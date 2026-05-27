@@ -326,6 +326,37 @@ tbody tr:hover{background:var(--offwhite)}
           <div class="alert alert-error" id="storeError" style="margin:1rem 1.5rem 0"></div>
           <div class="alert alert-success" id="storeSuccess" style="margin:1rem 1.5rem 0"></div>
 
+          <!-- BRANDING UPLOAD SECTION -->
+          <div class="form-section">
+            <div class="form-section-title">Store Branding</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Store Logo</label>
+                <div style="border:2px dashed var(--lgray);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s" id="logoDropArea" onclick="document.getElementById('logoInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--navy)'" ondragleave="this.style.borderColor='var(--lgray)'" ondrop="handleDrop(event,'logo')">
+                  <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="previewUpload(this,'logoPreview','logoDropArea')">
+                  <div id="logoDropContent">
+                    <div style="font-size:2rem;margin-bottom:0.4rem">🖼️</div>
+                    <div style="font-size:0.8rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> logo<br>PNG, JPG — Max 2MB</div>
+                  </div>
+                  <img id="logoPreview" src="" style="display:none;max-width:100%;max-height:120px;margin-top:0.5rem">
+                </div>
+                <div id="logoFileName" style="font-size:0.75rem;color:var(--green);margin-top:0.4rem"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Store Banner</label>
+                <div style="border:2px dashed var(--lgray);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s" id="bannerDropArea" onclick="document.getElementById('bannerInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--navy)'" ondragleave="this.style.borderColor='var(--lgray)'" ondrop="handleDrop(event,'banner')">
+                  <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="previewUpload(this,'bannerPreview','bannerDropArea')">
+                  <div id="bannerDropContent">
+                    <div style="font-size:2rem;margin-bottom:0.4rem">🏞️</div>
+                    <div style="font-size:0.8rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> banner<br>PNG, JPG — Recommended 1200×400px</div>
+                  </div>
+                  <img id="bannerPreview" src="" style="display:none;max-width:100%;max-height:120px;margin-top:0.5rem">
+                </div>
+                <div id="bannerFileName" style="font-size:0.75rem;color:var(--green);margin-top:0.4rem"></div>
+              </div>
+            </div>
+          </div>
+
           <div class="form-section">
             <div class="form-section-title">Basic Information</div>
             <div class="form-row">
@@ -549,6 +580,18 @@ tbody tr:hover{background:var(--offwhite)}
       <div class="form-group">
         <label class="form-label">Description</label>
         <textarea class="form-textarea" id="productDesc" placeholder="Describe your product..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Image</label>
+        <div style="border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer" id="productImgArea" onclick="document.getElementById('productImgInput').click()">
+          <input type="file" id="productImgInput" accept="image/*" style="display:none" onchange="previewUpload(this,'productImgPreview','productImgArea')">
+          <div id="productImgContent">
+            <div style="font-size:1.8rem;margin-bottom:0.3rem">📸</div>
+            <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> image<br>PNG, JPG — Max 5MB</div>
+          </div>
+          <img id="productImgPreview" src="" style="display:none;max-width:100%;max-height:100px;margin-top:0.5rem">
+        </div>
+        <div id="productImgName" style="font-size:0.75rem;color:var(--green);margin-top:0.4rem"></div>
       </div>
       <input type="hidden" id="editingProductId">
     </div>
@@ -929,6 +972,191 @@ function showAlert(id, msg) {
 document.getElementById('productModal').addEventListener('click', e => {
   if (e.target === document.getElementById('productModal')) closeProductModal();
 });
+
+// ── IMAGE PREVIEW ──
+function previewUpload(input, previewId, areaId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById(previewId);
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    // Hide drop content text
+    const content = document.getElementById(areaId.replace('DropArea','DropContent').replace('ImgArea','ImgContent'));
+    if (content) content.style.display = 'none';
+    // Show filename
+    const nameEl = document.getElementById(areaId.replace('DropArea','FileName').replace('ImgArea','ImgName'));
+    if (nameEl) nameEl.textContent = '✅ ' + file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── DRAG AND DROP ──
+function handleDrop(event, type) {
+  event.preventDefault();
+  const file = event.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  if (type === 'logo') {
+    const input = document.getElementById('logoInput');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    previewUpload(input, 'logoPreview', 'logoDropArea');
+  } else if (type === 'banner') {
+    const input = document.getElementById('bannerInput');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    previewUpload(input, 'bannerPreview', 'bannerDropArea');
+  }
+}
+
+// ── UPLOAD TO SUPABASE STORAGE ──
+async function uploadImage(bucket, file, path) {
+  const { error } = await sb.storage.from(bucket).upload(path, file, { upsert: true });
+  if (error) { console.error('Upload error:', error.message); return null; }
+  const { data } = sb.storage.from(bucket).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+// ── OVERRIDE SAVE STORE WITH UPLOADS ──
+async function saveStore() {
+  const name     = document.getElementById('storeName').value.trim();
+  const whatsapp = document.getElementById('storeWhatsapp').value.trim();
+  const desc     = document.getElementById('storeDesc').value.trim();
+  const category = document.getElementById('storeCategory').value;
+  const region   = document.getElementById('storeRegion').value;
+  const email    = document.getElementById('storeEmail').value.trim();
+  const location = document.getElementById('storeLocation').value.trim();
+  const btn      = document.getElementById('storeSaveBtn');
+
+  if (!name || !whatsapp || !desc || !category || !region) {
+    showAlert('storeError', 'Please fill in all required fields.');
+    return;
+  }
+
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  // Upload logo if selected
+  let logoUrl = currentStore?.logo || null;
+  const logoFile = document.getElementById('logoInput').files[0];
+  if (logoFile) {
+    btn.textContent = 'Uploading logo...';
+    logoUrl = await uploadImage('store-logos', logoFile, `${currentUser.id}/logo.${logoFile.name.split('.').pop()}`);
+  }
+
+  // Upload banner if selected
+  let bannerUrl = currentStore?.banner || null;
+  const bannerFile = document.getElementById('bannerInput').files[0];
+  if (bannerFile) {
+    btn.textContent = 'Uploading banner...';
+    bannerUrl = await uploadImage('store-banners', bannerFile, `${currentUser.id}/banner.${bannerFile.name.split('.').pop()}`);
+  }
+
+  btn.textContent = 'Saving store...';
+
+  const slug = currentStore?.slug || (name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + Date.now());
+
+  const storeData = {
+    user_id: currentUser.id,
+    store_name: name,
+    slug,
+    description: desc,
+    category,
+    whatsapp_number: whatsapp,
+    email,
+    region,
+    location,
+    logo: logoUrl,
+    banner: bannerUrl
+  };
+
+  let error;
+  if (currentStore) {
+    const res = await sb.from('stores').update(storeData).eq('id', currentStore.id);
+    error = res.error;
+  } else {
+    const res = await sb.from('stores').insert(storeData);
+    error = res.error;
+  }
+
+  if (error) {
+    showAlert('storeError', error.message);
+    btn.textContent = 'Save Store';
+    btn.disabled = false;
+    return;
+  }
+
+  showAlert('storeSuccess', 'Store saved successfully! ✅');
+  btn.textContent = 'Save Store';
+  btn.disabled = false;
+  await loadStore();
+  await loadStats();
+}
+
+// ── OVERRIDE SAVE PRODUCT WITH IMAGE UPLOAD ──
+async function saveProduct() {
+  const name     = document.getElementById('productName').value.trim();
+  const price    = document.getElementById('productPrice').value;
+  const stock    = document.getElementById('productStock').value;
+  const category = document.getElementById('productCategory').value;
+  const desc     = document.getElementById('productDesc').value.trim();
+  const editId   = document.getElementById('editingProductId').value;
+  const btn      = document.getElementById('productSaveBtn');
+
+  if (!name || !price || !stock) {
+    showAlert('productError', 'Please fill in all required fields.');
+    return;
+  }
+  if (!currentStore) {
+    showAlert('productError', 'Please create your store first.');
+    return;
+  }
+
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  // Upload product image if selected
+  let imageUrl = null;
+  const imgFile = document.getElementById('productImgInput').files[0];
+  if (imgFile) {
+    btn.textContent = 'Uploading image...';
+    const imgId = editId || Date.now();
+    imageUrl = await uploadImage('product-images', imgFile, `${currentUser.id}/${imgId}.${imgFile.name.split('.').pop()}`);
+  }
+
+  const productData = {
+    store_id: currentStore.id,
+    name,
+    price: Number(price),
+    stock: Number(stock),
+    category,
+    description: desc,
+    images: imageUrl ? [imageUrl] : []
+  };
+
+  let error;
+  if (editId) {
+    const res = await sb.from('products').update(productData).eq('id', editId);
+    error = res.error;
+  } else {
+    const res = await sb.from('products').insert(productData);
+    error = res.error;
+  }
+
+  if (error) {
+    showAlert('productError', error.message);
+    btn.textContent = editId ? 'Update Product' : 'Add Product';
+    btn.disabled = false;
+    return;
+  }
+
+  closeProductModal();
+  await loadProducts();
+  await loadStats();
+}
 
 // ── START ──
 init();
