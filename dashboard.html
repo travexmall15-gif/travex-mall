@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--blue:#2563EB;--sidebar:240px}
+body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--dark)}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;
+  z-index:100;
+}
+.sidebar-logo{
+  padding:1.5rem 1.5rem 1rem;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.sidebar-logo-text{font-size:1.1rem;font-weight:800;color:var(--white)}
+.sidebar-logo-text span{color:var(--gold)}
+.sidebar-logo-sub{font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:0.2rem}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
+.sidebar-section-label{
+  font-size:0.65rem;font-weight:700;
+  color:rgba(255,255,255,0.25);
+  text-transform:uppercase;letter-spacing:0.12em;
+  padding:0.75rem 1.5rem 0.4rem;
+}
+.sidebar-link{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.7rem 1.5rem;
+  color:rgba(255,255,255,0.6);
+  text-decoration:none;font-size:0.875rem;font-weight:500;
+  transition:all 0.2s;cursor:pointer;
+  border-left:3px solid transparent;
+}
+.sidebar-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.sidebar-link.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
+.sidebar-icon{width:18px;text-align:center;font-size:1rem;flex-shrink:0}
+.sidebar-bottom{
+  padding:1rem 1.5rem;
+  border-top:1px solid rgba(255,255,255,0.07);
+}
+.sidebar-user{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.sidebar-avatar{
+  width:36px;height:36px;
+  background:var(--gold);color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:800;flex-shrink:0;
+}
+.sidebar-user-name{font-size:0.8rem;font-weight:700;color:var(--white)}
+.sidebar-user-role{font-size:0.7rem;color:rgba(255,255,255,0.4)}
+.sidebar-logout{
+  display:flex;align-items:center;gap:0.5rem;
+  font-size:0.8rem;color:rgba(255,255,255,0.4);
+  cursor:pointer;transition:color 0.2s;
+  background:none;border:none;font-family:'Inter',sans-serif;
+}
+.sidebar-logout:hover{color:var(--red)}
+
+/* ── MAIN ── */
+.main{
+  margin-left:var(--sidebar);
+  flex:1;display:flex;flex-direction:column;min-height:100vh;
+}
+
+/* ── TOP NAV ── */
+.topnav{
+  background:var(--white);
+  border-bottom:1px solid var(--lgray);
+  padding:0 2rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.topnav-left{display:flex;align-items:center;gap:1rem}
+.page-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
+.page-breadcrumb{font-size:0.8rem;color:var(--gray)}
+.topnav-right{display:flex;align-items:center;gap:1rem}
+.topnav-btn{
+  background:var(--navy);color:var(--white);
+  padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:600;
+  border:none;cursor:pointer;transition:all 0.2s;
+  font-family:'Inter',sans-serif;
+}
+.topnav-btn:hover{background:var(--blue)}
+.topnav-btn.gold{background:var(--gold);color:var(--navy)}
+.topnav-btn.gold:hover{background:var(--gold2)}
+.notif-btn{
+  width:36px;height:36px;
+  background:var(--offwhite);border:1px solid var(--lgray);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1.1rem;position:relative;
+}
+.notif-dot{
+  position:absolute;top:6px;right:6px;
+  width:8px;height:8px;background:var(--red);border-radius:50%;
+}
+
+/* ── PAGE CONTENT ── */
+.page-content{padding:2rem;flex:1}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.active{display:block}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
+.stat-card{
+  background:var(--white);padding:1.5rem;
+  border:1px solid var(--lgray);
+}
+.stat-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.stat-label{font-size:0.75rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
+.stat-icon{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
+.stat-change{font-size:0.75rem;font-weight:500}
+.stat-change.up{color:var(--green)}
+.stat-change.down{color:var(--red)}
+
+/* ── SUBSCRIPTION BANNER ── */
+.sub-banner{
+  background:var(--navy);color:var(--white);
+  padding:1rem 1.5rem;margin-bottom:2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-left:4px solid var(--gold);
+}
+.sub-banner-text{font-size:0.875rem}
+.sub-banner-title{font-weight:700;color:var(--gold);margin-bottom:0.2rem}
+.sub-banner-btn{
+  background:var(--gold);color:var(--navy);
+  padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:700;
+  border:none;cursor:pointer;white-space:nowrap;
+  font-family:'Inter',sans-serif;
+}
+
+/* ── GRID 2 ── */
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem}
+
+/* ── TABLE ── */
+.card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.card-header{
+  padding:1.2rem 1.5rem;
+  border-bottom:1px solid var(--lgray);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.card-link{font-size:0.8rem;color:var(--blue);text-decoration:none;font-weight:600}
+.card-link:hover{color:var(--navy)}
+table{width:100%;border-collapse:collapse}
+thead th{
+  padding:0.75rem 1.5rem;
+  text-align:left;font-size:0.72rem;font-weight:700;
+  color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;
+  background:var(--offwhite);border-bottom:1px solid var(--lgray);
+}
+tbody td{
+  padding:1rem 1.5rem;
+  font-size:0.875rem;color:var(--dark);
+  border-bottom:1px solid var(--lgray);
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--offwhite)}
+.badge{
+  display:inline-block;
+  padding:0.2rem 0.6rem;
+  font-size:0.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;
+}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-completed{background:#D1FAE5;color:#065F46}
+.badge-cancelled{background:#FEE2E2;color:#991B1B}
+.badge-active{background:#D1FAE5;color:#065F46}
+.badge-expired{background:#FEE2E2;color:#991B1B}
+
+/* ── QUICK ACTIONS ── */
+.quick-actions{display:grid;grid-template-columns:1fr;gap:0.75rem;padding:1.5rem}
+.quick-action{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.75rem 1rem;
+  background:var(--offwhite);border:1px solid var(--lgray);
+  cursor:pointer;transition:all 0.2s;text-decoration:none;
+}
+.quick-action:hover{border-color:var(--navy);background:var(--white)}
+.qa-icon{
+  width:32px;height:32px;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;flex-shrink:0;
+}
+.qa-text{font-size:0.8rem;font-weight:600;color:var(--navy)}
+
+/* ── FORM STYLES ── */
+.form-section{padding:1.5rem;border-bottom:1px solid var(--lgray)}
+.form-section:last-child{border-bottom:none}
+.form-section-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:1.2rem}
+.form-group{margin-bottom:1.1rem}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);background:var(--white);font-family:'Inter',sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--navy)}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);background:var(--white);font-family:'Inter',sans-serif;font-size:0.875rem;color:var(--dark);outline:none;cursor:pointer}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);background:var(--white);font-family:'Inter',sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.upload-area{
+  border:2px dashed var(--lgray);padding:2rem;
+  text-align:center;cursor:pointer;transition:all 0.2s;
+}
+.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-icon{font-size:2rem;margin-bottom:0.5rem}
+.upload-text{font-size:0.8rem;color:var(--gray)}
+.upload-text strong{color:var(--navy)}
+.slug-preview{
+  background:var(--offwhite);border:1px solid var(--lgray);
+  padding:0.6rem 0.9rem;font-size:0.8rem;
+  display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem;
+}
+.slug-preview span{color:var(--gray)}
+.slug-preview strong{color:var(--blue)}
+.form-actions{padding:1.5rem;display:flex;gap:1rem;border-top:1px solid var(--lgray)}
+.btn-save{background:var(--navy);color:var(--white);padding:0.75rem 1.8rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-save:hover{background:var(--blue)}
+.btn-cancel{background:var(--white);color:var(--gray);padding:0.75rem 1.8rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif}
+.btn-cancel:hover{border-color:var(--navy);color:var(--navy)}
+
+/* ── PRODUCTS TABLE ── */
+.product-img{width:40px;height:40px;object-fit:cover;background:var(--lgray)}
+.product-img-placeholder{width:40px;height:40px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.action-btn{
+  background:none;border:none;cursor:pointer;
+  padding:0.3rem 0.5rem;font-size:0.8rem;font-weight:600;
+  transition:color 0.2s;font-family:'Inter',sans-serif;
+}
+.action-btn.edit{color:var(--blue)}
+.action-btn.edit:hover{color:var(--navy)}
+.action-btn.delete{color:var(--red)}
+.action-btn.delete:hover{color:#991B1B}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem;
+}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-header{
+  padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:var(--white);z-index:1;
+}
+.modal-title{font-size:1rem;font-weight:700;color:var(--navy)}
+.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray)}
+.modal-close:hover{color:var(--red)}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end}
+
+/* ── AI ADVISOR ── */
+.ai-chat{display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--white);border:1px solid var(--lgray)}
+.ai-chat-header{background:var(--navy);padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.ai-avatar{width:40px;height:40px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.ai-header-text{}
+.ai-header-name{font-size:0.95rem;font-weight:700;color:var(--white)}
+.ai-header-sub{font-size:0.75rem;color:rgba(255,255,255,0.5)}
+.ai-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.ai-msg{display:flex;gap:0.75rem;max-width:80%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-msg-bubble{
+  padding:0.75rem 1rem;font-size:0.875rem;line-height:1.55;
+}
+.ai-msg.ai .ai-msg-bubble{background:var(--offwhite);border:1px solid var(--lgray);color:var(--dark)}
+.ai-msg.user .ai-msg-bubble{background:var(--navy);color:var(--white)}
+.ai-msg-avatar{
+  width:32px;height:32px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;background:var(--offwhite);border:1px solid var(--lgray);
+}
+.ai-msg.user .ai-msg-avatar{background:var(--gold);color:var(--navy);font-weight:700;font-size:0.7rem}
+.ai-suggestions{padding:0.75rem 1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
+.ai-suggestion{
+  background:var(--offwhite);border:1px solid var(--lgray);
+  padding:0.4rem 0.8rem;font-size:0.75rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s;
+}
+.ai-suggestion:hover{border-color:var(--navy);color:var(--navy)}
+.ai-input-area{
+  padding:1rem 1.5rem;border-top:1px solid var(--lgray);
+  display:flex;gap:0.75rem;
+}
+.ai-input{
+  flex:1;padding:0.7rem 1rem;
+  border:1.5px solid var(--lgray);
+  font-family:'Inter',sans-serif;font-size:0.875rem;
+  outline:none;
+}
+.ai-input:focus{border-color:var(--navy)}
+.ai-send{
+  background:var(--gold);color:var(--navy);
+  padding:0.7rem 1.4rem;font-weight:700;font-size:0.8rem;
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;
+}
+.ai-send:hover{background:var(--gold2)}
+.typing-indicator{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing-dot{width:6px;height:6px;background:var(--gray);border-radius:50%;animation:bounce 1.4s infinite ease-in-out}
+.typing-dot:nth-child(1){animation-delay:0s}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+
+/* ── SUBSCRIPTION CARDS ── */
+.sub-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1.5rem}
+.sub-card{
+  border:1.5px solid var(--lgray);padding:2rem;
+  position:relative;transition:all 0.3s;
+}
+.sub-card:hover{border-color:var(--navy);transform:translateY(-2px)}
+.sub-card.popular{background:var(--navy);border-color:var(--navy)}
+.popular-badge-sub{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:var(--navy);
+  font-size:0.65rem;font-weight:800;padding:0.2rem 0.8rem;
+  text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap;
+}
+.sub-tier{font-size:0.7rem;font-weight:700;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.6rem}
+.sub-price{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:0.2rem}
+.sub-card.popular .sub-price{color:var(--white)}
+.sub-period{font-size:0.8rem;color:var(--gray);margin-bottom:1.2rem}
+.sub-card.popular .sub-period{color:rgba(255,255,255,0.5)}
+.sub-divider{height:1px;background:var(--lgray);margin-bottom:1.2rem}
+.sub-card.popular .sub-divider{background:rgba(255,255,255,0.1)}
+.sub-features{list-style:none;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:0.6rem}
+.sub-features li{font-size:0.8rem;color:var(--dark);display:flex;gap:0.5rem}
+.sub-card.popular .sub-features li{color:rgba(255,255,255,0.8)}
+.sub-features li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
+.sub-card.popular .sub-features li::before{color:var(--gold)}
+.sub-btn{
+  display:block;width:100%;padding:0.75rem;
+  text-align:center;font-weight:700;font-size:0.875rem;
+  background:var(--navy);color:var(--white);
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;
+}
+.sub-btn:hover{background:var(--blue)}
+.sub-card.popular .sub-btn{background:var(--gold);color:var(--navy)}
+.sub-card.popular .sub-btn:hover{background:var(--gold2)}
+.payment-instructions{
+  margin:0 1.5rem 1.5rem;
+  background:var(--offwhite);border:1px solid var(--lgray);
+  padding:1.5rem;
+}
+.pi-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:1rem}
+.pi-step{display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:0.8rem}
+.pi-step:last-child{margin-bottom:0}
+.pi-num{
+  width:24px;height:24px;background:var(--navy);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:800;flex-shrink:0;
+}
+.pi-text{font-size:0.825rem;color:var(--gray);line-height:1.5}
+.pi-text strong{color:var(--dark)}
+
+/* ── ORDERS ── */
+.filter-tabs{display:flex;gap:0;border-bottom:1px solid var(--lgray)}
+.filter-tab{
+  padding:0.75rem 1.2rem;font-size:0.8rem;font-weight:600;
+  color:var(--gray);border-bottom:2px solid transparent;
+  cursor:pointer;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none;
+  font-family:'Inter',sans-serif;
+}
+.filter-tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.filter-tab:hover{color:var(--navy)}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:4rem 2rem}
+.empty-icon{font-size:3rem;margin-bottom:1rem}
+.empty-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem}
+.empty-sub{font-size:0.875rem;color:var(--gray);margin-bottom:1.5rem}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">TRAVEX <span>MALL</span></div>
+      <div class="sidebar-logo-sub">Seller Dashboard</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a class="sidebar-link active" onclick="showPanel('overview')">
+        <span class="sidebar-icon">📊</span> Overview
+      </a>
+      <a class="sidebar-link" onclick="showPanel('store')">
+        <span class="sidebar-icon">🏪</span> My Store
+      </a>
+      <a class="sidebar-link" onclick="showPanel('products')">
+        <span class="sidebar-icon">📦</span> Products
+      </a>
+      <a class="sidebar-link" onclick="showPanel('orders')">
+        <span class="sidebar-icon">🛍️</span> Orders
+        <span style="margin-left:auto;background:var(--red);color:white;font-size:0.65rem;padding:0.1rem 0.45rem;font-weight:700">3</span>
+      </a>
+
+      <div class="sidebar-section-label">AI Tools</div>
+      <a class="sidebar-link" onclick="showPanel('ai')">
+        <span class="sidebar-icon">🤖</span> AI Advisor
+      </a>
+
+      <div class="sidebar-section-label">Account</div>
+      <a class="sidebar-link" onclick="showPanel('subscription')">
+        <span class="sidebar-icon">💳</span> Subscription
+      </a>
+      <a class="sidebar-link" href="index.html">
+        <span class="sidebar-icon">🌐</span> View Marketplace
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">JM</div>
+        <div>
+          <div class="sidebar-user-name">Jumanne Maregeri</div>
+          <div class="sidebar-user-role">Store Owner · Basic Plan</div>
+        </div>
+      </div>
+      <button class="sidebar-logout" onclick="window.location.href='login.html'">
+        🚪 Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- TOP NAV -->
+    <div class="topnav">
+      <div class="topnav-left">
+        <div>
+          <div class="page-title" id="pageTitle">Dashboard Overview</div>
+          <div class="page-breadcrumb">Travex Mall / <span id="pageBreadcrumb">Overview</span></div>
+        </div>
+      </div>
+      <div class="topnav-right">
+        <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+        <button class="topnav-btn gold" onclick="showPanel('products');openProductModal()">+ Add Product</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ══ OVERVIEW PANEL ══ -->
+      <div class="panel active" id="panel-overview">
+
+        <div class="sub-banner">
+          <div class="sub-banner-text">
+            <div class="sub-banner-title">⚠️ Subscription Required</div>
+            Your store is pending activation. Subscribe to start selling.
+          </div>
+          <button class="sub-banner-btn" onclick="showPanel('subscription')">Subscribe Now</button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-label">Total Products</div>
+              <div class="stat-icon" style="background:#EFF6FF">📦</div>
+            </div>
+            <div class="stat-value">12</div>
+            <div class="stat-change up">↑ +3 this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-label">Total Orders</div>
+              <div class="stat-icon" style="background:#F0FDF4">🛍️</div>
+            </div>
+            <div class="stat-value">8</div>
+            <div class="stat-change up">↑ +2 today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-label">Revenue (TZS)</div>
+              <div class="stat-icon" style="background:#FFFBEB">💰</div>
+            </div>
+            <div class="stat-value">145K</div>
+            <div class="stat-change up">↑ +12% this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-label">Store Views</div>
+              <div class="stat-icon" style="background:#FDF4FF">👁️</div>
+            </div>
+            <div class="stat-value">234</div>
+            <div class="stat-change down">↓ -5% this week</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Orders</div>
+              <a href="#" class="card-link" onclick="showPanel('orders')">View All →</a>
+            </div>
+            <table>
+              <thead><tr>
+                <th>Customer</th><th>Product</th><th>Total</th><th>Status</th>
+              </tr></thead>
+              <tbody>
+                <tr><td>Amina Hassan</td><td>Blue Dress</td><td>TZS 35,000</td><td><span class="badge badge-pending">Pending</span></td></tr>
+                <tr><td>Juma Ali</td><td>White Shirt</td><td>TZS 18,000</td><td><span class="badge badge-completed">Completed</span></td></tr>
+                <tr><td>Fatuma Said</td><td>Ankara Fabric</td><td>TZS 22,000</td><td><span class="badge badge-pending">Pending</span></td></tr>
+                <tr><td>Omar Khalid</td><td>Leather Bag</td><td>TZS 45,000</td><td><span class="badge badge-completed">Completed</span></td></tr>
+                <tr><td>Zainab Musa</td><td>Scarf Set</td><td>TZS 12,000</td><td><span class="badge badge-cancelled">Cancelled</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">Quick Actions</div></div>
+            <div class="quick-actions">
+              <a class="quick-action" onclick="showPanel('products');openProductModal()">
+                <div class="qa-icon">➕</div>
+                <div class="qa-text">Add New Product</div>
+              </a>
+              <a class="quick-action" onclick="showPanel('store')">
+                <div class="qa-icon">✏️</div>
+                <div class="qa-text">Edit Store Profile</div>
+              </a>
+              <a class="quick-action" onclick="showPanel('orders')">
+                <div class="qa-icon">📋</div>
+                <div class="qa-text">View All Orders</div>
+              </a>
+              <a class="quick-action" onclick="showPanel('ai')">
+                <div class="qa-icon">🤖</div>
+                <div class="qa-text">Ask AI Advisor</div>
+              </a>
+              <a class="quick-action" href="store.html" target="_blank">
+                <div class="qa-icon">🌐</div>
+                <div class="qa-text">Preview My Store</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══ STORE PANEL ══ -->
+      <div class="panel" id="panel-store">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Store Setup</div>
+            <a href="store.html" class="card-link" target="_blank">Preview Store →</a>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">Basic Information</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Store Name *</label>
+                <input type="text" class="form-input" value="Amina Fashion Store" oninput="updateSlug(this.value)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Business Category *</label>
+                <select class="form-select">
+                  <option selected>Fashion & Clothing</option>
+                  <option>Electronics</option>
+                  <option>Food & Agriculture</option>
+                  <option>Beauty & Health</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Description</label>
+              <textarea class="form-textarea">Premium clothing and accessories for men and women. Quality fabrics at affordable prices.</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store URL</label>
+              <div class="slug-preview">
+                <span>travexmall.com/store/</span>
+                <strong id="slugPreview">amina-fashion-store</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Contact & Location</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">WhatsApp Number *</label>
+                <input type="tel" class="form-input" value="+255 712 000 000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" value="amina@example.com">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Region *</label>
+                <select class="form-select">
+                  <option selected>Dar es Salaam</option>
+                  <option>Arusha</option>
+                  <option>Dodoma</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Location / Address</label>
+                <input type="text" class="form-input" placeholder="e.g. Kariakoo, Dar es Salaam">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Store Branding</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Store Logo</label>
+                <div class="upload-area">
+                  <div class="upload-icon">🖼️</div>
+                  <div class="upload-text"><strong>Click to upload</strong> or drag and drop<br>PNG, JPG up to 2MB</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Store Banner</label>
+                <div class="upload-area">
+                  <div class="upload-icon">🏞️</div>
+                  <div class="upload-text"><strong>Click to upload</strong> or drag and drop<br>PNG, JPG up to 5MB (recommended 1200×400)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-save" onclick="alert('Store saved! ✅')">Save Store</button>
+            <button class="btn-cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PRODUCTS PANEL ══ -->
+      <div class="panel" id="panel-products">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Products (12)</div>
+            <button class="topnav-btn" onclick="openProductModal()">+ Add Product</button>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Product</th><th>Price (TZS)</th><th>Stock</th><th>Category</th><th>Status</th><th>Actions</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td style="display:flex;align-items:center;gap:0.75rem"><div class="product-img-placeholder">👗</div><span>Blue Ankara Dress</span></td>
+                <td>35,000</td><td>8</td><td>Dresses</td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="action-btn edit">Edit</button><button class="action-btn delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="display:flex;align-items:center;gap:0.75rem"><div class="product-img-placeholder">👔</div><span>White Cotton Shirt</span></td>
+                <td>18,000</td><td>15</td><td>Shirts</td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="action-btn edit">Edit</button><button class="action-btn delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="display:flex;align-items:center;gap:0.75rem"><div class="product-img-placeholder">🧣</div><span>Silk Scarf Set</span></td>
+                <td>12,000</td><td>0</td><td>Accessories</td>
+                <td><span class="badge badge-expired">Out of Stock</span></td>
+                <td><button class="action-btn edit">Edit</button><button class="action-btn delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="display:flex;align-items:center;gap:0.75rem"><div class="product-img-placeholder">👜</div><span>Leather Handbag</span></td>
+                <td>45,000</td><td>4</td><td>Bags</td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="action-btn edit">Edit</button><button class="action-btn delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="display:flex;align-items:center;gap:0.75rem"><div class="product-img-placeholder">🧵</div><span>Ankara Fabric (3m)</span></td>
+                <td>22,000</td><td>20</td><td>Fabrics</td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="action-btn edit">Edit</button><button class="action-btn delete">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ ORDERS PANEL ══ -->
+      <div class="panel" id="panel-orders">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Orders Management</div></div>
+          <div class="filter-tabs">
+            <button class="filter-tab active">All Orders (8)</button>
+            <button class="filter-tab">Pending (3)</button>
+            <button class="filter-tab">Completed (4)</button>
+            <button class="filter-tab">Cancelled (1)</button>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Order ID</th><th>Customer</th><th>Product</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="font-family:monospace;font-size:0.75rem">#ORD-001</td><td>Amina Hassan</td><td>Blue Dress</td><td>1</td><td>TZS 35,000</td><td><span class="badge badge-pending">Pending</span></td><td>Today, 10:30</td></tr>
+              <tr><td style="font-family:monospace;font-size:0.75rem">#ORD-002</td><td>Juma Ali</td><td>White Shirt</td><td>2</td><td>TZS 36,000</td><td><span class="badge badge-completed">Completed</span></td><td>Today, 09:15</td></tr>
+              <tr><td style="font-family:monospace;font-size:0.75rem">#ORD-003</td><td>Fatuma Said</td><td>Ankara Fabric</td><td>3</td><td>TZS 66,000</td><td><span class="badge badge-pending">Pending</span></td><td>Yesterday</td></tr>
+              <tr><td style="font-family:monospace;font-size:0.75rem">#ORD-004</td><td>Omar Khalid</td><td>Leather Bag</td><td>1</td><td>TZS 45,000</td><td><span class="badge badge-completed">Completed</span></td><td>Yesterday</td></tr>
+              <tr><td style="font-family:monospace;font-size:0.75rem">#ORD-005</td><td>Zainab Musa</td><td>Scarf Set</td><td>1</td><td>TZS 12,000</td><td><span class="badge badge-cancelled">Cancelled</span></td><td>2 days ago</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ AI ADVISOR PANEL ══ -->
+      <div class="panel" id="panel-ai">
+        <div class="ai-chat">
+          <div class="ai-chat-header">
+            <div class="ai-avatar">🤖</div>
+            <div class="ai-header-text">
+              <div class="ai-header-name">AI Business Advisor</div>
+              <div class="ai-header-sub">Powered by Gemini AI · Fashion & Clothing · Dar es Salaam</div>
+            </div>
+          </div>
+          <div class="ai-messages" id="aiMessages">
+            <div class="ai-msg ai">
+              <div class="ai-msg-avatar">🤖</div>
+              <div class="ai-msg-bubble">
+                Habari! I'm your AI Business Advisor for Travex Mall. I can help you with pricing strategies, product descriptions, marketing tips, and growing your fashion business in Dar es Salaam. What would you like to know? 😊
+              </div>
+            </div>
+          </div>
+          <div class="ai-suggestions">
+            <button class="ai-suggestion" onclick="sendAiMessage('How should I price my products?')">💰 How to price products?</button>
+            <button class="ai-suggestion" onclick="sendAiMessage('Write a product description for me')">✍️ Write product description</button>
+            <button class="ai-suggestion" onclick="sendAiMessage('How do I get more customers?')">📈 Get more customers</button>
+            <button class="ai-suggestion" onclick="sendAiMessage('What fashion products sell well in Dar es Salaam?')">🏆 Trending products</button>
+          </div>
+          <div class="ai-input-area">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Ask anything about your business..." onkeypress="if(event.key==='Enter')sendAiMessage()">
+            <button class="ai-send" onclick="sendAiMessage()">Send →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SUBSCRIPTION PANEL ══ -->
+      <div class="panel" id="panel-subscription">
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header">
+            <div class="card-title">Choose Your Plan</div>
+            <span class="badge badge-expired">Current: No Active Plan</span>
+          </div>
+          <div class="sub-cards">
+            <div class="sub-card">
+              <div class="sub-tier">Basic</div>
+              <div class="sub-price">TZS 25,000</div>
+              <div class="sub-period">per month</div>
+              <div class="sub-divider"></div>
+              <ul class="sub-features">
+                <li>1 digital store</li>
+                <li>Up to 50 products</li>
+                <li>WhatsApp orders</li>
+                <li>Basic analytics</li>
+                <li>Email support</li>
+              </ul>
+              <button class="sub-btn" onclick="selectPlan('Basic', 25000)">Select Basic</button>
+            </div>
+            <div class="sub-card popular">
+              <div class="popular-badge-sub">Most Popular</div>
+              <div class="sub-tier">Standard</div>
+              <div class="sub-price">TZS 50,000</div>
+              <div class="sub-period">per month</div>
+              <div class="sub-divider"></div>
+              <ul class="sub-features">
+                <li>1 digital store</li>
+                <li>Unlimited products</li>
+                <li>WhatsApp orders</li>
+                <li>Full analytics</li>
+                <li>AI Business Advisor</li>
+                <li>Priority support</li>
+              </ul>
+              <button class="sub-btn" onclick="selectPlan('Standard', 50000)">Select Standard</button>
+            </div>
+            <div class="sub-card">
+              <div class="sub-tier">Premium</div>
+              <div class="sub-price">TZS 80,000</div>
+              <div class="sub-period">per month</div>
+              <div class="sub-divider"></div>
+              <ul class="sub-features">
+                <li>Up to 3 stores</li>
+                <li>Unlimited products</li>
+                <li>Everything in Standard</li>
+                <li>Advanced AI features</li>
+                <li>Dedicated support</li>
+                <li>Custom domain help</li>
+              </ul>
+              <button class="sub-btn" onclick="selectPlan('Premium', 80000)">Select Premium</button>
+            </div>
+          </div>
+          <div class="payment-instructions">
+            <div class="pi-title">💳 How to Activate Your Subscription:</div>
+            <div class="pi-step"><div class="pi-num">1</div><div class="pi-text">Transfer your plan amount to:<br><strong>CRDB BANK — Account: 0152774556100</strong></div></div>
+            <div class="pi-step"><div class="pi-num">2</div><div class="pi-text">Send payment screenshot to WhatsApp:<br><strong>+255 651 919 915</strong></div></div>
+            <div class="pi-step"><div class="pi-num">3</div><div class="pi-text">Your store will be <strong>activated within 2 hours</strong> after payment confirmation.</div></div>
+            <div class="pi-step"><div class="pi-num">4</div><div class="pi-text">Questions? Email: <strong>travemall15@gmail.com</strong></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD PRODUCT MODAL ── -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Product</div>
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Product Name *</label>
+        <input type="text" class="form-input" placeholder="e.g. Blue Ankara Dress">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price (TZS) *</label>
+          <input type="number" class="form-input" placeholder="e.g. 35000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stock Quantity *</label>
+          <input type="number" class="form-input" placeholder="e.g. 10">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select">
+          <option>Dresses</option><option>Shirts</option>
+          <option>Accessories</option><option>Bags</option><option>Fabrics</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" placeholder="Describe your product — materials, sizes, colors..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Images</label>
+        <div class="upload-area">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text"><strong>Click to upload</strong> images<br>PNG, JPG up to 5MB each (max 5 images)</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+      <button class="btn-save" onclick="saveProduct()">Add Product</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Panel navigation
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  const titles = {
+    overview: 'Dashboard Overview',
+    store: 'My Store',
+    products: 'Products',
+    orders: 'Orders',
+    ai: 'AI Business Advisor',
+    subscription: 'Subscription Plans'
+  };
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  document.getElementById('pageBreadcrumb').textContent = titles[name] || name;
+  event.currentTarget && event.currentTarget.classList.add('active');
+}
+
+// Slug preview
+function updateSlug(val) {
+  const slug = val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  document.getElementById('slugPreview').textContent = slug || 'your-store-name';
+}
+
+// Product modal
+function openProductModal() {
+  document.getElementById('productModal').classList.add('open');
+}
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('open');
+}
+function saveProduct() {
+  alert('Product added successfully! ✅');
+  closeProductModal();
+}
+
+// Subscription
+function selectPlan(plan, amount) {
+  alert(`You selected the ${plan} plan (TZS ${amount.toLocaleString()}/month).\n\nPlease transfer TZS ${amount.toLocaleString()} to CRDB BANK: 0152774556100\n\nThen send your payment screenshot to WhatsApp: +255 651 919 915\n\nYour store will be activated within 2 hours! ✅`);
+}
+
+// AI Chat
+const aiResponses = {
+  'price': 'For fashion items in Dar es Salaam, I recommend pricing 20-30% above your cost price. Dresses: TZS 25,000–60,000. Shirts: TZS 15,000–35,000. Accessories: TZS 8,000–25,000. Check Kariakoo market rates and price competitively. Offering bundle discounts (buy 2 get 10% off) can increase your average order value significantly.',
+  'description': 'Here\'s a compelling product description template:\n\n"✨ [Product Name] — [Key Feature]\n\nMaterial: [fabric type]\nSizes available: [S, M, L, XL]\nColors: [available colors]\n\nPerfect for [occasion]. Made with high-quality [material] for lasting comfort and style. Available in limited quantities.\n\n📦 Fast delivery in Dar es Salaam\n💬 Order via WhatsApp: [your number]"',
+  'customers': 'To get more customers in Dar es Salaam:\n\n1. Post daily on Instagram & TikTok — show products being worn\n2. Join WhatsApp groups for fashion & shopping in your area\n3. Offer first-time buyer discount (10-15%)\n4. Ask happy customers to refer friends (give them a discount)\n5. Post in Kariakoo Facebook groups\n6. Use hashtags: #DarFashion #TanzaniaStyle #KariakooFashion',
+  'trending': 'Currently trending fashion in Dar es Salaam:\n\n🔥 Ankara/Kitenge dresses — very high demand\n🔥 Office wear sets — growing market\n🔥 Casual sneakers — popular with youth\n🔥 Phone cases & accessories — low cost, high margin\n🔥 Children\'s school uniforms (especially Aug-Jan)\n\nI recommend stocking Kitenge items as they sell year-round with high margins.',
+  'default': 'Great question! As a fashion business in Dar es Salaam, here are my recommendations:\n\n1. Focus on quality product photos — they make a huge difference\n2. Respond to WhatsApp orders within 30 minutes\n3. Keep your product descriptions detailed and accurate\n4. Offer M-Pesa payment for easy transactions\n\nWould you like specific advice on any of these areas?'
+};
+
+function sendAiMessage(text) {
+  const input = document.getElementById('aiInput');
+  const messages = document.getElementById('aiMessages');
+  const msg = text || input.value.trim();
+  if(!msg) return;
+
+  // Add user message
+  messages.innerHTML += `
+    <div class="ai-msg user">
+      <div class="ai-msg-avatar">JM</div>
+      <div class="ai-msg-bubble">${msg}</div>
+    </div>`;
+
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+
+  // Add typing indicator
+  const typingId = 'typing-' + Date.now();
+  messages.innerHTML += `
+    <div class="ai-msg ai" id="${typingId}">
+      <div class="ai-msg-avatar">🤖</div>
+      <div class="ai-msg-bubble">
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  // Simulate AI response
+  setTimeout(() => {
+    const msgLower = msg.toLowerCase();
+    let response = aiResponses.default;
+    if(msgLower.includes('price') || msgLower.includes('bei')) response = aiResponses.price;
+    else if(msgLower.includes('description') || msgLower.includes('maelezo')) response = aiResponses.description;
+    else if(msgLower.includes('customer') || msgLower.includes('wateja')) response = aiResponses.customers;
+    else if(msgLower.includes('trend') || msgLower.includes('popular') || msgLower.includes('sell')) response = aiResponses.trending;
+
+    document.getElementById(typingId).outerHTML = `
+      <div class="ai-msg ai">
+        <div class="ai-msg-avatar">🤖</div>
+        <div class="ai-msg-bubble">${response.replace(/\n/g, '<br>')}</div>
+      </div>`;
+    messages.scrollTop = messages.scrollHeight;
+  }, 1500);
+}
+
+// Close modal on overlay click
+document.getElementById('productModal').addEventListener('click', function(e) {
+  if(e.target === this) closeProductModal();
+});
+</script>
+</body>
+</html>
