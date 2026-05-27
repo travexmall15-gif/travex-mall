@@ -424,7 +424,17 @@ async function ask(type, text) {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const { data: { session } } = await sb.auth.getSession();
+    const response = await fetch(GEMINI_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${SUPABASE_ANON}`
+  },
+  body: JSON.stringify({
+    message: msg,
+    systemPrompt: systemPrompts[type]
+  })
+});
     const response = await fetch(GEMINI_URL, {
       method: 'POST',
       headers: {
