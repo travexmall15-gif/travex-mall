@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply for Campus Shop — Travex Campus</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:1.1rem;font-weight:800;color:var(--white)}
+.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none}
+.nav-back:hover{color:var(--gold)}
+
+/* PROGRESS */
+.progress-wrap{background:var(--white);border-bottom:1px solid var(--lgray);padding:1.5rem 5%}
+.progress-steps{display:flex;align-items:center;max-width:700px;margin:0 auto}
+.prog-step{display:flex;align-items:center;gap:0.6rem;flex:1}
+.prog-circle{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;border:2px solid var(--lgray);color:var(--gray);flex-shrink:0;transition:all 0.3s}
+.prog-circle.active{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.prog-circle.done{background:var(--green);border-color:var(--green);color:var(--white)}
+.prog-label{font-size:0.72rem;font-weight:600;color:var(--gray);transition:color 0.3s}
+.prog-label.active{color:var(--navy);font-weight:700}
+.prog-line{flex:1;height:2px;background:var(--lgray);margin:0 0.5rem;transition:background 0.3s}
+.prog-line.done{background:var(--green)}
+
+main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
+
+/* STEP PANELS */
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* SECTION TITLE */
+.step-title{font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:0.4rem}
+.step-sub{font-size:0.875rem;color:var(--gray);margin-bottom:2rem;line-height:1.6}
+
+/* CARDS */
+.form-card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem;overflow:hidden}
+.card-header{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.card-header-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.card-body{padding:1.5rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-group:last-child{margin-bottom:0}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
+.form-label span{color:var(--red)}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus{border-color:var(--navy)}
+.form-input::placeholder{color:#9CA3AF}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
+.form-select:focus{border-color:var(--navy)}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.form-textarea:focus{border-color:var(--navy)}
+.form-hint{font-size:0.72rem;color:var(--gray);margin-top:0.4rem}
+
+/* UPLOAD */
+.upload-area{border:2px dashed var(--lgray);padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative}
+.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2.5rem;margin-bottom:0.5rem}
+.upload-text{font-size:0.8rem;color:var(--gray);line-height:1.6}
+.upload-text strong{color:var(--navy)}
+.upload-preview{display:none;align-items:center;gap:0.75rem;margin-top:1rem;padding:0.75rem;background:var(--offwhite);border:1px solid var(--lgray)}
+.upload-preview-name{font-size:0.8rem;font-weight:600;color:var(--green)}
+
+/* UNI SELECTOR */
+.uni-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem}
+.uni-option{border:2px solid var(--lgray);padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s}
+.uni-option:hover{border-color:var(--navy)}
+.uni-option.selected{border-color:var(--navy);background:var(--navy)}
+.uni-option.selected .uni-opt-abbr{color:var(--gold)}
+.uni-option.selected .uni-opt-name{color:rgba(255,255,255,0.8)}
+.uni-opt-abbr{font-size:1rem;font-weight:900;color:var(--navy);transition:color 0.2s}
+.uni-opt-name{font-size:0.65rem;color:var(--gray);margin-top:0.2rem;transition:color 0.2s}
+
+/* PAYMENT INFO */
+.payment-box{background:var(--offwhite);border:1px solid var(--lgray);padding:1.5rem}
+.payment-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:1rem}
+.payment-step{display:flex;gap:0.75rem;margin-bottom:0.8rem;align-items:flex-start}
+.payment-step:last-child{margin-bottom:0}
+.pay-num{width:24px;height:24px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0}
+.pay-text{font-size:0.85rem;color:var(--gray);line-height:1.5}
+.pay-text strong{color:var(--dark)}
+
+/* ALERT */
+.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red);display:block}
+.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green)}
+
+/* ACTIONS */
+.form-actions{display:flex;gap:1rem;justify-content:space-between;align-items:center;margin-top:2rem}
+.btn-next{background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.btn-next:hover{background:var(--blue)}
+.btn-next:disabled{background:var(--lgray);cursor:not-allowed}
+.btn-back-step{background:var(--white);color:var(--gray);padding:0.85rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+.btn-back-step:hover{border-color:var(--navy);color:var(--navy)}
+.btn-submit{background:var(--gold);color:var(--navy);padding:0.85rem 2rem;font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.btn-submit:hover{background:var(--gold2)}
+.btn-submit:disabled{background:var(--lgray);cursor:not-allowed}
+
+/* SUCCESS */
+.success-screen{text-align:center;padding:3rem 1.5rem;background:var(--white);border:1px solid var(--lgray);display:none}
+.success-icon{font-size:4rem;margin-bottom:1rem}
+.success-title{font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem}
+.success-desc{font-size:0.9rem;color:var(--gray);line-height:1.7;margin-bottom:2rem}
+.success-info{background:var(--offwhite);border:1px solid var(--lgray);padding:1.2rem;text-align:left;margin-bottom:2rem}
+.success-info-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
+.success-info-item{font-size:0.85rem;color:var(--gray);margin-bottom:0.4rem;display:flex;gap:0.5rem}
+.success-info-item strong{color:var(--dark)}
+.success-btn{background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;text-decoration:none;display:inline-block;transition:all 0.2s}
+.success-btn:hover{background:var(--blue)}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr}
+  .uni-selector{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">TRAVEX <span>CAMPUS</span></div>
+  <a href="campus.html" class="nav-back">← Back to Campus</a>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="prog-step">
+      <div class="prog-circle active" id="prog1">1</div>
+      <div class="prog-label active" id="prog1lbl">Your Info</div>
+    </div>
+    <div class="prog-line" id="line1"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog2">2</div>
+      <div class="prog-label" id="prog2lbl">University</div>
+    </div>
+    <div class="prog-line" id="line2"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog3">3</div>
+      <div class="prog-label" id="prog3lbl">Business</div>
+    </div>
+    <div class="prog-line" id="line3"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog4">4</div>
+      <div class="prog-label" id="prog4lbl">Review</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">Application Submitted!</div>
+    <div class="success-desc">
+      Thank you for applying to Travex Campus! We will review your application within 48 hours and contact you via WhatsApp and Email.
+    </div>
+    <div class="success-info">
+      <div class="success-info-title">What Happens Next:</div>
+      <div class="success-info-item">📱 <span>We will WhatsApp you within <strong>48 hours</strong></span></div>
+      <div class="success-info-item">✅ <span>If approved, you will receive your <strong>shop number</strong></span></div>
+      <div class="success-info-item">💳 <span>Pay <strong>TZS 15,000</strong> to activate your shop</span></div>
+      <div class="success-info-item">🏪 <span>Set up your store and <strong>start selling!</strong></span></div>
+    </div>
+    <a href="campus.html" class="success-btn">← Back to Campus</a>
+  </div>
+
+  <!-- STEP 1 — PERSONAL INFO -->
+  <div class="step-panel active" id="step1">
+    <div class="step-title">Tell Us About Yourself</div>
+    <div class="step-sub">Fill in your personal details. All information must be accurate and match your university records.</div>
+
+    <div class="alert alert-error" id="step1Error"></div>
+
+    <div class="form-card">
+      <div class="card-header"><div class="card-header-title">Personal Information</div></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name <span>*</span></label>
+            <input type="text" class="form-input" id="fullName" placeholder="Your full name as on ID">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number <span>*</span></label>
+            <input type="tel" class="form-input" id="phone" placeholder="+255 712 000 000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address <span>*</span></label>
+          <input type="email" class="form-input" id="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year of Study <span>*</span></label>
+          <select class="form-select" id="yearOfStudy">
+            <option value="">Select your year</option>
+            <option value="Year 1">Year 1</option>
+            <option value="Year 2">Year 2</option>
+            <option value="Year 3">Year 3</option>
+            <option value="Year 4">Year 4</option>
+            <option value="Postgraduate">Postgraduate</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <div></div>
+      <button class="btn-next" onclick="goStep(2)">Continue → University</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 — UNIVERSITY -->
+  <div class="step-panel" id="step2">
+    <div class="step-title">Select Your University</div>
+    <div class="step-sub">Choose your university and upload your student ID card for verification.</div>
+
+    <div class="alert alert-error" id="step2Error"></div>
+
+    <div class="form-card">
+      <div class="card-header"><div class="card-header-title">Your University <span style="color:var(--red)">*</span></div></div>
+      <div class="card-body">
+        <div class="uni-selector">
+          <div class="uni-option" onclick="selectUni(this,'UDSM','University of Dar es Salaam','Dar es Salaam')">
+            <div class="uni-opt-abbr">UDSM</div>
+            <div class="uni-opt-name">Dar es Salaam</div>
+          </div>
+          <div class="uni-option" onclick="selectUni(this,'UDOM','University of Dodoma','Dodoma')">
+            <div class="uni-opt-abbr">UDOM</div>
+            <div class="uni-opt-name">Dodoma</div>
+          </div>
+          <div class="uni-option" onclick="selectUni(this,'ARU','Ardhi University','Dar es Salaam')">
+            <div class="uni-opt-abbr">ARU</div>
+            <div class="uni-opt-name">Ardhi</div>
+          </div>
+          <div class="uni-option" onclick="selectUni(this,'TIA','Tanzania Institute of Accountancy','Dar es Salaam')">
+            <div class="uni-opt-abbr">TIA</div>
+            <div class="uni-opt-name">Accountancy</div>
+          </div>
+          <div class="uni-option" onclick="selectUni(this,'NIT','National Institute of Transport','Dar es Salaam')">
+            <div class="uni-opt-abbr">NIT</div>
+            <div class="uni-opt-name">Transport</div>
+          </div>
+        </div>
+        <input type="hidden" id="selectedUniAbbr">
+        <input type="hidden" id="selectedUniName">
+        <input type="hidden" id="selectedUniRegion">
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="card-header"><div class="card-header-title">Upload University ID Card <span style="color:var(--red)">*</span></div></div>
+      <div class="card-body">
+        <div class="upload-area">
+          <input type="file" id="idCardInput" accept="image/*,.pdf" onchange="previewFile(this)">
+          <div class="upload-icon">🪪</div>
+          <div class="upload-text">
+            <strong>Click to upload</strong> your University ID Card<br>
+            PNG, JPG or PDF — Max 5MB<br>
+            <span style="font-size:0.72rem;color:#9CA3AF">Must show your name, student number, and university name</span>
+          </div>
+        </div>
+        <div class="upload-preview" id="uploadPreview">
+          <span style="font-size:1.2rem">📄</span>
+          <div class="upload-preview-name" id="uploadPreviewName">File uploaded</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-back-step" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" onclick="goStep(3)">Continue → Business</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 — BUSINESS -->
+  <div class="step-panel" id="step3">
+    <div class="step-title">Your Business Details</div>
+    <div class="step-sub">Tell us about what you want to sell on campus. Be specific — this helps us match you with the right category.</div>
+
+    <div class="alert alert-error" id="step3Error"></div>
+
+    <div class="form-card">
+      <div class="card-header"><div class="card-header-title">Business Information</div></div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">Business/Shop Name <span>*</span></label>
+          <input type="text" class="form-input" id="shopName" placeholder="e.g. Amina Fashion UDSM">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business Category <span>*</span></label>
+          <select class="form-select" id="businessCategory">
+            <option value="">Select what you sell</option>
+            <option>Fashion & Clothing</option>
+            <option>Food & Snacks</option>
+            <option>Electronics & Accessories</option>
+            <option>Beauty & Health</option>
+            <option>Books & Stationery</option>
+            <option>Art & Crafts</option>
+            <option>Services</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business Description <span>*</span></label>
+          <textarea class="form-textarea" id="businessDesc" placeholder="Describe what you sell, your prices range, and why students on campus should buy from you..."></textarea>
+          <div class="form-hint">Minimum 50 characters. Be specific about your products and target customers.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp Business Number <span>*</span></label>
+          <input type="tel" class="form-input" id="businessWhatsapp" placeholder="+255 712 000 000">
+          <div class="form-hint">This is where customers will contact you for orders</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-back-step" onclick="goStep(2)">← Back</button>
+      <button class="btn-next" onclick="goStep(4)">Continue → Review</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 — REVIEW -->
+  <div class="step-panel" id="step4">
+    <div class="step-title">Review Your Application</div>
+    <div class="step-sub">Check everything is correct before submitting. You cannot change your application after submission.</div>
+
+    <div class="alert alert-error" id="step4Error"></div>
+
+    <div class="form-card" id="reviewCard">
+      <div class="card-header"><div class="card-header-title">Application Summary</div></div>
+      <div class="card-body" id="reviewBody"></div>
+    </div>
+
+    <div class="form-card">
+      <div class="card-header"><div class="card-header-title">💳 Payment Information</div></div>
+      <div class="card-body">
+        <div class="payment-box">
+          <div class="payment-title">How to Pay After Approval:</div>
+          <div class="payment-step"><div class="pay-num">1</div><div class="pay-text">Wait for approval WhatsApp message (within 48 hours)</div></div>
+          <div class="payment-step"><div class="pay-num">2</div><div class="pay-text">Transfer <strong>TZS 15,000</strong> to: <strong>CRDB BANK — 0152774556100</strong></div></div>
+          <div class="payment-step"><div class="pay-num">3</div><div class="pay-text">Send payment screenshot to WhatsApp: <strong>+255 651 919 915</strong></div></div>
+          <div class="payment-step"><div class="pay-num">4</div><div class="pay-text">Receive your <strong>shop number</strong> and login credentials</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#FEF3C7;border:1px solid #FDE68A;padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:0.85rem;color:#92400E">
+      ⚠️ <strong>Important:</strong> Only 200 founding shops are available. Submit now to secure your slot. Applications are reviewed in order of submission.
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-back-step" onclick="goStep(3)">← Back</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitApplication()">Submit Application →</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentStep = 1;
+let selectedUni = { abbr:"", name:"", region:"" };
+
+function goStep(step) {
+  // Validate current step
+  if (!validateStep(currentStep)) return;
+
+  // Update progress
+  for (let i = 1; i <= 4; i++) {
+    const circle = document.getElementById("prog" + i);
+    const label  = document.getElementById("prog" + i + "lbl");
+    const line   = document.getElementById("line" + i);
+    if (i < step) {
+      circle.className = "prog-circle done";
+      circle.textContent = "✓";
+      label.className = "prog-label done";
+      if (line) line.className = "prog-line done";
+    } else if (i === step) {
+      circle.className = "prog-circle active";
+      circle.textContent = i;
+      label.className = "prog-label active";
+    } else {
+      circle.className = "prog-circle";
+      circle.textContent = i;
+      label.className = "prog-label";
+    }
+  }
+
+  document.querySelectorAll(".step-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("step" + step).classList.add("active");
+
+  if (step === 4) buildReview();
+  currentStep = step;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function validateStep(step) {
+  const errEl = document.getElementById("step" + step + "Error");
+  if (errEl) errEl.style.display = "none";
+
+  if (step === 1) {
+    const name  = document.getElementById("fullName").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const year  = document.getElementById("yearOfStudy").value;
+    if (!name || !phone || !email || !year) {
+      errEl.textContent = "Please fill in all required fields.";
+      errEl.style.display = "block";
+      return false;
+    }
+  }
+  if (step === 2) {
+    if (!selectedUni.abbr) {
+      document.getElementById("step2Error").textContent = "Please select your university.";
+      document.getElementById("step2Error").style.display = "block";
+      return false;
+    }
+    if (!document.getElementById("idCardInput").files[0]) {
+      document.getElementById("step2Error").textContent = "Please upload your university ID card.";
+      document.getElementById("step2Error").style.display = "block";
+      return false;
+    }
+  }
+  if (step === 3) {
+    const shopName = document.getElementById("shopName").value.trim();
+    const cat      = document.getElementById("businessCategory").value;
+    const desc     = document.getElementById("businessDesc").value.trim();
+    const wa       = document.getElementById("businessWhatsapp").value.trim();
+    if (!shopName || !cat || !desc || !wa) {
+      document.getElementById("step3Error").textContent = "Please fill in all required fields.";
+      document.getElementById("step3Error").style.display = "block";
+      return false;
+    }
+    if (desc.length < 50) {
+      document.getElementById("step3Error").textContent = "Business description must be at least 50 characters.";
+      document.getElementById("step3Error").style.display = "block";
+      return false;
+    }
+  }
+  return true;
+}
+
+function selectUni(el, abbr, name, region) {
+  document.querySelectorAll(".uni-option").forEach(o => o.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedUni = { abbr, name, region };
+  document.getElementById("selectedUniAbbr").value = abbr;
+  document.getElementById("selectedUniName").value = name;
+  document.getElementById("selectedUniRegion").value = region;
+}
+
+function previewFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById("uploadPreviewName").textContent = "✅ " + file.name;
+  document.getElementById("uploadPreview").style.display = "flex";
+}
+
+function buildReview() {
+  const body = document.getElementById("reviewBody");
+  const rows = [
+    ["Full Name", document.getElementById("fullName").value],
+    ["Phone", document.getElementById("phone").value],
+    ["Email", document.getElementById("email").value],
+    ["Year of Study", document.getElementById("yearOfStudy").value],
+    ["University", selectedUni.abbr + " — " + selectedUni.name],
+    ["Region", selectedUni.region],
+    ["Shop Name", document.getElementById("shopName").value],
+    ["Category", document.getElementById("businessCategory").value],
+    ["WhatsApp", document.getElementById("businessWhatsapp").value],
+  ];
+  body.innerHTML = rows.map(([label, value]) => `
+    <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--lgray);font-size:0.875rem">
+      <span style="color:var(--gray);font-weight:500">${label}</span>
+      <span style="color:var(--dark);font-weight:600;text-align:right;max-width:60%">${value}</span>
+    </div>`).join("") + `
+    <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.875rem">
+      <span style="color:var(--gray);font-weight:500">ID Card</span>
+      <span style="color:var(--green);font-weight:600">✅ Uploaded</span>
+    </div>`;
+}
+
+async function submitApplication() {
+  const btn = document.getElementById("submitBtn");
+  btn.textContent = "Submitting...";
+  btn.disabled = true;
+
+  try {
+    // Upload ID card to Supabase Storage
+    const idFile = document.getElementById("idCardInput").files[0];
+    let idCardUrl = null;
+    if (idFile) {
+      const ext  = idFile.name.split(".").pop();
+      const path = `id-cards/${Date.now()}.${ext}`;
+      const { error: uploadError } = await sb.storage.from("campus-assets").upload(path, idFile);
+      if (!uploadError) {
+        const { data } = sb.storage.from("campus-assets").getPublicUrl(path);
+        idCardUrl = data.publicUrl;
+      }
+    }
+
+    // Submit application
+    const { error } = await sb.from("campus_applications").insert({
+      full_name:            document.getElementById("fullName").value.trim(),
+      email:                document.getElementById("email").value.trim(),
+      phone:                document.getElementById("phone").value.trim(),
+      university:           selectedUni.name,
+      university_abbr:      selectedUni.abbr,
+      region:               selectedUni.region,
+      year_of_study:        document.getElementById("yearOfStudy").value,
+      business_category:    document.getElementById("businessCategory").value,
+      business_description: document.getElementById("businessDesc").value.trim(),
+      id_card_url:          idCardUrl,
+      status:               "pending"
+    });
+
+    if (error) throw error;
+
+    // Show success
+    document.querySelectorAll(".step-panel").forEach(p => p.style.display = "none");
+    document.getElementById("successScreen").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+  } catch (err) {
+    document.getElementById("step4Error").textContent = "Submission failed: " + err.message;
+    document.getElementById("step4Error").style.display = "block";
+    btn.textContent = "Submit Application →";
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
