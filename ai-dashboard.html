@@ -300,7 +300,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 <script>
 // ── CONFIG ──
 const SUPABASE_URL  = 'https://bscecjbgnjitlfmgwcic.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
+const SUPABASE_ANON = 'WEKA_ANON_KEY_YAKO_HAPA';
 const GEMINI_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co/functions/v1/gemini-chat';
 
 const { createClient } = supabase;
@@ -424,17 +424,7 @@ async function ask(type, text) {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const response = await fetch(GEMINI_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${SUPABASE_ANON}`
-  },
-  body: JSON.stringify({
-    message: msg,
-    systemPrompt: systemPrompts[type]
-  })
-});
+    const { data: { session } } = await sb.auth.getSession();
     const response = await fetch(GEMINI_URL, {
       method: 'POST',
       headers: {
@@ -484,7 +474,11 @@ async function ask(type, text) {
 
 // ── CHECK AUTH ──
 sb.auth.getSession().then(({ data }) => {
-  if (!data.session) window.location.href = 'login.html';
+  if (!data.session) {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.replace('login.html');
+  }
 });
 </script>
 </body>
