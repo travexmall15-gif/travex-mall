@@ -122,9 +122,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(13,27,62,0.
 }
 .auto-scroll{animation:scrollLeft 40s linear infinite}
 .auto-scroll-fast{animation:scrollLeft 20s linear infinite}
-.uni-carousel-wrap{overflow:hidden;position:relative;width:100%}
-.uni-carousel-track{display:flex;gap:1rem;width:max-content;cursor:grab;user-select:none;will-change:transform}
-.uni-carousel-track.paused{animation-play-state:paused!important}
+.uni-carousel-wrap{overflow:hidden;position:relative;width:100%;margin-top:1.5rem}
+.uni-carousel-track{display:flex;gap:1rem;width:max-content;cursor:grab;user-select:none;will-change:transform;transform:translateX(0)}
 .uni-carousel-track.dragging{cursor:grabbing}
 
 /* ── STORE CARD ── */
@@ -524,30 +523,74 @@ footer{background:#060D1F;padding:4rem 5% 2rem;border-top:1px solid rgba(255,255
         <a href="campus-apply.html" class="uni-btn-ghost">Open Your Shop →</a>
       </div>
     </div>
-    <!-- Universities Carousel -->
-    <div class="uni-carousel-wrap">
-      <div class="carousel-track uni-carousel-track" id="uniCarousel">
-        <a href="campus-university.html?uni=UDSM" class="uni-card">
-          <div class="uni-card-top"><div class="uni-abbr">UDSM</div><div><div class="uni-card-name">University of Dar es Salaam</div><div class="uni-card-full">Chuo Kikuu cha Dar es Salaam</div></div></div>
-          <div class="uni-card-bottom"><div class="uni-card-shops">Browse Shops</div><div class="uni-card-arrow">→</div></div>
-        </a>
-        <a href="campus-university.html?uni=UDOM" class="uni-card">
-          <div class="uni-card-top"><div class="uni-abbr">UDOM</div><div><div class="uni-card-name">University of Dodoma</div><div class="uni-card-full">Chuo Kikuu cha Dodoma</div></div></div>
-          <div class="uni-card-bottom"><div class="uni-card-shops">Browse Shops</div><div class="uni-card-arrow">→</div></div>
-        </a>
-        <a href="campus-university.html?uni=ARU" class="uni-card">
-          <div class="uni-card-top"><div class="uni-abbr">ARU</div><div><div class="uni-card-name">Ardhi University</div><div class="uni-card-full">Chuo Kikuu cha Ardhi</div></div></div>
-          <div class="uni-card-bottom"><div class="uni-card-shops">Browse Shops</div><div class="uni-card-arrow">→</div></div>
-        </a>
-        <a href="campus-university.html?uni=TIA" class="uni-card">
-          <div class="uni-card-top"><div class="uni-abbr">TIA</div><div><div class="uni-card-name">Tanzania Institute of Accountancy</div><div class="uni-card-full">Taasisi ya Uhasibu Tanzania</div></div></div>
-          <div class="uni-card-bottom"><div class="uni-card-shops">Browse Shops</div><div class="uni-card-arrow">→</div></div>
-        </a>
-        <a href="campus-university.html?uni=NIT" class="uni-card">
-          <div class="uni-card-top"><div class="uni-abbr">NIT</div><div><div class="uni-card-name">National Institute of Transport</div><div class="uni-card-full">Taasisi ya Usafirishaji Tanzania</div></div></div>
-          <div class="uni-card-bottom"><div class="uni-card-shops">Browse Shops</div><div class="uni-card-arrow">→</div></div>
-        </a>
-      </div>
+    <!-- Universities Grid -->
+    <div class="uni-grid-5" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:2rem">
+
+      <!-- UDSM -->
+      <a href="campus-university.html?uni=UDSM" style="text-decoration:none;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;transition:all 0.3s;cursor:pointer" onmouseover="this.style.background='rgba(201,168,76,0.15)';this.style.borderColor='rgba(201,168,76,0.5)';this.style.transform='translateY(-4px)'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.transform='translateY(0)'">
+        <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="28" fill="#1a3a6b"/>
+          <circle cx="28" cy="28" r="24" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+        </svg>
+        <div style="text-align:center">
+          <div style="font-size:0.72rem;font-weight:800;color:var(--white);margin-bottom:0.2rem">UDSM</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);line-height:1.4">University of<br>Dar es Salaam</div>
+        </div>
+        <div style="font-size:0.62rem;color:var(--gold);font-weight:700">Browse →</div>
+      </a>
+
+      <!-- UDOM -->
+      <a href="campus-university.html?uni=UDOM" style="text-decoration:none;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;transition:all 0.3s;cursor:pointer" onmouseover="this.style.background='rgba(201,168,76,0.15)';this.style.borderColor='rgba(201,168,76,0.5)';this.style.transform='translateY(-4px)'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.transform='translateY(0)'">
+        <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="28" fill="#14532d"/>
+          <circle cx="28" cy="28" r="24" fill="none" stroke="#86efac" stroke-width="1.5"/>
+        </svg>
+        <div style="text-align:center">
+          <div style="font-size:0.72rem;font-weight:800;color:var(--white);margin-bottom:0.2rem">UDOM</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);line-height:1.4">University of<br>Dodoma</div>
+        </div>
+        <div style="font-size:0.62rem;color:var(--gold);font-weight:700">Browse →</div>
+      </a>
+
+      <!-- ARU -->
+      <a href="campus-university.html?uni=ARU" style="text-decoration:none;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;transition:all 0.3s;cursor:pointer" onmouseover="this.style.background='rgba(201,168,76,0.15)';this.style.borderColor='rgba(201,168,76,0.5)';this.style.transform='translateY(-4px)'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.transform='translateY(0)'">
+        <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="28" fill="#7c2d12"/>
+          <circle cx="28" cy="28" r="24" fill="none" stroke="#fed7aa" stroke-width="1.5"/>
+        </svg>
+        <div style="text-align:center">
+          <div style="font-size:0.72rem;font-weight:800;color:var(--white);margin-bottom:0.2rem">ARU</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);line-height:1.4">Ardhi<br>University</div>
+        </div>
+        <div style="font-size:0.62rem;color:var(--gold);font-weight:700">Browse →</div>
+      </a>
+
+      <!-- TIA -->
+      <a href="campus-university.html?uni=TIA" style="text-decoration:none;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;transition:all 0.3s;cursor:pointer" onmouseover="this.style.background='rgba(201,168,76,0.15)';this.style.borderColor='rgba(201,168,76,0.5)';this.style.transform='translateY(-4px)'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.transform='translateY(0)'">
+        <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="28" fill="#1e3a5f"/>
+          <circle cx="28" cy="28" r="24" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+        </svg>
+        <div style="text-align:center">
+          <div style="font-size:0.72rem;font-weight:800;color:var(--white);margin-bottom:0.2rem">TIA</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);line-height:1.4">Tanzania Institute<br>of Accountancy</div>
+        </div>
+        <div style="font-size:0.62rem;color:var(--gold);font-weight:700">Browse →</div>
+      </a>
+
+      <!-- NIT -->
+      <a href="campus-university.html?uni=NIT" style="text-decoration:none;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;transition:all 0.3s;cursor:pointer" onmouseover="this.style.background='rgba(201,168,76,0.15)';this.style.borderColor='rgba(201,168,76,0.5)';this.style.transform='translateY(-4px)'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.transform='translateY(0)'">
+        <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="28" fill="#4c1d95"/>
+          <circle cx="28" cy="28" r="24" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+        </svg>
+        <div style="text-align:center">
+          <div style="font-size:0.72rem;font-weight:800;color:var(--white);margin-bottom:0.2rem">NIT</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);line-height:1.4">National Institute<br>of Transport</div>
+        </div>
+        <div style="font-size:0.62rem;color:var(--gold);font-weight:700">Browse →</div>
+      </a>
+
     </div>
   </div>
 </section>
