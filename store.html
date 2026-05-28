@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ig" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F77737"/><stop offset="40%" stop-color="#E1306C"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig)"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -175,6 +175,53 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,62,0.97);backdrop-fi
 .ai-win-input:focus{border-color:var(--navy)}
 .ai-win-send{background:var(--gold);color:var(--navy);padding:0.55rem 0.9rem;font-weight:700;font-size:0.75rem;border:none;cursor:pointer;font-family:"Inter",sans-serif}
 
+
+/* SOCIAL BUTTONS */
+.social-btns{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem}
+.social-btn{display:flex;align-items:center;gap:0.75rem;width:100%;padding:0.65rem 1rem;font-size:0.82rem;font-weight:700;text-decoration:none;transition:all 0.2s;border:1.5px solid var(--lgray);background:var(--white);color:var(--dark)}
+.social-btn:hover{transform:translateX(4px)}
+.social-btn.instagram{border-color:#E1306C}
+.social-btn.instagram:hover{background:linear-gradient(45deg,#F77737,#E1306C,#833AB4);border-color:transparent;box-shadow:0 4px 15px rgba(225,48,108,0.35)}
+.social-btn.tiktok{border-color:#333}
+.social-btn.tiktok:hover{background:#010101;border-color:#010101;box-shadow:0 4px 15px rgba(0,0,0,0.25)}
+.social-btn.facebook{border-color:#1877F2}
+.social-btn.facebook:hover{background:#1877F2;border-color:#1877F2;box-shadow:0 4px 15px rgba(24,119,242,0.35)}
+.social-btn.instagram:hover .social-btn-label,
+.social-btn.instagram:hover .social-btn-handle,
+.social-btn.tiktok:hover .social-btn-label,
+.social-btn.tiktok:hover .social-btn-handle,
+.social-btn.facebook:hover .social-btn-label,
+.social-btn.facebook:hover .social-btn-handle{color:var(--white)!important}
+.social-icon{font-size:1.2rem;flex-shrink:0}
+.social-btn-label{font-size:0.82rem;font-weight:700;color:var(--dark);transition:color 0.2s}
+.social-btn-handle{font-size:0.7rem;font-weight:400;color:var(--gray);margin-top:0.1rem;transition:color 0.2s}
+
+
+/* SOCIAL ICON PILLS - below store name */
+.store-social-row{}
+.social-pill{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:700;text-decoration:none;transition:all 0.25s;border:1.5px solid rgba(255,255,255,0.25);color:var(--white);backdrop-filter:blur(4px);background:rgba(255,255,255,0.1)}
+.social-pill:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,0.3)}
+.social-pill.wa{border-color:#25D366;background:rgba(37,211,102,0.2)}
+.social-pill.wa:hover{background:#25D366}
+.social-pill.ig:hover{background:linear-gradient(45deg,#F77737,#E1306C,#833AB4);border-color:transparent}
+.social-pill.tt:hover{background:#010101;border-color:#010101}
+.social-pill.fb:hover{background:#1877F2;border-color:#1877F2}
+.social-pill svg{flex-shrink:0}
+
+
+/* SOCIAL PILLS */
+.s-pill{display:inline-flex;align-items:center;gap:0.4rem;padding:0.35rem 0.8rem;font-size:0.72rem;font-weight:700;text-decoration:none;transition:all 0.25s;border:1.5px solid rgba(255,255,255,0.25);color:var(--white);background:rgba(0,0,0,0.25);backdrop-filter:blur(4px);cursor:pointer}
+.s-pill:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+.s-pill.wa{border-color:#25D366}
+.s-pill.wa:hover{background:#25D366;border-color:#25D366}
+.s-pill.ig:hover{background:linear-gradient(45deg,#F77737,#E1306C,#833AB4);border-color:transparent}
+.s-pill.tt:hover{background:#010101;border-color:#010101}
+.s-pill.fb:hover{background:#1877F2;border-color:#1877F2}
+.s-pill.ph{border-color:rgba(255,255,255,0.3)}
+.s-pill.ph:hover{background:rgba(255,255,255,0.2)}
+.s-pill.em{border-color:rgba(255,255,255,0.3)}
+.s-pill.em:hover{background:rgba(255,255,255,0.2)}
+
 </style>
 </head>
 <body>
@@ -194,10 +241,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,62,0.97);backdrop-fi
       <div class="store-header-name" id="storeHeaderName">Loading Store...</div>
       <div class="store-header-cat" id="storeHeaderCat">—</div>
       <div class="store-header-badges" id="storeHeaderBadges"></div>
+      <!-- SOCIAL ICONS ROW -->
+      <div id="storeSocialRow" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem"></div>
     </div>
-    <a href="#" class="store-wa-btn" id="storeWaBtn" target="_blank">
-      💬 WhatsApp Order
-    </a>
   </div>
 </div>
 
@@ -253,6 +299,12 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,62,0.97);backdrop-fi
         📧 Send Email
       </a>
       <p style="font-size:0.75rem;color:var(--gray);text-align:center;margin-top:0.5rem;line-height:1.5">Response usually within 30 minutes</p>
+    </div>
+
+    <!-- Social Media -->
+    <div class="sidebar-card" id="socialCard" style="display:none">
+      <div class="sidebar-card-title">Follow Us</div>
+      <div class="social-btns" id="socialBtns"></div>
     </div>
 
     <!-- Share -->
@@ -384,12 +436,124 @@ function loadStoreData(store) {
   // WhatsApp
   const waNum = store.whatsapp_number?.replace(/\D/g,"");
   const waLink = `https://wa.me/${waNum}?text=Hello! I found your store on Travex Mall — ${store.store_name}`;
-  document.getElementById("storeWaBtn").href   = waLink;
   document.getElementById("sidebarWaBtn").href = waLink;
+
+  // ── SOCIAL PILLS BELOW STORE NAME ──
+  const socialRow = document.getElementById("storeSocialRow");
+  if (socialRow) {
+    const igSVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="igx" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F77737"/><stop offset="40%" stop-color="#E1306C"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#igx)"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg>`;
+    const ttSVG = `<svg width="15" height="15" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#010101"/><path d="M16.6 5.82A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83a5.674 5.674 0 0 0-.79-.05 5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21a5.674 5.674 0 0 0 5.68-5.68V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg>`;
+    const fbSVG = `<svg width="15" height="15" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg>`;
+    const waSVG = `<svg width="15" height="15" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#25D366"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.13-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.57c-.21.59-1.22 1.13-1.69 1.17-.44.04-.85.2-2.87-.6-2.42-.96-3.97-3.44-4.09-3.6-.12-.16-.97-1.29-.97-2.46s.61-1.74.83-1.98c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42.21.5.71 1.73.77 1.86.06.12.1.27.02.43-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.25-.1.49.14.24.62.99 1.33 1.6.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.59-.15 1.18z" fill="white"/></svg>`;
+    const phSVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.85a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+
+    let pills = "";
+    if (waNum)              pills += `<a href="${waLink}" target="_blank" class="s-pill wa">${waSVG} WhatsApp</a>`;
+    if (store.whatsapp_number) pills += `<a href="tel:${store.whatsapp_number}" class="s-pill ph">${phSVG} Call</a>`;
+    if (store.email)        pills += `<a href="mailto:${store.email}" class="s-pill em"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email</a>`;
+    if (store.instagram)    pills += `<a href="https://instagram.com/${store.instagram}" target="_blank" class="s-pill ig">${igSVG} @${store.instagram}</a>`;
+    if (store.tiktok)       pills += `<a href="https://tiktok.com/@${store.tiktok}" target="_blank" class="s-pill tt">${ttSVG} @${store.tiktok}</a>`;
+    if (store.facebook) {
+      const fbName = store.facebook.replace(/https?:\/\/(www\.)?facebook\.com\//, "");
+      pills += `<a href="${store.facebook}" target="_blank" class="s-pill fb">${fbSVG} ${fbName}</a>`;
+    }
+    socialRow.innerHTML = pills;
+  }
 
   // Email
   if (store.email) {
     document.getElementById("sidebarEmailBtn").href = `mailto:${store.email}`;
+  }
+
+  // social handled above
+  const socialRow = document.getElementById("storeSocialRow");
+  if (socialRow) {
+    let pills = "";
+
+    // WhatsApp pill
+    const waNum = store.whatsapp_number?.replace(/\D/g,"");
+    if (waNum) {
+      const waLink = `https://wa.me/${waNum}?text=Hello! I found your store on Travex Mall`;
+      pills += `<a href="${waLink}" target="_blank" class="social-pill wa"><svg width="14" height="14" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#25D366"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.13-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.57c-.21.59-1.22 1.13-1.69 1.17-.44.04-.85.2-2.87-.6-2.42-.96-3.97-3.44-4.09-3.6-.12-.16-.97-1.29-.97-2.46s.61-1.74.83-1.98c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42.21.5.71 1.73.77 1.86.06.12.1.27.02.43-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.25-.1.49.14.24.62.99 1.33 1.6.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.59-.15 1.18z" fill="white"/></svg> WhatsApp</a>`;
+    }
+
+    // Phone pill
+    if (store.whatsapp_number) {
+      pills += `<a href="tel:${store.whatsapp_number}" class="social-pill" style="border-color:rgba(255,255,255,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.85a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Call</a>`;
+    }
+
+    // Email pill
+    if (store.email) {
+      pills += `<a href="mailto:${store.email}" class="social-pill" style="border-color:rgba(255,255,255,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email</a>`;
+    }
+
+    // Instagram pill
+    if (store.instagram) {
+      pills += `<a href="https://instagram.com/${store.instagram}" target="_blank" class="social-pill ig"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="igp" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F77737"/><stop offset="40%" stop-color="#E1306C"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#igp)"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg> @${store.instagram}</a>`;
+    }
+
+    // TikTok pill
+    if (store.tiktok) {
+      pills += `<a href="https://tiktok.com/@${store.tiktok}" target="_blank" class="social-pill tt"><svg width="14" height="14" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#010101"/><path d="M16.6 5.82A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83c-.25-.03-.51-.05-.79-.05a5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21a5.674 5.674 0 0 0 5.68-5.68V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg> @${store.tiktok}</a>`;
+    }
+
+    // Facebook pill
+    if (store.facebook) {
+      const fbName = store.facebook.replace(/https?:\/\/(www\.)?facebook\.com\//, "");
+      pills += `<a href="${store.facebook}" target="_blank" class="social-pill fb"><svg width="14" height="14" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg> ${fbName}</a>`;
+    }
+
+    socialRow.innerHTML = pills;
+  }
+
+  // Hide old sidebar social card (now in header)
+  const socialCard  = document.getElementById("socialCard");
+  const socialBtnsEl= document.getElementById("socialBtns");
+  if (socialCard) socialCard.style.display = "none";
+
+  // Keep sidebar WhatsApp for compat
+  const socialBtns  = [];
+  if (store.instagram) {
+    socialBtns.push(`
+      <a href="https://instagram.com/${store.instagram}" target="_blank" class="social-btn instagram">
+        <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#010101"/><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83c-.25-.03-.51-.05-.79-.05a5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21 5.674 5.674 0 0 0 15.54 15.32V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg>
+        <div>
+          <div class="social-btn-label">Instagram</div>
+          <div class="social-btn-handle">@${store.instagram}</div>
+        </div>
+        <span style="margin-left:auto;font-size:0.75rem;opacity:0.5">→</span>
+      </a>`);
+  }
+  if (store.tiktok) {
+    socialBtns.push(`
+      <a href="https://tiktok.com/@${store.tiktok}" target="_blank" class="social-btn tiktok">
+        <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg>
+        <div>
+          <div class="social-btn-label">TikTok</div>
+          <div class="social-btn-handle">@${store.tiktok}</div>
+        </div>
+        <span style="margin-left:auto;font-size:0.75rem;opacity:0.5">→</span>
+      </a>`);
+  }
+  if (store.facebook) {
+    const fbLabel = store.facebook.replace(/https?:\/\/(www\.)?facebook\.com\//,"");
+    socialBtns.push(`
+      <a href="${store.facebook}" target="_blank" class="social-btn facebook">
+        <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <rect width="24" height="24" rx="5" fill="#1877F2"/>
+  <path d="M16 12h-2.5v8H10v-8H8v-3h2v-1.8C10 5.4 11.4 4 13.7 4H16v3h-1.5c-.8 0-1 .4-1 1V9H16l-.5 3z" fill="white"/>
+</svg>
+        <div>
+          <div class="social-btn-label">Facebook</div>
+          <div class="social-btn-handle">${fbLabel}</div>
+        </div>
+        <span style="margin-left:auto;font-size:0.75rem;opacity:0.5">→</span>
+      </a>`);
+  }
+
+  if (socialBtns.length > 0) {
+    socialCard.style.display  = "block";
+    socialBtnsEl.innerHTML = socialBtns.join("");
   }
 
   // Info bar

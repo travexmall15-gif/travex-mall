@@ -330,15 +330,15 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
       <div class="form-group">
         <label class="form-label">Phone Number <span>*</span></label>
         <input type="tel" class="form-input" id="ownerPhone" placeholder="+255 712 000 000">
-        <div class="form-hint">This number will be used for all communications about your store</div>
+        <div class="form-hint">This number will be used for all store communications</div>
       </div>
       <div class="form-group">
-        <label class="form-label">Create Your Password <span>*</span></label>
+        <label class="form-label">Create Password <span>*</span></label>
         <div class="pass-wrap">
           <input type="password" class="form-input" id="ownerPass" placeholder="6 characters — e.g. abc123" maxlength="6">
           <button class="pass-toggle" onclick="togglePass()">Show</button>
         </div>
-        <div class="form-hint">Your password must be exactly 6 characters — used to login to your dashboard</div>
+        <div class="form-hint">Exactly 6 characters. Used to login to your dashboard later</div>
       </div>
     </div>
   </div>
@@ -651,7 +651,7 @@ function validateStep(step, next) {
       const cat  = document.getElementById("sCat"+i)?.value;
       const reg  = document.getElementById("sReg"+i)?.value;
       if (!name||!wa||!desc||!cat||!reg) {
-        err.textContent = `Duka ${i}: Please fill in all required fields.`;
+        err.textContent = `Store ${i}: Please fill in all required fields.`;
         err.classList.add("show");
         return false;
       }
@@ -688,7 +688,7 @@ function generateStoreForms() {
   for (let i = 1; i <= n; i++) {
     html += `
     <div id="sForm${i}" style="margin-bottom:1.5rem">
-      ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.5rem 1.2rem;font-size:0.82rem;font-weight:700;margin-bottom:1rem">Duka ${i} of ${n}</div>`:""}
+      ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.5rem 1.2rem;font-size:0.82rem;font-weight:700;margin-bottom:1rem">Store ${i} of ${n}</div>`:""}
       <div class="form-card">
         <div class="card-head"><div class="card-head-title">Basic Information</div></div>
         <div class="card-body">
@@ -704,7 +704,7 @@ function generateStoreForms() {
           </div>
           <div class="form-group">
             <label class="form-label">Store Description <span>*</span></label>
-            <textarea class="form-textarea" id="sDesc${i}" placeholder="Eleza store lako — unauza nini, ubora wako, kwa nini wateja wakuchague..."></textarea>
+            <textarea class="form-textarea" id="sDesc${i}" placeholder="Describe your store — unauza nini, ubora wako, kwa nini wateja wakuchague..."></textarea>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -737,6 +737,45 @@ function generateStoreForms() {
           </div>
         </div>
       </div>
+
+      <!-- Social Media -->
+      <div class="form-card">
+        <div class="card-head">
+          <div class="card-head-title">🌐 Social Media <span style="font-size:0.72rem;color:var(--gray);font-weight:400">(Optional — visible to customers)</span></div>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px"><defs><linearGradient id="igf${i}" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F77737"/><stop offset="40%" stop-color="#E1306C"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#igf${i})"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg>
+                Instagram Username
+              </label>
+              <div style="position:relative">
+                <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);font-size:0.82rem;color:var(--gray);font-weight:600">@</span>
+                <input type="text" class="form-input" id="sInsta${i}" placeholder="yourhandle" style="padding-left:1.8rem">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px"><rect width="24" height="24" rx="6" fill="#010101"/><path d="M16.6 5.82A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83a5.674 5.674 0 0 0-.79-.05 5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21a5.674 5.674 0 0 0 5.68-5.68V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg>
+                TikTok Username
+              </label>
+              <div style="position:relative">
+                <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);font-size:0.82rem;color:var(--gray);font-weight:600">@</span>
+                <input type="text" class="form-input" id="sTiktok${i}" placeholder="yourhandle" style="padding-left:1.8rem">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg>
+              Facebook Page URL
+            </label>
+            <input type="text" class="form-input" id="sFacebook${i}" placeholder="https://facebook.com/yourpage">
+          </div>
+        </div>
+      </div>
+
       <div class="form-card">
         <div class="card-head"><div class="card-head-title">Branding (Optional)</div></div>
         <div class="card-body">
@@ -789,7 +828,7 @@ function buildPreview() {
 
     html += `
     <div class="preview-box" style="${i>1?"margin-top:1.5rem":""}">
-      ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.4rem 1rem;font-size:0.75rem;font-weight:700">Duka ${i}</div>`:""}
+      ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.4rem 1rem;font-size:0.75rem;font-weight:700">Store ${i}</div>`:""}
       <div class="preview-banner" style="${bSrc?`background-image:url(${bSrc});background-size:cover;background-position:center`:"background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"}">
         <div class="preview-overlay"></div>
       </div>
@@ -870,6 +909,10 @@ async function submitAndProceed() {
         bannerUrl = data.publicUrl;
       }
 
+      const instagram = (document.getElementById("sInsta"+i)?.value || "").trim().replace("@","");
+      const tiktok    = (document.getElementById("sTiktok"+i)?.value || "").trim().replace("@","");
+      const facebook  = (document.getElementById("sFacebook"+i)?.value || "").trim();
+
       await sb.from("stores").insert({
         user_id:           userId,
         store_name:        name,
@@ -883,7 +926,10 @@ async function submitAndProceed() {
         subscription_plan: selectedPlan.key,
         is_active:         false,
         owner_name:        ownerName,
-        owner_phone:       ownerPhone
+        owner_phone:       ownerPhone,
+        instagram:         instagram || null,
+        tiktok:            tiktok    || null,
+        facebook:          facebook  || null
       });
     }
 
