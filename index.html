@@ -8,7 +8,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Travex Mall"> content="width=device-width, initial-scale=1.0">
 <title>Travex Mall — Africa's Intelligent Digital Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>body{opacity:0;transition:opacity 0.3s}body.loaded{opacity:1}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -253,6 +256,8 @@ footer{background:#060D1F;padding:4rem 5% 2rem;border-top:1px solid rgba(255,255
   .uni-stats{gap:1.5rem}
 }
 @media(max-width:480px){
+  html{font-size:16px}
+  body{font-size:16px}
   nav{padding:0 4%;height:60px}
   .nav-logo{font-size:1.1rem}
   .btn-login{display:none}
@@ -726,6 +731,6 @@ document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
 
 // ── START ──
 init();
-</script>
+</script><script>document.body.classList.add('loaded')</script>
 </body>
 </html>
