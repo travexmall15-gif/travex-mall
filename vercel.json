@@ -1,35 +1,23 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
   "headers": [
     {
       "source": "/sw.js",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache" },
-        { "key": "Content-Type", "value": "application/javascript" },
         { "key": "Service-Worker-Allowed", "value": "/" }
       ]
     },
     {
-      "source": "/manifest.json",
+      "source": "/sitemap.xml",
       "headers": [
-        { "key": "Content-Type", "value": "application/manifest+json" },
-        { "key": "Cache-Control", "value": "public, max-age=0" }
+        { "key": "Content-Type", "value": "application/xml" }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/login", "destination": "/login.html" },
-    { "source": "/signup", "destination": "/signup.html" },
-    { "source": "/otp", "destination": "/otp.html" },
-    { "source": "/register-business", "destination": "/register-business.html" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/store", "destination": "/store.html" },
-    { "source": "/campus", "destination": "/campus.html" },
-    { "source": "/campus-apply", "destination": "/campus-apply.html" },
-    { "source": "/campus-dashboard", "destination": "/campus-dashboard.html" },
-    { "source": "/subscription", "destination": "/subscription.html" },
-    { "source": "/offline", "destination": "/offline.html" }
   ]
 }
