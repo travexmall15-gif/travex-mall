@@ -143,6 +143,38 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,62,0.97);backdrop-fi
   .store-info-bar{gap:1rem}
   .store-info-divider{display:none}
 }
+
+/* AI CUSTOMER CARE */
+.ai-chat-bubble{position:fixed;bottom:1.5rem;right:1.5rem;z-index:500}
+.ai-bubble-btn{width:58px;height:58px;background:var(--navy);border:3px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.4rem;box-shadow:0 4px 20px rgba(13,27,62,0.3);transition:all 0.3s;border-radius:50%}
+.ai-bubble-btn:hover{transform:scale(1.1);background:var(--gold)}
+.ai-bubble-badge{position:absolute;top:-4px;right:-4px;background:var(--green);color:var(--white);font-size:0.55rem;font-weight:800;padding:0.15rem 0.35rem;border-radius:20px;border:2px solid var(--white)}
+.ai-chat-window{position:fixed;bottom:5rem;right:1.5rem;width:340px;background:var(--white);border:1px solid var(--lgray);box-shadow:0 8px 40px rgba(13,27,62,0.2);z-index:500;display:none;flex-direction:column;max-height:480px;border-radius:0}
+.ai-chat-window.open{display:flex}
+.ai-chat-win-header{background:var(--navy);padding:1rem 1.2rem;display:flex;align-items:center;gap:0.75rem}
+.ai-chat-win-avatar{width:36px;height:36px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;border-radius:50%}
+.ai-chat-win-info{}
+.ai-chat-win-name{font-size:0.875rem;font-weight:700;color:var(--white)}
+.ai-chat-win-status{font-size:0.68rem;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:0.3rem}
+.ai-chat-win-dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+.ai-chat-win-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);font-size:1.2rem;cursor:pointer}
+.ai-chat-win-close:hover{color:var(--white)}
+.ai-chat-win-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.75rem}
+.ai-win-msg{display:flex;gap:0.5rem;max-width:90%}
+.ai-win-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-win-icon{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.75rem;background:var(--offwhite);border:1px solid var(--lgray);border-radius:50%}
+.ai-win-msg.user .ai-win-icon{background:var(--gold);color:var(--navy);font-weight:800;font-size:0.6rem}
+.ai-win-bubble{padding:0.6rem 0.85rem;font-size:0.82rem;line-height:1.55}
+.ai-win-msg.bot .ai-win-bubble{background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-win-msg.user .ai-win-bubble{background:var(--navy);color:var(--white)}
+.ai-win-sugs{padding:0.5rem 1rem;display:flex;gap:0.4rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
+.ai-win-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.3rem 0.6rem;font-size:0.7rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ai-win-sug:hover{border-color:var(--navy);color:var(--navy)}
+.ai-win-input-row{padding:0.75rem 1rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem}
+.ai-win-input{flex:1;padding:0.55rem 0.75rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.82rem;outline:none}
+.ai-win-input:focus{border-color:var(--navy)}
+.ai-win-send{background:var(--gold);color:var(--navy);padding:0.55rem 0.9rem;font-weight:700;font-size:0.75rem;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+
 </style>
 </head>
 <body>
@@ -527,5 +559,112 @@ document.getElementById("orderModal").addEventListener("click", e => {
 
 init();
 </script>
+
+<!-- AI CUSTOMER CARE WIDGET -->
+<div class="ai-chat-bubble">
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-win-header">
+      <div class="ai-chat-win-avatar">🤖</div>
+      <div class="ai-chat-win-info">
+        <div class="ai-chat-win-name">AI Customer Care</div>
+        <div class="ai-chat-win-status"><div class="ai-chat-win-dot"></div> Online · Ready to help</div>
+      </div>
+      <button class="ai-chat-win-close" onclick="toggleAIChat()">✕</button>
+    </div>
+    <div class="ai-chat-win-msgs" id="aiWinMsgs">
+      <div class="ai-win-msg bot">
+        <div class="ai-win-icon">🤖</div>
+        <div class="ai-win-bubble">Habari! 👋 I am the AI assistant for this store. How can I help you today? You can ask me about products, prices, delivery, or anything else!</div>
+      </div>
+    </div>
+    <div class="ai-win-sugs" id="aiWinSugs">
+      <button class="ai-win-sug" onclick="askAI('What products do you have?')">📦 Products</button>
+      <button class="ai-win-sug" onclick="askAI('How do I place an order?')">🛍️ How to order</button>
+      <button class="ai-win-sug" onclick="askAI('Do you deliver?')">🚚 Delivery</button>
+      <button class="ai-win-sug" onclick="askAI('What are your payment methods?')">💳 Payment</button>
+    </div>
+    <div class="ai-win-input-row">
+      <input type="text" class="ai-win-input" id="aiWinInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter')askAI()">
+      <button class="ai-win-send" onclick="askAI()">→</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;cursor:pointer" onclick="toggleAIChat()">
+    <div class="ai-bubble-btn">
+      <span style="font-size:0.75rem;font-weight:900;color:var(--gold);letter-spacing:0.05em">AI</span>
+    </div>
+    <div style="background:var(--navy);color:var(--white);font-size:0.6rem;font-weight:700;padding:0.2rem 0.5rem;white-space:nowrap;letter-spacing:0.05em;border:1px solid rgba(201,168,76,0.4)">Customer Care</div>
+  </div>
+</div>
+
+<script>
+const GEMINI_URL = "https://bscecjbgnjitlfmgwcic.supabase.co/functions/v1/gemini-chat";
+
+function toggleAIChat() {
+  const win = document.getElementById("aiChatWindow");
+  win.classList.toggle("open");
+}
+
+async function askAI(text) {
+  const input   = document.getElementById("aiWinInput");
+  const msgs    = document.getElementById("aiWinMsgs");
+  const sugs    = document.getElementById("aiWinSugs");
+  const msg     = text || input.value.trim();
+  if (!msg) return;
+
+  // Hide suggestions after first message
+  sugs.style.display = "none";
+
+  // Add user message
+  msgs.innerHTML += `<div class="ai-win-msg user"><div class="ai-win-icon">ME</div><div class="ai-win-bubble">${msg}</div></div>`;
+  input.value = "";
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Typing
+  const typingId = "t" + Date.now();
+  msgs.innerHTML += `<div class="ai-win-msg bot" id="${typingId}"><div class="ai-win-icon">🤖</div><div class="ai-win-bubble">...</div></div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Build store context
+  const storeContext = currentStore ? `
+You are the AI Customer Care assistant for "${currentStore.store_name}" on Travex Mall Tanzania.
+Store details:
+- Name: ${currentStore.store_name}
+- Category: ${currentStore.category || "General"}
+- Region: ${currentStore.region || "Tanzania"}
+- Description: ${currentStore.description || "A store on Travex Mall"}
+- WhatsApp: ${currentStore.whatsapp_number || "Contact via Travex Mall"}
+- Products available: ${allProducts.length} products
+${allProducts.length > 0 ? "- Product list: " + allProducts.slice(0,10).map(p => p.name + " (TZS " + Number(p.price).toLocaleString() + ")").join(", ") : ""}
+
+Your job:
+- Answer customer questions about this store and its products
+- Help customers place orders (tell them to click the order button on any product)
+- Be friendly, helpful and professional
+- Answer in English or Swahili based on the customer's language
+- Keep answers short and clear (max 3 sentences)
+- If asked about delivery, say the seller will confirm delivery details on WhatsApp
+- If asked about payment, mention M-Pesa, CRDB Bank, and cash on delivery
+- Always encourage customers to order via WhatsApp for fastest response
+  ` : "You are a helpful customer care AI for a store on Travex Mall Tanzania.";
+
+  try {
+    const res  = await fetch(GEMINI_URL, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos"
+      },
+      body: JSON.stringify({ message: msg, systemPrompt: storeContext })
+    });
+    const data = await res.json();
+    const reply = data.reply || "Sorry, I could not process your request. Please contact the seller directly on WhatsApp.";
+    document.getElementById(typingId).outerHTML = `<div class="ai-win-msg bot"><div class="ai-win-icon">🤖</div><div class="ai-win-bubble">${reply.replace(/\n/g,"<br>")}</div></div>`;
+  } catch {
+    document.getElementById(typingId).outerHTML = `<div class="ai-win-msg bot"><div class="ai-win-icon">🤖</div><div class="ai-win-bubble" style="color:var(--red)">Connection error. Please contact seller on WhatsApp directly.</div></div>`;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
+
 </body>
 </html>
