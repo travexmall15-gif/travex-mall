@@ -228,15 +228,67 @@ footer{background:#060D1F;padding:4rem 5% 2rem;border-top:1px solid rgba(255,255
   .uni-colleges{width:100%}
   .footer-grid{grid-template-columns:1fr 1fr}
 }
-@media(max-width:600px){
-  .nav-links{display:none}
-  .hero h1{font-size:2.2rem}
-  .stores-grid{grid-template-columns:1fr}
-  .cat-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1fr}
-  .footer-top{flex-direction:column}
+@media(max-width:900px){
+  .uni-content{flex-direction:column}
+  .uni-colleges{width:100%}
+  .sf-steps{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .exp-cards{grid-template-columns:1fr}
 }
-</style>
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero h1{font-size:2rem}
+  .hero p{font-size:0.9rem}
+  .hero-ctas{flex-direction:column}
+  .hero-ctas a{text-align:center;width:100%}
+  .hero-stats{gap:1.5rem}
+  .stores-grid,.shops-grid{grid-template-columns:1fr 1fr}
+  .cat-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .filter-row{gap:0.5rem}
+  .region-btn{font-size:0.75rem;padding:0.45rem 0.9rem}
+  .exp-cards{grid-template-columns:1fr}
+  .uni-content{flex-direction:column;padding:3rem 5%}
+  .uni-colleges{width:100%;min-width:unset}
+  .uni-stats{gap:1.5rem}
+}
+@media(max-width:480px){
+  nav{padding:0 4%;height:60px}
+  .nav-logo{font-size:1.1rem}
+  .btn-login{display:none}
+  .btn-signup{padding:0.4rem 0.9rem;font-size:0.75rem}
+  .hero{padding:6rem 4% 3rem}
+  .hero h1{font-size:1.7rem;line-height:1.12}
+  .hero p{font-size:0.875rem}
+  .hero-stat-val{font-size:1.5rem}
+  .hero-stat-lbl{font-size:0.65rem}
+  .hero-badge{font-size:0.65rem;padding:0.3rem 0.75rem}
+  .stores-grid,.shops-grid{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-icon{width:42px;height:42px;font-size:1.1rem}
+  .cat-name{font-size:0.72rem}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-top{flex-direction:column;gap:1.5rem}
+  .footer-products{gap:0.75rem}
+  .section-header{flex-direction:column;align-items:flex-start;gap:0.5rem}
+  .uni-badge{font-size:0.65rem}
+  .uni-title{font-size:1.8rem}
+  .uni-stats{gap:1rem}
+  .uni-stat-val{font-size:1.2rem}
+  .uni-college{padding:0.75rem 0.9rem}
+  .uni-college-abbr{width:36px;height:36px;font-size:0.6rem}
+  .shop-finder{padding:3rem 4%}
+  .sec-headline{font-size:1.4rem}
+  .top-rated{padding:3rem 4%}
+  .categories{padding:3rem 4%}
+  .stores-section{padding:2rem 4% 4rem}
+  .region-section{padding:2rem 4% 0}
+  .filter-bar{padding:1.5rem 4% 0}
+  .filter-row{flex-wrap:wrap}
+  .region-btn{font-size:0.72rem;padding:0.4rem 0.75rem}
+  .exp-card{padding:1.5rem}
+  .exp-count{font-size:2rem}
+}</style>
 </head>
 <body>
 
