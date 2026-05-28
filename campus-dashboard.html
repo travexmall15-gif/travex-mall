@@ -608,7 +608,7 @@ tbody tr:hover{background:var(--offwhite)}
 
 <script>
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const SUPABASE_ANON = "WEKA_ANON_KEY_YAKO_HAPA";
 const GEMINI_URL    = "https://bscecjbgnjitlfmgwcic.supabase.co/functions/v1/gemini-chat";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -620,7 +620,7 @@ let userUniAbbr  = "";
 // INIT
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = "login.html"; return; }
+  if (!session) { window.location.replace("login.html"); return; }
   currentUser = session.user;
 
   const name = currentUser.user_metadata?.name || currentUser.email.split("@")[0];
@@ -918,7 +918,9 @@ function showAlert(id, msg) {
 
 async function handleLogout() {
   await sb.auth.signOut();
-  window.location.href = "login.html";
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace("login.html");
 }
 
 init();
