@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Your Store — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+
+nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none}
+.nav-back:hover{color:var(--gold)}
+
+/* PROGRESS */
+.progress-wrap{background:var(--white);border-bottom:1px solid var(--lgray);padding:1.2rem 5%}
+.progress-steps{display:flex;align-items:center;max-width:700px;margin:0 auto}
+.prog-step{display:flex;align-items:center;gap:0.4rem;flex:1}
+.prog-circle{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;border:2px solid var(--lgray);color:var(--gray);flex-shrink:0;transition:all 0.3s}
+.prog-circle.active{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.prog-circle.done{background:var(--green);border-color:var(--green);color:var(--white)}
+.prog-label{font-size:0.65rem;font-weight:600;color:var(--gray)}
+.prog-label.active{color:var(--navy);font-weight:700}
+.prog-label.done{color:var(--green)}
+.prog-line{flex:1;height:2px;background:var(--lgray);margin:0 0.3rem;transition:background 0.3s}
+.prog-line.done{background:var(--green)}
+
+main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
+.step-panel{display:none}
+.step-panel.active{display:block}
+.step-title{font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:0.4rem}
+.step-sub{font-size:0.875rem;color:var(--gray);margin-bottom:2rem;line-height:1.6}
+
+/* FORM */
+.form-card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.card-head{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.card-head-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.card-body{padding:1.5rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-group:last-child{margin-bottom:0}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
+.form-label span{color:var(--red)}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus{border-color:var(--navy)}
+.form-input::placeholder{color:#9CA3AF}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
+.form-select:focus{border-color:var(--navy)}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.form-hint{font-size:0.72rem;color:var(--gray);margin-top:0.3rem}
+
+/* PASSWORD */
+.pass-wrap{position:relative}
+.pass-toggle{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray);font-size:0.78rem;font-family:"Inter",sans-serif}
+
+/* PLAN CARDS */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem}
+.plan-card{border:2px solid var(--lgray);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:var(--white)}
+.plan-card:hover{transform:translateY(-3px)}
+.plan-card.selected.basic{border-color:var(--gray);background:var(--offwhite);box-shadow:0 12px 30px rgba(0,0,0,0.08)}
+.plan-card.selected.standard{border-color:var(--navy);background:linear-gradient(135deg,#EFF6FF,#DBEAFE);box-shadow:0 12px 30px rgba(13,27,62,0.15)}
+.plan-card.selected.premium{border-color:var(--gold);background:linear-gradient(135deg,#FFFBEB,#FEF3C7);box-shadow:0 12px 30px rgba(201,168,76,0.2)}
+.plan-popular{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:0.6rem;font-weight:800;padding:0.2rem 0.7rem;text-transform:uppercase;white-space:nowrap}
+.plan-check{position:absolute;top:10px;right:10px;width:22px;height:22px;background:var(--green);display:none;align-items:center;justify-content:center;color:var(--white);font-size:0.7rem;font-weight:800}
+.plan-card.selected .plan-check{display:flex}
+.plan-tier{font-size:0.68rem;font-weight:700;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem}
+.plan-price{font-size:1.6rem;font-weight:900;color:var(--navy);line-height:1;margin-bottom:0.2rem}
+.plan-period{font-size:0.72rem;color:var(--gray);margin-bottom:1rem}
+.plan-divider{height:1px;background:var(--lgray);margin-bottom:1rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:0.45rem}
+.plan-features li{font-size:0.75rem;color:var(--dark);display:flex;gap:0.4rem;align-items:flex-start}
+.plan-features li::before{content:"✓";color:var(--green);font-weight:800;flex-shrink:0}
+
+/* PREMIUM STORES COUNT */
+.stores-count{display:none;margin-top:1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);padding:1rem}
+.stores-count.show{display:block}
+.stores-count-label{font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem}
+.stores-btns{display:flex;gap:0.4rem}
+.store-btn{flex:1;padding:0.5rem 0.4rem;font-size:0.75rem;font-weight:700;border:1.5px solid var(--lgray);background:var(--white);cursor:pointer;font-family:"Inter",sans-serif;text-align:center;transition:all 0.2s}
+.store-btn:hover{border-color:var(--gold)}
+.store-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+
+/* UPLOAD */
+.upload-area{border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-preview{max-width:100%;max-height:100px;margin-top:0.5rem;display:none}
+
+/* PREVIEW */
+.preview-box{background:var(--white);border:1px solid var(--lgray);overflow:hidden;margin-bottom:1.5rem}
+.preview-banner{height:140px;background:linear-gradient(135deg,var(--navy),var(--blue));position:relative}
+.preview-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,27,62,0.7),transparent)}
+.preview-header{padding:1rem 1.5rem;display:flex;align-items:flex-end;gap:1rem;margin-top:-32px;position:relative;z-index:1}
+.preview-logo{width:56px;height:56px;background:var(--navy);border:4px solid var(--white);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:var(--gold);flex-shrink:0;overflow:hidden}
+.preview-logo img{width:100%;height:100%;object-fit:cover}
+.preview-name{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.preview-cat{font-size:0.75rem;color:var(--gray);margin-top:0.2rem}
+.preview-badges{display:flex;gap:0.4rem;margin-top:0.4rem;flex-wrap:wrap}
+.preview-badge{padding:0.15rem 0.5rem;font-size:0.6rem;font-weight:700;text-transform:uppercase}
+.preview-body{padding:1rem 1.5rem;border-top:1px solid var(--lgray)}
+.preview-desc{font-size:0.83rem;color:var(--gray);line-height:1.6;margin-bottom:0.75rem}
+.preview-meta{display:flex;gap:1.5rem;flex-wrap:wrap}
+.preview-meta-item{font-size:0.75rem;color:var(--gray);display:flex;align-items:center;gap:0.3rem}
+.preview-meta-item strong{color:var(--navy)}
+.preview-note{background:#FEF3C7;border:1px solid #FDE68A;padding:0.75rem 1rem;font-size:0.8rem;color:#92400E;margin-bottom:1.5rem;display:flex;gap:0.5rem}
+
+/* PAYMENT PAGE */
+.pay-page{background:var(--white);border:1px solid var(--lgray);padding:2rem;margin-bottom:1.5rem}
+.pay-page-title{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
+.pay-page-sub{font-size:0.82rem;color:var(--gray);margin-bottom:1.5rem;line-height:1.6}
+.pay-amount-box{background:var(--navy);padding:1.5rem;text-align:center;margin-bottom:1.5rem}
+.pay-amount-label{font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
+.pay-amount-val{font-size:2rem;font-weight:900;color:var(--gold)}
+.pay-amount-period{font-size:0.8rem;color:rgba(255,255,255,0.4)}
+.pay-steps{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem}
+.pay-step{display:flex;gap:0.75rem;align-items:flex-start}
+.pay-num{width:28px;height:28px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0}
+.pay-text{font-size:0.85rem;color:var(--gray);line-height:1.55}
+.pay-text strong{color:var(--dark)}
+.copy-row{display:flex;justify-content:space-between;align-items:center;background:var(--offwhite);border:1px solid var(--lgray);padding:0.55rem 0.85rem;margin-top:0.4rem}
+.copy-val{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.copy-btn{background:var(--navy);color:var(--white);border:none;padding:0.28rem 0.7rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif}
+.copy-btn:hover{background:var(--gold);color:var(--navy)}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:#25D366;color:var(--white);font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;margin-bottom:1rem;transition:all 0.2s;text-decoration:none}
+.wa-btn:hover{background:#128C7E}
+.close-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:var(--offwhite);color:var(--gray);font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.close-btn:hover{background:var(--lgray)}
+
+/* ACTIONS */
+.form-actions{display:flex;gap:1rem;justify-content:space-between;align-items:center;margin-top:2rem}
+.btn-back{background:var(--white);color:var(--gray);padding:0.85rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+.btn-back:hover{border-color:var(--navy);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.btn-next:hover{background:var(--blue)}
+.btn-submit{background:var(--gold);color:var(--navy);padding:0.85rem 2rem;font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-submit:hover{background:var(--gold2)}
+.btn-submit:disabled{background:var(--lgray);color:var(--gray);cursor:not-allowed}
+
+/* ALERT */
+.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+
+/* THANK YOU PAGE */
+.thankyou{display:none;text-align:center;padding:3rem 1.5rem;background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.thankyou.show{display:block}
+.thankyou-icon{font-size:4rem;margin-bottom:1rem}
+.thankyou-title{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem}
+.thankyou-sub{font-size:0.9rem;color:var(--gray);line-height:1.7;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
+.thankyou-info{background:var(--offwhite);border:1px solid var(--lgray);padding:1.2rem;text-align:left;margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
+.thankyou-info-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
+.thankyou-item{font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;display:flex;gap:0.5rem}
+.thankyou-item strong{color:var(--dark)}
+.btn-go-login{display:inline-block;background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;text-decoration:none;margin-bottom:0.75rem}
+.btn-go-login:hover{background:var(--blue)}
+.btn-go-home{display:inline-block;background:transparent;color:var(--navy);padding:0.85rem 2rem;font-size:0.875rem;font-weight:600;text-decoration:none;border:1.5px solid var(--lgray)}
+.btn-go-home:hover{border-color:var(--navy)}
+
+@media(max-width:600px){
+  .plan-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .progress-steps .prog-label{display:none}
+}
+
+/* DASHBOARD PREVIEW */
+.dash-sidebar-item{padding:0.55rem 1rem;color:rgba(255,255,255,0.6);font-size:0.78rem;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:all 0.2s}
+.dash-sidebar-item:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.active-item{color:var(--gold)!important;background:rgba(201,168,76,0.1)!important;border-left-color:var(--gold)!important}
+.locked-item{opacity:0.4;cursor:not-allowed!important;font-size:0.75rem}
+.dash-tab{display:none}
+.active-tab{display:block}
+.store-tab-btn{padding:0.65rem 1.2rem;background:transparent;border:none;border-bottom:2px solid transparent;font-size:0.8rem;font-weight:600;color:var(--gray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.store-tab-btn:hover{color:var(--navy)}
+.store-tab-btn.active{color:var(--navy);border-bottom-color:var(--navy)}
+.ai-tool-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;margin-bottom:1rem}
+.ai-tool-card.locked{opacity:0.4;pointer-events:none}
+.ai-tool-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.ai-tool-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.ai-tool-name{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.ai-tool-desc{font-size:0.78rem;color:var(--gray)}
+.ai-tool-badge{font-size:0.62rem;font-weight:700;padding:0.15rem 0.5rem;margin-left:auto;flex-shrink:0}
+.ai-chat-preview{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem;font-size:0.78rem;color:var(--gray);border-left:3px solid var(--navy)}
+.locked-overlay{position:absolute;inset:0;background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:var(--gray);z-index:10}
+
+
+/* ── DASHBOARD PREVIEW STYLES ── */
+.dash-preview{background:#F1F3F8;min-height:600px;border:1px solid var(--lgray)}
+.dash-sidebar{width:200px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;min-height:600px}
+.dash-sidebar-logo{padding:1rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.dash-sidebar-logo-text{font-size:0.9rem;font-weight:800;color:var(--white)}
+.dash-sidebar-logo-text span{color:var(--gold)}
+.dash-sidebar-nav{padding:0.5rem 0;flex:1}
+.dash-nav-section{font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 1rem 0.2rem}
+.dash-nav-item{display:flex;align-items:center;gap:0.5rem;padding:0.55rem 1rem;color:rgba(255,255,255,0.55);font-size:0.78rem;font-weight:500;cursor:default;border-left:3px solid transparent;opacity:0.8}
+.dash-nav-item.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
+.dash-nav-item.locked{opacity:0.4}
+.dash-main{flex:1;display:flex;flex-direction:column}
+.dash-topbar{background:var(--white);border-bottom:1px solid var(--lgray);padding:0 1.5rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.dash-page-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.dash-locked-chip{background:#FEF3C7;color:#92400E;font-size:0.62rem;font-weight:700;padding:0.2rem 0.6rem;border:1px solid #FDE68A}
+.dash-content{padding:1.5rem;flex:1}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.dash-stat{background:var(--white);border:1px solid var(--lgray);padding:1rem}
+.dash-stat-label{font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem}
+.dash-stat-value{font-size:1.4rem;font-weight:800;color:var(--navy)}
+.dash-stat-sub{font-size:0.65rem;color:var(--green);margin-top:0.2rem}
+.dash-grid2{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-bottom:1rem}
+.dash-card{background:var(--white);border:1px solid var(--lgray)}
+.dash-card-header{padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.dash-card-title{font-size:0.8rem;font-weight:700;color:var(--navy)}
+.dash-card-btn{background:var(--lgray);color:var(--gray);padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;border:none;cursor:not-allowed;font-family:"Inter",sans-serif}
+.dash-card-body{padding:1rem}
+.dash-empty{text-align:center;padding:1.5rem;color:var(--gray);font-size:0.78rem}
+.dash-empty-icon{font-size:1.8rem;margin-bottom:0.4rem}
+.dash-store-card{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;opacity:0.9}
+.dash-store-logo{width:36px;height:36px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--gold);flex-shrink:0}
+.dash-store-name{font-size:0.82rem;font-weight:700;color:var(--navy)}
+.dash-store-cat{font-size:0.7rem;color:var(--gray)}
+.dash-store-badge{margin-left:auto;background:var(--lgray);color:var(--gray);font-size:0.6rem;font-weight:700;padding:0.15rem 0.5rem}
+
+/* AI CARDS */
+.ai-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem}
+.ai-card{background:var(--white);border:1px solid var(--lgray);padding:1rem;position:relative}
+.ai-card.locked-feature{opacity:0.45;pointer-events:none}
+.ai-card-icon{font-size:1.6rem;margin-bottom:0.5rem}
+.ai-card-name{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
+.ai-card-desc{font-size:0.72rem;color:var(--gray);line-height:1.5}
+.ai-card-btn{width:100%;margin-top:0.75rem;padding:0.5rem;background:var(--navy);color:var(--white);font-size:0.72rem;font-weight:600;border:none;cursor:not-allowed;font-family:"Inter",sans-serif;opacity:0.7}
+.ai-lock-badge{position:absolute;top:8px;right:8px;background:var(--lgray);color:var(--gray);font-size:0.58rem;font-weight:700;padding:0.15rem 0.4rem}
+
+/* OVERVIEW STORES TABLE */
+.overview-stores-grid{display:flex;flex-direction:column;gap:0.5rem}
+.ov-store-row{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem}
+.ov-store-num{width:28px;height:28px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0}
+.ov-store-info{flex:1}
+.ov-store-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.ov-store-meta{font-size:0.7rem;color:var(--gray);margin-top:0.1rem}
+.ov-store-status{font-size:0.68rem;font-weight:700;padding:0.2rem 0.5rem;background:#FEF3C7;color:#92400E}
+
+/* DASH TABS */
+.dash-tabs{display:flex;gap:0;background:var(--navy);border-bottom:1px solid rgba(255,255,255,0.1)}
+.dash-tab{padding:0.6rem 1.2rem;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"Inter",sans-serif}
+.dash-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.dash-tab:hover{color:var(--white)}
+.dash-panel{display:none}
+.dash-panel.active{display:flex}
+
+.locked-overlay{position:relative}
+.locked-overlay::after{content:"🔒 Activate to unlock";position:absolute;inset:0;background:rgba(248,249,252,0.85);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--gray);pointer-events:none}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="index.html" class="nav-back">← Marketplace</a>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-steps">
+    <div class="prog-step">
+      <div class="prog-circle active" id="prog1">1</div>
+      <div class="prog-label active" id="lbl1">Account</div>
+    </div>
+    <div class="prog-line" id="line1"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog2">2</div>
+      <div class="prog-label" id="lbl2">Plan</div>
+    </div>
+    <div class="prog-line" id="line2"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog3">3</div>
+      <div class="prog-label" id="lbl3">Store Info</div>
+    </div>
+    <div class="prog-line" id="line3"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog4">4</div>
+      <div class="prog-label" id="lbl4">Preview</div>
+    </div>
+    <div class="prog-line" id="line4"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog5">5</div>
+      <div class="prog-label" id="lbl5">Payment</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- THANK YOU PAGE -->
+<div class="thankyou" id="thankYouPage">
+  <div class="thankyou-icon">🎉</div>
+  <div class="thankyou-title">Thank You! We Will Be In Touch</div>
+  <div class="thankyou-sub">Your details have been saved successfully. Our team will review your payment and contact you via the phone number you provided.</div>
+  <div class="thankyou-info">
+    <div class="thankyou-info-title">What Happens Next:</div>
+    <div class="thankyou-item">✅ <span>Your details have been saved securely in our system</span></div>
+    <div class="thankyou-item">📞 <span>Our team will <strong>call or message you</strong> to confirm your payment</span></div>
+    <div class="thankyou-item">🏪 <span>Your store will be <strong>officially opened</strong> after payment is confirmed</span></div>
+    <div class="thankyou-item">🔐 <span>You will receive <strong>dashboard login details</strong> via your phone</span></div>
+    <div class="thankyou-item">⏱️ <span>This process takes <strong>only 2 hours</strong></span></div>
+  </div>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <a href="seller-login.html" class="btn-go-login">Login to Dashboard →</a>
+    <a href="index.html" class="btn-go-home">← Back to Marketplace</a>
+  </div>
+</div>
+
+<!-- STEP 1 — ACCOUNT INFO -->
+<div class="step-panel active" id="step1">
+  <div class="step-title">Welcome to Travex Mall!</div>
+  <div class="step-sub">Enter your personal details. These will be used to create your store account.</div>
+
+  <div class="alert alert-error" id="err1"></div>
+
+  <div class="form-card">
+    <div class="card-head"><div class="card-head-title">Store Owner Information</div></div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">Full Name of Owner <span>*</span></label>
+        <input type="text" class="form-input" id="ownerName" placeholder="e.g. John Maregeri">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number <span>*</span></label>
+        <input type="tel" class="form-input" id="ownerPhone" placeholder="+255 712 000 000">
+        <div class="form-hint">This number will be used for all communications about your store</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Create Your Password <span>*</span></label>
+        <div class="pass-wrap">
+          <input type="password" class="form-input" id="ownerPass" placeholder="6 characters — e.g. abc123" maxlength="6">
+          <button class="pass-toggle" onclick="togglePass()">Show</button>
+        </div>
+        <div class="form-hint">Your password must be exactly 6 characters — used to login to your dashboard</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <div></div>
+    <button class="btn-next" onclick="goStep(2)">Continue → Choose Plan</button>
+  </div>
+</div>
+
+<!-- STEP 2 — CHOOSE PLAN -->
+<div class="step-panel" id="step2">
+  <div class="step-title">Choose Your Plan</div>
+  <div class="step-sub">Select the plan that fits your business. You can upgrade anytime.</div>
+
+  <div class="alert alert-error" id="err2"></div>
+
+  <div class="plan-grid">
+    <div class="plan-card basic" id="cardBasic" onclick="selectPlan('basic',25000,1,this)">
+      <div class="plan-check">✓</div>
+      <div class="plan-tier">⭐ Basic</div>
+      <div class="plan-price">TZS 25,000</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>1 digital store</li>
+        <li>Up to 50 products</li>
+        <li>WhatsApp orders</li>
+        <li>Basic analytics</li>
+        <li>Email support</li>
+      </ul>
+    </div>
+    <div class="plan-card standard" id="cardStandard" onclick="selectPlan('standard',50000,1,this)">
+      <div class="plan-popular">Most Popular</div>
+      <div class="plan-check">✓</div>
+      <div class="plan-tier">⭐⭐ Standard</div>
+      <div class="plan-price">TZS 50,000</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>1 digital store</li>
+        <li>Unlimited products</li>
+        <li>WhatsApp orders</li>
+        <li>Full analytics</li>
+        <li>AI Business Advisor</li>
+        <li>Priority support</li>
+      </ul>
+    </div>
+    <div class="plan-card premium" id="cardPremium" onclick="selectPlan('premium',80000,1,this)">
+      <div class="plan-check">✓</div>
+      <div class="plan-tier">👑 Premium</div>
+      <div class="plan-price" id="premiumPrice">TZS 80,000</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>1 — 3 digital stores</li>
+        <li>Unlimited products</li>
+        <li>Everything in Standard</li>
+        <li>AI Customer Care</li>
+        <li>AI Marketing</li>
+        <li>Featured on homepage</li>
+        <li>Dedicated support</li>
+      </ul>
+      <div class="stores-count" id="storesCountWrap">
+        <div class="stores-count-label">How many stores do you want?</div>
+        <div class="stores-btns">
+          <div class="store-btn active" onclick="setStoreCount(1,80000,this);event.stopPropagation()">1 Store<br><small>TZS 80K</small></div>
+          <div class="store-btn" onclick="setStoreCount(2,140000,this);event.stopPropagation()">2 Stores<br><small>TZS 140K</small></div>
+          <div class="store-btn" onclick="setStoreCount(3,190000,this);event.stopPropagation()">3 Stores<br><small>TZS 190K</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn-back" onclick="goStep(1)">← Back</button>
+    <button class="btn-next" onclick="goStep(3)">Continue → Store Info</button>
+  </div>
+</div>
+
+<!-- STEP 3 — STORE INFO -->
+<div class="step-panel" id="step3">
+  <div class="step-title">Your Store Information</div>
+  <div class="step-sub" id="step3Sub">Fill in your store details. These will be visible to your customers.</div>
+
+  <div class="alert alert-error" id="err3"></div>
+  <div id="storeForms"></div>
+
+  <div class="form-actions">
+    <button class="btn-back" onclick="goStep(2)">← Back</button>
+    <button class="btn-next" onclick="goStep(4)">Continue → Preview Store</button>
+  </div>
+</div>
+
+<!-- STEP 4 — PREVIEW DASHBOARD -->
+<div class="step-panel" id="step4">
+  <div class="step-title">Your Dashboard Preview</div>
+  <div class="step-sub">This is your interactive dashboard preview based on your details. <strong>All features activate after payment.</strong></div>
+
+  <div style="background:#FEF3C7;border:1px solid #FDE68A;padding:0.75rem 1rem;font-size:0.8rem;color:#92400E;margin-bottom:1.5rem;display:flex;gap:0.5rem;align-items:center">
+    🔒 <span><strong>Preview Mode</strong> — Buttons are locked until payment is complete. This is exactly what you will get!</span>
+  </div>
+
+  <div id="dashPreview" style="border:2px solid var(--lgray);overflow:hidden;background:var(--offwhite)">
+
+    <div style="background:var(--navy);padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:0.9rem;font-weight:800;color:var(--white)">TRAVEX <span style="color:var(--gold)">MALL</span> <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);font-weight:400">· Seller Dashboard</span></div>
+      <div style="display:flex;align-items:center;gap:0.75rem">
+        <div style="width:30px;height:30px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--navy)" id="dashAvatar">?</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.7)" id="dashUserName">Owner</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:200px 1fr;min-height:520px">
+      <div style="background:var(--navy);padding:1rem 0;border-right:1px solid rgba(255,255,255,0.07)">
+        <div style="padding:0 1rem;margin-bottom:0.5rem;font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em">Main</div>
+        <div class="dash-sidebar-item active-item" onclick="switchDashPanel('overview',this)">📊 Overview</div>
+        <div class="dash-sidebar-item" id="sideStoresBtn" onclick="switchDashPanel('stores',this)" style="display:none">🏪 All Stores</div>
+        <div class="dash-sidebar-item locked-item">📦 Products 🔒</div>
+        <div class="dash-sidebar-item locked-item">🛍️ Orders 🔒</div>
+        <div style="padding:0.75rem 1rem 0.4rem;margin-top:0.5rem;font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em">AI Tools</div>
+        <div class="dash-sidebar-item" onclick="switchDashPanel('ai',this)">🤖 AI Assistants</div>
+        <div style="padding:0.75rem 1rem 0.4rem;margin-top:0.5rem;font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em">Account</div>
+        <div class="dash-sidebar-item locked-item">💳 Subscription 🔒</div>
+      </div>
+
+      <div style="overflow:auto;max-height:520px">
+
+        <div id="dashPanel-overview" class="dash-tab active-tab">
+          <div style="background:var(--white);padding:1rem 1.5rem;border-bottom:1px solid var(--lgray)">
+            <div style="font-size:0.95rem;font-weight:700;color:var(--navy)">Dashboard Overview</div>
+            <div style="font-size:0.72rem;color:var(--gray)" id="dashPlanBadge">Loading...</div>
+          </div>
+          <div id="premiumStoreTabs" style="display:none;background:var(--white);border-bottom:1px solid var(--lgray);padding:0 1rem">
+            <div style="display:flex;gap:0;overflow-x:auto" id="storeTabBtns"></div>
+          </div>
+          <div style="padding:1.5rem">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem" id="dashStats">
+              <div style="background:var(--white);padding:1rem;border:1px solid var(--lgray)"><div style="font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.4rem">Products</div><div style="font-size:1.4rem;font-weight:800;color:var(--navy)">0</div><div style="font-size:0.62rem;color:var(--green)">Add after activation</div></div>
+              <div style="background:var(--white);padding:1rem;border:1px solid var(--lgray)"><div style="font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.4rem">Orders</div><div style="font-size:1.4rem;font-weight:800;color:var(--navy)">0</div><div style="font-size:0.62rem;color:var(--gray)">All time</div></div>
+              <div style="background:var(--white);padding:1rem;border:1px solid var(--lgray)"><div style="font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.4rem">Revenue (TZS)</div><div style="font-size:1.4rem;font-weight:800;color:var(--navy)">0</div><div style="font-size:0.62rem;color:var(--gray)">Total earned</div></div>
+              <div style="background:var(--white);padding:1rem;border:1px solid var(--lgray)"><div style="font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.4rem">Status</div><div style="font-size:0.78rem;font-weight:800;color:var(--red)">⏳ Pending</div><div style="font-size:0.62rem;color:var(--gray)">Awaiting payment</div></div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--lgray);margin-bottom:1rem">
+              <div style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:0.82rem;font-weight:700;color:var(--navy)" id="dashStoreCardTitle">Your Store</div>
+                <div style="background:var(--lgray);color:var(--gray);font-size:0.62rem;padding:0.2rem 0.5rem;font-weight:700">🔒 Editable after payment</div>
+              </div>
+              <div style="padding:1rem 1.2rem" id="dashStoreInfo">Loading...</div>
+            </div>
+            <div style="background:linear-gradient(135deg,var(--navy),var(--blue));padding:1.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+              <div>
+                <div style="font-size:0.82rem;font-weight:700;color:var(--gold);margin-bottom:0.2rem">⚡ Activate Your Store</div>
+                <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Complete payment to unlock all features and go live</div>
+              </div>
+              <div style="background:var(--gold);color:var(--navy);padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:700;opacity:0.6;cursor:not-allowed">Pay to Activate 🔒</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="dashPanel-stores" class="dash-tab">
+          <div style="background:var(--white);padding:1rem 1.5rem;border-bottom:1px solid var(--lgray)">
+            <div style="font-size:0.95rem;font-weight:700;color:var(--navy)">All My Stores</div>
+            <div style="font-size:0.72rem;color:var(--gray)" id="storesTabSub">Your stores overview</div>
+          </div>
+          <div style="padding:1.5rem" id="dashStoresGrid">Loading...</div>
+        </div>
+
+        <div id="dashPanel-ai" class="dash-tab">
+          <div style="background:var(--white);padding:1rem 1.5rem;border-bottom:1px solid var(--lgray)">
+            <div style="font-size:0.95rem;font-weight:700;color:var(--navy)">🤖 AI Assistants</div>
+            <div style="font-size:0.72rem;color:var(--gray)" id="aiPlanNote">Based on your plan</div>
+          </div>
+          <div style="padding:1.5rem" id="dashAITools">Loading...</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions" style="margin-top:1.5rem">
+    <button class="btn-back" onclick="goStep(3)">← Back</button>
+    <button class="btn-submit" id="submitBtn" onclick="submitAndProceed()">Submit & Proceed to Payment →</button>
+  </div>
+</div>
+
+<!-- STEP 5 — PAYMENT -->
+<div class="step-panel" id="step5">
+  <div class="step-title">Subscription Payment</div>
+  <div class="step-sub">Fanya malipo ya mpango uliochagua ili store lako liwashwe.</div>
+
+  <div class="pay-page">
+    <div class="pay-amount-box">
+      <div class="pay-amount-label">Amount to Pay</div>
+      <div class="pay-amount-val" id="payAmountDisplay">TZS 50,000</div>
+      <div class="pay-amount-period">per month · Ghairi wakati wowote</div>
+    </div>
+
+    <div class="pay-steps">
+      <div class="pay-step">
+        <div class="pay-num">1</div>
+        <div class="pay-text">
+          Transfer <strong id="payAmt2">TZS 50,000</strong> to CRDB Bank:
+          <div class="copy-row">
+            <span class="copy-val">0152774556100</span>
+            <button class="copy-btn" onclick="copyText('0152774556100',this)">Copy</button>
+          </div>
+        </div>
+      </div>
+      <div class="pay-step">
+        <div class="pay-num">2</div>
+        <div class="pay-text">
+          Send payment screenshot to WhatsApp:
+          <div class="copy-row">
+            <span class="copy-val">+255 651 919 915</span>
+            <a href="https://wa.me/255651919915" target="_blank" class="copy-btn" style="text-decoration:none">Open WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div class="pay-step">
+        <div class="pay-num">3</div>
+        <div class="pay-text">Our team will verify and <strong>kukufungua store ndani ya masaa 2</strong></div>
+      </div>
+      <div class="pay-step">
+        <div class="pay-num">4</div>
+        <div class="pay-text">We will contact you via <strong>your registered phone: <span id="confirmPhone">—</span></strong></div>
+      </div>
+    </div>
+
+    <a href="https://wa.me/255651919915" target="_blank" class="wa-btn">
+      💬 Send Payment Screenshot on WhatsApp
+    </a>
+    <button class="close-btn" onclick="finishAndThankYou()">
+      ✅ I Have Paid — Finish
+    </button>
+  </div>
+
+  <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:1rem 1.2rem;font-size:0.82rem;color:#1E3A5F;line-height:1.7">
+    📞 <strong>Note:</strong> Our team will call or message you on phone number <strong id="confirmPhone2">—</strong> after payment is confirmed. Please ensure your phone is reachable.
+  </div>
+</div>
+
+</main>
+
+<script>
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let selectedPlan = { key:"standard", price:50000, name:"Standard", stores:1 };
+let currentStep  = 1;
+
+// ── PROGRESS ──
+function updateProgress(step) {
+  for (let i = 1; i <= 5; i++) {
+    const c  = document.getElementById("prog"+i);
+    const l  = document.getElementById("lbl"+i);
+    const ln = document.getElementById("line"+i);
+    if (i < step)      { c.className="prog-circle done"; c.textContent="✓"; l.className="prog-label done"; if(ln) ln.className="prog-line done"; }
+    else if (i===step) { c.className="prog-circle active"; c.textContent=i; l.className="prog-label active"; }
+    else               { c.className="prog-circle"; c.textContent=i; l.className="prog-label"; }
+  }
+}
+
+// ── GO STEP ──
+function goStep(step) {
+  if (!validateStep(currentStep, step)) return;
+
+  updateProgress(step);
+  document.querySelectorAll(".step-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("step"+step).classList.add("active");
+
+  if (step === 3) generateStoreForms();
+  if (step === 4) buildPreview();
+  if (step === 5) buildPaymentPage();
+
+  currentStep = step;
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+// ── VALIDATE ──
+function validateStep(step, next) {
+  if (next < step) return true;
+
+  if (step === 1) {
+    const name  = document.getElementById("ownerName").value.trim();
+    const phone = document.getElementById("ownerPhone").value.trim();
+    const pass  = document.getElementById("ownerPass").value;
+    const err   = document.getElementById("err1");
+    if (!name)  { err.textContent="Please enter your full name."; err.classList.add("show"); return false; }
+    if (!phone) { err.textContent="Please enter your phone number."; err.classList.add("show"); return false; }
+    if (!pass)  { err.textContent="Please enter your password."; err.classList.add("show"); return false; }
+    if (pass.length !== 6) { err.textContent="Password must be exactly 6 characters — e.g. abc123"; err.classList.add("show"); return false; }
+    err.classList.remove("show");
+  }
+
+  if (step === 2) {
+    const err = document.getElementById("err2");
+    if (!selectedPlan.key) { err.textContent="Please select a plan."; err.classList.add("show"); return false; }
+    err.classList.remove("show");
+  }
+
+  if (step === 3) {
+    const err = document.getElementById("err3");
+    for (let i = 1; i <= selectedPlan.stores; i++) {
+      const name = document.getElementById("sName"+i)?.value.trim();
+      const wa   = document.getElementById("sWa"+i)?.value.trim();
+      const desc = document.getElementById("sDesc"+i)?.value.trim();
+      const cat  = document.getElementById("sCat"+i)?.value;
+      const reg  = document.getElementById("sReg"+i)?.value;
+      if (!name||!wa||!desc||!cat||!reg) {
+        err.textContent = `Duka ${i}: Please fill in all required fields.`;
+        err.classList.add("show");
+        return false;
+      }
+    }
+    err.classList.remove("show");
+  }
+  return true;
+}
+
+// ── SELECT PLAN ──
+function selectPlan(key, price, stores, el) {
+  document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  document.getElementById("storesCountWrap").classList.remove("show");
+  if (key === "premium") document.getElementById("storesCountWrap").classList.add("show");
+  selectedPlan = { key, price, name:{basic:"Basic",standard:"Standard",premium:"Premium"}[key], stores };
+}
+
+function setStoreCount(count, price, el) {
+  document.querySelectorAll(".store-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  selectedPlan.stores = count;
+  selectedPlan.price  = price;
+  document.getElementById("premiumPrice").textContent = "TZS " + price.toLocaleString();
+}
+
+// ── GENERATE STORE FORMS ──
+function generateStoreForms() {
+  const n = selectedPlan.stores;
+  document.getElementById("step3Sub").innerHTML =
+    `Fill in your store details. You are opening <strong>${n} store${n>1?" ("+n+")":""}</strong>.`;
+
+  let html = "";
+  for (let i = 1; i <= n; i++) {
+    html += `
+    <div id="sForm${i}" style="margin-bottom:1.5rem">
+      ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.5rem 1.2rem;font-size:0.82rem;font-weight:700;margin-bottom:1rem">Duka ${i} of ${n}</div>`:""}
+      <div class="form-card">
+        <div class="card-head"><div class="card-head-title">Basic Information</div></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Store Name <span>*</span></label>
+              <input type="text" class="form-input" id="sName${i}" placeholder="e.g. Amina Fashion Store">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store WhatsApp <span>*</span></label>
+              <input type="tel" class="form-input" id="sWa${i}" placeholder="+255 712 000 000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Store Description <span>*</span></label>
+            <textarea class="form-textarea" id="sDesc${i}" placeholder="Eleza store lako — unauza nini, ubora wako, kwa nini wateja wakuchague..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Business Category <span>*</span></label>
+              <select class="form-select" id="sCat${i}">
+                <option value="">Select category</option>
+                <option>Fashion & Clothing</option>
+                <option>Electronics</option>
+                <option>Food & Agriculture</option>
+                <option>Beauty & Health</option>
+                <option>Hardware & Construction</option>
+                <option>Home & Furniture</option>
+                <option>Books & Education</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Region <span>*</span></label>
+              <select class="form-select" id="sReg${i}">
+                <option value="">Select region</option>
+                <option>Dar es Salaam</option>
+                <option>Arusha</option>
+                <option>Dodoma</option>
+                <option>Mwanza</option>
+                <option>Moshi</option>
+                <option>Zanzibar</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="card-head"><div class="card-head-title">Branding (Optional)</div></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Store Logo</label>
+              <div class="upload-area">
+                <input type="file" id="sLogo${i}" accept="image/*" onchange="prevImg(this,'sPrevLogo${i}')">
+                <div style="font-size:1.8rem;margin-bottom:0.3rem">🖼️</div>
+                <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> logo</div>
+                <img id="sPrevLogo${i}" class="upload-preview">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Banner</label>
+              <div class="upload-area">
+                <input type="file" id="sBanner${i}" accept="image/*" onchange="prevImg(this,'sPrevBanner${i}')">
+                <div style="font-size:1.8rem;margin-bottom:0.3rem">🏞️</div>
+                <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> bango</div>
+                <img id="sPrevBanner${i}" class="upload-preview">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  document.getElementById("storeForms").innerHTML = html;
+}
+
+// ── BUILD PREVIEW ──
+function buildPreview() {
+  const n = selectedPlan.stores;
+  const planColors = { basic:"background:var(--lgray);color:var(--gray)", standard:"background:var(--navy);color:var(--white)", premium:"background:var(--gold);color:var(--navy)" };
+  const planLabels = { basic:"⭐ Basic", standard:"⭐⭐ Standard", premium:"👑 Premium" };
+  let html = "";
+
+  for (let i = 1; i <= n; i++) {
+    const name    = document.getElementById("sName"+i)?.value || "Store Name";
+    const desc    = document.getElementById("sDesc"+i)?.value || "Maelezo ya store...";
+    const cat     = document.getElementById("sCat"+i)?.value || "Category";
+    const reg     = document.getElementById("sReg"+i)?.value || "Region";
+    const wa      = document.getElementById("sWa"+i)?.value || "—";
+    const initials= name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
+
+    const logoEl   = document.getElementById("sPrevLogo"+i);
+    const bannerEl = document.getElementById("sPrevBanner"+i);
+    const logoSrc  = logoEl?.src && logoEl.style.display!=="none" ? logoEl.src : null;
+    const bSrc     = bannerEl?.src && bannerEl.style.display!=="none" ? bannerEl.src : null;
+
+    html += `
+    <div class="preview-box" style="${i>1?"margin-top:1.5rem":""}">
+      ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.4rem 1rem;font-size:0.75rem;font-weight:700">Duka ${i}</div>`:""}
+      <div class="preview-banner" style="${bSrc?`background-image:url(${bSrc});background-size:cover;background-position:center`:"background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"}">
+        <div class="preview-overlay"></div>
+      </div>
+      <div class="preview-header">
+        <div class="preview-logo">${logoSrc?`<img src="${logoSrc}" style="width:100%;height:100%;object-fit:cover">`:initials}</div>
+        <div>
+          <div class="preview-name">${name}</div>
+          <div class="preview-cat">${cat} · ${reg}</div>
+          <div class="preview-badges">
+            <span class="preview-badge" style="${planColors[selectedPlan.key]}">${planLabels[selectedPlan.key]}</span>
+            <span class="preview-badge" style="background:#D1FAE5;color:#065F46">✓ Verified</span>
+          </div>
+        </div>
+      </div>
+      <div class="preview-body">
+        <div class="preview-desc">${desc}</div>
+        <div class="preview-meta">
+          <div class="preview-meta-item">📍 <strong>${reg}</strong></div>
+          <div class="preview-meta-item">💬 <strong>${wa}</strong></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById("previewContent").innerHTML = html;
+  document.getElementById("summaryPlan").textContent  = selectedPlan.name + " Plan";
+  document.getElementById("summaryStores").textContent= "Mastore "+selectedPlan.stores;
+  document.getElementById("summaryPrice").textContent = "TZS "+selectedPlan.price.toLocaleString()+"/mwezi";
+}
+
+// ── SUBMIT ──
+async function submitAndProceed() {
+  const btn = document.getElementById("submitBtn");
+  btn.textContent = "Saving...";
+  btn.disabled = true;
+
+  try {
+    const ownerName  = document.getElementById("ownerName").value.trim();
+    const ownerPhone = document.getElementById("ownerPhone").value.trim();
+    const ownerPass  = document.getElementById("ownerPass").value;
+
+    // Create account via Supabase auth
+    const phoneClean = ownerPhone.replace(/\D/g,"");
+    const email = phoneClean + "@travexmall.app";
+    const { data: signData, error: signErr } = await sb.auth.signUp({
+      email,
+      password: ownerPass + "TRX!",
+      options: { data: { name: ownerName, phone: ownerPhone } }
+    });
+
+    let userId = signData?.user?.id || null;
+
+    // If already registered, sign in
+    if (signErr?.message?.includes("already registered")) {
+      const { data: siData } = await sb.auth.signInWithPassword({ email, password: ownerPass + "TRX!" });
+      userId = siData?.user?.id || null;
+    }
+
+    // Save stores
+    for (let i = 1; i <= selectedPlan.stores; i++) {
+      const name = document.getElementById("sName"+i).value.trim();
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g,"-") + "-" + Date.now() + (i>1?i:"");
+
+      let logoUrl = null, bannerUrl = null;
+      const logoFile   = document.getElementById("sLogo"+i)?.files[0];
+      const bannerFile = document.getElementById("sBanner"+i)?.files[0];
+
+      if (logoFile && userId) {
+        const ext = logoFile.name.split(".").pop();
+        await sb.storage.from("store-logos").upload(`${userId}/logo${i}.${ext}`, logoFile, {upsert:true});
+        const { data } = sb.storage.from("store-logos").getPublicUrl(`${userId}/logo${i}.${ext}`);
+        logoUrl = data.publicUrl;
+      }
+      if (bannerFile && userId) {
+        const ext = bannerFile.name.split(".").pop();
+        await sb.storage.from("store-banners").upload(`${userId}/banner${i}.${ext}`, bannerFile, {upsert:true});
+        const { data } = sb.storage.from("store-banners").getPublicUrl(`${userId}/banner${i}.${ext}`);
+        bannerUrl = data.publicUrl;
+      }
+
+      await sb.from("stores").insert({
+        user_id:           userId,
+        store_name:        name,
+        slug,
+        description:       document.getElementById("sDesc"+i).value.trim(),
+        category:          document.getElementById("sCat"+i).value,
+        region:            document.getElementById("sReg"+i).value,
+        whatsapp_number:   document.getElementById("sWa"+i).value.trim(),
+        logo:              logoUrl,
+        banner:            bannerUrl,
+        subscription_plan: selectedPlan.key,
+        is_active:         false,
+        owner_name:        ownerName,
+        owner_phone:       ownerPhone
+      });
+    }
+
+    // Save subscription record
+    await sb.from("subscriptions").insert({
+      user_id:    userId,
+      plan_type:  selectedPlan.key,
+      amount:     selectedPlan.price,
+      status:     "pending"
+    });
+
+    btn.textContent = "Submit & Proceed to Payment";
+    btn.disabled = false;
+    goStep(5);
+
+  } catch(e) {
+    document.getElementById("err3").textContent = "Error: " + e.message;
+    document.getElementById("err3").classList.add("show");
+    btn.textContent = "Submit & Proceed to Payment";
+    btn.disabled = false;
+  }
+}
+
+// ── BUILD PAYMENT PAGE ──
+function buildPaymentPage() {
+  const amt   = "TZS " + selectedPlan.price.toLocaleString();
+  const phone = document.getElementById("ownerPhone")?.value || "—";
+  document.getElementById("payAmountDisplay").textContent = amt;
+  document.getElementById("payAmt2").textContent           = amt;
+  document.getElementById("confirmPhone").textContent      = phone;
+  document.getElementById("confirmPhone2").textContent     = phone;
+}
+
+// ── FINISH ──
+function finishAndThankYou() {
+  document.querySelectorAll(".step-panel").forEach(p => p.style.display="none");
+  document.getElementById("progressWrap").style.display = "none";
+  document.getElementById("thankYouPage").classList.add("show");
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+// ── HELPERS ──
+function togglePass() {
+  const inp = document.getElementById("ownerPass");
+  const btn = document.querySelector(".pass-toggle");
+  inp.type = inp.type==="password" ? "text" : "password";
+  btn.textContent = inp.type==="password" ? "Show" : "Hide";
+}
+
+function prevImg(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { const el = document.getElementById(previewId); el.src=e.target.result; el.style.display="block"; };
+  reader.readAsDataURL(file);
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = "Copied ✓";
+    btn.style.background = "var(--green)";
+    setTimeout(() => { btn.textContent=orig; btn.style.background=""; }, 2000);
+  });
+}
+
+// ── BUILD DASHBOARD PREVIEW ──
+function buildPreview() {
+  const n     = selectedPlan.stores;
+  const plan  = selectedPlan.key;
+  const owner = document.getElementById("ownerName").value || "Owner";
+  const init  = owner.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
+
+  document.getElementById("dashAvatar").textContent   = init;
+  document.getElementById("dashUserName").textContent = owner;
+
+  const planLabels = { basic:"⭐ Basic Plan", standard:"⭐⭐ Standard Plan", premium:"👑 Premium Plan" };
+  document.getElementById("dashPlanBadge").textContent =
+    planLabels[plan] + " · TZS " + selectedPlan.price.toLocaleString() + "/month · " + n + " Store" + (n>1?"s":"");
+
+  buildStoreCard(1);
+  buildAITools();
+  buildStoresGrid();
+
+  // Premium multi-store tabs
+  if (plan === "premium" && n > 1) {
+    document.getElementById("premiumStoreTabs").style.display = "block";
+    document.getElementById("sideStoresBtn").style.display = "block";
+    let tabs = "";
+    for (let i = 1; i <= n; i++) {
+      const sn = document.getElementById("sName"+i)?.value || "Store "+i;
+      tabs += `<button class="store-tab-btn ${i===1?"active":""}" onclick="switchStoreCardTab(${i},this)">${sn}</button>`;
+    }
+    tabs += `<button class="store-tab-btn" onclick="switchStoreCardTab(0,this)">📊 All Stores</button>`;
+    document.getElementById("storeTabBtns").innerHTML = tabs;
+  }
+}
+
+function buildStoreCard(i) {
+  const name    = document.getElementById("sName"+i)?.value || "Store Name";
+  const cat     = document.getElementById("sCat"+i)?.value || "—";
+  const reg     = document.getElementById("sReg"+i)?.value || "—";
+  const wa      = document.getElementById("sWa"+i)?.value || "—";
+  const desc    = document.getElementById("sDesc"+i)?.value || "—";
+  const init    = name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
+  const logoEl  = document.getElementById("sPrevLogo"+i);
+  const logoSrc = logoEl?.src && logoEl.style.display!=="none" ? logoEl.src : null;
+  const pColor  = { basic:"background:var(--lgray);color:var(--gray)", standard:"background:var(--navy);color:var(--white)", premium:"background:var(--gold);color:var(--navy)" };
+  const pLabel  = { basic:"⭐ Basic", standard:"⭐⭐ Standard", premium:"👑 Premium" };
+
+  document.getElementById("dashStoreCardTitle").textContent = name;
+  document.getElementById("dashStoreInfo").innerHTML = `
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem">
+      <div style="width:52px;height:52px;background:var(--navy);border:3px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:0.95rem;font-weight:800;color:var(--gold);overflow:hidden;flex-shrink:0">
+        ${logoSrc?`<img src="${logoSrc}" style="width:100%;height:100%;object-fit:cover">`:init}
+      </div>
+      <div>
+        <div style="font-size:0.95rem;font-weight:800;color:var(--navy)">${name}</div>
+        <div style="font-size:0.72rem;color:var(--gray)">${cat}</div>
+        <div style="display:flex;gap:0.4rem;margin-top:0.3rem;flex-wrap:wrap">
+          <span style="font-size:0.6rem;font-weight:700;padding:0.15rem 0.45rem;${pColor[selectedPlan.key]}">${pLabel[selectedPlan.key]}</span>
+          <span style="font-size:0.6rem;font-weight:700;padding:0.15rem 0.45rem;background:#D1FAE5;color:#065F46">✓ Verified</span>
+          <span style="font-size:0.6rem;font-weight:700;padding:0.15rem 0.45rem;background:#FEF3C7;color:#92400E">⏳ Pending</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+      <div style="font-size:0.75rem;padding:0.5rem;background:var(--offwhite)"><span style="color:var(--gray)">Region: </span><strong>${reg}</strong></div>
+      <div style="font-size:0.75rem;padding:0.5rem;background:var(--offwhite)"><span style="color:var(--gray)">WhatsApp: </span><strong>${wa}</strong></div>
+      <div style="font-size:0.75rem;padding:0.5rem;background:var(--offwhite);grid-column:1/-1"><span style="color:var(--gray)">About: </span>${desc}</div>
+    </div>`;
+}
+
+function buildAITools() {
+  const plan = selectedPlan.key;
+  const tools = [
+    { key:"care",      icon:"💬", name:"Customer Care AI",      desc:"Responds to customer inquiries automatically in English & Swahili. Handles complaints and writes professional replies.",  plans:["basic","standard","premium"], sample:"Hello! How can I help you today? Ask me about products, prices or delivery." },
+    { key:"advisor",   icon:"🤖", name:"Business Advisor AI",   desc:"Analyzes store performance, suggests pricing strategies and gives growth advice specific to Tanzania market.", plans:["standard","premium"],           sample:"Tip: Add at least 10 products this week to attract more customers to your store." },
+    { key:"accounting",icon:"📊", name:"Accounting AI",         desc:"Tracks revenue, calculates profit/loss, generates weekly financial reports and helps manage business expenses.", plans:["premium"],                       sample:"Weekly Report: Revenue TZS 0 · Expenses TZS 0 · Net Profit TZS 0." },
+    { key:"marketing", icon:"📈", name:"Marketing & Demand AI", desc:"Predicts trending products in Tanzania, creates WhatsApp campaigns and analyzes market demand for your category.", plans:["premium"],                       sample:"Fashion is trending this week in Dar es Salaam — perfect for your store!" }
+  ];
+
+  const planNotes = {
+    basic:    "Basic Plan: Customer Care AI only",
+    standard: "Standard Plan: Customer Care AI + Business Advisor AI",
+    premium:  "Premium Plan: All 4 AI Assistants included"
+  };
+  document.getElementById("aiPlanNote").textContent = planNotes[plan];
+
+  let html = `<div style="background:var(--navy);padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.75rem;color:rgba(255,255,255,0.7)">
+    🤖 Your AI assistants will be fully active after payment. Preview each one below:
+  </div>`;
+
+  tools.forEach(t => {
+    const has = t.plans.includes(plan);
+    html += `<div style="background:var(--white);border:1px solid ${has?"var(--lgray)":"var(--lgray)"};padding:1.1rem;margin-bottom:0.75rem;position:relative;${!has?"opacity:0.4":""}">
+      ${!has?`<div style="position:absolute;inset:0;background:rgba(248,249,252,0.85);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--gray);z-index:5">🔒 Not included in ${selectedPlan.name} Plan — Upgrade to unlock</div>`:""}
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:${has?"0.75rem":"0"}">
+        <div style="width:36px;height:36px;background:var(--offwhite);border:1px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">${t.icon}</div>
+        <div style="flex:1">
+          <div style="font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${t.name}</div>
+          <div style="font-size:0.75rem;color:var(--gray);line-height:1.5">${t.desc}</div>
+        </div>
+        <span style="font-size:0.62rem;font-weight:700;padding:0.15rem 0.5rem;flex-shrink:0;${has?"background:#D1FAE5;color:#065F46":"background:var(--lgray);color:var(--gray)"}">${has?"✓ Included":"Locked"}</span>
+      </div>
+      ${has?`<div style="background:var(--offwhite);border:1px solid var(--lgray);padding:0.6rem 0.85rem;font-size:0.75rem;color:var(--gray);border-left:3px solid var(--navy);font-style:italic">💬 "${t.sample}"</div>`:""}
+    </div>`;
+  });
+
+  document.getElementById("dashAITools").innerHTML = html;
+}
+
+function buildStoresGrid() {
+  const n = selectedPlan.stores;
+  const pColor = { basic:"var(--lgray)", standard:"var(--navy)", premium:"var(--gold)" };
+  let html = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem">`;
+  for (let i = 1; i <= n; i++) {
+    const name = document.getElementById("sName"+i)?.value || "Store "+i;
+    const cat  = document.getElementById("sCat"+i)?.value || "—";
+    const reg  = document.getElementById("sReg"+i)?.value || "—";
+    const init = name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
+    html += `<div style="background:var(--white);border:2px solid ${pColor[selectedPlan.key]};overflow:hidden">
+      <div style="height:65px;background:linear-gradient(135deg,#0D1B3E,#1B3A6B);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:var(--gold)">${init}</div>
+      <div style="padding:0.75rem">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${name}</div>
+        <div style="font-size:0.68rem;color:var(--gray);margin-bottom:0.5rem">${cat} · ${reg}</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+          <span style="font-size:0.62rem;background:#FEF3C7;color:#92400E;padding:0.15rem 0.35rem;font-weight:700">⏳ Pending</span>
+          <span style="font-size:0.62rem;color:var(--gray)">0 products</span>
+        </div>
+        <div style="width:100%;padding:0.4rem;background:var(--lgray);text-align:center;font-size:0.68rem;font-weight:700;color:var(--gray);cursor:not-allowed">Manage 🔒</div>
+      </div>
+    </div>`;
+  }
+  html += "</div>";
+  document.getElementById("dashStoresGrid").innerHTML = html;
+  document.getElementById("storesTabSub").textContent = n + " store" + (n>1?"s":"") + " registered";
+}
+
+function switchDashPanel(name, el) {
+  document.querySelectorAll(".dash-sidebar-item:not(.locked-item)").forEach(i => i.classList.remove("active-item"));
+  el.classList.add("active-item");
+  document.querySelectorAll(".dash-tab").forEach(t => t.classList.remove("active-tab"));
+  document.getElementById("dashPanel-" + name).classList.add("active-tab");
+}
+
+function switchStoreCardTab(num, btn) {
+  document.querySelectorAll(".store-tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  if (num === 0) {
+    // All stores overview
+    document.getElementById("dashStoreCardTitle").textContent = "All Stores Overview";
+    const n = selectedPlan.stores;
+    let rows = "";
+    for (let i = 1; i <= n; i++) {
+      const sn = document.getElementById("sName"+i)?.value || "Store "+i;
+      rows += `<div style="display:flex;justify-content:space-between;padding:0.5rem;background:var(--offwhite);border:1px solid var(--lgray);margin-bottom:0.4rem;font-size:0.78rem"><span style="font-weight:700;color:var(--navy)">${sn}</span><span style="color:var(--gray)">0 products · 0 orders · TZS 0</span></div>`;
+    }
+    document.getElementById("dashStoreInfo").innerHTML = rows;
+  } else {
+    buildStoreCard(num);
+  }
+}
+
+// Auto select standard
+document.getElementById("cardStandard").click();
+</script>
+</body>
+</html>

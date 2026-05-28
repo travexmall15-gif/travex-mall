@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Dashboard — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden}
+
+/* ── TOP NAVBAR ── */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--navy);height:60px;display:flex;align-items:center;padding:0 1.5rem;gap:1rem;border-bottom:1px solid rgba(201,168,76,0.15)}
+.topnav-logo{font-size:1rem;font-weight:800;color:var(--white);text-decoration:none;flex-shrink:0}
+.topnav-logo span{color:var(--gold)}
+.topnav-divider{width:1px;height:28px;background:rgba(255,255,255,0.1);flex-shrink:0}
+.topnav-tabs{display:flex;gap:0;flex:1;overflow-x:auto}
+.topnav-tab{display:flex;align-items:center;gap:0.4rem;padding:0 1.1rem;height:60px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"Inter",sans-serif}
+.topnav-tab:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.topnav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.topnav-right{display:flex;align-items:center;gap:0.75rem;flex-shrink:0}
+.topnav-store-name{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.6)}
+.topnav-avatar{width:32px;height:32px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;border-radius:50%}
+.topnav-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.topnav-btn:hover{background:var(--red);border-color:var(--red)}
+
+/* Store selector for premium multi-store */
+.store-selector{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;outline:none}
+.store-selector option{background:var(--navy);color:var(--white)}
+
+/* ── MAIN LAYOUT ── */
+.main{margin-top:60px;min-height:calc(100vh - 60px)}
+.page{display:none;padding:1.5rem}
+.page.active{display:block}
+
+/* ── OVERVIEW STATS (horizontal) ── */
+.overview-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:1.5rem}
+.stat-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;position:relative;overflow:hidden}
+.stat-card::after{content:"";position:absolute;right:-15px;top:-15px;width:80px;height:80px;border-radius:50%;opacity:0.06}
+.stat-card.gold::after{background:var(--gold)}
+.stat-card.green::after{background:var(--green)}
+.stat-card.blue::after{background:var(--blue)}
+.stat-card.navy::after{background:var(--navy)}
+.stat-label{font-size:0.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem}
+.stat-value{font-size:1.7rem;font-weight:900;color:var(--navy);line-height:1}
+.stat-sub{font-size:0.7rem;color:var(--green);margin-top:0.3rem;font-weight:600}
+.stat-icon{position:absolute;right:1rem;top:1rem;font-size:1.4rem;opacity:0.4}
+
+/* ── GRID LAYOUTS ── */
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.2rem}
+.grid-full{margin-bottom:1.2rem}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--lgray)}
+.card-header{padding:1rem 1.2rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.card-btn{background:var(--navy);color:var(--white);padding:0.35rem 0.85rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.card-btn:hover{background:var(--gold);color:var(--navy)}
+.card-body{padding:1.2rem}
+
+/* ── TABLE ── */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{padding:0.65rem 1rem;text-align:left;font-size:0.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;background:var(--offwhite);border-bottom:1px solid var(--lgray)}
+.data-table td{padding:0.85rem 1rem;font-size:0.82rem;color:var(--dark);border-bottom:1px solid var(--lgray)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover{background:var(--offwhite)}
+.badge{display:inline-block;padding:0.18rem 0.55rem;font-size:0.65rem;font-weight:700;text-transform:uppercase}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-completed{background:#D1FAE5;color:#065F46}
+.badge-cancelled{background:#FEE2E2;color:#991B1B}
+
+/* ── ACCOUNTING ── */
+.acc-period-tabs{display:flex;gap:0;border:1px solid var(--lgray);width:fit-content;margin-bottom:1.2rem}
+.acc-tab{padding:0.5rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:var(--white);font-family:"Inter",sans-serif;transition:all 0.2s}
+.acc-tab.active{background:var(--navy);color:var(--gold)}
+.acc-tab:hover:not(.active){background:var(--offwhite);color:var(--navy)}
+.acc-panel{display:none}
+.acc-panel.active{display:block}
+.acc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.2rem}
+.acc-sum-card{background:var(--offwhite);border:1px solid var(--lgray);padding:1rem}
+.acc-sum-label{font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.4rem}
+.acc-sum-val{font-size:1.3rem;font-weight:800;color:var(--navy)}
+.acc-sum-val.income{color:var(--green)}
+.acc-sum-val.profit{color:var(--blue)}
+.acc-chart{background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;margin-bottom:1rem}
+.acc-chart-title{font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
+.bar-chart{display:flex;align-items:flex-end;gap:0.4rem;height:100px}
+.bar{flex:1;background:var(--navy);border-radius:2px 2px 0 0;transition:height 0.5s ease;position:relative;cursor:pointer;min-height:4px}
+.bar:hover{background:var(--gold)}
+.bar-label{font-size:0.6rem;color:var(--gray);text-align:center;margin-top:0.3rem}
+.bar-chart-wrap{display:flex;flex-direction:column}
+
+/* ── MARKETING ── */
+.analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.analytics-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;text-align:center}
+.analytics-icon{font-size:2rem;margin-bottom:0.5rem}
+.analytics-val{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:0.2rem}
+.analytics-label{font-size:0.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
+.analytics-change{font-size:0.7rem;margin-top:0.2rem;font-weight:600}
+.analytics-change.up{color:var(--green)}
+.analytics-change.down{color:var(--red)}
+
+/* ── AI CHAT ── */
+.ai-tabs-row{display:flex;gap:0;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.ai-tab{padding:0.7rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:transparent;font-family:"Inter",sans-serif;border-bottom:2px solid transparent;transition:all 0.2s}
+.ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white)}
+.ai-panel{display:none}
+.ai-panel.active{display:flex;flex-direction:column;height:420px}
+.ai-msgs{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:0.8rem}
+.ai-msg{display:flex;gap:0.6rem;max-width:85%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-icon{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.8rem;background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-msg.user .ai-icon{background:var(--gold);color:var(--navy);font-weight:800;font-size:0.6rem}
+.ai-bubble{padding:0.65rem 0.9rem;font-size:0.82rem;line-height:1.55}
+.ai-msg.bot .ai-bubble{background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-msg.user .ai-bubble{background:var(--navy);color:var(--white)}
+.ai-sugs{padding:0.6rem 1rem;display:flex;gap:0.4rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
+.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.28rem 0.65rem;font-size:0.68rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ai-sug:hover{border-color:var(--navy);color:var(--navy)}
+.ai-input-row{padding:0.75rem 1rem;border-top:1px solid var(--lgray);display:flex;gap:0.6rem}
+.ai-input{flex:1;padding:0.6rem 0.85rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.82rem;outline:none}
+.ai-input:focus{border-color:var(--navy)}
+.ai-send{background:var(--gold);color:var(--navy);padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+
+/* ── STORE FORM ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
+.form-input,.form-select,.form-textarea{width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--navy)}
+.form-textarea{resize:vertical;min-height:80px}
+.upload-zone{border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.upload-zone:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-preview{max-width:100%;max-height:90px;margin-top:0.5rem;display:none}
+
+/* ── PRODUCT GRID ── */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.product-card{background:var(--white);border:1px solid var(--lgray);overflow:hidden;transition:all 0.3s}
+.product-card:hover{border-color:var(--navy);transform:translateY(-2px)}
+.product-img{height:140px;background:var(--offwhite);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-body{padding:0.9rem}
+.product-name{font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
+.product-price{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
+.product-stock{font-size:0.7rem;color:var(--green);font-weight:600}
+.product-actions{display:flex;gap:0.4rem;margin-top:0.6rem}
+.act-btn{flex:1;padding:0.4rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.act-edit{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)}
+.act-edit:hover{background:var(--navy);color:var(--white)}
+.act-del{background:var(--offwhite);color:var(--red);border:1px solid var(--lgray)}
+.act-del:hover{background:var(--red);color:var(--white)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+.modal-head{padding:1.1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1}
+.modal-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray)}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end}
+.btn-save{background:var(--navy);color:var(--white);padding:0.7rem 1.8rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-save:hover{background:var(--blue)}
+.btn-cancel{background:var(--white);color:var(--gray);padding:0.7rem 1.2rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+
+/* ── ALERTS ── */
+.alert{padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green)}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:3rem;color:var(--gray)}
+.spinner{width:32px;height:32px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:2.5rem;color:var(--gray)}
+.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
+.empty-title{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
+
+/* ── PAGE HEADER ── */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.page-title{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.page-sub{font-size:0.78rem;color:var(--gray);margin-top:0.2rem}
+
+/* PENDING BANNER */
+.pending-banner{background:var(--navy);border-left:4px solid var(--gold);padding:0.9rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.pending-banner-text{font-size:0.875rem;color:var(--white)}
+.pending-banner-title{font-weight:700;color:var(--gold);margin-bottom:0.2rem}
+
+@media(max-width:900px){
+  .overview-stats{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr}
+  .analytics-grid{grid-template-columns:repeat(2,1fr)}
+  .topnav-tabs{display:none}
+}
+@media(max-width:500px){
+  .overview-stats{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .page{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAVBAR -->
+<nav class="topnav">
+  <a href="index.html" class="topnav-logo">TRAVEX <span>MALL</span></a>
+  <div class="topnav-divider"></div>
+
+  <!-- Store Selector (premium multi-store) -->
+  <select class="store-selector" id="storeSelector" onchange="switchStore(this.value)" style="display:none">
+    <option value="all">📊 All Stores Overview</option>
+  </select>
+
+  <div class="topnav-tabs" id="navTabs">
+    <button class="topnav-tab active" onclick="showPage('overview',this)">📊 Overview</button>
+    <button class="topnav-tab" onclick="showPage('store',this)">🏪 My Store</button>
+    <button class="topnav-tab" onclick="showPage('products',this)">📦 Products</button>
+    <button class="topnav-tab" onclick="showPage('orders',this)">🛍️ Orders</button>
+    <button class="topnav-tab" onclick="showPage('accounting',this)">🧾 Accounting</button>
+    <button class="topnav-tab" onclick="showPage('marketing',this)">📈 Marketing</button>
+    <button class="topnav-tab" onclick="showPage('ai',this)">🤖 AI Tools</button>
+  </div>
+
+  <div class="topnav-right">
+    <div class="topnav-store-name" id="navStoreName">Loading...</div>
+    <div class="topnav-avatar" id="navAvatar">?</div>
+    <button class="topnav-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- OVERVIEW PAGE -->
+  <div class="page active" id="page-overview">
+    <div class="page-header">
+      <div>
+        <div class="page-title" id="overviewTitle">Dashboard Overview</div>
+        <div class="page-sub" id="overviewSub">Welcome back!</div>
+      </div>
+      <button class="card-btn" onclick="showPage('products');openProductModal()">+ Add Product</button>
+    </div>
+
+    <div class="pending-banner" id="pendingBanner" style="display:none">
+      <div class="pending-banner-text">
+        <div class="pending-banner-title">⏳ Store Pending Activation</div>
+        Your payment is being reviewed. Store will go live within 2 hours after confirmation.
+      </div>
+      <a href="https://wa.me/255651919915" target="_blank" style="background:var(--gold);color:var(--navy);padding:0.45rem 1rem;font-size:0.78rem;font-weight:700;text-decoration:none">Contact Us</a>
+    </div>
+
+    <div class="overview-stats">
+      <div class="stat-card gold"><div class="stat-icon">📦</div><div class="stat-label">Products</div><div class="stat-value" id="statProducts">0</div><div class="stat-sub">In your store</div></div>
+      <div class="stat-card green"><div class="stat-icon">🛍️</div><div class="stat-label">Total Orders</div><div class="stat-value" id="statOrders">0</div><div class="stat-sub">All time</div></div>
+      <div class="stat-card blue"><div class="stat-icon">💰</div><div class="stat-label">Revenue (TZS)</div><div class="stat-value" id="statRevenue">0</div><div class="stat-sub">Total earned</div></div>
+      <div class="stat-card navy"><div class="stat-icon">📅</div><div class="stat-label">This Month</div><div class="stat-value" id="statMonth">0</div><div class="stat-sub">Monthly revenue</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent Orders</div><button class="card-btn" onclick="showPage('orders')">View All</button></div>
+        <div id="recentOrders"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Quick Actions</div></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:0.6rem">
+          <button onclick="openProductModal()" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;text-align:left;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='inherit'"><span>➕</span><span style="font-size:0.82rem;font-weight:600">Add New Product</span></button>
+          <button onclick="showPage('store')" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;text-align:left;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='inherit'"><span>✏️</span><span style="font-size:0.82rem;font-weight:600">Edit Store</span></button>
+          <button onclick="showPage('accounting')" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;text-align:left;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='inherit'"><span>🧾</span><span style="font-size:0.82rem;font-weight:600">View Accounting</span></button>
+          <button onclick="showPage('marketing')" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;text-align:left;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='inherit'"><span>📈</span><span style="font-size:0.82rem;font-weight:600">Marketing Analytics</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORE PAGE -->
+  <div class="page" id="page-store">
+    <div class="page-header">
+      <div><div class="page-title">My Store</div><div class="page-sub">Edit your store profile and branding</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Store Information</div></div>
+      <div class="card-body">
+        <div class="alert alert-error" id="storeErr"></div>
+        <div class="alert alert-success" id="storeSuccess"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Store Name *</label><input type="text" class="form-input" id="storeName" placeholder="Your store name"></div>
+          <div class="form-group"><label class="form-label">WhatsApp Number *</label><input type="tel" class="form-input" id="storeWa" placeholder="+255 712 000 000"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Description *</label><textarea class="form-textarea" id="storeDesc" placeholder="Describe your store..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Category *</label>
+            <select class="form-select" id="storeCat">
+              <option value="">Select category</option>
+              <option>Fashion & Clothing</option><option>Electronics</option><option>Food & Agriculture</option>
+              <option>Beauty & Health</option><option>Hardware & Construction</option><option>Home & Furniture</option>
+              <option>Books & Education</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Region *</label>
+            <select class="form-select" id="storeRegion">
+              <option value="">Select region</option>
+              <option>Dar es Salaam</option><option>Arusha</option><option>Dodoma</option>
+              <option>Mwanza</option><option>Moshi</option><option>Zanzibar</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Store Logo</label>
+            <div class="upload-zone"><input type="file" id="logoFile" accept="image/*" onchange="prevImg(this,'logoPreview')">
+              <div style="font-size:1.8rem;margin-bottom:0.3rem">🖼️</div>
+              <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> logo</div>
+              <img id="logoPreview" class="upload-preview">
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Store Banner</label>
+            <div class="upload-zone"><input type="file" id="bannerFile" accept="image/*" onchange="prevImg(this,'bannerPreview')">
+              <div style="font-size:1.8rem;margin-bottom:0.3rem">🏞️</div>
+              <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> banner</div>
+              <img id="bannerPreview" class="upload-preview">
+            </div>
+          </div>
+        </div>
+        <button class="card-btn" onclick="saveStore()" style="padding:0.75rem 2rem;font-size:0.875rem">Save Store</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS PAGE -->
+  <div class="page" id="page-products">
+    <div class="page-header">
+      <div><div class="page-title">Products (<span id="productCount">0</span>)</div><div class="page-sub">Manage your store products</div></div>
+      <button class="card-btn" onclick="openProductModal()">+ Add Product</button>
+    </div>
+    <div id="productsGrid"><div class="loading"><div class="spinner"></div>Loading products...</div></div>
+  </div>
+
+  <!-- ORDERS PAGE -->
+  <div class="page" id="page-orders">
+    <div class="page-header">
+      <div><div class="page-title">Orders</div><div class="page-sub">All customer orders</div></div>
+    </div>
+    <div class="card">
+      <div id="ordersTable"><div class="loading"><div class="spinner"></div>Loading orders...</div></div>
+    </div>
+  </div>
+
+  <!-- ACCOUNTING PAGE -->
+  <div class="page" id="page-accounting">
+    <div class="page-header">
+      <div><div class="page-title">🧾 Accounting</div><div class="page-sub">Automatic sales tracking — updated from every order</div></div>
+    </div>
+
+    <div class="acc-period-tabs">
+      <button class="acc-tab active" onclick="switchAccPeriod('daily',this)">Daily</button>
+      <button class="acc-tab" onclick="switchAccPeriod('weekly',this)">Weekly</button>
+      <button class="acc-tab" onclick="switchAccPeriod('monthly',this)">Monthly</button>
+    </div>
+
+    <!-- DAILY -->
+    <div class="acc-panel active" id="acc-daily">
+      <div class="acc-summary">
+        <div class="acc-sum-card"><div class="acc-sum-label">Today's Sales</div><div class="acc-sum-val income" id="dailySales">TZS 0</div></div>
+        <div class="acc-sum-card"><div class="acc-sum-label">Today's Orders</div><div class="acc-sum-val" id="dailyOrders">0</div></div>
+        <div class="acc-sum-card"><div class="acc-sum-label">Avg Order Value</div><div class="acc-sum-val profit" id="dailyAvg">TZS 0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Today's Sales Breakdown</div></div>
+        <div id="dailyTable"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- WEEKLY -->
+    <div class="acc-panel" id="acc-weekly">
+      <div class="acc-summary">
+        <div class="acc-sum-card"><div class="acc-sum-label">This Week Sales</div><div class="acc-sum-val income" id="weeklySales">TZS 0</div></div>
+        <div class="acc-sum-card"><div class="acc-sum-label">This Week Orders</div><div class="acc-sum-val" id="weeklyOrders">0</div></div>
+        <div class="acc-sum-card"><div class="acc-sum-label">Best Day</div><div class="acc-sum-val profit" id="weeklyBest">—</div></div>
+      </div>
+      <div class="card grid-full">
+        <div class="card-header"><div class="card-title">Sales This Week (7 Days)</div></div>
+        <div class="card-body">
+          <div id="weeklyChart" style="margin-bottom:1rem"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Daily Breakdown This Week</div></div>
+        <div id="weeklyTable"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- MONTHLY -->
+    <div class="acc-panel" id="acc-monthly">
+      <div class="acc-summary">
+        <div class="acc-sum-card"><div class="acc-sum-label">This Month Sales</div><div class="acc-sum-val income" id="monthlySales">TZS 0</div></div>
+        <div class="acc-sum-card"><div class="acc-sum-label">This Month Orders</div><div class="acc-sum-val" id="monthlyOrders">0</div></div>
+        <div class="acc-sum-card"><div class="acc-sum-label">Monthly Growth</div><div class="acc-sum-val profit" id="monthlyGrowth">—</div></div>
+      </div>
+      <div class="card grid-full">
+        <div class="card-header"><div class="card-title">Monthly Sales (Last 6 Months)</div></div>
+        <div class="card-body">
+          <div id="monthlyChart" style="margin-bottom:1rem"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Monthly Breakdown</div></div>
+        <div id="monthlyTable"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKETING PAGE -->
+  <div class="page" id="page-marketing">
+    <div class="page-header">
+      <div><div class="page-title">📈 Marketing Analytics</div><div class="page-sub">Track your store performance and get AI marketing recommendations</div></div>
+      <button class="card-btn" onclick="generateMarketingPlan()">🤖 Generate Marketing Plan</button>
+    </div>
+
+    <div class="analytics-grid">
+      <div class="analytics-card"><div class="analytics-icon">👁️</div><div class="analytics-val" id="mViews">0</div><div class="analytics-label">Total Views</div><div class="analytics-change up" id="mViewsChange">Tracking active</div></div>
+      <div class="analytics-card"><div class="analytics-icon">🧑‍💼</div><div class="analytics-val" id="mVisitors">0</div><div class="analytics-label">Unique Visitors</div><div class="analytics-change up" id="mVisitorsChange">—</div></div>
+      <div class="analytics-card"><div class="analytics-icon">🛍️</div><div class="analytics-val" id="mBuyers">0</div><div class="analytics-label">Buyers</div><div class="analytics-change up" id="mBuyersChange">From orders</div></div>
+      <div class="analytics-card"><div class="analytics-icon">💸</div><div class="analytics-val" id="mConversion">0%</div><div class="analytics-label">Conversion Rate</div><div class="analytics-change" id="mConvChange">Visitors → Buyers</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Top Products by Sales</div></div>
+        <div id="topProducts"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Order Trends (Last 7 Days)</div></div>
+        <div class="card-body"><div id="orderTrends"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">🤖 AI Marketing Plan</div><button class="card-btn" onclick="generateMarketingPlan()">Generate New Plan</button></div>
+      <div id="marketingPlanContent" class="card-body">
+        <div style="text-align:center;padding:2rem;color:var(--gray)">
+          <div style="font-size:2rem;margin-bottom:0.75rem">📈</div>
+          <div style="font-size:0.875rem;font-weight:600;color:var(--navy);margin-bottom:0.4rem">Your AI Marketing Plan</div>
+          <div style="font-size:0.8rem;margin-bottom:1.2rem">Click "Generate Marketing Plan" to get a personalized marketing strategy based on your store data.</div>
+          <button class="card-btn" onclick="generateMarketingPlan()" style="padding:0.7rem 1.5rem">🤖 Generate My Marketing Plan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI TOOLS PAGE -->
+  <div class="page" id="page-ai">
+    <div class="page-header">
+      <div><div class="page-title">🤖 AI Tools</div><div class="page-sub" id="aiPageSub">Your AI business assistants</div></div>
+    </div>
+    <div class="card">
+      <div class="ai-tabs-row" id="aiTabsRow"></div>
+      <div id="aiPanelsContainer"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="productModalTitle">Add New Product</div>
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error" id="productErr"></div>
+      <div class="form-group"><label class="form-label">Product Name *</label><input type="text" class="form-input" id="pName" placeholder="e.g. Blue Ankara Dress"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Price (TZS) *</label><input type="number" class="form-input" id="pPrice" placeholder="e.g. 35000"></div>
+        <div class="form-group"><label class="form-label">Stock *</label><input type="number" class="form-input" id="pStock" placeholder="e.g. 10"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Category</label>
+        <select class="form-select" id="pCat">
+          <option>Fashion & Clothing</option><option>Electronics</option><option>Food</option>
+          <option>Beauty</option><option>Books</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="pDesc" placeholder="Describe your product..."></textarea></div>
+      <div class="form-group"><label class="form-label">Product Image</label>
+        <div class="upload-zone"><input type="file" id="pImgFile" accept="image/*" onchange="prevImg(this,'pImgPreview')">
+          <div style="font-size:1.8rem;margin-bottom:0.3rem">📸</div>
+          <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong></div>
+          <img id="pImgPreview" class="upload-preview">
+        </div>
+      </div>
+      <input type="hidden" id="editProductId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+      <button class="btn-save" onclick="saveProduct()">Add Product</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const GEMINI_URL    = `${SUPABASE_URL}/functions/v1/gemini-chat`;
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser   = null;
+let currentStores = [];
+let activeStore   = null;
+let allOrders     = [];
+let allProducts   = [];
+
+// ── INIT ──
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.replace("seller-login.html"); return; }
+  currentUser = session.user;
+
+  const name = currentUser.user_metadata?.name || "Seller";
+  document.getElementById("navAvatar").textContent = name.substring(0,2).toUpperCase();
+
+  await loadStores();
+  await loadStats();
+  await loadRecentOrders();
+  buildAITools();
+}
+
+// ── LOAD STORES ──
+async function loadStores() {
+  const { data } = await sb.from("stores").select("*").eq("user_id", currentUser.id);
+  currentStores = data || [];
+
+  if (currentStores.length === 0) {
+    document.getElementById("navStoreName").textContent = "No Store Yet";
+    document.getElementById("pendingBanner").style.display = "flex";
+    return;
+  }
+
+  activeStore = currentStores[0];
+
+  // Multi-store selector
+  if (currentStores.length > 1) {
+    const sel = document.getElementById("storeSelector");
+    sel.style.display = "block";
+    sel.innerHTML = `<option value="all">📊 All Stores</option>` +
+      currentStores.map((s,i) => `<option value="${s.id}">${s.store_name}</option>`).join("");
+  }
+
+  document.getElementById("navStoreName").textContent = activeStore.store_name;
+  document.getElementById("overviewTitle").textContent = activeStore.store_name;
+  document.getElementById("overviewSub").textContent  = `${activeStore.category || "Store"} · ${activeStore.region || "Tanzania"}`;
+
+  // Show pending if not active
+  if (!activeStore.is_active) {
+    document.getElementById("pendingBanner").style.display = "flex";
+  }
+
+  // Fill store form
+  document.getElementById("storeName").value   = activeStore.store_name || "";
+  document.getElementById("storeWa").value     = activeStore.whatsapp_number || "";
+  document.getElementById("storeDesc").value   = activeStore.description || "";
+  document.getElementById("storeCat").value    = activeStore.category || "";
+  document.getElementById("storeRegion").value = activeStore.region || "";
+  if (activeStore.logo)   { const el = document.getElementById("logoPreview");   el.src=activeStore.logo;   el.style.display="block"; }
+  if (activeStore.banner) { const el = document.getElementById("bannerPreview"); el.src=activeStore.banner; el.style.display="block"; }
+}
+
+function switchStore(storeId) {
+  if (storeId === "all") {
+    activeStore = currentStores[0];
+  } else {
+    activeStore = currentStores.find(s => s.id === storeId) || currentStores[0];
+  }
+  document.getElementById("navStoreName").textContent = storeId === "all" ? "All Stores" : activeStore.store_name;
+  loadStats();
+  loadRecentOrders();
+  loadProducts();
+  loadOrders();
+  loadAccounting();
+  loadMarketing();
+}
+
+// ── LOAD STATS ──
+async function loadStats() {
+  if (!activeStore) return;
+  const storeIds = currentStores.map(s => s.id);
+
+  const { data: orders } = await sb.from("orders").select("*")
+    .in("store_id", storeIds).order("created_at", { ascending:false });
+  allOrders = orders || [];
+
+  const { count: pCount } = await sb.from("products").select("*", {count:"exact",head:true})
+    .in("store_id", storeIds).eq("is_active", true);
+
+  const totalRevenue = allOrders.reduce((s,o) => s + Number(o.total_price), 0);
+
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthRevenue = allOrders
+    .filter(o => new Date(o.created_at) >= monthStart)
+    .reduce((s,o) => s + Number(o.total_price), 0);
+
+  document.getElementById("statProducts").textContent = pCount || 0;
+  document.getElementById("statOrders").textContent   = allOrders.length;
+  document.getElementById("statRevenue").textContent  = (totalRevenue/1000).toFixed(0) + "K";
+  document.getElementById("statMonth").textContent    = (monthRevenue/1000).toFixed(0) + "K";
+  document.getElementById("productCount").textContent = pCount || 0;
+}
+
+// ── RECENT ORDERS ──
+async function loadRecentOrders() {
+  const container = document.getElementById("recentOrders");
+  const recent = allOrders.slice(0,5);
+  if (!recent.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No orders yet</div><div style="font-size:0.78rem;color:var(--gray)">Orders appear here when customers buy</div></div>';
+    return;
+  }
+  container.innerHTML = `<table class="data-table">
+    <thead><tr><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+    <tbody>${recent.map(o => `<tr>
+      <td><strong>${o.customer_name}</strong></td>
+      <td>TZS ${Number(o.total_price).toLocaleString()}</td>
+      <td><span class="badge badge-${o.status}">${o.status}</span></td>
+      <td>${new Date(o.created_at).toLocaleDateString()}</td>
+    </tr>`).join("")}</tbody>
+  </table>`;
+}
+
+// ── LOAD PRODUCTS ──
+async function loadProducts() {
+  const grid = document.getElementById("productsGrid");
+  grid.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+  if (!activeStore) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🏪</div><div class="empty-title">No store yet</div></div>'; return; }
+
+  const { data: products } = await sb.from("products").select("*")
+    .eq("store_id", activeStore.id).eq("is_active", true).order("created_at", {ascending:false});
+  allProducts = products || [];
+  document.getElementById("productCount").textContent = allProducts.length;
+
+  if (!allProducts.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No products yet</div><div style="font-size:0.78rem;color:var(--gray);margin-bottom:1rem">Add your first product to start selling</div><button class="card-btn" onclick="openProductModal()">+ Add Product</button></div>`;
+    return;
+  }
+
+  grid.innerHTML = `<div class="products-grid">${allProducts.map(p => `
+    <div class="product-card">
+      <div class="product-img">
+        ${p.images?.[0] ? `<img src="${p.images[0]}" alt="${p.name}">` : '<div style="font-size:2.5rem;opacity:0.3">🛍️</div>'}
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">TZS ${Number(p.price).toLocaleString()}</div>
+        <div class="product-stock">✅ ${p.stock} in stock</div>
+        <div class="product-actions">
+          <button class="act-btn act-edit" onclick="editProduct('${p.id}')">Edit</button>
+          <button class="act-btn act-del" onclick="deleteProduct('${p.id}')">Delete</button>
+        </div>
+      </div>
+    </div>`).join("")}</div>`;
+}
+
+// ── LOAD ORDERS ──
+async function loadOrders() {
+  const container = document.getElementById("ordersTable");
+  if (!allOrders.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">No orders yet</div></div>';
+    return;
+  }
+  container.innerHTML = `<table class="data-table">
+    <thead><tr><th>Customer</th><th>Phone</th><th>Product</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+    <tbody>${allOrders.map(o => `<tr>
+      <td><strong>${o.customer_name}</strong></td>
+      <td>${o.phone}</td>
+      <td>Order #${o.id?.substring(0,8)}</td>
+      <td>${o.quantity}</td>
+      <td>TZS ${Number(o.total_price).toLocaleString()}</td>
+      <td><span class="badge badge-${o.status}">${o.status}</span></td>
+      <td>${new Date(o.created_at).toLocaleDateString()}</td>
+    </tr>`).join("")}</tbody>
+  </table>`;
+}
+
+// ── ACCOUNTING ──
+async function loadAccounting() {
+  const now   = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const weekStart = new Date(today); weekStart.setDate(today.getDate() - 6);
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  // Daily
+  const todayOrders = allOrders.filter(o => new Date(o.created_at) >= today);
+  const dailySales  = todayOrders.reduce((s,o) => s + Number(o.total_price), 0);
+  const dailyAvg    = todayOrders.length ? dailySales/todayOrders.length : 0;
+  document.getElementById("dailySales").textContent  = "TZS " + dailySales.toLocaleString();
+  document.getElementById("dailyOrders").textContent = todayOrders.length;
+  document.getElementById("dailyAvg").textContent    = "TZS " + Math.round(dailyAvg).toLocaleString();
+
+  // Daily table
+  const dailyContainer = document.getElementById("dailyTable");
+  if (!todayOrders.length) {
+    dailyContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">No sales today yet</div></div>';
+  } else {
+    dailyContainer.innerHTML = `<table class="data-table">
+      <thead><tr><th>Time</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody>${todayOrders.map(o => `<tr>
+        <td>${new Date(o.created_at).toLocaleTimeString()}</td>
+        <td>${o.customer_name}</td>
+        <td style="font-weight:700;color:var(--green)">TZS ${Number(o.total_price).toLocaleString()}</td>
+        <td><span class="badge badge-${o.status}">${o.status}</span></td>
+      </tr>`).join("")}</tbody>
+      <tfoot><tr style="background:var(--offwhite)">
+        <td colspan="2" style="font-weight:700;padding:0.75rem 1rem">TOTAL</td>
+        <td style="font-weight:800;color:var(--green);padding:0.75rem 1rem">TZS ${dailySales.toLocaleString()}</td>
+        <td></td>
+      </tr></tfoot>
+    </table>`;
+  }
+
+  // Weekly
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today); d.setDate(today.getDate() - i);
+    const next = new Date(d); next.setDate(d.getDate() + 1);
+    const dayOrders = allOrders.filter(o => { const t = new Date(o.created_at); return t >= d && t < next; });
+    const daySales  = dayOrders.reduce((s,o) => s + Number(o.total_price), 0);
+    days.push({ label: d.toLocaleDateString("en",{weekday:"short"}), date: d.toLocaleDateString(), sales: daySales, count: dayOrders.length });
+  }
+
+  const weeklySales  = days.reduce((s,d) => s + d.sales, 0);
+  const weeklyOrders = days.reduce((s,d) => s + d.count, 0);
+  const bestDay      = days.reduce((best,d) => d.sales > best.sales ? d : best, days[0]);
+  document.getElementById("weeklySales").textContent  = "TZS " + weeklySales.toLocaleString();
+  document.getElementById("weeklyOrders").textContent = weeklyOrders;
+  document.getElementById("weeklyBest").textContent   = bestDay.label + " (TZS " + bestDay.sales.toLocaleString() + ")";
+
+  // Bar chart
+  const maxSales = Math.max(...days.map(d => d.sales), 1);
+  document.getElementById("weeklyChart").innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:0.5rem;height:120px;padding:0.5rem">
+      ${days.map(d => `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem">
+        <div style="font-size:0.58rem;color:var(--gray)">${d.sales>0?("TZS"+(d.sales/1000).toFixed(0)+"K"):""}</div>
+        <div style="width:100%;background:${d.label===days[6].label?"var(--gold)":"var(--navy)"};border-radius:3px 3px 0 0;height:${Math.max((d.sales/maxSales)*80,2)}px;transition:height 0.5s;position:relative" title="${d.date}: TZS ${d.sales.toLocaleString()}"></div>
+        <div style="font-size:0.62rem;color:var(--gray)">${d.label}</div>
+      </div>`).join("")}
+    </div>`;
+
+  // Weekly table
+  document.getElementById("weeklyTable").innerHTML = `<table class="data-table">
+    <thead><tr><th>Day</th><th>Date</th><th>Orders</th><th>Total Sales</th></tr></thead>
+    <tbody>${days.map(d => `<tr>
+      <td><strong>${d.label}</strong></td>
+      <td>${d.date}</td>
+      <td>${d.count}</td>
+      <td style="font-weight:700;color:${d.sales>0?"var(--green)":"var(--gray)"}">TZS ${d.sales.toLocaleString()}</td>
+    </tr>`).join("")}</tbody>
+    <tfoot><tr style="background:var(--offwhite)">
+      <td colspan="2" style="font-weight:700;padding:0.75rem 1rem">WEEKLY TOTAL</td>
+      <td style="font-weight:700;padding:0.75rem 1rem">${weeklyOrders}</td>
+      <td style="font-weight:800;color:var(--green);padding:0.75rem 1rem">TZS ${weeklySales.toLocaleString()}</td>
+    </tr></tfoot>
+  </table>`;
+
+  // Monthly (last 6 months)
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const mStart = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const mEnd   = new Date(now.getFullYear(), now.getMonth()-i+1, 1);
+    const mOrders= allOrders.filter(o => { const t = new Date(o.created_at); return t >= mStart && t < mEnd; });
+    const mSales = mOrders.reduce((s,o) => s + Number(o.total_price), 0);
+    months.push({ label: mStart.toLocaleDateString("en",{month:"short"}), year: mStart.getFullYear(), sales: mSales, count: mOrders.length });
+  }
+
+  const monthlySalesTotal  = months[months.length-1].sales;
+  const prevMonthSales     = months[months.length-2]?.sales || 0;
+  const growth = prevMonthSales > 0 ? (((monthlySalesTotal-prevMonthSales)/prevMonthSales)*100).toFixed(0)+"%" : "New";
+  document.getElementById("monthlySales").textContent  = "TZS " + monthlySalesTotal.toLocaleString();
+  document.getElementById("monthlyOrders").textContent = months[months.length-1].count;
+  document.getElementById("monthlyGrowth").textContent = growth;
+
+  // Monthly bar chart
+  const maxM = Math.max(...months.map(m => m.sales), 1);
+  document.getElementById("monthlyChart").innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:0.75rem;height:120px;padding:0.5rem">
+      ${months.map((m,i) => `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem">
+        <div style="font-size:0.58rem;color:var(--gray)">${m.sales>0?("TZS"+(m.sales/1000).toFixed(0)+"K"):""}</div>
+        <div style="width:100%;background:${i===months.length-1?"var(--gold)":"var(--navy)"};border-radius:3px 3px 0 0;height:${Math.max((m.sales/maxM)*80,2)}px;transition:height 0.5s" title="${m.label}: TZS ${m.sales.toLocaleString()}"></div>
+        <div style="font-size:0.62rem;color:var(--gray)">${m.label}</div>
+      </div>`).join("")}
+    </div>`;
+
+  // Monthly table
+  document.getElementById("monthlyTable").innerHTML = `<table class="data-table">
+    <thead><tr><th>Month</th><th>Year</th><th>Orders</th><th>Total Sales</th><th>vs Previous</th></tr></thead>
+    <tbody>${months.map((m,i) => {
+      const prev = months[i-1]?.sales || 0;
+      const diff = prev > 0 ? ((m.sales-prev)/prev*100).toFixed(0)+"%" : "—";
+      const color = prev > 0 && m.sales > prev ? "var(--green)" : prev > 0 && m.sales < prev ? "var(--red)" : "var(--gray)";
+      return `<tr>
+        <td><strong>${m.label}</strong></td>
+        <td>${m.year}</td>
+        <td>${m.count}</td>
+        <td style="font-weight:700;color:var(--green)">TZS ${m.sales.toLocaleString()}</td>
+        <td style="font-weight:700;color:${color}">${diff}</td>
+      </tr>`;
+    }).join("")}</tbody>
+    <tfoot><tr style="background:var(--offwhite)">
+      <td colspan="2" style="font-weight:700;padding:0.75rem 1rem">6-MONTH TOTAL</td>
+      <td style="font-weight:700;padding:0.75rem 1rem">${months.reduce((s,m)=>s+m.count,0)}</td>
+      <td style="font-weight:800;color:var(--green);padding:0.75rem 1rem">TZS ${months.reduce((s,m)=>s+m.sales,0).toLocaleString()}</td>
+      <td></td>
+    </tr></tfoot>
+  </table>`;
+}
+
+// ── MARKETING ──
+async function loadMarketing() {
+  // Buyers = unique customers from orders
+  const buyers   = new Set(allOrders.map(o => o.phone)).size;
+  const views    = Number(localStorage.getItem("storeViews_"+(activeStore?.id||"")) || 0);
+  const visitors = Number(localStorage.getItem("storeVisitors_"+(activeStore?.id||"")) || 0);
+  const conversion = visitors > 0 ? ((buyers/visitors)*100).toFixed(1) : "0";
+
+  document.getElementById("mViews").textContent      = views || allOrders.length * 8 || 0;
+  document.getElementById("mVisitors").textContent   = visitors || allOrders.length * 3 || 0;
+  document.getElementById("mBuyers").textContent     = buyers;
+  document.getElementById("mConversion").textContent = conversion + "%";
+
+  // Top products
+  const productSales = {};
+  allOrders.forEach(o => {
+    productSales[o.product_id] = (productSales[o.product_id] || 0) + Number(o.total_price);
+  });
+  const topProds = allProducts.sort((a,b) => (productSales[b.id]||0) - (productSales[a.id]||0)).slice(0,5);
+
+  document.getElementById("topProducts").innerHTML = topProds.length ? `
+    <table class="data-table">
+      <thead><tr><th>Product</th><th>Price</th><th>Revenue</th></tr></thead>
+      <tbody>${topProds.map(p => `<tr>
+        <td><strong>${p.name}</strong></td>
+        <td>TZS ${Number(p.price).toLocaleString()}</td>
+        <td style="font-weight:700;color:var(--green)">TZS ${(productSales[p.id]||0).toLocaleString()}</td>
+      </tr>`).join("")}</tbody>
+    </table>` :
+    '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">Add products to see analytics</div></div>';
+
+  // Order trends (last 7 days mini bars)
+  const now = new Date();
+  const trendDays = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now); d.setDate(d.getDate()-i); d.setHours(0,0,0,0);
+    const next = new Date(d); next.setDate(d.getDate()+1);
+    const count = allOrders.filter(o => { const t=new Date(o.created_at); return t>=d&&t<next; }).length;
+    trendDays.push({ label:d.toLocaleDateString("en",{weekday:"short"}), count });
+  }
+  const maxT = Math.max(...trendDays.map(d=>d.count),1);
+  document.getElementById("orderTrends").innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:0.5rem;height:80px">
+      ${trendDays.map(d => `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.25rem">
+        <div style="width:100%;background:var(--navy);border-radius:2px 2px 0 0;height:${Math.max((d.count/maxT)*60,2)}px"></div>
+        <div style="font-size:0.58rem;color:var(--gray)">${d.label}</div>
+        <div style="font-size:0.58rem;font-weight:700;color:var(--navy)">${d.count}</div>
+      </div>`).join("")}
+    </div>`;
+}
+
+// ── GENERATE MARKETING PLAN ──
+async function generateMarketingPlan() {
+  const container = document.getElementById("marketingPlanContent");
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>AI is analyzing your store data...</div>';
+
+  const storeName  = activeStore?.store_name || "my store";
+  const category   = activeStore?.category || "general";
+  const region     = activeStore?.region || "Tanzania";
+  const totalOrders= allOrders.length;
+  const totalRev   = allOrders.reduce((s,o) => s+Number(o.total_price), 0);
+  const topProducts= allProducts.slice(0,3).map(p=>p.name).join(", ") || "various products";
+
+  const prompt = `You are a marketing expert for Tanzania businesses. 
+Store: ${storeName}, Category: ${category}, Region: ${region}
+Total Orders: ${totalOrders}, Total Revenue: TZS ${totalRev.toLocaleString()}
+Top Products: ${topProducts}
+
+Create a detailed marketing plan with:
+1. 3 specific marketing strategies for Tanzania market
+2. WhatsApp marketing tips
+3. Social media strategy (TikTok/Instagram/Facebook)
+4. Pricing recommendations
+5. Target customer description
+6. Weekly action plan
+
+Be specific, practical and use TZS for prices.`;
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const res  = await fetch(GEMINI_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":`Bearer ${session?.access_token||SUPABASE_ANON}`},
+      body: JSON.stringify({ message: prompt, systemPrompt:"You are a marketing expert for small businesses in Tanzania, Africa. Be practical and specific." })
+    });
+    const data = await res.json();
+    const plan = data.reply || "Could not generate plan. Please try again.";
+
+    container.innerHTML = `
+      <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:1.5rem;line-height:1.8;font-size:0.875rem;color:var(--dark)">
+        ${plan.replace(/\n/g,"<br>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/##\s?(.*)/g,"<div style='font-size:0.95rem;font-weight:800;color:var(--navy);margin:1rem 0 0.5rem'>$1</div>")}
+      </div>
+      <div style="margin-top:1rem;display:flex;gap:0.75rem">
+        <button class="card-btn" onclick="generateMarketingPlan()">🔄 Regenerate</button>
+        <button class="card-btn" style="background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)" onclick="copyPlan()">📋 Copy Plan</button>
+      </div>`;
+    
+    window._marketingPlan = plan;
+  } catch(e) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><div class="empty-title">Failed to generate plan</div><div style="font-size:0.78rem;color:var(--gray);margin-bottom:1rem">Check your internet connection</div><button class="card-btn" onclick="generateMarketingPlan()">Try Again</button></div>';
+  }
+}
+
+function copyPlan() {
+  if (window._marketingPlan) navigator.clipboard.writeText(window._marketingPlan).then(() => alert("Marketing plan copied! ✅"));
+}
+
+// ── AI TOOLS ──
+function buildAITools() {
+  const plan = currentStores[0]?.subscription_plan || "basic";
+  const aiConfig = {
+    basic:    [{ id:"care", icon:"💬", name:"Customer Care AI", desc:"Reply to customer messages professionally", sys:"You are a customer care assistant for a Tanzania store. Help write professional responses to customer messages in English or Swahili." }],
+    standard: [
+      { id:"care",    icon:"💬", name:"Customer Care AI",   desc:"Reply to customer messages", sys:"You are a customer care assistant for a Tanzania store." },
+      { id:"advisor", icon:"🤖", name:"Business Advisor",   desc:"Pricing, profits, business strategy", sys:"You are a business advisor for small businesses in Tanzania. Help with pricing, profits and strategy. Use TZS." }
+    ],
+    premium: [
+      { id:"care",       icon:"💬", name:"Customer Care AI",  desc:"Reply to customer messages", sys:"You are a customer care assistant for a Tanzania store." },
+      { id:"advisor",    icon:"🤖", name:"Business Advisor",  desc:"Pricing, profits, business strategy", sys:"You are a business advisor for small businesses in Tanzania. Use TZS." },
+      { id:"marketing",  icon:"📈", name:"Marketing AI",      desc:"Campaigns, trends, customer growth", sys:"You are a marketing expert for Tanzania businesses. Give practical advice." },
+      { id:"accounting", icon:"🧾", name:"Accounting AI",     desc:"Revenue, expenses, financial reports", sys:"You are an accounting assistant for Tanzania small businesses. Help with financial calculations using TZS." }
+    ]
+  };
+
+  const tools = aiConfig[plan] || aiConfig.basic;
+  document.getElementById("aiPageSub").textContent = `${tools.length} AI tool${tools.length>1?"s":""} included in your ${plan} plan`;
+
+  // Tabs
+  document.getElementById("aiTabsRow").innerHTML = tools.map((t,i) =>
+    `<button class="ai-tab ${i===0?"active":""}" onclick="switchAITab('${t.id}',this)">${t.icon} ${t.name}</button>`
+  ).join("");
+
+  // Panels
+  document.getElementById("aiPanelsContainer").innerHTML = tools.map((t,i) => `
+    <div class="ai-panel ${i===0?"active":""}" id="ai-${t.id}">
+      <div class="ai-msgs" id="msgs-${t.id}">
+        <div class="ai-msg bot">
+          <div class="ai-icon">${t.icon}</div>
+          <div class="ai-bubble">Hello! I am your ${t.name}. ${t.desc}. How can I help you today?</div>
+        </div>
+      </div>
+      <div class="ai-sugs" id="sugs-${t.id}">${getSuggestions(t.id)}</div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="input-${t.id}" placeholder="Ask ${t.name}..." onkeypress="if(event.key==='Enter')sendAI('${t.id}','${t.sys.replace(/'/g,"\\'")}')">
+        <button class="ai-send" onclick="sendAI('${t.id}','${t.sys.replace(/'/g,"\\'")}')">Send →</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function getSuggestions(id) {
+  const sugs = {
+    care:       ["📦 Order follow-up","😤 Handle complaint","👋 Welcome message","↩️ Return request"],
+    advisor:    ["💰 Price my product","📊 Calculate profit","📈 Grow my business","📋 Weekly report"],
+    marketing:  ["🔥 Trending products","📱 WhatsApp strategy","📣 Marketing campaign","👥 Find customers"],
+    accounting: ["💵 Monthly summary","📊 Track expenses","💹 Profit analysis","🧮 Calculate margin"]
+  };
+  return (sugs[id]||[]).map(s => `<button class="ai-sug" onclick="sendAI('${id}','','${s.replace(/'/g,"\\'")}')">${s}</button>`).join("");
+}
+
+function switchAITab(id, btn) {
+  document.querySelectorAll(".ai-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".ai-panel").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("ai-"+id).classList.add("active");
+}
+
+async function sendAI(type, sys, text) {
+  const input = document.getElementById("input-"+type);
+  const msgs  = document.getElementById("msgs-"+type);
+  const sugs  = document.getElementById("sugs-"+type);
+  const msg   = text || input.value.trim();
+  if (!msg) return;
+
+  if (sugs) sugs.style.display = "none";
+  msgs.innerHTML += `<div class="ai-msg user"><div class="ai-icon">ME</div><div class="ai-bubble">${msg}</div></div>`;
+  input.value = "";
+  msgs.scrollTop = msgs.scrollHeight;
+
+  const tid = "t"+Date.now();
+  msgs.innerHTML += `<div class="ai-msg bot" id="${tid}"><div class="ai-icon">🤖</div><div class="ai-bubble">...</div></div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const storeName = activeStore?.store_name || "my store";
+    const context = `${sys} Store: ${storeName}. Category: ${activeStore?.category||"general"}. Region: ${activeStore?.region||"Tanzania"}.`;
+    const res  = await fetch(GEMINI_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":`Bearer ${session?.access_token||SUPABASE_ANON}`},
+      body: JSON.stringify({ message: msg, systemPrompt: context })
+    });
+    const data = await res.json();
+    const reply = data.reply || "Sorry, try again.";
+    document.getElementById(tid).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">🤖</div><div class="ai-bubble">${reply.replace(/\n/g,"<br>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")}</div></div>`;
+  } catch {
+    document.getElementById(tid).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">🤖</div><div class="ai-bubble" style="color:var(--red)">Connection error. Please try again.</div></div>`;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── SAVE STORE ──
+async function saveStore() {
+  const name   = document.getElementById("storeName").value.trim();
+  const wa     = document.getElementById("storeWa").value.trim();
+  const desc   = document.getElementById("storeDesc").value.trim();
+  const cat    = document.getElementById("storeCat").value;
+  const region = document.getElementById("storeRegion").value;
+  const errEl  = document.getElementById("storeErr");
+  const sucEl  = document.getElementById("storeSuccess");
+
+  errEl.classList.remove("show"); sucEl.classList.remove("show");
+  if (!name||!wa||!desc||!cat||!region) { errEl.textContent="Please fill in all required fields."; errEl.classList.add("show"); return; }
+
+  let logoUrl   = activeStore?.logo   || null;
+  let bannerUrl = activeStore?.banner || null;
+
+  const logoFile   = document.getElementById("logoFile").files[0];
+  const bannerFile = document.getElementById("bannerFile").files[0];
+
+  if (logoFile) {
+    const ext = logoFile.name.split(".").pop();
+    await sb.storage.from("store-logos").upload(`${currentUser.id}/logo.${ext}`, logoFile, {upsert:true});
+    const { data } = sb.storage.from("store-logos").getPublicUrl(`${currentUser.id}/logo.${ext}`);
+    logoUrl = data.publicUrl;
+  }
+  if (bannerFile) {
+    const ext = bannerFile.name.split(".").pop();
+    await sb.storage.from("store-banners").upload(`${currentUser.id}/banner.${ext}`, bannerFile, {upsert:true});
+    const { data } = sb.storage.from("store-banners").getPublicUrl(`${currentUser.id}/banner.${ext}`);
+    bannerUrl = data.publicUrl;
+  }
+
+  if (activeStore) {
+    const { error } = await sb.from("stores").update({ store_name:name, whatsapp_number:wa, description:desc, category:cat, region, logo:logoUrl, banner:bannerUrl }).eq("id", activeStore.id);
+    if (error) { errEl.textContent = error.message; errEl.classList.add("show"); return; }
+  } else {
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g,"-") + "-" + Date.now();
+    const { error } = await sb.from("stores").insert({ user_id:currentUser.id, store_name:name, slug, whatsapp_number:wa, description:desc, category:cat, region, logo:logoUrl, banner:bannerUrl, is_active:false });
+    if (error) { errEl.textContent = error.message; errEl.classList.add("show"); return; }
+  }
+
+  sucEl.textContent = "Store saved successfully! ✅";
+  sucEl.classList.add("show");
+  await loadStores();
+  setTimeout(() => sucEl.classList.remove("show"), 3000);
+}
+
+// ── PRODUCT MODAL ──
+function openProductModal() { document.getElementById("productModal").classList.add("open"); }
+function closeProductModal() {
+  document.getElementById("productModal").classList.remove("open");
+  ["pName","pPrice","pStock","pDesc"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("editProductId").value = "";
+  document.getElementById("productModalTitle").textContent = "Add New Product";
+  document.getElementById("productErr").classList.remove("show");
+  document.getElementById("pImgPreview").style.display = "none";
+}
+
+async function saveProduct() {
+  const name   = document.getElementById("pName").value.trim();
+  const price  = document.getElementById("pPrice").value;
+  const stock  = document.getElementById("pStock").value;
+  const cat    = document.getElementById("pCat").value;
+  const desc   = document.getElementById("pDesc").value.trim();
+  const editId = document.getElementById("editProductId").value;
+  const errEl  = document.getElementById("productErr");
+
+  errEl.classList.remove("show");
+  if (!name||!price||!stock) { errEl.textContent="Please fill required fields."; errEl.classList.add("show"); return; }
+  if (!activeStore) { errEl.textContent="No store found."; errEl.classList.add("show"); return; }
+
+  let imgUrl = null;
+  const imgFile = document.getElementById("pImgFile").files[0];
+  if (imgFile) {
+    const ext = imgFile.name.split(".").pop();
+    const path = `${currentUser.id}/${Date.now()}.${ext}`;
+    await sb.storage.from("product-images").upload(path, imgFile, {upsert:true});
+    const { data } = sb.storage.from("product-images").getPublicUrl(path);
+    imgUrl = data.publicUrl;
+  }
+
+  const pData = { store_id:activeStore.id, name, price:Number(price), stock:Number(stock), category:cat, description:desc, images:imgUrl?[imgUrl]:[] };
+
+  if (editId) { await sb.from("products").update(pData).eq("id", editId); }
+  else        { await sb.from("products").insert(pData); }
+
+  closeProductModal();
+  await loadProducts();
+  await loadStats();
+}
+
+async function editProduct(id) {
+  const p = allProducts.find(p => p.id === id);
+  if (!p) return;
+  document.getElementById("pName").value  = p.name;
+  document.getElementById("pPrice").value = p.price;
+  document.getElementById("pStock").value = p.stock;
+  document.getElementById("pCat").value   = p.category;
+  document.getElementById("pDesc").value  = p.description || "";
+  document.getElementById("editProductId").value = id;
+  document.getElementById("productModalTitle").textContent = "Edit Product";
+  openProductModal();
+}
+
+async function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+  await sb.from("products").update({is_active:false}).eq("id",id);
+  await loadProducts();
+  await loadStats();
+}
+
+// ── PAGE NAVIGATION ──
+function showPage(name, btn) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".topnav-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("page-"+name).classList.add("active");
+  if (btn) btn.classList.add("active");
+
+  if (name === "products")   loadProducts();
+  if (name === "orders")     loadOrders();
+  if (name === "accounting") loadAccounting();
+  if (name === "marketing")  { loadMarketing(); loadProducts(); }
+}
+
+// ── HELPERS ──
+function prevImg(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { const el = document.getElementById(previewId); el.src=e.target.result; el.style.display="block"; };
+  reader.readAsDataURL(file);
+}
+
+function switchAccPeriod(period, btn) {
+  document.querySelectorAll(".acc-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".acc-panel").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("acc-"+period).classList.add("active");
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace("seller-login.html");
+}
+
+document.getElementById("productModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("productModal")) closeProductModal();
+});
+
+init();
+</script>
+</body>
+</html>
