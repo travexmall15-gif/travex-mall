@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://travex-mall.vercel.app/sitemap.xml
