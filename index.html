@@ -2,16 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0D1B3E">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Travex Mall"> content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Travex Mall — Africa's Intelligent Digital Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>body{opacity:0;transition:opacity 0.3s}body.loaded{opacity:1}</style>
+<style>body{visibility:hidden}body.fonts-loaded{visibility:visible}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -241,61 +237,82 @@ footer{background:#060D1F;padding:4rem 5% 2rem;border-top:1px solid rgba(255,255
 @media(max-width:768px){
   .nav-links{display:none}
   .hero h1{font-size:2rem}
-  .hero p{font-size:0.9rem}
+  .hero p{font-size:0.95rem}
   .hero-ctas{flex-direction:column}
-  .hero-ctas a{text-align:center;width:100%}
+  .hero-ctas a{text-align:center;width:100%;display:block}
   .hero-stats{gap:1.5rem}
   .stores-grid,.shops-grid{grid-template-columns:1fr 1fr}
   .cat-grid{grid-template-columns:repeat(3,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .filter-row{gap:0.5rem}
   .region-btn{font-size:0.75rem;padding:0.45rem 0.9rem}
-  .exp-cards{grid-template-columns:1fr}
   .uni-content{flex-direction:column;padding:3rem 5%}
   .uni-colleges{width:100%;min-width:unset}
-  .uni-stats{gap:1.5rem}
 }
 @media(max-width:480px){
-  html{font-size:16px}
-  body{font-size:16px}
+  html,body{font-size:15px}
   nav{padding:0 4%;height:60px}
   .nav-logo{font-size:1.1rem}
   .btn-login{display:none}
   .btn-signup{padding:0.4rem 0.9rem;font-size:0.75rem}
   .hero{padding:6rem 4% 3rem}
-  .hero h1{font-size:1.7rem;line-height:1.12}
-  .hero p{font-size:0.875rem}
+  .hero h1{font-size:1.75rem;line-height:1.12}
+  .hero p{font-size:0.9rem;line-height:1.65}
   .hero-stat-val{font-size:1.5rem}
   .hero-stat-lbl{font-size:0.65rem}
   .hero-badge{font-size:0.65rem;padding:0.3rem 0.75rem}
   .stores-grid,.shops-grid{grid-template-columns:1fr}
   .cat-grid{grid-template-columns:repeat(2,1fr)}
-  .cat-icon{width:42px;height:42px;font-size:1.1rem}
-  .cat-name{font-size:0.72rem}
+  .cat-icon{width:44px;height:44px;font-size:1.1rem}
+  .cat-name{font-size:0.75rem}
   .footer-grid{grid-template-columns:1fr}
   .footer-top{flex-direction:column;gap:1.5rem}
-  .footer-products{gap:0.75rem}
+  .footer-products{gap:0.75rem;flex-wrap:wrap}
   .section-header{flex-direction:column;align-items:flex-start;gap:0.5rem}
-  .uni-badge{font-size:0.65rem}
   .uni-title{font-size:1.8rem}
-  .uni-stats{gap:1rem}
+  .uni-stats{gap:1rem;flex-wrap:wrap}
   .uni-stat-val{font-size:1.2rem}
   .uni-college{padding:0.75rem 0.9rem}
-  .uni-college-abbr{width:36px;height:36px;font-size:0.6rem}
-  .shop-finder{padding:3rem 4%}
+  .uni-college-abbr{width:36px;height:36px;font-size:0.58rem}
+  .shop-finder,.top-rated,.categories,.stores-section,.region-section,.filter-bar{padding-left:4%;padding-right:4%}
   .sec-headline{font-size:1.4rem}
-  .top-rated{padding:3rem 4%}
-  .categories{padding:3rem 4%}
-  .stores-section{padding:2rem 4% 4rem}
-  .region-section{padding:2rem 4% 0}
-  .filter-bar{padding:1.5rem 4% 0}
-  .filter-row{flex-wrap:wrap}
-  .region-btn{font-size:0.72rem;padding:0.4rem 0.75rem}
   .exp-card{padding:1.5rem}
   .exp-count{font-size:2rem}
-}</style>
+  .plan-card{padding:1.5rem}
+  .store-card-body,.shop-body{padding:1rem}
+}
+  .hero h1{font-size:2.2rem}
+  .stores-grid{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-top{flex-direction:column}
+}
+</style>
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0D1B3E">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Travex Mall">
+  <meta name="application-name" content="Travex Mall">
+  <meta name="msapplication-TileColor" content="#0D1B3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.svg">
 </head>
 <body>
+
+<!-- PWA INSTALL BANNER -->
+<div id="installBanner" style="display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#0D1B3E;border:1px solid rgba(201,168,76,0.4);padding:1rem 1.5rem;z-index:9999;align-items:center;gap:1.5rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);max-width:400px;width:90%">
+  <div>
+    <div style="font-size:0.85rem;font-weight:800;color:#fff;margin-bottom:0.2rem">📱 Install Travex Mall</div>
+    <div style="font-size:0.75rem;color:rgba(255,255,255,0.55)">Add to your home screen for quick access</div>
+  </div>
+  <div style="display:flex;gap:0.5rem;flex-shrink:0">
+    <button onclick="installApp()" style="background:#C9A84C;color:#0D1B3E;border:none;padding:0.5rem 1rem;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:inherit">Install</button>
+    <button onclick="dismissInstall()" style="background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.2);padding:0.5rem;font-size:0.8rem;cursor:pointer;font-family:inherit">✕</button>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -451,35 +468,33 @@ footer{background:#060D1F;padding:4rem 5% 2rem;border-top:1px solid rgba(255,255
         <div><div class="uni-stat-val">5</div><div class="uni-stat-lbl">Universities</div></div>
         <div><div class="uni-stat-val">TZS 15K</div><div class="uni-stat-lbl">Per Month</div></div>
       </div>
-      <a href="campus.html" class="uni-btn">
-Apply for Early Access →'Travex Uni-Student Market — Maombi yanafunguliwa hivi karibuni!\n\ncampus.html
-:\nWhatsApp: +255 651 919 915')">
+      <a href="#" class="uni-btn" onclick="alert('Travex Uni-Student Market — Maombi yanafunguliwa hivi karibuni!\n\nApply for early access:\nWhatsApp: +255 651 919 915')">
         Apply for Early Access →
       </a>
     </div>
     <div class="uni-right">
       <div class="uni-colleges">
-        <a href="campus-university.html?uni=UDSM" class="uni-college">
+        <a href="#" class="uni-college">
           <div class="uni-college-abbr">UDSM</div>
           <div><div class="uni-college-name">University of Dar es Salaam</div><div class="uni-college-full">Chuo Kikuu cha Dar es Salaam</div></div>
           <div class="uni-college-shops">Coming Soon</div>
         </a>
-        <a href="campus-university.html?uni=UDOM" class="uni-college">
+        <a href="#" class="uni-college">
           <div class="uni-college-abbr">UDOM</div>
           <div><div class="uni-college-name">University of Dodoma</div><div class="uni-college-full">Chuo Kikuu cha Dodoma</div></div>
           <div class="uni-college-shops">Coming Soon</div>
         </a>
-        <a href="campus-university.html?uni=ARU" class="uni-college">
+        <a href="#" class="uni-college">
           <div class="uni-college-abbr">ARU</div>
           <div><div class="uni-college-name">Ardhi University</div><div class="uni-college-full">Chuo Kikuu cha Ardhi</div></div>
           <div class="uni-college-shops">Coming Soon</div>
         </a>
-        <a href="campus-university.html?uni=TIA" class="uni-college">
+        <a href="#" class="uni-college">
           <div class="uni-college-abbr">TIA</div>
           <div><div class="uni-college-name">Tanzania Institute of Accountancy</div><div class="uni-college-full">Taasisi ya Uhasibu Tanzania</div></div>
           <div class="uni-college-shops">Coming Soon</div>
         </a>
-        <a href="campus-university.html?uni=NIT" class="uni-college">
+        <a href="#" class="uni-college">
           <div class="uni-college-abbr">NIT</div>
           <div><div class="uni-college-name">National Institute of Transport</div><div class="uni-college-full">Taasisi ya Usafirishaji Tanzania</div></div>
           <div class="uni-college-shops">Coming Soon</div>
@@ -551,7 +566,7 @@ Apply for Early Access →'Travex Uni-Student Market — Maombi yanafunguliwa hi
 <script>
 // ── SUPABASE ──
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const SUPABASE_ANON = "WEKA_ANON_KEY_YAKO_HAPA";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -731,6 +746,65 @@ document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
 
 // ── START ──
 init();
-</script><script>document.body.classList.add('loaded')</script>
+</script>
+
+<script>
+// ── SERVICE WORKER REGISTRATION ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registered'))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+
+// ── INSTALL PROMPT ──
+let deferredPrompt;
+const installBanner = document.getElementById('installBanner');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBanner) installBanner.style.display = 'flex';
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(result => {
+      if (result.outcome === 'accepted') {
+        if (installBanner) installBanner.style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  }
+}
+
+function dismissInstall() {
+  if (installBanner) installBanner.style.display = 'none';
+  localStorage.setItem('installDismissed', 'true');
+}
+
+// Don't show if dismissed before
+if (localStorage.getItem('installDismissed')) {
+  if (installBanner) installBanner.style.display = 'none';
+}
+
+window.addEventListener('appinstalled', () => {
+  if (installBanner) installBanner.style.display = 'none';
+  deferredPrompt = null;
+});
+</script>
+
+<script>
+// Fix font flash
+document.fonts.ready.then(() => {
+  document.body.classList.add('fonts-loaded');
+});
+// Fallback
+setTimeout(() => {
+  document.body.classList.add('fonts-loaded');
+}, 1000);
+</script>
 </body>
 </html>
