@@ -221,7 +221,7 @@ tbody tr:hover{background:var(--offwhite)}
       <button class="sidebar-link" onclick="showPanel('products',this)">📦 Products</button>
       <button class="sidebar-link" onclick="showPanel('orders',this)">🛍️ Orders</button>
       <div class="sidebar-section">Tools</div>
-      <button class="sidebar-link" onclick="onclick="window.location.href='ai-dashboard.html'">🤖 AI Advisor</button>
+      <button class="sidebar-link" onclick="showPanel('ai',this)">🤖 AI Advisor</button>
       <div class="sidebar-section">Account</div>
       <button class="sidebar-link" onclick="showPanel('subscription',this)">💳 Subscription</button>
       <a href="index.html" class="sidebar-link">🌐 Marketplace</a>
@@ -309,7 +309,7 @@ tbody tr:hover{background:var(--offwhite)}
               <button class="qa" onclick="showPanel('orders')">
                 <div class="qa-icon">📋</div><div class="qa-text">View All Orders</div>
               </button>
-              <button class="qa" onclick="window.location.href='ai-dashboard.html'">
+              <button class="qa" onclick="showPanel('ai')">
                 <div class="qa-icon">🤖</div><div class="qa-text">Ask AI Advisor</div>
               </button>
             </div>
@@ -605,7 +605,7 @@ tbody tr:hover{background:var(--offwhite)}
 <script>
 // ── SUPABASE CONFIG ──
 const SUPABASE_URL  = 'https://bscecjbgnjitlfmgwcic.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
+const SUPABASE_ANON = 'WEKA_ANON_KEY_YAKO_HAPA';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -617,7 +617,7 @@ let currentPanel  = 'overview';
 // ── INIT ──
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
+  if (!session) { window.location.replace('login.html'); return; }
   currentUser = session.user;
 
   // Set user name
@@ -897,7 +897,9 @@ function closeProductModal() {
 // ── LOGOUT ──
 async function handleLogout() {
   await sb.auth.signOut();
-  window.location.href = 'login.html';
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace('login.html');
 }
 
 // ── PANEL NAVIGATION ──
