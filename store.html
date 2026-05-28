@@ -3,263 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amina Fashion Store — Travex Mall</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Store — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669}
-body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--dark)}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
 
 /* NAV */
-nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-logo{font-size:1.2rem;font-weight:800;color:var(--white);text-decoration:none}
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,62,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none}
 .nav-logo span{color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:1.5rem}
-.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.8rem;font-weight:500}
-.nav-links a:hover{color:var(--gold)}
-.nav-btn{background:var(--gold);color:var(--navy);padding:0.4rem 1.1rem;font-size:0.8rem;font-weight:700;text-decoration:none;transition:all 0.2s}
-.nav-btn:hover{background:var(--gold2)}
+.nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s}
+.nav-back:hover{color:var(--gold)}
 
 /* STORE BANNER */
-.store-banner{
-  height:280px;
-  background:linear-gradient(135deg,#0D1B3E 0%,#1B3A6B 50%,#2563EB 100%);
-  position:relative;overflow:hidden;
-}
-.store-banner-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 40%,rgba(13,27,62,0.7) 100%);
-}
-.store-banner-pattern{
-  position:absolute;inset:0;opacity:0.06;
-  background-image:radial-gradient(rgba(255,255,255,0.8) 1px,transparent 1px);
-  background-size:32px 32px;
-}
+.store-header{position:relative;height:280px;background:linear-gradient(135deg,var(--navy),var(--blue));overflow:hidden}
+.store-banner-img{width:100%;height:100%;object-fit:cover}
+.store-header-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,27,62,0.9) 0%,rgba(13,27,62,0.3) 60%,transparent 100%)}
+.store-header-content{position:absolute;bottom:0;left:0;right:0;padding:2rem 5%;display:flex;align-items:flex-end;gap:1.5rem}
+.store-logo-big{width:80px;height:80px;background:var(--navy);border:4px solid var(--white);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:var(--gold);flex-shrink:0;overflow:hidden}
+.store-logo-big img{width:100%;height:100%;object-fit:cover}
+.store-header-info{flex:1}
+.store-header-name{font-size:1.6rem;font-weight:900;color:var(--white);margin-bottom:0.3rem}
+.store-header-cat{font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:0.5rem}
+.store-header-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
+.store-badge{padding:0.2rem 0.6rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+.store-badge.premium{background:var(--gold);color:var(--navy)}
+.store-badge.standard{background:var(--navy);color:var(--white);border:1px solid rgba(255,255,255,0.3)}
+.store-badge.basic{background:rgba(255,255,255,0.15);color:var(--white)}
+.store-badge.verified{background:var(--green);color:var(--white)}
+.store-wa-btn{background:var(--green);color:var(--white);padding:0.7rem 1.5rem;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;display:flex;align-items:center;gap:0.5rem;text-decoration:none;flex-shrink:0;transition:all 0.2s}
+.store-wa-btn:hover{background:#047857;transform:translateY(-2px)}
 
-/* STORE HEADER */
-.store-header{background:var(--white);border-bottom:1px solid var(--lgray);padding:0 5%}
-.store-header-inner{
-  display:flex;align-items:flex-end;gap:1.5rem;
-  padding-bottom:1.5rem;position:relative;
-}
-.store-logo{
-  width:90px;height:90px;
-  background:var(--navy);
-  display:flex;align-items:center;justify-content:center;
-  font-size:2rem;font-weight:800;color:var(--gold);
-  border:4px solid var(--white);
-  margin-top:-45px;flex-shrink:0;
-  position:relative;z-index:1;
-}
-.store-info{flex:1;padding-top:0.5rem}
-.store-name{font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
-.store-meta-row{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
-.store-badge{
-  background:var(--navy);color:var(--gold);
-  font-size:0.65rem;font-weight:700;
-  padding:0.2rem 0.6rem;letter-spacing:0.08em;
-  text-transform:uppercase;
-}
-.store-region{font-size:0.8rem;color:var(--gray);display:flex;align-items:center;gap:0.3rem}
-.store-category-tag{font-size:0.8rem;color:var(--gray)}
-.store-whatsapp{
-  display:flex;align-items:center;gap:0.4rem;
-  font-size:0.8rem;color:var(--green);font-weight:600;
-  text-decoration:none;
-}
-.store-whatsapp:hover{text-decoration:underline}
-.store-actions{display:flex;gap:0.75rem;align-items:flex-end;padding-top:0.5rem}
-.btn-whatsapp{
-  background:#25D366;color:var(--white);
-  padding:0.6rem 1.3rem;font-size:0.85rem;font-weight:700;
-  border:none;cursor:pointer;
-  display:flex;align-items:center;gap:0.5rem;
-  transition:all 0.2s;text-decoration:none;
-}
-.btn-whatsapp:hover{background:#128C7E}
-.btn-share{
-  background:var(--white);color:var(--navy);
-  padding:0.6rem 1.1rem;font-size:0.85rem;font-weight:600;
-  border:1.5px solid var(--lgray);cursor:pointer;
-  transition:all 0.2s;
-}
-.btn-share:hover{border-color:var(--navy)}
+/* STORE INFO BAR */
+.store-info-bar{background:var(--white);border-bottom:1px solid var(--lgray);padding:1rem 5%;display:flex;gap:2rem;align-items:center;flex-wrap:wrap}
+.store-info-item{display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--gray)}
+.store-info-item strong{color:var(--navy);font-weight:700}
+.store-info-divider{width:1px;height:20px;background:var(--lgray)}
 
-/* STORE NAV TABS */
-.store-tabs{
-  display:flex;gap:0;
-  border-top:1px solid var(--lgray);
-}
-.store-tab{
-  padding:0.8rem 1.5rem;
-  font-size:0.85rem;font-weight:600;color:var(--gray);
-  cursor:pointer;border-bottom:2px solid transparent;
-  background:none;border-top:none;border-left:none;border-right:none;
-  font-family:'Inter',sans-serif;transition:all 0.2s;
-}
-.store-tab.active{color:var(--navy);border-bottom-color:var(--navy)}
-.store-tab:hover{color:var(--navy)}
-
-/* MAIN CONTENT */
-.store-content{
-  display:grid;
-  grid-template-columns:1fr 300px;
-  gap:2rem;
-  padding:2rem 5%;
-  max-width:1200px;margin:0 auto;width:100%;
-  box-sizing:border-box;
-}
+/* MAIN LAYOUT */
+.store-main{max-width:1200px;margin:0 auto;padding:2rem 5%;display:grid;grid-template-columns:1fr 280px;gap:2rem}
 
 /* PRODUCTS */
-.products-header{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;
-}
-.products-title{font-size:1rem;font-weight:700;color:var(--navy)}
-.products-count{font-size:0.8rem;color:var(--gray)}
-.products-filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.filter-chip{
-  padding:0.35rem 0.85rem;
-  background:var(--white);border:1.5px solid var(--lgray);
-  font-size:0.75rem;font-weight:600;color:var(--gray);
-  cursor:pointer;transition:all 0.2s;
-}
-.filter-chip:hover{border-color:var(--navy);color:var(--navy)}
-.filter-chip.active{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.products-section{}
+.products-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.products-title{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.products-count{font-size:0.82rem;color:var(--gray)}
 
+/* CATEGORY FILTER */
+.cat-filter{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.cat-filter-btn{padding:0.4rem 0.9rem;background:var(--white);border:1.5px solid var(--lgray);color:var(--gray);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:"Inter",sans-serif}
+.cat-filter-btn:hover{border-color:var(--navy);color:var(--navy)}
+.cat-filter-btn.active{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+
+/* PRODUCT GRID */
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem}
-
-.product-card{
-  background:var(--white);border:1px solid var(--lgray);
-  overflow:hidden;transition:all 0.3s;
-}
+.product-card{background:var(--white);border:1px solid var(--lgray);overflow:hidden;transition:all 0.3s;cursor:pointer}
 .product-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(13,27,62,0.1);border-color:var(--navy)}
-.product-img{
-  height:180px;
-  background:linear-gradient(135deg,#F3F4F6,#E5E7EB);
-  display:flex;align-items:center;justify-content:center;
-  font-size:3rem;position:relative;overflow:hidden;
-}
-.product-out-badge{
-  position:absolute;top:8px;left:8px;
-  background:var(--gray);color:var(--white);
-  font-size:0.65rem;font-weight:700;padding:0.2rem 0.5rem;
-}
-.product-body{padding:1rem}
-.product-name{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
-.product-price{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.75rem}
-.product-price span{font-size:0.75rem;font-weight:500;color:var(--gray)}
-.product-stock{font-size:0.72rem;color:var(--gray);margin-bottom:0.75rem}
-.product-stock.low{color:var(--gold)}
-.btn-order{
-  display:block;width:100%;padding:0.65rem;
-  background:#25D366;color:var(--white);
-  font-size:0.8rem;font-weight:700;
-  border:none;cursor:pointer;
-  font-family:'Inter',sans-serif;
-  transition:all 0.2s;text-align:center;
-}
-.btn-order:hover{background:#128C7E}
-.btn-order.disabled{background:var(--lgray);color:var(--gray);cursor:not-allowed}
+.product-img{height:180px;background:var(--offwhite);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-img-placeholder{font-size:3rem;opacity:0.3}
+.product-body{padding:0.9rem}
+.product-name{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-desc{font-size:0.75rem;color:var(--gray);margin-bottom:0.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.product-price{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:0.6rem}
+.product-stock{font-size:0.7rem;color:var(--green);font-weight:600}
+.product-stock.low{color:var(--red)}
+.product-order-btn{width:100%;padding:0.6rem;background:var(--navy);color:var(--white);font-size:0.8rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-top:0.6rem}
+.product-order-btn:hover{background:var(--gold);color:var(--navy)}
 
 /* SIDEBAR */
 .store-sidebar{}
-
-.sidebar-card{
-  background:var(--white);border:1px solid var(--lgray);
-  margin-bottom:1.5rem;overflow:hidden;
-}
-.sidebar-card-title{
-  padding:1rem 1.2rem;border-bottom:1px solid var(--lgray);
-  font-size:0.875rem;font-weight:700;color:var(--navy);
-}
-.sidebar-card-body{padding:1.2rem}
-
-.store-about p{font-size:0.85rem;color:var(--gray);line-height:1.65;margin-bottom:1rem}
-.store-detail{display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:0.75rem;font-size:0.8rem}
-.store-detail-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
-.store-detail-text{color:var(--gray);line-height:1.5}
-.store-detail-text strong{color:var(--dark)}
-
-.contact-btn{
-  display:block;width:100%;padding:0.75rem;
-  text-align:center;font-weight:700;font-size:0.875rem;
-  margin-bottom:0.75rem;cursor:pointer;
-  border:none;font-family:'Inter',sans-serif;
-  transition:all 0.2s;text-decoration:none;
-}
-.contact-whatsapp{background:#25D366;color:var(--white)}
-.contact-whatsapp:hover{background:#128C7E}
-.contact-email{background:var(--white);color:var(--navy);border:1.5px solid var(--lgray)}
-.contact-email:hover{border-color:var(--navy)}
+.sidebar-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;margin-bottom:1.2rem}
+.sidebar-card-title{font-size:0.82rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem}
+.sidebar-info-row{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--lgray);font-size:0.82rem}
+.sidebar-info-row:last-child{border-bottom:none}
+.sidebar-info-label{color:var(--gray)}
+.sidebar-info-value{font-weight:600;color:var(--navy)}
+.contact-btn{display:flex;align-items:center;gap:0.6rem;width:100%;padding:0.75rem 1rem;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;text-decoration:none;margin-bottom:0.6rem}
+.contact-btn.whatsapp{background:#25D366;color:var(--white)}
+.contact-btn.whatsapp:hover{background:#128C7E}
+.contact-btn.email{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)}
+.contact-btn.email:hover{border-color:var(--navy)}
 
 /* ORDER MODAL */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.5);
-  z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem;
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);width:100%;max-width:460px}
-.modal-header{
-  padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.modal-title{font-size:1rem;font-weight:700;color:var(--navy)}
-.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray)}
+.modal{background:var(--white);width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.modal-header{background:var(--navy);padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:1rem;font-weight:800;color:var(--white)}
+.modal-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.4rem;cursor:pointer}
+.modal-close:hover{color:var(--white)}
 .modal-body{padding:1.5rem}
-.order-product-preview{
-  display:flex;gap:1rem;align-items:center;
-  padding:1rem;background:var(--offwhite);
-  border:1px solid var(--lgray);margin-bottom:1.5rem;
-}
-.order-product-icon{
-  width:50px;height:50px;background:var(--navy);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;flex-shrink:0;
-}
-.order-product-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
-.order-product-price{font-size:0.875rem;color:var(--gold);font-weight:700}
-.form-group{margin-bottom:1.1rem}
-.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
-.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);background:var(--white);font-family:'Inter',sans-serif;font-size:0.875rem;color:var(--dark);outline:none}
+.modal-product-info{background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;margin-bottom:1.2rem;display:flex;gap:1rem;align-items:center}
+.modal-product-img{width:60px;height:60px;background:var(--lgray);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden}
+.modal-product-img img{width:100%;height:100%;object-fit:cover}
+.modal-product-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
+.modal-product-price{font-size:1rem;font-weight:800;color:var(--gold);margin-top:0.2rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
+.form-label span{color:var(--red)}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s}
 .form-input:focus{border-color:var(--navy)}
-.qty-control{display:flex;align-items:center;gap:0;border:1.5px solid var(--lgray)}
-.qty-btn{width:36px;height:38px;background:var(--offwhite);border:none;font-size:1.1rem;cursor:pointer;font-weight:700;color:var(--navy)}
-.qty-btn:hover{background:var(--lgray)}
-.qty-value{width:60px;height:38px;border:none;border-left:1.5px solid var(--lgray);border-right:1.5px solid var(--lgray);text-align:center;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;outline:none}
-.order-total{
-  background:var(--offwhite);border:1px solid var(--lgray);
-  padding:1rem;margin-bottom:1.2rem;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.order-total-label{font-size:0.8rem;color:var(--gray);font-weight:600}
-.order-total-value{font-size:1.1rem;font-weight:800;color:var(--navy)}
-.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem}
-.btn-send-whatsapp{
-  flex:1;padding:0.85rem;
-  background:#25D366;color:var(--white);
-  font-size:0.9rem;font-weight:700;
-  border:none;cursor:pointer;
-  font-family:'Inter',sans-serif;
-  display:flex;align-items:center;justify-content:center;gap:0.5rem;
-}
-.btn-send-whatsapp:hover{background:#128C7E}
-.btn-cancel-order{
-  padding:0.85rem 1.2rem;
-  background:var(--white);color:var(--gray);
-  border:1.5px solid var(--lgray);
-  font-size:0.875rem;font-weight:600;
-  cursor:pointer;font-family:'Inter',sans-serif;
-}
+.qty-row{display:flex;align-items:center;gap:0.75rem}
+.qty-btn{width:36px;height:36px;background:var(--offwhite);border:1.5px solid var(--lgray);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:"Inter",sans-serif;transition:all 0.2s}
+.qty-btn:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.qty-display{font-size:1.1rem;font-weight:700;color:var(--navy);width:40px;text-align:center}
+.order-total{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}
+.order-total-label{font-size:0.85rem;color:var(--gray)}
+.order-total-val{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.btn-order-submit{width:100%;padding:0.9rem;background:#25D366;color:var(--white);font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"Inter",sans-serif;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:all 0.2s}
+.btn-order-submit:hover{background:#128C7E}
+
+/* EMPTY & LOADING */
+.loading{text-align:center;padding:3rem;color:var(--gray)}
+.loading-spinner{width:36px;height:36px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gray)}
+.empty-icon{font-size:3rem;margin-bottom:1rem}
+
+/* FOOTER */
+.store-footer{background:var(--navy);padding:1.5rem 5%;text-align:center;margin-top:3rem}
+.store-footer p{font-size:0.8rem;color:rgba(255,255,255,0.4)}
+.store-footer a{color:var(--gold);text-decoration:none}
 
 @media(max-width:900px){
-  .store-content{grid-template-columns:1fr}
+  .store-main{grid-template-columns:1fr}
   .store-sidebar{order:-1}
-  .store-header-inner{flex-wrap:wrap}
-  .store-actions{width:100%}
 }
 @media(max-width:600px){
-  nav .nav-links{display:none}
-  .store-logo{width:70px;height:70px;margin-top:-35px}
+  .store-header{height:220px}
+  .store-header-content{flex-direction:column;align-items:flex-start;gap:0.75rem}
+  .store-wa-btn{display:none}
+  .store-logo-big{width:64px;height:64px}
+  .store-header-name{font-size:1.3rem}
+  .products-grid{grid-template-columns:1fr 1fr}
+  .store-info-bar{gap:1rem}
+  .store-info-divider{display:none}
 }
 </style>
 </head>
@@ -268,206 +150,85 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">TRAVEX <span>MALL</span></a>
-  <div class="nav-links">
-    <a href="index.html">← Marketplace</a>
-    <a href="login.html">My Account</a>
-    <a href="signup.html" class="nav-btn">Open Your Store</a>
-  </div>
+  <a href="index.html" class="nav-back">← Back to Marketplace</a>
 </nav>
 
-<!-- STORE BANNER -->
-<div class="store-banner">
-  <div class="store-banner-pattern"></div>
-  <div class="store-banner-overlay"></div>
-</div>
-
 <!-- STORE HEADER -->
-<div class="store-header">
-  <div class="store-header-inner">
-    <div class="store-logo">AM</div>
-    <div class="store-info">
-      <div class="store-name">Amina Fashion Store</div>
-      <div class="store-meta-row">
-        <span class="store-badge">✓ Verified Store</span>
-        <span class="store-region">📍 Dar es Salaam</span>
-        <span class="store-category-tag">Fashion & Clothing</span>
-        <a href="https://wa.me/255712000000" class="store-whatsapp" target="_blank">
-          💬 +255 712 000 000
-        </a>
-      </div>
+<div class="store-header" id="storeHeader">
+  <div class="store-header-overlay"></div>
+  <div class="store-header-content">
+    <div class="store-logo-big" id="storeLogo">TM</div>
+    <div class="store-header-info">
+      <div class="store-header-name" id="storeHeaderName">Loading Store...</div>
+      <div class="store-header-cat" id="storeHeaderCat">—</div>
+      <div class="store-header-badges" id="storeHeaderBadges"></div>
     </div>
-    <div class="store-actions">
-      <a href="https://wa.me/255712000000?text=Hello! I visited your Travex Mall store and would like to know more about your products." target="_blank" class="btn-whatsapp">
-        💬 WhatsApp Store
-      </a>
-      <button class="btn-share" onclick="shareStore()">↗ Share</button>
-    </div>
-  </div>
-  <div class="store-tabs">
-    <button class="store-tab active">All Products</button>
-    <button class="store-tab">Dresses</button>
-    <button class="store-tab">Shirts</button>
-    <button class="store-tab">Accessories</button>
-    <button class="store-tab">Fabrics</button>
+    <a href="#" class="store-wa-btn" id="storeWaBtn" target="_blank">
+      💬 WhatsApp Order
+    </a>
   </div>
 </div>
 
-<!-- CONTENT -->
-<div class="store-content">
+<!-- STORE INFO BAR -->
+<div class="store-info-bar" id="storeInfoBar">
+  <div class="store-info-item">📍 <strong id="infoRegion">—</strong></div>
+  <div class="store-info-divider"></div>
+  <div class="store-info-item">📦 <strong id="infoProducts">—</strong> Products</div>
+  <div class="store-info-divider"></div>
+  <div class="store-info-item">📅 <strong id="infoSince">—</strong></div>
+  <div class="store-info-divider"></div>
+  <div class="store-info-item">💬 <strong id="infoWhatsapp">—</strong></div>
+</div>
+
+<!-- MAIN -->
+<div class="store-main">
 
   <!-- PRODUCTS -->
-  <div>
+  <div class="products-section">
     <div class="products-header">
       <div class="products-title">Products</div>
-      <div class="products-count">12 products available</div>
+      <div class="products-count" id="productsCount">Loading...</div>
     </div>
-
-    <div class="products-grid">
-
-      <div class="product-card">
-        <div class="product-img">👗</div>
-        <div class="product-body">
-          <div class="product-name">Blue Ankara Dress</div>
-          <div class="product-price">TZS 35,000 <span>/ piece</span></div>
-          <div class="product-stock">8 in stock</div>
-          <button class="btn-order" onclick="openOrder('Blue Ankara Dress', 35000, '👗')">💬 Order via WhatsApp</button>
-        </div>
+    <div class="cat-filter" id="catFilter"></div>
+    <div class="products-grid" id="productsGrid">
+      <div class="loading" style="grid-column:1/-1">
+        <div class="loading-spinner"></div>
+        Loading products...
       </div>
-
-      <div class="product-card">
-        <div class="product-img">👔</div>
-        <div class="product-body">
-          <div class="product-name">White Cotton Shirt</div>
-          <div class="product-price">TZS 18,000 <span>/ piece</span></div>
-          <div class="product-stock">15 in stock</div>
-          <button class="btn-order" onclick="openOrder('White Cotton Shirt', 18000, '👔')">💬 Order via WhatsApp</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">🧵</div>
-        <div class="product-body">
-          <div class="product-name">Kitenge Fabric (3m)</div>
-          <div class="product-price">TZS 22,000 <span>/ roll</span></div>
-          <div class="product-stock">20 in stock</div>
-          <button class="btn-order" onclick="openOrder('Kitenge Fabric (3m)', 22000, '🧵')">💬 Order via WhatsApp</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">👜</div>
-        <div class="product-body">
-          <div class="product-name">Leather Handbag</div>
-          <div class="product-price">TZS 45,000 <span>/ piece</span></div>
-          <div class="product-stock low">Only 4 left!</div>
-          <button class="btn-order" onclick="openOrder('Leather Handbag', 45000, '👜')">💬 Order via WhatsApp</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">🧣</div>
-        <div class="product-body">
-          <div class="product-name">Silk Scarf Set</div>
-          <div class="product-price">TZS 12,000 <span>/ set</span></div>
-          <div class="product-stock" style="color:var(--red)">Out of stock</div>
-          <button class="btn-order disabled" disabled>Out of Stock</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">👒</div>
-        <div class="product-body">
-          <div class="product-name">Ladies Sun Hat</div>
-          <div class="product-price">TZS 9,500 <span>/ piece</span></div>
-          <div class="product-stock">12 in stock</div>
-          <button class="btn-order" onclick="openOrder('Ladies Sun Hat', 9500, '👒')">💬 Order via WhatsApp</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">🥿</div>
-        <div class="product-body">
-          <div class="product-name">Flat Sandals (Ladies)</div>
-          <div class="product-price">TZS 16,000 <span>/ pair</span></div>
-          <div class="product-stock">7 in stock</div>
-          <button class="btn-order" onclick="openOrder('Flat Sandals (Ladies)', 16000, '🥿')">💬 Order via WhatsApp</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">🩱</div>
-        <div class="product-body">
-          <div class="product-name">Swimwear Set</div>
-          <div class="product-price">TZS 28,000 <span>/ set</span></div>
-          <div class="product-stock">5 in stock</div>
-          <button class="btn-order" onclick="openOrder('Swimwear Set', 28000, '🩱')">💬 Order via WhatsApp</button>
-        </div>
-      </div>
-
     </div>
   </div>
 
   <!-- SIDEBAR -->
   <div class="store-sidebar">
 
+    <!-- About Store -->
     <div class="sidebar-card">
       <div class="sidebar-card-title">About This Store</div>
-      <div class="sidebar-card-body store-about">
-        <p>Premium clothing and accessories for men and women. Quality fabrics at affordable prices — delivered across Dar es Salaam.</p>
-        <div class="store-detail">
-          <div class="store-detail-icon">📍</div>
-          <div class="store-detail-text"><strong>Location:</strong><br>Kariakoo, Dar es Salaam</div>
-        </div>
-        <div class="store-detail">
-          <div class="store-detail-icon">🕐</div>
-          <div class="store-detail-text"><strong>Response Time:</strong><br>Usually within 30 minutes</div>
-        </div>
-        <div class="store-detail">
-          <div class="store-detail-icon">🚚</div>
-          <div class="store-detail-text"><strong>Delivery:</strong><br>Dar es Salaam — Same day<br>Other regions — 2-3 days</div>
-        </div>
-        <div class="store-detail">
-          <div class="store-detail-icon">💳</div>
-          <div class="store-detail-text"><strong>Payment:</strong><br>M-Pesa, Airtel Money, Cash on delivery</div>
-        </div>
-      </div>
+      <p id="storeDesc" style="font-size:0.85rem;color:var(--gray);line-height:1.65;margin-bottom:1rem">Loading...</p>
+      <div class="sidebar-info-row"><span class="sidebar-info-label">Category</span><span class="sidebar-info-value" id="sidebarCat">—</span></div>
+      <div class="sidebar-info-row"><span class="sidebar-info-label">Region</span><span class="sidebar-info-value" id="sidebarRegion">—</span></div>
+      <div class="sidebar-info-row"><span class="sidebar-info-label">Plan</span><span class="sidebar-info-value" id="sidebarPlan">—</span></div>
+      <div class="sidebar-info-row"><span class="sidebar-info-label">Status</span><span class="sidebar-info-value" style="color:var(--green)">✅ Verified</span></div>
     </div>
 
+    <!-- Contact -->
     <div class="sidebar-card">
-      <div class="sidebar-card-title">Contact Store</div>
-      <div class="sidebar-card-body">
-        <a href="https://wa.me/255712000000" target="_blank" class="contact-btn contact-whatsapp">
-          💬 Chat on WhatsApp
-        </a>
-        <a href="mailto:amina@example.com" class="contact-btn contact-email">
-          📧 Send Email
-        </a>
-        <div style="font-size:0.75rem;color:var(--gray);text-align:center;margin-top:0.5rem">
-          WhatsApp: +255 712 000 000
-        </div>
-      </div>
+      <div class="sidebar-card-title">Contact Seller</div>
+      <a href="#" class="contact-btn whatsapp" id="sidebarWaBtn" target="_blank">
+        💬 WhatsApp Seller
+      </a>
+      <a href="#" class="contact-btn email" id="sidebarEmailBtn">
+        📧 Send Email
+      </a>
+      <p style="font-size:0.75rem;color:var(--gray);text-align:center;margin-top:0.5rem;line-height:1.5">Response usually within 30 minutes</p>
     </div>
 
+    <!-- Share -->
     <div class="sidebar-card">
-      <div class="sidebar-card-title">Store Stats</div>
-      <div class="sidebar-card-body">
-        <div style="display:flex;justify-content:space-between;margin-bottom:0.8rem">
-          <span style="font-size:0.8rem;color:var(--gray)">Products</span>
-          <span style="font-size:0.8rem;font-weight:700;color:var(--navy)">12</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:0.8rem">
-          <span style="font-size:0.8rem;color:var(--gray)">Store Views</span>
-          <span style="font-size:0.8rem;font-weight:700;color:var(--navy)">234</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:0.8rem">
-          <span style="font-size:0.8rem;color:var(--gray)">Member Since</span>
-          <span style="font-size:0.8rem;font-weight:700;color:var(--navy)">May 2026</span>
-        </div>
-        <div style="display:flex;justify-content:space-between">
-          <span style="font-size:0.8rem;color:var(--gray)">Region</span>
-          <span style="font-size:0.8rem;font-weight:700;color:var(--navy)">Dar es Salaam</span>
-        </div>
-      </div>
+      <div class="sidebar-card-title">Share This Store</div>
+      <button onclick="shareStore()" style="width:100%;padding:0.7rem;background:var(--offwhite);border:1px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;color:var(--navy);transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='var(--navy)'">
+        🔗 Copy Store Link
+      </button>
     </div>
 
   </div>
@@ -478,133 +239,293 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">Place Your Order</div>
-      <button class="modal-close" onclick="closeOrder()">✕</button>
+      <button class="modal-close" onclick="closeOrderModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="order-product-preview">
-        <div class="order-product-icon" id="orderIcon">👗</div>
+      <div class="modal-product-info">
+        <div class="modal-product-img" id="modalProductImg">🛍️</div>
         <div>
-          <div class="order-product-name" id="orderName">Blue Ankara Dress</div>
-          <div class="order-product-price" id="orderPrice">TZS 35,000</div>
+          <div class="modal-product-name" id="modalProductName">Product Name</div>
+          <div class="modal-product-price" id="modalProductPrice">TZS 0</div>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Your Name *</label>
-        <input type="text" class="form-input" placeholder="Enter your full name" id="customerName">
+        <label class="form-label">Your Name <span>*</span></label>
+        <input type="text" class="form-input" id="orderName" placeholder="Your full name">
       </div>
-
       <div class="form-group">
-        <label class="form-label">Your Phone Number *</label>
-        <input type="tel" class="form-input" placeholder="+255 712 000 000" id="customerPhone">
+        <label class="form-label">Phone Number <span>*</span></label>
+        <input type="tel" class="form-input" id="orderPhone" placeholder="+255 712 000 000">
       </div>
-
       <div class="form-group">
         <label class="form-label">Quantity</label>
-        <div class="qty-control">
+        <div class="qty-row">
           <button class="qty-btn" onclick="changeQty(-1)">−</button>
-          <input type="number" class="qty-value" value="1" min="1" id="orderQty" oninput="updateTotal()">
+          <div class="qty-display" id="qtyDisplay">1</div>
           <button class="qty-btn" onclick="changeQty(1)">+</button>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Delivery Address (optional)</label>
-        <input type="text" class="form-input" placeholder="Your address for delivery" id="customerAddress">
+      <div class="order-total">
+        <span class="order-total-label">Total Amount:</span>
+        <span class="order-total-val" id="orderTotal">TZS 0</span>
       </div>
 
-      <div class="order-total">
-        <div class="order-total-label">Total Amount:</div>
-        <div class="order-total-value" id="orderTotal">TZS 35,000</div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel-order" onclick="closeOrder()">Cancel</button>
-      <button class="btn-send-whatsapp" onclick="sendWhatsAppOrder()">
+      <button class="btn-order-submit" onclick="submitOrder()">
         💬 Send Order via WhatsApp
       </button>
+      <p style="font-size:0.75rem;color:var(--gray);text-align:center;margin-top:0.75rem;line-height:1.5">
+        Your order will be sent directly to the seller's WhatsApp. They will confirm and arrange delivery.
+      </p>
     </div>
   </div>
 </div>
 
+<!-- FOOTER -->
+<div class="store-footer">
+  <p>© 2026 <a href="index.html">Travex Mall</a> · <a href="mailto:travexmall15@gmail.com">travexmall15@gmail.com</a> · <a href="https://wa.me/255651919915">+255 651 919 915</a></p>
+</div>
+
 <script>
-let currentProduct = { name: '', price: 0, icon: '' };
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-function openOrder(name, price, icon) {
-  currentProduct = { name, price, icon };
-  document.getElementById('orderIcon').textContent = icon;
-  document.getElementById('orderName').textContent = name;
-  document.getElementById('orderPrice').textContent = 'TZS ' + price.toLocaleString();
-  document.getElementById('orderQty').value = 1;
-  document.getElementById('orderTotal').textContent = 'TZS ' + price.toLocaleString();
-  document.getElementById('orderModal').classList.add('open');
-}
+let currentStore    = null;
+let allProducts     = [];
+let currentProduct  = null;
+let currentQty      = 1;
 
-function closeOrder() {
-  document.getElementById('orderModal').classList.remove('open');
-}
+// Get store slug from URL
+const params = new URLSearchParams(window.location.search);
+const storeSlug = params.get("store") || params.get("id");
 
-function changeQty(delta) {
-  const input = document.getElementById('orderQty');
-  const val = Math.max(1, parseInt(input.value || 1) + delta);
-  input.value = val;
-  updateTotal();
-}
-
-function updateTotal() {
-  const qty = parseInt(document.getElementById('orderQty').value) || 1;
-  const total = currentProduct.price * qty;
-  document.getElementById('orderTotal').textContent = 'TZS ' + total.toLocaleString();
-}
-
-function sendWhatsAppOrder() {
-  const name = document.getElementById('customerName').value;
-  const phone = document.getElementById('customerPhone').value;
-  const qty = document.getElementById('orderQty').value;
-  const address = document.getElementById('customerAddress').value;
-  const total = currentProduct.price * qty;
-
-  if(!name || !phone) {
-    alert('Please enter your name and phone number.');
+async function init() {
+  if (!storeSlug) {
+    // Try to get first store if no slug
+    const { data } = await sb.from("stores").select("*").eq("is_active", true).limit(1).single();
+    if (data) loadStoreData(data);
+    else showError();
     return;
   }
 
-  const message = `Hello! I want to place an order:
+  const { data, error } = await sb.from("stores").select("*")
+    .or(`slug.eq.${storeSlug},id.eq.${storeSlug}`)
+    .single();
 
-🛍️ Product: ${currentProduct.name}
-💰 Price: TZS ${currentProduct.price.toLocaleString()}
-📦 Quantity: ${qty}
-💵 Total: TZS ${total.toLocaleString()}
-🏪 Store: Amina Fashion Store
-📍 Region: Dar es Salaam
-${address ? `🏠 Delivery Address: ${address}` : ''}
+  if (error || !data) { showError(); return; }
+  loadStoreData(data);
+}
 
-👤 My Name: ${name}
-📱 My Phone: ${phone}
+function loadStoreData(store) {
+  currentStore = store;
+  document.title = store.store_name + " — Travex Mall";
 
-Please confirm availability. Asante! 🙏`;
+  // Header
+  const initials = store.store_name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
+  const logoEl   = document.getElementById("storeLogo");
+  if (store.logo) {
+    logoEl.innerHTML = `<img src="${store.logo}" alt="${store.store_name}">`;
+  } else {
+    logoEl.textContent = initials;
+  }
 
-  const encoded = encodeURIComponent(message);
-  window.open(`https://wa.me/255712000000?text=${encoded}`, '_blank');
-  closeOrder();
+  // Banner
+  if (store.banner) {
+    document.getElementById("storeHeader").style.backgroundImage = `url(${store.banner})`;
+    document.getElementById("storeHeader").style.backgroundSize  = "cover";
+    document.getElementById("storeHeader").style.backgroundPosition = "center";
+  }
+
+  document.getElementById("storeHeaderName").textContent = store.store_name;
+  document.getElementById("storeHeaderCat").textContent  = `${store.category || "General"} · ${store.region || "Tanzania"}`;
+
+  // Badges
+  const plan = store.subscription_plan || "basic";
+  const planLabel = plan === "premium" ? "👑 Premium" : plan === "standard" ? "⭐⭐ Standard" : "⭐ Basic";
+  document.getElementById("storeHeaderBadges").innerHTML = `
+    <span class="store-badge ${plan}">${planLabel}</span>
+    <span class="store-badge verified">✓ Verified</span>`;
+
+  // WhatsApp
+  const waNum = store.whatsapp_number?.replace(/\D/g,"");
+  const waLink = `https://wa.me/${waNum}?text=Hello! I found your store on Travex Mall — ${store.store_name}`;
+  document.getElementById("storeWaBtn").href   = waLink;
+  document.getElementById("sidebarWaBtn").href = waLink;
+
+  // Email
+  if (store.email) {
+    document.getElementById("sidebarEmailBtn").href = `mailto:${store.email}`;
+  }
+
+  // Info bar
+  document.getElementById("infoRegion").textContent   = store.region || "Tanzania";
+  document.getElementById("infoSince").textContent    = "Joined " + new Date(store.created_at).toLocaleDateString("en", {month:"short", year:"numeric"});
+  document.getElementById("infoWhatsapp").textContent = store.whatsapp_number || "—";
+
+  // Sidebar
+  document.getElementById("storeDesc").textContent    = store.description || "Welcome to our store on Travex Mall!";
+  document.getElementById("sidebarCat").textContent   = store.category || "General";
+  document.getElementById("sidebarRegion").textContent= store.region || "Tanzania";
+  document.getElementById("sidebarPlan").textContent  = planLabel;
+
+  loadProducts();
+}
+
+async function loadProducts() {
+  const { data: products } = await sb.from("products")
+    .select("*")
+    .eq("store_id", currentStore.id)
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+
+  allProducts = products || [];
+  document.getElementById("infoProducts").textContent = allProducts.length;
+  document.getElementById("productsCount").textContent = `${allProducts.length} product${allProducts.length !== 1 ? "s" : ""}`;
+
+  // Build category filters
+  const cats = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+  const catFilter = document.getElementById("catFilter");
+  if (cats.length > 1) {
+    catFilter.innerHTML = `<button class="cat-filter-btn active" onclick="filterProducts('all',this)">All</button>` +
+      cats.map(c => `<button class="cat-filter-btn" onclick="filterProducts('${c}',this)">${c}</button>`).join("");
+  }
+
+  renderProducts(allProducts);
+}
+
+function renderProducts(products) {
+  const grid = document.getElementById("productsGrid");
+  if (!products.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📦</div><div style="font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem">No products yet</div><div style="font-size:0.8rem;color:var(--gray)">This store hasn't added products yet. Check back soon!</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = products.map(p => {
+    const img    = p.images?.[0];
+    const stock  = p.stock || 0;
+    const lowStock = stock > 0 && stock <= 5;
+    return `
+    <div class="product-card" onclick="openOrderModal('${p.id}')">
+      <div class="product-img">
+        ${img ? `<img src="${img}" alt="${p.name}" onerror="this.style.display='none'">` : `<div class="product-img-placeholder">🛍️</div>`}
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        ${p.description ? `<div class="product-desc">${p.description}</div>` : ""}
+        <div class="product-price">TZS ${Number(p.price).toLocaleString()}</div>
+        <div class="product-stock ${lowStock?"low":""}">${stock === 0 ? "⚠️ Out of stock" : lowStock ? `⚡ Only ${stock} left` : `✅ ${stock} in stock`}</div>
+        <button class="product-order-btn" ${stock === 0 ? "disabled style='opacity:0.5;cursor:not-allowed'" : ""}>
+          💬 Order via WhatsApp
+        </button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function filterProducts(cat, btn) {
+  document.querySelectorAll(".cat-filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const filtered = cat === "all" ? allProducts : allProducts.filter(p => p.category === cat);
+  renderProducts(filtered);
+}
+
+// ORDER MODAL
+function openOrderModal(productId) {
+  const product = allProducts.find(p => p.id === productId);
+  if (!product || product.stock === 0) return;
+  currentProduct = product;
+  currentQty     = 1;
+
+  const img = product.images?.[0];
+  document.getElementById("modalProductImg").innerHTML = img
+    ? `<img src="${img}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover">`
+    : "🛍️";
+  document.getElementById("modalProductName").textContent  = product.name;
+  document.getElementById("modalProductPrice").textContent = `TZS ${Number(product.price).toLocaleString()}`;
+  document.getElementById("qtyDisplay").textContent        = "1";
+  document.getElementById("orderTotal").textContent        = `TZS ${Number(product.price).toLocaleString()}`;
+  document.getElementById("orderName").value  = "";
+  document.getElementById("orderPhone").value = "";
+
+  document.getElementById("orderModal").classList.add("open");
+}
+
+function closeOrderModal() {
+  document.getElementById("orderModal").classList.remove("open");
+  currentProduct = null;
+}
+
+function changeQty(delta) {
+  const max = currentProduct?.stock || 99;
+  currentQty = Math.max(1, Math.min(currentQty + delta, max));
+  document.getElementById("qtyDisplay").textContent = currentQty;
+  document.getElementById("orderTotal").textContent = `TZS ${(currentQty * currentProduct.price).toLocaleString()}`;
+}
+
+async function submitOrder() {
+  const name  = document.getElementById("orderName").value.trim();
+  const phone = document.getElementById("orderPhone").value.trim();
+
+  if (!name || !phone) {
+    alert("Please fill in your name and phone number.");
+    return;
+  }
+
+  const total   = currentQty * currentProduct.price;
+  const waNum   = currentStore.whatsapp_number?.replace(/\D/g,"");
+  const message = encodeURIComponent(
+    `🛍️ *New Order — Travex Mall*\n\n` +
+    `📦 Product: ${currentProduct.name}\n` +
+    `💰 Price: TZS ${Number(currentProduct.price).toLocaleString()}\n` +
+    `🔢 Quantity: ${currentQty}\n` +
+    `💵 Total: TZS ${total.toLocaleString()}\n\n` +
+    `👤 Customer: ${name}\n` +
+    `📱 Phone: ${phone}\n\n` +
+    `Please confirm my order. Thank you! 🙏`
+  );
+
+  // Save order to Supabase
+  try {
+    await sb.from("orders").insert({
+      store_id:      currentStore.id,
+      product_id:    currentProduct.id,
+      customer_name: name,
+      phone,
+      quantity:      currentQty,
+      total_price:   total,
+      status:        "pending"
+    });
+  } catch(e) {
+    console.log("Order save error:", e);
+  }
+
+  // Open WhatsApp
+  window.open(`https://wa.me/${waNum}?text=${message}`, "_blank");
+  closeOrderModal();
 }
 
 function shareStore() {
-  if(navigator.share) {
-    navigator.share({
-      title: 'Amina Fashion Store — Travex Mall',
-      text: 'Check out this amazing store on Travex Mall!',
-      url: window.location.href
-    });
+  const url = window.location.href;
+  if (navigator.share) {
+    navigator.share({ title: currentStore?.store_name, url });
   } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Store link copied to clipboard! ✅');
+    navigator.clipboard.writeText(url).then(() => alert("Store link copied! ✅"));
   }
 }
 
-document.getElementById('orderModal').addEventListener('click', function(e) {
-  if(e.target === this) closeOrder();
+function showError() {
+  document.getElementById("storeHeaderName").textContent = "Store Not Found";
+  document.getElementById("productsGrid").innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔍</div><div style="font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem">Store not found</div><div style="font-size:0.8rem;color:var(--gray);margin-bottom:1rem">This store may have been moved or doesn't exist.</div><a href="index.html" style="background:var(--navy);color:var(--white);padding:0.75rem 1.5rem;font-size:0.875rem;font-weight:700;text-decoration:none;display:inline-block">Back to Marketplace</a></div>`;
+}
+
+document.getElementById("orderModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("orderModal")) closeOrderModal();
 });
+
+init();
 </script>
 </body>
 </html>
