@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Dashboard — Travex Campus</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--sidebar:240px}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sidebar-top{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sidebar-logo{font-size:1rem;font-weight:800;color:var(--white)}
+.sidebar-logo span{color:var(--gold)}
+.sidebar-campus-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-size:0.62rem;font-weight:700;padding:0.2rem 0.6rem;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.4rem}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
+.sidebar-section{font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em;padding:0.75rem 1.5rem 0.4rem}
+.sidebar-link{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.5rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;cursor:pointer;border-left:3px solid transparent;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;font-family:"Inter",sans-serif}
+.sidebar-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.sidebar-link.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
+.sidebar-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07)}
+.sidebar-user{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.sidebar-avatar{width:36px;height:36px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;flex-shrink:0}
+.sidebar-user-name{font-size:0.8rem;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user-uni{font-size:0.68rem;color:rgba(255,255,255,0.4)}
+.btn-logout{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(255,255,255,0.4);cursor:pointer;background:none;border:none;font-family:"Inter",sans-serif;transition:color 0.2s}
+.btn-logout:hover{color:var(--red)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topnav{background:var(--white);border-bottom:1px solid var(--lgray);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
+.page-bread{font-size:0.78rem;color:var(--gray)}
+.topnav-btn{background:var(--gold);color:var(--navy);padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.topnav-btn:hover{background:var(--gold2)}
+
+.content{padding:2rem;flex:1}
+.panel{display:none}
+.panel.active{display:block}
+
+/* WINNER BANNER */
+.winner-banner{background:linear-gradient(135deg,#B45309,#D97706);padding:1.2rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem;border-left:4px solid var(--gold2)}
+.winner-icon{font-size:2rem;flex-shrink:0}
+.winner-text{}
+.winner-title{font-size:0.9rem;font-weight:800;color:var(--white);margin-bottom:0.2rem}
+.winner-sub{font-size:0.78rem;color:rgba(255,255,255,0.7)}
+
+/* SUBSCRIPTION BANNER */
+.sub-banner{background:var(--navy);padding:1rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;border-left:4px solid var(--gold)}
+.sub-banner-text{font-size:0.875rem;color:var(--white)}
+.sub-banner-title{font-weight:700;color:var(--gold);margin-bottom:0.2rem}
+.sub-banner-btn{background:var(--gold);color:var(--navy);padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:700;border:none;cursor:pointer;white-space:nowrap;font-family:"Inter",sans-serif}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
+.stat-card{background:var(--white);padding:1.5rem;border:1px solid var(--lgray)}
+.stat-label{font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--navy)}
+.stat-sub{font-size:0.72rem;color:var(--green);margin-top:0.3rem}
+
+/* GRID 2 */
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.card-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.card-btn{background:var(--navy);color:var(--white);padding:0.45rem 1rem;font-size:0.78rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.card-btn:hover{background:var(--blue)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+thead th{padding:0.75rem 1.5rem;text-align:left;font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;background:var(--offwhite);border-bottom:1px solid var(--lgray)}
+tbody td{padding:1rem 1.5rem;font-size:0.875rem;color:var(--dark);border-bottom:1px solid var(--lgray)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--offwhite)}
+.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-completed{background:#D1FAE5;color:#065F46}
+.badge-cancelled{background:#FEE2E2;color:#991B1B}
+
+/* QUICK ACTIONS */
+.quick-actions{padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem}
+.qa{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;transition:all 0.2s;background:none;width:100%;font-family:"Inter",sans-serif;border:1px solid var(--lgray)}
+.qa:hover{background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.qa-icon{width:32px;height:32px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.qa-text{font-size:0.85rem;font-weight:600;color:var(--navy)}
+
+/* LEADERBOARD */
+.leaderboard{list-style:none;padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem}
+.lb-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:var(--offwhite);border:1px solid var(--lgray)}
+.lb-item.you{border-color:var(--gold);background:#FFFBEB}
+.lb-rank{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;flex-shrink:0}
+.lb-rank.gold{background:var(--gold);color:var(--navy)}
+.lb-rank.silver{background:#9CA3AF;color:var(--white)}
+.lb-rank.bronze{background:#B45309;color:var(--white)}
+.lb-rank.other{background:var(--lgray);color:var(--gray)}
+.lb-name{flex:1;font-size:0.85rem;font-weight:600;color:var(--navy)}
+.lb-you-badge{font-size:0.65rem;background:var(--gold);color:var(--navy);padding:0.1rem 0.4rem;font-weight:700;margin-left:0.4rem}
+.lb-uni{font-size:0.7rem;color:var(--gray)}
+.lb-sales{font-size:0.85rem;font-weight:700;color:var(--navy)}
+
+/* FORM */
+.form-section{padding:1.5rem;border-bottom:1px solid var(--lgray)}
+.form-section:last-child{border-bottom:none}
+.form-section-title{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:1.2rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus{border-color:var(--navy)}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.upload-area{border:2px dashed var(--lgray);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative}
+.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.form-actions{padding:1.5rem;border-top:1px solid var(--lgray);display:flex;gap:1rem}
+.btn-save{background:var(--navy);color:var(--white);padding:0.75rem 2rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-save:hover{background:#1B3A6B}
+
+/* AI CHAT */
+.ai-tabs{display:flex;gap:0;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.ai-tab{flex:1;padding:0.75rem;font-size:0.8rem;font-weight:600;color:var(--gray);border:none;cursor:pointer;transition:all 0.2s;font-family:"Inter",sans-serif;background:transparent;border-bottom:2px solid transparent}
+.ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white)}
+.ai-chat-wrap{display:none}
+.ai-chat-wrap.active{display:flex;flex-direction:column;height:450px}
+.ai-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.ai-msg{display:flex;gap:0.75rem;max-width:85%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-icon{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-msg.user .ai-icon{background:var(--gold);color:var(--navy);font-size:0.65rem;font-weight:800}
+.ai-bubble{padding:0.75rem 1rem;font-size:0.85rem;line-height:1.6}
+.ai-msg.bot .ai-bubble{background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-msg.user .ai-bubble{background:var(--navy);color:var(--white)}
+.ai-sugs{padding:0.75rem 1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
+.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.35rem 0.75rem;font-size:0.72rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ai-sug:hover{border-color:var(--navy);color:var(--navy)}
+.ai-input-row{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem}
+.ai-input{flex:1;padding:0.7rem 1rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;outline:none}
+.ai-input:focus{border-color:var(--navy)}
+.ai-send{background:var(--gold);color:var(--navy);padding:0.7rem 1.2rem;font-weight:700;font-size:0.8rem;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white)}
+.modal-title{font-size:1rem;font-weight:700;color:var(--navy)}
+.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray)}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end}
+.btn-cancel{background:var(--white);color:var(--gray);padding:0.7rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+
+/* ACTION BTNS */
+.action-btn{background:none;border:none;cursor:pointer;font-family:"Inter",sans-serif;font-size:0.8rem;font-weight:600;padding:0.3rem 0.5rem;transition:color 0.2s}
+.action-edit{color:#2563EB}
+.action-delete{color:var(--red)}
+
+.loading{text-align:center;padding:3rem;color:var(--gray)}
+.loading-spinner{width:32px;height:32px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gray)}
+.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
+
+.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green)}
+
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-logo">TRAVEX <span>CAMPUS</span></div>
+    <div class="sidebar-campus-badge">🎓 Student Seller</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Main</div>
+    <button class="sidebar-link active" onclick="showPanel('overview',this)">📊 Overview</button>
+    <button class="sidebar-link" onclick="showPanel('store',this)">🏪 My Shop</button>
+    <button class="sidebar-link" onclick="showPanel('products',this)">📦 Products</button>
+    <button class="sidebar-link" onclick="showPanel('orders',this)">🛍️ Orders</button>
+    <div class="sidebar-section">AI Tools</div>
+    <button class="sidebar-link" onclick="showPanel('ai',this)">🤖 AI Assistants</button>
+    <div class="sidebar-section">Campus</div>
+    <button class="sidebar-link" onclick="showPanel('leaderboard',this)">🏆 Leaderboard</button>
+    <button class="sidebar-link" onclick="showPanel('subscription',this)">💳 Subscription</button>
+    <a href="campus.html" class="sidebar-link">🌐 Campus Market</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="userInitials">?</div>
+      <div>
+        <div class="sidebar-user-name" id="userName">Loading...</div>
+        <div class="sidebar-user-uni" id="userUni">—</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="handleLogout()">🚪 Log Out</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topnav">
+    <div>
+      <div class="page-title" id="pageTitle">Dashboard Overview</div>
+      <div class="page-bread">Travex Campus / <span id="pageBread">Overview</span></div>
+    </div>
+    <button class="topnav-btn" onclick="showPanel('products');openProductModal()">+ Add Product</button>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="panel-overview">
+
+      <!-- Winner Banner (show if winner) -->
+      <div class="winner-banner" id="winnerBanner" style="display:none">
+        <div class="winner-icon">🏆</div>
+        <div class="winner-text">
+          <div class="winner-title">🎉 Congratulations! You are this month's Campus Champion!</div>
+          <div class="winner-sub">TZS 30,000 has been sent to your M-Pesa. Your free month subscription has been activated.</div>
+        </div>
+      </div>
+
+      <!-- Sub Banner -->
+      <div class="sub-banner" id="subBanner" style="display:none">
+        <div class="sub-banner-text">
+          <div class="sub-banner-title">⚠️ Subscription Required</div>
+          Your shop is pending activation. Pay TZS 15,000 to start selling.
+        </div>
+        <button class="sub-banner-btn" onclick="showPanel('subscription')">Activate Shop</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Products</div>
+          <div class="stat-value" id="statProducts">0</div>
+          <div class="stat-sub">In your shop</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Orders</div>
+          <div class="stat-value" id="statOrders">0</div>
+          <div class="stat-sub">All time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Revenue (TZS)</div>
+          <div class="stat-value" id="statRevenue">0</div>
+          <div class="stat-sub">Total earned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Shop Number</div>
+          <div class="stat-value" id="statShopNum" style="font-size:1.2rem">—</div>
+          <div class="stat-sub" id="statShopStatus">Pending</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Recent Orders</div>
+            <button class="card-btn" onclick="showPanel('orders')">View All</button>
+          </div>
+          <div id="recentOrders">
+            <div class="loading"><div class="loading-spinner"></div>Loading...</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Quick Actions</div></div>
+          <div class="quick-actions">
+            <button class="qa" onclick="openProductModal()">
+              <div class="qa-icon">➕</div><div class="qa-text">Add New Product</div>
+            </button>
+            <button class="qa" onclick="showPanel('store')">
+              <div class="qa-icon">✏️</div><div class="qa-text">Edit My Shop</div>
+            </button>
+            <button class="qa" onclick="showPanel('ai')">
+              <div class="qa-icon">🤖</div><div class="qa-text">Ask AI Advisor</div>
+            </button>
+            <button class="qa" onclick="showPanel('leaderboard')">
+              <div class="qa-icon">🏆</div><div class="qa-text">View Leaderboard</div>
+            </button>
+            <button class="qa" onclick="window.open('campus-university.html?uni=' + userUniAbbr)">
+              <div class="qa-icon">🌐</div><div class="qa-text">Preview My Shop</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY SHOP -->
+    <div class="panel" id="panel-store">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" id="shopFormTitle">My Shop Profile</div>
+        </div>
+        <div class="alert alert-error" id="shopError" style="margin:1rem 1.5rem 0"></div>
+        <div class="alert alert-success" id="shopSuccess" style="margin:1rem 1.5rem 0"></div>
+
+        <div class="form-section">
+          <div class="form-section-title">Shop Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Shop Name</label>
+              <input type="text" class="form-input" id="shopName" placeholder="e.g. Amina Fashion UDSM">
+            </div>
+            <div class="form-group">
+              <label class="form-label">WhatsApp Number</label>
+              <input type="tel" class="form-input" id="shopWhatsapp" placeholder="+255 712 000 000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Shop Description</label>
+            <textarea class="form-textarea" id="shopDesc" placeholder="Describe your shop and what you sell..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="shopCategory">
+                <option>Fashion & Clothing</option>
+                <option>Food & Snacks</option>
+                <option>Electronics & Accessories</option>
+                <option>Beauty & Health</option>
+                <option>Books & Stationery</option>
+                <option>Art & Crafts</option>
+                <option>Services</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">University</label>
+              <input type="text" class="form-input" id="shopUni" readonly style="background:var(--offwhite)">
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Shop Branding</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Shop Logo</label>
+              <div class="upload-area">
+                <input type="file" id="logoInput" accept="image/*" onchange="previewImg(this,'logoPreview')">
+                <div style="font-size:2rem;margin-bottom:0.4rem">🖼️</div>
+                <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> logo<br>PNG, JPG — Max 2MB</div>
+                <img id="logoPreview" src="" style="display:none;max-width:100%;max-height:100px;margin-top:0.5rem">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Shop Banner</label>
+              <div class="upload-area">
+                <input type="file" id="bannerInput" accept="image/*" onchange="previewImg(this,'bannerPreview')">
+                <div style="font-size:2rem;margin-bottom:0.4rem">🏞️</div>
+                <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> banner<br>PNG, JPG — Max 5MB</div>
+                <img id="bannerPreview" src="" style="display:none;max-width:100%;max-height:100px;margin-top:0.5rem">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" onclick="saveShop()">Save Shop</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="panel" id="panel-products">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Products (<span id="productCount">0</span>)</div>
+          <button class="card-btn" onclick="openProductModal()">+ Add Product</button>
+        </div>
+        <div id="productsContainer">
+          <div class="loading"><div class="loading-spinner"></div>Loading products...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="panel" id="panel-orders">
+      <div class="card">
+        <div class="card-header"><div class="card-title">My Orders</div></div>
+        <div id="ordersContainer">
+          <div class="loading"><div class="loading-spinner"></div>Loading orders...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI ASSISTANTS -->
+    <div class="panel" id="panel-ai">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🤖 AI Assistants</div></div>
+        <div class="ai-tabs">
+          <button class="ai-tab active" onclick="switchAI('advisor',this)">🤖 Business Advisor</button>
+          <button class="ai-tab" onclick="switchAI('marketing',this)">📈 Marketing</button>
+          <button class="ai-tab" onclick="switchAI('care',this)">💬 Customer Care</button>
+          <button class="ai-tab" onclick="switchAI('learn',this)">📚 Business Learning</button>
+        </div>
+
+        <!-- Business Advisor -->
+        <div class="ai-chat-wrap active" id="ai-advisor">
+          <div class="ai-messages" id="msgs-advisor">
+            <div class="ai-msg bot"><div class="ai-icon">🤖</div><div class="ai-bubble">Habari! I am your Business Advisor. Ask me about pricing, profit calculations, business strategy, and growing your campus shop!</div></div>
+          </div>
+          <div class="ai-sugs">
+            <button class="ai-sug" onclick="sendAI('advisor','How do I price my products for campus students?')">💰 Campus pricing</button>
+            <button class="ai-sug" onclick="sendAI('advisor','Calculate my profit if I buy at TZS 5,000 and sell at TZS 8,000')">📊 Calculate profit</button>
+            <button class="ai-sug" onclick="sendAI('advisor','Give me a weekly business report template')">📋 Weekly report</button>
+          </div>
+          <div class="ai-input-row">
+            <input type="text" class="ai-input" id="input-advisor" placeholder="Ask about pricing, profits, strategy..." onkeypress="if(event.key==='Enter')sendAI('advisor')">
+            <button class="ai-send" onclick="sendAI('advisor')">Send →</button>
+          </div>
+        </div>
+
+        <!-- Marketing -->
+        <div class="ai-chat-wrap" id="ai-marketing">
+          <div class="ai-messages" id="msgs-marketing">
+            <div class="ai-msg bot"><div class="ai-icon">📈</div><div class="ai-bubble">Habari! I am your Marketing AI. I help you create campus marketing campaigns, predict what will sell, and grow your customer base among students!</div></div>
+          </div>
+          <div class="ai-sugs">
+            <button class="ai-sug" onclick="sendAI('marketing','What products sell best among university students in Tanzania?')">🔥 Trending products</button>
+            <button class="ai-sug" onclick="sendAI('marketing','Create a WhatsApp marketing message for my shop')">💬 WhatsApp campaign</button>
+            <button class="ai-sug" onclick="sendAI('marketing','How do I attract more students to my campus shop?')">📣 Get customers</button>
+          </div>
+          <div class="ai-input-row">
+            <input type="text" class="ai-input" id="input-marketing" placeholder="Ask about marketing, trends, campaigns..." onkeypress="if(event.key==='Enter')sendAI('marketing')">
+            <button class="ai-send" onclick="sendAI('marketing')">Send →</button>
+          </div>
+        </div>
+
+        <!-- Customer Care -->
+        <div class="ai-chat-wrap" id="ai-care">
+          <div class="ai-messages" id="msgs-care">
+            <div class="ai-msg bot"><div class="ai-icon">💬</div><div class="ai-bubble">Habari! I help you respond to customer messages professionally. Paste a student's message and I will help you reply perfectly!</div></div>
+          </div>
+          <div class="ai-sugs">
+            <button class="ai-sug" onclick="sendAI('care','A student is asking when their order will be ready. How do I respond?')">📦 Order inquiry</button>
+            <button class="ai-sug" onclick="sendAI('care','Write a welcome message for new customers')">👋 Welcome message</button>
+            <button class="ai-sug" onclick="sendAI('care','A student says my product quality is bad. How do I respond professionally?')">😤 Handle complaint</button>
+          </div>
+          <div class="ai-input-row">
+            <input type="text" class="ai-input" id="input-care" placeholder="Paste customer message or ask how to respond..." onkeypress="if(event.key==='Enter')sendAI('care')">
+            <button class="ai-send" onclick="sendAI('care')">Send →</button>
+          </div>
+        </div>
+
+        <!-- Business Learning -->
+        <div class="ai-chat-wrap" id="ai-learn">
+          <div class="ai-messages" id="msgs-learn">
+            <div class="ai-msg bot"><div class="ai-icon">📚</div><div class="ai-bubble">Habari! I am your Business Learning AI. Every week I teach you something new about running a successful campus business. What would you like to learn today?</div></div>
+          </div>
+          <div class="ai-sugs">
+            <button class="ai-sug" onclick="sendAI('learn','Teach me about profit margins for a student business')">💡 Profit margins</button>
+            <button class="ai-sug" onclick="sendAI('learn','What is customer retention and how do I apply it on campus?')">🔄 Customer retention</button>
+            <button class="ai-sug" onclick="sendAI('learn','Teach me how to manage my business finances as a student')">💰 Finance basics</button>
+          </div>
+          <div class="ai-input-row">
+            <input type="text" class="ai-input" id="input-learn" placeholder="What do you want to learn today?" onkeypress="if(event.key==='Enter')sendAI('learn')">
+            <button class="ai-send" onclick="sendAI('learn')">Send →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="panel" id="panel-leaderboard">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏆 Monthly Campus Leaderboard</div>
+          <div style="font-size:0.75rem;color:var(--gray)">Resets every month</div>
+        </div>
+        <div style="padding:1rem 1.5rem;background:linear-gradient(135deg,#B45309,#D97706);display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.1em">This Month's Prize</div>
+            <div style="font-size:1.2rem;font-weight:800;color:var(--white)">TZS 30,000 + Free Month</div>
+          </div>
+          <div style="font-size:2rem">🏆</div>
+        </div>
+        <ul class="leaderboard" id="leaderboardList">
+          <div class="loading"><div class="loading-spinner"></div>Loading leaderboard...</div>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SUBSCRIPTION -->
+    <div class="panel" id="panel-subscription">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Campus Shop Subscription</div></div>
+        <div style="padding:2rem">
+          <div style="background:linear-gradient(135deg,var(--navy),#1B3A6B);padding:2rem;text-align:center;margin-bottom:2rem">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.5rem">Campus Student Plan</div>
+            <div style="font-size:3rem;font-weight:900;color:var(--white)">TZS 15,000</div>
+            <div style="font-size:0.875rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem">per month</div>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;text-align:left;margin-bottom:1.5rem">
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem"><span style="color:var(--gold)">✓</span> Full digital shop with unique campus URL</div>
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem"><span style="color:var(--gold)">✓</span> Up to 50 products</div>
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem"><span style="color:var(--gold)">✓</span> WhatsApp order system</div>
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem"><span style="color:var(--gold)">✓</span> AI Business Advisor + Marketing + Customer Care + Learning</div>
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem"><span style="color:var(--gold)">✓</span> Sales analytics dashboard</div>
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);display:flex;gap:0.5rem"><span style="color:var(--gold)">✓</span> Monthly Champion competition</div>
+            </div>
+          </div>
+          <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:1.5rem">
+            <div style="font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:1rem">💳 How to Pay:</div>
+            <div style="display:flex;flex-direction:column;gap:0.8rem">
+              <div style="display:flex;gap:0.75rem;font-size:0.85rem">
+                <div style="width:24px;height:24px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0">1</div>
+                <div style="color:var(--gray)">Transfer <strong style="color:var(--dark)">TZS 15,000</strong> to: <strong style="color:var(--dark)">CRDB BANK — 0152774556100</strong></div>
+              </div>
+              <div style="display:flex;gap:0.75rem;font-size:0.85rem">
+                <div style="width:24px;height:24px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0">2</div>
+                <div style="color:var(--gray)">Send screenshot to WhatsApp: <strong style="color:var(--dark)">+255 651 919 915</strong></div>
+              </div>
+              <div style="display:flex;gap:0.75rem;font-size:0.85rem">
+                <div style="width:24px;height:24px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0">3</div>
+                <div style="color:var(--gray)">Shop activated within <strong style="color:var(--dark)">2 hours</strong></div>
+              </div>
+              <div style="display:flex;gap:0.75rem;font-size:0.85rem">
+                <div style="width:24px;height:24px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0">4</div>
+                <div style="color:var(--gray)">Questions: <strong style="color:var(--dark)">travexmall15@gmail.com</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="productModalTitle">Add New Product</div>
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error" id="productError"></div>
+      <div class="form-group">
+        <label class="form-label">Product Name *</label>
+        <input type="text" class="form-input" id="productName" placeholder="e.g. Blue Ankara Dress">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price (TZS) *</label>
+          <input type="number" class="form-input" id="productPrice" placeholder="e.g. 8000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stock *</label>
+          <input type="number" class="form-input" id="productStock" placeholder="e.g. 10">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="productCategory">
+          <option>Fashion & Clothing</option>
+          <option>Food & Snacks</option>
+          <option>Electronics & Accessories</option>
+          <option>Beauty & Health</option>
+          <option>Books & Stationery</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:Inter,sans-serif;font-size:0.875rem;outline:none;resize:vertical;min-height:80px" id="productDesc" placeholder="Describe your product..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Image</label>
+        <div class="upload-area">
+          <input type="file" id="productImgInput" accept="image/*" onchange="previewImg(this,'productImgPreview')">
+          <div style="font-size:1.8rem;margin-bottom:0.3rem">📸</div>
+          <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> image</div>
+          <img id="productImgPreview" src="" style="display:none;max-width:100%;max-height:100px;margin-top:0.5rem">
+        </div>
+      </div>
+      <input type="hidden" id="editingProductId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+      <button class="btn-save" id="productSaveBtn" onclick="saveProduct()">Add Product</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const GEMINI_URL    = "https://bscecjbgnjitlfmgwcic.supabase.co/functions/v1/gemini-chat";
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser  = null;
+let currentShop  = null;
+let userUniAbbr  = "";
+
+// INIT
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = "login.html"; return; }
+  currentUser = session.user;
+
+  const name = currentUser.user_metadata?.name || currentUser.email.split("@")[0];
+  document.getElementById("userName").textContent    = name;
+  document.getElementById("userInitials").textContent = name.substring(0,2).toUpperCase();
+
+  await loadShop();
+  await loadStats();
+  await loadRecentOrders();
+  await loadLeaderboard();
+}
+
+// LOAD SHOP
+async function loadShop() {
+  const { data } = await sb.from("campus_stores").select("*").eq("user_id", currentUser.id).single();
+  currentShop = data;
+
+  if (currentShop) {
+    userUniAbbr = currentShop.university_abbr;
+    document.getElementById("userUni").textContent     = currentShop.university_abbr;
+    document.getElementById("shopName").value          = currentShop.store_name || "";
+    document.getElementById("shopWhatsapp").value      = currentShop.whatsapp_number || "";
+    document.getElementById("shopDesc").value          = currentShop.description || "";
+    document.getElementById("shopCategory").value      = currentShop.category || "";
+    document.getElementById("shopUni").value           = currentShop.university || "";
+    document.getElementById("statShopNum").textContent = currentShop.shop_number ? "#" + currentShop.shop_number : "Pending";
+    document.getElementById("statShopStatus").textContent = currentShop.is_active ? "✅ Active" : "⏳ Pending activation";
+    if (!currentShop.is_active) document.getElementById("subBanner").style.display = "flex";
+  } else {
+    document.getElementById("subBanner").style.display = "flex";
+  }
+}
+
+// LOAD STATS
+async function loadStats() {
+  if (!currentShop) return;
+  const { count: pCount } = await sb.from("campus_products").select("*", {count:"exact",head:true}).eq("store_id", currentShop.id);
+  const { data: orders }  = await sb.from("campus_orders").select("total_price").eq("store_id", currentShop.id);
+  document.getElementById("statProducts").textContent = pCount || 0;
+  document.getElementById("statOrders").textContent   = orders?.length || 0;
+  const rev = orders?.reduce((s,o) => s + Number(o.total_price), 0) || 0;
+  document.getElementById("statRevenue").textContent  = rev.toLocaleString();
+  document.getElementById("productCount").textContent = pCount || 0;
+}
+
+// LOAD RECENT ORDERS
+async function loadRecentOrders() {
+  const container = document.getElementById("recentOrders");
+  if (!currentShop) { container.innerHTML = '<div class="empty"><div class="empty-icon">🏪</div><div>Set up your shop first</div></div>'; return; }
+  const { data: orders } = await sb.from("campus_orders").select("*").eq("store_id", currentShop.id).order("created_at",{ascending:false}).limit(5);
+  if (!orders?.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><div>No orders yet — add products and start selling!</div></div>'; return; }
+  container.innerHTML = `<table><thead><tr><th>Customer</th><th>Total</th><th>Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.customer_name}</td><td>TZS ${Number(o.total_price).toLocaleString()}</td><td><span class="badge badge-${o.status}">${o.status}</span></td></tr>`).join("")}</tbody></table>`;
+}
+
+// LOAD PRODUCTS
+async function loadProducts() {
+  const container = document.getElementById("productsContainer");
+  if (!currentShop) { container.innerHTML = '<div class="empty"><div class="empty-icon">🏪</div><div>Set up your shop first</div></div>'; return; }
+  const { data: products } = await sb.from("campus_products").select("*").eq("store_id", currentShop.id).order("created_at",{ascending:false});
+  document.getElementById("productCount").textContent = products?.length || 0;
+  if (!products?.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><div style="font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.4rem">No products yet</div><div style="font-size:0.8rem;color:var(--gray)">Add your first product to start selling!</div></div>'; return; }
+  container.innerHTML = `<table><thead><tr><th>Product</th><th>Price (TZS)</th><th>Stock</th><th>Category</th><th>Actions</th></tr></thead><tbody>${products.map(p=>`<tr><td><strong>${p.name}</strong></td><td>${Number(p.price).toLocaleString()}</td><td>${p.stock}</td><td>${p.category||"—"}</td><td><button class="action-btn action-edit" onclick="editProduct('${p.id}','${p.name}',${p.price},${p.stock},'${p.category||""}','${p.description||""}')">Edit</button><button class="action-btn action-delete" onclick="deleteProduct('${p.id}')">Delete</button></td></tr>`).join("")}</tbody></table>`;
+}
+
+// LOAD ORDERS
+async function loadOrders() {
+  const container = document.getElementById("ordersContainer");
+  if (!currentShop) { container.innerHTML = '<div class="empty">Set up your shop first</div>'; return; }
+  const { data: orders } = await sb.from("campus_orders").select("*").eq("store_id", currentShop.id).order("created_at",{ascending:false});
+  if (!orders?.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">🛍️</div><div>No orders yet</div></div>'; return; }
+  container.innerHTML = `<table><thead><tr><th>Customer</th><th>Phone</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.customer_name}</td><td>${o.phone}</td><td>${o.quantity}</td><td>TZS ${Number(o.total_price).toLocaleString()}</td><td><span class="badge badge-${o.status}">${o.status}</span></td><td>${new Date(o.created_at).toLocaleDateString()}</td></tr>`).join("")}</tbody></table>`;
+}
+
+// LOAD LEADERBOARD
+async function loadLeaderboard() {
+  const list = document.getElementById("leaderboardList");
+  const { data: shops } = await sb.from("campus_stores").select("id,store_name,university_abbr,user_id").eq("is_active",true);
+  if (!shops?.length) { list.innerHTML = '<div class="empty">No sellers yet — be the first!</div>'; return; }
+
+  // Get order totals per shop
+  const totals = [];
+  for (const shop of shops) {
+    const { data: orders } = await sb.from("campus_orders").select("total_price").eq("store_id", shop.id);
+    const total = orders?.reduce((s,o) => s + Number(o.total_price), 0) || 0;
+    totals.push({ ...shop, total });
+  }
+  totals.sort((a,b) => b.total - a.total);
+
+  const rankClasses = ["gold","silver","bronze"];
+  list.innerHTML = totals.slice(0,10).map((shop, i) => {
+    const isYou = shop.user_id === currentUser?.id;
+    const rankClass = rankClasses[i] || "other";
+    return `<li class="lb-item ${isYou?"you":""}">
+      <div class="lb-rank ${rankClass}">${i===0?"👑":i+1}</div>
+      <div>
+        <div class="lb-name">${shop.store_name} ${isYou?'<span class="lb-you-badge">YOU</span>':""}</div>
+        <div class="lb-uni">${shop.university_abbr}</div>
+      </div>
+      <div class="lb-sales">TZS ${shop.total.toLocaleString()}</div>
+    </li>`;
+  }).join("");
+}
+
+// SAVE SHOP
+async function saveShop() {
+  const name     = document.getElementById("shopName").value.trim();
+  const whatsapp = document.getElementById("shopWhatsapp").value.trim();
+  const desc     = document.getElementById("shopDesc").value.trim();
+  const category = document.getElementById("shopCategory").value;
+
+  if (!name || !whatsapp || !desc) { showAlert("shopError","Please fill in all fields."); return; }
+
+  let logoUrl  = currentShop?.logo   || null;
+  let bannerUrl= currentShop?.banner || null;
+
+  const logoFile = document.getElementById("logoInput").files[0];
+  if (logoFile) logoUrl = await uploadImg("campus-assets", logoFile, `logos/${currentUser.id}.${logoFile.name.split(".").pop()}`);
+
+  const bannerFile = document.getElementById("bannerInput").files[0];
+  if (bannerFile) bannerUrl = await uploadImg("campus-assets", bannerFile, `banners/${currentUser.id}.${bannerFile.name.split(".").pop()}`);
+
+  const shopData = { user_id: currentUser.id, store_name: name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now(), description: desc, category, whatsapp_number: whatsapp, university: document.getElementById("shopUni").value, university_abbr: userUniAbbr, logo: logoUrl, banner: bannerUrl };
+
+  let error;
+  if (currentShop) {
+    const r = await sb.from("campus_stores").update(shopData).eq("id", currentShop.id);
+    error = r.error;
+  } else {
+    const r = await sb.from("campus_stores").insert(shopData);
+    error = r.error;
+  }
+
+  if (error) { showAlert("shopError", error.message); return; }
+  showAlert("shopSuccess","Shop saved! ✅");
+  await loadShop();
+}
+
+// SAVE PRODUCT
+async function saveProduct() {
+  const name     = document.getElementById("productName").value.trim();
+  const price    = document.getElementById("productPrice").value;
+  const stock    = document.getElementById("productStock").value;
+  const category = document.getElementById("productCategory").value;
+  const desc     = document.getElementById("productDesc").value.trim();
+  const editId   = document.getElementById("editingProductId").value;
+
+  if (!name || !price || !stock) { showAlert("productError","Please fill in all required fields."); return; }
+  if (!currentShop) { showAlert("productError","Please set up your shop first."); return; }
+
+  let imageUrl = null;
+  const imgFile = document.getElementById("productImgInput").files[0];
+  if (imgFile) imageUrl = await uploadImg("campus-assets", imgFile, `products/${currentUser.id}/${Date.now()}.${imgFile.name.split(".").pop()}`);
+
+  const productData = { store_id: currentShop.id, name, price: Number(price), stock: Number(stock), category, description: desc, images: imageUrl ? [imageUrl] : [] };
+
+  let error;
+  if (editId) {
+    const r = await sb.from("campus_products").update(productData).eq("id", editId);
+    error = r.error;
+  } else {
+    const r = await sb.from("campus_products").insert(productData);
+    error = r.error;
+  }
+
+  if (error) { showAlert("productError", error.message); return; }
+  closeProductModal();
+  await loadProducts();
+  await loadStats();
+}
+
+async function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+  await sb.from("campus_products").update({is_active:false}).eq("id",id);
+  await loadProducts();
+  await loadStats();
+}
+
+function editProduct(id,name,price,stock,category,desc) {
+  document.getElementById("editingProductId").value   = id;
+  document.getElementById("productName").value        = name;
+  document.getElementById("productPrice").value       = price;
+  document.getElementById("productStock").value       = stock;
+  document.getElementById("productCategory").value    = category;
+  document.getElementById("productDesc").value        = desc;
+  document.getElementById("productModalTitle").textContent = "Edit Product";
+  document.getElementById("productSaveBtn").textContent    = "Update Product";
+  openProductModal();
+}
+
+// UPLOAD IMAGE
+async function uploadImg(bucket, file, path) {
+  const { error } = await sb.storage.from(bucket).upload(path, file, { upsert: true });
+  if (error) return null;
+  const { data } = sb.storage.from(bucket).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+function previewImg(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById(previewId);
+    preview.src = e.target.result;
+    preview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
+
+// PANEL NAV
+function showPanel(name, btn) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".sidebar-link").forEach(l => l.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  if (btn) btn.classList.add("active");
+  const titles = { overview:"Dashboard Overview", store:"My Shop", products:"Products", orders:"Orders", ai:"AI Assistants", leaderboard:"Campus Leaderboard", subscription:"Subscription" };
+  document.getElementById("pageTitle").textContent = titles[name] || name;
+  document.getElementById("pageBread").textContent  = titles[name] || name;
+  if (name === "products")    loadProducts();
+  if (name === "orders")      loadOrders();
+  if (name === "leaderboard") loadLeaderboard();
+}
+
+// AI CHAT
+function switchAI(type, btn) {
+  document.querySelectorAll(".ai-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".ai-chat-wrap").forEach(w => w.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("ai-" + type).classList.add("active");
+}
+
+const systemPrompts = {
+  advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tanzania. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
+  marketing:"You are a Marketing AI for Travex Campus student marketplace in Tanzania. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
+  care:     "You are a Customer Care assistant for Travex Campus sellers in Tanzania. Help students respond to customer messages professionally and politely in English or Swahili. Write actual response templates they can use.",
+  learn:    "You are a Business Learning AI for Travex Campus student sellers in Tanzania. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
+};
+
+async function sendAI(type, text) {
+  const input    = document.getElementById("input-" + type);
+  const messages = document.getElementById("msgs-" + type);
+  const msg      = text || input.value.trim();
+  if (!msg) return;
+
+  const icons = { advisor:"🤖", marketing:"📈", care:"💬", learn:"📚" };
+
+  messages.innerHTML += `<div class="ai-msg user"><div class="ai-icon">ME</div><div class="ai-bubble">${msg}</div></div>`;
+  input.value = "";
+  messages.scrollTop = messages.scrollHeight;
+
+  const typingId = "t-" + Date.now();
+  messages.innerHTML += `<div class="ai-msg bot" id="${typingId}"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble">...</div></div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const res = await fetch(GEMINI_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Authorization":`Bearer ${session?.access_token || SUPABASE_ANON}` },
+      body: JSON.stringify({ message: msg, systemPrompt: systemPrompts[type] })
+    });
+    const data = await res.json();
+    const reply = data.reply || "Sorry, try again.";
+    document.getElementById(typingId).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble">${reply.replace(/\n/g,"<br>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")}</div></div>`;
+  } catch {
+    document.getElementById(typingId).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble" style="color:var(--red)">Connection error. Please try again.</div></div>`;
+  }
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// MODAL
+function openProductModal() { document.getElementById("productModal").classList.add("open"); }
+function closeProductModal() {
+  document.getElementById("productModal").classList.remove("open");
+  document.getElementById("editingProductId").value = "";
+  document.getElementById("productName").value  = "";
+  document.getElementById("productPrice").value = "";
+  document.getElementById("productStock").value = "";
+  document.getElementById("productDesc").value  = "";
+  document.getElementById("productModalTitle").textContent = "Add New Product";
+  document.getElementById("productSaveBtn").textContent    = "Add Product";
+  document.getElementById("productError").style.display   = "none";
+}
+
+document.getElementById("productModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("productModal")) closeProductModal();
+});
+
+function showAlert(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 5000);
+}
+
+async function handleLogout() {
+  await sb.auth.signOut();
+  window.location.href = "login.html";
+}
+
+init();
+</script>
+</body>
+</html>
