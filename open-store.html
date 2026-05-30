@@ -82,7 +82,9 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 /* PLAN CARDS */
 /* DURATION SELECTOR */
-.dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative}
+.dur-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:0.5rem;scrollbar-width:thin;scrollbar-color:rgba(13,27,62,0.2) transparent}
+.dur-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;min-width:500px}
+.dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative;min-width:110px}
 .dur-card:hover{border-color:var(--navy);transform:translateY(-2px)}
 .dur-card.selected{border-color:var(--navy);background:var(--offwhite);box-shadow:0 6px 20px rgba(13,27,62,0.1)}
 .dur-months{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
@@ -91,6 +93,8 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .popular-dur{background:var(--gold);color:var(--navy)}
 
 .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem}
+.plan-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:0.5rem;margin-bottom:1.5rem}
+.plan-scroll-wrap .plan-grid{margin-bottom:0}
 .plan-card{border:2px solid var(--lgray);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:var(--white)}
 .plan-card:hover{transform:translateY(-3px)}
 .plan-card.selected.basic{border-color:var(--gray);background:var(--offwhite);box-shadow:0 12px 30px rgba(0,0,0,0.08)}
@@ -193,6 +197,9 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .btn-go-home:hover{border-color:var(--navy)}
 
 @media(max-width:600px){
+  .dur-grid{min-width:480px}
+  .plan-grid{min-width:560px;grid-template-columns:repeat(3,1fr)}
+  .plan-card{min-width:160px}
   .plan-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
   .progress-steps .prog-label{display:none}
@@ -390,7 +397,8 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
   <!-- DURATION SELECTOR -->
   <div style="margin-bottom:2rem">
     <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em">Choose Subscription Duration</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem">
+    <div class="dur-scroll-wrap">
+      <div class="dur-grid">
 
       <div class="dur-card selected" id="dur-1" onclick="selectDuration(1,0,this)">
         <div class="dur-months">1 Month</div>
