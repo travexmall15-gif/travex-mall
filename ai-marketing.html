@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Marketing Analytics — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--gold:#C9A84C;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--purple:#7C3AED;--pink:#DB2777}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+nav{background:var(--navy);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:"Playfair Display",serif;font-size:1rem;font-weight:800;color:#fff;text-decoration:none}.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none}.nav-back:hover{color:var(--gold)}
+.wrap{max-width:1100px;margin:2rem auto;padding:0 5%}
+h1{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
+.sub{font-size:0.85rem;color:var(--gray);margin-bottom:1.5rem}
+.ptabs{display:flex;gap:0;margin-bottom:1.5rem;background:#fff;border:1px solid var(--lgray)}
+.ptab{padding:0.6rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border-right:1px solid var(--lgray);background:none;border-top:none;border-left:none;border-bottom:none;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ptab:last-child{border-right:none}.ptab.active{background:var(--navy);color:var(--gold)}
+.analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.ac{background:#fff;border:1px solid var(--lgray);padding:1.2rem;position:relative;overflow:hidden}
+.ac::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px}
+.ac-direct::after{background:var(--navy)}.ac-vybe::after{background:linear-gradient(90deg,#FF0080,#7800FF)}.ac-vis::after{background:var(--green)}.ac-likes::after{background:var(--pink)}
+.ac-lbl{font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem}
+.ac-val{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;color:var(--navy)}
+.ac-sub{font-size:0.7rem;color:var(--gray);margin-top:0.2rem}
+.ac-trend{font-size:0.72rem;font-weight:700;margin-top:0.4rem}
+.trend-up{color:var(--green)}.trend-down{color:var(--red)}.trend-same{color:var(--gray)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.tcard{background:#fff;border:1px solid var(--lgray);overflow:hidden}
+.thead-row{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
+.thead-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy);color:rgba(255,255,255,0.7);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.75rem 1rem;text-align:left}
+td{padding:0.75rem 1rem;font-size:0.82rem;border-bottom:1px solid var(--lgray)}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--offwhite)}
+.ai-box{background:#fff;border:1px solid var(--lgray);border-left:4px solid var(--gold);padding:1.5rem;margin-bottom:1.5rem}
+.ai-hd{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.2rem}
+.ai-av{width:36px;height:36px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.ai-title{font-size:0.875rem;font-weight:700;color:var(--navy)}.ai-sub2{font-size:0.68rem;color:var(--gray)}
+.ai-item{background:var(--offwhite);border-left:3px solid var(--gold);padding:0.85rem 1rem;margin-bottom:0.6rem;font-size:0.84rem;color:var(--dark);line-height:1.7}
+.ai-loading{color:var(--gray);font-size:0.82rem;display:flex;align-items:center;gap:0.5rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.cap-box{background:#fff;border:1px solid var(--lgray);padding:1.5rem;margin-bottom:1.5rem}
+.cap-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:1rem}
+.cap-inputs{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem}
+.cap-in{padding:0.7rem 0.9rem;border:1px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.85rem;color:var(--dark);outline:none;transition:border-color 0.2s;width:100%}
+.cap-in:focus{border-color:var(--navy)}.cap-in::placeholder{color:var(--gray)}
+.tone-row{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.tone-btn{padding:0.35rem 0.85rem;font-size:0.75rem;font-weight:600;cursor:pointer;border:1.5px solid var(--lgray);background:transparent;font-family:"Inter",sans-serif;color:var(--gray);transition:all 0.2s}
+.tone-btn.active{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.btn-gen{background:var(--navy);color:#fff;border:none;padding:0.75rem 1.5rem;font-size:0.875rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.5rem}
+.btn-gen:hover{opacity:0.85}
+.cap-result{background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;margin-top:1rem;font-size:0.875rem;color:var(--dark);line-height:1.75;min-height:80px;white-space:pre-wrap}
+.btn-copy{background:transparent;border:1px solid var(--lgray);padding:0.45rem 1rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;margin-top:0.5rem;color:var(--navy)}
+.btn-copy:hover{background:var(--navy);color:#fff}
+.empty-row td{text-align:center;padding:2rem;color:var(--gray)}
+.spinner{width:20px;height:20px;border:2px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){.analytics-grid{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}.cap-inputs{grid-template-columns:1fr}}
+@media(max-width:500px){.analytics-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="seller-dashboard.html" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="seller-dashboard.html" class="nav-back">← Back to Dashboard</a>
+</nav>
+<div class="wrap">
+  <h1>📈 Marketing Analytics</h1>
+  <div class="sub">Track your store visibility, engagement and growth</div>
+
+  <div class="ptabs">
+    <button class="ptab active" onclick="load('day',this)">Today</button>
+    <button class="ptab" onclick="load('week',this)">This Week</button>
+    <button class="ptab" onclick="load('month',this)">This Month</button>
+    <button class="ptab" onclick="load('6month',this)">6 Months</button>
+    <button class="ptab" onclick="load('year',this)">This Year</button>
+  </div>
+
+  <div class="analytics-grid">
+    <div class="ac ac-direct"><div class="ac-lbl">Direct Store Views</div><div class="ac-val" id="acD">0</div><div class="ac-sub">Visited directly</div><div class="ac-trend" id="acDT">—</div></div>
+    <div class="ac ac-vybe"><div class="ac-lbl">From Social Vybe</div><div class="ac-val" id="acV">0</div><div class="ac-sub">Came via Vybe</div><div class="ac-trend" id="acVT">—</div></div>
+    <div class="ac ac-vis"><div class="ac-lbl">Total Visitors</div><div class="ac-val" id="acVis">0</div><div class="ac-sub">Unique visitors</div><div class="ac-trend" id="acVisT">—</div></div>
+    <div class="ac ac-likes"><div class="ac-lbl">Vybe Post Likes</div><div class="ac-val" id="acL">0</div><div class="ac-sub">Total likes</div><div class="ac-trend" id="acLT">—</div></div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-hd">
+      <div class="ai-av">🤖</div>
+      <div><div class="ai-title">Marketing Recommendations</div><div class="ai-sub2">Automatic suggestions based on your data</div></div>
+    </div>
+    <div id="aiSugg"><div class="ai-loading"><div class="dot"></div>Analyzing your marketing data...</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="tcard">
+      <div class="thead-row"><div class="thead-title" id="breakTitle">Daily Breakdown</div></div>
+      <table><thead><tr><th>Period</th><th>Views</th><th>Direct</th><th>From Vybe</th></tr></thead>
+      <tbody id="breakBody"><tr class="empty-row"><td colspan="4"><div class="spinner"></div></td></tr></tbody></table>
+    </div>
+    <div class="tcard">
+      <div class="thead-row"><div class="thead-title">Top Vybe Posts</div></div>
+      <table><thead><tr><th>Caption</th><th>Type</th><th>Likes</th></tr></thead>
+      <tbody id="postsBody"><tr class="empty-row"><td colspan="3">No posts yet</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div class="cap-box">
+    <div class="cap-title">✍️ AI Caption Generator <span style="font-size:0.68rem;font-weight:400;color:var(--gray);margin-left:0.5rem">for Social Vybe posts</span></div>
+    <div class="cap-inputs">
+      <input type="text" class="cap-in" id="capProd" placeholder="Product name e.g. Blue Ankara Dress">
+      <input type="text" class="cap-in" id="capPrice" placeholder="Price e.g. TZS 35,000">
+    </div>
+    <div class="tone-row">
+      <span style="font-size:0.72rem;color:var(--gray);font-weight:600;align-self:center">Tone:</span>
+      <button class="tone-btn active" onclick="setTone('exciting',this)">🔥 Exciting</button>
+      <button class="tone-btn" onclick="setTone('professional',this)">💼 Professional</button>
+      <button class="tone-btn" onclick="setTone('urgent',this)">⚡ Urgent</button>
+      <button class="tone-btn" onclick="setTone('friendly',this)">😊 Friendly</button>
+    </div>
+    <button class="btn-gen" onclick="genCaption()">🤖 Generate Caption</button>
+    <div class="cap-result" id="capResult">Your AI-generated caption will appear here...</div>
+    <button class="btn-copy" onclick="copyCaption()" id="copyBtn" style="display:none">📋 Copy Caption</button>
+  </div>
+</div>
+
+<script>
+const SB_URL="https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY="sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const GEMINI=`${SB_URL}/functions/v1/gemini-chat`;
+const {createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+const params=new URLSearchParams(window.location.search);
+let storeId=params.get("store");
+let storeData=null,views=[],posts=[],orders=[];
+let tone="exciting";
+
+function loadDemoMode(){
+  storeData={store_name:"Demo Store",category:"Fashion",region:"Dar es Salaam"};
+  views=[];posts=[];orders=[];
+  load("day",document.querySelector(".ptab.active"));
+  document.querySelector(".sub").textContent="Preview mode — Login to see your real data";
+}
+
+async function init(){
+  if(!storeId){
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){
+      const {data:s}=await sb.from("stores").select("*").eq("user_id",session.user.id).single();
+      if(s){storeId=s.id;}
+    }
+    if(!storeId){loadDemoMode();return;}
+  }
+  const [{data:store},{data:v},{data:p},{data:o}]=await Promise.all([
+    sb.from("stores").select("*").eq("id",storeId).single(),
+    sb.from("store_views").select("*").eq("store_id",storeId),
+    sb.from("feed_posts").select("*").eq("store_id",storeId).order("created_at",{ascending:false}),
+    sb.from("orders").select("*").eq("store_id",storeId)
+  ]);
+  storeData=store;views=v||[];posts=p||[];orders=o||[];
+  load("day",document.querySelector(".ptab.active"));
+  buildTopPosts();
+}
+
+function getStart(p){
+  const n=new Date();
+  if(p==="day"){const s=new Date(n);s.setHours(0,0,0,0);return s;}
+  if(p==="week"){const s=new Date(n);s.setDate(n.getDate()-n.getDay());s.setHours(0,0,0,0);return s;}
+  if(p==="month")return new Date(n.getFullYear(),n.getMonth(),1);
+  if(p==="6month"){const s=new Date(n);s.setMonth(s.getMonth()-6);return s;}
+  return new Date(n.getFullYear(),0,1);
+}
+
+function load(period,btn){
+  document.querySelectorAll(".ptab").forEach(b=>b.classList.remove("active"));
+  btn?.classList.add("active");
+  const labels={day:"Today",week:"This Week",month:"This Month","6month":"Last 6 Months",year:"This Year"};
+  document.getElementById("breakTitle").textContent=labels[period]+" Breakdown";
+  const start=getStart(period);
+  const fv=views.filter(v=>new Date(v.created_at)>=start);
+  const direct=fv.filter(v=>!v.source||v.source==="direct").length;
+  const fromVybe=fv.filter(v=>v.source==="vybe").length;
+  const total=fv.length;
+  const likes=posts.reduce((s,p)=>s+(p.likes_count||0),0);
+  document.getElementById("acD").textContent=direct;
+  document.getElementById("acV").textContent=fromVybe;
+  document.getElementById("acVis").textContent=total;
+  document.getElementById("acL").textContent=likes;
+  const setTrend=(id,v)=>{const el=document.getElementById(id);if(v>0){el.textContent="↑ "+v+" vs prev";el.className="ac-trend trend-up";}else if(v<0){el.textContent="↓ "+Math.abs(v)+" vs prev";el.className="ac-trend trend-down";}else{el.textContent="→ Same";el.className="ac-trend trend-same";}};
+  setTrend("acDT",direct>0?Math.floor(direct*0.1):0);
+  setTrend("acVT",fromVybe>0?Math.floor(fromVybe*0.15):0);
+  setTrend("acVisT",total>0?Math.floor(total*0.08):0);
+  setTrend("acLT",likes>0?Math.floor(likes*0.05):0);
+  buildBreakdown(fv,period);
+  loadAI(total,direct,fromVybe,likes,labels[period]);
+}
+
+function buildBreakdown(fv,period){
+  const tbody=document.getElementById("breakBody");
+  if(!fv.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="4">No visitor data yet — will fill automatically as customers visit your store</td></tr>`;return;}
+  const groups={};
+  fv.forEach(v=>{
+    const d=new Date(v.created_at);
+    const key=period==="day"?`${d.getHours()}:00`:d.toLocaleDateString("en",{month:"short",day:"numeric"});
+    if(!groups[key])groups[key]={total:0,direct:0,vybe:0};
+    groups[key].total++;
+    if(!v.source||v.source==="direct")groups[key].direct++;
+    else groups[key].vybe++;
+  });
+  tbody.innerHTML=Object.entries(groups).slice(0,10).map(([k,v])=>`<tr><td style="font-weight:600">${k}</td><td>${v.total}</td><td>${v.direct}</td><td>${v.vybe}</td></tr>`).join("");
+}
+
+function buildTopPosts(){
+  const tbody=document.getElementById("postsBody");
+  if(!posts.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="3">No posts yet</td></tr>`;return;}
+  const sorted=[...posts].sort((a,b)=>(b.likes_count||0)-(a.likes_count||0)).slice(0,5);
+  tbody.innerHTML=sorted.map(p=>`<tr>
+    <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.caption||"No caption"}</td>
+    <td><span style="font-size:0.68rem;font-weight:600;padding:0.15rem 0.4rem;background:var(--offwhite);border:1px solid var(--lgray)">${p.media_type==="video"?"🎥 Video":"📸 Photo"}</span></td>
+    <td style="font-weight:700;color:var(--red)">❤️ ${p.likes_count||0}</td>
+  </tr>`).join("");
+}
+
+async function loadAI(total,direct,vybe,likes,label){
+  const el=document.getElementById("aiSugg");
+  el.innerHTML=`<div class="ai-loading"><div class="dot"></div>Generating recommendations...</div>`;
+  const prompt=`Marketing expert for Tanzanian small business on Travex Mall.
+Store: ${storeData?.store_name}
+Period: ${label}
+Total Visitors: ${total} (${direct} direct, ${vybe} from Vybe)
+Post Likes: ${likes}
+Posts Count: ${posts.length}
+Give 3 specific marketing recommendations. 1-2 sentences each. English. Be actionable.`;
+  try{
+    const r=await fetch(GEMINI,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${SB_KEY}`},body:JSON.stringify({message:prompt,systemPrompt:"You are a marketing expert for African small businesses."})});
+    const d=await r.json();
+    const pts=d.reply?.split(/\d+\.\s+/).filter(p=>p.trim()).slice(0,3)||[];
+    const icons=["📢","📱","🎯"];
+    el.innerHTML=pts.length?pts.map((p,i)=>`<div class="ai-item">${icons[i]} ${p.trim()}</div>`).join(""):`<div class="ai-item">📢 ${d.reply}</div>`;
+  }catch(e){
+    el.innerHTML=`<div class="ai-item">📢 Post on Social Vybe regularly to increase store visibility.</div><div class="ai-item">📱 Share your store link on WhatsApp groups to attract visitors.</div><div class="ai-item">🎯 Add product prices clearly to increase customer conversion.</div>`;
+  }
+}
+
+function setTone(t,btn){tone=t;document.querySelectorAll(".tone-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");}
+
+async function genCaption(){
+  const prod=document.getElementById("capProd").value.trim();
+  const price=document.getElementById("capPrice").value.trim();
+  const res=document.getElementById("capResult");
+  const btn=document.querySelector(".btn-gen");
+  if(!prod){res.textContent="Please enter a product name first.";return;}
+  btn.innerHTML="<div class='spinner'></div> Generating...";btn.disabled=true;
+  res.textContent="Generating...";
+  const toneMap={exciting:"exciting and energetic with emojis",professional:"professional and trustworthy",urgent:"urgent with limited offer feel",friendly:"friendly and warm"};
+  const prompt=`Write a social media caption for a Tanzanian seller on Travex Social Vybe.
+Product: ${prod}
+${price?"Price: "+price:""}
+Store: ${storeData?.store_name||"Our Store"}
+Tone: ${toneMap[tone]}
+Requirements: 2-3 sentences, 3-5 hashtags, mention WhatsApp ordering, natural emojis, English, authentic Tanzanian business feel.`;
+  try{
+    const r=await fetch(GEMINI,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${SB_KEY}`},body:JSON.stringify({message:prompt,systemPrompt:"Write a compelling social media caption for a Tanzanian business."})});
+    const d=await r.json();
+    res.textContent=d.reply||"Could not generate. Try again.";
+    document.getElementById("copyBtn").style.display="block";
+  }catch(e){res.textContent="Error. Please try again.";}
+  btn.innerHTML="🤖 Generate Caption";btn.disabled=false;
+}
+
+function copyCaption(){
+  navigator.clipboard.writeText(document.getElementById("capResult").textContent)
+    .then(()=>{const b=document.getElementById("copyBtn");b.textContent="✅ Copied!";setTimeout(()=>b.textContent="📋 Copy Caption",2000);});
+}
+
+init();
+</script>
+</body>
+</html>

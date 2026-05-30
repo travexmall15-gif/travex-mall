@@ -5,7 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open Your Store — Travex Mall</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// Color picker
+function pickColor(color, el) {
+  document.getElementById("selectedColor").value = color;
+  document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
+  el.style.outline = "2px solid #C9A84C";
+}
+function pickColorCustom(color) {
+  document.getElementById("selectedColor").value = color;
+  document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
+}
+
+// Font picker
+function pickFont(font, el) {
+  document.getElementById("selectedFont").value = font;
+  document.querySelectorAll(".font-opt").forEach(d => {
+    d.style.border = "1px solid var(--lgray)";
+    d.style.background = "var(--offwhite)";
+  });
+  el.style.border = "2px solid var(--gold)";
+  el.style.background = "#FFFBEB";
+}
+</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
@@ -59,6 +81,15 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .pass-toggle{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray);font-size:0.78rem;font-family:"Inter",sans-serif}
 
 /* PLAN CARDS */
+/* DURATION SELECTOR */
+.dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative}
+.dur-card:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dur-card.selected{border-color:var(--navy);background:var(--offwhite);box-shadow:0 6px 20px rgba(13,27,62,0.1)}
+.dur-months{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
+.dur-discount{font-size:0.72rem;color:var(--gray);margin-bottom:0.4rem}
+.dur-badge{display:inline-block;background:var(--green);color:var(--white);font-size:0.6rem;font-weight:800;padding:0.15rem 0.5rem;text-transform:uppercase;letter-spacing:0.05em}
+.popular-dur{background:var(--gold);color:var(--navy)}
+
 .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem}
 .plan-card{border:2px solid var(--lgray);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:var(--white)}
 .plan-card:hover{transform:translateY(-3px)}
@@ -356,18 +387,53 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
   <div class="alert alert-error" id="err2"></div>
 
+  <!-- DURATION SELECTOR -->
+  <div style="margin-bottom:2rem">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em">Choose Subscription Duration</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem">
+
+      <div class="dur-card selected" id="dur-1" onclick="selectDuration(1,0,this)">
+        <div class="dur-months">1 Month</div>
+        <div class="dur-discount">Standard price</div>
+        <div class="dur-badge" style="visibility:hidden">0% off</div>
+      </div>
+
+      <div class="dur-card" id="dur-3" onclick="selectDuration(3,5,this)">
+        <div class="dur-months">3 Months</div>
+        <div class="dur-discount" style="color:var(--green);font-weight:700">Save 5%</div>
+        <div class="dur-badge">5% OFF</div>
+      </div>
+
+      <div class="dur-card" id="dur-6" onclick="selectDuration(6,15,this)">
+        <div class="dur-months">6 Months</div>
+        <div class="dur-discount" style="color:var(--green);font-weight:700">Save 15%</div>
+        <div class="dur-badge popular-dur">15% OFF ⭐</div>
+      </div>
+
+      <div class="dur-card" id="dur-12" onclick="selectDuration(12,20,this)">
+        <div class="dur-months">1 Year</div>
+        <div class="dur-discount" style="color:var(--green);font-weight:700">Save 20%</div>
+        <div class="dur-badge">20% OFF 🔥</div>
+      </div>
+
+    </div>
+  </div>
+
   <div class="plan-grid">
     <div class="plan-card basic" id="cardBasic" onclick="selectPlan('basic',25000,1,this)">
       <div class="plan-check">✓</div>
       <div class="plan-tier">⭐ Basic</div>
-      <div class="plan-price">TZS 25,000</div>
-      <div class="plan-period">per month</div>
+      <div class="plan-price" id="price-basic">TZS 25,000</div>
+      <div class="plan-period" id="period-basic">per month</div>
+      <div id="save-basic" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li>1 digital store</li>
         <li>Up to 50 products</li>
         <li>WhatsApp orders</li>
+        <li>Customer Care AI</li>
         <li>Basic analytics</li>
+        <li>📸 1 photo/week on Vybe</li>
         <li>Email support</li>
       </ul>
     </div>
@@ -375,31 +441,36 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
       <div class="plan-popular">Most Popular</div>
       <div class="plan-check">✓</div>
       <div class="plan-tier">⭐⭐ Standard</div>
-      <div class="plan-price">TZS 50,000</div>
-      <div class="plan-period">per month</div>
+      <div class="plan-price" id="price-standard">TZS 50,000</div>
+      <div class="plan-period" id="period-standard">per month</div>
+      <div id="save-standard" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li>1 digital store</li>
         <li>Unlimited products</li>
         <li>WhatsApp orders</li>
-        <li>Full analytics</li>
-        <li>AI Business Advisor</li>
+        <li>Customer Care AI</li>
+        <li>Business Advisor AI</li>
+        <li>Marketing Analytics AI</li>
+        <li>📸 3 photos + 🎥 2 videos/week on Vybe</li>
         <li>Priority support</li>
       </ul>
     </div>
     <div class="plan-card premium" id="cardPremium" onclick="selectPlan('premium',80000,1,this)">
       <div class="plan-check">✓</div>
       <div class="plan-tier">👑 Premium</div>
-      <div class="plan-price" id="premiumPrice">TZS 80,000</div>
-      <div class="plan-period">per month</div>
+      <div class="plan-price" id="price-premium">TZS 80,000</div>
+      <div class="plan-period" id="period-premium">per month</div>
+      <div id="save-premium" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li>1 — 3 digital stores</li>
         <li>Unlimited products</li>
-        <li>Everything in Standard</li>
-        <li>AI Customer Care</li>
-        <li>AI Marketing</li>
+        <li>All 4 AI Tools</li>
+        <li>Accounting AI</li>
         <li>Featured on homepage</li>
+        <li>📸 10 photos + 🎥 5 videos/week on Vybe</li>
+        <li>Boosted on Vybe algorithm 👑</li>
         <li>Dedicated support</li>
       </ul>
       <div class="stores-count" id="storesCountWrap">
@@ -662,6 +733,47 @@ function validateStep(step, next) {
 }
 
 // ── SELECT PLAN ──
+// Duration state
+let selectedMonths = 1;
+let selectedDiscount = 0;
+
+function selectDuration(months, discount, el) {
+  selectedMonths = months;
+  selectedDiscount = discount;
+
+  // Update UI
+  document.querySelectorAll('.dur-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  // Recalculate prices shown on plan cards
+  const basePrices = {basic: 25000, standard: 50000, premium: 80000};
+  Object.entries(basePrices).forEach(([plan, base]) => {
+    const total = Math.round(base * months * (1 - discount/100));
+    const monthly = Math.round(total / months);
+    const priceEl = document.getElementById('price-' + plan);
+    const perEl   = document.getElementById('period-' + plan);
+    const saveEl  = document.getElementById('save-' + plan);
+    if (priceEl) priceEl.textContent = 'TZS ' + total.toLocaleString();
+    if (perEl)   perEl.textContent   = months === 1 ? 'per month' : `for ${months} months`;
+    if (saveEl) {
+      if (discount > 0) {
+        const saved = Math.round(base * months * (discount/100));
+        saveEl.textContent = `You save TZS ${saved.toLocaleString()}!`;
+        saveEl.style.display = 'block';
+      } else {
+        saveEl.style.display = 'none';
+      }
+    }
+  });
+
+  // Update selected plan price
+  if (selectedPlan) {
+    const base = {basic:25000, standard:50000, premium:80000}[selectedPlan.key] || 0;
+    selectedPlan.price = Math.round(base * months * (1 - discount/100));
+    selectedPlan.months = months;
+  }
+}
+
 function selectPlan(key, price, stores, el) {
   document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
   el.classList.add("selected");
@@ -772,6 +884,49 @@ function generateStoreForms() {
               Facebook Page URL
             </label>
             <input type="text" class="form-input" id="sFacebook${i}" placeholder="https://facebook.com/yourpage">
+          </div>
+        </div>
+      </div>
+
+      <!-- THEME CUSTOMIZATION -->
+      <div class="form-card">
+        <div class="card-head"><div class="card-head-title">🎨 Dashboard Theme (Optional)</div></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Dashboard Color</label>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.75rem" id="colorPicker">
+              <div onclick="pickColor('#0D1B3E',this)" style="width:36px;height:36px;background:#0D1B3E;cursor:pointer;border:3px solid #0D1B3E;outline:2px solid #C9A84C" title="Navy (Default)"></div>
+              <div onclick="pickColor('#7C3AED',this)" style="width:36px;height:36px;background:#7C3AED;cursor:pointer;border:3px solid #7C3AED" title="Purple"></div>
+              <div onclick="pickColor('#059669',this)" style="width:36px;height:36px;background:#059669;cursor:pointer;border:3px solid #059669" title="Green"></div>
+              <div onclick="pickColor('#DC2626',this)" style="width:36px;height:36px;background:#DC2626;cursor:pointer;border:3px solid #DC2626" title="Red"></div>
+              <div onclick="pickColor('#F97316',this)" style="width:36px;height:36px;background:#F97316;cursor:pointer;border:3px solid #F97316" title="Orange"></div>
+              <div onclick="pickColor('#0891B2',this)" style="width:36px;height:36px;background:#0891B2;cursor:pointer;border:3px solid #0891B2" title="Cyan"></div>
+              <div onclick="pickColor('#BE185D',this)" style="width:36px;height:36px;background:#BE185D;cursor:pointer;border:3px solid #BE185D" title="Pink"></div>
+              <div onclick="pickColor('#111827',this)" style="width:36px;height:36px;background:#111827;cursor:pointer;border:3px solid #111827" title="Black"></div>
+              <input type="color" id="customColor" value="#0D1B3E" onchange="pickColorCustom(this.value)" style="width:36px;height:36px;cursor:pointer;border:none;padding:0" title="Custom color">
+            </div>
+            <input type="hidden" id="selectedColor" value="#0D1B3E">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Store Name Font</label>
+            <div style="display:flex;flex-direction:column;gap:0.5rem" id="fontPicker">
+              <div onclick="pickFont('Playfair Display',this)" style="padding:0.6rem 1rem;border:2px solid var(--gold);cursor:pointer;background:var(--offwhite)" class="font-opt selected-font">
+                <span style="font-family:'Playfair Display',serif;font-size:1.1rem">Playfair Display</span> — <span style="font-size:0.72rem;color:var(--gray)">Elegant, luxury</span>
+              </div>
+              <div onclick="pickFont('Bebas Neue',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+                <span style="font-family:'Bebas Neue',cursive;font-size:1.1rem">BEBAS NEUE</span> — <span style="font-size:0.72rem;color:var(--gray)">Bold, modern</span>
+              </div>
+              <div onclick="pickFont('Inter',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+                <span style="font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:700">Inter Bold</span> — <span style="font-size:0.72rem;color:var(--gray)">Clean, professional</span>
+              </div>
+              <div onclick="pickFont('Montserrat',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+                <span style="font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:700">Montserrat</span> — <span style="font-size:0.72rem;color:var(--gray)">Strong, corporate</span>
+              </div>
+              <div onclick="pickFont('Poppins',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+                <span style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:600">Poppins</span> — <span style="font-size:0.72rem;color:var(--gray)">Soft, trendy</span>
+              </div>
+            </div>
+            <input type="hidden" id="selectedFont" value="Playfair Display">
           </div>
         </div>
       </div>
@@ -912,6 +1067,8 @@ async function submitAndProceed() {
       const instagram = (document.getElementById("sInsta"+i)?.value || "").trim().replace("@","");
       const tiktok    = (document.getElementById("sTiktok"+i)?.value || "").trim().replace("@","");
       const facebook  = (document.getElementById("sFacebook"+i)?.value || "").trim();
+      const themeColor = document.getElementById("selectedColor")?.value || "#0D1B3E";
+      const themeFont  = document.getElementById("selectedFont")?.value || "Playfair Display";
 
       await sb.from("stores").insert({
         user_id:           userId,
@@ -929,7 +1086,9 @@ async function submitAndProceed() {
         owner_phone:       ownerPhone,
         instagram:         instagram || null,
         tiktok:            tiktok    || null,
-        facebook:          facebook  || null
+        facebook:          facebook  || null,
+        theme_color:       themeColor,
+        theme_font:        themeFont
       });
     }
 
@@ -955,12 +1114,34 @@ async function submitAndProceed() {
 
 // ── BUILD PAYMENT PAGE ──
 function buildPaymentPage() {
-  const amt   = "TZS " + selectedPlan.price.toLocaleString();
-  const phone = document.getElementById("ownerPhone")?.value || "—";
+  const plan    = selectedPlan;
+  const amt     = "TZS " + plan.price.toLocaleString();
+  const months  = plan.months || 1;
+  const disc    = plan.discount || 0;
+  const phone   = document.getElementById("ownerPhone")?.value || "—";
+  const planLabels = {basic:"⭐ Basic",standard:"⭐⭐ Standard",premium:"👑 Premium"};
+
   document.getElementById("payAmountDisplay").textContent = amt;
-  document.getElementById("payAmt2").textContent           = amt;
-  document.getElementById("confirmPhone").textContent      = phone;
-  document.getElementById("confirmPhone2").textContent     = phone;
+  document.getElementById("payAmt2").textContent = amt;
+  document.getElementById("confirmPhone").textContent  = phone;
+  document.getElementById("confirmPhone2").textContent = phone;
+
+  // Update period display
+  const periodEl = document.getElementById("payPeriodDisplay");
+  if (periodEl) {
+    periodEl.textContent = months === 1
+      ? `${planLabels[plan.key]} · 1 month · Cancel anytime`
+      : `${planLabels[plan.key]} · ${months} months · Cancel anytime`;
+  }
+
+  // Show savings
+  const saveEl = document.getElementById("paySaveDisplay");
+  if (saveEl && disc > 0) {
+    const original = Math.round((plan.basePrice || 0) * months);
+    const saved = original - plan.price;
+    saveEl.textContent = `🎉 You save TZS ${saved.toLocaleString()} (${disc}% off)!`;
+    saveEl.style.display = "block";
+  }
 }
 
 // ── FINISH ──

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Accounting AI — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+nav{background:var(--navy);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:"Playfair Display",serif;font-size:1rem;font-weight:800;color:#fff;text-decoration:none}.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none}.nav-back:hover{color:var(--gold)}
+.wrap{max-width:1100px;margin:2rem auto;padding:0 5%}
+h1{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
+.sub{font-size:0.85rem;color:var(--gray);margin-bottom:1.5rem}
+.period-tabs{display:flex;gap:0;margin-bottom:1.5rem;background:#fff;border:1px solid var(--lgray)}
+.ptab{padding:0.6rem 1.5rem;font-size:0.8rem;font-weight:600;color:var(--gray);cursor:pointer;border-right:1px solid var(--lgray);background:none;border-top:none;border-left:none;border-bottom:none;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ptab:last-child{border-right:none}
+.ptab.active{background:var(--navy);color:var(--gold)}
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.sum-card{background:#fff;border:1px solid var(--lgray);padding:1.2rem;border-top:3px solid var(--navy)}
+.sum-card.rev{border-top-color:var(--green)}.sum-card.ord{border-top-color:var(--blue)}.sum-card.avg{border-top-color:var(--gold)}.sum-card.best{border-top-color:var(--navy)}
+.sum-lbl{font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
+.sum-val{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:var(--navy)}
+.sum-sub{font-size:0.7rem;color:var(--gray);margin-top:0.2rem}
+.tcard{background:#fff;border:1px solid var(--lgray);margin-bottom:1.5rem;overflow:hidden}
+.thead-row{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
+.thead-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.thead-sub{font-size:0.75rem;color:var(--gray)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy);color:rgba(255,255,255,0.7);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.75rem 1rem;text-align:left}
+td{padding:0.75rem 1rem;font-size:0.82rem;border-bottom:1px solid var(--lgray);color:var(--dark)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--offwhite)}
+.positive{color:var(--green);font-weight:700}
+.negative{color:var(--red);font-weight:700}
+.total-row td{background:var(--offwhite);font-weight:700;color:var(--navy)}
+.badge{padding:0.18rem 0.55rem;font-size:0.62rem;font-weight:700}
+.badge-green{background:#D1FAE5;color:#065F46}
+.badge-red{background:#FEE2E2;color:#991B1B}
+.badge-yellow{background:#FEF3C7;color:#92400E}
+.empty-row td{text-align:center;padding:2.5rem;color:var(--gray);font-size:0.85rem}
+.ai-box{background:#fff;border:1px solid var(--lgray);border-left:4px solid var(--gold);padding:1.5rem;margin-bottom:1.5rem}
+.ai-hd{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.2rem}
+.ai-av{width:36px;height:36px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.ai-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.ai-sub2{font-size:0.68rem;color:var(--gray)}
+.ai-item{background:var(--offwhite);border:1px solid var(--lgray);border-left:3px solid var(--gold);padding:0.85rem 1rem;margin-bottom:0.6rem;font-size:0.84rem;color:var(--dark);line-height:1.7}
+.ai-item:last-child{margin-bottom:0}
+.ai-loading{color:var(--gray);font-size:0.82rem;display:flex;align-items:center;gap:0.5rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.spinner{width:22px;height:22px;border:2px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bar-wrap{display:flex;align-items:center;gap:0.5rem}
+.bar-bg{flex:1;height:5px;background:var(--lgray);max-width:100px}
+.bar-fill{height:100%;background:var(--navy)}
+@media(max-width:768px){.summary-row{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.summary-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="seller-dashboard.html" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="seller-dashboard.html" class="nav-back">← Back to Dashboard</a>
+</nav>
+<div class="wrap">
+  <h1>🧾 Accounting AI</h1>
+  <div class="sub">Automatic financial tracking — powered by your real store data</div>
+
+  <div class="period-tabs">
+    <button class="ptab active" onclick="load('week',this)">This Week</button>
+    <button class="ptab" onclick="load('month',this)">This Month</button>
+    <button class="ptab" onclick="load('quarter',this)">Quarterly</button>
+    <button class="ptab" onclick="load('year',this)">This Year</button>
+  </div>
+
+  <div class="summary-row">
+    <div class="sum-card rev"><div class="sum-lbl">Total Revenue</div><div class="sum-val" id="sRev">TZS 0</div><div class="sum-sub" id="sRevSub">—</div></div>
+    <div class="sum-card ord"><div class="sum-lbl">Total Orders</div><div class="sum-val" id="sOrd">0</div><div class="sum-sub" id="sOrdSub">—</div></div>
+    <div class="sum-card avg"><div class="sum-lbl">Avg. Order</div><div class="sum-val" id="sAvg">TZS 0</div><div class="sum-sub">Per order</div></div>
+    <div class="sum-card best"><div class="sum-lbl">Best Product</div><div class="sum-val" id="sBest" style="font-size:1rem">—</div><div class="sum-sub">Top seller</div></div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-hd">
+      <div class="ai-av">🤖</div>
+      <div><div class="ai-title">AI Financial Analysis</div><div class="ai-sub2">Auto-generated evaluation of your performance</div></div>
+    </div>
+    <div id="aiRecs"><div class="ai-loading"><div class="dot"></div>Analyzing your financial data...</div></div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead-row"><div class="thead-title" id="tTitle">Weekly Breakdown</div><div class="thead-sub" id="tRange">—</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Period</th><th>Orders</th><th>Revenue (TZS)</th><th>Avg Order</th><th>Performance</th></tr></thead>
+      <tbody id="tBody"><tr class="empty-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead-row"><div class="thead-title">Product Performance</div><div class="thead-sub" id="prodRange">—</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Product</th><th>Units Sold</th><th>Revenue (TZS)</th><th>Share</th><th>Status</th></tr></thead>
+      <tbody id="prodBody"><tr class="empty-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead-row"><div class="thead-title">📊 Monthly P&L Statement</div><div class="thead-sub">Capital vs Revenue vs Net Profit</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Month</th><th>Capital (TZS)</th><th>Revenue (TZS)</th><th>Net Profit (TZS)</th><th>Result</th></tr></thead>
+      <tbody id="plBody"><tr class="empty-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody></table>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL="https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY="sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const GEMINI=`${SB_URL}/functions/v1/gemini-chat`;
+const {createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+
+const params=new URLSearchParams(window.location.search);
+let storeId=params.get("store");
+let allOrders=[],allProducts=[],storeData=null;
+
+function loadDemoMode(){
+  storeData={store_name:"Demo Store",category:"Fashion",region:"Dar es Salaam",subscription_plan:"standard"};
+  allOrders=[];allProducts=[];
+  load("week",document.querySelector(".ptab.active"));
+  buildPL();
+  document.querySelector(".sub").textContent="Preview mode — Login to see your real data";
+}
+
+async function init(){
+  if(!storeId){
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){
+      const {data:s}=await sb.from("stores").select("*").eq("user_id",session.user.id).single();
+      if(s){storeId=s.id;}
+    }
+    if(!storeId){loadDemoMode();return;}
+  }
+  const [{data:store},{data:orders},{data:products}]=await Promise.all([
+    sb.from("stores").select("*").eq("id",storeId).single(),
+    sb.from("orders").select("*").eq("store_id",storeId).order("created_at",{ascending:false}),
+    sb.from("products").select("*").eq("store_id",storeId)
+  ]);
+  storeData=store;allOrders=orders||[];allProducts=products||[];
+  load("week",document.querySelector(".ptab.active"));
+  buildPL();
+}
+
+function getStart(p){
+  const n=new Date();
+  if(p==="week"){const s=new Date(n);s.setDate(n.getDate()-n.getDay());s.setHours(0,0,0,0);return s;}
+  if(p==="month")return new Date(n.getFullYear(),n.getMonth(),1);
+  if(p==="quarter")return new Date(n.getFullYear(),Math.floor(n.getMonth()/3)*3,1);
+  return new Date(n.getFullYear(),0,1);
+}
+
+function load(period,btn){
+  document.querySelectorAll(".ptab").forEach(b=>b.classList.remove("active"));
+  btn?.classList.add("active");
+  const start=getStart(period);
+  const labels={week:"This Week",month:"This Month",quarter:"This Quarter",year:"This Year"};
+  const label=labels[period];
+  const filtered=allOrders.filter(o=>new Date(o.created_at)>=start);
+  const rev=filtered.reduce((s,o)=>s+(Number(o.total_price)||0),0);
+  const avg=filtered.length?Math.round(rev/filtered.length):0;
+  const pMap={};
+  filtered.forEach(o=>{if(o.product_id)pMap[o.product_id]=(pMap[o.product_id]||0)+1;});
+  const bestId=Object.keys(pMap).sort((a,b)=>pMap[b]-pMap[a])[0];
+  const bestP=allProducts.find(p=>p.id===bestId);
+  document.getElementById("sRev").textContent="TZS "+rev.toLocaleString();
+  document.getElementById("sRevSub").textContent=label+" total";
+  document.getElementById("sOrd").textContent=filtered.length;
+  document.getElementById("sOrdSub").textContent=label;
+  document.getElementById("sAvg").textContent="TZS "+avg.toLocaleString();
+  document.getElementById("sBest").textContent=bestP?.name||"—";
+  document.getElementById("tTitle").textContent=label+" Breakdown";
+  document.getElementById("tRange").textContent=`From ${start.toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"})}`;
+  buildBreakdown(filtered,period);
+  buildProducts(filtered,rev);
+  loadAI(filtered,rev,label);
+}
+
+function buildBreakdown(orders,period){
+  const tbody=document.getElementById("tBody");
+  if(!orders.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="5">No orders in this period yet — tables will fill automatically as orders come in</td></tr>`;return;}
+  const groups={};
+  orders.forEach(o=>{
+    const d=new Date(o.created_at);
+    let key=period==="week"?d.toLocaleDateString("en",{weekday:"long",day:"numeric",month:"short"}):
+            period==="month"?`Week ${Math.ceil(d.getDate()/7)}`:
+            d.toLocaleDateString("en",{month:"long",year:"numeric"});
+    if(!groups[key])groups[key]={orders:0,revenue:0};
+    groups[key].orders++;groups[key].revenue+=Number(o.total_price)||0;
+  });
+  const total=orders.reduce((s,o)=>s+(Number(o.total_price)||0),0);
+  const avg=total/Object.keys(groups).length;
+  const rows=Object.entries(groups).map(([k,v])=>`<tr>
+    <td style="font-weight:600">${k}</td>
+    <td>${v.orders}</td>
+    <td class="positive">TZS ${v.revenue.toLocaleString()}</td>
+    <td>TZS ${Math.round(v.revenue/v.orders).toLocaleString()}</td>
+    <td><span class="badge ${v.revenue>=avg?"badge-green":"badge-yellow"}">${v.revenue>=avg?"🔥 Strong":"📊 Normal"}</span></td>
+  </tr>`);
+  rows.push(`<tr class="total-row"><td>TOTAL</td><td>${orders.length}</td><td>TZS ${total.toLocaleString()}</td><td>TZS ${orders.length?Math.round(total/orders.length).toLocaleString():0}</td><td><span class="badge badge-green">✓ Summary</span></td></tr>`);
+  tbody.innerHTML=rows.join("");
+}
+
+function buildProducts(orders,totalRev){
+  const tbody=document.getElementById("prodBody");
+  if(!orders.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="5">No product sales yet — will fill automatically with orders</td></tr>`;return;}
+  const pMap={};
+  orders.forEach(o=>{if(!o.product_id)return;if(!pMap[o.product_id])pMap[o.product_id]={units:0,rev:0};pMap[o.product_id].units+=Number(o.quantity)||1;pMap[o.product_id].rev+=Number(o.total_price)||0;});
+  const rows=Object.entries(pMap).sort((a,b)=>b[1].rev-a[1].rev).map(([id,v])=>{
+    const p=allProducts.find(x=>x.id===id);
+    const pct=totalRev?Math.round((v.rev/totalRev)*100):0;
+    return `<tr>
+      <td style="font-weight:600">${p?.name||"Product"}</td>
+      <td>${v.units}</td>
+      <td class="positive">TZS ${v.rev.toLocaleString()}</td>
+      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div><span style="font-size:0.75rem;font-weight:600">${pct}%</span></div></td>
+      <td><span class="badge ${pct>30?"badge-green":pct>10?"badge-yellow":"badge-red"}">${pct>30?"⭐ Top":"Normal"}</span></td>
+    </tr>`;
+  });
+  tbody.innerHTML=rows.join("");
+}
+
+function buildPL(){
+  const tbody=document.getElementById("plBody");
+  const months={};
+  allOrders.forEach(o=>{
+    const d=new Date(o.created_at);
+    const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+    if(!months[key])months[key]={revenue:0,label:d.toLocaleDateString("en",{month:"long",year:"numeric"})};
+    months[key].revenue+=Number(o.total_price)||0;
+  });
+  allProducts.forEach(p=>{
+    const d=new Date(p.created_at);
+    const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+    if(!months[key])months[key]={revenue:0,label:d.toLocaleDateString("en",{month:"long",year:"numeric"})};
+    if(!months[key].capital)months[key].capital=0;
+    months[key].capital+=(Number(p.price)||0)*(Number(p.stock)||1);
+  });
+  if(!Object.keys(months).length){tbody.innerHTML=`<tr class="empty-row"><td colspan="5">No data yet — P&L will calculate automatically each month</td></tr>`;return;}
+  const rows=Object.entries(months).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>{
+    const capital=v.capital||0;
+    const profit=v.revenue-capital;
+    const isProfit=profit>=0;
+    return `<tr>
+      <td style="font-weight:600">${v.label}</td>
+      <td>TZS ${capital.toLocaleString()}</td>
+      <td class="positive">TZS ${v.revenue.toLocaleString()}</td>
+      <td class="${isProfit?"positive":"negative"}">TZS ${Math.abs(profit).toLocaleString()}</td>
+      <td><span class="badge ${isProfit?"badge-green":"badge-red"}">${isProfit?"✅ Profit":"❌ Loss"}</span></td>
+    </tr>`;
+  });
+  tbody.innerHTML=rows.join("");
+}
+
+async function loadAI(orders,rev,label){
+  const el=document.getElementById("aiRecs");
+  el.innerHTML=`<div class="ai-loading"><div class="dot"></div>Analyzing ${label} data...</div>`;
+  const pMap={};
+  orders.forEach(o=>{if(o.product_id){const p=allProducts.find(x=>x.id===o.product_id);if(p)pMap[p.name]=(pMap[p.name]||0)+1;}});
+  const top=Object.entries(pMap).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([n,c])=>`${n}:${c}`).join(", ");
+  const prompt=`Financial advisor for Tanzanian business on Travex Mall.
+Store: ${storeData?.store_name}
+Period: ${label}
+Revenue: TZS ${rev.toLocaleString()}
+Orders: ${orders.length}
+Avg Order: TZS ${orders.length?Math.round(rev/orders.length).toLocaleString():0}
+Top Products: ${top||"None yet"}
+Give exactly 4 insights: 1)Performance evaluation 2)What's going well 3)What needs improvement 4)Action to increase revenue. Be specific, 1-2 sentences each. English only.`;
+  try{
+    const r=await fetch(GEMINI,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${SB_KEY}`},body:JSON.stringify({message:prompt,systemPrompt:"You are a professional financial advisor. Give clear concise insights."})});
+    const d=await r.json();
+    const pts=d.reply?.split(/\d+\.\s+/).filter(p=>p.trim()).slice(0,4)||[];
+    const icons=["📊","✅","⚠️","💡"];
+    el.innerHTML=pts.length?pts.map((p,i)=>`<div class="ai-item">${icons[i]||"•"} ${p.trim()}</div>`).join(""):`<div class="ai-item">📊 ${d.reply||"Analysis unavailable"}</div>`;
+  }catch(e){
+    el.innerHTML=`<div class="ai-item">📊 Revenue for ${label}: TZS ${rev.toLocaleString()} from ${orders.length} orders.</div><div class="ai-item">💡 Keep tracking orders daily to identify trends.</div>`;
+  }
+}
+
+init();
+</script>
+</body>
+</html>
