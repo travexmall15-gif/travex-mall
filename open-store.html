@@ -82,9 +82,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 /* PLAN CARDS */
 /* DURATION SELECTOR */
-.dur-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:0.5rem;scrollbar-width:thin;scrollbar-color:rgba(13,27,62,0.2) transparent}
-.dur-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;min-width:500px}
-.dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative;min-width:110px}
+.dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative}
 .dur-card:hover{border-color:var(--navy);transform:translateY(-2px)}
 .dur-card.selected{border-color:var(--navy);background:var(--offwhite);box-shadow:0 6px 20px rgba(13,27,62,0.1)}
 .dur-months{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
@@ -93,8 +91,6 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .popular-dur{background:var(--gold);color:var(--navy)}
 
 .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem}
-.plan-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:0.5rem;margin-bottom:1.5rem}
-.plan-scroll-wrap .plan-grid{margin-bottom:0}
 .plan-card{border:2px solid var(--lgray);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:var(--white)}
 .plan-card:hover{transform:translateY(-3px)}
 .plan-card.selected.basic{border-color:var(--gray);background:var(--offwhite);box-shadow:0 12px 30px rgba(0,0,0,0.08)}
@@ -197,9 +193,6 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .btn-go-home:hover{border-color:var(--navy)}
 
 @media(max-width:600px){
-  .dur-grid{min-width:480px}
-  .plan-grid{min-width:560px;grid-template-columns:repeat(3,1fr)}
-  .plan-card{min-width:160px}
   .plan-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
   .progress-steps .prog-label{display:none}
@@ -397,8 +390,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
   <!-- DURATION SELECTOR -->
   <div style="margin-bottom:2rem">
     <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em">Choose Subscription Duration</div>
-    <div class="dur-scroll-wrap">
-      <div class="dur-grid">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem">
 
       <div class="dur-card selected" id="dur-1" onclick="selectDuration(1,0,this)">
         <div class="dur-months">1 Month</div>
@@ -427,78 +419,473 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
     </div>
   </div>
 
-  <div class="plan-grid">
-    <div class="plan-card basic" id="cardBasic" onclick="selectPlan('basic',25000,1,this)">
+  <div class="plan-scroll-wrap"><div class="plan-grid" style="grid-template-columns:1fr 1fr">
+
+    <!-- BASIC PLAN -->
+    <div class="plan-card basic selected" id="cardBasic" onclick="selectPlan('basic',25000,1,this)">
       <div class="plan-check">✓</div>
       <div class="plan-tier">⭐ Basic</div>
       <div class="plan-price" id="price-basic">TZS 25,000</div>
-      <div class="plan-period" id="period-basic">per month</div>
+      <div class="plan-period">per month</div>
       <div id="save-basic" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
       <div class="plan-divider"></div>
-      <ul class="plan-features">
+      <ul class="plan-features" id="features-basic">
         <li>1 digital store</li>
-        <li>Up to 50 products</li>
+        <li>Unlimited products</li>
         <li>WhatsApp orders</li>
         <li>Customer Care AI</li>
-        <li>Basic analytics</li>
-        <li>📸 1 photo/week on Vybe</li>
+        <li>Accounting AI</li>
+        <li>Travex Move delivery</li>
+        <li>📸 2 photos/week on Vybe</li>
         <li>Email support</li>
       </ul>
     </div>
-    <div class="plan-card standard" id="cardStandard" onclick="selectPlan('standard',50000,1,this)">
-      <div class="plan-popular">Most Popular</div>
+
+    <!-- PREMIUM PLAN -->
+    <div class="plan-card premium" id="cardPremium" onclick="selectPlan('premium',45000,1,this)">
+      <div class="plan-popular">Best Value</div>
       <div class="plan-check">✓</div>
-      <div class="plan-tier">⭐⭐ Standard</div>
-      <div class="plan-price" id="price-standard">TZS 50,000</div>
-      <div class="plan-period" id="period-standard">per month</div>
-      <div id="save-standard" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
+      <div class="plan-tier">👑 Premium</div>
+      <div class="plan-price" id="price-premium">TZS 45,000</div>
+      <div class="plan-period">per month</div>
+      <div id="save-premium" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
       <div class="plan-divider"></div>
-      <ul class="plan-features">
+      <ul class="plan-features" id="features-premium">
         <li>1 digital store</li>
         <li>Unlimited products</li>
-        <li>WhatsApp orders</li>
-        <li>Customer Care AI</li>
-        <li>Business Advisor AI</li>
+        <li>All AI Tools (4)</li>
         <li>Marketing Analytics AI</li>
-        <li>📸 3 photos + 🎥 2 videos/week on Vybe</li>
+        <li>Business Advisor AI</li>
+        <li>Travex Move delivery</li>
+        <li>📸 5 photos + 🎥 2 videos/week</li>
+        <li>👑 Boosted on Vybe</li>
         <li>Priority support</li>
       </ul>
     </div>
-    <div class="plan-card premium" id="cardPremium" onclick="selectPlan('premium',80000,1,this)">
-      <div class="plan-check">✓</div>
-      <div class="plan-tier">👑 Premium</div>
-      <div class="plan-price" id="price-premium">TZS 80,000</div>
-      <div class="plan-period" id="period-premium">per month</div>
-      <div id="save-premium" style="display:none;font-size:0.68rem;color:var(--green);font-weight:700;margin-top:0.2rem"></div>
-      <div class="plan-divider"></div>
-      <ul class="plan-features">
-        <li>1 — 3 digital stores</li>
-        <li>Unlimited products</li>
-        <li>All 4 AI Tools</li>
-        <li>Accounting AI</li>
-        <li>Featured on homepage</li>
-        <li>📸 10 photos + 🎥 5 videos/week on Vybe</li>
-        <li>Boosted on Vybe algorithm 👑</li>
-        <li>Dedicated support</li>
-      </ul>
-      <div class="stores-count" id="storesCountWrap">
-        <div class="stores-count-label">How many stores do you want?</div>
-        <div class="stores-btns">
-          <div class="store-btn active" onclick="setStoreCount(1,80000,this);event.stopPropagation()">1 Store<br><small>TZS 80K</small></div>
-          <div class="store-btn" onclick="setStoreCount(2,140000,this);event.stopPropagation()">2 Stores<br><small>TZS 140K</small></div>
-          <div class="store-btn" onclick="setStoreCount(3,190000,this);event.stopPropagation()">3 Stores<br><small>TZS 190K</small></div>
+
+  </div></div><!-- /plan-grid /plan-scroll-wrap -->
+
+  <!-- STEP 3Subl>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Your Store — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// Color picker
+function pickColor(color, el) {
+  document.getElementById("selectedColor").value = color;
+  document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
+  el.style.outline = "2px solid #C9A84C";
+}
+function pickColorCustom(color) {
+  document.getElementById("selectedColor").value = color;
+  document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
+}
+
+// Font picker
+function pickFont(font, el) {
+  document.getElementById("selectedFont").value = font;
+  document.querySelectorAll(".font-opt").forEach(d => {
+    d.style.border = "1px solid var(--lgray)";
+    d.style.background = "var(--offwhite)";
+  });
+  el.style.border = "2px solid var(--gold)";
+  el.style.background = "#FFFBEB";
+}
+</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+
+nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none}
+.nav-back:hover{color:var(--gold)}
+
+/* PROGRESS */
+.progress-wrap{background:var(--white);border-bottom:1px solid var(--lgray);padding:1.2rem 5%}
+.progress-steps{display:flex;align-items:center;max-width:700px;margin:0 auto}
+.prog-step{display:flex;align-items:center;gap:0.4rem;flex:1}
+.prog-circle{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;border:2px solid var(--lgray);color:var(--gray);flex-shrink:0;transition:all 0.3s}
+.prog-circle.active{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.prog-circle.done{background:var(--green);border-color:var(--green);color:var(--white)}
+.prog-label{font-size:0.65rem;font-weight:600;color:var(--gray)}
+.prog-label.active{color:var(--navy);font-weight:700}
+.prog-label.done{color:var(--green)}
+.prog-line{flex:1;height:2px;background:var(--lgray);margin:0 0.3rem;transition:background 0.3s}
+.prog-line.done{background:var(--green)}
+
+main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
+.step-panel{display:none}
+.step-panel.active{display:block}
+.step-title{font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:0.4rem}
+.step-sub{font-size:0.875rem;color:var(--gray);margin-bottom:2rem;line-height:1.6}
+
+/* FORM */
+.form-card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.card-head{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.card-head-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.card-body{padding:1.5rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-group:last-child{margin-bottom:0}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
+.form-label span{color:var(--red)}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus{border-color:var(--navy)}
+.form-input::placeholder{color:#9CA3AF}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
+.form-select:focus{border-color:var(--navy)}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.form-hint{font-size:0.72rem;color:var(--gray);margin-top:0.3rem}
+
+/* PASSWORD */
+.pass-wrap{position:relative}
+.pass-toggle{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray);font-size:0.78rem;font-family:"Inter",sans-serif}
+
+/* PLAN CARDS */
+/* DURATION SELECTOR */
+.dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative}
+.dur-card:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dur-card.selected{border-color:var(--navy);background:var(--offwhite);box-shadow:0 6px 20px rgba(13,27,62,0.1)}
+.dur-months{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
+.dur-discount{font-size:0.72rem;color:var(--gray);margin-bottom:0.4rem}
+.dur-badge{display:inline-block;background:var(--green);color:var(--white);font-size:0.6rem;font-weight:800;padding:0.15rem 0.5rem;text-transform:uppercase;letter-spacing:0.05em}
+.popular-dur{background:var(--gold);color:var(--navy)}
+
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem}
+.plan-card{border:2px solid var(--lgray);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:var(--white)}
+.plan-card:hover{transform:translateY(-3px)}
+.plan-card.selected.basic{border-color:var(--gray);background:var(--offwhite);box-shadow:0 12px 30px rgba(0,0,0,0.08)}
+.plan-card.selected.standard{border-color:var(--navy);background:linear-gradient(135deg,#EFF6FF,#DBEAFE);box-shadow:0 12px 30px rgba(13,27,62,0.15)}
+.plan-card.selected.premium{border-color:var(--gold);background:linear-gradient(135deg,#FFFBEB,#FEF3C7);box-shadow:0 12px 30px rgba(201,168,76,0.2)}
+.plan-popular{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:0.6rem;font-weight:800;padding:0.2rem 0.7rem;text-transform:uppercase;white-space:nowrap}
+.plan-check{position:absolute;top:10px;right:10px;width:22px;height:22px;background:var(--green);display:none;align-items:center;justify-content:center;color:var(--white);font-size:0.7rem;font-weight:800}
+.plan-card.selected .plan-check{display:flex}
+.plan-tier{font-size:0.68rem;font-weight:700;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem}
+.plan-price{font-size:1.6rem;font-weight:900;color:var(--navy);line-height:1;margin-bottom:0.2rem}
+.plan-period{font-size:0.72rem;color:var(--gray);margin-bottom:1rem}
+.plan-divider{height:1px;background:var(--lgray);margin-bottom:1rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:0.45rem}
+.plan-features li{font-size:0.75rem;color:var(--dark);display:flex;gap:0.4rem;align-items:flex-start}
+.plan-features li::before{content:"✓";color:var(--green);font-weight:800;flex-shrink:0}
+
+/* PREMIUM STORES COUNT */
+.stores-count{display:none;margin-top:1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);padding:1rem}
+.stores-count.show{display:block}
+.stores-count-label{font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem}
+.stores-btns{display:flex;gap:0.4rem}
+.store-btn{flex:1;padding:0.5rem 0.4rem;font-size:0.75rem;font-weight:700;border:1.5px solid var(--lgray);background:var(--white);cursor:pointer;font-family:"Inter",sans-serif;text-align:center;transition:all 0.2s}
+.store-btn:hover{border-color:var(--gold)}
+.store-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+
+/* UPLOAD */
+.upload-area{border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-preview{max-width:100%;max-height:100px;margin-top:0.5rem;display:none}
+
+/* PREVIEW */
+.preview-box{background:var(--white);border:1px solid var(--lgray);overflow:hidden;margin-bottom:1.5rem}
+.preview-banner{height:140px;background:linear-gradient(135deg,var(--navy),var(--blue));position:relative}
+.preview-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,27,62,0.7),transparent)}
+.preview-header{padding:1rem 1.5rem;display:flex;align-items:flex-end;gap:1rem;margin-top:-32px;position:relative;z-index:1}
+.preview-logo{width:56px;height:56px;background:var(--navy);border:4px solid var(--white);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:var(--gold);flex-shrink:0;overflow:hidden}
+.preview-logo img{width:100%;height:100%;object-fit:cover}
+.preview-name{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.preview-cat{font-size:0.75rem;color:var(--gray);margin-top:0.2rem}
+.preview-badges{display:flex;gap:0.4rem;margin-top:0.4rem;flex-wrap:wrap}
+.preview-badge{padding:0.15rem 0.5rem;font-size:0.6rem;font-weight:700;text-transform:uppercase}
+.preview-body{padding:1rem 1.5rem;border-top:1px solid var(--lgray)}
+.preview-desc{font-size:0.83rem;color:var(--gray);line-height:1.6;margin-bottom:0.75rem}
+.preview-meta{display:flex;gap:1.5rem;flex-wrap:wrap}
+.preview-meta-item{font-size:0.75rem;color:var(--gray);display:flex;align-items:center;gap:0.3rem}
+.preview-meta-item strong{color:var(--navy)}
+.preview-note{background:#FEF3C7;border:1px solid #FDE68A;padding:0.75rem 1rem;font-size:0.8rem;color:#92400E;margin-bottom:1.5rem;display:flex;gap:0.5rem}
+
+/* PAYMENT PAGE */
+.pay-page{background:var(--white);border:1px solid var(--lgray);padding:2rem;margin-bottom:1.5rem}
+.pay-page-title{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
+.pay-page-sub{font-size:0.82rem;color:var(--gray);margin-bottom:1.5rem;line-height:1.6}
+.pay-amount-box{background:var(--navy);padding:1.5rem;text-align:center;margin-bottom:1.5rem}
+.pay-amount-label{font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
+.pay-amount-val{font-size:2rem;font-weight:900;color:var(--gold)}
+.pay-amount-period{font-size:0.8rem;color:rgba(255,255,255,0.4)}
+.pay-steps{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem}
+.pay-step{display:flex;gap:0.75rem;align-items:flex-start}
+.pay-num{width:28px;height:28px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0}
+.pay-text{font-size:0.85rem;color:var(--gray);line-height:1.55}
+.pay-text strong{color:var(--dark)}
+.copy-row{display:flex;justify-content:space-between;align-items:center;background:var(--offwhite);border:1px solid var(--lgray);padding:0.55rem 0.85rem;margin-top:0.4rem}
+.copy-val{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.copy-btn{background:var(--navy);color:var(--white);border:none;padding:0.28rem 0.7rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif}
+.copy-btn:hover{background:var(--gold);color:var(--navy)}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:#25D366;color:var(--white);font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;margin-bottom:1rem;transition:all 0.2s;text-decoration:none}
+.wa-btn:hover{background:#128C7E}
+.close-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:var(--offwhite);color:var(--gray);font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.close-btn:hover{background:var(--lgray)}
+
+/* ACTIONS */
+.form-actions{display:flex;gap:1rem;justify-content:space-between;align-items:center;margin-top:2rem}
+.btn-back{background:var(--white);color:var(--gray);padding:0.85rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+.btn-back:hover{border-color:var(--navy);color:var(--navy)}
+.btn-next{background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.btn-next:hover{background:var(--blue)}
+.btn-submit{background:var(--gold);color:var(--navy);padding:0.85rem 2rem;font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-submit:hover{background:var(--gold2)}
+.btn-submit:disabled{background:var(--lgray);color:var(--gray);cursor:not-allowed}
+
+/* ALERT */
+.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+
+/* THANK YOU PAGE */
+.thankyou{display:none;text-align:center;padding:3rem 1.5rem;background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.thankyou.show{display:block}
+.thankyou-icon{font-size:4rem;margin-bottom:1rem}
+.thankyou-title{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem}
+.thankyou-sub{font-size:0.9rem;color:var(--gray);line-height:1.7;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
+.thankyou-info{background:var(--offwhite);border:1px solid var(--lgray);padding:1.2rem;text-align:left;margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
+.thankyou-info-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
+.thankyou-item{font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;display:flex;gap:0.5rem}
+.thankyou-item strong{color:var(--dark)}
+.btn-go-login{display:inline-block;background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;text-decoration:none;margin-bottom:0.75rem}
+.btn-go-login:hover{background:var(--blue)}
+.btn-go-home{display:inline-block;background:transparent;color:var(--navy);padding:0.85rem 2rem;font-size:0.875rem;font-weight:600;text-decoration:none;border:1.5px solid var(--lgray)}
+.btn-go-home:hover{border-color:var(--navy)}
+
+@media(max-width:600px){
+  .plan-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .progress-steps .prog-label{display:none}
+}
+
+/* DASHBOARD PREVIEW */
+.dash-sidebar-item{padding:0.55rem 1rem;color:rgba(255,255,255,0.6);font-size:0.78rem;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:all 0.2s}
+.dash-sidebar-item:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.active-item{color:var(--gold)!important;background:rgba(201,168,76,0.1)!important;border-left-color:var(--gold)!important}
+.locked-item{opacity:0.4;cursor:not-allowed!important;font-size:0.75rem}
+.dash-tab{display:none}
+.active-tab{display:block}
+.store-tab-btn{padding:0.65rem 1.2rem;background:transparent;border:none;border-bottom:2px solid transparent;font-size:0.8rem;font-weight:600;color:var(--gray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.store-tab-btn:hover{color:var(--navy)}
+.store-tab-btn.active{color:var(--navy);border-bottom-color:var(--navy)}
+.ai-tool-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;margin-bottom:1rem}
+.ai-tool-card.locked{opacity:0.4;pointer-events:none}
+.ai-tool-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.ai-tool-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.ai-tool-name{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.ai-tool-desc{font-size:0.78rem;color:var(--gray)}
+.ai-tool-badge{font-size:0.62rem;font-weight:700;padding:0.15rem 0.5rem;margin-left:auto;flex-shrink:0}
+.ai-chat-preview{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem;font-size:0.78rem;color:var(--gray);border-left:3px solid var(--navy)}
+.locked-overlay{position:absolute;inset:0;background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:var(--gray);z-index:10}
+
+
+/* ── DASHBOARD PREVIEW STYLES ── */
+.dash-preview{background:#F1F3F8;min-height:600px;border:1px solid var(--lgray)}
+.dash-sidebar{width:200px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;min-height:600px}
+.dash-sidebar-logo{padding:1rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.dash-sidebar-logo-text{font-size:0.9rem;font-weight:800;color:var(--white)}
+.dash-sidebar-logo-text span{color:var(--gold)}
+.dash-sidebar-nav{padding:0.5rem 0;flex:1}
+.dash-nav-section{font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 1rem 0.2rem}
+.dash-nav-item{display:flex;align-items:center;gap:0.5rem;padding:0.55rem 1rem;color:rgba(255,255,255,0.55);font-size:0.78rem;font-weight:500;cursor:default;border-left:3px solid transparent;opacity:0.8}
+.dash-nav-item.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
+.dash-nav-item.locked{opacity:0.4}
+.dash-main{flex:1;display:flex;flex-direction:column}
+.dash-topbar{background:var(--white);border-bottom:1px solid var(--lgray);padding:0 1.5rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.dash-page-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.dash-locked-chip{background:#FEF3C7;color:#92400E;font-size:0.62rem;font-weight:700;padding:0.2rem 0.6rem;border:1px solid #FDE68A}
+.dash-content{padding:1.5rem;flex:1}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.dash-stat{background:var(--white);border:1px solid var(--lgray);padding:1rem}
+.dash-stat-label{font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem}
+.dash-stat-value{font-size:1.4rem;font-weight:800;color:var(--navy)}
+.dash-stat-sub{font-size:0.65rem;color:var(--green);margin-top:0.2rem}
+.dash-grid2{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-bottom:1rem}
+.dash-card{background:var(--white);border:1px solid var(--lgray)}
+.dash-card-header{padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.dash-card-title{font-size:0.8rem;font-weight:700;color:var(--navy)}
+.dash-card-btn{background:var(--lgray);color:var(--gray);padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;border:none;cursor:not-allowed;font-family:"Inter",sans-serif}
+.dash-card-body{padding:1rem}
+.dash-empty{text-align:center;padding:1.5rem;color:var(--gray);font-size:0.78rem}
+.dash-empty-icon{font-size:1.8rem;margin-bottom:0.4rem}
+.dash-store-card{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;opacity:0.9}
+.dash-store-logo{width:36px;height:36px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--gold);flex-shrink:0}
+.dash-store-name{font-size:0.82rem;font-weight:700;color:var(--navy)}
+.dash-store-cat{font-size:0.7rem;color:var(--gray)}
+.dash-store-badge{margin-left:auto;background:var(--lgray);color:var(--gray);font-size:0.6rem;font-weight:700;padding:0.15rem 0.5rem}
+
+/* AI CARDS */
+.ai-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem}
+.ai-card{background:var(--white);border:1px solid var(--lgray);padding:1rem;position:relative}
+.ai-card.locked-feature{opacity:0.45;pointer-events:none}
+.ai-card-icon{font-size:1.6rem;margin-bottom:0.5rem}
+.ai-card-name{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
+.ai-card-desc{font-size:0.72rem;color:var(--gray);line-height:1.5}
+.ai-card-btn{width:100%;margin-top:0.75rem;padding:0.5rem;background:var(--navy);color:var(--white);font-size:0.72rem;font-weight:600;border:none;cursor:not-allowed;font-family:"Inter",sans-serif;opacity:0.7}
+.ai-lock-badge{position:absolute;top:8px;right:8px;background:var(--lgray);color:var(--gray);font-size:0.58rem;font-weight:700;padding:0.15rem 0.4rem}
+
+/* OVERVIEW STORES TABLE */
+.overview-stores-grid{display:flex;flex-direction:column;gap:0.5rem}
+.ov-store-row{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem}
+.ov-store-num{width:28px;height:28px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0}
+.ov-store-info{flex:1}
+.ov-store-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.ov-store-meta{font-size:0.7rem;color:var(--gray);margin-top:0.1rem}
+.ov-store-status{font-size:0.68rem;font-weight:700;padding:0.2rem 0.5rem;background:#FEF3C7;color:#92400E}
+
+/* DASH TABS */
+.dash-tabs{display:flex;gap:0;background:var(--navy);border-bottom:1px solid rgba(255,255,255,0.1)}
+.dash-tab{padding:0.6rem 1.2rem;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"Inter",sans-serif}
+.dash-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.dash-tab:hover{color:var(--white)}
+.dash-panel{display:none}
+.dash-panel.active{display:flex}
+
+.locked-overlay{position:relative}
+.locked-overlay::after{content:"🔒 Activate to unlock";position:absolute;inset:0;background:rgba(248,249,252,0.85);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--gray);pointer-events:none}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="index.html" class="nav-back">← Marketplace</a>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-steps">
+    <div class="prog-step">
+      <div class="prog-circle active" id="prog1">1</div>
+      <div class="prog-label active" id="lbl1">Account</div>
+    </div>
+    <div class="prog-line" id="line1"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog2">2</div>
+      <div class="prog-label" id="lbl2">Plan</div>
+    </div>
+    <div class="prog-line" id="line2"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog3">3</div>
+      <div class="prog-label" id="lbl3">Store Info</div>
+    </div>
+    <div class="prog-line" id="line3"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog4">4</div>
+      <div class="prog-label" id="lbl4">Preview</div>
+    </div>
+    <div class="prog-line" id="line4"></div>
+    <div class="prog-step">
+      <div class="prog-circle" id="prog5">5</div>
+      <div class="prog-label" id="lbl5">Payment</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- THANK YOU PAGE -->
+<div class="thankyou" id="thankYouPage">
+  <div class="thankyou-icon">🎉</div>
+  <div class="thankyou-title">Thank You! We Will Be In Touch</div>
+  <div class="thankyou-sub">Your details have been saved successfully. Our team will review your payment and contact you via the phone number you provided.</div>
+  <div class="thankyou-info">
+    <div class="thankyou-info-title">What Happens Next:</div>
+    <div class="thankyou-item">✅ <span>Your details have been saved securely in our system</span></div>
+    <div class="thankyou-item">📞 <span>Our team will <strong>call or message you</strong> to confirm your payment</span></div>
+    <div class="thankyou-item">🏪 <span>Your store will be <strong>officially opened</strong> after payment is confirmed</span></div>
+    <div class="thankyou-item">🔐 <span>You will receive <strong>dashboard login details</strong> via your phone</span></div>
+    <div class="thankyou-item">⏱️ <span>This process takes <strong>only 2 hours</strong></span></div>
+  </div>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <a href="seller-login.html" class="btn-go-login">Login to Dashboard →</a>
+    <a href="index.html" class="btn-go-home">← Back to Marketplace</a>
+  </div>
+</div>
+
+<!-- STEP 1 — ACCOUNT INFO -->
+<div class="step-panel active" id="step1">
+  <div class="step-title">Welcome to Travex Mall!</div>
+  <div class="step-sub">Enter your personal details. These will be used to create your store account.</div>
+
+  <div class="alert alert-error" id="err1"></div>
+
+  <div class="form-card">
+    <div class="card-head"><div class="card-head-title">Store Owner Information</div></div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">Full Name of Owner <span>*</span></label>
+        <input type="text" class="form-input" id="ownerName" placeholder="e.g. John Maregeri">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number <span>*</span></label>
+        <input type="tel" class="form-input" id="ownerPhone" placeholder="+255 712 000 000">
+        <div class="form-hint">This number will be used for all store communications</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Create Password <span>*</span></label>
+        <div class="pass-wrap">
+          <input type="password" class="form-input" id="ownerPass" placeholder="6 characters — e.g. abc123" maxlength="6">
+          <button class="pass-toggle" onclick="togglePass()">Show</button>
         </div>
+        <div class="form-hint">Exactly 6 characters. Used to login to your dashboard later</div>
       </div>
     </div>
   </div>
 
   <div class="form-actions">
-    <button class="btn-back" onclick="goStep(1)">← Back</button>
-    <button class="btn-next" onclick="goStep(3)">Continue → Store Info</button>
+    <div></div>
+    <button class="btn-next" onclick="goStep(2)">Continue → Choose Plan</button>
   </div>
 </div>
 
-<!-- STEP 3 — STORE INFO -->
+<!-- STEP 2 — CHOOSE PLAN -->
+<div class="step-panel" id="step2">
+  <div class="step-title">Choose Your Plan</div>
+  <div class="step-sub">Select the plan that fits your business. You can upgrade anytime.</div>
+
+  <div class="alert alert-error" id="err2"></div>
+
+  <!-- DURATION SELECTOR -->
+  <div style="margin-bottom:2rem">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em">Choose Subscription Duration</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem">
+
+      <div class="dur-card selected" id="dur-1" onclick="selectDuration(1,0,this)">
+        <div class="dur-months">1 Month</div>
+        <div class="dur-discount">Standard price</div>
+        <div class="dur-badge" style="visibility:hidden">0% off</div>
+      </div>
+
+      <div class="dur-card" id="dur-3" onclick="selectDuration(3,5,this)">
+        <div class="dur-months">3 Months</div>
+        <div class="dur-discount" style="color:var(--green);font-weight:700">Save 5%</div>
+        <div class="dur-badge">5% OFF</div>
+      </div>
+
+      <div class="dur-card" id="dur-6" onclick="selectDuration(6,15,this)">
+        <div class="dur-months">6 Months</div>
+        <div class="dur-discount" style="color:var(--green);font-weight:700">Save 15%</div>
+        <div class="dur-badge popular-dur">15% OFF ⭐</div>
+      </div>
+
+      <div class="dur-card" id="dur-12" onclick="selectDuration(12,20,this)">
+        <div class="dur-months">1 Year</div>
+        <div class="dur-discount" style="color:var(--green);font-weight:700">Save 20%</div>
+        <div class="dur-badge">20% OFF 🔥</div>
+      </div>
+
+    </div>
+  </div>
+
 <div class="step-panel" id="step3">
   <div class="step-title">Your Store Information</div>
   <div class="step-sub" id="step3Sub">Fill in your store details. These will be visible to your customers.</div>
@@ -681,6 +1068,42 @@ document.addEventListener("DOMContentLoaded", () => {
     if (heroTitle) heroTitle.textContent = "Open Your Wholesale Store";
     // Show B2B fields
     document.querySelectorAll(".b2b-only").forEach(el => el.style.display = "block");
+    // Update B2B prices on plan cards
+    const pb = document.getElementById("price-basic");
+    const pp = document.getElementById("price-premium");
+    if (pb) pb.textContent = "TZS 75,000";
+    if (pp) pp.textContent = "TZS 110,000";
+    // Update B2B features
+    const fb = document.getElementById("features-basic");
+    if (fb) fb.innerHTML = `
+      <li>1 digital store</li>
+      <li>Unlimited products</li>
+      <li>WhatsApp + Bulk orders</li>
+      <li>Customer Care AI</li>
+      <li>Accounting AI</li>
+      <li>MOQ & Bulk pricing</li>
+      <li>Travex Move (cargo)</li>
+      <li>📸 10 photos + 🎥 4 videos/week</li>
+      <li>Business verification badge 🥇</li>
+    `;
+    const fp = document.getElementById("features-premium");
+    if (fp) fp.innerHTML = `
+      <li>1 digital store</li>
+      <li>Unlimited products</li>
+      <li>All AI Tools (4)</li>
+      <li>MOQ & Bulk pricing tiers</li>
+      <li>Invoice generation</li>
+      <li>Wholesale catalog</li>
+      <li>Travex Move (cargo)</li>
+      <li>📸 20 photos + 🎥 8 videos/week</li>
+      <li>👑 Top of B2B Vybe feed</li>
+      <li>Priority support</li>
+    `;
+    // Pre-select basic at B2B price
+    selectPlan('basic', 75000, 1, document.getElementById("cardBasic"));
+  } else {
+    // Pre-select basic at B2C price
+    selectPlan('basic', 25000, 1, document.getElementById("cardBasic"));
   }
 });
 
@@ -770,7 +1193,7 @@ function selectDuration(months, discount, el) {
   el.classList.add('selected');
 
   // Recalculate prices shown on plan cards
-  const basePrices = {basic: 25000, standard: 50000, premium: 80000};
+  const basePrices = {basic: IS_B2B?75000:25000, premium: IS_B2B?110000:45000};
   Object.entries(basePrices).forEach(([plan, base]) => {
     const total = Math.round(base * months * (1 - discount/100));
     const monthly = Math.round(total / months);
@@ -792,23 +1215,26 @@ function selectDuration(months, discount, el) {
 
   // Update selected plan price
   if (selectedPlan) {
-    const base = {basic:25000, standard:50000, premium:80000}[selectedPlan.key] || 0;
+    const base = IS_B2B ? {basic:75000, premium:110000}[selectedPlan.key]||75000 : {basic:25000, premium:45000}[selectedPlan.key]||25000;
     selectedPlan.price = Math.round(base * months * (1 - discount/100));
     selectedPlan.months = months;
   }
 }
 
 function selectPlan(key, price, stores, el) {
-  // Override price for B2B
+  // Set correct price based on type
   if (IS_B2B) {
     const b2bPrices = {basic: 75000, premium: 110000};
     price = b2bPrices[key] || price;
+  } else {
+    const b2cPrices = {basic: 25000, premium: 45000};
+    price = b2cPrices[key] || price;
   }
   document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
   el.classList.add("selected");
   document.getElementById("storesCountWrap").classList.remove("show");
   if (key === "premium") document.getElementById("storesCountWrap").classList.add("show");
-  selectedPlan = { key, price, name:{basic:"Basic",standard:"Standard",premium:"Premium"}[key], stores };
+  selectedPlan = { key, price, name:{basic:"Basic",premium:"Premium"}[key]||key, stores };
 }
 
 function setStoreCount(count, price, el) {
@@ -993,8 +1419,8 @@ function generateStoreForms() {
 // ── BUILD PREVIEW ──
 function buildPreview() {
   const n = selectedPlan.stores;
-  const planColors = { basic:"background:var(--lgray);color:var(--gray)", standard:"background:var(--navy);color:var(--white)", premium:"background:var(--gold);color:var(--navy)" };
-  const planLabels = { basic:"⭐ Basic", standard:"⭐⭐ Standard", premium:"👑 Premium" };
+  const planColors = { basic:"background:var(--lgray);color:var(--gray)", premium:"background:var(--gold);color:var(--navy)" };
+  const planLabels = { basic:"⭐ Basic", premium:"👑 Premium" };
   let html = "";
 
   for (let i = 1; i <= n; i++) {
@@ -1153,7 +1579,7 @@ function buildPaymentPage() {
   const months  = plan.months || 1;
   const disc    = plan.discount || 0;
   const phone   = document.getElementById("ownerPhone")?.value || "—";
-  const planLabels = {basic:"⭐ Basic",standard:"⭐⭐ Standard",premium:"👑 Premium"};
+  const planLabels = {basic:"⭐ Basic",premium:"👑 Premium"};
 
   document.getElementById("payAmountDisplay").textContent = amt;
   document.getElementById("payAmt2").textContent = amt;
@@ -1221,7 +1647,7 @@ function buildPreview() {
   document.getElementById("dashAvatar").textContent   = init;
   document.getElementById("dashUserName").textContent = owner;
 
-  const planLabels = { basic:"⭐ Basic Plan", standard:"⭐⭐ Standard Plan", premium:"👑 Premium Plan" };
+  const planLabels = { basic:"⭐ Basic Plan", premium:"👑 Premium Plan" };
   document.getElementById("dashPlanBadge").textContent =
     planLabels[plan] + " · TZS " + selectedPlan.price.toLocaleString() + "/month · " + n + " Store" + (n>1?"s":"");
 
@@ -1252,8 +1678,8 @@ function buildStoreCard(i) {
   const init    = name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
   const logoEl  = document.getElementById("sPrevLogo"+i);
   const logoSrc = logoEl?.src && logoEl.style.display!=="none" ? logoEl.src : null;
-  const pColor  = { basic:"background:var(--lgray);color:var(--gray)", standard:"background:var(--navy);color:var(--white)", premium:"background:var(--gold);color:var(--navy)" };
-  const pLabel  = { basic:"⭐ Basic", standard:"⭐⭐ Standard", premium:"👑 Premium" };
+  const pColor  = { basic:"background:var(--lgray);color:var(--gray)", premium:"background:var(--gold);color:var(--navy)" };
+  const pLabel  = { basic:"⭐ Basic", premium:"👑 Premium" };
 
   document.getElementById("dashStoreCardTitle").textContent = name;
   document.getElementById("dashStoreInfo").innerHTML = `
@@ -1281,15 +1707,15 @@ function buildStoreCard(i) {
 function buildAITools() {
   const plan = selectedPlan.key;
   const tools = [
-    { key:"care",      icon:"💬", name:"Customer Care AI",      desc:"Responds to customer inquiries automatically in English & Swahili. Handles complaints and writes professional replies.",  plans:["basic","standard","premium"], sample:"Hello! How can I help you today? Ask me about products, prices or delivery." },
-    { key:"advisor",   icon:"🤖", name:"Business Advisor AI",   desc:"Analyzes store performance, suggests pricing strategies and gives growth advice specific to Tanzania market.", plans:["standard","premium"],           sample:"Tip: Add at least 10 products this week to attract more customers to your store." },
+    { key:"care",      icon:"💬", name:"Customer Care AI",      desc:"Responds to customer inquiries automatically in English & Swahili. Handles complaints and writes professional replies.",  plans:["basic","premium"], sample:"Hello! How can I help you today? Ask me about products, prices or delivery." },
+    { key:"advisor",   icon:"🤖", name:"Business Advisor AI",   desc:"Analyzes store performance, suggests pricing strategies and gives growth advice specific to Tanzania market.", plans:["basic","premium"],           sample:"Tip: Add at least 10 products this week to attract more customers to your store." },
     { key:"accounting",icon:"📊", name:"Accounting AI",         desc:"Tracks revenue, calculates profit/loss, generates weekly financial reports and helps manage business expenses.", plans:["premium"],                       sample:"Weekly Report: Revenue TZS 0 · Expenses TZS 0 · Net Profit TZS 0." },
     { key:"marketing", icon:"📈", name:"Marketing & Demand AI", desc:"Predicts trending products in Tanzania, creates WhatsApp campaigns and analyzes market demand for your category.", plans:["premium"],                       sample:"Fashion is trending this week in Dar es Salaam — perfect for your store!" }
   ];
 
   const planNotes = {
     basic:    "Basic Plan: Customer Care AI only",
-    standard: "Standard Plan: Customer Care AI + Business Advisor AI",
+    ,
     premium:  "Premium Plan: All 4 AI Assistants included"
   };
   document.getElementById("aiPlanNote").textContent = planNotes[plan];
@@ -1370,7 +1796,7 @@ function switchStoreCardTab(num, btn) {
 }
 
 // Auto select standard
-document.getElementById("cardStandard").click();
+// Auto-select handled in DOMContentLoaded
 </script>
 </body>
 </html>
