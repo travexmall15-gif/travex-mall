@@ -172,7 +172,10 @@ tr:hover td{background:var(--offwhite)}
   <div class="login-box">
     <div class="login-logo">TRAVEX <span>MALL</span></div>
     <div class="login-sub">Admin Control Panel</div>
-    <input type="password" class="login-input" id="adminPin" placeholder="Enter Admin PIN" onkeydown="if(event.key==='Enter')adminLogin()">
+    <div style="position:relative">
+      <input type="password" class="login-input" id="adminPin" placeholder="Enter Admin PIN" onkeydown="if(event.key==='Enter')adminLogin()" style="padding-right:3rem">
+      <button onclick="var x=document.getElementById('adminPin');x.type=x.type==='password'?'text':'password'" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:0.75rem">Show</button>
+    </div>
     <button class="login-btn" onclick="adminLogin()">Access Admin Panel →</button>
     <div class="login-err" id="loginErr">Incorrect PIN. Try again.</div>
   </div>
@@ -649,15 +652,15 @@ const {createClient} = supabase;
 const sb = createClient(SB_URL, SB_KEY);
 
 // ── ADMIN PIN (change this!) ──
-const ADMIN_PIN = "TRX2026";
+const ADMIN_PIN = "admin2026";
 
 let allStores = [], allSubs = [], allPosts = [];
 let currentFilter = 'all';
 
 // ── LOGIN ──
 function adminLogin() {
-  const pin = document.getElementById("adminPin").value;
-  if (pin === ADMIN_PIN) {
+  const pin = document.getElementById("adminPin").value.trim();
+  if (pin === ADMIN_PIN || pin.toLowerCase() === ADMIN_PIN.toLowerCase()) {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("adminMain").style.display = "grid";
     loadAll();
