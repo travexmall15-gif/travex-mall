@@ -660,7 +660,23 @@ const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let selectedPlan = { key:"standard", price:50000, name:"Standard", stores:1 };
+// ── Store type from URL ──
+const _urlP = new URLSearchParams(window.location.search);
+const STORE_TYPE = _urlP.get("type") || "b2c";
+const IS_B2B = STORE_TYPE === "b2b";
+
+// Update page title based on type
+document.addEventListener("DOMContentLoaded", () => {
+  if (IS_B2B) {
+    document.title = "Open Wholesale Store — Travex Mall";
+    const heroTitle = document.querySelector(".page-hero-title, h1");
+    if (heroTitle) heroTitle.textContent = "Open Your Wholesale Store";
+    // Show B2B fields
+    document.querySelectorAll(".b2b-only").forEach(el => el.style.display = "block");
+  }
+});
+
+let selectedPlan = { key:"basic", price: IS_B2B ? 75000 : 25000, name:"Basic", stores:1 };
 let currentStep  = 1;
 
 // ── PROGRESS ──
@@ -775,6 +791,11 @@ function selectDuration(months, discount, el) {
 }
 
 function selectPlan(key, price, stores, el) {
+  // Override price for B2B
+  if (IS_B2B) {
+    const b2bPrices = {basic: 75000, premium: 110000};
+    price = b2bPrices[key] || price;
+  }
   document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
   el.classList.add("selected");
   document.getElementById("storesCountWrap").classList.remove("show");
@@ -1071,24 +1092,29 @@ async function submitAndProceed() {
       const themeFont  = document.getElementById("selectedFont")?.value || "Playfair Display";
 
       await sb.from("stores").insert({
-        user_id:           userId,
-        store_name:        name,
+        user_id:              userId,
+        store_name:           name,
         slug,
-        description:       document.getElementById("sDesc"+i).value.trim(),
-        category:          document.getElementById("sCat"+i).value,
-        region:            document.getElementById("sReg"+i).value,
-        whatsapp_number:   document.getElementById("sWa"+i).value.trim(),
-        logo:              logoUrl,
-        banner:            bannerUrl,
-        subscription_plan: selectedPlan.key,
-        is_active:         false,
-        owner_name:        ownerName,
-        owner_phone:       ownerPhone,
-        instagram:         instagram || null,
-        tiktok:            tiktok    || null,
-        facebook:          facebook  || null,
-        theme_color:       themeColor,
-        theme_font:        themeFont
+        description:          document.getElementById("sDesc"+i).value.trim(),
+        category:             document.getElementById("sCat"+i).value,
+        region:               document.getElementById("sReg"+i).value,
+        whatsapp_number:      document.getElementById("sWa"+i).value.trim(),
+        logo:                 logoUrl,
+        banner:               bannerUrl,
+        subscription_plan:    selectedPlan.key,
+        subscription_status:  "approved",
+        is_active:            true,
+        store_type:           STORE_TYPE,
+        badge:                IS_B2B ? "gold" : "silver",
+        business_reg_number:  IS_B2B ? (document.getElementById("businessRegNumber")?.value.trim()||null) : null,
+        tin_number:           IS_B2B ? (document.getElementById("tinNumber")?.value.trim()||null) : null,
+        owner_name:           ownerName,
+        owner_phone:          ownerPhone,
+        instagram:            instagram || null,
+        tiktok:               tiktok    || null,
+        facebook:             facebook  || null,
+        theme_color:          themeColor,
+        theme_font:           themeFont
       });
     }
 

@@ -328,7 +328,7 @@ let likedPosts = JSON.parse(localStorage.getItem("vybe_liked") || "[]");
 
 async function loadPosts() {
   const {data} = await sb.from("feed_posts")
-    .select(`*, stores(store_name,logo,slug,whatsapp_number,subscription_plan)`)
+    .select(`*, stores(store_name,logo,slug,whatsapp_number,subscription_plan,store_type,badge)`)
     .eq("is_active", true)
     .order("plan_weight", {ascending:false})
     .order("created_at", {ascending:false});
@@ -364,9 +364,15 @@ function renderPosts(posts) {
     const waLink= waNum ? `https://wa.me/${waNum}?text=Hello! I saw your post on Travex Social Vybe 🔥` : null;
     const planBadge = plan==="premium" ? `<div class="post-plan-badge badge-premium">👑 Premium</div>` :
                       plan==="standard"? `<div class="post-plan-badge badge-standard">⭐⭐ Standard</div>` : "";
+    const storeType = store.store_type || "b2c";
+    const isGold = storeType === "b2b";
+    const typeBadge = isGold
+      ? `<div style="position:absolute;top:0.5rem;left:0.5rem;background:rgba(201,168,76,0.88);color:#111;padding:0.15rem 0.5rem;font-size:0.58rem;font-weight:800;z-index:3">🥇 WHOLESALE</div>`
+      : `<div style="position:absolute;top:0.5rem;left:0.5rem;background:rgba(0,0,0,0.55);color:#E5E7EB;padding:0.15rem 0.5rem;font-size:0.58rem;font-weight:800;z-index:3;backdrop-filter:blur(4px)">🥈 RETAIL</div>`;
     const caption = (post.caption||"").replace(/(#\w+)/g,'<span class="hashtag">$1</span>');
 
     return `<div class="post-card reveal" style="animation-delay:${i*0.07}s">
+      ${typeBadge}
       ${plan!=="basic" ? '<div class="post-boost"></div>' : ""}
       ${planBadge}
       <div class="post-header">

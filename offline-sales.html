@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Offline Sales — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--gold:#C9A84C;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+nav{background:var(--navy);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:"Playfair Display",serif;font-size:1rem;font-weight:800;color:#fff;text-decoration:none}.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none}.nav-back:hover{color:var(--gold)}
+.wrap{max-width:800px;margin:2rem auto;padding:0 5%}
+h1{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
+.sub{font-size:0.85rem;color:var(--gray);margin-bottom:2rem}
+
+/* DATE DISPLAY */
+.date-bar{background:var(--navy);color:#fff;padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.date-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.45)}
+.date-val{font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:900;color:var(--gold)}
+
+/* BATCH FORM */
+.batch-card{background:#fff;border:1px solid var(--lgray);margin-bottom:1.5rem;overflow:hidden}
+.batch-header{background:var(--offwhite);padding:0.85rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.batch-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+.batch-total-label{font-size:0.72rem;color:var(--gray)}
+.batch-total-val{font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:900;color:var(--navy)}
+
+/* SALE ROWS */
+.sale-rows{padding:1rem 1.5rem}
+.sale-row{display:grid;grid-template-columns:1fr 80px 120px 120px;gap:0.75rem;align-items:center;margin-bottom:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--lgray)}
+.sale-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.sale-num{font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.7);background:var(--navy);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sale-input-wrap{display:flex;align-items:center;gap:0.5rem}
+.sale-row-inner{display:grid;grid-template-columns:1fr 80px 120px 120px;gap:0.75rem;align-items:center;width:100%}
+.form-in{width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.85rem;color:var(--dark);outline:none;transition:border-color 0.2s}
+.form-in:focus{border-color:var(--navy)}
+.form-in::placeholder{color:var(--gray);font-size:0.78rem}
+.total-display{padding:0.6rem 0.8rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy);text-align:right}
+.col-label{font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem}
+
+/* GRAND TOTAL */
+.grand-total{background:var(--navy);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.gt-label{font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6)}
+.gt-val{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:var(--gold)}
+
+/* BUTTONS */
+.btn-save{width:100%;padding:1rem;background:var(--green);color:#fff;border:none;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;margin-top:1.5rem}
+.btn-save:hover{opacity:0.88}
+.btn-save:disabled{opacity:0.4;cursor:not-allowed}
+.btn-new-batch{width:100%;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-size:0.875rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;margin-top:0.75rem;display:none}
+.btn-new-batch:hover{opacity:0.85}
+
+/* SUCCESS */
+.success-banner{background:#D1FAE5;border:1px solid #6EE7B7;border-left:4px solid var(--green);padding:0.85rem 1.2rem;margin-bottom:1.5rem;font-size:0.85rem;color:#065F46;display:none;align-items:center;gap:0.5rem}
+.success-banner.show{display:flex}
+
+/* HISTORY */
+.history-card{background:#fff;border:1px solid var(--lgray);margin-top:2rem;overflow:hidden}
+.history-header{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
+.history-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy);color:rgba(255,255,255,0.7);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.75rem 1rem;text-align:left}
+td{padding:0.75rem 1rem;font-size:0.82rem;border-bottom:1px solid var(--lgray);color:var(--dark)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--offwhite)}
+.empty-history{text-align:center;padding:2rem;color:var(--gray);font-size:0.85rem}
+
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;border-left:4px solid var(--red);padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:var(--red);display:none}
+.alert-error.show{display:block}
+
+@media(max-width:600px){.sale-row-inner{grid-template-columns:1fr 70px 100px 100px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="seller-dashboard.html" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="seller-dashboard.html" class="nav-back">← Back to Dashboard</a>
+</nav>
+
+<div class="wrap">
+  <h1>🏪 Offline Sales Entry</h1>
+  <div class="sub">Record your physical shop sales. Data automatically syncs with your Accounting AI.</div>
+
+  <!-- DATE -->
+  <div class="date-bar">
+    <div>
+      <div class="date-label">Recording sales for</div>
+      <div class="date-val" id="currentDate">—</div>
+    </div>
+    <div style="font-size:0.78rem;color:rgba(255,255,255,0.4)">Date updates automatically</div>
+  </div>
+
+  <!-- SUCCESS BANNER -->
+  <div class="success-banner" id="successBanner">
+    ✅ <strong>Sales saved successfully!</strong> Your accounting data has been updated.
+  </div>
+
+  <!-- ERROR -->
+  <div class="alert-error" id="errMsg"></div>
+
+  <!-- BATCH FORM -->
+  <div class="batch-card" id="batchCard">
+    <div class="batch-header">
+      <div class="batch-title">📝 Enter Sales (up to 5 per batch)</div>
+      <div>
+        <div class="batch-total-label">Batch Total</div>
+        <div class="batch-total-val" id="batchTotal">TZS 0</div>
+      </div>
+    </div>
+    <div class="sale-rows">
+      <!-- Column Headers -->
+      <div style="display:grid;grid-template-columns:1fr 80px 120px 120px;gap:0.75rem;margin-bottom:0.5rem;padding-left:0">
+        <div class="col-label">Product Name</div>
+        <div class="col-label">Qty</div>
+        <div class="col-label">Unit Price (TZS)</div>
+        <div class="col-label">Total (TZS)</div>
+      </div>
+
+      <!-- SALE ROWS 1-5 -->
+      <div id="saleRows"></div>
+    </div>
+
+    <!-- GRAND TOTAL -->
+    <div class="grand-total">
+      <div class="gt-label">GRAND TOTAL</div>
+      <div class="gt-val" id="grandTotal">TZS 0</div>
+    </div>
+  </div>
+
+  <button class="btn-save" id="saveBtn" onclick="saveSales()">💾 Save All Sales →</button>
+  <button class="btn-new-batch" id="newBatchBtn" onclick="newBatch()">+ Record Another Batch</button>
+
+  <!-- HISTORY -->
+  <div class="history-card">
+    <div class="history-header">
+      <div class="history-title">📋 Recent Batches</div>
+      <div style="font-size:0.75rem;color:var(--gray)" id="historyCount">—</div>
+    </div>
+    <table>
+      <thead><tr><th>Date</th><th>Products</th><th>Total (TZS)</th><th>Saved</th></tr></thead>
+      <tbody id="historyBody">
+        <tr><td colspan="4" class="empty-history">No offline sales recorded yet</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SB_URL="https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY="sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const {createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+
+const params=new URLSearchParams(window.location.search);
+let storeId=params.get("store");
+
+// Set today's date
+const today=new Date();
+document.getElementById("currentDate").textContent=today.toLocaleDateString("en",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+// Build sale rows
+function buildRows(){
+  const container=document.getElementById("saleRows");
+  container.innerHTML=[1,2,3,4,5].map(i=>`
+    <div class="sale-row-inner" id="row${i}" style="margin-bottom:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--lgray)">
+      <input type="text" class="form-in" id="prod${i}" placeholder="Product name..." oninput="calcRow(${i})">
+      <input type="number" class="form-in" id="qty${i}" placeholder="0" min="1" oninput="calcRow(${i})">
+      <input type="number" class="form-in" id="price${i}" placeholder="0" min="0" oninput="calcRow(${i})">
+      <div class="total-display" id="total${i}">0</div>
+    </div>`).join("");
+  // Remove border from last row
+  document.getElementById("row5").style.borderBottom="none";
+  document.getElementById("row5").style.marginBottom="0";
+  document.getElementById("row5").style.paddingBottom="0";
+}
+
+function calcRow(i){
+  const qty=parseFloat(document.getElementById("qty"+i).value)||0;
+  const price=parseFloat(document.getElementById("price"+i).value)||0;
+  const total=qty*price;
+  document.getElementById("total"+i).textContent=total.toLocaleString();
+  updateTotals();
+}
+
+function updateTotals(){
+  let grand=0;
+  for(let i=1;i<=5;i++){
+    const qty=parseFloat(document.getElementById("qty"+i)?.value)||0;
+    const price=parseFloat(document.getElementById("price"+i)?.value)||0;
+    grand+=qty*price;
+  }
+  document.getElementById("batchTotal").textContent="TZS "+grand.toLocaleString();
+  document.getElementById("grandTotal").textContent="TZS "+grand.toLocaleString();
+}
+
+async function init(){
+  if(!storeId){
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){
+      const {data:s}=await sb.from("stores").select("*").eq("user_id",session.user.id).single();
+      if(s)storeId=s.id;
+    }
+  }
+  buildRows();
+  loadHistory();
+}
+
+async function saveSales(){
+  const btn=document.getElementById("saveBtn");
+  const errEl=document.getElementById("errMsg");
+  errEl.classList.remove("show");
+
+  // Collect valid rows
+  const sales=[];
+  const batchId=crypto.randomUUID();
+  for(let i=1;i<=5;i++){
+    const prod=(document.getElementById("prod"+i)?.value||"").trim();
+    const qty=parseFloat(document.getElementById("qty"+i)?.value)||0;
+    const price=parseFloat(document.getElementById("price"+i)?.value)||0;
+    if(prod&&qty>0&&price>0){
+      sales.push({
+        store_id:storeId,
+        product_name:prod,
+        quantity:qty,
+        unit_price:price,
+        total_price:qty*price,
+        sale_date:today.toISOString().split("T")[0],
+        batch_id:batchId
+      });
+    }
+  }
+
+  if(!sales.length){
+    errEl.textContent="Please fill in at least one product with quantity and price.";
+    errEl.classList.add("show");
+    return;
+  }
+  if(!storeId){
+    errEl.textContent="Store not found. Please open from your dashboard.";
+    errEl.classList.add("show");
+    return;
+  }
+
+  btn.textContent="Saving...";btn.disabled=true;
+
+  const {error}=await sb.from("offline_sales").insert(sales);
+
+  if(error){
+    errEl.textContent="Error saving: "+error.message;
+    errEl.classList.add("show");
+    btn.textContent="💾 Save All Sales →";
+    btn.disabled=false;
+    return;
+  }
+
+  // Show success
+  document.getElementById("successBanner").classList.add("show");
+  btn.style.display="none";
+  document.getElementById("newBatchBtn").style.display="block";
+  // Clear form
+  buildRows();
+  updateTotals();
+  loadHistory();
+}
+
+function newBatch(){
+  document.getElementById("successBanner").classList.remove("show");
+  document.getElementById("saveBtn").style.display="block";
+  document.getElementById("saveBtn").textContent="💾 Save All Sales →";
+  document.getElementById("saveBtn").disabled=false;
+  document.getElementById("newBatchBtn").style.display="none";
+  buildRows();
+  updateTotals();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function loadHistory(){
+  if(!storeId)return;
+  const {data}=await sb.from("offline_sales")
+    .select("*")
+    .eq("store_id",storeId)
+    .order("created_at",{ascending:false});
+
+  if(!data||!data.length){
+    document.getElementById("historyCount").textContent="No batches yet";
+    return;
+  }
+
+  // Group by batch_id
+  const batches={};
+  data.forEach(s=>{
+    const bid=s.batch_id||s.sale_date;
+    if(!batches[bid])batches[bid]={date:s.sale_date,count:0,total:0,created_at:s.created_at};
+    batches[bid].count++;
+    batches[bid].total+=Number(s.total_price)||0;
+  });
+
+  const rows=Object.values(batches).slice(0,10);
+  document.getElementById("historyCount").textContent=`${rows.length} batch${rows.length!==1?"es":""}`;
+  document.getElementById("historyBody").innerHTML=rows.map(b=>`
+    <tr>
+      <td style="font-weight:600">${new Date(b.date).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"})}</td>
+      <td>${b.count} product${b.count!==1?"s":""}</td>
+      <td style="font-weight:700;color:var(--green)">TZS ${b.total.toLocaleString()}</td>
+      <td style="font-size:0.75rem;color:var(--gray)">${new Date(b.created_at).toLocaleTimeString("en",{hour:"2-digit",minute:"2-digit"})}</td>
+    </tr>`).join("");
+}
+
+init();
+</script>
+</body>
+</html>
