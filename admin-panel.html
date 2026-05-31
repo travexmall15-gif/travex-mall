@@ -212,6 +212,13 @@ tr:hover td{background:var(--offwhite)}
       <div class="nav-item" onclick="showPage('featured',this)"><span class="ni">⭐</span>Top Rated / Featured</div>
       <div class="nav-item" onclick="showPage('vybe',this)"><span class="ni">✦</span>Vybe Posts</div>
 
+      <div class="nav-section">🎓 Uni Market</div>
+      <div class="nav-item" onclick="showPage('campus-overview',this)"><span class="ni">📊</span>Campus Overview</div>
+      <div class="nav-item" onclick="showPage('campus-applications',this)"><span class="ni">📋</span>Applications <span id="campusPendingCount" style="margin-left:auto;background:#7C3AED;color:#fff;font-size:0.6rem;padding:0.1rem 0.4rem;font-weight:700"></span></div>
+      <div class="nav-item" onclick="showPage('campus-stores',this)"><span class="ni">🏪</span>Campus Stores</div>
+      <div class="nav-item" onclick="showPage('campus-analytics',this)"><span class="ni">👁️</span>Campus Traffic</div>
+      <div class="nav-item" onclick="showPage('campus-revenue',this)"><span class="ni">💰</span>Campus Revenue</div>
+
       <div class="nav-section">Travex Move</div>
       <div class="nav-item" onclick="showPage('move-overview',this)"><span class="ni">🚚</span>Move Dashboard</div>
       <div class="nav-item" onclick="showPage('move-drivers',this)"><span class="ni">👤</span>Drivers</div>
@@ -627,6 +634,133 @@ tr:hover td{background:var(--offwhite)}
       </div>
     </div>
 
+
+    <!-- PAGE: CAMPUS OVERVIEW -->
+    <div class="page" id="page-campus-overview">
+      <div class="page-title">📊 Uni-Student Market Overview</div>
+      <div class="page-sub">Muhtasari wa Travex Campus — Applications, Stores, Traffic na Mapato</div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
+        <div class="stat-card"><div class="stat-num" id="c-stat-apps">—</div><div class="stat-lbl">Total Applications</div><div class="stat-card-after" style="background:#7C3AED"></div></div>
+        <div class="stat-card"><div class="stat-num" id="c-stat-pending">—</div><div class="stat-lbl">Pending Review</div><div class="stat-card-after" style="background:var(--orange)"></div></div>
+        <div class="stat-card"><div class="stat-num" id="c-stat-stores">—</div><div class="stat-lbl">Active Campus Stores</div><div class="stat-card-after" style="background:var(--green)"></div></div>
+        <div class="stat-card"><div class="stat-num" id="c-stat-revenue">—</div><div class="stat-lbl">Campus Revenue (TZS)</div><div class="stat-card-after" style="background:var(--gold)"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div class="card-wrap">
+          <div class="card-title-row"><div class="ct">📋 Recent Applications</div><button class="filter-btn" onclick="showPage('campus-applications',null)">View All →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Jina</th><th>Chuo</th><th>Duka</th><th>Status</th><th>Tarehe</th></tr></thead><tbody id="c-recent-apps">
+            <tr><td colspan="5" style="text-align:center;color:var(--gray);padding:1.5rem">Inapakia...</td></tr>
+          </tbody></table></div>
+        </div>
+        <div class="card-wrap">
+          <div class="card-title-row"><div class="ct">🏫 Stores per University</div></div>
+          <div id="c-uni-breakdown" style="padding:0.5rem">
+            <div style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: CAMPUS APPLICATIONS -->
+    <div class="page" id="page-campus-applications">
+      <div class="page-title">📋 Campus Applications</div>
+      <div class="page-sub">Maombi ya wanafunzi kutaka kufungua maduka — Pitia, Idhinisha au Kataa</div>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <button class="filter-btn active" id="ca-filter-all"    onclick="filterApps('all',this)">Yote</button>
+        <button class="filter-btn"       id="ca-filter-pending" onclick="filterApps('pending',this)">Pending ⏳</button>
+        <button class="filter-btn"       id="ca-filter-approved" onclick="filterApps('approved',this)">Approved ✅</button>
+        <button class="filter-btn"       id="ca-filter-rejected" onclick="filterApps('rejected',this)">Rejected ❌</button>
+        <input type="search" id="ca-search" placeholder="Tafuta jina, chuo, duka..." oninput="filterAppsSearch(this.value)"
+          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr>
+          <th>Jina</th><th>Email</th><th>Chuo</th><th>Duka</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
+        </tr></thead>
+        <tbody id="campus-apps-tbody">
+          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <!-- PAGE: CAMPUS STORES -->
+    <div class="page" id="page-campus-stores">
+      <div class="page-title">🏪 Campus Stores</div>
+      <div class="page-sub">Maduka yote yanayotumika kwenye Travex Uni-Student Market</div>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <select id="cs-uni-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
+          <option value="">Vyuo Vyote</option>
+          <option>UDSM</option><option>UDOM</option><option>ARU</option><option>TIA</option><option>NIT</option>
+        </select>
+        <select id="cs-status-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
+          <option value="">Status Yote</option>
+          <option value="true">Active</option>
+          <option value="false">Pending</option>
+        </select>
+        <input type="search" id="cs-search" placeholder="Tafuta duka..." oninput="filterCampusStores()"
+          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr>
+          <th>#</th><th>Duka</th><th>Seller</th><th>Chuo</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
+        </tr></thead>
+        <tbody id="campus-stores-tbody">
+          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <!-- PAGE: CAMPUS ANALYTICS -->
+    <div class="page" id="page-campus-analytics">
+      <div class="page-title">👁️ Campus Traffic</div>
+      <div class="page-sub">Watu wanaoingia kwenye maduka ya Uni-Student Market</div>
+      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
+        <button class="cpt active" onclick="loadCampusAnalytics('day',this)">Leo</button>
+        <button class="cpt" onclick="loadCampusAnalytics('week',this)">Wiki hii</button>
+        <button class="cpt" onclick="loadCampusAnalytics('month',this)">Mwezi huu</button>
+        <button class="cpt" onclick="loadCampusAnalytics('year',this)">Mwaka huu</button>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card" style="border-top:3px solid #7C3AED"><div class="kpi-val" id="ca-views">—</div><div class="kpi-lbl">Total Views</div></div>
+        <div class="kpi-card" style="border-top:3px solid var(--gold)"><div class="kpi-val" id="ca-stores-viewed">—</div><div class="kpi-lbl">Stores Viewed</div></div>
+        <div class="kpi-card" style="border-top:3px solid var(--green)"><div class="kpi-val" id="ca-top-uni">—</div><div class="kpi-lbl">Top University</div></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Traffic by University</div>
+        <div id="ca-uni-chart" style="display:grid;gap:0.75rem;margin-top:1rem"></div>
+      </div>
+    </div>
+
+    <!-- PAGE: CAMPUS REVENUE -->
+    <div class="page" id="page-campus-revenue">
+      <div class="page-title">💰 Campus Revenue</div>
+      <div class="page-sub">Mapato yanayotoka kwenye Travex Uni-Student Market</div>
+      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
+        <button class="cpt active" onclick="loadCampusRevenue('day',this)">Leo</button>
+        <button class="cpt" onclick="loadCampusRevenue('week',this)">Wiki hii</button>
+        <button class="cpt" onclick="loadCampusRevenue('month',this)">Mwezi huu</button>
+        <button class="cpt" onclick="loadCampusRevenue('year',this)">Mwaka huu</button>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card" style="border-top:3px solid var(--gold)"><div class="kpi-val" id="cr-total">—</div><div class="kpi-lbl">Total Revenue</div></div>
+        <div class="kpi-card" style="border-top:3px solid var(--green)"><div class="kpi-val" id="cr-stores">—</div><div class="kpi-lbl">Paying Stores</div></div>
+        <div class="kpi-card" style="border-top:3px solid #7C3AED"><div class="kpi-val" id="cr-avg">—</div><div class="kpi-lbl">Avg per Store</div></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Mapato ya Campus kwa Chuo</div>
+        <div id="cr-breakdown" style="display:grid;gap:0.75rem;margin-top:1rem"></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Historia ya Malipo</div>
+        <div class="table-wrap" style="margin-top:0.5rem">
+          <table><thead><tr><th>Seller</th><th>Chuo</th><th>Duka</th><th>Kiasi</th><th>Tarehe</th><th>Status</th></tr></thead>
+          <tbody id="cr-payments-tbody">
+            <tr><td colspan="6" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /main-content -->
 </div><!-- /admin-wrap -->
 
@@ -693,6 +827,7 @@ async function loadAll() {
   renderB2BStores();
   renderRecentPending();
   await loadMoveData();
+  await loadCampusData();
 }
 
 // ── STATS ──
@@ -1124,6 +1259,11 @@ function showPage(name, el) {
     if(name==="analytics")     loadAnalytics("day",    document.querySelector("#page-analytics .cpt"));
     if(name==="accounting")    loadAccounting("day",   document.querySelector("#page-accounting .cpt"));
     if(name==="move-overview") renderMoveOverview();
+    if(name==="campus-overview")       loadCampusOverview();
+    if(name==="campus-applications")   loadCampusApplications();
+    if(name==="campus-stores")         loadCampusStores();
+    if(name==="campus-analytics")      loadCampusAnalytics("day",document.querySelector("#page-campus-analytics .cpt"));
+    if(name==="campus-revenue")         loadCampusRevenue("day",document.querySelector("#page-campus-revenue .cpt"));
     if(name==="move-drivers")  renderDrivers();
     if(name==="move-deliveries") renderDeliveries();
     if(name==="move-revenue")  loadMoveRevenue("day",  document.querySelector("#page-move-revenue .cpt"));
@@ -1536,6 +1676,364 @@ async function buildYearlyChart(chartId, labelsId, type) {
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("adminPin").focus();
 });
+
+// ══════════════════════════════════════════════════
+// UNI-STUDENT MARKET — CAMPUS ADMIN FUNCTIONS
+// ══════════════════════════════════════════════════
+let allCampusApps   = [];
+let allCampusStores = [];
+
+async function loadCampusData() {
+  const [{ data: apps }, { data: stores }, { data: subs }] = await Promise.all([
+    sb.from("campus_applications").select("*").order("created_at", { ascending: false }),
+    sb.from("campus_stores").select("*").order("created_at", { ascending: false }),
+    sb.from("campus_subscriptions").select("*").order("created_at", { ascending: false })
+  ]);
+  allCampusApps   = apps   || [];
+  allCampusStores = stores || [];
+  allCampusSubs   = subs   || [];
+
+  // Update pending badge
+  const pending = allCampusApps.filter(a => a.status === "pending");
+  setText("campusPendingCount", pending.length || "");
+}
+
+let allCampusSubs = [];
+
+async function loadCampusOverview() {
+  await loadCampusData();
+
+  setText("c-stat-apps",    allCampusApps.length);
+  setText("c-stat-pending", allCampusApps.filter(a=>a.status==="pending").length);
+  setText("c-stat-stores",  allCampusStores.filter(s=>s.is_active).length);
+  const rev = allCampusSubs.filter(s=>s.status==="paid").reduce((sum,s)=>sum+Number(s.amount||15000),0);
+  setText("c-stat-revenue", "TZS " + rev.toLocaleString());
+
+  // Recent apps table
+  const tbody = document.getElementById("c-recent-apps");
+  const recent = allCampusApps.slice(0,5);
+  tbody.innerHTML = recent.length ? recent.map(a => `
+    <tr>
+      <td><strong>${a.full_name||"—"}</strong></td>
+      <td>${a.university_abbr||"—"}</td>
+      <td>${a.shop_name||a.business_category||"—"}</td>
+      <td><span class="badge badge-${a.status}">${a.status}</span></td>
+      <td>${new Date(a.created_at).toLocaleDateString("sw")}</td>
+    </tr>`).join("") : "<tr><td colspan='5' style='text-align:center;color:var(--gray);padding:1rem'>Hakuna maombi bado</td></tr>";
+
+  // Uni breakdown
+  const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
+  const breakdown = document.getElementById("c-uni-breakdown");
+  const maxStores = Math.max(...unis.map(u => allCampusStores.filter(s=>s.university_abbr===u).length), 1);
+  breakdown.innerHTML = unis.map(uni => {
+    const count = allCampusStores.filter(s=>s.university_abbr===uni).length;
+    const active = allCampusStores.filter(s=>s.university_abbr===uni && s.is_active).length;
+    const pct = Math.round((count/maxStores)*100);
+    return `
+      <div style="margin-bottom:1rem">
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.3rem">
+          <span style="font-weight:700;color:var(--navy)">${uni}</span>
+          <span style="color:var(--gray)">${count} maduka (${active} active)</span>
+        </div>
+        <div style="background:var(--lgray);height:8px">
+          <div style="background:#7C3AED;height:8px;width:${pct}%;transition:width 0.5s"></div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+async function loadCampusApplications() {
+  if (!allCampusApps.length) await loadCampusData();
+  renderAppsTable(allCampusApps);
+}
+
+function renderAppsTable(apps) {
+  const tbody = document.getElementById("campus-apps-tbody");
+  if (!apps.length) {
+    tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna maombi</td></tr>";
+    return;
+  }
+  tbody.innerHTML = apps.map(a => `
+    <tr>
+      <td><strong>${a.full_name||"—"}</strong></td>
+      <td style="font-size:0.78rem">${a.email||"—"}</td>
+      <td>${a.university_abbr||"—"}</td>
+      <td>${a.shop_name||"—"}</td>
+      <td>${a.business_category||"—"}</td>
+      <td><a href="https://wa.me/${(a.whatsapp||a.phone||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green)">${a.whatsapp||a.phone||"—"}</a></td>
+      <td><span class="badge badge-${a.status}">${a.status}</span></td>
+      <td style="font-size:0.75rem">${new Date(a.created_at).toLocaleDateString("sw")}</td>
+      <td>
+        ${a.status==="pending" ? `
+          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.3rem">Idhinisha</button>
+          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Kataa</button>
+        ` : `<span style="font-size:0.72rem;color:var(--gray)">${a.status}</span>`}
+        ${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank" style="display:block;font-size:0.7rem;color:#7C3AED;margin-top:0.2rem">Ona ID →</a>` : ""}
+      </td>
+    </tr>`).join("");
+}
+
+let _appsFilter = "all";
+function filterApps(status, btn) {
+  _appsFilter = status;
+  document.querySelectorAll("#page-campus-applications .filter-btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  const filtered = status==="all" ? allCampusApps : allCampusApps.filter(a=>a.status===status);
+  renderAppsTable(filtered);
+}
+function filterAppsSearch(q) {
+  const lq = q.toLowerCase();
+  const filtered = allCampusApps.filter(a =>
+    (a.full_name||"").toLowerCase().includes(lq) ||
+    (a.email||"").toLowerCase().includes(lq) ||
+    (a.university_abbr||"").toLowerCase().includes(lq) ||
+    (a.shop_name||"").toLowerCase().includes(lq)
+  );
+  renderAppsTable(_appsFilter==="all" ? filtered : filtered.filter(a=>a.status===_appsFilter));
+}
+
+async function approveCampusApp(id) {
+  const app = allCampusApps.find(a=>a.id===id);
+  if (!app) return;
+  if (!confirm(`Idhinisha maombi ya ${app.full_name} — ${app.shop_name}?`)) return;
+
+  // Update application status
+  const { error: e1 } = await sb.from("campus_applications").update({ status:"approved", approved_at: new Date().toISOString() }).eq("id", id);
+  if (e1) { showToast("Imeshindwa: " + e1.message, "error"); return; }
+
+  // Create campus_store record
+  const { error: e2 } = await sb.from("campus_stores").upsert({
+    user_id:          app.user_id || null,
+    store_name:       app.shop_name || app.full_name + "'s Shop",
+    category:         app.business_category,
+    description:      app.business_description || "",
+    whatsapp_number:  app.whatsapp || app.phone,
+    university:       app.university,
+    university_abbr:  app.university_abbr,
+    region:           app.region,
+    seller_name:      app.full_name,
+    seller_email:     app.email,
+    is_active:        false,   // active after payment
+    subscription_status: "pending",
+    created_at:       new Date().toISOString()
+  });
+
+  if (e2) { showToast("Application approved lakini store haikuundwa: " + e2.message, "error"); }
+  
+  showToast("✅ " + app.full_name + " ameidhinishwa! Tuma WhatsApp ili alipe TZS 15,000.");
+  
+  // Open WhatsApp with approval message
+  const msg = encodeURIComponent(
+    `🎉 *Hongera ${app.full_name}!*
+
+` +
+    `Application yako ya Travex Uni-Student Market *imeidhinishwa!*
+
+` +
+    `*Duka lako:* ${app.shop_name}
+*Chuo:* ${app.university_abbr}
+
+` +
+    `*Hatua inayofuata — Lipa Ada:*
+` +
+    `💳 CRDB BANK: *0152774556100*
+` +
+    `📱 M-Pesa: *+255 651 919 915*
+` +
+    `💵 Kiasi: *TZS 15,000*
+
+` +
+    `Baada ya kulipa, tuma picha ya risiti hapa na duka lako litafunguliwa *ndani ya masaa 2*.
+
+` +
+    `Karibu kwenye Travex Campus! 🎓
+— Travex Digital Group`
+  );
+  window.open(`https://wa.me/${(app.whatsapp||app.phone||"").replace(/\D/g,"")}?text=${msg}`, "_blank");
+  
+  await loadCampusData();
+  renderAppsTable(allCampusApps);
+}
+
+async function rejectCampusApp(id) {
+  const app = allCampusApps.find(a=>a.id===id);
+  if (!app) return;
+  if (!confirm(`Kataa maombi ya ${app.full_name}?`)) return;
+  const { error } = await sb.from("campus_applications").update({ status:"rejected" }).eq("id", id);
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
+  showToast("Maombi ya " + app.full_name + " yamekataliwa.");
+  await loadCampusData();
+  renderAppsTable(allCampusApps);
+}
+
+async function loadCampusStores() {
+  if (!allCampusStores.length) await loadCampusData();
+  renderCampusStoresTable(allCampusStores);
+}
+
+function renderCampusStoresTable(stores) {
+  const tbody = document.getElementById("campus-stores-tbody");
+  if (!stores.length) {
+    tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna maduka bado</td></tr>";
+    return;
+  }
+  tbody.innerHTML = stores.map((s,i) => `
+    <tr>
+      <td style="font-weight:700;color:#7C3AED">#${s.shop_number||"—"}</td>
+      <td><strong>${s.store_name||"—"}</strong></td>
+      <td style="font-size:0.78rem">${s.seller_name||"—"}</td>
+      <td>${s.university_abbr||"—"}</td>
+      <td>${s.category||"—"}</td>
+      <td><a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green)">${s.whatsapp_number||"—"}</a></td>
+      <td><span class="badge badge-${s.is_active?"approved":"pending"}">${s.is_active?"Active":"Pending"}</span></td>
+      <td style="font-size:0.75rem">${new Date(s.created_at).toLocaleDateString("sw")}</td>
+      <td>
+        ${!s.is_active ? `<button onclick="activateCampusStore('${s.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Activate</button>` : ""}
+        <button onclick="deactivateCampusStore('${s.id}','${s.is_active}')" style="background:${s.is_active?"var(--red)":"var(--gray)"};color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-left:0.2rem">${s.is_active?"Deactivate":"Remove"}</button>
+      </td>
+    </tr>`).join("");
+}
+
+function filterCampusStores() {
+  const uni    = document.getElementById("cs-uni-filter").value;
+  const status = document.getElementById("cs-status-filter").value;
+  const q      = document.getElementById("cs-search").value.toLowerCase();
+  let filtered = allCampusStores;
+  if (uni) filtered = filtered.filter(s=>s.university_abbr===uni);
+  if (status !== "") filtered = filtered.filter(s=>String(s.is_active)===status);
+  if (q) filtered = filtered.filter(s=>(s.store_name||"").toLowerCase().includes(q)||(s.seller_name||"").toLowerCase().includes(q));
+  renderCampusStoresTable(filtered);
+}
+
+async function activateCampusStore(id) {
+  const store = allCampusStores.find(s=>s.id===id);
+  if (!store || !confirm(`Activate duka la "${store.store_name}"?`)) return;
+  // Assign shop number if not set
+  const shopNumber = allCampusStores.filter(s=>s.university_abbr===store.university_abbr && s.shop_number).length + 1;
+  const { error } = await sb.from("campus_stores").update({
+    is_active: true,
+    subscription_status: "approved",
+    shop_number: shopNumber,
+    subscription_start: new Date().toISOString(),
+    subscription_expires: new Date(Date.now() + 30*24*60*60*1000).toISOString()
+  }).eq("id", id);
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
+  showToast("✅ Duka la " + store.store_name + " limewashwa! Shop #" + shopNumber);
+  await loadCampusData();
+  renderCampusStoresTable(allCampusStores);
+}
+
+async function deactivateCampusStore(id, isActive) {
+  const store = allCampusStores.find(s=>s.id===id);
+  if (!store || !confirm(`${isActive==="true"?"Deactivate":"Futa"} duka la "${store.store_name}"?`)) return;
+  const { error } = await sb.from("campus_stores").update({ is_active: false, subscription_status:"pending" }).eq("id", id);
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
+  showToast("Duka limezimwa.");
+  await loadCampusData();
+  renderCampusStoresTable(allCampusStores);
+}
+
+async function loadCampusAnalytics(period, btn) {
+  document.querySelectorAll("#page-campus-analytics .cpt").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  
+  const now = new Date();
+  let start;
+  if (period==="day")   start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  else if(period==="week") { start=new Date(now); start.setDate(now.getDate()-7); }
+  else if(period==="month") start=new Date(now.getFullYear(),now.getMonth(),1);
+  else start=new Date(now.getFullYear(),0,1);
+
+  const { data:views } = await sb.from("campus_store_views").select("*,campus_stores(store_name,university_abbr)")
+    .gte("created_at", start.toISOString());
+  
+  const vArr = views || [];
+  setText("ca-views", vArr.length.toLocaleString());
+  const uniqueStores = new Set(vArr.map(v=>v.store_id)).size;
+  setText("ca-stores-viewed", uniqueStores);
+  
+  // By university
+  const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
+  const byUni = {};
+  unis.forEach(u => byUni[u] = 0);
+  vArr.forEach(v => { const u = v.campus_stores?.university_abbr; if(u && byUni[u]!==undefined) byUni[u]++; });
+  const topUni = Object.entries(byUni).sort((a,b)=>b[1]-a[1])[0];
+  setText("ca-top-uni", topUni ? topUni[0] + " (" + topUni[1] + ")" : "—");
+  
+  const maxViews = Math.max(...Object.values(byUni), 1);
+  const chart = document.getElementById("ca-uni-chart");
+  chart.innerHTML = unis.map(uni => {
+    const count = byUni[uni] || 0;
+    const pct = Math.round((count/maxViews)*100);
+    return `<div style="display:flex;align-items:center;gap:1rem">
+      <span style="width:50px;font-weight:700;font-size:0.82rem;color:var(--navy)">${uni}</span>
+      <div style="flex:1;background:var(--lgray);height:24px;position:relative">
+        <div style="background:#7C3AED;height:24px;width:${pct}%;transition:width 0.5s;display:flex;align-items:center;padding:0 0.5rem">
+          ${count>0?'<span style="font-size:0.7rem;font-weight:700;color:#fff">'+count+'</span>':''}
+        </div>
+      </div>
+      <span style="font-size:0.78rem;color:var(--gray);width:60px;text-align:right">${count} views</span>
+    </div>`;
+  }).join("");
+}
+
+async function loadCampusRevenue(period, btn) {
+  document.querySelectorAll("#page-campus-revenue .cpt").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  
+  if (!allCampusSubs.length) await loadCampusData();
+
+  const now = new Date();
+  let start;
+  if (period==="day")   start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  else if(period==="week") { start=new Date(now); start.setDate(now.getDate()-7); }
+  else if(period==="month") start=new Date(now.getFullYear(),now.getMonth(),1);
+  else start=new Date(now.getFullYear(),0,1);
+
+  // Use campus_stores subscription_start as proxy if no campus_subscriptions
+  const paidStores = allCampusStores.filter(s => {
+    if (!s.is_active || !s.subscription_start) return false;
+    return new Date(s.subscription_start) >= start;
+  });
+  
+  const total = paidStores.length * 15000;
+  setText("cr-total", "TZS " + total.toLocaleString());
+  setText("cr-stores", paidStores.length);
+  setText("cr-avg", paidStores.length ? "TZS 15,000" : "—");
+  
+  // By university
+  const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
+  const breakdown = document.getElementById("cr-breakdown");
+  breakdown.innerHTML = unis.map(uni => {
+    const count = paidStores.filter(s=>s.university_abbr===uni).length;
+    const rev   = count * 15000;
+    return `<div style="display:flex;align-items:center;gap:1rem;padding:0.5rem 0;border-bottom:1px solid var(--lgray)">
+      <span style="width:60px;font-weight:700;font-size:0.85rem;color:#7C3AED">${uni}</span>
+      <span style="font-size:0.82rem;color:var(--gray)">${count} maduka</span>
+      <span style="margin-left:auto;font-weight:700;color:var(--navy)">TZS ${rev.toLocaleString()}</span>
+    </div>`;
+  }).join("");
+
+  // Payments table
+  const tbody = document.getElementById("cr-payments-tbody");
+  tbody.innerHTML = paidStores.length ? paidStores.map(s=>`
+    <tr>
+      <td><strong>${s.seller_name||"—"}</strong></td>
+      <td>${s.university_abbr||"—"}</td>
+      <td>${s.store_name||"—"}</td>
+      <td style="font-weight:700;color:var(--green)">TZS 15,000</td>
+      <td style="font-size:0.75rem">${s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("sw") : "—"}</td>
+      <td><span class="badge badge-approved">Paid</span></td>
+    </tr>`).join("") : "<tr><td colspan='6' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna malipo katika kipindi hiki</td></tr>";
+}
+
+// Add .badge styles if not present
+if (!document.querySelector("style#campus-styles")) {
+  const s = document.createElement("style");
+  s.id = "campus-styles";
+  s.textContent = `.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}.badge-pending{background:#FEF3C7;color:#92400E}.badge-approved{background:#D1FAE5;color:#065F46}.badge-rejected{background:#FEE2E2;color:#B91C1C}`;
+  document.head.appendChild(s);
+}
 </script>
 </body>
 </html>
