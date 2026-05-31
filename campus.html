@@ -166,6 +166,11 @@ footer{background:#060D1F;padding:3rem 5% 2rem}
 body{visibility:visible}
 
 </style>
+  <link rel="manifest" href="/campus-manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Travex Campus">
+  <meta name="theme-color" content="#0D1B3E">
 </head>
 <body>
 
@@ -195,6 +200,38 @@ body{visibility:visible}
       <a href="campus-apply.html" class="btn-gold">Apply for Your Shop →</a>
       <a href="#universities" class="btn-outline">Browse Universities</a>
     </div>
+
+    <!-- CAMPUS APP DOWNLOAD -->
+    <div id="campus-app-row" style="margin-bottom:2.5rem">
+      <div style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.65rem">📱 Pakua Travex Campus App:</div>
+      <div style="display:flex;gap:0.65rem;flex-wrap:wrap;align-items:center">
+        <!-- Android -->
+        <button id="campusInstallBtn" onclick="triggerCampusInstall()" style="display:none;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(201,168,76,0.35);color:#fff;padding:0.55rem 1.15rem;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;transition:all 0.2s"
+          onmouseover="this.style.borderColor='#C9A84C';this.style.background='rgba(201,168,76,0.12)'"
+          onmouseout="this.style.borderColor='rgba(201,168,76,0.35)';this.style.background='rgba(255,255,255,0.08)'">
+          <span style="font-size:1.1rem">🤖</span> Android — Install
+        </button>
+        <!-- iOS -->
+        <button onclick="toggleCampusIOSGuide()" style="display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(201,168,76,0.35);color:#fff;padding:0.55rem 1.15rem;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;transition:all 0.2s"
+          onmouseover="this.style.borderColor='#C9A84C';this.style.background='rgba(201,168,76,0.12)'"
+          onmouseout="this.style.borderColor='rgba(201,168,76,0.35)';this.style.background='rgba(255,255,255,0.08)'">
+          <span style="font-size:1.1rem"> </span> iPhone / iOS
+        </button>
+        <span style="font-size:0.68rem;color:rgba(255,255,255,0.25);font-style:italic">Uni Market tu 🎓</span>
+      </div>
+      <!-- iOS Guide -->
+      <div id="campus-ios-guide" style="display:none;margin-top:0.75rem;background:rgba(13,27,62,0.6);border:1px solid rgba(201,168,76,0.2);padding:1rem 1.2rem;max-width:380px">
+        <div style="font-size:0.75rem;font-weight:700;color:#C9A84C;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em"> Jinsi ya Kuinstall kwenye iPhone:</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);line-height:2.1">
+          <div>1️⃣ Fungua <strong style="color:#fff">Safari</strong> (si Chrome)</div>
+          <div>2️⃣ Bonyeza kitufe cha <strong style="color:#fff">Share ⬆️</strong> chini ya skrini</div>
+          <div>3️⃣ Chagua <strong style="color:#fff">"Add to Home Screen"</strong></div>
+          <div>4️⃣ Bonyeza <strong style="color:#fff">"Add"</strong> — Campus App iko! 🎓</div>
+        </div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:0.6rem">URL: <span style="color:rgba(201,168,76,0.6)">travex-mall.vercel.app/campus.html</span></div>
+      </div>
+    </div>
+
     <div class="hero-stats">
       <div><div class="stat-val">60</div><div class="stat-lbl">Nafasi kwa Kila Chuo</div></div>
       <div><div class="stat-val">5</div><div class="stat-lbl">Universities</div></div>
@@ -470,6 +507,39 @@ const revObs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")});
 },{threshold:0.08});
 document.querySelectorAll(".reveal").forEach(el=>revObs.observe(el));
+
+// ── CAMPUS PWA INSTALL ─────────────────────────────────────────
+let campusDeferredPrompt;
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  campusDeferredPrompt = e;
+  const btn = document.getElementById("campusInstallBtn");
+  if (btn) btn.style.display = "flex";
+});
+
+function triggerCampusInstall() {
+  if (!campusDeferredPrompt) return;
+  campusDeferredPrompt.prompt();
+  campusDeferredPrompt.userChoice.then(r => {
+    if (r.outcome === "accepted") {
+      const btn = document.getElementById("campusInstallBtn");
+      if (btn) btn.style.display = "none";
+    }
+    campusDeferredPrompt = null;
+  });
+}
+
+function toggleCampusIOSGuide() {
+  const g = document.getElementById("campus-ios-guide");
+  if (g) g.style.display = g.style.display === "none" ? "block" : "none";
+}
+
+// Register campus service worker
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw-campus.js").catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
