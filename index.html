@@ -336,6 +336,38 @@ footer{background:#060D1F;padding:4rem 5% 2rem;border-top:1px solid rgba(255,255
       <a href="seller-login.html" class="btn-hero-primary">Login to Your Shop →</a>
       <a href="store-landing.html" class="btn-hero-ghost">Open New Store</a>
     </div>
+
+    <!-- APP DOWNLOAD ROW -->
+    <div id="app-download-row" style="margin-bottom:2rem">
+      <div style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">📱 Pakua App — Pia inapatikana kwenye:</div>
+      <div style="display:flex;gap:0.65rem;flex-wrap:wrap;align-items:center">
+        <!-- Android -->
+        <button id="mallInstallBtn" onclick="triggerMallInstall()" style="display:none;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);color:#fff;padding:0.55rem 1.1rem;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:700;transition:all 0.2s"
+          onmouseover="this.style.borderColor='#C9A84C';this.style.background='rgba(201,168,76,0.12)'"
+          onmouseout="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.08)'">
+          <span style="font-size:1.1rem">🤖</span> Android — Install App
+        </button>
+        <!-- iOS -->
+        <button onclick="toggleIOSGuide('mall')" style="display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);color:#fff;padding:0.55rem 1.1rem;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:700;transition:all 0.2s"
+          onmouseover="this.style.borderColor='#C9A84C';this.style.background='rgba(201,168,76,0.12)'"
+          onmouseout="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.08)'">
+          <span style="font-size:1.1rem"> </span> iPhone / iOS
+        </button>
+        <span style="font-size:0.68rem;color:rgba(255,255,255,0.25);font-style:italic">B2C · B2B · Social Vybe</span>
+      </div>
+      <!-- iOS Guide for Mall -->
+      <div id="ios-guide-mall" style="display:none;margin-top:0.75rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:1rem 1.2rem;max-width:380px">
+        <div style="font-size:0.75rem;font-weight:700;color:#C9A84C;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em"> Jinsi ya Kuinstall kwenye iPhone:</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.65);line-height:2">
+          <div>1️⃣ Fungua <strong style="color:#fff">Safari</strong> (si Chrome/Firefox)</div>
+          <div>2️⃣ Bonyeza kitufe cha <strong style="color:#fff">Share</strong> (⬆️) chini</div>
+          <div>3️⃣ Chagua <strong style="color:#fff">"Add to Home Screen"</strong></div>
+          <div>4️⃣ Bonyeza <strong style="color:#fff">"Add"</strong> — App iko tayari! 🎉</div>
+        </div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:0.6rem">URL: <span style="color:rgba(201,168,76,0.7)">travex-mall.vercel.app</span></div>
+      </div>
+    </div>
+
     <div class="hero-stats">
       <div><div class="hero-stat-val" data-count="3">0M+</div><div class="hero-stat-lbl">Tanzania SMEs</div></div>
       <div><div class="hero-stat-val" data-count="75">$0B</div><div class="hero-stat-lbl">Africa Market</div></div>
@@ -898,6 +930,9 @@ if ("serviceWorker" in navigator) {
 let deferredPrompt;
 window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault(); deferredPrompt = e;
+  // Show the inline install button in hero
+  const inlineBtn = document.getElementById("mallInstallBtn");
+  if (inlineBtn) inlineBtn.style.display = "flex";
   const b = document.getElementById("installBanner");
   if (b && !localStorage.getItem("installDismissed")) b.style.display = "flex";
 });
@@ -907,6 +942,24 @@ function installApp() {
   deferredPrompt.userChoice.then(r => {
     if (r.outcome==="accepted") document.getElementById("installBanner").style.display="none";
     deferredPrompt = null;
+
+function triggerMallInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r => {
+    if (r.outcome==="accepted") {
+      document.getElementById("mallInstallBtn").style.display="none";
+      document.getElementById("installBanner").style.display="none";
+    }
+    deferredPrompt = null;
+  });
+}
+
+function toggleIOSGuide(type) {
+  const guide = document.getElementById("ios-guide-" + type);
+  if (!guide) return;
+  guide.style.display = guide.style.display === "none" ? "block" : "none";
+}
   });
 }
 function dismissInstall() {
