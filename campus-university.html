@@ -304,7 +304,7 @@ function createParticles() {
 // Load shops
 async function loadShops() {
   const {data} = await sb.from("campus_stores").select("*")
-    .eq("university", uniKey).eq("status","approved")
+    .eq("university_abbr", uniKey).eq("is_active", true)
     .order("created_at",{ascending:false});
   allShops = data || [];
   document.getElementById("statShops").textContent = allShops.length;
@@ -327,7 +327,7 @@ function renderShops(shops) {
   grid.innerHTML = shops.map((s,i) => {
     const initials = s.store_name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
     const wa = s.whatsapp_number || "";
-    return `<a href="store.html?store=${s.slug}" class="shop-card reveal" style="animation-delay:${i*0.05}s">
+    return `<a href="store.html?store=${s.id}" class="shop-card reveal" style="animation-delay:${i*0.05}s">
       <div class="shop-banner">
         ${s.banner?`<img src="${s.banner}" alt="${s.store_name}" loading="lazy">`:""}
         <span class="shop-cat-badge">${s.category||"General"}</span>
