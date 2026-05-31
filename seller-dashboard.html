@@ -8,28 +8,31 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
-html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden}
+:root{
+  --br:8px;
+  --br-lg:12px;
+  --br-pill:40px;--navy:#0B3D2E;--blue:#145A43;--gold:#D7C7A1;--gold2:#E8D9B5;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden}
 
 /* ── TOP NAVBAR ── */
 /* THEME VARIABLES */
-:root{--theme-color:#0D1B3E;--theme-text:#ffffff}
-.topnav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--theme-color)!important;background:var(--navy);height:60px;display:flex;align-items:center;padding:0 1.5rem;gap:1rem;border-bottom:1px solid rgba(201,168,76,0.15)}
+:root{--theme-color:#0B3D2E;--theme-text:#ffffff}
+.topnav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--theme-color)!important;background:var(--navy);height:60px;display:flex;align-items:center;padding:0 1.5rem;gap:1rem;border-bottom:1px solid rgba(215,199,161,0.15)}
 .topnav-logo{font-size:1rem;font-weight:800;color:var(--white);text-decoration:none;flex-shrink:0}
 .topnav-logo span{color:var(--gold)}
 .topnav-divider{width:1px;height:28px;background:rgba(255,255,255,0.1);flex-shrink:0}
 .topnav-tabs{display:flex;gap:0;flex:1;overflow-x:auto}
-.topnav-tab{display:flex;align-items:center;gap:0.4rem;padding:0 1.1rem;height:60px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"Inter",sans-serif}
+.topnav-tab{display:flex;align-items:center;gap:0.4rem;padding:0 1.1rem;height:60px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"DM Sans",sans-serif}
 .topnav-tab:hover{color:var(--white);background:rgba(255,255,255,0.05)}
 .topnav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 .topnav-right{display:flex;align-items:center;gap:0.75rem;flex-shrink:0}
 .topnav-store-name{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.6)}
 .topnav-avatar{width:32px;height:32px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;border-radius:50%}
-.topnav-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.topnav-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .topnav-btn:hover{background:var(--red);border-color:var(--red)}
 
 /* Store selector for premium multi-store */
-.store-selector{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;outline:none}
+.store-selector{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;outline:none}
 .store-selector option{background:var(--navy);color:var(--white)}
 
 /* ── MAIN LAYOUT ── */
@@ -59,7 +62,7 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 .card{background:var(--white);border:1px solid var(--lgray)}
 .card-header{padding:1rem 1.2rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
 .card-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
-.card-btn{background:var(--navy);color:var(--white);padding:0.35rem 0.85rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.card-btn{background:var(--navy);color:var(--white);padding:0.35rem 0.85rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .card-btn:hover{background:var(--gold);color:var(--navy)}
 .card-body{padding:1.2rem}
 
@@ -76,7 +79,7 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 
 /* ── ACCOUNTING ── */
 .acc-period-tabs{display:flex;gap:0;border:1px solid var(--lgray);width:fit-content;margin-bottom:1.2rem}
-.acc-tab{padding:0.5rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:var(--white);font-family:"Inter",sans-serif;transition:all 0.2s}
+.acc-tab{padding:0.5rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:var(--white);font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .acc-tab.active{background:var(--navy);color:var(--gold)}
 .acc-tab:hover:not(.active){background:var(--offwhite);color:var(--navy)}
 .acc-panel{display:none}
@@ -107,7 +110,7 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 
 /* ── AI CHAT ── */
 .ai-tabs-row{display:flex;gap:0;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
-.ai-tab{padding:0.7rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:transparent;font-family:"Inter",sans-serif;border-bottom:2px solid transparent;transition:all 0.2s}
+.ai-tab{padding:0.7rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:transparent;font-family:"DM Sans",sans-serif;border-bottom:2px solid transparent;transition:all 0.2s}
 .ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white)}
 .ai-panel{display:none}
 .ai-panel.active{display:flex;flex-direction:column;height:420px}
@@ -120,18 +123,18 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 .ai-msg.bot .ai-bubble{background:var(--offwhite);border:1px solid var(--lgray)}
 .ai-msg.user .ai-bubble{background:var(--navy);color:var(--white)}
 .ai-sugs{padding:0.6rem 1rem;display:flex;gap:0.4rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
-.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.28rem 0.65rem;font-size:0.68rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.28rem 0.65rem;font-size:0.68rem;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .ai-sug:hover{border-color:var(--navy);color:var(--navy)}
 .ai-input-row{padding:0.75rem 1rem;border-top:1px solid var(--lgray);display:flex;gap:0.6rem}
-.ai-input{flex:1;padding:0.6rem 0.85rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.82rem;outline:none}
+.ai-input{flex:1;padding:0.6rem 0.85rem;border:1.5px solid var(--lgray);font-family:"DM Sans",sans-serif;font-size:0.82rem;outline:none}
 .ai-input:focus{border-color:var(--navy)}
-.ai-send{background:var(--gold);color:var(--navy);padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.ai-send{background:var(--gold);color:var(--navy);padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;border:none;cursor:pointer;font-family:"DM Sans",sans-serif}
 
 /* ── STORE FORM ── */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .form-group{margin-bottom:1rem}
 .form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
-.form-input,.form-select,.form-textarea{width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input,.form-select,.form-textarea{width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);font-family:"DM Sans",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--navy)}
 .form-textarea{resize:vertical;min-height:80px}
 .upload-zone{border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
@@ -150,7 +153,7 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 .product-price{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
 .product-stock{font-size:0.7rem;color:var(--green);font-weight:600}
 .product-actions{display:flex;gap:0.4rem;margin-top:0.6rem}
-.act-btn{flex:1;padding:0.4rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.act-btn{flex:1;padding:0.4rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .act-edit{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)}
 .act-edit:hover{background:var(--navy);color:var(--white)}
 .act-del{background:var(--offwhite);color:var(--red);border:1px solid var(--lgray)}
@@ -165,9 +168,9 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 .modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray)}
 .modal-body{padding:1.5rem}
 .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end}
-.btn-save{background:var(--navy);color:var(--white);padding:0.7rem 1.8rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-save{background:var(--navy);color:var(--white);padding:0.7rem 1.8rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:"DM Sans",sans-serif}
 .btn-save:hover{background:var(--blue)}
-.btn-cancel{background:var(--white);color:var(--gray);padding:0.7rem 1.2rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+.btn-cancel{background:var(--white);color:var(--gray);padding:0.7rem 1.2rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"DM Sans",sans-serif}
 
 /* ── ALERTS ── */
 .alert{padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none}
@@ -254,11 +257,11 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 
   <div class="topnav-right">
     <!-- Subscription status -->
-    <div id="subStatusBadge" style="display:none;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);cursor:pointer" onclick="showPage('subscription',document.querySelector('.topnav-tab'))">
+    <div id="subStatusBadge" style="display:none;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:rgba(215,199,161,0.1);border:1px solid rgba(215,199,161,0.3);cursor:pointer" onclick="showPage('subscription',document.querySelector('.topnav-tab'))">
       <span style="font-size:0.6rem;font-weight:700;color:var(--gold)" id="subStatusText">Active</span>
     </div>
     <!-- Post to Vybe quick button -->
-    <button onclick="quickPostVybe()" style="background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border:none;padding:0.35rem 1rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;flex-shrink:0" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+    <button onclick="quickPostVybe()" style="background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border:none;padding:0.35rem 1rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;flex-shrink:0" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
       ✦ Post to Vybe
     </button>
     <div class="topnav-store-name" id="navStoreName">Loading...</div>
@@ -549,7 +552,7 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 <div class="page" id="page-vybe">
   <div class="page-header">
     <div>
-      <div class="page-title" style="background:linear-gradient(135deg,#7C3AED,#F472B6,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.2rem">✦ Travex Social Vybe</div>
+      <div class="page-title" style="background:linear-gradient(135deg,#7C3AED,#F472B6,#D7C7A1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.2rem">✦ Travex Social Vybe</div>
       <div class="page-sub" id="vybeSubTitle">Be Seen. Be Sold. Be Vybe.</div>
     </div>
     <div style="display:flex;gap:0.75rem">
@@ -559,7 +562,7 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
   </div>
 
   <!-- WEEKLY LIMITS -->
-  <div class="card" style="margin-bottom:1.5rem;border-top:3px solid transparent;border-image:linear-gradient(135deg,#7C3AED,#F472B6,#C9A84C) 1">
+  <div class="card" style="margin-bottom:1.5rem;border-top:3px solid transparent;border-image:linear-gradient(135deg,#7C3AED,#F472B6,#D7C7A1) 1">
     <div class="card-header"><div class="card-title">📊 Your Weekly Post Limits</div></div>
     <div class="card-body">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem">
@@ -606,8 +609,8 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
         Click "Generate Caption" — AI will write a caption for your post automatically.
       </div>
       <div style="display:flex;gap:0.5rem;margin-top:0.5rem">
-        <button onclick="copyCaptionToPost()" style="background:var(--navy);color:var(--white);border:none;padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Use in Post</button>
-        <button onclick="generateCaption()" style="background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Regenerate</button>
+        <button onclick="copyCaptionToPost()" style="background:var(--navy);color:var(--white);border:none;padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Use in Post</button>
+        <button onclick="generateCaption()" style="background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">Regenerate</button>
       </div>
     </div>
   </div>
@@ -633,8 +636,8 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
       <div class="form-group">
         <label class="form-label">Media Type</label>
         <div style="display:flex;gap:0.5rem">
-          <button id="typePhoto" onclick="setMediaType('image',this)" style="flex:1;padding:0.6rem;background:var(--navy);color:var(--gold);border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700">📸 Photo</button>
-          <button id="typeVideo" onclick="setMediaType('video',this)" style="flex:1;padding:0.6rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600" id="videoBtnModal">🎥 Video</button>
+          <button id="typePhoto" onclick="setMediaType('image',this)" style="flex:1;padding:0.6rem;background:var(--navy);color:var(--gold);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700">📸 Photo</button>
+          <button id="typeVideo" onclick="setMediaType('video',this)" style="flex:1;padding:0.6rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600" id="videoBtnModal">🎥 Video</button>
         </div>
       </div>
       <div class="form-group">
@@ -719,27 +722,27 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
     <div class="modal-body">
       <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
         <span style="font-size:0.82rem;color:var(--navy);font-weight:600" id="shareStoreUrl">Loading...</span>
-        <button onclick="copyStoreLink()" style="background:var(--navy);color:var(--white);border:none;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Copy</button>
+        <button onclick="copyStoreLink()" style="background:var(--navy);color:var(--white);border:none;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">Copy</button>
       </div>
       <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:1rem">Share on:</div>
       <div style="display:flex;flex-direction:column;gap:0.6rem">
-        <a id="shareWaBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#25D366;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:all 0.2s;font-family:'Inter',sans-serif">
+        <a id="shareWaBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#25D366;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:all 0.2s;font-family:'DM Sans',sans-serif">
           <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="rgba(255,255,255,0.2)"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.13-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.57c-.21.59-1.22 1.13-1.69 1.17-.44.04-2.87-.6-2.87-.6-2.42-.96-3.97-3.44-4.09-3.6-.12-.16-.97-1.29-.97-2.46s.61-1.74.83-1.98c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42l.77 1.86c.06.12.1.27.02.43l-.36.42c-.12.12-.24.25-.1.49.14.24.62.99 1.33 1.6.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06l.76-.94c.16-.24.32-.2.54-.12l1.64.78c.24.12.4.18.46.28.06.1.06.59-.15 1.18z" fill="white"/></svg>
           Share on WhatsApp
         </a>
-        <a id="shareIgBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:linear-gradient(135deg,#F77737,#E1306C,#833AB4);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif">
+        <a id="shareIgBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:linear-gradient(135deg,#F77737,#E1306C,#833AB4);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'DM Sans',sans-serif">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="1" y="1" width="22" height="22" rx="6" fill="rgba(255,255,255,0.2)"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg>
           Share on Instagram (Copy link)
         </a>
-        <a id="shareTtBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#010101;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif">
+        <a id="shareTtBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#010101;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'DM Sans',sans-serif">
           <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.1)"/><path d="M16.6 5.82A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83a5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21a5.674 5.674 0 0 0 5.68-5.68V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg>
           Share on TikTok (Copy link)
         </a>
-        <a id="shareFbBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#1877F2;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif">
+        <a id="shareFbBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#1877F2;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'DM Sans',sans-serif">
           <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.2)"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg>
           Share on Facebook
         </a>
-        <button onclick="navigator.share ? navigator.share({title:activeStore?.store_name,url:document.getElementById('shareStoreUrl').textContent}) : copyStoreLink()" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%">
+        <button onclick="navigator.share ? navigator.share({title:activeStore?.store_name,url:document.getElementById('shareStoreUrl').textContent}) : copyStoreLink()" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%">
           📤 More sharing options...
         </button>
       </div>
@@ -814,9 +817,9 @@ function applyTheme(color) {
 function buildQuickActions(themeColor) {
   const grid = document.getElementById("quickActionsGrid");
   if (!grid) return;
-  const r=parseInt((themeColor||'#0D1B3E').slice(1,3),16)||13;
-  const g=parseInt((themeColor||'#0D1B3E').slice(3,5),16)||27;
-  const b=parseInt((themeColor||'#0D1B3E').slice(5,7),16)||62;
+  const r=parseInt((themeColor||'#0B3D2E').slice(1,3),16)||13;
+  const g=parseInt((themeColor||'#0B3D2E').slice(3,5),16)||27;
+  const b=parseInt((themeColor||'#0B3D2E').slice(5,7),16)||62;
   const brightness=(r*299+g*587+b*114)/1000;
   const txt = brightness > 128 ? '#111827' : '#ffffff';
 
@@ -833,11 +836,11 @@ function buildQuickActions(themeColor) {
     <button onclick="${a.fn}" style="
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       gap:0.5rem;padding:1.25rem 0.75rem;
-      background:${themeColor||'#0D1B3E'};
+      background:${themeColor||'#0B3D2E'};
       color:${txt};
       border:1px solid rgba(255,255,255,0.1);
       cursor:pointer;
-      font-family:'Inter',sans-serif;
+      font-family:'DM Sans',sans-serif;
       transition:all 0.2s;
       text-align:center;
       min-height:90px;
@@ -881,7 +884,7 @@ function updateNavStore(store, products, orders) {
 
   // Apply theme
   if (store.theme_color) applyTheme(store.theme_color);
-  buildQuickActions(store.theme_color || '#0D1B3E');
+  buildQuickActions(store.theme_color || '#0B3D2E');
 }
 
 async function init() {
@@ -929,7 +932,7 @@ function showPendingGate(status) {
     body = `Risiti yako ya malipo imepokelewa na inafanyiwa verification na timu yetu. Utapata ujumbe wa email ndani ya masaa 2. Subiri kidogo...`;
     cta  = `<div style="display:flex;gap:0.75rem">
       <a href="https://wa.me/255651919915?text=Ninahitaji+msaada+na+duka+langu+${encodeURIComponent(storeName)}" target="_blank" style="flex:1;display:block;padding:0.85rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;text-align:center">💬 WhatsApp Support</a>
-      <button onclick="location.reload()" style="flex:0 0 100px;padding:0.85rem;background:var(--lgray);border:none;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer">🔄 Refresh</button>
+      <button onclick="location.reload()" style="flex:0 0 100px;padding:0.85rem;background:var(--lgray);border:none;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer">🔄 Refresh</button>
     </div>`;
   } else {
     icon = "⏳"; title = "Duka Lako Linasubiri Activation";
@@ -1498,7 +1501,7 @@ async function saveStore() {
       is_active: true,
       store_type: activeStore?.store_type || "b2c",
       badge: (activeStore?.store_type === "b2b") ? "gold" : "silver",
-      theme_color: activeStore?.theme_color || "#0D1B3E",
+      theme_color: activeStore?.theme_color || "#0B3D2E",
       theme_font: activeStore?.theme_font || "Playfair Display"
     }).eq("id", activeStore.id);
     if (error) { errEl.textContent = error.message; errEl.classList.add("show"); return; }
@@ -1693,7 +1696,7 @@ async function loadSubscriptionStatus() {
     };
     const tools = aiTools[plan] || aiTools.basic;
     aiGrid.innerHTML = tools.map(t =>
-      `<button onclick="showPage('ai');setTimeout(()=>switchAITab&&switchAITab('${t.id}',document.getElementById('ai-tab-${t.id}')),200)" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='inherit'">
+      `<button onclick="showPage('ai');setTimeout(()=>switchAITab&&switchAITab('${t.id}',document.getElementById('ai-tab-${t.id}')),200)" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='white'" onmouseout="this.style.background='var(--offwhite)';this.style.color='inherit'">
         <span style="font-size:1.5rem">${t.icon}</span>
         <span style="font-size:0.72rem;font-weight:700">${t.name}</span>
       </button>`
@@ -1863,7 +1866,7 @@ async function loadFeedPage() {
           <div style="font-size:0.75rem;color:var(--gray);margin-bottom:0.4rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.caption||"—"}</div>
           <div style="display:flex;justify-content:space-between;align-items:center">
             <span style="font-size:0.7rem;color:var(--red)">❤️ ${p.likes_count||0} likes</span>
-            <button onclick="deletePost('${p.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:0.75rem;font-family:'Inter',sans-serif">Delete</button>
+            <button onclick="deletePost('${p.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif">Delete</button>
           </div>
         </div>
       </div>`).join("")}
