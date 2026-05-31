@@ -8,15 +8,18 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;
-  --uni-bg1:#0D1B3E;--uni-bg2:#1B3A6B;--uni-accent:#C9A84C}
+:root{
+  --br:8px;
+  --br-lg:12px;
+  --br-pill:40px;--navy:#0B3D2E;--gold:#D7C7A1;--gold2:#E8D9B5;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;
+  --uni-bg1:#0B3D2E;--uni-bg2:#145A43;--uni-accent:#D7C7A1}
 html{scroll-behavior:smooth}
-body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden;visibility:hidden}
+body{font-family:"DM Sans",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden;visibility:hidden}
 body.loaded{visibility:visible}
 
 /* NAV */
 nav{background:var(--uni-bg1);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08)}
-.nav-logo{font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:800;color:var(--white)}
+.nav-logo{font-family:"Outfit","DM Sans",sans-serif;font-size:1.1rem;font-weight:800;color:var(--white)}
 .nav-logo span{color:var(--gold)}
 .nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.2s}
 .nav-back:hover{color:var(--gold)}
@@ -40,11 +43,11 @@ nav{background:var(--uni-bg1);padding:0 5%;height:64px;display:flex;align-items:
 .uni-hero-left{flex:1;min-width:300px}
 .uni-badge{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:0.3rem 0.9rem;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:1.2rem;animation:fadeInDown 0.7s ease both}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
-.uni-hero h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:0.4rem;animation:fadeInUp 0.8s ease 0.15s both}
+.uni-hero h1{font-family:"Outfit","DM Sans",sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:0.4rem;animation:fadeInUp 0.8s ease 0.15s both}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .uni-hero-swahili{font-size:0.9rem;color:rgba(255,255,255,0.45);margin-bottom:2rem;animation:fadeInUp 0.8s ease 0.25s both;font-style:italic}
 .uni-hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;animation:fadeInUp 0.8s ease 0.35s both}
-.uni-hstat-val{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:800;color:var(--uni-accent)}
+.uni-hstat-val{font-family:"Outfit","DM Sans",sans-serif;font-size:1.6rem;font-weight:800;color:var(--uni-accent)}
 .uni-hstat-lbl{font-size:0.65rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
 
 /* BIG LOGO RIGHT */
@@ -54,19 +57,19 @@ nav{background:var(--uni-bg1);padding:0 5%;height:64px;display:flex;align-items:
 .uni-big-circle svg{width:130px;height:130px}
 
 /* ABBR watermark */
-.uni-abbr-watermark{position:absolute;right:5%;top:50%;transform:translateY(-50%);font-family:"Playfair Display",serif;font-size:8rem;font-weight:900;color:rgba(255,255,255,0.04);letter-spacing:0.05em;user-select:none;z-index:2;pointer-events:none}
+.uni-abbr-watermark{position:absolute;right:5%;top:50%;transform:translateY(-50%);font-family:"Outfit","DM Sans",sans-serif;font-size:8rem;font-weight:900;color:rgba(255,255,255,0.04);letter-spacing:0.05em;user-select:none;z-index:2;pointer-events:none}
 
 /* FILTER BAR */
 .filter-section{background:var(--white);border-bottom:1px solid var(--lgray);padding:1.2rem 5%;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;position:sticky;top:64px;z-index:50}
 .filter-label{font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;flex-shrink:0}
-.filter-btn{padding:0.4rem 1rem;background:var(--offwhite);border:1.5px solid var(--lgray);color:var(--gray);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:"Inter",sans-serif}
+.filter-btn{padding:0.4rem 1rem;background:var(--offwhite);border:1.5px solid var(--lgray);color:var(--gray);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:"DM Sans",sans-serif}
 .filter-btn:hover{border-color:var(--navy);color:var(--navy)}
 .filter-btn.active{background:var(--uni-bg1);border-color:var(--uni-bg1);color:var(--gold)}
 
 /* MAIN */
 .main{padding:2.5rem 5%;max-width:1200px;margin:0 auto;width:100%}
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.75rem}
-.section-title{font-family:"Playfair Display",serif;font-size:1.2rem;font-weight:800;color:var(--navy)}
+.section-title{font-family:"Outfit","DM Sans",sans-serif;font-size:1.2rem;font-weight:800;color:var(--navy)}
 .section-count{font-size:0.82rem;color:var(--gray)}
 .stores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
 
@@ -106,7 +109,7 @@ nav{background:var(--uni-bg1);padding:0 5%;height:64px;display:flex;align-items:
 .apply-banner{background:linear-gradient(135deg,var(--uni-bg1),var(--uni-bg2));padding:3rem 5%;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-top:3rem;position:relative;overflow:hidden}
 .apply-banner::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:32px 32px}
 .apply-banner-content{position:relative;z-index:1}
-.apply-banner-title{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:800;color:var(--white);margin-bottom:0.4rem}
+.apply-banner-title{font-family:"Outfit","DM Sans",sans-serif;font-size:1.4rem;font-weight:800;color:var(--white);margin-bottom:0.4rem}
 .apply-banner-sub{font-size:0.875rem;color:rgba(255,255,255,0.55);line-height:1.6}
 .apply-banner-btn{background:var(--gold);color:var(--navy);padding:0.85rem 2rem;font-weight:700;font-size:0.9rem;text-decoration:none;white-space:nowrap;position:relative;z-index:1;flex-shrink:0}
 .apply-banner-btn:hover{background:var(--gold2)}
@@ -208,11 +211,11 @@ const UNI_DATA = {
   UDSM: {
     name:"University of Dar es Salaam",
     swahili:"Chuo Kikuu cha Dar es Salaam",
-    bg1:"#0D1B3E", bg2:"#1B3A6B", accent:"#C9A84C", ring:"#C9A84C",
+    bg1:"#0B3D2E", bg2:"#145A43", accent:"#D7C7A1", ring:"#D7C7A1",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="65" cy="65" r="65" fill="#1B3A6B"/>
-      <circle cx="65" cy="65" r="58" fill="none" stroke="#C9A84C" stroke-width="2"/>
-      <circle cx="65" cy="65" r="50" fill="#0D1B3E"/>
+      <circle cx="65" cy="65" r="65" fill="#145A43"/>
+      <circle cx="65" cy="65" r="58" fill="none" stroke="#D7C7A1" stroke-width="2"/>
+      <circle cx="65" cy="65" r="50" fill="#0B3D2E"/>
       <text x="65" y="76" font-family="Georgia,serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">UDSM</text>
     </svg>`
   },
