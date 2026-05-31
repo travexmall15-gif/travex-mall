@@ -6,18 +6,18 @@
 <title>Open Wholesale Store — Travex Mall</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-// Color picker
+// Color picker — live
 function pickColor(color, el) {
   document.getElementById("selectedColor").value = color;
   document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
-  el.style.outline = "2px solid #C9A84C";
+  el.style.outline = "3px solid #C9A84C";
+  updateLiveTheme();
 }
 function pickColorCustom(color) {
   document.getElementById("selectedColor").value = color;
   document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
+  updateLiveTheme();
 }
-
-// Font picker
 function pickFont(font, el) {
   document.getElementById("selectedFont").value = font;
   document.querySelectorAll(".font-opt").forEach(d => {
@@ -26,6 +26,19 @@ function pickFont(font, el) {
   });
   el.style.border = "2px solid var(--gold)";
   el.style.background = "#FFFBEB";
+  updateLiveTheme();
+}
+function updateLiveTheme() {
+  const color = document.getElementById("selectedColor")?.value || "#0D1B3E";
+  const font  = document.getElementById("selectedFont")?.value || "Playfair Display";
+  const prev  = document.getElementById("themePreviewCard");
+  if (!prev) return;
+  const namePrev = prev.querySelector(".tprev-name");
+  const heroBanner = prev.querySelector(".tprev-banner");
+  const badge = prev.querySelector(".tprev-badge");
+  if (namePrev) namePrev.style.fontFamily = font + ",'Inter',sans-serif";
+  if (heroBanner) heroBanner.style.background = `linear-gradient(135deg,${color},${color}cc)`;
+  if (badge) { badge.style.background = color; badge.style.color = "#fff"; }
 }
 </script>
 <style>
@@ -606,57 +619,57 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 <!-- STEP 5 — PAYMENT -->
 <div class="step-panel" id="step5">
-  <div class="step-title">Subscription Payment</div>
-  <div class="step-sub">Fanya malipo ya mpango uliochagua ili store lako liwashwe.</div>
+  <div class="step-title">Malipo ya Subscription</div>
+  <div class="step-sub">Kamilisha malipo ili duka lako la wholesale lifunguliwe ndani ya masaa 2.</div>
 
-  <div class="pay-page">
-    <div class="pay-amount-box">
-      <div class="pay-amount-label">Amount to Pay</div>
-      <div class="pay-amount-val" id="payAmountDisplay">TZS 50,000</div>
-      <div class="pay-amount-period">per month · Ghairi wakati wowote</div>
+  <div id="payPanel-instructions">
+    <div class="pay-page">
+      <div class="pay-amount-box">
+        <div class="pay-amount-label">Kiasi cha Kulipa</div>
+        <div class="pay-amount-val" id="payAmountDisplay">TZS 50,000</div>
+        <div class="pay-amount-period">kwa mwezi · Ghairi wakati wowote</div>
+      </div>
+      <div class="pay-steps">
+        <div class="pay-step"><div class="pay-num">1</div><div class="pay-text">Hamisha <strong id="payAmt2">TZS 50,000</strong> kwenda CRDB Bank:<div class="copy-row"><span class="copy-val">0152774556100</span><button class="copy-btn" onclick="copyText('0152774556100',this)">Copy</button></div></div></div>
+        <div class="pay-step"><div class="pay-num">2</div><div class="pay-text">Au lipa M-Pesa/Airtel:<div class="copy-row"><span class="copy-val">+255 651 919 915</span><button class="copy-btn" onclick="copyText('255651919915',this)">Copy</button></div></div></div>
+        <div class="pay-step"><div class="pay-num">3</div><div class="pay-text">Piga screenshot ya risiti yako</div></div>
+        <div class="pay-step"><div class="pay-num">4</div><div class="pay-text">Rudi hapa upaki risiti kupitia kitufe hapa chini</div></div>
+      </div>
+      <button onclick="showReceiptUpload()" class="close-btn" style="background:var(--gold);color:var(--navy);border:none">✅ Nimelipa — Pakia Risiti →</button>
     </div>
-
-    <div class="pay-steps">
-      <div class="pay-step">
-        <div class="pay-num">1</div>
-        <div class="pay-text">
-          Transfer <strong id="payAmt2">TZS 50,000</strong> to CRDB Bank:
-          <div class="copy-row">
-            <span class="copy-val">0152774556100</span>
-            <button class="copy-btn" onclick="copyText('0152774556100',this)">Copy</button>
-          </div>
-        </div>
-      </div>
-      <div class="pay-step">
-        <div class="pay-num">2</div>
-        <div class="pay-text">
-          Send payment screenshot to WhatsApp:
-          <div class="copy-row">
-            <span class="copy-val">+255 651 919 915</span>
-            <a href="https://wa.me/255651919915" target="_blank" class="copy-btn" style="text-decoration:none">Open WhatsApp</a>
-          </div>
-        </div>
-      </div>
-      <div class="pay-step">
-        <div class="pay-num">3</div>
-        <div class="pay-text">Our team will verify and <strong>kukufungua store ndani ya masaa 2</strong></div>
-      </div>
-      <div class="pay-step">
-        <div class="pay-num">4</div>
-        <div class="pay-text">We will contact you via <strong>your registered phone: <span id="confirmPhone">—</span></strong></div>
-      </div>
-    </div>
-
-    <a href="https://wa.me/255651919915" target="_blank" class="wa-btn">
-      💬 Send Payment Screenshot on WhatsApp
-    </a>
-    <button class="close-btn" onclick="finishAndThankYou()">
-      ✅ I Have Paid — Finish
-    </button>
   </div>
 
-  <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:1rem 1.2rem;font-size:0.82rem;color:#1E3A5F;line-height:1.7">
-    📞 <strong>Note:</strong> Our team will call or message you on phone number <strong id="confirmPhone2">—</strong> after payment is confirmed. Please ensure your phone is reachable.
+  <div id="payPanel-receipt" style="display:none">
+    <div class="pay-page">
+      <div style="text-align:center;margin-bottom:1.5rem"><div style="font-size:2.5rem;margin-bottom:0.5rem">📸</div><div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem">Pakia Screenshot ya Risiti</div></div>
+      <div id="receiptDropzone" style="border:2px dashed var(--lgray);padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;margin-bottom:1.2rem" onclick="document.getElementById('receiptFile').click()"
+        ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+        ondrop="handleReceiptDrop(event)">
+        <input type="file" id="receiptFile" accept="image/*,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%" onchange="previewReceipt(this)">
+        <div style="font-size:2rem;margin-bottom:0.5rem" id="receiptDropIcon">🖼️</div>
+        <div style="font-size:0.85rem;color:var(--gray)" id="receiptDropLabel"><strong style="color:var(--navy)">Bonyeza kupakia</strong> au buruta picha hapa<br><span style="font-size:0.72rem">JPG, PNG, PDF — Max 5MB</span></div>
+        <img id="receiptPreviewImg" style="display:none;max-width:100%;max-height:180px;margin-top:1rem" alt="Receipt">
+      </div>
+      <div id="receiptError" style="display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem"></div>
+      <div style="display:flex;gap:0.75rem">
+        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">← Rudi</button>
+        <button onclick="submitReceipt()" id="receiptSubmitBtn" style="flex:1;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer">Tuma Risiti & Maliza →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="payPanel-success" style="display:none">
+    <div class="pay-page" style="text-align:center">
+      <div style="width:64px;height:64px;background:#D1FAE5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem">✅</div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--green);margin-bottom:0.5rem">Risiti Imepokelewa!</div>
+      <div style="font-size:0.875rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem">Risiti yako inafanyiwa verification. Utapata email ya uthibitisho <strong>ndani ya masaa 2</strong>.</div>
+      <div style="background:#F0FDF4;border:1px solid #BBF7D0;padding:1.2rem;text-align:left;margin-bottom:1.5rem">
+        <div style="font-size:0.82rem;color:#065F46;line-height:2.1">📧 Angalia email yako kwa barua pepe ya uthibitisho<br>⏱️ Subiri masaa 2 — timu yetu itakagua risiti<br>🏪 Duka litafunguliwa na utajulishwa<br>🔑 Ingia Dashboard yako baada ya activation</div>
+      </div>
+      <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:1rem;font-size:0.8rem;color:#1E3A5F;text-align:left;margin-bottom:1.5rem">📞 Tutawasiliana nawe: <strong id="confirmPhoneFinal">—</strong></div>
+      <a href="https://wa.me/255651919915?text=Nimetuma+risiti+ya+malipo+kwenye+Travex+Mall+B2B!" target="_blank" style="display:block;width:100%;padding:0.9rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;margin-bottom:0.75rem">💬 Wasiliana Nasi WhatsApp</a>
+      <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">Nenda kwenye Login →</button>
+    </div>
   </div>
 </div>
 
@@ -947,6 +960,20 @@ function generateStoreForms() {
             </div>
             <input type="hidden" id="selectedFont" value="Playfair Display">
           </div>
+          <div style="margin-top:1rem">
+            <label class="form-label">Live Preview:</label>
+            <div id="themePreviewCard" style="border:1px solid var(--lgray);overflow:hidden;max-width:340px">
+              <div class="tprev-banner" style="height:60px;background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"></div>
+              <div style="padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem;margin-top:-18px;position:relative">
+                <div class="tprev-badge" style="width:36px;height:36px;background:#0D1B3E;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0" id="tprev-initials">TX</div>
+                <div>
+                  <div class="tprev-name" style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:#111827" id="tprev-storename">Store Name</div>
+                  <div class="tprev-cat" style="font-size:0.65rem;color:#6B7280">Category · Region</div>
+                </div>
+              </div>
+              <div style="padding:0 1rem 0.75rem;font-size:0.75rem;color:#6B7280" id="tprev-desc">Maelezo ya duka lako yataonekana hapa...</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -978,6 +1005,24 @@ function generateStoreForms() {
     </div>`;
   }
   document.getElementById("storeForms").innerHTML = html;
+  ["sName1","sCat1","sDesc1","sReg1"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", () => {
+      const nm = document.getElementById("sName1")?.value || "Store Name";
+      const ct = document.getElementById("sCat1")?.value || "Category";
+      const rg = document.getElementById("sReg1")?.value || "Region";
+      const ds = document.getElementById("sDesc1")?.value || "Maelezo ya duka lako...";
+      const initials = nm.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase() || "TX";
+      const nm_el = document.getElementById("tprev-storename");
+      const catLabel = document.querySelector(".tprev-cat");
+      const ds_el = document.getElementById("tprev-desc");
+      const in_el = document.getElementById("tprev-initials");
+      if (nm_el) nm_el.textContent = nm;
+      if (catLabel) catLabel.textContent = ct + (rg ? " · " + rg : "");
+      if (ds_el) ds_el.textContent = ds;
+      if (in_el) in_el.textContent = initials;
+    });
+  });
 }
 
 // ── BUILD PREVIEW ──
@@ -1373,6 +1418,64 @@ function switchStoreCardTab(num, btn) {
 
 // Auto select standard
 // Auto-selected: basic at TZS 75,000
+
+function showReceiptUpload() {
+  document.getElementById("payPanel-instructions").style.display = "none";
+  document.getElementById("payPanel-receipt").style.display = "block";
+}
+function handleReceiptDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer?.files[0];
+  if (!file) return;
+  const dt = new DataTransfer(); dt.items.add(file);
+  document.getElementById("receiptFile").files = dt.files;
+  previewReceipt(document.getElementById("receiptFile"));
+}
+function previewReceipt(input) {
+  const file = input.files[0]; if (!file) return;
+  document.getElementById("receiptDropLabel").innerHTML = `<strong style="color:var(--green)">✅ ${file.name}</strong>`;
+  document.getElementById("receiptDropIcon").textContent = "📄";
+  document.getElementById("receiptDropzone").style.borderColor = "var(--green)";
+  document.getElementById("receiptDropzone").style.background = "#F0FDF4";
+  if (file.type.startsWith("image/")) {
+    const r = new FileReader();
+    r.onload = e => { const img = document.getElementById("receiptPreviewImg"); img.src = e.target.result; img.style.display = "block"; };
+    r.readAsDataURL(file);
+  }
+}
+async function submitReceipt() {
+  const file = document.getElementById("receiptFile").files[0];
+  const errEl = document.getElementById("receiptError");
+  const btn = document.getElementById("receiptSubmitBtn");
+  if (!file) { errEl.textContent = "Tafadhali pakia picha ya risiti."; errEl.style.display = "block"; return; }
+  errEl.style.display = "none"; btn.textContent = "Inatuma..."; btn.disabled = true;
+  try {
+    const ext = file.name.split(".").pop();
+    const path = `receipts/b2b/${Date.now()}.${ext}`;
+    let receiptUrl = null;
+    const { error: upErr } = await sb.storage.from("store-assets").upload(path, file, { upsert: true });
+    if (!upErr) { const { data } = sb.storage.from("store-assets").getPublicUrl(path); receiptUrl = data.publicUrl; }
+    const phone = document.getElementById("ownerPhone")?.value?.trim();
+    await sb.from("pending_payments").insert({
+      owner_name: document.getElementById("ownerName")?.value?.trim(), owner_phone: phone,
+      plan: selectedPlan.name, amount: selectedPlan.price, store_type: "b2b",
+      receipt_url: receiptUrl, status: "pending_verification", submitted_at: new Date().toISOString()
+    });
+    await sb.from("stores").update({ payment_status: "receipt_uploaded", receipt_url: receiptUrl }).eq("owner_phone", phone);
+    await sb.from("admin_notifications").insert({
+      type: "payment_receipt",
+      title: `💳 B2B Risiti — ${document.getElementById("ownerName")?.value?.trim()}`,
+      body: `Plan: ${selectedPlan.name} | TZS ${selectedPlan.price.toLocaleString()} | Phone: ${phone}`,
+      receipt_url: receiptUrl, is_read: false, created_at: new Date().toISOString()
+    });
+    document.getElementById("payPanel-receipt").style.display = "none";
+    document.getElementById("payPanel-success").style.display = "block";
+    document.getElementById("confirmPhoneFinal").textContent = phone || "—";
+  } catch(err) {
+    errEl.textContent = "Imeshindwa: " + err.message; errEl.style.display = "block";
+    btn.textContent = "Tuma Risiti →"; btn.disabled = false;
+  }
+}
 </script>
 </body>
 </html>
