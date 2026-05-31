@@ -255,7 +255,7 @@ tr:hover td{background:var(--offwhite)}
 
       <!-- RECENT PENDING -->
       <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">⏳ Recent Pending Stores</div><button class="filter-btn" onclick="showPage('pending',document.querySelector('.nav-item:nth-child(4))'))">View All →</button></div>
+        <div class="tcard-head"><div class="tcard-title">⏳ Recent Pending Stores</div><button class="filter-btn" onclick="showPage('pending',null)">View All →</button></div>
         <div class="tbl-wrap"><table>
           <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Owner</th><th>Date</th><th>Action</th></tr></thead>
           <tbody id="recentPendingBody"><tr class="empty-row"><td colspan="6"><div class="spinner"></div></td></tr></tbody>
@@ -692,6 +692,7 @@ async function loadAll() {
   renderB2CStores();
   renderB2BStores();
   renderRecentPending();
+  await loadMoveData();
 }
 
 // ── STATS ──
@@ -1112,7 +1113,21 @@ function showPage(name, el) {
   const page = document.getElementById("page-"+name);
   if (page) page.classList.add("active");
   if (el && el.classList) el.classList.add("active");
-  document.getElementById("topbarTitle").textContent = el?.textContent?.trim() || name;
+  const title = el ? el.querySelector(".ni") 
+    ? el.textContent.replace(el.querySelector(".ni").textContent,"").trim()
+    : el.textContent.trim() 
+    : name;
+  document.getElementById("topbarTitle").textContent = title;
+
+  // Load data for specific pages
+  setTimeout(() => {
+    if(name==="analytics")     loadAnalytics("day",    document.querySelector("#page-analytics .cpt"));
+    if(name==="accounting")    loadAccounting("day",   document.querySelector("#page-accounting .cpt"));
+    if(name==="move-overview") renderMoveOverview();
+    if(name==="move-drivers")  renderDrivers();
+    if(name==="move-deliveries") renderDeliveries();
+    if(name==="move-revenue")  loadMoveRevenue("day",  document.querySelector("#page-move-revenue .cpt"));
+  }, 50);
 }
 
 // ── TOAST ──
@@ -1513,24 +1528,9 @@ async function buildYearlyChart(chartId, labelsId, type) {
     </div>`).join("");
 }
 
-// ── Override loadAll to also load Move data ──
-const _origLoadAll = loadAll;
-async function loadAll() {
-  await _origLoadAll();
-  await loadMoveData();
-}
+// loadMoveData called inside loadAll directly
 
-// ── Override showPage to trigger data load ──
-const _origShowPage = showPage;
-function showPage(name, el) {
-  _origShowPage(name, el);
-  if(name==="analytics") loadAnalytics("day", document.querySelector("#page-analytics .cpt"));
-  if(name==="accounting") loadAccounting("day", document.querySelector("#page-accounting .cpt"));
-  if(name==="move-overview") renderMoveOverview();
-  if(name==="move-drivers") renderDrivers();
-  if(name==="move-deliveries") renderDeliveries();
-  if(name==="move-revenue") loadMoveRevenue("day", document.querySelector("#page-move-revenue .cpt"));
-}
+
 
 // ── ENTER TO LOGIN ──
 document.addEventListener("DOMContentLoaded", () => {
