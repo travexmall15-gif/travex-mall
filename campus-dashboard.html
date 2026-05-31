@@ -192,93 +192,83 @@ tbody tr:hover{background:var(--offwhite)}
 <div id="campusLoginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0D1B3E 0%,#1B3A6B 100%);overflow-y:auto">
   <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem">
     <div style="width:100%;max-width:400px">
+
       <!-- Logo -->
       <div style="text-align:center;margin-bottom:2rem">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🎓</div>
         <div style="font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:0.3rem">TRAVEX <span style="color:#C9A84C">CAMPUS</span></div>
         <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;text-transform:uppercase">Student Seller Dashboard</div>
       </div>
 
-      <!-- Toggle tabs -->
-      <div style="display:flex;background:rgba(255,255,255,0.06);border-radius:0;margin-bottom:1.5rem">
-        <button id="loginTabBtn" onclick="switchAuthTab('login')"
-          style="flex:1;padding:0.75rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;background:#C9A84C;color:#0D1B3E;transition:all 0.2s">
-          Ingia / Login
-        </button>
-        <button id="signupTabBtn" onclick="switchAuthTab('signup')"
-          style="flex:1;padding:0.75rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,0.6);transition:all 0.2s">
-          Jisajili / Register
-        </button>
-      </div>
+      <!-- Login Card -->
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
+        <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Karibu! Ingia Akaunti Yako</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:1.5rem;line-height:1.6">Tumia email na nenosiri uliyo pewa wakati wa approval</div>
 
-      <!-- Login Form -->
-      <div id="loginForm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
-        <div style="margin-bottom:1rem" id="loginError"></div>
+        <div id="loginError" style="margin-bottom:1rem"></div>
+
         <div style="margin-bottom:1rem">
-          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Email</label>
+          <label style="display:block;font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Email</label>
           <input type="email" id="loginEmail" placeholder="email@example.com"
-            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none"
+            style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"
             onkeypress="if(event.key==='Enter')doLogin()">
         </div>
+
         <div style="margin-bottom:1.5rem">
-          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Nenosiri / Password</label>
+          <label style="display:block;font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Nenosiri</label>
           <input type="password" id="loginPassword" placeholder="••••••••"
-            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none"
+            style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"
             onkeypress="if(event.key==='Enter')doLogin()">
         </div>
+
         <button onclick="doLogin()" id="loginBtn"
-          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s">
+          style="width:100%;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:800;border:none;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em"
+          onmouseover="this.style.background='#F0C96B'" onmouseout="this.style.background='#C9A84C'">
           Ingia Dashibodi →
         </button>
+
         <div style="text-align:center;margin-top:1rem">
-          <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline">Umesahau nenosiri?</a>
+          <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Umesahau nenosiri?</a>
         </div>
       </div>
 
-      <!-- Signup Form -->
-      <div id="signupForm" style="display:none;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
-        <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1.2rem;line-height:1.6">
-          ⚠️ Kujisajili hapa ni kwa wale ambao <strong style="color:#C9A84C">wamekwisha-approved</strong> na Travex Campus. Kama bado haujatuma maombi, <a href="campus-apply.html" style="color:#C9A84C">apply hapa kwanza</a>.
-        </div>
-        <div id="signupError" style="margin-bottom:1rem"></div>
-        <div style="margin-bottom:1rem">
-          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Jina Lako Kamili</label>
-          <input type="text" id="signupName" placeholder="Jina lako kamili"
-            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none">
-        </div>
-        <div style="margin-bottom:1rem">
-          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Email</label>
-          <input type="email" id="signupEmail" placeholder="email@example.com"
-            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none">
-        </div>
-        <div style="margin-bottom:1.5rem">
-          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Nenosiri / Password</label>
-          <input type="password" id="signupPassword" placeholder="Angalau herufi 8"
-            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none">
-        </div>
-        <button onclick="doSignup()" id="signupBtn"
-          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s">
-          Jisajili Sasa →
-        </button>
-      </div>
-
-      <!-- Reset Password -->
+      <!-- Reset Password (hidden by default) -->
       <div id="resetForm" style="display:none;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
-        <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-bottom:1.2rem">Ingiza email yako na tutakutumia link ya kubadilisha nenosiri.</div>
+        <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:0.4rem">Badilisha Nenosiri</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1.2rem;line-height:1.6">Ingiza email yako — tutakutumia link ya kubadilisha nenosiri.</div>
         <div id="resetMsg" style="margin-bottom:1rem"></div>
         <input type="email" id="resetEmail" placeholder="email@example.com"
-          style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;margin-bottom:1rem">
+          style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;margin-bottom:1rem">
         <button onclick="doReset()"
-          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;border:none;cursor:pointer">
+          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;margin-bottom:0.75rem">
           Tuma Link →
         </button>
-        <div style="text-align:center;margin-top:1rem">
-          <a onclick="switchAuthTab('login')" style="font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline">← Rudi Login</a>
+        <div style="text-align:center">
+          <a onclick="showLoginForm()" style="font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline">← Rudi Login</a>
         </div>
       </div>
 
-      <div style="text-align:center;margin-top:1.5rem">
-        <a href="campus.html" style="font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none">← Rudi Campus</a>
+      <!-- Divider -->
+      <div style="display:flex;align-items:center;gap:1rem;margin:1.5rem 0">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.08)"></div>
+        <span style="font-size:0.72rem;color:rgba(255,255,255,0.25)">Huna akaunti bado?</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.08)"></div>
       </div>
+
+      <!-- Apply CTA -->
+      <a href="campus-apply.html"
+         style="display:block;text-align:center;padding:0.9rem;background:transparent;border:1.5px solid rgba(201,168,76,0.4);color:#C9A84C;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;text-decoration:none;transition:all 0.2s;letter-spacing:0.02em"
+         onmouseover="this.style.borderColor='#C9A84C';this.style.background='rgba(201,168,76,0.08)'"
+         onmouseout="this.style.borderColor='rgba(201,168,76,0.4)';this.style.background='transparent'">
+        🎓 Tuma Maombi ya Duka →
+      </a>
+
+      <div style="text-align:center;margin-top:1.2rem">
+        <a href="campus.html" style="font-size:0.72rem;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">← Rudi Campus</a>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1025,27 +1015,18 @@ async function handleLogout() {
 init();
 
 // ── CAMPUS AUTH FUNCTIONS ────────────────────────────────
-function switchAuthTab(tab) {
-  const loginForm  = document.getElementById("loginForm");
-  const signupForm = document.getElementById("signupForm");
-  const resetForm  = document.getElementById("resetForm");
-  const loginBtn   = document.getElementById("loginTabBtn");
-  const signupBtn  = document.getElementById("signupTabBtn");
-
-  loginForm.style.display  = tab === "login"  ? "block" : "none";
-  signupForm.style.display = tab === "signup" ? "block" : "none";
-  resetForm.style.display  = "none";
-
-  loginBtn.style.background  = tab === "login"  ? "#C9A84C" : "transparent";
-  loginBtn.style.color       = tab === "login"  ? "#0D1B3E" : "rgba(255,255,255,0.6)";
-  signupBtn.style.background = tab === "signup" ? "#C9A84C" : "transparent";
-  signupBtn.style.color      = tab === "signup" ? "#0D1B3E" : "rgba(255,255,255,0.6)";
-}
+function switchAuthTab(tab) { /* legacy - not used */ }
 
 function showResetPass() {
-  document.getElementById("loginForm").style.display  = "none";
-  document.getElementById("signupForm").style.display = "none";
-  document.getElementById("resetForm").style.display  = "block";
+  const overlay = document.getElementById("campusLoginOverlay");
+  overlay.querySelectorAll("[id$='Form']").forEach(f => f.style.display = "none");
+  document.getElementById("resetForm").style.display = "block";
+}
+function showLoginForm() {
+  const overlay = document.getElementById("campusLoginOverlay");
+  overlay.querySelectorAll("[id$='Form']").forEach(f => f.style.display = "none");
+  // The main login card is not a form with id — just hide reset
+  document.getElementById("resetForm").style.display = "none";
 }
 
 async function doLogin() {
@@ -1072,38 +1053,7 @@ async function doLogin() {
   await init();
 }
 
-async function doSignup() {
-  const name  = document.getElementById("signupName").value.trim();
-  const email = document.getElementById("signupEmail").value.trim();
-  const pass  = document.getElementById("signupPassword").value;
-  const btn   = document.getElementById("signupBtn");
-  const errEl = document.getElementById("signupError");
-
-  if (!name || !email || !pass) {
-    showAuthError(errEl, "Tafadhali jaza sehemu zote.");
-    return;
-  }
-  if (pass.length < 8) {
-    showAuthError(errEl, "Nenosiri lazima liwe na angalau herufi 8.");
-    return;
-  }
-  btn.textContent = "Inajisajili...";
-  btn.disabled = true;
-
-  const { error } = await sb.auth.signUp({
-    email, password: pass,
-    options: { data: { name, role: "campus_seller" } }
-  });
-  if (error) {
-    showAuthError(errEl, "Imeshindwa: " + error.message);
-    btn.textContent = "Jisajili Sasa →";
-    btn.disabled = false;
-    return;
-  }
-  showAuthMsg(errEl, "✅ Umefanikiwa! Angalia email yako kuthibitisha akaunti, kisha ingia.", "#D1FAE5", "#059669");
-  btn.textContent = "Jisajili Sasa →";
-  btn.disabled = false;
-}
+// doSignup removed — registration handled by admin approval flow
 
 async function doReset() {
   const email = document.getElementById("resetEmail").value.trim();
