@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +8,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
 body{font-family:"Inter",sans-serif;background:var(--navy);min-height:100vh;display:flex;flex-direction:column}
 .bg-dots{position:fixed;inset:0;opacity:0.03;background-image:radial-gradient(rgba(255,255,255,0.8) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
 .bg-glow{position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(201,168,76,0.08),transparent 60%);pointer-events:none}
 .topbar{padding:1.5rem 5%;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
 .logo{font-size:1.2rem;font-weight:800;color:var(--white);text-decoration:none}
 .logo span{color:var(--gold)}
-.back-link{font-size:0.8rem;color:rgba(255,255,255,0.5);text-decoration:none}
+.back-link{font-size:0.8rem;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s}
 .back-link:hover{color:var(--gold)}
 .card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem;position:relative;z-index:2}
 .card{background:var(--white);width:100%;max-width:420px;padding:2.5rem}
@@ -24,110 +24,259 @@ body{font-family:"Inter",sans-serif;background:var(--navy);min-height:100vh;disp
 .card-sub{font-size:0.875rem;color:var(--gray);margin-bottom:2rem;line-height:1.6}
 .form-group{margin-bottom:1.2rem}
 .form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
-.form-input{width:100%;padding:0.75rem 1rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s}
+.form-input{width:100%;padding:0.75rem 1rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;box-sizing:border-box}
 .form-input:focus{border-color:var(--navy)}
 .form-input::placeholder{color:#9CA3AF}
 .pass-wrap{position:relative}
 .pass-toggle{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray);font-size:0.78rem;font-family:"Inter",sans-serif}
 .btn-login{width:100%;padding:0.875rem;background:var(--navy);color:var(--white);font-size:0.95rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;margin-bottom:1rem}
-.btn-login:hover{background:var(--blue,#1B3A6B)}
-.btn-login:disabled{background:var(--lgray);cursor:not-allowed}
+.btn-login:hover:not(:disabled){background:var(--blue)}
+.btn-login:disabled{background:var(--lgray);color:var(--gray);cursor:not-allowed}
 .divider{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem}
 .divider-line{flex:1;height:1px;background:var(--lgray)}
-.divider-text{font-size:0.72rem;color:var(--gray)}
+.divider-text{font-size:0.72rem;color:var(--gray);white-space:nowrap}
 .btn-open{display:block;width:100%;padding:0.875rem;background:var(--gold);color:var(--navy);font-size:0.875rem;font-weight:700;text-align:center;text-decoration:none;transition:all 0.2s}
 .btn-open:hover{background:var(--gold2)}
-.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
+.alert{padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;line-height:1.5}
 .alert.show{display:block}
-.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+.alert-error{background:#FEE2E2;border-left:3px solid var(--red);color:#B91C1C}
+.alert-success{background:#D1FAE5;border-left:3px solid var(--green);color:#065F46}
+.alert-warn{background:#FEF3C7;border-left:3px solid #F59E0B;color:#92400E}
 .card-footer{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--lgray);text-align:center;font-size:0.78rem;color:var(--gray)}
 .card-footer a{color:var(--navy);font-weight:600;text-decoration:none}
 .page-footer{padding:1.5rem 5%;text-align:center;position:relative;z-index:2}
 .page-footer p{font-size:0.72rem;color:rgba(255,255,255,0.2)}
+.forgot-link{font-size:0.78rem;color:var(--gray);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:"Inter",sans-serif;margin-top:0.5rem;display:block;text-align:right}
+.forgot-link:hover{color:var(--navy)}
 </style>
 </head>
 <body>
 <div class="bg-dots"></div>
 <div class="bg-glow"></div>
+
 <div class="topbar">
   <a href="index.html" class="logo">TRAVEX <span>MALL</span></a>
-  <a href="index.html" class="back-link">← Marketplace</a>
+  <a href="index.html" class="back-link">← Rudi Marketplace</a>
 </div>
+
 <div class="card-wrap">
   <div class="card">
-    <div class="card-icon">🏪</div>
-    <div class="card-title">Seller Dashboard Login</div>
-    <div class="card-sub">Enter the phone number and password you used when registering your store.</div>
-    <div class="alert alert-error" id="errAlert"></div>
-    <div class="form-group">
-      <label class="form-label">Phone Number</label>
-      <input type="tel" class="form-input" id="phone" placeholder="+255 712 000 000" onkeypress="if(event.key==='Enter')login()">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password (6 characters)</label>
-      <div class="pass-wrap">
-        <input type="password" class="form-input" id="password" placeholder="Your 6-character password" maxlength="6" onkeypress="if(event.key==='Enter')login()">
-        <button class="pass-toggle" onclick="togglePass()">Show</button>
+
+    <!-- ── LOGIN PANEL ── -->
+    <div id="loginPanel">
+      <div class="card-icon">🏪</div>
+      <div class="card-title">Ingia Dashibodi Yako</div>
+      <div class="card-sub">Ingiza namba ya simu na nenosiri ulioweka wakati wa kufungua duka lako.</div>
+
+      <div class="alert alert-error" id="loginError"></div>
+      <div class="alert alert-warn"  id="loginWarn"></div>
+
+      <div class="form-group">
+        <label class="form-label">Namba ya Simu</label>
+        <input type="tel" class="form-input" id="phone" placeholder="+255 712 000 000"
+          onkeypress="if(event.key==='Enter')doLogin()" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nenosiri</label>
+        <div class="pass-wrap">
+          <input type="password" class="form-input" id="password" placeholder="Nenosiri lako"
+            onkeypress="if(event.key==='Enter')doLogin()" autocomplete="current-password">
+          <button class="pass-toggle" type="button" onclick="togglePass('password',this)">Onyesha</button>
+        </div>
+        <button class="forgot-link" onclick="showPanel('resetPanel')">Umesahau nenosiri?</button>
+      </div>
+
+      <button class="btn-login" id="loginBtn" onclick="doLogin()">Ingia Dashibodi →</button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">Bado huna duka?</div>
+        <div class="divider-line"></div>
+      </div>
+      <a href="store-landing.html" class="btn-open">🏪 Fungua Duka Lako Travex Mall</a>
+
+      <div class="card-footer">
+        <p>Msaada? <a href="mailto:travexmall15@gmail.com">travexmall15@gmail.com</a> · <a href="https://wa.me/255651919915">WhatsApp Support</a></p>
       </div>
     </div>
-    <button class="btn-login" id="loginBtn" onclick="login()">Login to My Dashboard →</button>
-    <div class="divider"><div class="divider-line"></div><div class="divider-text">Don't have a store yet?</div><div class="divider-line"></div></div>
-    <a href="store-landing.html" class="btn-open">🏪 Open Your Store on Travex Mall</a>
-    <div class="card-footer">
-      <p>Need help? <a href="mailto:travexmall15@gmail.com">travexmall15@gmail.com</a> · <a href="https://wa.me/255651919915">+255 651 919 915</a></p>
+
+    <!-- ── RESET PASSWORD PANEL ── -->
+    <div id="resetPanel" style="display:none">
+      <div class="card-icon">🔑</div>
+      <div class="card-title">Badilisha Nenosiri</div>
+      <div class="card-sub">Ingiza namba yako ya simu — tutatumia link ya kubadilisha nenosiri kwenye email yako.</div>
+
+      <div class="alert alert-error"   id="resetError"></div>
+      <div class="alert alert-success" id="resetSuccess"></div>
+
+      <div class="form-group">
+        <label class="form-label">Namba ya Simu</label>
+        <input type="tel" class="form-input" id="resetPhone" placeholder="+255 712 000 000"
+          onkeypress="if(event.key==='Enter')doReset()">
+      </div>
+
+      <button class="btn-login" id="resetBtn" onclick="doReset()">Tuma Link ya Reset →</button>
+      <button onclick="showPanel('loginPanel')" style="width:100%;padding:0.75rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.875rem;cursor:pointer;color:var(--gray)">← Rudi Login</button>
     </div>
+
   </div>
 </div>
-<div class="page-footer"><p>© 2026 Travex Digital Group</p></div>
+
+<div class="page-footer"><p>© 2026 Travex Mall · Travex Digital Group (TDG) · Tanzania</p></div>
+
 <script>
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// Check if already logged in
+// If already logged in → go straight to dashboard
 sb.auth.getSession().then(({ data: { session } }) => {
   if (session) window.location.replace("seller-dashboard.html");
 });
 
-async function login() {
-  const phone = document.getElementById("phone").value.trim().replace(/\s/g,"");
+// ── HELPERS ────────────────────────────────────────────────────
+function showPanel(id) {
+  ["loginPanel","resetPanel"].forEach(p => {
+    document.getElementById(p).style.display = p === id ? "block" : "none";
+  });
+}
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = "alert alert-error show";
+}
+function showWarn(id, msg) {
+  const el = document.getElementById(id);
+  el.innerHTML = msg;
+  el.className = "alert alert-warn show";
+}
+function showOk(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = "alert alert-success show";
+}
+function clearAlerts() {
+  ["loginError","loginWarn","resetError","resetSuccess"].forEach(id => {
+    const el = document.getElementById(id);
+    el.className = "alert";
+    el.textContent = "";
+  });
+}
+function togglePass(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  const isPass = inp.type === "password";
+  inp.type = isPass ? "text" : "password";
+  btn.textContent = isPass ? "Ficha" : "Onyesha";
+}
+function phoneToEmail(phone) {
+  return phone.replace(/\D/g, "") + "@travexmall.app";
+}
+
+// ── LOGIN ───────────────────────────────────────────────────────
+async function doLogin() {
+  clearAlerts();
+  const phone = document.getElementById("phone").value.trim();
   const pass  = document.getElementById("password").value;
   const btn   = document.getElementById("loginBtn");
-  const err   = document.getElementById("errAlert");
-  err.classList.remove("show");
 
-  if (!phone || !pass) {
-    err.textContent = "Please enter your phone number and password.";
-    err.classList.add("show"); return;
-  }
+  if (!phone) { showErr("loginError", "⚠️ Ingiza namba yako ya simu."); return; }
+  if (!pass)  { showErr("loginError", "⚠️ Ingiza nenosiri lako."); return; }
 
-  btn.textContent = "Logging in...";
+  btn.textContent = "Inaingia...";
   btn.disabled = true;
 
-  // Build email from phone (same as open-store)
-  const phoneClean = phone.replace(/\D/g,"");
-  const email = phoneClean + "@travexmall.app";
-
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass + "TRX!" });
+  const email = phoneToEmail(phone);
+  const { data, error } = await sb.auth.signInWithPassword({
+    email,
+    password: pass + "TRX!"
+  });
 
   if (error) {
-    err.textContent = "Incorrect phone number or password. Please check and try again.";
-    err.classList.add("show");
-    btn.textContent = "Login to My Dashboard →";
+    btn.textContent = "Ingia Dashibodi →";
     btn.disabled = false;
+
+    const msg = error.message.toLowerCase();
+    if (msg.includes("invalid") || msg.includes("credentials") || msg.includes("wrong")) {
+      showErr("loginError", "❌ Namba ya simu au nenosiri si sahihi. Jaribu tena.");
+    } else if (msg.includes("email not confirmed")) {
+      showWarn("loginWarn", "📧 Email yako haijathibitishwa bado. Angalia inbox yako na ubonyeze link ya uthibitisho.");
+    } else if (msg.includes("too many")) {
+      showErr("loginError", "⏳ Umejaribu mara nyingi sana. Subiri dakika 5 kisha jaribu tena.");
+    } else {
+      showErr("loginError", "❌ Imeshindwa: " + error.message);
+    }
     return;
   }
 
-  btn.textContent = "Welcome! Loading dashboard...";
+  // ── Check store status after login ──
+  const userId = data.user.id;
+  const { data: stores } = await sb.from("stores")
+    .select("store_name, is_active, payment_status")
+    .eq("user_id", userId)
+    .limit(1);
+
+  if (!stores || stores.length === 0) {
+    // Logged in but no store — show warning, still allow dashboard
+    btn.textContent = "Karibu! Inapakia...";
+    window.location.replace("seller-dashboard.html");
+    return;
+  }
+
+  const store = stores[0];
+
+  if (!store.is_active) {
+    const status = store.payment_status || "pending";
+    if (status === "receipt_uploaded" || status === "pending_verification") {
+      showWarn("loginWarn",
+        `🔍 <strong>Risiti yako inafanyiwa verification!</strong><br>
+        Duka "<strong>${store.store_name}</strong>" bado halijawashwa. Timu yetu inakagua risiti yako — subiri masaa 2. 
+        Utajulishwa kupitia email na simu baada ya kuthibitishwa.`
+      );
+    } else {
+      showWarn("loginWarn",
+        `⏳ <strong>Duka lako bado halijawashwa.</strong><br>
+        Kamilisha malipo ili duka "<strong>${store.store_name}</strong>" liwashwe. 
+        <a href="store-landing.html" style="color:var(--navy);font-weight:700">Fungua Duka →</a>`
+      );
+    }
+    btn.textContent = "Ingia Dashibodi →";
+    btn.disabled = false;
+    // Still allow them in after 3 seconds to see their pending dashboard
+    setTimeout(() => window.location.replace("seller-dashboard.html"), 3000);
+    return;
+  }
+
+  // All good — active store
+  btn.textContent = "✅ Karibu! Inapakia dashibodi...";
   window.location.replace("seller-dashboard.html");
 }
 
-function togglePass() {
-  const inp = document.getElementById("password");
-  const btn = document.querySelector(".pass-toggle");
-  inp.type = inp.type === "password" ? "text" : "password";
-  btn.textContent = inp.type === "password" ? "Show" : "Hide";
+// ── RESET PASSWORD ──────────────────────────────────────────────
+async function doReset() {
+  clearAlerts();
+  const phone = document.getElementById("resetPhone").value.trim();
+  const btn   = document.getElementById("resetBtn");
+
+  if (!phone) { showErr("resetError", "⚠️ Ingiza namba yako ya simu."); return; }
+
+  btn.textContent = "Inatuma...";
+  btn.disabled = true;
+
+  const email = phoneToEmail(phone);
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + "/seller-dashboard.html"
+  });
+
+  btn.textContent = "Tuma Link ya Reset →";
+  btn.disabled = false;
+
+  if (error) {
+    // Don't reveal if account exists or not for security
+    showOk("resetSuccess", "✅ Kama namba hiyo ipo kwenye mfumo, tutakutumia link ya reset. Angalia email yako.");
+    return;
+  }
+  showOk("resetSuccess", "✅ Link ya kubadilisha nenosiri imetumwa! Angalia email inayohusiana na akaunti yako.");
 }
 </script>
 </body>
