@@ -689,7 +689,7 @@ tr:hover td{background:var(--offwhite)}
       </div>
       <div class="table-wrap">
         <table><thead><tr>
-          <th>Jina</th><th>Email</th><th>Chuo</th><th>Duka</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
+          <th>Jina / Mwaka</th><th>Email</th><th>Chuo</th><th>Duka / Kategoria</th><th>WhatsApp</th><th>ID ya Chuo</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
         </tr></thead>
         <tbody id="campus-apps-tbody">
           <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
@@ -1148,35 +1148,121 @@ async function deletePost(postId) {
   await loadAll();
 }
 
-// ── VIEW STORE MODAL ──
-function viewStore(storeId) {
+// ── VIEW STORE MODAL — FULL DETAILS ──
+async function viewStore(storeId) {
   const s = allStores.find(x => x.id === storeId);
   if (!s) return;
-  const now = new Date();
-  const expires = s.subscription_expires ? new Date(s.subscription_expires) : null;
+
+  // Also fetch pending_payment record for this store (has receipt)
+  const { data: payData } = await sb.from("pending_payments")
+    .select("*").eq("owner_phone", s.owner_phone || s.whatsapp_number).order("submitted_at",{ascending:false}).limit(1);
+  const pay = payData?.[0] || null;
+
+  const now      = new Date();
+  const expires  = s.subscription_expires ? new Date(s.subscription_expires) : null;
   const daysLeft = expires ? Math.ceil((expires-now)/(1000*60*60*24)) : null;
+  const isPending = s.subscription_status !== "approved";
 
   document.getElementById("modalStoreName").textContent = s.store_name || "Store";
-  document.getElementById("modalBody").innerHTML = `
-    <div class="modal-row"><span class="modal-label">Store Name</span><span class="modal-val">${s.store_name||"—"}</span></div>
-    <div class="modal-row"><span class="modal-label">Type</span><span class="modal-val">${s.store_type==="b2b"?"🥇 B2B Wholesale":"🥈 B2C Retail"}</span></div>
-    <div class="modal-row"><span class="modal-label">Plan</span><span class="modal-val">${s.subscription_plan==="premium"?"👑 Premium":"⭐ Basic"}</span></div>
-    <div class="modal-row"><span class="modal-label">Status</span><span class="modal-val">${s.subscription_status==="approved"?"✅ Active":"⏳ Pending"}</span></div>
-    <div class="modal-row"><span class="modal-label">Category</span><span class="modal-val">${s.category||"—"}</span></div>
-    <div class="modal-row"><span class="modal-label">Region</span><span class="modal-val">${s.region||"—"}</span></div>
-    <div class="modal-row"><span class="modal-label">WhatsApp</span><span class="modal-val">${s.whatsapp_number||"—"}</span></div>
-    <div class="modal-row"><span class="modal-label">Started</span><span class="modal-val">${s.subscription_start?new Date(s.subscription_start).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}):"—"}</span></div>
-    <div class="modal-row"><span class="modal-label">Expires</span><span class="modal-val" style="color:${daysLeft&&daysLeft<=7?'var(--red)':'inherit'}">${expires?expires.toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}):"—"}${daysLeft!==null?` (${daysLeft}d)`:""}</span></div>
-    ${s.store_type==="b2b"?`
-    <div class="modal-row"><span class="modal-label">Business Reg</span><span class="modal-val">${s.business_reg_number||"—"}</span></div>
-    <div class="modal-row"><span class="modal-label">TIN Number</span><span class="modal-val">${s.tin_number||"—"}</span></div>`:""}
-    <div class="modal-row"><span class="modal-label">Description</span><span class="modal-val" style="max-width:300px;text-align:right;font-size:0.78rem">${s.description||"—"}</span></div>
-  `;
+
+  // ── SECTION BUILDER ──
+  const row = (label, val, opts={}) => {
+    if (!val && val !== 0) return "";
+    const color = opts.color ? `color:${opts.color}` : "";
+    const big   = opts.big   ? "font-size:0.95rem;font-weight:700;" : "";
+    return `<div class="modal-row"><span class="modal-label">${label}</span><span class="modal-val" style="${color}${big}">${val}</span></div>`;
+  };
+
+  const sectionHead = (title, icon) =>
+    `<div style="background:var(--offwhite);padding:0.5rem 1rem;font-size:0.7rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.08em;margin:0.75rem -1.5rem 0.5rem;border-top:1px solid var(--lgray);border-bottom:1px solid var(--lgray)">${icon} ${title}</div>`;
+
+  // ── BUILD MODAL CONTENT ──
+  let body = "";
+
+  // BRANDING PREVIEW
+  const bannerStyle = s.banner ? `background-image:url(${s.banner});background-size:cover;background-position:center` : `background:linear-gradient(135deg,#0D1B3E,#1B3A6B)`;
+  const logoHtml = s.logo
+    ? `<img src="${s.logo}" style="width:60px;height:60px;object-fit:cover;border:3px solid #fff">`
+    : `<div style="width:60px;height:60px;background:var(--navy);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:var(--gold)">${(s.store_name||"ST").substring(0,2).toUpperCase()}</div>`;
+
+  body += `
+    <div style="margin:-1.5rem -1.5rem 1rem">
+      <div style="height:90px;${bannerStyle};position:relative">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent)"></div>
+      </div>
+      <div style="padding:0 1.5rem;margin-top:-30px;position:relative;display:flex;align-items:flex-end;gap:1rem">
+        ${logoHtml}
+        <div style="padding-bottom:0.5rem">
+          <div style="font-size:1rem;font-weight:800;color:var(--navy)">${s.store_name||"—"}</div>
+          <div style="font-size:0.72rem;color:var(--gray)">${s.category||""} · ${s.region||""}</div>
+        </div>
+      </div>
+    </div>`;
+
+  // STORE INFO
+  body += sectionHead("Taarifa za Duka", "🏪");
+  body += row("Jina la Duka",   s.store_name,        {big:true});
+  body += row("Aina ya Duka",   s.store_type==="b2b" ? "🥇 B2B Wholesale" : "🥈 B2C Retail");
+  body += row("Plan",           s.subscription_plan==="premium" ? "👑 Premium" : s.subscription_plan==="standard" ? "⭐⭐ Standard" : "⭐ Basic");
+  body += row("Status",         s.subscription_status==="approved" ? "✅ Active" : s.payment_status==="receipt_uploaded" ? "🔍 Risiti Inapitiwa" : "⏳ Pending",
+              {color: s.subscription_status==="approved" ? "var(--green)" : "var(--red)"});
+  body += row("Kategoria",      s.category);
+  body += row("Mkoa",           s.region);
+  body += row("Maelezo",        s.description);
+  body += row("Wazi / Mfumo",  s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("sw") : null);
+  body += row("Inaisha",        expires ? `${expires.toLocaleDateString("sw")} ${daysLeft !== null ? "(siku "+daysLeft+")" : ""}` : null,
+              {color: daysLeft && daysLeft<=7 ? "var(--red)" : ""});
+
+  // OWNER / CONTACT
+  body += sectionHead("Taarifa za Mmiliki", "👤");
+  body += row("Jina la Mmiliki", s.owner_name || s.seller_name);
+  body += row("Simu",            s.owner_phone || s.phone);
+  body += row("WhatsApp",        s.whatsapp_number ? `<a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${s.whatsapp_number} 💬</a>` : null);
+  body += row("Email",           s.owner_email || s.email);
+  body += row("Instagram",       s.instagram ? `<a href="https://instagram.com/${s.instagram}" target="_blank" style="color:#E1306C">@${s.instagram}</a>` : null);
+  body += row("TikTok",          s.tiktok    ? `<a href="https://tiktok.com/@${s.tiktok}"    target="_blank" style="color:#000">@${s.tiktok}</a>`    : null);
+  body += row("Facebook",        s.facebook  ? `<a href="${s.facebook}" target="_blank" style="color:#1877F2">Angalia →</a>` : null);
+
+  // B2B EXTRA
+  if (s.store_type === "b2b") {
+    body += sectionHead("Taarifa za Biashara (B2B)", "🏭");
+    body += row("Business Reg No.", s.business_reg_number);
+    body += row("TIN Number",       s.tin_number);
+    body += row("Min Order (MOQ)",  s.moq ? `TZS ${Number(s.moq).toLocaleString()}` : null);
+  }
+
+  // PAYMENT / RECEIPT
+  body += sectionHead("Malipo & Risiti", "💳");
+  body += row("Kiasi cha Malipo", pay ? `TZS ${Number(pay.amount||0).toLocaleString()}` : s.subscription_plan ? "Kulingana na Plan" : null);
+  body += row("Hali ya Malipo",  s.payment_status === "receipt_uploaded" ? "🔍 Risiti Imepakia — Inapitiwa" : s.subscription_status==="approved" ? "✅ Imelipwa" : "❌ Haijalipiwa",
+              {color: s.subscription_status==="approved" ? "var(--green)" : s.payment_status==="receipt_uploaded" ? "#92400E" : "var(--red)"});
+  
+  // RECEIPT IMAGE / LINK
+  const receiptUrl = s.receipt_url || pay?.receipt_url;
+  if (receiptUrl) {
+    const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(receiptUrl);
+    body += `<div class="modal-row"><span class="modal-label">Risiti ya Malipo</span><span class="modal-val">
+      ${isImg ? `<a href="${receiptUrl}" target="_blank"><img src="${receiptUrl}" style="max-width:160px;max-height:120px;border:1px solid var(--lgray);display:block;margin-bottom:0.3rem" onerror="this.style.display='none'"></a>` : ""}
+      <a href="${receiptUrl}" target="_blank" style="color:var(--gold);font-weight:600;font-size:0.8rem">📄 Angalia Risiti Kamili →</a>
+    </span></div>`;
+  } else {
+    body += `<div class="modal-row"><span class="modal-label">Risiti</span><span class="modal-val" style="color:var(--gray);font-size:0.78rem">Haijapakia bado</span></div>`;
+  }
+
+  // THEME
+  if (s.theme_color || s.theme_font) {
+    body += sectionHead("Mandhari ya Duka", "🎨");
+    if (s.theme_color) body += `<div class="modal-row"><span class="modal-label">Rangi</span><span class="modal-val" style="display:flex;align-items:center;gap:0.5rem"><span style="width:20px;height:20px;background:${s.theme_color};border:1px solid var(--lgray);display:inline-block"></span>${s.theme_color}</span></div>`;
+    body += row("Font",  s.theme_font);
+  }
+
+  document.getElementById("modalBody").innerHTML = body;
   document.getElementById("modalActions").innerHTML = `
-    ${s.subscription_status!=="approved"?`<button class="btn-approve" onclick="approveStore('${s.id}');closeModal()">✅ Approve Store</button>`:""}
-    <a href="store.html?store=${s.slug}" target="_blank" class="btn-view">🔗 Visit Store</a>
-    ${s.whatsapp_number?`<a href="https://wa.me/${s.whatsapp_number.replace(/\D/g,'')}" target="_blank" class="btn-view">💬 WhatsApp</a>`:""}
-    <button class="btn-reject" onclick="suspendStore('${s.id}');closeModal()">⛔ Suspend</button>
+    ${isPending ? `<button class="btn-approve" onclick="approveStore('${s.id}');closeModal()">✅ Approve Store</button>` : ""}
+    ${receiptUrl ? `<a href="${receiptUrl}" target="_blank" class="btn-view">📄 Ona Risiti</a>` : ""}
+    <a href="store.html?store=${s.slug||s.id}" target="_blank" class="btn-view">🔗 Visit Store</a>
+    ${s.whatsapp_number ? `<a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" class="btn-view" style="background:#25D366;color:#fff">💬 WhatsApp</a>` : ""}
+    ${!isPending ? `<button class="btn-reject" onclick="suspendStore('${s.id}');closeModal()">⛔ Suspend</button>` : `<button class="btn-reject" onclick="suspendStore('${s.id}');closeModal()">❌ Reject</button>`}
   `;
   document.getElementById("storeModal").classList.add("open");
 }
@@ -1770,22 +1856,89 @@ function renderAppsTable(apps) {
   }
   tbody.innerHTML = apps.map(a => `
     <tr>
-      <td><strong>${a.full_name||"—"}</strong></td>
-      <td style="font-size:0.78rem">${a.email||"—"}</td>
-      <td>${a.university_abbr||"—"}</td>
-      <td>${a.shop_name||"—"}</td>
-      <td>${a.business_category||"—"}</td>
-      <td><a href="https://wa.me/${(a.whatsapp||a.phone||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green)">${a.whatsapp||a.phone||"—"}</a></td>
-      <td><span class="badge badge-${a.status}">${a.status}</span></td>
-      <td style="font-size:0.75rem">${new Date(a.created_at).toLocaleDateString("sw")}</td>
+      <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.year_of_study||""}</div></td>
+      <td style="font-size:0.75rem">${a.email||"—"}</td>
+      <td><strong>${a.university_abbr||"—"}</strong><div style="font-size:0.65rem;color:var(--gray)">${a.region||""}</div></td>
+      <td><strong>${a.shop_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.business_category||""}</div></td>
+      <td><a href="https://wa.me/${(a.whatsapp||a.phone||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp||a.phone||"—"}</a></td>
       <td>
+        ${a.id_card_url
+          ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="width:40px;height:30px;object-fit:cover;border:1px solid var(--lgray)" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:#7C3AED;font-size:0.72rem&quot;>Ona ID →</a>'"></a>`
+          : '<span style="font-size:0.68rem;color:var(--gray)">—</span>'}
+      </td>
+      <td><span class="badge badge-${a.status}">${a.status}</span></td>
+      <td style="font-size:0.72rem">${new Date(a.created_at).toLocaleDateString("sw")}</td>
+      <td>
+        <button onclick="viewCampusApp('${a.id}')" style="background:var(--navy);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:0.3rem;display:block">👁 Taarifa</button>
         ${a.status==="pending" ? `
-          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.3rem">Idhinisha</button>
-          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Kataa</button>
+          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.2rem">✅ Idhinisha</button>
+          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">❌ Kataa</button>
         ` : `<span style="font-size:0.72rem;color:var(--gray)">${a.status}</span>`}
-        ${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank" style="display:block;font-size:0.7rem;color:#7C3AED;margin-top:0.2rem">Ona ID →</a>` : ""}
       </td>
     </tr>`).join("");
+}
+
+// ── CAMPUS APPLICATION DETAIL MODAL ──
+function viewCampusApp(id) {
+  const a = allCampusApps.find(x => x.id === id);
+  if (!a) return;
+
+  const sectionHead = (title, icon) =>
+    `<div style="background:var(--offwhite);padding:0.5rem 1rem;font-size:0.7rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.08em;margin:0.75rem -1.5rem 0.5rem;border-top:1px solid var(--lgray);border-bottom:1px solid var(--lgray)">${icon} ${title}</div>`;
+  const row = (label, val) => val ? `<div class="modal-row"><span class="modal-label">${label}</span><span class="modal-val">${val}</span></div>` : "";
+
+  let body = "";
+
+  // Personal info
+  body += sectionHead("Taarifa za Mwanafunzi", "🎓");
+  body += row("Jina Kamili",    a.full_name);
+  body += row("Email",          a.email);
+  body += row("Simu",           a.phone);
+  body += row("WhatsApp",       a.whatsapp ? `<a href="https://wa.me/${(a.whatsapp||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp} 💬</a>` : null);
+  body += row("Mwaka wa Masomo", a.year_of_study);
+
+  // University
+  body += sectionHead("Chuo & Eneo", "🏫");
+  body += row("Chuo",    a.university);
+  body += row("Kifupi",  a.university_abbr);
+  body += row("Mkoa",    a.region);
+
+  // Business
+  body += sectionHead("Biashara / Duka", "🏪");
+  body += row("Jina la Duka",    a.shop_name);
+  body += row("Kategoria",       a.business_category);
+  body += row("Maelezo",         a.business_description ? `<span style="font-size:0.78rem;line-height:1.6">${a.business_description}</span>` : null);
+
+  // Student ID card
+  body += sectionHead("Kitambulisho cha Chuo", "🪪");
+  if (a.id_card_url) {
+    const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(a.id_card_url);
+    body += `<div style="margin:0.5rem 0">
+      ${isImg ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="max-width:100%;max-height:200px;border:1px solid var(--lgray);display:block;margin-bottom:0.5rem" onerror="this.style.display='none'"></a>` : ""}
+      <a href="${a.id_card_url}" target="_blank" style="color:#7C3AED;font-weight:600;font-size:0.85rem">🪪 Angalia ID Kamili →</a>
+    </div>`;
+  } else {
+    body += `<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">Kitambulisho hakikupakiwa</div>`;
+  }
+
+  // Status & dates
+  body += sectionHead("Hali ya Maombi", "📋");
+  body += row("Status",          `<span class="badge badge-${a.status}">${a.status}</span>`);
+  body += row("Tarehe ya Ombi",  new Date(a.created_at).toLocaleString("sw"));
+  body += row("Idhinishwa",      a.approved_at ? new Date(a.approved_at).toLocaleString("sw") : null);
+
+  document.getElementById("modalStoreName").textContent = a.shop_name || a.full_name || "Application";
+  document.getElementById("modalBody").innerHTML = body;
+  document.getElementById("modalActions").innerHTML = `
+    ${a.status==="pending" ? `
+      <button class="btn-approve" onclick="approveCampusApp('${a.id}');closeModal()">✅ Idhinisha</button>
+      <button class="btn-reject"  onclick="rejectCampusApp('${a.id}');closeModal()">❌ Kataa</button>
+    ` : ""}
+    ${a.whatsapp||a.phone ? `<a href="https://wa.me/${((a.whatsapp||a.phone||"")).replace(/\D/g,"")}" target="_blank" class="btn-view" style="background:#25D366;color:#fff">💬 WhatsApp</a>` : ""}
+    ${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank" class="btn-view" style="background:#7C3AED;color:#fff">🪪 Ona ID</a>` : ""}
+    ${a.email ? `<a href="mailto:${a.email}" class="btn-view">📧 Email</a>` : ""}
+  `;
+  document.getElementById("storeModal").classList.add("open");
 }
 
 let _appsFilter = "all";
