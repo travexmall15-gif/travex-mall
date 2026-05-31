@@ -1,0 +1,25 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="80" fill="#0D1B3E"/>
+  <!-- Gold ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#C9A84C" stroke-width="8" opacity="0.4"/>
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#C9A84C" stroke-width="3" opacity="0.2"/>
+  <!-- Graduation cap body -->
+  <polygon points="256,95 400,162 256,229 112,162" fill="#C9A84C"/>
+  <!-- Cap top -->
+  <rect x="236" y="80" width="40" height="40" fill="#F0C96B" transform="rotate(45 256 100)"/>
+  <!-- Tassel -->
+  <line x1="400" y1="162" x2="400" y2="222" stroke="#C9A84C" stroke-width="8"/>
+  <circle cx="400" cy="232" r="14" fill="#C9A84C"/>
+  <!-- Store columns -->
+  <rect x="166" y="254" width="26" height="96" fill="#1B3A6B" rx="4"/>
+  <rect x="213" y="254" width="26" height="96" fill="#1B3A6B" rx="4"/>
+  <rect x="260" y="254" width="26" height="96" fill="#1B3A6B" rx="4"/>
+  <rect x="307" y="254" width="26" height="96" fill="#1B3A6B" rx="4"/>
+  <!-- Store roof -->
+  <rect x="148" y="235" width="210" height="28" fill="#C9A84C" rx="4"/>
+  <!-- Store base -->
+  <rect x="142" y="350" width="222" height="24" fill="#C9A84C" rx="4"/>
+  <!-- Text -->
+  <text x="256" y="418" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="#C9A84C" text-anchor="middle" letter-spacing="6">CAMPUS</text>
+  <text x="256" y="455" font-family="Arial,sans-serif" font-size="18" fill="rgba(255,255,255,0.4)" text-anchor="middle" letter-spacing="3">by TRAVEX</text>
+</svg>
