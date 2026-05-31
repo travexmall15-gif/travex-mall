@@ -208,6 +208,8 @@ html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);
 </style>
 </head>
 <body>
+<div id="pendingGateOverlay" style="display:none;position:fixed;inset:0;z-index:9999"></div>
+
 
 <!-- TOP NAVBAR -->
 <nav class="topnav" id="mainTopnav">
@@ -818,7 +820,6 @@ function buildQuickActions(themeColor) {
   const brightness=(r*299+g*587+b*114)/1000;
   const txt = brightness > 128 ? '#111827' : '#ffffff';
 
-  const isB2B = activeStore?.store_type === "b2b";
   const actions = [
     {icon:'➕', label:'Add Product',       fn:"openProductModal()"},
     {icon:'✏️', label:'Edit Store',         fn:"showPage('store',document.querySelector('.topnav-tab'))"},
@@ -826,28 +827,22 @@ function buildQuickActions(themeColor) {
     {icon:'📈', label:'Marketing Analytics', fn:"window.open('ai-marketing.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
     {icon:'🤖', label:'Business Advisor',   fn:"window.open('ai-business.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
     {icon:'🚚', label:'Book Delivery',       fn:"bookDelivery()"},
-    ...(isB2B ? [
-      {icon:'📋', label:'Invoice',           fn:"window.open('invoice.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')", b2b:true},
-      {icon:'📦', label:'Wholesale Catalog', fn:"showPage('products',document.querySelector('.topnav-tab'))", b2b:true},
-    ] : []),
   ];
 
   grid.innerHTML = actions.map(a => `
     <button onclick="${a.fn}" style="
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       gap:0.5rem;padding:1.25rem 0.75rem;
-      background:${a.b2b ? 'linear-gradient(135deg,#C9A84C,#F0C96B)' : (themeColor||'#0D1B3E')};
-      color:${a.b2b ? '#0D1B3E' : txt};
-      border:1px solid ${a.b2b ? 'rgba(201,168,76,0.4)' : 'rgba(255,255,255,0.1)'};
+      background:${themeColor||'#0D1B3E'};
+      color:${txt};
+      border:1px solid rgba(255,255,255,0.1);
       cursor:pointer;
       font-family:'Inter',sans-serif;
       transition:all 0.2s;
       text-align:center;
       min-height:90px;
       width:100%;
-      position:relative;
     " onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='brightness(1)'">
-      ${a.b2b ? '<span style="position:absolute;top:6px;right:6px;font-size:0.55rem;font-weight:800;background:#0D1B3E;color:#C9A84C;padding:0.1rem 0.35rem;letter-spacing:0.06em">B2B</span>' : ''}
       <span style="font-size:1.6rem">${a.icon}</span>
       <span style="font-size:0.72rem;font-weight:700;line-height:1.3">${a.label}</span>
     </button>`).join("");
@@ -898,11 +893,71 @@ async function init() {
   document.getElementById("navAvatar").textContent = name.substring(0,2).toUpperCase();
 
   await loadStores();
+
+  // ── GATE: if store is not yet active, show pending overlay ──
+  if (currentStores.length === 0) {
+    showPendingGate("no_store");
+    return;
+  }
+  if (currentStores[0] && !currentStores[0].is_active) {
+    const status = currentStores[0].payment_status || "pending";
+    showPendingGate(status);
+    return;
+  }
+
   await loadStats();
   await loadRecentOrders();
   buildAITools();
   loadSubscriptionStatus();
   updateNavStore(activeStore, allProducts, allOrders);
+}
+
+function showPendingGate(status) {
+  const overlay = document.getElementById("pendingGateOverlay");
+  if (!overlay) return;
+  const store = currentStores[0];
+  const storeName = store?.store_name || "Duka Lako";
+  const ownerName = currentUser.user_metadata?.name || "Seller";
+
+  let icon, title, body, cta;
+  if (status === "no_store") {
+    icon = "🏪"; title = "Haujafungua Duka Bado";
+    body = "Akaunti yako ipo, lakini bado hujafungua duka. Bonyeza hapa chini kuanza mchakato wa kufungua duka lako.";
+    cta  = `<a href="store-landing.html" style="display:block;padding:0.9rem;background:var(--gold);color:var(--navy);font-weight:700;text-decoration:none;text-align:center;font-size:0.95rem">🏪 Fungua Duka Langu →</a>`;
+  } else if (status === "receipt_uploaded" || status === "pending_verification") {
+    icon = "🔍"; title = "Risiti Inapitiwa!";
+    body = `Risiti yako ya malipo imepokelewa na inafanyiwa verification na timu yetu. Utapata ujumbe wa email ndani ya masaa 2. Subiri kidogo...`;
+    cta  = `<div style="display:flex;gap:0.75rem">
+      <a href="https://wa.me/255651919915?text=Ninahitaji+msaada+na+duka+langu+${encodeURIComponent(storeName)}" target="_blank" style="flex:1;display:block;padding:0.85rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;text-align:center">💬 WhatsApp Support</a>
+      <button onclick="location.reload()" style="flex:0 0 100px;padding:0.85rem;background:var(--lgray);border:none;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer">🔄 Refresh</button>
+    </div>`;
+  } else {
+    icon = "⏳"; title = "Duka Lako Linasubiri Activation";
+    body = `Asante ${ownerName}! Taarifa zako zimesalishwa. Kamilisha malipo ili duka lako liwashwe.`;
+    cta  = `<a href="seller-login.html" style="display:block;padding:0.9rem;background:var(--gold);color:var(--navy);font-weight:700;text-decoration:none;text-align:center">💳 Kamilisha Malipo →</a>`;
+  }
+
+  overlay.innerHTML = `
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--offwhite)">
+      <div style="background:#fff;border:1px solid var(--lgray);max-width:460px;width:100%;padding:2.5rem">
+        <div style="text-align:center;margin-bottom:1.5rem">
+          <div style="font-size:3rem;margin-bottom:0.75rem">${icon}</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem">${title}</div>
+          <div style="font-size:0.875rem;color:var(--gray);line-height:1.7">${body}</div>
+        </div>
+        ${store ? `<div style="background:var(--offwhite);padding:1rem;margin-bottom:1.5rem;font-size:0.82rem;line-height:2;color:var(--gray)">
+          🏪 <strong style="color:var(--navy)">${storeName}</strong><br>
+          👤 ${ownerName}<br>
+          📊 Status: <span style="font-weight:700;color:var(--red)">${status.replace(/_/g," ")}</span>
+        </div>` : ""}
+        <div style="display:flex;flex-direction:column;gap:0.75rem">${cta}</div>
+        <div style="text-align:center;margin-top:1.5rem">
+          <button onclick="sb.auth.signOut().then(()=>location.replace('seller-login.html'))"
+            style="font-size:0.78rem;color:var(--gray);background:none;border:none;cursor:pointer;text-decoration:underline">Ondoka (Logout)</button>
+        </div>
+      </div>
+    </div>`;
+  overlay.style.display = "block";
 }
 
 // ── LOAD STORES ──
@@ -1933,4 +1988,3 @@ init();
 </script>
 </body>
 </html>
-
