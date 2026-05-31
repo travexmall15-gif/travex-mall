@@ -818,6 +818,7 @@ function buildQuickActions(themeColor) {
   const brightness=(r*299+g*587+b*114)/1000;
   const txt = brightness > 128 ? '#111827' : '#ffffff';
 
+  const isB2B = activeStore?.store_type === "b2b";
   const actions = [
     {icon:'➕', label:'Add Product',       fn:"openProductModal()"},
     {icon:'✏️', label:'Edit Store',         fn:"showPage('store',document.querySelector('.topnav-tab'))"},
@@ -825,22 +826,28 @@ function buildQuickActions(themeColor) {
     {icon:'📈', label:'Marketing Analytics', fn:"window.open('ai-marketing.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
     {icon:'🤖', label:'Business Advisor',   fn:"window.open('ai-business.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
     {icon:'🚚', label:'Book Delivery',       fn:"bookDelivery()"},
+    ...(isB2B ? [
+      {icon:'📋', label:'Invoice',           fn:"window.open('invoice.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')", b2b:true},
+      {icon:'📦', label:'Wholesale Catalog', fn:"showPage('products',document.querySelector('.topnav-tab'))", b2b:true},
+    ] : []),
   ];
 
   grid.innerHTML = actions.map(a => `
     <button onclick="${a.fn}" style="
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       gap:0.5rem;padding:1.25rem 0.75rem;
-      background:${themeColor||'#0D1B3E'};
-      color:${txt};
-      border:1px solid rgba(255,255,255,0.1);
+      background:${a.b2b ? 'linear-gradient(135deg,#C9A84C,#F0C96B)' : (themeColor||'#0D1B3E')};
+      color:${a.b2b ? '#0D1B3E' : txt};
+      border:1px solid ${a.b2b ? 'rgba(201,168,76,0.4)' : 'rgba(255,255,255,0.1)'};
       cursor:pointer;
       font-family:'Inter',sans-serif;
       transition:all 0.2s;
       text-align:center;
       min-height:90px;
       width:100%;
+      position:relative;
     " onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='brightness(1)'">
+      ${a.b2b ? '<span style="position:absolute;top:6px;right:6px;font-size:0.55rem;font-weight:800;background:#0D1B3E;color:#C9A84C;padding:0.1rem 0.35rem;letter-spacing:0.06em">B2B</span>' : ''}
       <span style="font-size:1.6rem">${a.icon}</span>
       <span style="font-size:0.72rem;font-weight:700;line-height:1.3">${a.label}</span>
     </button>`).join("");
@@ -1926,3 +1933,4 @@ init();
 </script>
 </body>
 </html>
+
