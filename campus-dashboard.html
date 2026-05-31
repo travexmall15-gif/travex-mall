@@ -187,6 +187,102 @@ tbody tr:hover{background:var(--offwhite)}
 </head>
 <body>
 
+
+<!-- CAMPUS LOGIN OVERLAY -->
+<div id="campusLoginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0D1B3E 0%,#1B3A6B 100%);overflow-y:auto">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem">
+    <div style="width:100%;max-width:400px">
+      <!-- Logo -->
+      <div style="text-align:center;margin-bottom:2rem">
+        <div style="font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:0.3rem">TRAVEX <span style="color:#C9A84C">CAMPUS</span></div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;text-transform:uppercase">Student Seller Dashboard</div>
+      </div>
+
+      <!-- Toggle tabs -->
+      <div style="display:flex;background:rgba(255,255,255,0.06);border-radius:0;margin-bottom:1.5rem">
+        <button id="loginTabBtn" onclick="switchAuthTab('login')"
+          style="flex:1;padding:0.75rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;background:#C9A84C;color:#0D1B3E;transition:all 0.2s">
+          Ingia / Login
+        </button>
+        <button id="signupTabBtn" onclick="switchAuthTab('signup')"
+          style="flex:1;padding:0.75rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,0.6);transition:all 0.2s">
+          Jisajili / Register
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
+        <div style="margin-bottom:1rem" id="loginError"></div>
+        <div style="margin-bottom:1rem">
+          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Email</label>
+          <input type="email" id="loginEmail" placeholder="email@example.com"
+            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none"
+            onkeypress="if(event.key==='Enter')doLogin()">
+        </div>
+        <div style="margin-bottom:1.5rem">
+          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Nenosiri / Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••"
+            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none"
+            onkeypress="if(event.key==='Enter')doLogin()">
+        </div>
+        <button onclick="doLogin()" id="loginBtn"
+          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s">
+          Ingia Dashibodi →
+        </button>
+        <div style="text-align:center;margin-top:1rem">
+          <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline">Umesahau nenosiri?</a>
+        </div>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signupForm" style="display:none;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1.2rem;line-height:1.6">
+          ⚠️ Kujisajili hapa ni kwa wale ambao <strong style="color:#C9A84C">wamekwisha-approved</strong> na Travex Campus. Kama bado haujatuma maombi, <a href="campus-apply.html" style="color:#C9A84C">apply hapa kwanza</a>.
+        </div>
+        <div id="signupError" style="margin-bottom:1rem"></div>
+        <div style="margin-bottom:1rem">
+          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Jina Lako Kamili</label>
+          <input type="text" id="signupName" placeholder="Jina lako kamili"
+            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none">
+        </div>
+        <div style="margin-bottom:1rem">
+          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Email</label>
+          <input type="email" id="signupEmail" placeholder="email@example.com"
+            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none">
+        </div>
+        <div style="margin-bottom:1.5rem">
+          <label style="display:block;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Nenosiri / Password</label>
+          <input type="password" id="signupPassword" placeholder="Angalau herufi 8"
+            style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none">
+        </div>
+        <button onclick="doSignup()" id="signupBtn"
+          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s">
+          Jisajili Sasa →
+        </button>
+      </div>
+
+      <!-- Reset Password -->
+      <div id="resetForm" style="display:none;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2rem">
+        <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-bottom:1.2rem">Ingiza email yako na tutakutumia link ya kubadilisha nenosiri.</div>
+        <div id="resetMsg" style="margin-bottom:1rem"></div>
+        <input type="email" id="resetEmail" placeholder="email@example.com"
+          style="width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;margin-bottom:1rem">
+        <button onclick="doReset()"
+          style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;border:none;cursor:pointer">
+          Tuma Link →
+        </button>
+        <div style="text-align:center;margin-top:1rem">
+          <a onclick="switchAuthTab('login')" style="font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline">← Rudi Login</a>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:1.5rem">
+        <a href="campus.html" style="font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none">← Rudi Campus</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="layout">
 
 <!-- SIDEBAR -->
@@ -620,7 +716,10 @@ let userUniAbbr  = "";
 // INIT
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.replace("login.html"); return; }
+  if (!session) { 
+    document.getElementById("campusLoginOverlay").style.display = "block";
+    return; 
+  }
   currentUser = session.user;
 
   const name = currentUser.user_metadata?.name || currentUser.email.split("@")[0];
@@ -924,6 +1023,105 @@ async function handleLogout() {
 }
 
 init();
+
+// ── CAMPUS AUTH FUNCTIONS ────────────────────────────────
+function switchAuthTab(tab) {
+  const loginForm  = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const resetForm  = document.getElementById("resetForm");
+  const loginBtn   = document.getElementById("loginTabBtn");
+  const signupBtn  = document.getElementById("signupTabBtn");
+
+  loginForm.style.display  = tab === "login"  ? "block" : "none";
+  signupForm.style.display = tab === "signup" ? "block" : "none";
+  resetForm.style.display  = "none";
+
+  loginBtn.style.background  = tab === "login"  ? "#C9A84C" : "transparent";
+  loginBtn.style.color       = tab === "login"  ? "#0D1B3E" : "rgba(255,255,255,0.6)";
+  signupBtn.style.background = tab === "signup" ? "#C9A84C" : "transparent";
+  signupBtn.style.color      = tab === "signup" ? "#0D1B3E" : "rgba(255,255,255,0.6)";
+}
+
+function showResetPass() {
+  document.getElementById("loginForm").style.display  = "none";
+  document.getElementById("signupForm").style.display = "none";
+  document.getElementById("resetForm").style.display  = "block";
+}
+
+async function doLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass  = document.getElementById("loginPassword").value;
+  const btn   = document.getElementById("loginBtn");
+  const errEl = document.getElementById("loginError");
+
+  if (!email || !pass) {
+    showAuthError(errEl, "Tafadhali jaza email na nenosiri.");
+    return;
+  }
+  btn.textContent = "Inaingia...";
+  btn.disabled = true;
+
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) {
+    showAuthError(errEl, "Imeshindwa: " + (error.message === "Invalid login credentials" ? "Email au nenosiri si sahihi." : error.message));
+    btn.textContent = "Ingia Dashibodi →";
+    btn.disabled = false;
+    return;
+  }
+  document.getElementById("campusLoginOverlay").style.display = "none";
+  await init();
+}
+
+async function doSignup() {
+  const name  = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const pass  = document.getElementById("signupPassword").value;
+  const btn   = document.getElementById("signupBtn");
+  const errEl = document.getElementById("signupError");
+
+  if (!name || !email || !pass) {
+    showAuthError(errEl, "Tafadhali jaza sehemu zote.");
+    return;
+  }
+  if (pass.length < 8) {
+    showAuthError(errEl, "Nenosiri lazima liwe na angalau herufi 8.");
+    return;
+  }
+  btn.textContent = "Inajisajili...";
+  btn.disabled = true;
+
+  const { error } = await sb.auth.signUp({
+    email, password: pass,
+    options: { data: { name, role: "campus_seller" } }
+  });
+  if (error) {
+    showAuthError(errEl, "Imeshindwa: " + error.message);
+    btn.textContent = "Jisajili Sasa →";
+    btn.disabled = false;
+    return;
+  }
+  showAuthMsg(errEl, "✅ Umefanikiwa! Angalia email yako kuthibitisha akaunti, kisha ingia.", "#D1FAE5", "#059669");
+  btn.textContent = "Jisajili Sasa →";
+  btn.disabled = false;
+}
+
+async function doReset() {
+  const email = document.getElementById("resetEmail").value.trim();
+  const msgEl = document.getElementById("resetMsg");
+  if (!email) { showAuthError(msgEl, "Ingiza email yako."); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + "/campus-dashboard.html"
+  });
+  if (error) { showAuthError(msgEl, error.message); return; }
+  showAuthMsg(msgEl, "✅ Link imetumwa! Angalia email yako.", "#D1FAE5", "#059669");
+}
+
+function showAuthError(el, msg) {
+  el.innerHTML = \`<div style="padding:0.75rem 1rem;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;font-size:0.82rem;margin-bottom:0">\${msg}</div>\`;
+}
+function showAuthMsg(el, msg, bg, color) {
+  el.innerHTML = \`<div style="padding:0.75rem 1rem;background:\${bg};border:1px solid \${color};color:\${color};font-size:0.82rem;margin-bottom:0">\${msg}</div>\`;
+}
 </script>
 </body>
 </html>
