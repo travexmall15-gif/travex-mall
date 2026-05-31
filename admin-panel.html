@@ -1073,39 +1073,65 @@ function renderVybe() {
 async function approveStore(storeId) {
   const store = allStores.find(s => s.id === storeId);
   if (!store) return;
+  if (!confirm(`Activate duka "${store.store_name}"?\n\nDuka litawashwa MARA MOJA na mmiliki atatumwa email ya kuthibitisha.`)) return;
 
-  // Calculate expiry based on plan duration
   const sub = allSubs.find(s => s.store_id === storeId && s.status === "pending");
   const months = sub?.duration_months || 1;
-  const currExpiry = store.subscription_expires ? new Date(store.subscription_expires) : new Date();
   const now = new Date();
+  const currExpiry = store.subscription_expires ? new Date(store.subscription_expires) : now;
   const startFrom = currExpiry > now ? currExpiry : now;
   const newExpiry = new Date(startFrom);
   newExpiry.setMonth(newExpiry.getMonth() + months);
 
+  // 1. Activate store immediately — visible to customers NOW
   const { error } = await sb.from("stores").update({
-    subscription_status:  "approved",
-    is_active:            true,
-    subscription_start:   now.toISOString(),
-    subscription_expires: newExpiry.toISOString(),
+    subscription_status:      "approved",
+    is_active:                true,
+    payment_status:           "paid",
+    subscription_start:       now.toISOString(),
+    subscription_expires:     newExpiry.toISOString(),
     subscription_grace_until: null
   }).eq("id", storeId);
 
-  if (error) { showToast("Error: "+error.message, "error"); return; }
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
 
-  // Approve subscription record
+  // 2. Update subscription record
   if (sub) {
     await sb.from("subscriptions").update({
-      status:      "approved",
-      approved_at: now.toISOString(),
+      status: "approved", approved_at: now.toISOString(),
       approved_by: "Admin",
-      starts_at:   now.toISOString(),
-      expires_at:  newExpiry.toISOString()
+      starts_at: now.toISOString(), expires_at: newExpiry.toISOString()
     }).eq("id", sub.id);
   }
 
-  showToast("✅ "+store.store_name+" approved! Expires: "+newExpiry.toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}), "success");
+  // 3. Send approval email via Supabase Edge Function
+  const ownerEmail = store.owner_email || store.email || null;
+  const ownerPhone = store.owner_phone || store.whatsapp_number || "";
+  const planName   = store.subscription_plan === "premium" ? "👑 Premium" : store.subscription_plan === "standard" ? "⭐⭐ Standard" : "⭐ Basic";
+
+  if (ownerEmail) {
+    await sendApprovalEmail({
+      to:        ownerEmail,
+      ownerName: store.owner_name || store.seller_name || "Seller",
+      storeName: store.store_name,
+      storeType: store.store_type?.toUpperCase() || "B2C",
+      plan:      planName,
+      expires:   newExpiry.toLocaleDateString("sw", {day:"numeric", month:"long", year:"numeric"}),
+      loginUrl:  window.location.origin + "/seller-login.html",
+      storeUrl:  window.location.origin + "/store.html?store=" + (store.slug || store.id)
+    }).catch(() => {});
+  }
+
+  // 4. Mark admin notification as handled
+  await sb.from("admin_notifications")
+    .update({ is_read: true })
+    .eq("type", "payment_receipt")
+    .ilike("body", `%${ownerPhone}%`)
+    .catch(() => {});
+
+  showToast(`✅ "${store.store_name}" imewashwa! Duka linaonekana sasa. ${ownerEmail ? "📧 Email imetumwa." : "⚠️ Hakuna email — tuma WhatsApp."}`, "success");
   await loadAll();
+  loadNotifications();
 }
 
 // ── APPROVE SUBSCRIPTION ──
@@ -1963,64 +1989,91 @@ function filterAppsSearch(q) {
 async function approveCampusApp(id) {
   const app = allCampusApps.find(a=>a.id===id);
   if (!app) return;
-  if (!confirm(`Idhinisha maombi ya ${app.full_name} — ${app.shop_name}?`)) return;
+  if (!confirm(`Idhinisha maombi ya ${app.full_name}?\n\nDuka litawashwa MARA MOJA na atapewa maelekezo ya kulipa TZS 15,000.`)) return;
 
-  // Update application status
-  const { error: e1 } = await sb.from("campus_applications").update({ status:"approved", approved_at: new Date().toISOString() }).eq("id", id);
+  const now = new Date();
+
+  // 1. Update application status
+  const { error: e1 } = await sb.from("campus_applications").update({
+    status: "approved", approved_at: now.toISOString()
+  }).eq("id", id);
   if (e1) { showToast("Imeshindwa: " + e1.message, "error"); return; }
 
-  // Create campus_store record
+  // 2. Create campus_store — is_active=true so duka linaonekana mara moja
+  const shopNumber = allCampusStores.filter(s => s.university_abbr === app.university_abbr && s.shop_number).length + 1;
+  const expires30 = new Date(now.getTime() + 30*24*60*60*1000);
   const { error: e2 } = await sb.from("campus_stores").upsert({
-    user_id:          app.user_id || null,
-    store_name:       app.shop_name || app.full_name + "'s Shop",
-    category:         app.business_category,
-    description:      app.business_description || "",
-    whatsapp_number:  app.whatsapp || app.phone,
-    university:       app.university,
-    university_abbr:  app.university_abbr,
-    region:           app.region,
-    seller_name:      app.full_name,
-    seller_email:     app.email,
-    is_active:        false,   // active after payment
-    subscription_status: "pending",
-    created_at:       new Date().toISOString()
+    user_id:             app.user_id || null,
+    store_name:          app.shop_name || app.full_name + "'s Shop",
+    category:            app.business_category,
+    description:         app.business_description || "",
+    whatsapp_number:     app.whatsapp || app.phone,
+    university:          app.university,
+    university_abbr:     app.university_abbr,
+    region:              app.region,
+    seller_name:         app.full_name,
+    seller_email:        app.email,
+    is_active:           true,
+    subscription_status: "approved",
+    shop_number:         shopNumber,
+    subscription_start:  now.toISOString(),
+    subscription_expires: expires30.toISOString(),
+    created_at:          now.toISOString()
   });
+  if (e2) { showToast("⚠️ Store haikuundwa vizuri: " + e2.message, "error"); }
 
-  if (e2) { showToast("Application approved lakini store haikuundwa: " + e2.message, "error"); }
-  
-  showToast("✅ " + app.full_name + " ameidhinishwa! Tuma WhatsApp ili alipe TZS 15,000.");
-  
-  // Open WhatsApp with approval message
-  const msg = encodeURIComponent(
-    `🎉 *Hongera ${app.full_name}!*
+  // 3. Send approval email
+  if (app.email) {
+    await sendApprovalEmail({
+      to:        app.email,
+      ownerName: app.full_name,
+      storeName: app.shop_name || "Duka lako",
+      storeType: "CAMPUS",
+      plan:      "🎓 Campus Premium",
+      shopNum:   shopNumber,
+      expires:   expires30.toLocaleDateString("sw", {day:"numeric", month:"long", year:"numeric"}),
+      loginUrl:  window.location.origin + "/campus-dashboard.html",
+      storeUrl:  window.location.origin + "/campus-university.html?uni=" + app.university_abbr,
+      payNote:   "Lipa TZS 15,000 kwa CRDB 0152774556100 au M-Pesa +255 651 919 915 ili kudumisha duka lako kila mwezi"
+    }).catch(() => {});
+  }
+
+  // 4. Send WhatsApp with approval + payment instructions
+  const phone = (app.whatsapp || app.phone || "").replace(/\D/g, "");
+  if (phone) {
+    const msg = encodeURIComponent(
+      `🎉 *Hongera ${app.full_name}!*
 
 ` +
-    `Application yako ya Travex Uni-Student Market *imeidhinishwa!*
+      `Maombi yako ya Travex Uni-Student Market *yameidhinishwa!* 🎓
 
 ` +
-    `*Duka lako:* ${app.shop_name}
+      `*Duka lako:* ${app.shop_name}
 *Chuo:* ${app.university_abbr}
+*Shop No:* #${shopNumber}
 
 ` +
-    `*Hatua inayofuata — Lipa Ada:*
+      `*Lipa Ada ya Activation:*
 ` +
-    `💳 CRDB BANK: *0152774556100*
-` +
-    `📱 M-Pesa: *+255 651 919 915*
-` +
-    `💵 Kiasi: *TZS 15,000*
+      `💳 CRDB BANK: *0152774556100*
+📱 M-Pesa: *+255 651 919 915*
+💵 Kiasi: *TZS 15,000/mwezi*
 
 ` +
-    `Baada ya kulipa, tuma picha ya risiti hapa na duka lako litafunguliwa *ndani ya masaa 2*.
+      `Tuma picha ya risiti hapa baada ya kulipa.
+` +
+      `Ingia dashibodi: ${window.location.origin}/campus-dashboard.html
 
 ` +
-    `Karibu kwenye Travex Campus! 🎓
-— Travex Digital Group`
-  );
-  window.open(`https://wa.me/${(app.whatsapp||app.phone||"").replace(/\D/g,"")}?text=${msg}`, "_blank");
-  
+      `Karibu Travex Campus! 🎓`
+    );
+    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+  }
+
+  showToast(`✅ ${app.full_name} ameidhinishwa! Duka #${shopNumber} linaonekana sasa.${app.email ? " 📧 Email imetumwa." : ""}`, "success");
   await loadCampusData();
   renderAppsTable(allCampusApps);
+  loadNotifications();
 }
 
 async function rejectCampusApp(id) {
@@ -2307,6 +2360,129 @@ function subscribeToNotifications() {
 // Load notifications on start + subscribe
 loadNotifications();
 subscribeToNotifications();
+
+// ══════════════════════════════════════════════════════════════════
+// SEND APPROVAL EMAIL via Supabase Edge Function / direct API
+// ══════════════════════════════════════════════════════════════════
+async function sendApprovalEmail(params) {
+  const { to, ownerName, storeName, storeType, plan, expires, loginUrl, storeUrl, shopNum, payNote } = params;
+
+  const isCampus = storeType === "CAMPUS";
+  const subject  = isCampus
+    ? `🎓 Hongera ${ownerName}! Duka lako la Campus limeidhinishwa — Travex Campus`
+    : `🎉 Hongera! Duka lako "${storeName}" limewashwa — Travex Mall`;
+
+  const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:'Inter',Arial,sans-serif;background:#F8F9FC;margin:0;padding:0">
+  <div style="max-width:560px;margin:0 auto;background:#fff">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#0D1B3E,#1B3A6B);padding:2.5rem 2rem;text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem">${isCampus ? "🎓" : "🎉"}</div>
+      <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.25rem">
+        TRAVEX ${isCampus ? '<span style="color:#C9A84C">CAMPUS</span>' : '<span style="color:#C9A84C">MALL</span>'}
+      </div>
+      <div style="font-size:0.875rem;color:rgba(255,255,255,0.6)">Travex Digital Group · Tanzania</div>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:2rem">
+      <p style="font-size:1rem;font-weight:700;color:#0D1B3E;margin-bottom:0.5rem">Habari ${ownerName}! 👋</p>
+      <p style="color:#6B7280;line-height:1.7;margin-bottom:1.5rem">
+        ${isCampus
+          ? `Maombi yako ya kujiunga na <strong>Travex Uni-Student Market</strong> yameidhinishwa! Duka lako <strong>"${storeName}"</strong> limeundwa na linaonekana kwenye chuo chako.`
+          : `Hongana! Duka lako <strong>"${storeName}"</strong> limeidhinishwa na limewashwa kwenye <strong>Travex Mall</strong>. Unaweza kuanza kuuza sasa hivi!`
+        }
+      </p>
+
+      <!-- Store info box -->
+      <div style="background:#F8F9FC;border:1px solid #E5E7EB;padding:1.25rem;margin-bottom:1.5rem">
+        <div style="font-size:0.7rem;font-weight:700;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">📋 Taarifa za Duka Lako</div>
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+          <tr><td style="color:#6B7280;padding:0.3rem 0;width:40%">Jina la Duka</td><td style="font-weight:700;color:#111827">${storeName}</td></tr>
+          <tr><td style="color:#6B7280;padding:0.3rem 0">Aina</td><td style="font-weight:700;color:#111827">${storeType}</td></tr>
+          <tr><td style="color:#6B7280;padding:0.3rem 0">Plan</td><td style="font-weight:700;color:#C9A84C">${plan}</td></tr>
+          ${shopNum ? `<tr><td style="color:#6B7280;padding:0.3rem 0">Shop Number</td><td style="font-weight:700;color:#7C3AED">#${shopNum}</td></tr>` : ""}
+          <tr><td style="color:#6B7280;padding:0.3rem 0">Inaisha</td><td style="font-weight:700;color:#111827">${expires}</td></tr>
+        </table>
+      </div>
+
+      ${payNote ? `
+      <div style="background:#FEF3C7;border-left:3px solid #C9A84C;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:0.85rem;color:#92400E;line-height:1.6">
+        💳 <strong>Malipo:</strong> ${payNote}
+      </div>` : ""}
+
+      <!-- CTA Buttons -->
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <a href="${loginUrl}" style="display:inline-block;background:#C9A84C;color:#0D1B3E;padding:0.875rem 2rem;font-weight:800;text-decoration:none;font-size:0.95rem;margin-bottom:0.75rem">
+          🔑 Ingia Dashibodi Yako →
+        </a>
+        <br>
+        <a href="${storeUrl}" style="display:inline-block;background:#0D1B3E;color:#fff;padding:0.75rem 2rem;font-weight:600;text-decoration:none;font-size:0.875rem">
+          🏪 Angalia Duka Lako →
+        </a>
+      </div>
+
+      <!-- Next steps -->
+      <div style="border-top:1px solid #E5E7EB;padding-top:1.25rem">
+        <div style="font-size:0.72rem;font-weight:700;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">Hatua Zako Zinazofuata:</div>
+        <div style="font-size:0.82rem;color:#6B7280;line-height:2.2">
+          ${isCampus ? `
+          ✅ Lipa TZS 15,000 kudumisha duka lako<br>
+          📱 Tuma risiti WhatsApp: <strong>+255 651 919 915</strong><br>
+          🔑 Ingia dashibodi yako kuongeza bidhaa<br>
+          📢 Tangaza duka lako kwa wanafunzi wenzako
+          ` : `
+          ✅ Ingia dashibodi yako sasa<br>
+          📦 Ongeza bidhaa zako za kwanza<br>
+          📢 Shiriki duka lako kwenye mitandao ya kijamii<br>
+          💬 Wasiliana nasi kwa msaada: +255 651 919 915
+          `}
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#0D1B3E;padding:1.25rem 2rem;text-align:center">
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.8">
+        <strong style="color:#C9A84C">Travex Digital Group (TDG)</strong><br>
+        📧 travexmall15@gmail.com &nbsp;·&nbsp; 📱 +255 651 919 915<br>
+        <a href="https://wa.me/255651919915" style="color:#25D366;text-decoration:none">💬 WhatsApp Support</a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>`;
+
+  // Try Supabase Edge Function first, fallback gracefully
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type":  "application/json",
+        "Authorization": `Bearer ${session?.access_token || SUPABASE_ANON}`
+      },
+      body: JSON.stringify({ to, subject, html: htmlBody })
+    });
+    if (!resp.ok) throw new Error(await resp.text());
+    console.log("✅ Email sent to", to);
+  } catch (err) {
+    console.warn("Email send failed (Edge Function):", err.message);
+    // Log to admin_notifications as fallback
+    await sb.from("admin_notifications").insert({
+      type: "email_failed",
+      title: `⚠️ Email haikutumwa kwa ${to}`,
+      body:  `Subject: ${subject} | Error: ${err.message}. Tuma manually.`,
+      is_read: false,
+      created_at: new Date().toISOString()
+    }).catch(() => {});
+  }
+}
 </script>
 </body>
 </html>
