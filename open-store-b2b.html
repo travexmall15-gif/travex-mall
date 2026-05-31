@@ -10,7 +10,7 @@
 function pickColor(color, el) {
   document.getElementById("selectedColor").value = color;
   document.querySelectorAll("#colorPicker div").forEach(d => d.style.outline = "none");
-  el.style.outline = "3px solid #C9A84C";
+  el.style.outline = "3px solid #D7C7A1";
   updateLiveTheme();
 }
 function pickColorCustom(color) {
@@ -29,22 +29,25 @@ function pickFont(font, el) {
   updateLiveTheme();
 }
 function updateLiveTheme() {
-  const color = document.getElementById("selectedColor")?.value || "#0D1B3E";
+  const color = document.getElementById("selectedColor")?.value || "#0B3D2E";
   const font  = document.getElementById("selectedFont")?.value || "Playfair Display";
   const prev  = document.getElementById("themePreviewCard");
   if (!prev) return;
   const namePrev = prev.querySelector(".tprev-name");
   const heroBanner = prev.querySelector(".tprev-banner");
   const badge = prev.querySelector(".tprev-badge");
-  if (namePrev) namePrev.style.fontFamily = font + ",'Inter',sans-serif";
+  if (namePrev) namePrev.style.fontFamily = font + ",'DM Sans',sans-serif";
   if (heroBanner) heroBanner.style.background = `linear-gradient(135deg,${color},${color}cc)`;
   if (badge) { badge.style.background = color; badge.style.color = "#fff"; }
 }
 </script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
-body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+:root{
+  --br:8px;
+  --br-lg:12px;
+  --br-pill:40px;--navy:#0B3D2E;--blue:#145A43;--gold:#D7C7A1;--gold2:#E8D9B5;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+body{font-family:"DM Sans",sans-serif;background:var(--offwhite);color:var(--dark)}
 
 nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .nav-logo{font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none}
@@ -81,17 +84,17 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .form-group:last-child{margin-bottom:0}
 .form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
 .form-label span{color:var(--red)}
-.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"DM Sans",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
 .form-input:focus{border-color:var(--navy)}
 .form-input::placeholder{color:#9CA3AF}
-.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"DM Sans",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
 .form-select:focus{border-color:var(--navy)}
-.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"DM Sans",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
 .form-hint{font-size:0.72rem;color:var(--gray);margin-top:0.3rem}
 
 /* PASSWORD */
 .pass-wrap{position:relative}
-.pass-toggle{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray);font-size:0.78rem;font-family:"Inter",sans-serif}
+.pass-toggle{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray);font-size:0.78rem;font-family:"DM Sans",sans-serif}
 
 /* PLAN CARDS */
 /* DURATION SELECTOR */
@@ -128,7 +131,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .stores-count.show{display:block}
 .stores-count-label{font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem}
 .stores-btns{display:flex;gap:0.4rem}
-.store-btn{flex:1;padding:0.5rem 0.4rem;font-size:0.75rem;font-weight:700;border:1.5px solid var(--lgray);background:var(--white);cursor:pointer;font-family:"Inter",sans-serif;text-align:center;transition:all 0.2s}
+.store-btn{flex:1;padding:0.5rem 0.4rem;font-size:0.75rem;font-weight:700;border:1.5px solid var(--lgray);background:var(--white);cursor:pointer;font-family:"DM Sans",sans-serif;text-align:center;transition:all 0.2s}
 .store-btn:hover{border-color:var(--gold)}
 .store-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
 
@@ -171,20 +174,20 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .pay-text strong{color:var(--dark)}
 .copy-row{display:flex;justify-content:space-between;align-items:center;background:var(--offwhite);border:1px solid var(--lgray);padding:0.55rem 0.85rem;margin-top:0.4rem}
 .copy-val{font-size:0.875rem;font-weight:700;color:var(--navy)}
-.copy-btn{background:var(--navy);color:var(--white);border:none;padding:0.28rem 0.7rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif}
+.copy-btn{background:var(--navy);color:var(--white);border:none;padding:0.28rem 0.7rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif}
 .copy-btn:hover{background:var(--gold);color:var(--navy)}
-.wa-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:#25D366;color:var(--white);font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;margin-bottom:1rem;transition:all 0.2s;text-decoration:none}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:#25D366;color:var(--white);font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;margin-bottom:1rem;transition:all 0.2s;text-decoration:none}
 .wa-btn:hover{background:#128C7E}
-.close-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:var(--offwhite);color:var(--gray);font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.close-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:var(--offwhite);color:var(--gray);font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .close-btn:hover{background:var(--lgray)}
 
 /* ACTIONS */
 .form-actions{display:flex;gap:1rem;justify-content:space-between;align-items:center;margin-top:2rem}
-.btn-back{background:var(--white);color:var(--gray);padding:0.85rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+.btn-back{background:var(--white);color:var(--gray);padding:0.85rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"DM Sans",sans-serif}
 .btn-back:hover{border-color:var(--navy);color:var(--navy)}
-.btn-next{background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.btn-next{background:var(--navy);color:var(--white);padding:0.85rem 2rem;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .btn-next:hover{background:var(--blue)}
-.btn-submit{background:var(--gold);color:var(--navy);padding:0.85rem 2rem;font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-submit{background:var(--gold);color:var(--navy);padding:0.85rem 2rem;font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"DM Sans",sans-serif}
 .btn-submit:hover{background:var(--gold2)}
 .btn-submit:disabled{background:var(--lgray);color:var(--gray);cursor:not-allowed}
 
@@ -222,7 +225,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .locked-item{opacity:0.4;cursor:not-allowed!important;font-size:0.75rem}
 .dash-tab{display:none}
 .active-tab{display:block}
-.store-tab-btn{padding:0.65rem 1.2rem;background:transparent;border:none;border-bottom:2px solid transparent;font-size:0.8rem;font-weight:600;color:var(--gray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.store-tab-btn{padding:0.65rem 1.2rem;background:transparent;border:none;border-bottom:2px solid transparent;font-size:0.8rem;font-weight:600;color:var(--gray);cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s}
 .store-tab-btn:hover{color:var(--navy)}
 .store-tab-btn.active{color:var(--navy);border-bottom-color:var(--navy)}
 .ai-tool-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;margin-bottom:1rem}
@@ -261,7 +264,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .dash-card{background:var(--white);border:1px solid var(--lgray)}
 .dash-card-header{padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
 .dash-card-title{font-size:0.8rem;font-weight:700;color:var(--navy)}
-.dash-card-btn{background:var(--lgray);color:var(--gray);padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;border:none;cursor:not-allowed;font-family:"Inter",sans-serif}
+.dash-card-btn{background:var(--lgray);color:var(--gray);padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;border:none;cursor:not-allowed;font-family:"DM Sans",sans-serif}
 .dash-card-body{padding:1rem}
 .dash-empty{text-align:center;padding:1.5rem;color:var(--gray);font-size:0.78rem}
 .dash-empty-icon{font-size:1.8rem;margin-bottom:0.4rem}
@@ -278,7 +281,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .ai-card-icon{font-size:1.6rem;margin-bottom:0.5rem}
 .ai-card-name{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
 .ai-card-desc{font-size:0.72rem;color:var(--gray);line-height:1.5}
-.ai-card-btn{width:100%;margin-top:0.75rem;padding:0.5rem;background:var(--navy);color:var(--white);font-size:0.72rem;font-weight:600;border:none;cursor:not-allowed;font-family:"Inter",sans-serif;opacity:0.7}
+.ai-card-btn{width:100%;margin-top:0.75rem;padding:0.5rem;background:var(--navy);color:var(--white);font-size:0.72rem;font-weight:600;border:none;cursor:not-allowed;font-family:"DM Sans",sans-serif;opacity:0.7}
 .ai-lock-badge{position:absolute;top:8px;right:8px;background:var(--lgray);color:var(--gray);font-size:0.58rem;font-weight:700;padding:0.15rem 0.4rem}
 
 /* OVERVIEW STORES TABLE */
@@ -292,7 +295,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 /* DASH TABS */
 .dash-tabs{display:flex;gap:0;background:var(--navy);border-bottom:1px solid rgba(255,255,255,0.1)}
-.dash-tab{padding:0.6rem 1.2rem;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"Inter",sans-serif}
+.dash-tab{padding:0.6rem 1.2rem;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"DM Sans",sans-serif}
 .dash-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 .dash-tab:hover{color:var(--white)}
 .dash-panel{display:none}
@@ -652,8 +655,8 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
       </div>
       <div id="receiptError" style="display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem"></div>
       <div style="display:flex;gap:0.75rem">
-        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">← Rudi</button>
-        <button onclick="submitReceipt()" id="receiptSubmitBtn" style="flex:1;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer">Tuma Risiti & Maliza →</button>
+        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'DM Sans',sans-serif;cursor:pointer">← Rudi</button>
+        <button onclick="submitReceipt()" id="receiptSubmitBtn" style="flex:1;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer">Tuma Risiti & Maliza →</button>
       </div>
     </div>
   </div>
@@ -668,7 +671,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
       </div>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:1rem;font-size:0.8rem;color:#1E3A5F;text-align:left;margin-bottom:1.5rem">📞 Tutawasiliana nawe: <strong id="confirmPhoneFinal">—</strong></div>
       <a href="https://wa.me/255651919915?text=Nimetuma+risiti+ya+malipo+kwenye+Travex+Mall+B2B!" target="_blank" style="display:block;width:100%;padding:0.9rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;margin-bottom:0.75rem">💬 Wasiliana Nasi WhatsApp</a>
-      <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">Nenda kwenye Login →</button>
+      <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'DM Sans',sans-serif;cursor:pointer">Nenda kwenye Login →</button>
     </div>
   </div>
 </div>
@@ -927,7 +930,7 @@ function generateStoreForms() {
           <div class="form-group">
             <label class="form-label">Dashboard Color</label>
             <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.75rem" id="colorPicker">
-              <div onclick="pickColor('#0D1B3E',this)" style="width:36px;height:36px;background:#0D1B3E;cursor:pointer;border:3px solid #0D1B3E;outline:2px solid #C9A84C" title="Navy (Default)"></div>
+              <div onclick="pickColor('#0B3D2E',this)" style="width:36px;height:36px;background:#0B3D2E;cursor:pointer;border:3px solid #0B3D2E;outline:2px solid #D7C7A1" title="Navy (Default)"></div>
               <div onclick="pickColor('#7C3AED',this)" style="width:36px;height:36px;background:#7C3AED;cursor:pointer;border:3px solid #7C3AED" title="Purple"></div>
               <div onclick="pickColor('#059669',this)" style="width:36px;height:36px;background:#059669;cursor:pointer;border:3px solid #059669" title="Green"></div>
               <div onclick="pickColor('#DC2626',this)" style="width:36px;height:36px;background:#DC2626;cursor:pointer;border:3px solid #DC2626" title="Red"></div>
@@ -935,21 +938,21 @@ function generateStoreForms() {
               <div onclick="pickColor('#0891B2',this)" style="width:36px;height:36px;background:#0891B2;cursor:pointer;border:3px solid #0891B2" title="Cyan"></div>
               <div onclick="pickColor('#BE185D',this)" style="width:36px;height:36px;background:#BE185D;cursor:pointer;border:3px solid #BE185D" title="Pink"></div>
               <div onclick="pickColor('#111827',this)" style="width:36px;height:36px;background:#111827;cursor:pointer;border:3px solid #111827" title="Black"></div>
-              <input type="color" id="customColor" value="#0D1B3E" onchange="pickColorCustom(this.value)" style="width:36px;height:36px;cursor:pointer;border:none;padding:0" title="Custom color">
+              <input type="color" id="customColor" value="#0B3D2E" onchange="pickColorCustom(this.value)" style="width:36px;height:36px;cursor:pointer;border:none;padding:0" title="Custom color">
             </div>
-            <input type="hidden" id="selectedColor" value="#0D1B3E">
+            <input type="hidden" id="selectedColor" value="#0B3D2E">
           </div>
           <div class="form-group">
             <label class="form-label">Store Name Font</label>
             <div style="display:flex;flex-direction:column;gap:0.5rem" id="fontPicker">
               <div onclick="pickFont('Playfair Display',this)" style="padding:0.6rem 1rem;border:2px solid var(--gold);cursor:pointer;background:var(--offwhite)" class="font-opt selected-font">
-                <span style="font-family:'Playfair Display',serif;font-size:1.1rem">Playfair Display</span> — <span style="font-size:0.72rem;color:var(--gray)">Elegant, luxury</span>
+                <span style="font-family:'Outfit','DM Sans',sans-serif;font-size:1.1rem">Playfair Display</span> — <span style="font-size:0.72rem;color:var(--gray)">Elegant, luxury</span>
               </div>
               <div onclick="pickFont('Bebas Neue',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
-                <span style="font-family:'Bebas Neue',cursive;font-size:1.1rem">BEBAS NEUE</span> — <span style="font-size:0.72rem;color:var(--gray)">Bold, modern</span>
+                <span style="font-family:'Outfit','DM Sans',sans-serif;font-size:1.1rem">BEBAS NEUE</span> — <span style="font-size:0.72rem;color:var(--gray)">Bold, modern</span>
               </div>
               <div onclick="pickFont('Inter',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
-                <span style="font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:700">Inter Bold</span> — <span style="font-size:0.72rem;color:var(--gray)">Clean, professional</span>
+                <span style="font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:700">Inter Bold</span> — <span style="font-size:0.72rem;color:var(--gray)">Clean, professional</span>
               </div>
               <div onclick="pickFont('Montserrat',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
                 <span style="font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:700">Montserrat</span> — <span style="font-size:0.72rem;color:var(--gray)">Strong, corporate</span>
@@ -963,11 +966,11 @@ function generateStoreForms() {
           <div style="margin-top:1rem">
             <label class="form-label">Live Preview:</label>
             <div id="themePreviewCard" style="border:1px solid var(--lgray);overflow:hidden;max-width:340px">
-              <div class="tprev-banner" style="height:60px;background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"></div>
+              <div class="tprev-banner" style="height:60px;background:linear-gradient(135deg,#0B3D2E,#145A43)"></div>
               <div style="padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem;margin-top:-18px;position:relative">
-                <div class="tprev-badge" style="width:36px;height:36px;background:#0D1B3E;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0" id="tprev-initials">TX</div>
+                <div class="tprev-badge" style="width:36px;height:36px;background:#0B3D2E;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0" id="tprev-initials">TX</div>
                 <div>
-                  <div class="tprev-name" style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:#111827" id="tprev-storename">Store Name</div>
+                  <div class="tprev-name" style="font-family:'Outfit','DM Sans',sans-serif;font-size:0.95rem;font-weight:800;color:#111827" id="tprev-storename">Store Name</div>
                   <div class="tprev-cat" style="font-size:0.65rem;color:#6B7280">Category · Region</div>
                 </div>
               </div>
@@ -1048,7 +1051,7 @@ function buildPreview() {
     html += `
     <div class="preview-box" style="${i>1?"margin-top:1.5rem":""}">
       ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.4rem 1rem;font-size:0.75rem;font-weight:700">Store ${i}</div>`:""}
-      <div class="preview-banner" style="${bSrc?`background-image:url(${bSrc});background-size:cover;background-position:center`:"background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"}">
+      <div class="preview-banner" style="${bSrc?`background-image:url(${bSrc});background-size:cover;background-position:center`:"background:linear-gradient(135deg,#0B3D2E,#145A43)"}">
         <div class="preview-overlay"></div>
       </div>
       <div class="preview-header">
@@ -1131,7 +1134,7 @@ async function submitAndProceed() {
       const instagram = (document.getElementById("sInsta"+i)?.value || "").trim().replace("@","");
       const tiktok    = (document.getElementById("sTiktok"+i)?.value || "").trim().replace("@","");
       const facebook  = (document.getElementById("sFacebook"+i)?.value || "").trim();
-      const themeColor = document.getElementById("selectedColor")?.value || "#0D1B3E";
+      const themeColor = document.getElementById("selectedColor")?.value || "#0B3D2E";
       const themeFont  = document.getElementById("selectedFont")?.value || "Playfair Display";
 
       await sb.from("stores").insert({
@@ -1374,7 +1377,7 @@ function buildStoresGrid() {
     const reg  = document.getElementById("sReg"+i)?.value || "—";
     const init = name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
     html += `<div style="background:var(--white);border:2px solid ${pColor[selectedPlan.key]};overflow:hidden">
-      <div style="height:65px;background:linear-gradient(135deg,#0D1B3E,#1B3A6B);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:var(--gold)">${init}</div>
+      <div style="height:65px;background:linear-gradient(135deg,#0B3D2E,#145A43);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:var(--gold)">${init}</div>
       <div style="padding:0.75rem">
         <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${name}</div>
         <div style="font-size:0.68rem;color:var(--gray);margin-bottom:0.5rem">${cat} · ${reg}</div>
