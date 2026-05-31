@@ -1,0 +1,56 @@
+{
+  "name": "Travex Campus",
+  "short_name": "TX Campus",
+  "description": "Travex Uni-Student Market — Nunua na Uza kwenye Chuo Chako",
+  "start_url": "/campus.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0D1B3E",
+  "theme_color": "#0D1B3E",
+  "orientation": "portrait",
+  "lang": "sw",
+  "icons": [
+    {
+      "src": "icon-campus-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-campus-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "education", "business"],
+  "shortcuts": [
+    {
+      "name": "Browse Campus Shops",
+      "short_name": "Browse",
+      "url": "/campus.html#universities",
+      "icons": [{ "src": "icon-campus-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Dashboard",
+      "short_name": "Dashboard",
+      "url": "/campus-dashboard.html",
+      "icons": [{ "src": "icon-campus-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Apply for Shop",
+      "short_name": "Apply",
+      "url": "/campus-apply.html",
+      "icons": [{ "src": "icon-campus-192.svg", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-campus.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Travex Campus Home"
+    }
+  ]
+}
