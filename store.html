@@ -360,11 +360,11 @@ button,input,select,textarea,
 
       <div class="form-group">
         <label class="form-label">Your Name <span>*</span></label>
-        <input type="text" class="form-input" id="orderName" placeholder="Your full name">
+        <input type="text" class="form-input" id="orderName" data-form="order" placeholder="Your full name">
       </div>
       <div class="form-group">
         <label class="form-label">Phone Number <span>*</span></label>
-        <input type="tel" class="form-input" id="orderPhone" placeholder="+255 712 000 000">
+        <input type="text" class="form-input" id="orderLocation" placeholder="e.g. Kinondoni, Dar es Salaam">
       </div>
       <div class="form-group">
         <label class="form-label">Quantity</label>
@@ -674,6 +674,10 @@ function openOrderModal(productId) {
 }
 
 function closeOrderModal() {
+  const formSec = document.getElementById("orderFormSection");
+  const choiceSec = document.getElementById("orderChoiceSection");
+  if(formSec) formSec.style.display = "block";
+  if(choiceSec) choiceSec.style.display = "none";
   document.getElementById("orderModal").classList.remove("open");
   currentProduct = null;
 }
@@ -685,17 +689,15 @@ function changeQty(delta) {
   document.getElementById("orderTotal").textContent = `TZS ${(currentQty * currentProduct.price).toLocaleString()}`;
 }
 
-async function submitOrder() {
-  const name  = document.getElementById("orderName").value.trim();
-  const phone = document.getElementById("orderPhone").value.trim();
-
-  if (!name || !phone) {
-    alert("Please fill in your name and phone number.");
+async async function submitOrder() {
+  const name     = document.getElementById("orderName").value.trim();
+  const location = document.getElementById("orderLocation").value.trim();
+  if (!name || !location) {
+    alert("Please fill in your name and location.");
     return;
   }
-
-  const total   = currentQty * currentProduct.price;
-  const waNum   = currentStore.whatsapp_number?.replace(/\D/g,"");
+  const total  = currentQty * currentProduct.price;
+  const waNum  = currentStore.whatsapp_number?.replace(/\D/g,"");
   const message = encodeURIComponent(
     `🛍️ *New Order — Travex Mall*\n\n` +
     `📦 Product: ${currentProduct.name}\n` +
@@ -703,27 +705,57 @@ async function submitOrder() {
     `🔢 Quantity: ${currentQty}\n` +
     `💵 Total: TZS ${total.toLocaleString()}\n\n` +
     `👤 Customer: ${name}\n` +
-    `📱 Phone: ${phone}\n\n` +
+    `📍 Location: ${location}\n\n` +
     `Please confirm my order. Thank you! 🙏`
   );
 
   // Save order to Supabase
+  let orderId = null;
   try {
-    await sb.from("orders").insert({
-      store_id:      currentStore.id,
-      product_id:    currentProduct.id,
-      customer_name: name,
-      phone,
-      quantity:      currentQty,
-      total_price:   total,
-      status:        "pending"
-    });
-  } catch(e) {
-    console.log("Order save error:", e);
-  }
+    const { data } = await sb.from("orders").insert({
+      store_id:          currentStore.id,
+      product_id:        currentProduct.id,
+      product_name:      currentProduct.name,
+      customer_name:     name,
+      customer_location: location,
+      quantity:          currentQty,
+      total_price:       total,
+      status:            "pending",
+      source:            "store"
+    }).select("id").single();
+    if(data) orderId = data.id;
+  } catch(e) { console.log("Order save:", e); }
 
-  // Open WhatsApp
-  window.open(`https://wa.me/${waNum}?text=${message}`, "_blank");
+  // Build order link for WhatsApp
+  const orderLink = orderId
+    ? `\n\n🔗 View order: ${window.location.origin}/seller-dashboard.html?order=${orderId}`
+    : "";
+  const msgWithLink = encodeURIComponent(
+    `🛍️ *New Order — Travex Mall*\n\n` +
+    `📦 Product: ${currentProduct.name}\n` +
+    `💰 Price: TZS ${Number(currentProduct.price).toLocaleString()}\n` +
+    `🔢 Quantity: ${currentQty}\n` +
+    `💵 Total: TZS ${total.toLocaleString()}\n\n` +
+    `👤 Customer: ${name}\n` +
+    `📍 Location: ${location}` +
+    orderLink +
+    `\n\nPlease confirm! 🙏`
+  );
+
+  // Show choice screen
+  document.getElementById("orderFormSection").style.display = "none";
+  document.getElementById("orderChoiceSection").style.display = "block";
+  document.getElementById("orderChoiceSection").dataset.waUrl = `https://wa.me/${waNum}?text=${msgWithLink}`;
+}
+
+function chooseWhatsApp() {
+  const url = document.getElementById("orderChoiceSection").dataset.waUrl;
+  window.open(url, "_blank");
+  closeOrderModal();
+}
+
+function chooseTravexChat() {
+  alert("Travex Chat — coming soon! 🚀\nYour order has been saved. The seller will contact you.");
   closeOrderModal();
 }
 
