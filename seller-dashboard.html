@@ -1685,8 +1685,10 @@ function switchAccPeriod(period, btn) {
   document.getElementById("acc-"+period).classList.add("active");
 }
 
-async function logout() {
-  await sb.auth.signOut();
+async async function logout() {
+  try {
+    await sb.auth.signOut();
+  } catch(e) {}
   localStorage.clear();
   sessionStorage.clear();
   window.location.replace("seller-login.html");
