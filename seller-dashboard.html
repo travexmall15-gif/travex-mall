@@ -767,6 +767,10 @@ function applyTheme(color) {
 }
 
 function buildQuickActions(themeColor) {
+  const plan = activeStore?.subscription_plan || "basic";
+  const type = activeStore?.store_type || "b2c";
+  buildQuickActionsDynamic(plan, type, themeColor);
+  return;
   const grid = document.getElementById("quickActionsGrid");
   if (!grid) return;
   const r=parseInt((themeColor||'#0D1B3E').slice(1,3),16)||13;
@@ -870,6 +874,7 @@ async function init() {
   buildAITools();
   loadSubscriptionStatus();
   updateNavStore(activeStore, allProducts, allOrders);
+  configureDashboard(activeStore);
 }
 
 function showPendingGate(status) {
@@ -1361,6 +1366,11 @@ function copyPlan() {
 
 // ── AI TOOLS ──
 function buildAITools() {
+  const plan = activeStore?.subscription_plan || "basic";
+  const type = activeStore?.store_type || "b2c";
+  buildAIToolsDynamic(plan, type);
+  return; // rest handled by buildAIToolsDynamic
+  // legacy below kept for reference:
   const plan = currentStores[0]?.subscription_plan || "basic";
   const aiConfig = {
     basic:    [{ id:"care", icon:"💬", name:"Customer Care AI", desc:"Reply to customer messages professionally", sys:"You are a customer care assistant for a Tanzania store. Help write professional responses to customer messages in English or Swahili." }],
@@ -1633,6 +1643,8 @@ async function loadSubscriptionStatus() {
     .order("created_at",{ascending:false}).limit(1).single();
 
   const plan  = activeStore?.subscription_plan || "basic";
+  const type  = activeStore?.store_type || "b2c";
+  updateSubscriptionPage(plan, type);
   const icons = { basic:"⭐", standard:"⭐⭐", premium:"👑" };
   const prices= { basic:"TZS 25,000/mo", standard:"TZS 50,000/mo", premium:"TZS 80,000/mo" };
   const feats = {
@@ -2007,6 +2019,366 @@ async function cancelOrder(orderId) {
   allOrders = allOrders.map(o => o.id===orderId ? {...o, status:"cancelled"} : o);
   loadOrders();
 }
+
+// ══════════════════════════════════════════════════════════
+// DYNAMIC DASHBOARD CONFIGURATION
+// Runs after store loads — adapts everything to plan + type
+// ══════════════════════════════════════════════════════════
+function configureDashboard(store) {
+  const plan = store.subscription_plan || "basic";
+  const type = store.store_type || "b2c"; // "b2c" or "b2b"
+  const isB2B = type === "b2b";
+  const isPremium = plan === "premium";
+
+  // ── 1. SIDEBAR — show/hide items based on plan & type ──
+  configureSidebar(plan, type);
+
+  // ── 2. STAT CARDS — 4th stat changes ──
+  const stat4Label = document.querySelector(".stat-card.navy .stat-label");
+  const stat4Icon  = document.querySelector(".stat-card.navy .stat-icon");
+  if (stat4Label) stat4Label.textContent = isB2B ? "Bulk Orders" : "Pending Orders";
+  if (stat4Icon)  stat4Icon.textContent  = isB2B ? "📋" : "⏳";
+
+  // ── 3. AI TOOLS — rebuild based on plan + type ──
+  buildAIToolsDynamic(plan, type);
+
+  // ── 4. QUICK ACTIONS — based on plan + type ──
+  buildQuickActionsDynamic(plan, type, store.theme_color);
+
+  // ── 5. VYBE LIMITS — show in sidebar tooltip ──
+  const vybeLimits = {
+    basic:   isB2B ? "10 photos + 4 videos/week" : "2 photos/week",
+    premium: isB2B ? "20 photos + 8 videos/week" : "5 photos + 2 videos/week"
+  };
+  const vybeSbBtn = document.querySelector('[onclick="openPostModal()"] .sb-label');
+  if (vybeSbBtn) vybeSbBtn.title = vybeLimits[plan] || "";
+
+  // ── 6. PRODUCTS — show limit warning for basic b2c ──
+  // (basic b2c = unlimited, basic b2b = unlimited, all unlimited now)
+
+  // ── 7. ORDERS PAGE — rename for B2B ──
+  const ordersTitle = document.querySelector('[id="page-orders"] .page-title');
+  if (ordersTitle) ordersTitle.textContent = isB2B ? "Bulk Orders" : "Orders";
+
+  // ── 8. SUBSCRIPTION PAGE — update prices & features ──
+  updateSubscriptionPage(plan, type);
+
+  // ── 9. B2B SPECIFIC — show wholesale fields ──
+  if (isB2B) {
+    showB2BFields();
+  }
+
+  // ── 10. STORE FORM — category options for type ──
+  updateStoreCategoryOptions(type);
+}
+
+// ── SIDEBAR CONFIGURATION ──
+function configureSidebar(plan, type) {
+  const isB2B = type === "b2b";
+  const isPremium = plan === "premium";
+
+  // Marketing — show for all (basic gets limited view)
+  // Vybe — show for all
+  // AI Tools — always show, content adapts
+
+  // B2B: rename "Social Vybe" label
+  const vybeSbLabel = document.querySelector('[onclick="showPage('vybe',this)"] .sb-label');
+  if (vybeSbLabel) vybeSbLabel.textContent = isB2B ? "B2B Vybe" : "Social Vybe";
+
+  // B2B: rename "Orders" to "Bulk Orders"
+  const ordersSbLabel = document.querySelector('[onclick="showPage('orders',this)"] .sb-label');
+  if (ordersSbLabel) ordersSbLabel.textContent = isB2B ? "Bulk Orders" : "Orders";
+
+  // Plan badge in sidebar
+  const planEl = document.getElementById("sbStorePlan");
+  const planLabels = {
+    b2c: { basic: "⭐ Basic · B2C", premium: "👑 Premium · B2C" },
+    b2b: { basic: "⭐ Basic · B2B", premium: "👑 Premium · B2B" }
+  };
+  if (planEl) planEl.textContent = (planLabels[type]||planLabels.b2c)[plan] || "⭐ Basic";
+}
+
+// ── AI TOOLS — DYNAMIC ──
+function buildAIToolsDynamic(plan, type) {
+  const isB2B = type === "b2b";
+  const isPremium = plan === "premium";
+
+  const aiConfig = {
+    // B2C tools
+    b2c: {
+      basic: [
+        { id:"care", icon:"💬", name:"Customer Care AI",
+          desc:"Reply to customer messages professionally",
+          sys:"You are a customer care assistant for a Tanzania retail store. Help write professional responses to customer messages in English or Swahili." }
+      ],
+      premium: [
+        { id:"care",       icon:"💬", name:"Customer Care AI",
+          desc:"Reply to customer messages",
+          sys:"You are a customer care assistant for a Tanzania retail store." },
+        { id:"advisor",    icon:"🤖", name:"Business Advisor",
+          desc:"Pricing, profits, growth strategy",
+          sys:"You are a business advisor for small retail businesses in Tanzania. Help with pricing, profits and strategy. Use TZS currency." },
+        { id:"marketing",  icon:"📈", name:"Marketing AI",
+          desc:"Campaigns, content, customer growth",
+          sys:"You are a marketing expert for Tanzania retail businesses. Give practical social media and marketing advice." },
+        { id:"accounting", icon:"🧾", name:"Accounting AI",
+          desc:"Revenue, expenses, financial reports",
+          sys:"You are an accounting assistant for Tanzania retail businesses. Help with financial calculations using TZS." }
+      ]
+    },
+    // B2B tools
+    b2b: {
+      basic: [
+        { id:"care", icon:"💬", name:"Customer Care AI",
+          desc:"Respond to wholesale inquiries",
+          sys:"You are a customer care assistant for a Tanzania wholesale business. Help write professional responses to bulk order inquiries." },
+        { id:"accounting", icon:"🧾", name:"Accounting AI",
+          desc:"Bulk order tracking, revenue reports",
+          sys:"You are an accounting assistant for a Tanzania wholesale business. Help track bulk orders and revenue using TZS." }
+      ],
+      premium: [
+        { id:"care",       icon:"💬", name:"Customer Care AI",
+          desc:"Respond to wholesale inquiries",
+          sys:"You are a customer care assistant for a Tanzania wholesale business." },
+        { id:"advisor",    icon:"🤖", name:"Business Advisor",
+          desc:"Bulk pricing, MOQ strategy, growth",
+          sys:"You are a business advisor for wholesale businesses in Tanzania. Help with bulk pricing, MOQ strategy and market expansion. Use TZS." },
+        { id:"marketing",  icon:"📈", name:"Marketing AI",
+          desc:"B2B outreach, catalog promotion",
+          sys:"You are a B2B marketing expert for Tanzania wholesale businesses. Give practical advice on reaching retail buyers." },
+        { id:"accounting", icon:"🧾", name:"Accounting AI",
+          desc:"Bulk order finance, P&L reports",
+          sys:"You are an accounting assistant for a Tanzania wholesale business. Help with bulk order finances and P&L using TZS." }
+      ]
+    }
+  };
+
+  const tools = (aiConfig[type]||aiConfig.b2c)[plan] || aiConfig.b2c.basic;
+
+  // Update AI page subtitle
+  const aiSub = document.getElementById("aiPageSub");
+  if (aiSub) aiSub.textContent = `${tools.length} AI tool${tools.length>1?"s":""} in your ${plan.charAt(0).toUpperCase()+plan.slice(1)} ${type.toUpperCase()} plan`;
+
+  // Rebuild tabs
+  const tabsRow = document.getElementById("aiTabsRow");
+  if (tabsRow) tabsRow.innerHTML = tools.map((t,i) =>
+    `<button class="ai-tab ${i===0?"active":""}" onclick="switchAITab('${t.id}',this)">${t.icon} ${t.name}</button>`
+  ).join("");
+
+  // Rebuild panels
+  const panelsCont = document.getElementById("aiPanelsCont");
+  if (!panelsCont) return;
+
+  // Store system prompts for each tool
+  window.aiSystems = {};
+  tools.forEach(t => { window.aiSystems[t.id] = t.sys; });
+
+  panelsCont.innerHTML = tools.map((t,i) => `
+    <div class="ai-panel ${i===0?"active":""}" id="ai-panel-${t.id}" data-tool="${t.id}">
+      <div class="ai-msgs" id="ai-msgs-${t.id}">
+        <div class="ai-msg bot">
+          <div class="ai-icon">🤖</div>
+          <div class="ai-bubble">${t.icon} Hi! I am your <strong>${t.name}</strong>.<br>${t.desc}. How can I help you today?</div>
+        </div>
+      </div>
+      <div class="ai-sugs">
+        ${getAISuggestions(t.id, type).map(s=>`<button class="ai-sug" onclick="sendAI('${t.id}','${s}')">${s}</button>`).join("")}
+      </div>
+      <div class="ai-input-row">
+        <input class="ai-input" id="ai-input-${t.id}" placeholder="Ask ${t.name}..." onkeydown="if(event.key==='Enter')sendAI('${t.id}',this.value)">
+        <button class="ai-send" onclick="sendAI('${t.id}',document.getElementById('ai-input-${t.id}').value)">Send →</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+// AI suggestions per tool and type
+function getAISuggestions(toolId, type) {
+  const isB2B = type === "b2b";
+  const sugs = {
+    care:       isB2B ? ["How to respond to bulk inquiry?","Draft a quotation reply","Customer wants discount"] : ["Customer asking about price","Item out of stock reply","Thank you message"],
+    advisor:    isB2B ? ["How to set MOQ prices?","Expand to new regions","Improve bulk margins"] : ["Are my prices competitive?","How to increase sales?","Best products to stock"],
+    marketing:  isB2B ? ["How to reach more retailers?","B2B catalog promotion","WhatsApp marketing for wholesale"] : ["Caption for Instagram post","Best time to post?","How to get more followers?"],
+    accounting: isB2B ? ["Calculate bulk order profit","Monthly revenue report","Track expenses"] : ["Today's sales summary","Calculate profit margin","Monthly breakdown"]
+  };
+  return sugs[toolId] || ["How can you help me?"];
+}
+
+// ── QUICK ACTIONS — DYNAMIC ──
+function buildQuickActionsDynamic(plan, type, themeColor) {
+  const grid = document.getElementById("quickActionsGrid");
+  if (!grid) return;
+  const isB2B = type === "b2b";
+  const isPremium = plan === "premium";
+  const tc = themeColor || "#0D1B3E";
+  const r=parseInt(tc.slice(1,3),16)||13;
+  const g=parseInt(tc.slice(3,5),16)||27;
+  const b=parseInt(tc.slice(5,7),16)||62;
+  const txt=(r*299+g*587+b*114)/1000>128?"#111827":"#ffffff";
+
+  const base = [
+    {icon:"➕", label:"Add Product",   fn:"openProductModal()"},
+    {icon:"✏️", label:"Edit Store",    fn:"showPage('store',null)"},
+    {icon:"✦",  label:"Post to Vybe", fn:"openPostModal()"},
+    {icon:"🚚", label:isB2B?"Book Cargo":"Book Delivery", fn:"bookDelivery()"},
+  ];
+
+  const byPlan = {
+    basic: isB2B
+      ? [{icon:"🧾",label:"Accounting AI", fn:"showPage('ai',null)"}]
+      : [{icon:"💬",label:"Customer Care AI", fn:"showPage('ai',null)"}],
+    premium: [
+      {icon:"🤖",label:"Business Advisor", fn:"window.open('ai-business.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
+      {icon:"📈",label:"Marketing AI",     fn:"window.open('ai-marketing.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
+      {icon:"🧾",label:"Accounting AI",    fn:"window.open('ai-accounting.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
+    ]
+  };
+
+  const actions = [...base, ...(byPlan[plan]||byPlan.basic)];
+
+  grid.innerHTML = actions.map(a => `
+    <button onclick="${a.fn}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4rem;padding:1rem 0.5rem;background:var(--offwhite);color:var(--navy);border:1.5px solid var(--lgray);border-radius:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;text-align:center;min-height:80px;width:100%;font-size:0.78rem"
+    onmouseover="this.style.background='${tc}';this.style.color='${txt}';this.style.borderColor='${tc}'"
+    onmouseout="this.style.background='var(--offwhite)';this.style.color='var(--navy)';this.style.borderColor='var(--lgray)'">
+      <span style="font-size:1.3rem;line-height:1">${a.icon}</span>
+      <span style="font-size:0.68rem;font-weight:700;line-height:1.3">${a.label}</span>
+    </button>`).join("");
+}
+
+// ── SUBSCRIPTION PAGE UPDATE ──
+function updateSubscriptionPage(plan, type) {
+  const isB2B = type === "b2b";
+  const isPremium = plan === "premium";
+
+  // Prices based on type
+  const prices = {
+    b2c: { basic:"TZS 25,000/mo", premium:"TZS 45,000/mo" },
+    b2b: { basic:"TZS 75,000/mo", premium:"TZS 110,000/mo" }
+  };
+
+  // Features based on plan + type
+  const features = {
+    b2c: {
+      basic: [
+        "1 digital store","Unlimited products",
+        "WhatsApp order system","Customer Care AI",
+        "Accounting AI","Travex Move delivery",
+        "📸 2 photos/week on Vybe"
+      ],
+      premium: [
+        "1 digital store","Unlimited products",
+        "All 4 AI Tools","📸 5 photos + 🎥 2 videos/week",
+        "👑 Boosted on Vybe feed","Featured on homepage",
+        "Dedicated support"
+      ]
+    },
+    b2b: {
+      basic: [
+        "1 digital store","Unlimited products",
+        "Bulk & WhatsApp orders","Customer Care AI",
+        "Accounting AI","MOQ & Bulk pricing",
+        "Business verification 🥇",
+        "Travex Move cargo",
+        "📸 10 photos + 🎥 4 videos/week"
+      ],
+      premium: [
+        "1 digital store","Unlimited products",
+        "All 4 AI Tools","Invoice generation",
+        "Wholesale catalog","MOQ & Bulk tiers",
+        "📸 20 photos + 🎥 8 videos/week",
+        "👑 Top of B2B Vybe feed",
+        "Featured on homepage","Dedicated support"
+      ]
+    }
+  };
+
+  const planIcons   = { basic:"⭐", premium:"👑" };
+  const planNames   = { basic:"Basic", premium:"Premium" };
+  const typePrices  = (prices[type]||prices.b2c);
+  const typeFeats   = (features[type]||features.b2c)[plan] || features.b2c.basic;
+
+  const iconEl  = document.getElementById("subPlanIcon");
+  const nameEl  = document.getElementById("subPlanName");
+  const priceEl = document.getElementById("subPlanPrice");
+  const featEl  = document.getElementById("subFeaturesList");
+  const typeEl  = document.getElementById("subDetailPlan");
+
+  if(iconEl)  iconEl.textContent  = planIcons[plan]  || "⭐";
+  if(nameEl)  nameEl.textContent  = (planNames[plan]||"Basic") + " Plan · " + type.toUpperCase();
+  if(priceEl) priceEl.textContent = typePrices[plan] || "TZS 25,000/mo";
+  if(featEl)  featEl.innerHTML    = typeFeats.map(f =>
+    `<div style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.82rem;color:var(--dark);padding:0.2rem 0">
+      <span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span>${f}
+    </div>`).join("");
+
+  // Upgrade button text
+  const upgradeBtn = document.querySelector('a[href*="open-store"]');
+  if(upgradeBtn && !isPremium) {
+    upgradeBtn.textContent = "Upgrade to Premium →";
+    upgradeBtn.href = isB2B ? "open-store-b2b.html" : "open-store-b2c.html";
+  } else if(upgradeBtn && isPremium) {
+    upgradeBtn.textContent = "Renew Subscription →";
+    upgradeBtn.href = isB2B ? "open-store-b2b.html" : "open-store-b2c.html";
+  }
+
+  // Topbar subscription badge
+  const badge = document.getElementById("subStatusBadge");
+  const text  = document.getElementById("subStatusText");
+  if(badge && text) {
+    badge.style.display = "flex";
+    text.textContent = `${planIcons[plan]} ${planNames[plan]}`;
+  }
+}
+
+// ── B2B SPECIFIC FIELDS ──
+function showB2BFields() {
+  // Show business reg and TIN in store form
+  const storeForm = document.getElementById("page-store");
+  if (!storeForm) return;
+  const existing = document.getElementById("b2bFieldsSection");
+  if (existing) return; // Already added
+
+  const b2bSection = document.createElement("div");
+  b2bSection.id = "b2bFieldsSection";
+  b2bSection.innerHTML = `
+    <div style="margin-top:1rem;padding:1rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:12px">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem">🏭 Wholesale / B2B Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Business Registration Number</label>
+          <input type="text" class="form-input" id="storeRegNo" placeholder="e.g. 000123456">
+        </div>
+        <div class="form-group">
+          <label class="form-label">TIN Number</label>
+          <input type="text" class="form-input" id="storeTIN" placeholder="e.g. 100-123-456">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Minimum Order Quantity (MOQ)</label>
+          <input type="text" class="form-input" id="storeMOQ" placeholder="e.g. 10 units or TZS 50,000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Delivery / Shipping Coverage</label>
+          <input type="text" class="form-input" id="storeDelivery" placeholder="e.g. Nationwide, DSM only">
+        </div>
+      </div>
+    </div>`;
+
+  const cardBd = storeForm.querySelector(".card-bd");
+  if (cardBd) cardBd.appendChild(b2bSection);
+}
+
+// ── STORE CATEGORY OPTIONS BY TYPE ──
+function updateStoreCategoryOptions(type) {
+  const select = document.getElementById("storeCat");
+  if (!select) return;
+  const b2cCats = ["Fashion & Clothing","Electronics","Food & Agriculture","Beauty & Health","Hardware & Construction","Home & Furniture","Books & Education","Other"];
+  const b2bCats = ["Clothing & Textiles Wholesale","Electronics & Components","Food & Agriculture Bulk","Beauty & Health Products","Hardware & Materials","Import & Distribution","Manufacturing","Other Wholesale"];
+  const cats = type === "b2b" ? b2bCats : b2cCats;
+  select.innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join("");
+}
+
 
 init();
 
