@@ -149,6 +149,42 @@ button,input,select,textarea,
 <div class="page-footer"><p>© 2026 Travex Mall · Travex Digital Group (TDG) · Tanzania</p></div>
 
 <script>
+
+// ── DETECT LOGIN TYPE FROM URL ──
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type") || "b2c";
+  const isB2B = type === "b2b";
+
+  // Update page after DOM loads
+  document.addEventListener("DOMContentLoaded", function() {
+    const titleEl = document.querySelector("h1, .login-title, .auth-title");
+    const subtitleEl = document.querySelector(".login-sub, .auth-sub, .subtitle");
+    const loginBtn = document.getElementById("loginBtn");
+
+    if (isB2B) {
+      document.title = "Wholesale (B2B) Seller Login — Travex Mall";
+      if (titleEl) titleEl.textContent = "🏭 Wholesale Seller Login";
+      if (subtitleEl) subtitleEl.textContent = "Login to your B2B wholesale dashboard";
+      if (loginBtn) loginBtn.textContent = "Login to Wholesale Dashboard →";
+      // Add B2B badge
+      const badge = document.createElement("div");
+      badge.style.cssText = "display:inline-block;background:#C9A84C;color:#0D1B3E;padding:0.2rem 0.75rem;border-radius:20px;font-size:0.7rem;font-weight:700;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.08em";
+      badge.textContent = "🥇 B2B Wholesale Portal";
+      if (titleEl && titleEl.parentNode) titleEl.parentNode.insertBefore(badge, titleEl);
+    } else {
+      document.title = "Retail (B2C) Seller Login — Travex Mall";
+      if (titleEl) titleEl.textContent = "🛍️ Retail Seller Login";
+      if (loginBtn) loginBtn.textContent = "Login to Retail Dashboard →";
+      // Add B2C badge
+      const badge = document.createElement("div");
+      badge.style.cssText = "display:inline-block;background:#0D1B3E;color:#fff;padding:0.2rem 0.75rem;border-radius:20px;font-size:0.7rem;font-weight:700;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.08em";
+      badge.textContent = "🥈 B2C Retail Portal";
+      if (titleEl && titleEl.parentNode) titleEl.parentNode.insertBefore(badge, titleEl);
+    }
+  });
+})();
+
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
 const { createClient } = supabase;
@@ -233,21 +269,46 @@ async function doLogin() {
     return;
   }
 
-  // ── Check store status after login ──
+  // ── Check store type + status after login ──
   const userId = data.user.id;
+
+  // Detect which login context: b2c or b2b (from URL param or referrer)
+  const urlParams = new URLSearchParams(window.location.search);
+  const loginType = urlParams.get("type") || "b2c"; // default b2c
+
   const { data: stores } = await sb.from("stores")
-    .select("store_name, is_active, payment_status")
+    .select("store_name, is_active, payment_status, store_type")
     .eq("user_id", userId)
     .limit(1);
 
   if (!stores || stores.length === 0) {
-    // Logged in but no store — show warning, still allow dashboard
     btn.textContent = "Karibu! Inapakia...";
     window.location.replace("seller-dashboard.html");
     return;
   }
 
   const store = stores[0];
+
+  // ── STORE TYPE CHECK — B2C cannot login via B2B and vice versa ──
+  const storeType = store.store_type || "b2c";
+  if (storeType !== loginType) {
+    await sb.auth.signOut(); // sign out immediately
+    btn.textContent = "Login →";
+    btn.disabled = false;
+    const correctPage = storeType === "b2b"
+      ? "seller-login.html?type=b2b"
+      : "seller-login.html?type=b2c";
+    const typeName = storeType === "b2b" ? "Wholesale (B2B)" : "Retail (B2C)";
+    const wrongName = loginType === "b2b" ? "Wholesale (B2B)" : "Retail (B2C)";
+    showErr("loginError",
+      `❌ This is the <strong>${wrongName}</strong> login portal.<br>
+      Your account is registered as <strong>${typeName}</strong>.<br>
+      <a href="${correctPage}" style="color:var(--navy);font-weight:700;text-decoration:underline">
+        → Go to ${typeName} Login
+      </a>`
+    );
+    return;
+  }
 
   if (!store.is_active) {
     const status = store.payment_status || "pending";
