@@ -256,6 +256,18 @@ select,textarea,
   border-radius:16px!important;
 }
 /* fix any remaining 0-radius inline styles */
+
+/* ── Soft corners global fix ── */
+.stat-card,.card,.modal,.upload-zone,.acc-sum-card,.acc-chart,
+.analytics-card,.product-card,.badge,.alert,.pending-banner,
+.ai-bubble,.ai-icon,.ai-sug,.ai-input,.ai-send{border-radius:12px!important}
+.badge{border-radius:20px!important}
+.modal{border-radius:16px!important}
+.btn-save,.btn-cancel,.card-btn,.topnav-btn,.act-btn,.acc-tab{border-radius:8px!important}
+.form-input,.form-select,.form-textarea,.ai-input{border-radius:8px!important}
+.upload-zone{border-radius:12px!important}
+.store-selector{border-radius:8px!important}
+.topnav-avatar{border-radius:50%!important}
 </style>
 </head>
 <body>
@@ -305,11 +317,11 @@ select,textarea,
 
   <div class="topnav-right">
     <!-- Subscription status -->
-    <div id="subStatusBadge" style="display:none;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);cursor:pointer" onclick="showPage('subscription',document.querySelector('.topnav-tab'))">
+    <div id="subStatusBadge" style="display:none;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);cursor:pointer;border-radius:8px" onclick="showPage('subscription',document.querySelector('.topnav-tab'))">
       <span style="font-size:0.6rem;font-weight:700;color:var(--gold)" id="subStatusText">Active</span>
     </div>
     <!-- Post to Vybe quick button -->
-    <button onclick="quickPostVybe()" style="background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border:none;padding:0.35rem 1rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;flex-shrink:0" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+    <button onclick="quickPostVybe()" style="background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border:none;padding:0.35rem 1rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;flex-shrink:0;border-radius:8px" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
       ✦ Post to Vybe
     </button>
     <div class="topnav-store-name" id="navStoreName">Loading...</div>
@@ -363,7 +375,7 @@ select,textarea,
         <div class="pending-banner-title">⏳ Store Pending Activation</div>
         Your payment is being reviewed. Store will go live within 2 hours.
       </div>
-      <a href="https://wa.me/255651919915" target="_blank" style="background:var(--gold);color:var(--navy);padding:0.45rem 1rem;font-size:0.78rem;font-weight:700;text-decoration:none">Contact Us</a>
+      <a href="https://wa.me/255651919915" target="_blank" style="background:var(--gold);color:var(--navy);padding:0.45rem 1rem;font-size:0.78rem;font-weight:700;text-decoration:none;border-radius:8px">Contact Us</a>
     </div>
 
     <div class="grid2">
@@ -379,7 +391,7 @@ select,textarea,
       <!-- QUICK ACTIONS -->
       <div class="card" id="quickActionsCard">
         <div class="card-header"><div class="card-title">Quick Actions</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0" id="quickActionsGrid">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;padding:1rem" id="quickActionsGrid">
           <div style="text-align:center;padding:1.5rem;color:var(--gray);font-size:0.78rem;grid-column:1/-1">Loading...</div>
         </div>
       </div>
@@ -657,8 +669,8 @@ select,textarea,
         Click "Generate Caption" — AI will write a caption for your post automatically.
       </div>
       <div style="display:flex;gap:0.5rem;margin-top:0.5rem">
-        <button onclick="copyCaptionToPost()" style="background:var(--navy);color:var(--white);border:none;padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Use in Post</button>
-        <button onclick="generateCaption()" style="background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Regenerate</button>
+        <button onclick="copyCaptionToPost()" style="background:var(--navy);color:var(--white);border:none;padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border-radius:8px">Use in Post</button>
+        <button onclick="generateCaption()" style="background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border-radius:8px">Regenerate</button>
       </div>
     </div>
   </div>
@@ -737,7 +749,7 @@ select,textarea,
             <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Started</span><span style="font-weight:600" id="subDetailStart">—</span></div>
             <div style="display:flex;justify-content:space-between;font-size:0.8rem"><span style="color:var(--gray)">Expires</span><span style="font-weight:600;color:var(--red)" id="subDetailExpiry">—</span></div>
           </div>
-          <a href="open-store.html" style="display:block;width:100%;padding:0.85rem;background:var(--gold);color:var(--navy);font-size:0.9rem;font-weight:700;text-align:center;text-decoration:none">Upgrade Plan →</a>
+          <a href="open-store.html" style="display:block;width:100%;padding:0.85rem;background:var(--gold);color:var(--navy);font-size:0.9rem;font-weight:700;text-align:center;text-decoration:none;border-radius:10px">Upgrade Plan →</a>
         </div>
       </div>
     </div>
@@ -770,27 +782,27 @@ select,textarea,
     <div class="modal-body">
       <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
         <span style="font-size:0.82rem;color:var(--navy);font-weight:600" id="shareStoreUrl">Loading...</span>
-        <button onclick="copyStoreLink()" style="background:var(--navy);color:var(--white);border:none;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Copy</button>
+        <button onclick="copyStoreLink()" style="background:var(--navy);color:var(--white);border:none;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border-radius:8px">Copy</button>
       </div>
       <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:1rem">Share on:</div>
       <div style="display:flex;flex-direction:column;gap:0.6rem">
-        <a id="shareWaBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#25D366;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:all 0.2s;font-family:'Inter',sans-serif">
+        <a id="shareWaBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#25D366;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:all 0.2s;font-family:'Inter',sans-serif;border-radius:10px">
           <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="rgba(255,255,255,0.2)"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.13-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.57c-.21.59-1.22 1.13-1.69 1.17-.44.04-2.87-.6-2.87-.6-2.42-.96-3.97-3.44-4.09-3.6-.12-.16-.97-1.29-.97-2.46s.61-1.74.83-1.98c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42l.77 1.86c.06.12.1.27.02.43l-.36.42c-.12.12-.24.25-.1.49.14.24.62.99 1.33 1.6.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06l.76-.94c.16-.24.32-.2.54-.12l1.64.78c.24.12.4.18.46.28.06.1.06.59-.15 1.18z" fill="white"/></svg>
           Share on WhatsApp
         </a>
-        <a id="shareIgBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:linear-gradient(135deg,#F77737,#E1306C,#833AB4);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif">
+        <a id="shareIgBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:linear-gradient(135deg,#F77737,#E1306C,#833AB4);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="1" y="1" width="22" height="22" rx="6" fill="rgba(255,255,255,0.2)"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg>
           Share on Instagram (Copy link)
         </a>
-        <a id="shareTtBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#010101;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif">
+        <a id="shareTtBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#010101;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px">
           <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.1)"/><path d="M16.6 5.82A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83a5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21a5.674 5.674 0 0 0 5.68-5.68V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg>
           Share on TikTok (Copy link)
         </a>
-        <a id="shareFbBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#1877F2;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif">
+        <a id="shareFbBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#1877F2;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px">
           <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.2)"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg>
           Share on Facebook
         </a>
-        <button onclick="navigator.share ? navigator.share({title:activeStore?.store_name,url:document.getElementById('shareStoreUrl').textContent}) : copyStoreLink()" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%">
+        <button onclick="navigator.share ? navigator.share({title:activeStore?.store_name,url:document.getElementById('shareStoreUrl').textContent}) : copyStoreLink()" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;border-radius:10px">
           📤 More sharing options...
         </button>
       </div>
@@ -875,27 +887,32 @@ function buildQuickActions(themeColor) {
     {icon:'➕', label:'Add Product',       fn:"openProductModal()"},
     {icon:'✏️', label:'Edit Store',         fn:"showPage('store',document.querySelector('.topnav-tab'))"},
     {icon:'🧾', label:'Accounting AI',      fn:"window.open('ai-accounting.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
-    {icon:'📈', label:'Marketing Analytics', fn:"window.open('ai-marketing.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
+    {icon:'📈', label:'Marketing',          fn:"window.open('ai-marketing.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
     {icon:'🤖', label:'Business Advisor',   fn:"window.open('ai-business.html?store='+encodeURIComponent(activeStore?.id||''),'_blank')"},
-    {icon:'🚚', label:'Book Delivery',       fn:"bookDelivery()"},
+    {icon:'🚚', label:'Book Delivery',      fn:"bookDelivery()"},
+    {icon:'✦',  label:'Post to Vybe',      fn:"quickPostVybe()"},
+    {icon:'💳', label:'Subscription',      fn:"showPage('subscription',document.querySelector('.topnav-tab'))"},
   ];
 
   grid.innerHTML = actions.map(a => `
     <button onclick="${a.fn}" style="
       display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:0.5rem;padding:1.25rem 0.75rem;
-      background:${themeColor||'#0D1B3E'};
-      color:${txt};
-      border:1px solid rgba(255,255,255,0.1);
+      gap:0.45rem;padding:1.1rem 0.5rem;
+      background:var(--offwhite);
+      color:var(--navy);
+      border:1.5px solid var(--lgray);
+      border-radius:12px;
       cursor:pointer;
       font-family:'Inter',sans-serif;
       transition:all 0.2s;
       text-align:center;
-      min-height:90px;
+      min-height:84px;
       width:100%;
-    " onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='brightness(1)'">
-      <span style="font-size:1.6rem">${a.icon}</span>
-      <span style="font-size:0.72rem;font-weight:700;line-height:1.3">${a.label}</span>
+    "
+    onmouseover="this.style.background='${themeColor||'#0D1B3E'}';this.style.color='${txt}';this.style.borderColor='${themeColor||'#0D1B3E'}'"
+    onmouseout="this.style.background='var(--offwhite)';this.style.color='var(--navy)';this.style.borderColor='var(--lgray)'">
+      <span style="font-size:1.4rem;line-height:1">${a.icon}</span>
+      <span style="font-size:0.7rem;font-weight:700;line-height:1.3;margin-top:0.1rem">${a.label}</span>
     </button>`).join("");
 }
 
