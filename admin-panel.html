@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Admin Panel — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--orange:#F97316}
-body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--offwhite);color:var(--dark);min-height:100vh}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);min-height:100vh}
 
 /* ── LOGIN SCREEN ── */
 .login-screen{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:1000}
 .login-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:2.5rem;width:100%;max-width:380px;text-align:center}
-.login-logo{font-family:"Plus Jakarta Sans",sans-serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.3rem}
+.login-logo{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.3rem}
 .login-logo span{color:var(--gold)}
 .login-sub{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:2rem;letter-spacing:0.1em;text-transform:uppercase}
-.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-family:"Plus Jakarta Sans",sans-serif;font-size:0.9rem;outline:none;margin-bottom:0.75rem}
+.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-family:"Inter",sans-serif;font-size:0.9rem;outline:none;margin-bottom:0.75rem}
 .login-input::placeholder{color:rgba(255,255,255,0.3)}
-.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);border:none;font-family:"Plus Jakarta Sans",sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);border:none;font-family:"Inter",sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.2s}
 .login-btn:hover{background:#F0C96B}
 .login-err{font-size:0.8rem;color:var(--red);margin-top:0.5rem;display:none}
 
@@ -26,7 +27,7 @@ body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--offwhite);color
 .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
 .sidebar{background:var(--navy);padding:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
 .sidebar-logo{padding:1.2rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.08)}
-.sidebar-logo-txt{font-family:"Plus Jakarta Sans",sans-serif;font-size:1rem;font-weight:900;color:#fff}
+.sidebar-logo-txt{font-family:"Playfair Display",serif;font-size:1rem;font-weight:900;color:#fff}
 .sidebar-logo-txt span{color:var(--gold)}
 .sidebar-sub{font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
 .sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
@@ -46,13 +47,13 @@ body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--offwhite);color
 .ts-item{text-align:center}
 .ts-val{font-size:1rem;font-weight:800;color:var(--navy)}
 .ts-lbl{font-size:0.58rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
-.refresh-btn{background:var(--offwhite);border:1px solid var(--lgray);padding:0.4rem 0.85rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;color:var(--navy);transition:all 0.2s}
+.refresh-btn{background:var(--offwhite);border:1px solid var(--lgray);padding:0.4rem 0.85rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;color:var(--navy);transition:all 0.2s}
 .refresh-btn:hover{background:var(--navy);color:#fff}
 
 /* ── PAGES ── */
 .page{display:none;padding:2rem}
 .page.active{display:block}
-.page-title{font-family:"Plus Jakarta Sans",sans-serif;font-size:1.4rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
+.page-title{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
 .page-sub{font-size:0.82rem;color:var(--gray);margin-bottom:1.5rem}
 
 /* ── STAT CARDS ── */
@@ -62,7 +63,7 @@ body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--offwhite);color
 .stat-card.active{border-top-color:var(--green)}
 .stat-card.revenue{border-top-color:var(--gold)}
 .stat-lbl{font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
-.stat-val{font-family:"Plus Jakarta Sans",sans-serif;font-size:1.8rem;font-weight:900;color:var(--navy)}
+.stat-val{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;color:var(--navy)}
 .stat-sub{font-size:0.7rem;color:var(--gray);margin-top:0.2rem}
 
 /* ── TABLE ── */
@@ -70,9 +71,9 @@ body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--offwhite);color
 .tcard-head{padding:0.85rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
 .tcard-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
 .filter-row{display:flex;gap:0.5rem;flex-wrap:wrap}
-.filter-btn{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--lgray);background:#fff;color:var(--gray);font-family:"Plus Jakarta Sans",sans-serif;transition:all 0.2s}
+.filter-btn{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--lgray);background:#fff;color:var(--gray);font-family:"Inter",sans-serif;transition:all 0.2s}
 .filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.search-in{padding:0.4rem 0.75rem;border:1px solid var(--lgray);font-family:"Plus Jakarta Sans",sans-serif;font-size:0.78rem;outline:none;min-width:180px}
+.search-in{padding:0.4rem 0.75rem;border:1px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.78rem;outline:none;min-width:180px}
 .search-in:focus{border-color:var(--navy)}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
@@ -94,13 +95,13 @@ tr:hover td{background:var(--offwhite)}
 .badge-premium{background:#FDF4FF;color:#7E22CE}
 
 /* ── ACTION BUTTONS ── */
-.btn-approve{background:var(--green);color:#fff;border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;transition:all 0.2s;white-space:nowrap}
+.btn-approve{background:var(--green);color:#fff;border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap}
 .btn-approve:hover{opacity:0.85}
-.btn-reject{background:var(--red);color:#fff;border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;transition:all 0.2s;white-space:nowrap}
+.btn-reject{background:var(--red);color:#fff;border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap}
 .btn-reject:hover{opacity:0.85}
-.btn-view{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;transition:all 0.2s;white-space:nowrap;text-decoration:none;display:inline-block}
+.btn-view{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap;text-decoration:none;display:inline-block}
 .btn-view:hover{background:var(--navy);color:#fff}
-.btn-feature{background:var(--gold);color:var(--navy);border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;white-space:nowrap}
+.btn-feature{background:var(--gold);color:var(--navy);border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;white-space:nowrap}
 .action-wrap{display:flex;gap:0.4rem;flex-wrap:wrap}
 
 /* ── STORE DETAIL MODAL ── */
@@ -134,12 +135,12 @@ tr:hover td{background:var(--offwhite)}
 .chart-wrap{background:#fff;border:1px solid var(--lgray);padding:1.5rem;margin-bottom:1.5rem}
 .chart-title{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between}
 .chart-period-tabs{display:flex;gap:0}
-.cpt{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--lgray);background:#fff;color:var(--gray);font-family:"Plus Jakarta Sans",sans-serif;transition:all 0.2s;margin-left:-1px}
+.cpt{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--lgray);background:#fff;color:var(--gray);font-family:"Inter",sans-serif;transition:all 0.2s;margin-left:-1px}
 .cpt.active{background:var(--navy);color:#fff;border-color:var(--navy);z-index:1}
 .bar-chart{display:flex;align-items:flex-end;gap:4px;height:140px;padding-top:1rem}
 .bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
 .bar-fill{width:100%;background:var(--navy);border-radius:2px 2px 0 0;transition:height 0.5s ease;min-height:2px;position:relative}
-.bar-fill:hover::after{content:attr(data-val);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:2px 6px;font-size:0.6rem;white-space:nowrap;font-family:"Plus Jakarta Sans",sans-serif}
+.bar-fill:hover::after{content:attr(data-val);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:2px 6px;font-size:0.6rem;white-space:nowrap;font-family:"Inter",sans-serif}
 .bar-fill.gold{background:var(--gold)}
 .bar-fill.green{background:var(--green)}
 .bar-fill.blue{background:var(--blue)}
@@ -147,7 +148,7 @@ tr:hover td{background:var(--offwhite)}
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
 .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
 .kpi-card{background:#fff;border:1px solid var(--lgray);padding:1rem;text-align:center}
-.kpi-val{font-family:"Plus Jakarta Sans",sans-serif;font-size:1.4rem;font-weight:900;color:var(--navy)}
+.kpi-val{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:var(--navy)}
 .kpi-lbl{font-size:0.62rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px}
 .kpi-trend{font-size:0.72rem;margin-top:4px;font-weight:600}
 .trend-up{color:var(--green)}.trend-dn{color:var(--red)}.trend-flat{color:var(--gray)}
@@ -163,111 +164,30 @@ tr:hover td{background:var(--offwhite)}
   .topbar-stats{display:none}
 }
 
-/* ── Global polish: soft corners + font smoothing ── */
-button,input,select,textarea,.btn,a.btn,[class*="btn-"],[class*="-btn"]{border-radius:8px!important}
-input[type="text"],input[type="email"],input[type="tel"],input[type="password"],input[type="search"],textarea,select{border-radius:8px!important;font-family:"Plus Jakarta Sans",sans-serif!important}
-button{font-family:"Plus Jakarta Sans",sans-serif}
+/* ── Polish: soft corners + font smoothing + mobile ── */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-
-/* ═══════════════════════════════════════════
-   GLOBAL POLISH — soft corners + mobile pro
-   ═══════════════════════════════════════════ */
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{font-family:'Plus Jakarta Sans',sans-serif}
-
-/* Soft corners on ALL interactive elements */
 button,input,select,textarea,
 [class*="btn"],[class*="card"],[class*="modal"],
-[class*="badge"],[class*="tag"],[class*="pill"],
-[class*="dropdown"],[class*="panel"],[class*="box"],
-[class*="field"],[class*="form"]{border-radius:8px!important}
-
-/* Mobile-first base sizes */
+[class*="badge"],[class*="tab"],[class*="pill"],
+[class*="plan"],[class*="pricing"],[class*="sub-"]{border-radius:8px!important}
 @media(max-width:640px){
-  /* Typography scale for mobile */
-  h1,h2,h3{word-break:break-word;overflow-wrap:break-word}
-  
-  /* Prevent text overflow */
-  p,span,div{max-width:100%;overflow-wrap:break-word}
-  
-  /* Full-width buttons on mobile */
-  .btn,.btn-primary,.btn-secondary,.btn-gold,.btn-navy,
-  [class*="btn-"]{
-    display:flex!important;
-    width:100%!important;
-    justify-content:center!important;
-    align-items:center!important;
-    min-height:48px!important;
-    font-size:0.95rem!important;
-    padding:0.75rem 1.25rem!important;
-    border-radius:12px!important;
-  }
-  
-  /* Button groups — stack vertically */
-  .btn-group,.cta-group,.hero-ctas,[class*="-btns"]{
-    flex-direction:column!important;
-    gap:0.75rem!important;
-    width:100%!important;
-  }
-  
-  /* Cards — full width on mobile */
-  .card,[class*="-card"]{
-    width:100%!important;
-    border-radius:16px!important;
-  }
-  
-  /* Forms — comfortable touch targets */
-  input,select,textarea{
-    min-height:48px!important;
-    font-size:16px!important; /* prevents iOS zoom */
-    padding:0.75rem 1rem!important;
-    border-radius:10px!important;
-  }
-  
-  /* Nav — compact mobile */
   nav{padding:0 1rem!important;height:56px!important}
-  
-  /* Section padding */
-  section,[class*="-section"]{
-    padding-left:1.25rem!important;
-    padding-right:1.25rem!important;
-  }
-  
-  /* Grid — single column on mobile */
-  [style*="grid-template-columns"]{
-    grid-template-columns:1fr!important;
-  }
-  
-  /* Overflow fix */
-  .carousel-track,[class*="-track"]{
-    padding-right:1.25rem!important;
-  }
-
-  /* Subscription cards */
-  [class*="plan-card"],[class*="pricing-card"],[class*="sub-card"]{
-    border-radius:16px!important;
-    margin-bottom:1rem!important;
-  }
+  section,[class*="-section"]{padding-left:1.25rem!important;padding-right:1.25rem!important}
+  h1{font-size:clamp(1.6rem,7vw,2.4rem)!important;line-height:1.1!important;word-break:break-word}
+  h2{font-size:clamp(1.2rem,5vw,1.7rem)!important;line-height:1.15!important}
+  h3{font-size:clamp(1rem,4vw,1.3rem)!important}
+  p,li,span{font-size:0.875rem!important;line-height:1.65!important}
+  input,select,textarea{min-height:48px!important;font-size:16px!important;padding:0.75rem 1rem!important;border-radius:10px!important}
+  button,[class*="btn"]{min-height:48px!important;border-radius:10px!important;font-size:0.9rem!important}
+  [class*="-grid"]{grid-template-columns:1fr 1fr!important}
+  [class*="hero-grid"],[class*="-inner"]{grid-template-columns:1fr!important}
 }
-
-@media(max-width:480px){
-  /* Extra small — fonts scale down slightly */
-  body{font-size:15px}
-  h1{font-size:clamp(1.6rem,7vw,2.2rem)!important}
-  h2{font-size:clamp(1.3rem,5.5vw,1.8rem)!important}
-  h3{font-size:clamp(1.1rem,4.5vw,1.4rem)!important}
-  p,li{font-size:0.9rem!important;line-height:1.65!important}
-  
-  /* Tighter padding on very small screens */
-  section,[class*="-section"]{
-    padding-left:1rem!important;
-    padding-right:1rem!important;
-    padding-top:2.5rem!important;
-    padding-bottom:2.5rem!important;
-  }
+@media(max-width:400px){
+  h1{font-size:clamp(1.4rem,8vw,1.9rem)!important}
+  p,li{font-size:0.85rem!important}
+  [class*="-grid"]{grid-template-columns:1fr!important}
 }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -331,13 +251,13 @@ button,input,select,textarea,
     
   <!-- NOTIFICATION BELL -->
   <div style="position:relative;display:inline-block;margin-left:auto">
-    <button onclick="toggleNotifPanel()" id="notifBell" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:0.5rem 0.75rem;cursor:pointer;font-size:1rem;position:relative;font-family:'Plus Jakarta Sans',sans-serif">
+    <button onclick="toggleNotifPanel()" id="notifBell" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:0.5rem 0.75rem;cursor:pointer;font-size:1rem;position:relative;font-family:'Inter',sans-serif">
       🔔 <span id="notifCount" style="display:none;position:absolute;top:-4px;right:-4px;background:#DC2626;color:#fff;font-size:0.6rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center">0</span>
     </button>
     <div id="notifPanel" style="display:none;position:absolute;right:0;top:110%;width:340px;background:#fff;border:1px solid var(--lgray);box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:9999;max-height:400px;overflow-y:auto">
       <div style="padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
         <div style="font-size:0.82rem;font-weight:700;color:var(--navy)">Notifications</div>
-        <button onclick="markAllRead()" style="font-size:0.72rem;color:var(--gold);background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Mark all read</button>
+        <button onclick="markAllRead()" style="font-size:0.72rem;color:var(--gold);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif">Mark all read</button>
       </div>
       <div id="notifList"><div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem">Inapakia...</div></div>
     </div>
@@ -546,12 +466,12 @@ button,input,select,textarea,
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
             <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
               <div style="font-size:1.5rem;margin-bottom:0.25rem">🥈</div>
-              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:900;color:var(--navy)" id="av-b2c-views">—</div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--navy)" id="av-b2c-views">—</div>
               <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2C Views</div>
             </div>
             <div style="text-align:center;padding:1rem;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2)">
               <div style="font-size:1.5rem;margin-bottom:0.25rem">🥇</div>
-              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:900;color:var(--gold)" id="av-b2b-views">—</div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)" id="av-b2b-views">—</div>
               <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2B Views</div>
             </div>
           </div>
@@ -598,12 +518,12 @@ button,input,select,textarea,
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
             <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
               <div style="font-size:1.5rem;margin-bottom:0.25rem">🥈</div>
-              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:900;color:var(--navy)" id="ac-b2c-rev">—</div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--navy)" id="ac-b2c-rev">—</div>
               <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2C Revenue</div>
             </div>
             <div style="text-align:center;padding:1rem;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2)">
               <div style="font-size:1.5rem;margin-bottom:0.25rem">🥇</div>
-              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:900;color:var(--gold)" id="ac-b2b-rev">—</div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--gold)" id="ac-b2b-rev">—</div>
               <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2B Revenue</div>
             </div>
           </div>
@@ -756,7 +676,7 @@ button,input,select,textarea,
     <!-- PAGE: CAMPUS OVERVIEW -->
     <div class="page" id="page-campus-overview">
       <div class="page-title">📊 Uni-Student Market Overview</div>
-      <div class="page-sub">Muhtasari wa Travex Campus — Applications, Stores, Traffic na Revenue</div>
+      <div class="page-sub">Muhtasari wa Travex Campus — Applications, Stores, Traffic na Mapato</div>
       <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
         <div class="stat-card"><div class="stat-num" id="c-stat-apps">—</div><div class="stat-lbl">Total Applications</div><div class="stat-card-after" style="background:#7C3AED"></div></div>
         <div class="stat-card"><div class="stat-num" id="c-stat-pending">—</div><div class="stat-lbl">Pending Review</div><div class="stat-card-after" style="background:var(--orange)"></div></div>
@@ -788,12 +708,12 @@ button,input,select,textarea,
         <button class="filter-btn"       id="ca-filter-pending" onclick="filterApps('pending',this)">Pending ⏳</button>
         <button class="filter-btn"       id="ca-filter-approved" onclick="filterApps('approved',this)">Approved ✅</button>
         <button class="filter-btn"       id="ca-filter-rejected" onclick="filterApps('rejected',this)">Rejected ❌</button>
-        <input type="search" id="ca-search" placeholder="Search jina, chuo, duka..." oninput="filterAppsSearch(this.value)"
-          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+        <input type="search" id="ca-search" placeholder="Tafuta jina, chuo, duka..." oninput="filterAppsSearch(this.value)"
+          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
       </div>
       <div class="table-wrap">
         <table><thead><tr>
-          <th>Jina / Mwaka</th><th>Email</th><th>Chuo</th><th>Duka / Category</th><th>WhatsApp</th><th>ID ya Chuo</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
+          <th>Jina / Mwaka</th><th>Email</th><th>Chuo</th><th>Duka / Kategoria</th><th>WhatsApp</th><th>ID ya Chuo</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
         </tr></thead>
         <tbody id="campus-apps-tbody">
           <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
@@ -806,17 +726,17 @@ button,input,select,textarea,
       <div class="page-title">🏪 Campus Stores</div>
       <div class="page-sub">Maduka yote yanayotumika kwenye Travex Uni-Student Market</div>
       <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
-        <select id="cs-uni-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+        <select id="cs-uni-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
           <option value="">Vyuo Vyote</option>
           <option>UDSM</option><option>UDOM</option><option>ARU</option><option>TIA</option><option>NIT</option>
         </select>
-        <select id="cs-status-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+        <select id="cs-status-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
           <option value="">Status Yote</option>
           <option value="true">Active</option>
           <option value="false">Pending</option>
         </select>
-        <input type="search" id="cs-search" placeholder="Search duka..." oninput="filterCampusStores()"
-          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+        <input type="search" id="cs-search" placeholder="Tafuta duka..." oninput="filterCampusStores()"
+          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
       </div>
       <div class="table-wrap">
         <table><thead><tr>
@@ -852,7 +772,7 @@ button,input,select,textarea,
     <!-- PAGE: CAMPUS REVENUE -->
     <div class="page" id="page-campus-revenue">
       <div class="page-title">💰 Campus Revenue</div>
-      <div class="page-sub">Revenue yanayotoka kwenye Travex Uni-Student Market</div>
+      <div class="page-sub">Mapato yanayotoka kwenye Travex Uni-Student Market</div>
       <div class="chart-period-tabs" style="margin-bottom:1.5rem">
         <button class="cpt active" onclick="loadCampusRevenue('day',this)">Leo</button>
         <button class="cpt" onclick="loadCampusRevenue('week',this)">Wiki hii</button>
@@ -865,11 +785,11 @@ button,input,select,textarea,
         <div class="kpi-card" style="border-top:3px solid #7C3AED"><div class="kpi-val" id="cr-avg">—</div><div class="kpi-lbl">Avg per Store</div></div>
       </div>
       <div class="chart-wrap">
-        <div class="chart-title">Revenue ya Campus kwa Chuo</div>
+        <div class="chart-title">Mapato ya Campus kwa Chuo</div>
         <div id="cr-breakdown" style="display:grid;gap:0.75rem;margin-top:1rem"></div>
       </div>
       <div class="chart-wrap">
-        <div class="chart-title">Historia ya Payment</div>
+        <div class="chart-title">Historia ya Malipo</div>
         <div class="table-wrap" style="margin-top:0.5rem">
           <table><thead><tr><th>Seller</th><th>Chuo</th><th>Duka</th><th>Kiasi</th><th>Tarehe</th><th>Status</th></tr></thead>
           <tbody id="cr-payments-tbody">
@@ -1197,7 +1117,7 @@ async function approveStore(storeId) {
     subscription_grace_until: null
   }).eq("id", storeId);
 
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
 
   // 2. Update subscription record
   if (sub) {
@@ -1331,14 +1251,14 @@ async function viewStore(storeId) {
 
   // STORE INFO
   body += sectionHead("Taarifa za Duka", "🏪");
-  body += row("Store Name",   s.store_name,        {big:true});
+  body += row("Jina la Duka",   s.store_name,        {big:true});
   body += row("Aina ya Duka",   s.store_type==="b2b" ? "🥇 B2B Wholesale" : "🥈 B2C Retail");
   body += row("Plan",           s.subscription_plan==="premium" ? "👑 Premium" : s.subscription_plan==="standard" ? "⭐⭐ Standard" : "⭐ Basic");
   body += row("Status",         s.subscription_status==="approved" ? "✅ Active" : s.payment_status==="receipt_uploaded" ? "🔍 Risiti Inapitiwa" : "⏳ Pending",
               {color: s.subscription_status==="approved" ? "var(--green)" : "var(--red)"});
-  body += row("Category",      s.category);
-  body += row("Region",           s.region);
-  body += row("Description",        s.description);
+  body += row("Kategoria",      s.category);
+  body += row("Mkoa",           s.region);
+  body += row("Maelezo",        s.description);
   body += row("Wazi / Mfumo",  s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("sw") : null);
   body += row("Inaisha",        expires ? `${expires.toLocaleDateString("sw")} ${daysLeft !== null ? "(siku "+daysLeft+")" : ""}` : null,
               {color: daysLeft && daysLeft<=7 ? "var(--red)" : ""});
@@ -1351,7 +1271,7 @@ async function viewStore(storeId) {
   body += row("Email",           s.owner_email || s.email);
   body += row("Instagram",       s.instagram ? `<a href="https://instagram.com/${s.instagram}" target="_blank" style="color:#E1306C">@${s.instagram}</a>` : null);
   body += row("TikTok",          s.tiktok    ? `<a href="https://tiktok.com/@${s.tiktok}"    target="_blank" style="color:#000">@${s.tiktok}</a>`    : null);
-  body += row("Facebook",        s.facebook  ? `<a href="${s.facebook}" target="_blank" style="color:#1877F2">View →</a>` : null);
+  body += row("Facebook",        s.facebook  ? `<a href="${s.facebook}" target="_blank" style="color:#1877F2">Angalia →</a>` : null);
 
   // B2B EXTRA
   if (s.store_type === "b2b") {
@@ -1362,21 +1282,21 @@ async function viewStore(storeId) {
   }
 
   // PAYMENT / RECEIPT
-  body += sectionHead("Payment & Risiti", "💳");
-  body += row("Kiasi cha Payment", pay ? `TZS ${Number(pay.amount||0).toLocaleString()}` : s.subscription_plan ? "Kulingana na Plan" : null);
-  body += row("Hali ya Payment",  s.payment_status === "receipt_uploaded" ? "🔍 Risiti Imepakia — Inapitiwa" : s.subscription_status==="approved" ? "✅ Imelipwa" : "❌ Activejalipiwa",
+  body += sectionHead("Malipo & Risiti", "💳");
+  body += row("Kiasi cha Malipo", pay ? `TZS ${Number(pay.amount||0).toLocaleString()}` : s.subscription_plan ? "Kulingana na Plan" : null);
+  body += row("Hali ya Malipo",  s.payment_status === "receipt_uploaded" ? "🔍 Risiti Imepakia — Inapitiwa" : s.subscription_status==="approved" ? "✅ Imelipwa" : "❌ Haijalipiwa",
               {color: s.subscription_status==="approved" ? "var(--green)" : s.payment_status==="receipt_uploaded" ? "#92400E" : "var(--red)"});
   
   // RECEIPT IMAGE / LINK
   const receiptUrl = s.receipt_url || pay?.receipt_url;
   if (receiptUrl) {
     const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(receiptUrl);
-    body += `<div class="modal-row"><span class="modal-label">Risiti ya Payment</span><span class="modal-val">
+    body += `<div class="modal-row"><span class="modal-label">Risiti ya Malipo</span><span class="modal-val">
       ${isImg ? `<a href="${receiptUrl}" target="_blank"><img src="${receiptUrl}" style="max-width:160px;max-height:120px;border:1px solid var(--lgray);display:block;margin-bottom:0.3rem" onerror="this.style.display='none'"></a>` : ""}
-      <a href="${receiptUrl}" target="_blank" style="color:var(--gold);font-weight:600;font-size:0.8rem">📄 View Risiti Kamili →</a>
+      <a href="${receiptUrl}" target="_blank" style="color:var(--gold);font-weight:600;font-size:0.8rem">📄 Angalia Risiti Kamili →</a>
     </span></div>`;
   } else {
-    body += `<div class="modal-row"><span class="modal-label">Risiti</span><span class="modal-val" style="color:var(--gray);font-size:0.78rem">Activejapakia bado</span></div>`;
+    body += `<div class="modal-row"><span class="modal-label">Risiti</span><span class="modal-val" style="color:var(--gray);font-size:0.78rem">Haijapakia bado</span></div>`;
   }
 
   // THEME
@@ -1999,10 +1919,10 @@ function renderAppsTable(apps) {
       <td><span class="badge badge-${a.status}">${a.status}</span></td>
       <td style="font-size:0.72rem">${new Date(a.created_at).toLocaleDateString("sw")}</td>
       <td>
-        <button onclick="viewCampusApp('${a.id}')" style="background:var(--navy);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:0.3rem;display:block">👁 Taarifa</button>
+        <button onclick="viewCampusApp('${a.id}')" style="background:var(--navy);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:0.3rem;display:block">👁 Taarifa</button>
         ${a.status==="pending" ? `
-          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-right:0.2rem">✅ Idhinisha</button>
-          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">❌ Kataa</button>
+          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.2rem">✅ Idhinisha</button>
+          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">❌ Kataa</button>
         ` : `<span style="font-size:0.72rem;color:var(--gray)">${a.status}</span>`}
       </td>
     </tr>`).join("");
@@ -2021,7 +1941,7 @@ function viewCampusApp(id) {
 
   // Personal info
   body += sectionHead("Taarifa za Mwanafunzi", "🎓");
-  body += row("Full Name",    a.full_name);
+  body += row("Jina Kamili",    a.full_name);
   body += row("Email",          a.email);
   body += row("Simu",           a.phone);
   body += row("WhatsApp",       a.whatsapp ? `<a href="https://wa.me/${(a.whatsapp||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp} 💬</a>` : null);
@@ -2031,13 +1951,13 @@ function viewCampusApp(id) {
   body += sectionHead("Chuo & Eneo", "🏫");
   body += row("Chuo",    a.university);
   body += row("Kifupi",  a.university_abbr);
-  body += row("Region",    a.region);
+  body += row("Mkoa",    a.region);
 
   // Business
   body += sectionHead("Biashara / Duka", "🏪");
-  body += row("Store Name",    a.shop_name);
-  body += row("Category",       a.business_category);
-  body += row("Description",         a.business_description ? `<span style="font-size:0.78rem;line-height:1.6">${a.business_description}</span>` : null);
+  body += row("Jina la Duka",    a.shop_name);
+  body += row("Kategoria",       a.business_category);
+  body += row("Maelezo",         a.business_description ? `<span style="font-size:0.78rem;line-height:1.6">${a.business_description}</span>` : null);
 
   // Student ID card
   body += sectionHead("Kitambulisho cha Chuo", "🪪");
@@ -2045,7 +1965,7 @@ function viewCampusApp(id) {
     const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(a.id_card_url);
     body += `<div style="margin:0.5rem 0">
       ${isImg ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="max-width:100%;max-height:200px;border:1px solid var(--lgray);display:block;margin-bottom:0.5rem" onerror="this.style.display='none'"></a>` : ""}
-      <a href="${a.id_card_url}" target="_blank" style="color:#7C3AED;font-weight:600;font-size:0.85rem">🪪 View ID Kamili →</a>
+      <a href="${a.id_card_url}" target="_blank" style="color:#7C3AED;font-weight:600;font-size:0.85rem">🪪 Angalia ID Kamili →</a>
     </div>`;
   } else {
     body += `<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">Kitambulisho hakikupakiwa</div>`;
@@ -2101,7 +2021,7 @@ async function approveCampusApp(id) {
   const { error: e1 } = await sb.from("campus_applications").update({
     status: "approved", approved_at: now.toISOString()
   }).eq("id", id);
-  if (e1) { showToast("Failed: " + e1.message, "error"); return; }
+  if (e1) { showToast("Imeshindwa: " + e1.message, "error"); return; }
 
   // 2. Create campus_store — is_active=true so duka linaonekana mara moja
   const shopNumber = allCampusStores.filter(s => s.university_abbr === app.university_abbr && s.shop_number).length + 1;
@@ -2131,7 +2051,7 @@ async function approveCampusApp(id) {
     await sendApprovalEmail({
       to:        app.email,
       ownerName: app.full_name,
-      storeName: app.shop_name || "Your Store",
+      storeName: app.shop_name || "Duka lako",
       storeType: "CAMPUS",
       plan:      "🎓 Campus Premium",
       shopNum:   shopNumber,
@@ -2152,7 +2072,7 @@ async function approveCampusApp(id) {
       `Maombi yako ya Travex Uni-Student Market *yameidhinishwa!* 🎓
 
 ` +
-      `*Your Store:* ${app.shop_name}
+      `*Duka lako:* ${app.shop_name}
 *Chuo:* ${app.university_abbr}
 *Shop No:* #${shopNumber}
 
@@ -2164,12 +2084,12 @@ async function approveCampusApp(id) {
 💵 Kiasi: *TZS 15,000/mwezi*
 
 ` +
-      `Submit picha ya risiti hapa baada ya kulipa.
+      `Tuma picha ya risiti hapa baada ya kulipa.
 ` +
-      `Login dashibodi: ${window.location.origin}/campus-dashboard.html
+      `Ingia dashibodi: ${window.location.origin}/campus-dashboard.html
 
 ` +
-      `Welcome Travex Campus! 🎓`
+      `Karibu Travex Campus! 🎓`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
   }
@@ -2185,7 +2105,7 @@ async function rejectCampusApp(id) {
   if (!app) return;
   if (!confirm(`Kataa maombi ya ${app.full_name}?`)) return;
   const { error } = await sb.from("campus_applications").update({ status:"rejected" }).eq("id", id);
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
   showToast("Maombi ya " + app.full_name + " yamekataliwa.");
   await loadCampusData();
   renderAppsTable(allCampusApps);
@@ -2213,8 +2133,8 @@ function renderCampusStoresTable(stores) {
       <td><span class="badge badge-${s.is_active?"approved":"pending"}">${s.is_active?"Active":"Pending"}</span></td>
       <td style="font-size:0.75rem">${new Date(s.created_at).toLocaleDateString("sw")}</td>
       <td>
-        ${!s.is_active ? `<button onclick="activateCampusStore('${s.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Activate</button>` : ""}
-        <button onclick="deactivateCampusStore('${s.id}','${s.is_active}')" style="background:${s.is_active?"var(--red)":"var(--gray)"};color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-left:0.2rem">${s.is_active?"Deactivate":"Remove"}</button>
+        ${!s.is_active ? `<button onclick="activateCampusStore('${s.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Activate</button>` : ""}
+        <button onclick="deactivateCampusStore('${s.id}','${s.is_active}')" style="background:${s.is_active?"var(--red)":"var(--gray)"};color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-left:0.2rem">${s.is_active?"Deactivate":"Remove"}</button>
       </td>
     </tr>`).join("");
 }
@@ -2242,7 +2162,7 @@ async function activateCampusStore(id) {
     subscription_start: new Date().toISOString(),
     subscription_expires: new Date(Date.now() + 30*24*60*60*1000).toISOString()
   }).eq("id", id);
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
   showToast("✅ Duka la " + store.store_name + " limewashwa! Shop #" + shopNumber);
   await loadCampusData();
   renderCampusStoresTable(allCampusStores);
@@ -2250,9 +2170,9 @@ async function activateCampusStore(id) {
 
 async function deactivateCampusStore(id, isActive) {
   const store = allCampusStores.find(s=>s.id===id);
-  if (!store || !confirm(`${isActive==="true"?"Deactivate":"Delete"} duka la "${store.store_name}"?`)) return;
+  if (!store || !confirm(`${isActive==="true"?"Deactivate":"Futa"} duka la "${store.store_name}"?`)) return;
   const { error } = await sb.from("campus_stores").update({ is_active: false, subscription_status:"pending" }).eq("id", id);
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
+  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
   showToast("Duka limezimwa.");
   await loadCampusData();
   renderCampusStoresTable(allCampusStores);
@@ -2401,9 +2321,9 @@ async function loadNotifications() {
     const dot = n.is_read ? "" : `<span style="width:6px;height:6px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:4px"></span>`;
     const receiptLink = n.receipt_url ? `<a href="${n.receipt_url}" target="_blank" style="font-size:0.7rem;color:var(--gold);font-weight:600">Ona Risiti →</a>` : "";
     const ctaBtn = isPayment
-      ? `<button onclick="showPage('pending-payments',null);toggleNotifPanel()" style="font-size:0.7rem;color:var(--navy);background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600">Pitia Payment →</button>`
+      ? `<button onclick="showPage('pending-payments',null);toggleNotifPanel()" style="font-size:0.7rem;color:var(--navy);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Pitia Malipo →</button>`
       : isCampus
-      ? `<button onclick="showPage('campus-applications',null);toggleNotifPanel()" style="font-size:0.7rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600">Pitia Applications →</button>`
+      ? `<button onclick="showPage('campus-applications',null);toggleNotifPanel()" style="font-size:0.7rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Pitia Applications →</button>`
       : "";
     return `<div onclick="markRead('${n.id}')" style="padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);background:${bg};cursor:pointer" onmouseover="this.style.background='var(--offwhite)'" onmouseout="this.style.background='${bg}'">
       <div style="display:flex;gap:0.6rem;align-items:flex-start">
@@ -2473,14 +2393,14 @@ async function sendApprovalEmail(params) {
 
   const isCampus = storeType === "CAMPUS";
   const subject  = isCampus
-    ? `🎓 Hongera ${ownerName}! Your Store la Campus limeidhinishwa — Travex Campus`
-    : `🎉 Hongera! Your Store "${storeName}" limewashwa — Travex Mall`;
+    ? `🎓 Hongera ${ownerName}! Duka lako la Campus limeidhinishwa — Travex Campus`
+    : `🎉 Hongera! Duka lako "${storeName}" limewashwa — Travex Mall`;
 
   const htmlBody = `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="font-family:'Plus Jakarta Sans',Arial,sans-serif;background:#F8F9FC;margin:0;padding:0">
+<body style="font-family:'Inter',Arial,sans-serif;background:#F8F9FC;margin:0;padding:0">
   <div style="max-width:560px;margin:0 auto;background:#fff">
 
     <!-- Header -->
@@ -2497,8 +2417,8 @@ async function sendApprovalEmail(params) {
       <p style="font-size:1rem;font-weight:700;color:#0D1B3E;margin-bottom:0.5rem">Habari ${ownerName}! 👋</p>
       <p style="color:#6B7280;line-height:1.7;margin-bottom:1.5rem">
         ${isCampus
-          ? `Maombi yako ya kujiunga na <strong>Travex Uni-Student Market</strong> yameidhinishwa! Your Store <strong>"${storeName}"</strong> limeundwa na linaonekana kwenye chuo chako.`
-          : `Hongana! Your Store <strong>"${storeName}"</strong> limeidhinishwa na limewashwa kwenye <strong>Travex Mall</strong>. Unaweza kuanza kuuza sasa hivi!`
+          ? `Maombi yako ya kujiunga na <strong>Travex Uni-Student Market</strong> yameidhinishwa! Duka lako <strong>"${storeName}"</strong> limeundwa na linaonekana kwenye chuo chako.`
+          : `Hongana! Duka lako <strong>"${storeName}"</strong> limeidhinishwa na limewashwa kwenye <strong>Travex Mall</strong>. Unaweza kuanza kuuza sasa hivi!`
         }
       </p>
 
@@ -2506,7 +2426,7 @@ async function sendApprovalEmail(params) {
       <div style="background:#F8F9FC;border:1px solid #E5E7EB;padding:1.25rem;margin-bottom:1.5rem">
         <div style="font-size:0.7rem;font-weight:700;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">📋 Taarifa za Duka Lako</div>
         <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
-          <tr><td style="color:#6B7280;padding:0.3rem 0;width:40%">Store Name</td><td style="font-weight:700;color:#111827">${storeName}</td></tr>
+          <tr><td style="color:#6B7280;padding:0.3rem 0;width:40%">Jina la Duka</td><td style="font-weight:700;color:#111827">${storeName}</td></tr>
           <tr><td style="color:#6B7280;padding:0.3rem 0">Aina</td><td style="font-weight:700;color:#111827">${storeType}</td></tr>
           <tr><td style="color:#6B7280;padding:0.3rem 0">Plan</td><td style="font-weight:700;color:#C9A84C">${plan}</td></tr>
           ${shopNum ? `<tr><td style="color:#6B7280;padding:0.3rem 0">Shop Number</td><td style="font-weight:700;color:#7C3AED">#${shopNum}</td></tr>` : ""}
@@ -2516,17 +2436,17 @@ async function sendApprovalEmail(params) {
 
       ${payNote ? `
       <div style="background:#FEF3C7;border-left:3px solid #C9A84C;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:0.85rem;color:#92400E;line-height:1.6">
-        💳 <strong>Payment:</strong> ${payNote}
+        💳 <strong>Malipo:</strong> ${payNote}
       </div>` : ""}
 
       <!-- CTA Buttons -->
       <div style="text-align:center;margin-bottom:1.5rem">
         <a href="${loginUrl}" style="display:inline-block;background:#C9A84C;color:#0D1B3E;padding:0.875rem 2rem;font-weight:800;text-decoration:none;font-size:0.95rem;margin-bottom:0.75rem">
-          🔑 Login Dashboard Yako →
+          🔑 Ingia Dashibodi Yako →
         </a>
         <br>
         <a href="${storeUrl}" style="display:inline-block;background:#0D1B3E;color:#fff;padding:0.75rem 2rem;font-weight:600;text-decoration:none;font-size:0.875rem">
-          🏪 View Duka Lako →
+          🏪 Angalia Duka Lako →
         </a>
       </div>
 
@@ -2536,12 +2456,12 @@ async function sendApprovalEmail(params) {
         <div style="font-size:0.82rem;color:#6B7280;line-height:2.2">
           ${isCampus ? `
           ✅ Lipa TZS 15,000 kudumisha duka lako<br>
-          📱 Submit risiti WhatsApp: <strong>+255 651 919 915</strong><br>
-          🔑 Login dashibodi yako kuongeza bidhaa<br>
+          📱 Tuma risiti WhatsApp: <strong>+255 651 919 915</strong><br>
+          🔑 Ingia dashibodi yako kuongeza bidhaa<br>
           📢 Tangaza duka lako kwa wanafunzi wenzako
           ` : `
-          ✅ Login dashibodi yako sasa<br>
-          📦 Add bidhaa zako za kwanza<br>
+          ✅ Ingia dashibodi yako sasa<br>
+          📦 Ongeza bidhaa zako za kwanza<br>
           📢 Shiriki duka lako kwenye mitandao ya kijamii<br>
           💬 Wasiliana nasi kwa msaada: +255 651 919 915
           `}
@@ -2581,7 +2501,7 @@ async function sendApprovalEmail(params) {
     await sb.from("admin_notifications").insert({
       type: "email_failed",
       title: `⚠️ Email haikutumwa kwa ${to}`,
-      body:  `Subject: ${subject} | Error: ${err.message}. Submit manually.`,
+      body:  `Subject: ${subject} | Error: ${err.message}. Tuma manually.`,
       is_read: false,
       created_at: new Date().toISOString()
     }).catch(() => {});
