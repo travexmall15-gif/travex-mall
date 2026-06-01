@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Apply for Campus Shop — Travex Campus</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -124,7 +123,106 @@ button,input,select,textarea,.btn,a.btn,[class*="btn-"],[class*="-btn"]{border-r
 input[type="text"],input[type="email"],input[type="tel"],input[type="password"],input[type="search"],textarea,select{border-radius:8px!important;font-family:"Plus Jakarta Sans",sans-serif!important}
 button{font-family:"Plus Jakarta Sans",sans-serif}
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+/* ═══════════════════════════════════════════
+   GLOBAL POLISH — soft corners + mobile pro
+   ═══════════════════════════════════════════ */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Plus Jakarta Sans',sans-serif}
+
+/* Soft corners on ALL interactive elements */
+button,input,select,textarea,
+[class*="btn"],[class*="card"],[class*="modal"],
+[class*="badge"],[class*="tag"],[class*="pill"],
+[class*="dropdown"],[class*="panel"],[class*="box"],
+[class*="field"],[class*="form"]{border-radius:8px!important}
+
+/* Mobile-first base sizes */
+@media(max-width:640px){
+  /* Typography scale for mobile */
+  h1,h2,h3{word-break:break-word;overflow-wrap:break-word}
+  
+  /* Prevent text overflow */
+  p,span,div{max-width:100%;overflow-wrap:break-word}
+  
+  /* Full-width buttons on mobile */
+  .btn,.btn-primary,.btn-secondary,.btn-gold,.btn-navy,
+  [class*="btn-"]{
+    display:flex!important;
+    width:100%!important;
+    justify-content:center!important;
+    align-items:center!important;
+    min-height:48px!important;
+    font-size:0.95rem!important;
+    padding:0.75rem 1.25rem!important;
+    border-radius:12px!important;
+  }
+  
+  /* Button groups — stack vertically */
+  .btn-group,.cta-group,.hero-ctas,[class*="-btns"]{
+    flex-direction:column!important;
+    gap:0.75rem!important;
+    width:100%!important;
+  }
+  
+  /* Cards — full width on mobile */
+  .card,[class*="-card"]{
+    width:100%!important;
+    border-radius:16px!important;
+  }
+  
+  /* Forms — comfortable touch targets */
+  input,select,textarea{
+    min-height:48px!important;
+    font-size:16px!important; /* prevents iOS zoom */
+    padding:0.75rem 1rem!important;
+    border-radius:10px!important;
+  }
+  
+  /* Nav — compact mobile */
+  nav{padding:0 1rem!important;height:56px!important}
+  
+  /* Section padding */
+  section,[class*="-section"]{
+    padding-left:1.25rem!important;
+    padding-right:1.25rem!important;
+  }
+  
+  /* Grid — single column on mobile */
+  [style*="grid-template-columns"]{
+    grid-template-columns:1fr!important;
+  }
+  
+  /* Overflow fix */
+  .carousel-track,[class*="-track"]{
+    padding-right:1.25rem!important;
+  }
+
+  /* Subscription cards */
+  [class*="plan-card"],[class*="pricing-card"],[class*="sub-card"]{
+    border-radius:16px!important;
+    margin-bottom:1rem!important;
+  }
+}
+
+@media(max-width:480px){
+  /* Extra small — fonts scale down slightly */
+  body{font-size:15px}
+  h1{font-size:clamp(1.6rem,7vw,2.2rem)!important}
+  h2{font-size:clamp(1.3rem,5.5vw,1.8rem)!important}
+  h3{font-size:clamp(1.1rem,4.5vw,1.4rem)!important}
+  p,li{font-size:0.9rem!important;line-height:1.65!important}
+  
+  /* Tighter padding on very small screens */
+  section,[class*="-section"]{
+    padding-left:1rem!important;
+    padding-right:1rem!important;
+    padding-top:2.5rem!important;
+    padding-bottom:2.5rem!important;
+  }
+}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -165,20 +263,20 @@ button{font-family:"Plus Jakarta Sans",sans-serif}
     <div style="background:linear-gradient(135deg,#0D1B3E,#1B3A6B);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden">
       <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.05) 1px,transparent 1px);background-size:30px 30px"></div>
       <div style="font-size:4rem;margin-bottom:1rem;position:relative">🎉</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:0.5rem;position:relative">Maombi Yamepokelewa!</div>
-      <div style="font-size:0.95rem;color:rgba(255,255,255,0.65);line-height:1.7;position:relative">Karibu kwenye Travex Uni-Student Market! Umejiunga kwa mafanikio.</div>
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:0.5rem;position:relative">Maombi Yamepokelewa!</div>
+      <div style="font-size:0.95rem;color:rgba(255,255,255,0.65);line-height:1.7;position:relative">Welcome kwenye Travex Uni-Student Market! Umejiunga kwa mafanikio.</div>
     </div>
     <div style="background:#FEF3C7;border-bottom:3px solid #C9A84C;padding:1.2rem 2rem;text-align:center">
       <div style="font-size:0.75rem;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem">⏱️ Utapokea taarifa za approval kupitia Email</div>
-      <div style="font-size:2rem;font-weight:900;color:#0D1B3E;font-family:'Playfair Display',serif" id="approvalTimer">~ 60 Min</div>
+      <div style="font-size:2rem;font-weight:900;color:#0D1B3E;font-family:'Plus Jakarta Sans',sans-serif" id="approvalTimer">~ 60 Min</div>
       <div style="font-size:0.78rem;color:#92400E;margin-top:0.3rem">Ndani ya dakika 60 — angalia email yako mara kwa mara ikiwa ni pamoja na Spam folder</div>
     </div>
     <div style="background:#fff;padding:2rem">
       <div style="font-size:0.72rem;font-weight:800;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.2rem">Hatua Zinazofuata:</div>
       <div style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #E5E7EB">
         <div style="width:36px;height:36px;background:#0D1B3E;color:#C9A84C;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0">1</div>
-        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Angalia Email Yako 📧</div>
-        <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">Tutakutumia barua pepe ndani ya <strong style="color:#0D1B3E">dakika 60</strong> kukuambia kama application yako imeidhinishwa. Angalia pia folder ya Spam.</div></div>
+        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">View Email Yako 📧</div>
+        <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">Tutakutumia barua pepe ndani ya <strong style="color:#0D1B3E">dakika 60</strong> kukuambia kama application yako imeidhinishwa. View pia folder ya Spam.</div></div>
       </div>
       <div style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #E5E7EB">
         <div style="width:36px;height:36px;background:#0D1B3E;color:#C9A84C;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0">2</div>
@@ -187,13 +285,13 @@ button{font-family:"Plus Jakarta Sans",sans-serif}
       </div>
       <div style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #E5E7EB">
         <div style="width:36px;height:36px;background:#0D1B3E;color:#C9A84C;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0">3</div>
-        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Tuma Risiti WhatsApp 📱</div>
+        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Submit Risiti WhatsApp 📱</div>
         <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">Piga picha risiti ya malipo na uitumie WhatsApp: <strong style="color:#0D1B3E">+255 651 919 915</strong> au <strong style="color:#0D1B3E">+255 657 575 950</strong></div></div>
       </div>
       <div style="display:flex;gap:1rem;padding:1rem 0">
         <div style="width:36px;height:36px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0">4</div>
         <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Duka Lako Linafunguliwa! 🏪</div>
-        <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">Utapata login credentials na shop number yako kwa email. Ingia <strong style="color:#0D1B3E">campus-dashboard.html</strong> na uanze kuuza!</div></div>
+        <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">Utapata login credentials na shop number yako kwa email. Login <strong style="color:#0D1B3E">campus-dashboard.html</strong> na uanze kuuza!</div></div>
       </div>
       <div style="background:#F8F9FC;border:1px solid #E5E7EB;padding:1.2rem;margin-top:1.5rem;margin-bottom:1.5rem" id="successApplicantInfo"></div>
       <a href="https://wa.me/255651919915?text=Habari!%20Nimetuma%20maombi%20ya%20Travex%20Campus." target="_blank"
@@ -201,7 +299,7 @@ button{font-family:"Plus Jakarta Sans",sans-serif}
         💬 Wasiliana Nasi WhatsApp
       </a>
       <a href="campus.html" style="display:block;text-align:center;padding:0.85rem;background:#F8F9FC;border:1.5px solid #E5E7EB;color:#0D1B3E;font-weight:600;font-size:0.875rem;text-decoration:none">
-        ← Rudi Campus
+        ← Back Campus
       </a>
     </div>
   </div>
@@ -386,7 +484,7 @@ button{font-family:"Plus Jakarta Sans",sans-serif}
     </div>
 
     <div style="background:#FEF3C7;border:1px solid #FDE68A;padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:0.85rem;color:#92400E">
-      ⚠️ <strong>Important:</strong> Nafasi ni <strong>60 tu kwa kila chuo</strong>. Tuma maombi sasa kupata nafasi yako! Applications are reviewed in order of submission.
+      ⚠️ <strong>Important:</strong> Nafasi ni <strong>60 tu kwa kila chuo</strong>. Submit maombi sasa kupata nafasi yako! Applications are reviewed in order of submission.
     </div>
 
     <div class="form-actions">
