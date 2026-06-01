@@ -2,400 +2,346 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Seller Dashboard — Travex Mall</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--sb-w:220px}
 html,body{height:100%;font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden}
+.app{display:flex;height:100vh;overflow:hidden}
 
-/* ── TOP NAVBAR ── */
-/* THEME VARIABLES */
-:root{--theme-color:#0D1B3E;--theme-text:#ffffff}
-.topnav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--theme-color)!important;background:var(--navy);height:60px;display:flex;align-items:center;padding:0 1.5rem;gap:1rem;border-bottom:1px solid rgba(201,168,76,0.15)}
-.topnav-logo{font-size:1rem;font-weight:800;color:var(--white);text-decoration:none;flex-shrink:0}
-.topnav-logo span{color:var(--gold)}
-.topnav-divider{width:1px;height:28px;background:rgba(255,255,255,0.1);flex-shrink:0}
-.topnav-tabs{display:flex;gap:0;flex:1;overflow-x:auto;border-radius:8px}
-.topnav-tab{display:flex;align-items:center;gap:0.4rem;padding:0 1.1rem;height:60px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:transparent;font-family:"Inter",sans-serif;border-radius:8px}
-.topnav-tab:hover{color:var(--white);background:rgba(255,255,255,0.05);border-radius:8px}
-.topnav-tab.active{color:var(--gold);border-bottom-color:var(--gold);border-radius:8px}
-.topnav-right{display:flex;align-items:center;gap:0.75rem;flex-shrink:0}
-.topnav-store-name{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.6)}
-.topnav-avatar{width:32px;height:32px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;border-radius:50%}
-.topnav-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;border-radius:8px}
-.topnav-btn:hover{background:var(--red);border-color:var(--red);border-radius:8px}
+/* SIDEBAR */
+.sidebar{width:var(--sb-w);flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;overflow:hidden;z-index:100;transition:width 0.25s}
+.sidebar.collapsed{width:68px}
+.sidebar.collapsed .sb-label,.sidebar.collapsed .sb-section-label,.sidebar.collapsed .sb-store-info,.sidebar.collapsed .sb-value,.sidebar.collapsed .sb-logo-text{display:none}
+.sidebar.collapsed .sb-badge{display:none!important}
+.sb-header{height:60px;display:flex;align-items:center;padding:0 1rem;gap:0.6rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.sb-logo{display:flex;align-items:center;gap:0.5rem;text-decoration:none;flex:1;overflow:hidden}
+.sb-logo-mark{font-size:0.9rem;font-weight:800;color:var(--gold);flex-shrink:0}
+.sb-logo-text{font-size:0.9rem;font-weight:800;color:var(--white);white-space:nowrap}
+.sb-toggle{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:0.9rem;flex-shrink:0;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.sb-toggle:hover{background:rgba(255,255,255,0.15);color:#fff}
+.sb-store{padding:0.7rem 1rem;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:0.65rem;flex-shrink:0;min-height:60px}
+.sb-store-logo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.1);border:2px solid rgba(201,168,76,0.25);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:800;color:var(--gold);flex-shrink:0;overflow:hidden}
+.sb-store-logo img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.sb-store-info{overflow:hidden;flex:1}
+.sb-store-name{font-size:0.78rem;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-store-plan{font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:1px}
+.sb-value{margin:0.5rem 0.75rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.18);border-radius:10px;padding:0.55rem 0.75rem;flex-shrink:0}
+.sb-value-label{font-size:0.58rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em}
+.sb-value-num{font-size:0.88rem;font-weight:800;color:var(--gold);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-nav{flex:1;overflow-y:auto;padding:0.4rem 0;scrollbar-width:none}
+.sb-nav::-webkit-scrollbar{display:none}
+.sb-section-label{font-size:0.57rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:0.65rem 1rem 0.2rem;white-space:nowrap}
+.sb-btn{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 1rem;background:transparent;border:none;color:rgba(255,255,255,0.5);cursor:pointer;width:100%;text-align:left;font-family:"Inter",sans-serif;font-size:0.8rem;font-weight:500;transition:all 0.15s;white-space:nowrap;overflow:hidden;position:relative}
+.sb-btn:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85)}
+.sb-btn.active{background:rgba(201,168,76,0.1);color:var(--gold)}
+.sb-btn.active::after{content:"";position:absolute;right:0;top:10%;bottom:10%;width:3px;background:var(--gold);border-radius:3px 0 0 3px}
+.sb-icon{font-size:1.05rem;flex-shrink:0;width:20px;text-align:center;line-height:1}
+.sb-label{flex:1;overflow:hidden;text-overflow:ellipsis}
+.sb-badge{background:var(--red);color:#fff;font-size:0.58rem;font-weight:700;padding:0.1rem 0.35rem;border-radius:20px;flex-shrink:0}
+.sb-divider{height:1px;background:rgba(255,255,255,0.07);margin:0.3rem 0.75rem}
+.sb-logout{padding:0.65rem 0.75rem;border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.sb-logout-btn{display:flex;align-items:center;gap:0.65rem;padding:0.5rem 0.7rem;border-radius:10px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);color:rgba(255,100,100,0.75);cursor:pointer;font-family:"Inter",sans-serif;font-size:0.75rem;font-weight:600;width:100%;transition:all 0.2s;white-space:nowrap;overflow:hidden}
+.sb-logout-btn:hover{background:rgba(220,38,38,0.15);color:#ff6b6b}
 
-/* Store selector for premium multi-store */
-.store-selector{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--white);padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;outline:none;border-radius:8px}
-.store-selector option{background:var(--navy);color:var(--white);border-radius:8px}
+/* MAIN */
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:60px;background:var(--white);border-bottom:1px solid var(--lgray);display:flex;align-items:center;padding:0 1.25rem;gap:0.9rem;flex-shrink:0}
+.topbar-info{flex:1;min-width:0}
+.topbar-title{font-size:0.95rem;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-sub{font-size:0.68rem;color:var(--gray);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-badge{display:none;align-items:center;gap:0.35rem;padding:0.28rem 0.7rem;border-radius:20px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);cursor:pointer;flex-shrink:0}
+.sub-badge-text{font-size:0.65rem;font-weight:700;color:var(--gold)}
+.vybe-btn{background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border:none;padding:0.35rem 0.9rem;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;border-radius:20px;flex-shrink:0;white-space:nowrap}
+.topbar-avatar{width:32px;height:32px;background:var(--gold);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:800;flex-shrink:0}
+.mob-menu-btn{display:none;width:34px;height:34px;border-radius:8px;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);cursor:pointer;font-size:1rem;align-items:center;justify-content:center;flex-shrink:0}
 
-/* ── MAIN LAYOUT ── */
-.main{margin-top:60px;min-height:calc(100vh - 60px)}
-.page{display:none;padding:1.5rem}
-.page.active{display:block}
+/* CONTENT */
+.content-area{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:1rem}
+.page{display:none}
+.page.active{display:contents}
 
-/* ── OVERVIEW STATS (horizontal) ── */
-.overview-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:1.5rem}
-.stat-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;position:relative;overflow:hidden;border-radius:14px}
-.stat-card::after{content:"";position:absolute;right:-15px;top:-15px;width:80px;height:80px;border-radius:50%;opacity:0.06}
-.stat-card.gold::after{background:var(--gold);border-radius:14px}
-.stat-card.green::after{background:var(--green);border-radius:14px}
-.stat-card.blue::after{background:var(--blue);border-radius:14px}
-.stat-card.navy::after{background:var(--navy);border-radius:14px}
-.stat-label{font-size:0.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem}
-.stat-value{font-size:1.7rem;font-weight:900;color:var(--navy);line-height:1}
-.stat-sub{font-size:0.7rem;color:var(--green);margin-top:0.3rem;font-weight:600}
-.stat-icon{position:absolute;right:1rem;top:1rem;font-size:1.4rem;opacity:0.4}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.stat-card{background:var(--white);border:1px solid var(--lgray);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden}
+.stat-card::after{content:"";position:absolute;right:-10px;top:-10px;width:70px;height:70px;border-radius:50%;opacity:0.07}
+.stat-card.gold::after{background:var(--gold)}
+.stat-card.green::after{background:var(--green)}
+.stat-card.blue::after{background:var(--blue)}
+.stat-card.navy::after{background:var(--navy)}
+.stat-icon{position:absolute;right:0.85rem;top:0.85rem;font-size:1.25rem;opacity:0.35}
+.stat-label{font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem}
+.stat-value{font-size:1.55rem;font-weight:900;color:var(--navy);line-height:1}
+.stat-sub{font-size:0.65rem;color:var(--green);margin-top:0.3rem;font-weight:600}
 
-/* ── GRID LAYOUTS ── */
-.grid2{display:grid;grid-template-columns:2fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.2rem}
-.grid-full{margin-bottom:1.2rem}
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--lgray);border-radius:14px;overflow:hidden}
+.card-hd{padding:0.85rem 1.1rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;gap:0.5rem;flex-wrap:wrap}
+.card-title{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.card-btn{background:var(--navy);color:var(--white);padding:0.3rem 0.75rem;font-size:0.68rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;border-radius:8px}
+.card-btn:hover{background:var(--gold);color:var(--navy)}
+.card-bd{padding:1rem}
+.btn-gold{background:var(--gold);color:var(--navy);padding:0.4rem 1rem;font-size:0.75rem;font-weight:700;text-decoration:none;border-radius:8px;border:none;cursor:pointer;font-family:"Inter",sans-serif;display:inline-block}
 
-/* ── CARDS ── */
-.card{background:var(--white);border:1px solid var(--lgray);border-radius:14px}
-.card-header{padding:1rem 1.2rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;border-radius:14px}
-.card-title{font-size:0.875rem;font-weight:700;color:var(--navy);border-radius:14px}
-.card-btn{background:var(--navy);color:var(--white);padding:0.35rem 0.85rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;border-radius:14px}
-.card-btn:hover{background:var(--gold);color:var(--navy);border-radius:14px}
-.card-body{padding:1.2rem;border-radius:14px}
+/* LAYOUT GRIDS */
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
 
-/* ── TABLE ── */
-.data-table{width:100%;border-collapse:collapse;border-radius:8px}
-.data-table th{padding:0.65rem 1rem;text-align:left;font-size:0.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;background:var(--offwhite);border-bottom:1px solid var(--lgray);border-radius:8px}
-.data-table td{padding:0.85rem 1rem;font-size:0.82rem;color:var(--dark);border-bottom:1px solid var(--lgray);border-radius:8px}
-.data-table tr:last-child td{border-bottom:none;border-radius:8px}
-.data-table tr:hover{background:var(--offwhite);border-radius:8px}
-.badge{display:inline-block;padding:0.18rem 0.55rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;border-radius:20px}
-.badge-pending{background:#FEF3C7;color:#92400E;border-radius:20px}
-.badge-completed{background:#D1FAE5;color:#065F46;border-radius:20px}
-.badge-cancelled{background:#FEE2E2;color:#991B1B;border-radius:20px}
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:0.8rem}
+.data-table th{padding:0.55rem 0.85rem;text-align:left;font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;background:var(--offwhite);border-bottom:1px solid var(--lgray)}
+.data-table td{padding:0.7rem 0.85rem;border-bottom:1px solid var(--lgray);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--offwhite)}
+.data-table tr[style*="#EFF6FF"]:hover td{background:#DBEAFE!important}
+.badge{display:inline-flex;align-items:center;padding:0.15rem 0.55rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;border-radius:20px}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-inprocess{background:#DBEAFE;color:#1E40AF}
+.badge-completed{background:#D1FAE5;color:#065F46}
+.badge-cancelled{background:#FEE2E2;color:#991B1B}
 
-/* ── ACCOUNTING ── */
-.acc-period-tabs{display:flex;gap:0;border:1px solid var(--lgray);width:fit-content;margin-bottom:1.2rem;border-radius:8px}
-.acc-tab{padding:0.5rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:var(--white);font-family:"Inter",sans-serif;transition:all 0.2s;border-radius:8px}
-.acc-tab.active{background:var(--navy);color:var(--gold);border-radius:8px}
-.acc-tab:hover:not(.active){background:var(--offwhite);color:var(--navy)}
-.acc-panel{display:none;border-radius:12px}
-.acc-panel.active{display:block;border-radius:12px}
-.acc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.2rem}
-.acc-sum-card{background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;border-radius:14px}
-.acc-sum-label{font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.4rem}
-.acc-sum-val{font-size:1.3rem;font-weight:800;color:var(--navy)}
-.acc-sum-val.income{color:var(--green)}
-.acc-sum-val.profit{color:var(--blue)}
-.acc-chart{background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;margin-bottom:1rem}
-.acc-chart-title{font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
-.bar-chart{display:flex;align-items:flex-end;gap:0.4rem;height:100px}
-.bar{flex:1;background:var(--navy);border-radius:2px 2px 0 0;transition:height 0.5s ease;position:relative;cursor:pointer;min-height:4px}
-.bar:hover{background:var(--gold)}
-.bar-label{font-size:0.6rem;color:var(--gray);text-align:center;margin-top:0.3rem}
-.bar-chart-wrap{display:flex;flex-direction:column}
+/* FORMS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem}
+.form-group{margin-bottom:0.85rem}
+.form-label{display:block;font-size:0.73rem;font-weight:600;color:var(--dark);margin-bottom:0.3rem}
+.form-input,.form-select,.form-textarea{width:100%;padding:0.6rem 0.85rem;border:1.5px solid var(--lgray);border-radius:10px;font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--navy)}
+.form-textarea{resize:vertical;min-height:80px}
+.upload-zone{border:2px dashed var(--lgray);border-radius:12px;padding:1.1rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.upload-zone:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-preview{max-width:100%;max-height:90px;margin-top:0.5rem;display:none;border-radius:8px}
 
-/* ── MARKETING ── */
-.analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;border-radius:12px}
-.analytics-card{background:var(--white);border:1px solid var(--lgray);padding:1.2rem;text-align:center;border-radius:14px}
-.analytics-icon{font-size:2rem;margin-bottom:0.5rem;border-radius:12px}
-.analytics-val{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:0.2rem;border-radius:12px}
-.analytics-label{font-size:0.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;border-radius:12px}
-.analytics-change{font-size:0.7rem;margin-top:0.2rem;font-weight:600;border-radius:12px}
-.analytics-change.up{color:var(--green);border-radius:12px}
-.analytics-change.down{color:var(--red);border-radius:12px}
-
-/* ── AI CHAT ── */
-.ai-tabs-row{display:flex;gap:0;border-bottom:1px solid var(--lgray);background:var(--offwhite);border-radius:8px}
-.ai-tab{padding:0.7rem 1.2rem;font-size:0.78rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:transparent;font-family:"Inter",sans-serif;border-bottom:2px solid transparent;transition:all 0.2s;border-radius:8px}
-.ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white);border-radius:8px}
-.ai-panel{display:none;border-radius:12px}
-.ai-panel.active{display:flex;flex-direction:column;height:420px;border-radius:12px}
-.ai-msgs{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:0.8rem}
-.ai-msg{display:flex;gap:0.6rem;max-width:85%}
-.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
-.ai-icon{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.8rem;background:var(--offwhite);border:1px solid var(--lgray)}
-.ai-msg.user .ai-icon{background:var(--gold);color:var(--navy);font-weight:800;font-size:0.6rem}
-.ai-bubble{padding:0.65rem 0.9rem;font-size:0.82rem;line-height:1.55}
-.ai-msg.bot .ai-bubble{background:var(--offwhite);border:1px solid var(--lgray)}
-.ai-msg.user .ai-bubble{background:var(--navy);color:var(--white)}
-.ai-sugs{padding:0.6rem 1rem;display:flex;gap:0.4rem;flex-wrap:wrap;border-top:1px solid var(--lgray);border-radius:8px}
-.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.28rem 0.65rem;font-size:0.68rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;border-radius:8px}
-.ai-sug:hover{border-color:var(--navy);color:var(--navy);border-radius:8px}
-.ai-input-row{padding:0.75rem 1rem;border-top:1px solid var(--lgray);display:flex;gap:0.6rem;border-radius:8px}
-.ai-input{flex:1;padding:0.6rem 0.85rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.82rem;outline:none;border-radius:8px}
-.ai-input:focus{border-color:var(--navy);border-radius:8px}
-.ai-send{background:var(--gold);color:var(--navy);padding:0.6rem 1rem;font-weight:700;font-size:0.75rem;border:none;cursor:pointer;font-family:"Inter",sans-serif;border-radius:8px}
-
-/* ── STORE FORM ── */
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.form-group{margin-bottom:1rem}
-.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
-.form-input,.form-select,.form-textarea{width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white);border-radius:8px}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--navy);border-radius:8px}
-.form-textarea{resize:vertical;min-height:80px;border-radius:8px}
-.upload-zone{border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;border-radius:12px}
-.upload-zone:hover{border-color:var(--navy);background:var(--offwhite);border-radius:12px}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;border-radius:8px}
-.upload-preview{max-width:100%;max-height:90px;margin-top:0.5rem;display:none;border-radius:12px}
-
-/* ── PRODUCT GRID ── */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
-.product-card{background:var(--white);border:1px solid var(--lgray);overflow:hidden;transition:all 0.3s;border-radius:14px}
-.product-card:hover{border-color:var(--navy);transform:translateY(-2px);border-radius:14px}
-.product-img{height:140px;background:var(--offwhite);display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* PRODUCTS */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:0.9rem}
+.product-card{background:var(--white);border:1px solid var(--lgray);border-radius:14px;overflow:hidden;transition:all 0.25s}
+.product-card:hover{border-color:var(--navy);transform:translateY(-2px);box-shadow:0 6px 20px rgba(13,27,62,0.1)}
+.product-img{height:130px;background:var(--offwhite);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:2.5rem}
 .product-img img{width:100%;height:100%;object-fit:cover}
-.product-body{padding:0.9rem}
-.product-name{font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
-.product-price{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
-.product-stock{font-size:0.7rem;color:var(--green);font-weight:600}
-.product-actions{display:flex;gap:0.4rem;margin-top:0.6rem}
-.act-btn{flex:1;padding:0.4rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;border-radius:8px}
+.product-body{padding:0.8rem}
+.product-name{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-price{font-size:0.92rem;font-weight:800;color:var(--navy);margin-bottom:0.35rem}
+.product-stock{font-size:0.65rem;color:var(--green);font-weight:600;margin-bottom:0.55rem}
+.product-stock.low{color:var(--red)}
+.product-actions{display:flex;gap:0.35rem}
+.act-btn{flex:1;padding:0.35rem;font-size:0.68rem;font-weight:700;border-radius:8px;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
 .act-edit{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)}
 .act-edit:hover{background:var(--navy);color:var(--white)}
 .act-del{background:var(--offwhite);color:var(--red);border:1px solid var(--lgray)}
 .act-del:hover{background:var(--red);color:var(--white)}
 
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;display:none;align-items:center;justify-content:center;padding:1.5rem;border-radius:14px}
-.modal-overlay.open{display:flex;border-radius:14px}
-.modal{background:var(--white);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;border-radius:14px}
-.modal-head{padding:1.1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1;border-radius:14px}
-.modal-title{font-size:0.95rem;font-weight:700;color:var(--navy);border-radius:14px}
-.modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray);border-radius:14px}
-.modal-body{padding:1.5rem;border-radius:14px}
-.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end;border-radius:14px}
-.btn-save{background:var(--navy);color:var(--white);padding:0.7rem 1.8rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;border-radius:8px}
-.btn-save:hover{background:var(--blue);border-radius:8px}
-.btn-cancel{background:var(--white);color:var(--gray);padding:0.7rem 1.2rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;border-radius:8px}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;border-radius:16px}
+.modal-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1}
+.modal-title{font-size:0.92rem;font-weight:700;color:var(--navy)}
+.modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray);border-radius:8px;padding:0.15rem 0.3rem}
+.modal-body{padding:1.25rem}
+.modal-footer{padding:1rem 1.25rem;border-top:1px solid var(--lgray);display:flex;gap:0.65rem;justify-content:flex-end}
+.btn-save{background:var(--navy);color:var(--white);padding:0.62rem 1.4rem;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;border-radius:10px;transition:all 0.2s}
+.btn-save:hover{background:var(--blue)}
+.btn-cancel{background:var(--white);color:var(--gray);padding:0.62rem 1rem;font-size:0.85rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;border-radius:10px}
 
-/* ── ALERTS ── */
-.alert{padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem;display:none;border-radius:12px}
-.alert.show{display:block;border-radius:12px}
-.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red);border-radius:12px}
-.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green);border-radius:12px}
+/* ALERTS */
+.alert{padding:0.7rem 1rem;font-size:0.8rem;margin-bottom:0.75rem;display:none;border-radius:10px}
+.alert.show{display:block}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green)}
+.alert-warn{background:#FEF3C7;border:1px solid #FDE68A;color:#92400E}
 
-/* ── LOADING ── */
-.loading{text-align:center;padding:3rem;color:var(--gray)}
-.spinner{width:32px;height:32px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:2rem;gap:0.65rem;color:var(--gray);font-size:0.8rem}
+.spinner{width:24px;height:24px;border:2.5px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-state{text-align:center;padding:2.5rem;color:var(--gray)}
-.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
-.empty-title{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
+.empty-icon{font-size:2.2rem;margin-bottom:0.65rem}
+.empty-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
 
-/* ── PAGE HEADER ── */
-.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
-.page-title{font-size:1.1rem;font-weight:800;color:var(--navy)}
-.page-sub{font-size:0.78rem;color:var(--gray);margin-top:0.2rem}
+/* ACCOUNTING */
+.period-tabs{display:flex;gap:2px;background:var(--offwhite);border:1px solid var(--lgray);border-radius:10px;padding:3px;width:fit-content;margin-bottom:1rem}
+.ptab{padding:0.38rem 0.9rem;font-size:0.73rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:transparent;font-family:"Inter",sans-serif;border-radius:8px;transition:all 0.2s}
+.ptab.active{background:var(--white);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.acc-panel{display:none}.acc-panel.active{display:block}
+.acc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:0.85rem;margin-bottom:1rem}
+.acc-sum-card{background:var(--offwhite);border:1px solid var(--lgray);border-radius:12px;padding:0.85rem}
+.acc-sum-label{font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.3rem}
+.acc-sum-val{font-size:1.15rem;font-weight:800;color:var(--navy)}
+.acc-sum-val.income{color:var(--green)}.acc-sum-val.profit{color:var(--blue)}
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px}
+.bar-chart-col{display:flex;flex-direction:column;flex:1;align-items:center}
+.bar{width:100%;background:var(--navy);border-radius:3px 3px 0 0;min-height:4px;cursor:pointer;transition:background 0.2s}
+.bar:hover,.bar.today{background:var(--gold)}
+.bar-lbl{font-size:0.55rem;color:var(--gray);margin-top:3px}
+
+/* MARKETING */
+.analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.85rem}
+.analytics-card{background:var(--white);border:1px solid var(--lgray);border-radius:12px;padding:1rem;text-align:center}
+.analytics-icon{font-size:1.6rem;margin-bottom:0.35rem}
+.analytics-val{font-size:1.5rem;font-weight:900;color:var(--navy)}
+.analytics-label{font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase}
+.analytics-change{font-size:0.65rem;margin-top:0.15rem;font-weight:600}
+.analytics-change.up{color:var(--green)}.analytics-change.down{color:var(--red)}
+
+/* AI */
+.ai-tabs-row{display:flex;border-bottom:1px solid var(--lgray);background:var(--offwhite);overflow-x:auto;scrollbar-width:none}
+.ai-tabs-row::-webkit-scrollbar{display:none}
+.ai-tab{padding:0.6rem 1rem;font-size:0.73rem;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:transparent;font-family:"Inter",sans-serif;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white)}
+.ai-panel{display:none}.ai-panel.active{display:flex;flex-direction:column;height:360px}
+.ai-msgs{flex:1;overflow-y:auto;padding:0.9rem;display:flex;flex-direction:column;gap:0.7rem}
+.ai-msg{display:flex;gap:0.45rem;max-width:85%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-icon{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.75rem;background:var(--offwhite);border:1px solid var(--lgray);border-radius:50%}
+.ai-msg.user .ai-icon{background:var(--gold);color:var(--navy);font-weight:800;font-size:0.58rem}
+.ai-bubble{padding:0.55rem 0.8rem;font-size:0.78rem;line-height:1.55}
+.ai-msg.bot .ai-bubble{background:var(--offwhite);border:1px solid var(--lgray);border-radius:0 10px 10px 10px}
+.ai-msg.user .ai-bubble{background:var(--navy);color:var(--white);border-radius:10px 0 10px 10px}
+.ai-sugs{padding:0.45rem 0.85rem;display:flex;gap:0.3rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
+.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.22rem 0.55rem;font-size:0.62rem;cursor:pointer;font-family:"Inter",sans-serif;border-radius:20px;transition:all 0.2s}
+.ai-sug:hover{border-color:var(--navy);color:var(--navy)}
+.ai-input-row{padding:0.6rem 0.85rem;border-top:1px solid var(--lgray);display:flex;gap:0.45rem}
+.ai-input{flex:1;padding:0.55rem 0.8rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.8rem;outline:none;border-radius:10px}
+.ai-input:focus{border-color:var(--navy)}
+.ai-send{background:var(--gold);color:var(--navy);padding:0.55rem 0.9rem;font-weight:700;font-size:0.7rem;border:none;cursor:pointer;font-family:"Inter",sans-serif;border-radius:10px}
 
 /* PENDING BANNER */
-.pending-banner{background:var(--navy);border-left:4px solid var(--gold);padding:0.9rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-radius:12px}
-.pending-banner-text{font-size:0.875rem;color:var(--white);border-radius:12px}
-.pending-banner-title{font-weight:700;color:var(--gold);margin-bottom:0.2rem;border-radius:12px}
+.pending-banner{background:var(--navy);border-left:4px solid var(--gold);padding:0.85rem 1.1rem;border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem}
+.pending-banner-title{font-weight:700;color:var(--gold);margin-bottom:0.12rem;font-size:0.85rem}
+.pending-banner-text{font-size:0.75rem;color:rgba(255,255,255,0.7)}
 
+/* MOBILE OVERLAY */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99}
+.sb-overlay.show{display:block}
+
+/* MOBILE */
 @media(max-width:900px){
-  .overview-stats{grid-template-columns:repeat(2,1fr)}
-  .grid2{grid-template-columns:1fr}
-  .grid3{grid-template-columns:1fr}
-  .analytics-grid{grid-template-columns:repeat(2,1fr);border-radius:12px}
-  .topnav-tabs{display:none;border-radius:8px}
-}
-@media(max-width:500px){
-  .overview-stats{grid-template-columns:1fr 1fr}
+  .sidebar{position:fixed;left:-100%;top:0;bottom:0;width:var(--sb-w)!important;z-index:200;transition:left 0.25s;box-shadow:4px 0 24px rgba(0,0,0,0.2)}
+  .sidebar.mob-open{left:0}
+  .sidebar.collapsed{width:var(--sb-w)!important}
+  .sidebar.collapsed .sb-label,.sidebar.collapsed .sb-section-label,.sidebar.collapsed .sb-store-info,.sidebar.collapsed .sb-value,.sidebar.collapsed .sb-logo-text{display:block}
+  .mob-menu-btn{display:flex}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .analytics-grid{grid-template-columns:1fr 1fr}
+  .acc-summary{grid-template-columns:1fr 1fr}
   .form-row{grid-template-columns:1fr}
-  .page{padding:1rem}
+  .vybe-btn .vb-text{display:none}
 }
-
-/* ── Polish: soft corners + font smoothing + mobile ── */
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-button,input,select,textarea,
-[class*="btn"],[class*="card"],[class*="modal"],
-[class*="badge"],[class*="tab"],[class*="pill"],
-[class*="plan"],[class*="pricing"],[class*="sub-"]{border-radius:8px!important}
-@media(max-width:640px){
-  nav{padding:0 1rem!important;height:56px!important}
-  section,[class*="-section"]{padding-left:1.25rem!important;padding-right:1.25rem!important}
-  h1{font-size:clamp(1.6rem,7vw,2.4rem)!important;line-height:1.1!important;word-break:break-word}
-  h2{font-size:clamp(1.2rem,5vw,1.7rem)!important;line-height:1.15!important}
-  h3{font-size:clamp(1rem,4vw,1.3rem)!important}
-  p,li,span{font-size:0.875rem!important;line-height:1.65!important}
-  input,select,textarea{min-height:48px!important;font-size:16px!important;padding:0.75rem 1rem!important;border-radius:10px!important}
-  button,[class*="btn"]{min-height:48px!important;border-radius:10px!important;font-size:0.9rem!important}
-  [class*="-grid"]{grid-template-columns:1fr 1fr!important}
-  [class*="hero-grid"],[class*="-inner"]{grid-template-columns:1fr!important}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr;gap:0.6rem}
+  .stat-card{padding:0.8rem}
+  .stat-value{font-size:1.3rem}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .data-table{font-size:0.72rem;display:block;overflow-x:auto}
+  .content-area{padding:0.75rem;gap:0.75rem}
+  .modal{border-radius:16px 16px 0 0;position:fixed;bottom:0;max-height:88vh;width:100%!important;max-width:100%!important}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .acc-summary{grid-template-columns:1fr}
+  .analytics-grid{grid-template-columns:1fr 1fr}
 }
-@media(max-width:400px){
-  h1{font-size:clamp(1.4rem,8vw,1.9rem)!important}
-  p,li{font-size:0.85rem!important}
-  [class*="-grid"]{grid-template-columns:1fr!important}
-}
-
-/* ── SOFT CORNERS: every button, input, form element ── */
-button,
-input[type="text"],input[type="email"],input[type="tel"],
-input[type="password"],input[type="number"],input[type="search"],
-input[type="url"],input[type="file"],
-select,textarea,
-[class*="btn"],[class*="-btn"],[class*="btn-"],
-[class*="nav-tab"],[class*="tab-btn"],[class*="cat-tab"],
-[class*="card"],[class*="-card"],
-[class*="modal"],[class*="popup"],[class*="overlay-box"],
-[class*="badge"],[class*="tag"],[class*="chip"],[class*="pill"],
-[class*="plan"],[class*="pricing"],[class*="sub-card"],
-[class*="step"],[class*="panel"],
-[class*="upload"],[class*="dropzone"],[class*="file-"],
-[class*="search"],[class*="filter"]{
-  border-radius:10px!important;
-}
-/* pill-shaped: small tags/badges */
-[class*="badge"],[class*="tag"],[class*="chip"],[class*="status"]{
-  border-radius:20px!important;
-}
-/* large modals/cards get more radius */
-[class*="modal"],[class*="plan-card"],[class*="pricing-card"]{
-  border-radius:16px!important;
-}
-/* fix any remaining 0-radius inline styles */
-
-/* ── Soft corners global fix ── */
-.stat-card,.card,.modal,.upload-zone,.acc-sum-card,.acc-chart,
-.analytics-card,.product-card,.badge,.alert,.pending-banner,
-.ai-bubble,.ai-icon,.ai-sug,.ai-input,.ai-send{border-radius:12px!important}
-.badge{border-radius:20px!important}
-.modal{border-radius:16px!important}
-.btn-save,.btn-cancel,.card-btn,.topnav-btn,.act-btn,.acc-tab{border-radius:8px!important}
-.form-input,.form-select,.form-textarea,.ai-input{border-radius:8px!important}
-.upload-zone{border-radius:12px!important}
-.store-selector{border-radius:8px!important}
-.topnav-avatar{border-radius:50%!important}
 </style>
 </head>
 <body>
-<div id="pendingGateOverlay" style="display:none;position:fixed;inset:0;z-index:9999"></div>
 
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 
-<!-- TOP NAVBAR -->
-<nav class="topnav" id="mainTopnav">
-  <!-- Brand -->
-  <a href="index.html" class="topnav-logo">TRAVEX <span>MALL</span></a>
-  <div class="topnav-divider"></div>
+<div class="app">
 
-  <!-- Store Logo + Name -->
-  <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0">
-    <div id="navStoreLogo" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;overflow:hidden;flex-shrink:0">
-      TM
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <a href="index.html" class="sb-logo">
+        <span class="sb-logo-mark">TX</span>
+        <span class="sb-logo-text">TRAVEX MALL</span>
+      </a>
+      <button class="sb-toggle" onclick="toggleSidebar()">☰</button>
     </div>
-    <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.9)" id="navStoreTitle">Loading...</div>
+    <div class="sb-store">
+      <div class="sb-store-logo" id="sbStoreLogo">TM</div>
+      <div class="sb-store-info">
+        <div class="sb-store-name" id="sbStoreName">Loading...</div>
+        <div class="sb-store-plan" id="sbStorePlan">—</div>
+      </div>
+    </div>
+    <div class="sb-value">
+      <div class="sb-value-label">Store Value</div>
+      <div class="sb-value-num" id="sbStoreValue">TZS —</div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section-label">Main</div>
+      <button class="sb-btn active" onclick="showPage('overview',this)"><span class="sb-icon">📊</span><span class="sb-label">Overview</span></button>
+      <button class="sb-btn" onclick="showPage('store',this)"><span class="sb-icon">🏪</span><span class="sb-label">My Store</span></button>
+      <button class="sb-btn" onclick="showPage('products',this)"><span class="sb-icon">📦</span><span class="sb-label">Products</span></button>
+      <button class="sb-btn" onclick="openPostModal()"><span class="sb-icon">✦</span><span class="sb-label">Post to Vybe</span></button>
+      <div class="sb-divider"></div>
+      <div class="sb-section-label">Sales</div>
+      <button class="sb-btn" onclick="showPage('orders',this)"><span class="sb-icon">🛍️</span><span class="sb-label">Orders</span><span class="sb-badge" id="pendingBadge" style="display:none">0</span></button>
+      <button class="sb-btn" onclick="showPage('accounting',this)"><span class="sb-icon">🧾</span><span class="sb-label">Accounting</span></button>
+      <div class="sb-divider"></div>
+      <div class="sb-section-label">Grow</div>
+      <button class="sb-btn" onclick="showPage('marketing',this)"><span class="sb-icon">📈</span><span class="sb-label">Marketing</span></button>
+      <button class="sb-btn" onclick="showPage('ai',this)"><span class="sb-icon">🤖</span><span class="sb-label">AI Tools</span></button>
+      <button class="sb-btn" onclick="showPage('vybe',this)"><span class="sb-icon">🔥</span><span class="sb-label">Social Vybe</span></button>
+      <div class="sb-divider"></div>
+      <div class="sb-section-label">Account</div>
+      <button class="sb-btn" onclick="showPage('subscription',this)"><span class="sb-icon">💳</span><span class="sb-label">Subscription</span></button>
+    </div>
+    <div class="sb-logout">
+      <button class="sb-logout-btn" onclick="logout()"><span>⏻</span><span class="sb-label">Logout</span></button>
+    </div>
   </div>
 
-  <div class="topnav-divider"></div>
-
-  <!-- Store Value -->
-  <div style="display:flex;flex-direction:column;flex-shrink:0">
-    <div style="font-size:0.55rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em">Store Value</div>
-    <div style="font-size:0.82rem;font-weight:800;color:rgba(255,255,255,0.95)" id="navStoreValue">TZS —</div>
-  </div>
-
-  <div class="topnav-divider"></div>
-
-  <!-- Store Selector (premium multi-store) -->
-  <select class="store-selector" id="storeSelector" onchange="switchStore(this.value)" style="display:none">
-    <option value="all">📊 All Stores Overview</option>
-  </select>
-
-  <div class="topnav-tabs" id="navTabs">
-    <button class="topnav-tab active" onclick="showPage('overview',this)">📊 Overview</button>
-    <button class="topnav-tab" onclick="showPage('store',this)">🏪 My Store</button>
-    <button class="topnav-tab" onclick="showPage('products',this)">📦 Products</button>
-    <button class="topnav-tab" onclick="showPage('orders',this)">🛍️ Orders</button>
-    <button class="topnav-tab" onclick="showPage('accounting',this)">🧾 Accounting</button>
-    <button class="topnav-tab" onclick="showPage('marketing',this)">📈 Marketing</button>
-    <button class="topnav-tab" onclick="showPage('ai',this)">🤖 AI Tools</button>
-    <button class="topnav-tab" onclick="showPage('subscription',this)">💳 Subscription</button>
-    <button class="topnav-tab" onclick="showPage('vybe',this)">✦ Social Vybe</button>
-  </div>
-
-  <div class="topnav-right">
-    <!-- Subscription status -->
-    <div id="subStatusBadge" style="display:none;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);cursor:pointer;border-radius:8px" onclick="showPage('subscription',document.querySelector('.topnav-tab'))">
-      <span style="font-size:0.6rem;font-weight:700;color:var(--gold)" id="subStatusText">Active</span>
-    </div>
-    <!-- Post to Vybe quick button -->
-    <button onclick="quickPostVybe()" style="background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border:none;padding:0.35rem 1rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;flex-shrink:0;border-radius:8px" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-      ✦ Post to Vybe
-    </button>
-    <div class="topnav-store-name" id="navStoreName">Loading...</div>
-    <div class="topnav-avatar" id="navAvatar">?</div>
-    <button class="topnav-btn" onclick="logout()">Logout</button>
-  </div>
-</nav>
-
-<!-- MAIN -->
-<div class="main">
-
-  <!-- OVERVIEW PAGE -->
-  <div class="page active" id="page-overview">
-
-    <!-- ══ OVERVIEW STATS ROW ══ -->
-    <div class="overview-stats" style="margin-bottom:1.5rem">
-      <div class="stat-card gold">
-        <div class="stat-icon">📦</div>
-        <div class="stat-label">Products</div>
-        <div class="stat-value" id="statProducts">0</div>
-        <div class="stat-sub">In your store</div>
+  <!-- MAIN -->
+  <div class="main-area">
+    <div class="topbar">
+      <button class="mob-menu-btn" onclick="openSidebar()">☰</button>
+      <div class="topbar-info">
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-sub" id="topbarSub">Welcome back</div>
       </div>
-      <div class="stat-card green">
-        <div class="stat-icon">🛍️</div>
-        <div class="stat-label">Total Orders</div>
-        <div class="stat-value" id="statOrders">0</div>
-        <div class="stat-sub">All time</div>
+      <div id="subStatusBadge" class="sub-badge" onclick="showPage('subscription',null)">
+        <span class="sub-badge-text" id="subStatusText">Active</span>
       </div>
-      <div class="stat-card blue">
-        <div class="stat-icon">💰</div>
-        <div class="stat-label">Today's Revenue</div>
-        <div class="stat-value" id="statRevenue">0</div>
-        <div class="stat-sub">TZS earned today</div>
-      </div>
+      <button onclick="openPostModal()" class="vybe-btn">✦ <span class="vb-text">Post to Vybe</span></button>
+      <div class="topbar-avatar" id="navAvatar">?</div>
     </div>
 
-    <!-- AI FEATURES QUICK -->
-    <div class="card" style="margin-bottom:1.5rem;border-left:4px solid var(--gold);display:none" id="aiQuickCard">
-      <div class="card-header">
-        <div class="card-title">🤖 Your AI Features</div>
-        <button class="card-btn" onclick="showPage('ai')">Open AI Tools</button>
-      </div>
-      <div class="card-body">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.75rem" id="aiQuickGrid"></div>
-      </div>
-    </div>
+    <div class="content-area">
 
-    <!-- PENDING BANNER -->
-    <div class="pending-banner" id="pendingBanner" style="display:none">
-      <div class="pending-banner-text">
-        <div class="pending-banner-title">⏳ Store Pending Activation</div>
-        Your payment is being reviewed. Store will go live within 2 hours.
-      </div>
-      <a href="https://wa.me/255651919915" target="_blank" style="background:var(--gold);color:var(--navy);padding:0.45rem 1rem;font-size:0.78rem;font-weight:700;text-decoration:none;border-radius:8px">Contact Us</a>
-    </div>
-
-    <div class="grid2">
-      <!-- RECENT ORDERS -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Recent Orders</div>
-          <button class="card-btn" onclick="showPage('orders')">View All</button>
+      <!-- OVERVIEW PAGE -->
+      <div class="page active" id="page-overview">
+        <div class="stats-row">
+          <div class="stat-card gold"><div class="stat-icon">📦</div><div class="stat-label">Products</div><div class="stat-value" id="statProducts">0</div><div class="stat-sub">In your store</div></div>
+          <div class="stat-card green"><div class="stat-icon">🛍️</div><div class="stat-label">Total Orders</div><div class="stat-value" id="statOrders">0</div><div class="stat-sub">All time</div></div>
+          <div class="stat-card blue"><div class="stat-icon">💰</div><div class="stat-label">Today's Revenue</div><div class="stat-value" id="statRevenue">0</div><div class="stat-sub">TZS earned today</div></div>
+          <div class="stat-card navy"><div class="stat-icon">👁️</div><div class="stat-label">Pending Orders</div><div class="stat-value" id="statPending">0</div><div class="stat-sub">Need confirmation</div></div>
         </div>
-        <div id="recentOrders"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-      </div>
-
-      <!-- QUICK ACTIONS -->
-      <div class="card" id="quickActionsCard">
-        <div class="card-header"><div class="card-title">Quick Actions</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;padding:1rem" id="quickActionsGrid">
-          <div style="text-align:center;padding:1.5rem;color:var(--gray);font-size:0.78rem;grid-column:1/-1">Loading...</div>
+        <div class="pending-banner" id="pendingBanner" style="display:none">
+          <div><div class="pending-banner-title">⏳ Store Pending Activation</div><div class="pending-banner-text">Your payment is being reviewed. Store will go live within 2 hours.</div></div>
+          <a href="https://wa.me/255651919915" target="_blank" class="btn-gold">Contact Us</a>
+        </div>
+        <div class="card" style="display:none;border-left:3px solid var(--gold)" id="aiQuickCard">
+          <div class="card-hd"><div class="card-title">🤖 Your AI Features</div><button class="card-btn" onclick="showPage('ai',null)">Open AI Tools</button></div>
+          <div class="card-bd"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.65rem" id="aiQuickGrid"></div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-hd"><div class="card-title">Recent Orders</div><button class="card-btn" onclick="showPage('orders',null)">View All</button></div>
+            <div id="recentOrders"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title">Quick Actions</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;padding:0.85rem" id="quickActionsGrid">
+              <div style="grid-column:1/-1;text-align:center;padding:1rem;color:var(--gray);font-size:0.78rem">Loading...</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
 <div class="page" id="page-store">
     <div class="page-header">
@@ -473,18 +419,14 @@ select,textarea,
       </div>
     </div>
   </div>
-
-  <!-- PRODUCTS PAGE -->
-  <div class="page" id="page-products">
+<div class="page" id="page-products">
     <div class="page-header">
       <div><div class="page-title">Products (<span id="productCount">0</span>)</div><div class="page-sub">Manage your store products</div></div>
       <button class="card-btn" onclick="openProductModal()">+ Add Product</button>
     </div>
     <div id="productsGrid"><div class="loading"><div class="spinner"></div>Loading products...</div></div>
   </div>
-
-  <!-- ORDERS PAGE -->
-  <div class="page" id="page-orders">
+<div class="page" id="page-orders">
     <div class="page-header">
       <div><div class="page-title">Orders</div><div class="page-sub">All customer orders</div></div>
     </div>
@@ -492,9 +434,7 @@ select,textarea,
       <div id="ordersTable"><div class="loading"><div class="spinner"></div>Loading orders...</div></div>
     </div>
   </div>
-
-  <!-- ACCOUNTING PAGE -->
-  <div class="page" id="page-accounting">
+<div class="page" id="page-accounting">
     <div class="page-header">
       <div><div class="page-title">🧾 Accounting</div><div class="page-sub">Automatic sales tracking — updated from every order</div></div>
     </div>
@@ -556,9 +496,7 @@ select,textarea,
       </div>
     </div>
   </div>
-
-  <!-- MARKETING PAGE -->
-  <div class="page" id="page-marketing">
+<div class="page" id="page-marketing">
     <div class="page-header">
       <div><div class="page-title">📈 Marketing Analytics</div><div class="page-sub">Track your store performance and get AI marketing recommendations</div></div>
       <button class="card-btn" onclick="generateMarketingPlan()">🤖 Generate Marketing Plan</button>
@@ -594,9 +532,7 @@ select,textarea,
       </div>
     </div>
   </div>
-
-  <!-- AI TOOLS PAGE -->
-  <div class="page" id="page-ai">
+<div class="page" id="page-ai">
     <div class="page-header">
       <div><div class="page-title">🤖 AI Tools</div><div class="page-sub" id="aiPageSub">Your AI business assistants</div></div>
     </div>
@@ -605,10 +541,48 @@ select,textarea,
       <div id="aiPanelsContainer"></div>
     </div>
   </div>
-
+<div class="page" id="page-subscription">
+  <div class="page-header">
+    <div><div class="page-title">💳 Subscription Status</div><div class="page-sub">Manage your Travex Mall subscription</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Current Plan</div></div>
+      <div class="card-body">
+        <div style="text-align:center;padding:1.5rem 0">
+          <div style="font-size:3rem;margin-bottom:0.75rem" id="subPlanIcon">⭐</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem" id="subPlanName">Basic Plan</div>
+          <div style="font-size:1.8rem;font-weight:900;color:var(--gold);margin-bottom:0.5rem" id="subPlanPrice">TZS 25,000/mo</div>
+          <div id="subStatusDisplay" style="display:inline-block;padding:0.3rem 1rem;font-size:0.78rem;font-weight:700;background:#D1FAE5;color:#065F46;margin-bottom:1.5rem">✅ Active</div>
+          <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;text-align:left;margin-bottom:1rem">
+            <div style="font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">Subscription Details</div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Plan</span><span style="font-weight:600" id="subDetailPlan">Basic</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Status</span><span style="font-weight:600;color:var(--green)" id="subDetailStatus">Active</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Started</span><span style="font-weight:600" id="subDetailStart">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem"><span style="color:var(--gray)">Expires</span><span style="font-weight:600;color:var(--red)" id="subDetailExpiry">—</span></div>
+          </div>
+          <a href="open-store.html" style="display:block;width:100%;padding:0.85rem;background:var(--gold);color:var(--navy);font-size:0.9rem;font-weight:700;text-align:center;text-decoration:none;border-radius:10px">Upgrade Plan →</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- Plan features -->
+      <div class="card" style="margin-bottom:1.2rem">
+        <div class="card-header"><div class="card-title">Your Plan Features</div></div>
+        <div class="card-body" id="subFeaturesList" style="display:flex;flex-direction:column;gap:0.5rem"></div>
+      </div>
+      <!-- Need help -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Need Help?</div></div>
+        <div class="card-body">
+          <p style="font-size:0.82rem;color:var(--gray);line-height:1.65;margin-bottom:1rem">Contact us to renew your subscription or upgrade your plan.</p>
+          <a href="https://wa.me/255651919915" target="_blank" class="card-btn" style="display:block;text-align:center;padding:0.75rem;text-decoration:none;background:#25D366;margin-bottom:0.5rem">💬 WhatsApp Support</a>
+          <a href="mailto:travexmall15@gmail.com" class="card-btn" style="display:block;text-align:center;padding:0.75rem;text-decoration:none;background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)">📧 Email Support</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!-- SOCIAL VYBE PAGE -->
 <div class="page" id="page-vybe">
   <div class="page-header">
     <div>
@@ -683,171 +657,89 @@ select,textarea,
     </div>
   </div>
 </div>
+    </div><!-- content-area -->
+  </div><!-- main-area -->
+</div><!-- app -->
 
-<!-- POST MODAL -->
-<div class="modal-overlay" id="postModal">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title">📢 Create New Post</div>
-      <button class="modal-close" onclick="closePostModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="alert alert-error" id="postErr"></div>
-      <div class="form-group">
-        <label class="form-label">Media Type</label>
-        <div style="display:flex;gap:0.5rem">
-          <button id="typePhoto" onclick="setMediaType('image',this)" style="flex:1;padding:0.6rem;background:var(--navy);color:var(--gold);border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700">📸 Photo</button>
-          <button id="typeVideo" onclick="setMediaType('video',this)" style="flex:1;padding:0.6rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600" id="videoBtnModal">🎥 Video</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Upload <span id="mediaTypeLabel">Photo</span> *</label>
-        <div class="upload-zone" id="mediaUploadZone">
-          <input type="file" id="postMediaFile" accept="image/*,video/*" onchange="previewPostMedia(this)">
-          <div style="font-size:1.8rem;margin-bottom:0.3rem" id="mediaUploadIcon">📸</div>
-          <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> your photo or video</div>
-        </div>
-        <div id="mediaPreviewWrap" style="display:none;margin-top:0.75rem">
-          <img id="postImgPreview" style="max-width:100%;max-height:200px;display:none">
-          <video id="postVidPreview" style="max-width:100%;max-height:200px;display:none" controls></video>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Caption</label>
-        <textarea class="form-textarea" id="postCaption" placeholder="Describe your product... use #hashtags to reach more people!"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Price (TZS) — Optional</label>
-        <input type="number" class="form-input" id="postPrice" placeholder="e.g. 25000">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closePostModal()">Cancel</button>
-      <button class="btn-save" onclick="submitPost()" id="postSubmitBtn">📢 Post Now</button>
-    </div>
-  </div>
-</div>
-
-<!-- SUBSCRIPTION PAGE -->
-<div class="page" id="page-subscription">
-  <div class="page-header">
-    <div><div class="page-title">💳 Subscription Status</div><div class="page-sub">Manage your Travex Mall subscription</div></div>
-  </div>
-  <div class="grid2">
-    <div class="card">
-      <div class="card-header"><div class="card-title">Current Plan</div></div>
-      <div class="card-body">
-        <div style="text-align:center;padding:1.5rem 0">
-          <div style="font-size:3rem;margin-bottom:0.75rem" id="subPlanIcon">⭐</div>
-          <div style="font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem" id="subPlanName">Basic Plan</div>
-          <div style="font-size:1.8rem;font-weight:900;color:var(--gold);margin-bottom:0.5rem" id="subPlanPrice">TZS 25,000/mo</div>
-          <div id="subStatusDisplay" style="display:inline-block;padding:0.3rem 1rem;font-size:0.78rem;font-weight:700;background:#D1FAE5;color:#065F46;margin-bottom:1.5rem">✅ Active</div>
-          <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:1rem;text-align:left;margin-bottom:1rem">
-            <div style="font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">Subscription Details</div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Plan</span><span style="font-weight:600" id="subDetailPlan">Basic</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Status</span><span style="font-weight:600;color:var(--green)" id="subDetailStatus">Active</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem"><span style="color:var(--gray)">Started</span><span style="font-weight:600" id="subDetailStart">—</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem"><span style="color:var(--gray)">Expires</span><span style="font-weight:600;color:var(--red)" id="subDetailExpiry">—</span></div>
-          </div>
-          <a href="open-store.html" style="display:block;width:100%;padding:0.85rem;background:var(--gold);color:var(--navy);font-size:0.9rem;font-weight:700;text-align:center;text-decoration:none;border-radius:10px">Upgrade Plan →</a>
-        </div>
-      </div>
-    </div>
-    <div>
-      <!-- Plan features -->
-      <div class="card" style="margin-bottom:1.2rem">
-        <div class="card-header"><div class="card-title">Your Plan Features</div></div>
-        <div class="card-body" id="subFeaturesList" style="display:flex;flex-direction:column;gap:0.5rem"></div>
-      </div>
-      <!-- Need help -->
-      <div class="card">
-        <div class="card-header"><div class="card-title">Need Help?</div></div>
-        <div class="card-body">
-          <p style="font-size:0.82rem;color:var(--gray);line-height:1.65;margin-bottom:1rem">Contact us to renew your subscription or upgrade your plan.</p>
-          <a href="https://wa.me/255651919915" target="_blank" class="card-btn" style="display:block;text-align:center;padding:0.75rem;text-decoration:none;background:#25D366;margin-bottom:0.5rem">💬 WhatsApp Support</a>
-          <a href="mailto:travexmall15@gmail.com" class="card-btn" style="display:block;text-align:center;padding:0.75rem;text-decoration:none;background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)">📧 Email Support</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SHARE STORE MODAL -->
+<!-- MODALS -->
 <div class="modal-overlay" id="shareModal">
   <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title">🔗 Share Your Store</div>
-      <button class="modal-close" onclick="document.getElementById('shareModal').classList.remove('open')">✕</button>
-    </div>
+    <div class="modal-head"><div class="modal-title">🔗 Share Your Store</div><button class="modal-close" onclick="document.getElementById('shareModal').classList.remove('open')">✕</button></div>
     <div class="modal-body">
-      <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
-        <span style="font-size:0.82rem;color:var(--navy);font-weight:600" id="shareStoreUrl">Loading...</span>
-        <button onclick="copyStoreLink()" style="background:var(--navy);color:var(--white);border:none;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border-radius:8px">Copy</button>
+      <div style="background:var(--offwhite);border:1px solid var(--lgray);padding:0.7rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem;border-radius:10px;gap:0.5rem">
+        <span style="font-size:0.78rem;color:var(--navy);font-weight:600;word-break:break-all" id="shareStoreUrl">Loading...</span>
+        <button onclick="copyStoreLink()" style="background:var(--navy);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border-radius:8px;flex-shrink:0">Copy</button>
       </div>
-      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:1rem">Share on:</div>
-      <div style="display:flex;flex-direction:column;gap:0.6rem">
-        <a id="shareWaBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#25D366;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:all 0.2s;font-family:'Inter',sans-serif;border-radius:10px">
-          <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="rgba(255,255,255,0.2)"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.13-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.57c-.21.59-1.22 1.13-1.69 1.17-.44.04-2.87-.6-2.87-.6-2.42-.96-3.97-3.44-4.09-3.6-.12-.16-.97-1.29-.97-2.46s.61-1.74.83-1.98c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42l.77 1.86c.06.12.1.27.02.43l-.36.42c-.12.12-.24.25-.1.49.14.24.62.99 1.33 1.6.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06l.76-.94c.16-.24.32-.2.54-.12l1.64.78c.24.12.4.18.46.28.06.1.06.59-.15 1.18z" fill="white"/></svg>
-          Share on WhatsApp
-        </a>
-        <a id="shareIgBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:linear-gradient(135deg,#F77737,#E1306C,#833AB4);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="1" y="1" width="22" height="22" rx="6" fill="rgba(255,255,255,0.2)"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="white"/></svg>
-          Share on Instagram (Copy link)
-        </a>
-        <a id="shareTtBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#010101;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px">
-          <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.1)"/><path d="M16.6 5.82A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5 2.592 2.592 0 0 1-2.59-2.5 2.592 2.592 0 0 1 2.59-2.5c.28 0 .54.04.79.1V9.83a5.674 5.674 0 0 0-5.67 5.67A5.674 5.674 0 0 0 9.86 21a5.674 5.674 0 0 0 5.68-5.68V9.17a7.31 7.31 0 0 0 4.28 1.37V7.46s-1.96.04-3.22-1.64z" fill="white"/></svg>
-          Share on TikTok (Copy link)
-        </a>
-        <a id="shareFbBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#1877F2;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px">
-          <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.2)"/><path d="M16 8.5h-2a1 1 0 0 0-1 1V11h3l-.5 3H13v7h-3v-7H8v-3h2V9.5A3.5 3.5 0 0 1 13.5 6H16v2.5z" fill="white"/></svg>
-          Share on Facebook
-        </a>
-        <button onclick="navigator.share ? navigator.share({title:activeStore?.store_name,url:document.getElementById('shareStoreUrl').textContent}) : copyStoreLink()" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;border-radius:10px">
-          📤 More sharing options...
-        </button>
+      <div style="display:flex;flex-direction:column;gap:0.5rem">
+        <a id="shareWaBtn" href="#" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem 1rem;background:#25D366;color:#fff;text-decoration:none;font-size:0.82rem;font-weight:700;border-radius:10px">💬 Share on WhatsApp</a>
+        <button onclick="navigator.share?navigator.share({title:activeStore?.store_name,url:document.getElementById('shareStoreUrl').textContent}):copyStoreLink()" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);color:var(--navy);font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border-radius:10px;width:100%">📤 More sharing options...</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PRODUCT MODAL -->
 <div class="modal-overlay" id="productModal">
   <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="productModalTitle">Add New Product</div>
-      <button class="modal-close" onclick="closeProductModal()">✕</button>
-    </div>
+    <div class="modal-head"><div class="modal-title" id="productModalTitle">Add New Product</div><button class="modal-close" onclick="closeProductModal()">✕</button></div>
     <div class="modal-body">
       <div class="alert alert-error" id="productErr"></div>
       <div class="form-group"><label class="form-label">Product Name *</label><input type="text" class="form-input" id="pName" placeholder="e.g. Blue Ankara Dress"></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Price (TZS) *</label><input type="number" class="form-input" id="pPrice" placeholder="e.g. 35000"></div>
-        <div class="form-group"><label class="form-label">Stock *</label><input type="number" class="form-input" id="pStock" placeholder="e.g. 10"></div>
+        <div class="form-group"><label class="form-label">Price (TZS) *</label><input type="number" class="form-input" id="pPrice" placeholder="35000"></div>
+        <div class="form-group"><label class="form-label">Stock *</label><input type="number" class="form-input" id="pStock" placeholder="10"></div>
       </div>
       <div class="form-group"><label class="form-label">Category</label>
-        <select class="form-select" id="pCat">
-          <option>Fashion & Clothing</option><option>Electronics</option><option>Food</option>
-          <option>Beauty</option><option>Books</option><option>Other</option>
-        </select>
+        <select class="form-select" id="pCat"><option>Fashion & Clothing</option><option>Electronics</option><option>Food</option><option>Beauty</option><option>Books</option><option>Other</option></select>
       </div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="pDesc" placeholder="Describe your product..."></textarea></div>
       <div class="form-group"><label class="form-label">Product Image</label>
         <div class="upload-zone"><input type="file" id="pImgFile" accept="image/*" onchange="prevImg(this,'pImgPreview')">
-          <div style="font-size:1.8rem;margin-bottom:0.3rem">📸</div>
-          <div style="font-size:0.75rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong></div>
+          <div style="font-size:1.6rem;margin-bottom:0.2rem">📸</div>
+          <div style="font-size:0.72rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong></div>
           <img id="pImgPreview" class="upload-preview">
         </div>
       </div>
       <input type="hidden" id="editProductId">
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeProductModal()">Cancel</button>
-      <button class="btn-save" onclick="saveProduct()">Add Product</button>
-    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeProductModal()">Cancel</button><button class="btn-save" onclick="saveProduct()">Save Product</button></div>
   </div>
 </div>
 
+<div class="modal-overlay" id="postModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title">📢 Post to Vybe</div><button class="modal-close" onclick="closePostModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="alert alert-error" id="postErr"></div>
+      <div class="form-group"><label class="form-label">Media Type</label>
+        <div style="display:flex;gap:0.5rem">
+          <button id="typePhoto" onclick="setMediaType('image',this)" style="flex:1;padding:0.55rem;background:var(--navy);color:var(--gold);border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;border-radius:8px;font-size:0.82rem">📸 Photo</button>
+          <button id="typeVideo" onclick="setMediaType('video',this)" style="flex:1;padding:0.55rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;border-radius:8px;font-size:0.82rem">🎥 Video</button>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Upload <span id="mediaTypeLabel">Photo</span> *</label>
+        <div class="upload-zone" id="mediaUploadZone"><input type="file" id="postMediaFile" accept="image/*,video/*" onchange="previewPostMedia(this)">
+          <div style="font-size:1.6rem;margin-bottom:0.2rem" id="mediaUploadIcon">📸</div>
+          <div style="font-size:0.72rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong></div>
+        </div>
+        <div id="mediaPreviewWrap" style="display:none;margin-top:0.65rem"><img id="postImgPreview" style="max-width:100%;max-height:170px;display:none;border-radius:8px"><video id="postVidPreview" style="max-width:100%;max-height:170px;display:none;border-radius:8px" controls></video></div>
+      </div>
+      <div class="form-group"><label class="form-label">Caption</label><textarea class="form-textarea" id="postCaption" placeholder="Describe your product... #hashtags"></textarea></div>
+      <div class="form-group"><label class="form-label">Price (TZS) — Optional</label><input type="number" class="form-input" id="postPrice" placeholder="25000"></div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closePostModal()">Cancel</button><button class="btn-save" onclick="submitPost()" id="postSubmitBtn">📢 Post Now</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// SIDEBAR CONTROLS
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('collapsed')}
+function openSidebar(){document.getElementById('sidebar').classList.add('mob-open');document.getElementById('sbOverlay').classList.add('show')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('mob-open');document.getElementById('sbOverlay').classList.remove('show')}
+
+// PAGE TITLES
+const PAGE_TITLES={overview:['Dashboard','Welcome back'],store:['My Store','Edit your store profile and branding'],products:['Products','Manage your store products'],orders:['Orders','Confirm and manage customer orders'],accounting:['Accounting','Automatic sales tracking from every order'],marketing:['Marketing Analytics','Track your store visibility and growth'],ai:['AI Tools','AI-powered business assistance'],subscription:['Subscription','Manage your Travex Mall plan'],vybe:['Social Vybe','Post products and grow your brand']};
+
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
 const GEMINI_URL    = `${SUPABASE_URL}/functions/v1/gemini-chat`;
@@ -1170,21 +1062,59 @@ async function loadProducts() {
 async function loadOrders() {
   const container = document.getElementById("ordersTable");
   if (!allOrders.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">No orders yet</div></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">No orders yet</div><div style="font-size:0.78rem;color:var(--gray);margin-top:0.3rem">Orders appear here when customers place them</div></div>';
     return;
   }
+  // Check URL for highlighted order
+  const urlParams = new URLSearchParams(window.location.search);
+  const highlightId = urlParams.get("order");
+
   container.innerHTML = `<table class="data-table">
-    <thead><tr><th>Customer</th><th>Phone</th><th>Product</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
-    <tbody>${allOrders.map(o => `<tr>
-      <td><strong>${o.customer_name}</strong></td>
-      <td>${o.phone}</td>
-      <td>Order #${o.id?.substring(0,8)}</td>
-      <td>${o.quantity}</td>
-      <td>TZS ${Number(o.total_price).toLocaleString()}</td>
-      <td><span class="badge badge-${o.status}">${o.status}</span></td>
-      <td>${new Date(o.created_at).toLocaleDateString()}</td>
-    </tr>`).join("")}</tbody>
+    <thead><tr>
+      <th>Customer</th><th>Product</th><th>Location</th>
+      <th>Qty</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th>
+    </tr></thead>
+    <tbody>${allOrders.map(o => {
+      const isHighlight = highlightId && (o.id === highlightId || o.id?.startsWith(highlightId));
+      const isInProcess = o.status === "in_process" || isHighlight;
+      const statusMap = {
+        pending:   '<span class="badge badge-pending">⏳ Pending</span>',
+        in_process:'<span class="badge badge-inprocess">🔵 In Process</span>',
+        completed: '<span class="badge badge-completed">✅ Sold</span>',
+        cancelled: '<span class="badge badge-cancelled">❌ Cancelled</span>',
+      };
+      const actions = o.status === "completed" || o.status === "cancelled"
+        ? '<span style="font-size:0.75rem;color:var(--gray)">—</span>'
+        : `<div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+            <button data-confirm="${o.id}" onclick="confirmOrder('${o.id}')"
+              style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.7rem;font-size:0.7rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:'Inter',sans-serif">
+              ✅ Confirm
+            </button>
+            <button onclick="cancelOrder('${o.id}')"
+              style="background:var(--offwhite);color:var(--red);border:1px solid var(--red);padding:0.3rem 0.7rem;font-size:0.7rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:'Inter',sans-serif">
+              ❌ Cancel
+            </button>
+           </div>`;
+      return `<tr style="${isInProcess ? 'background:#EFF6FF;border-left:3px solid #3B82F6' : ''}">
+        <td><strong>${o.customer_name || "—"}</strong></td>
+        <td>${o.product_name || "Order #"+o.id?.substring(0,8)}</td>
+        <td style="color:var(--gray);font-size:0.78rem">${o.customer_location || "—"}</td>
+        <td>${o.quantity || 1}</td>
+        <td style="font-weight:700;color:var(--navy)">TZS ${Number(o.total_price).toLocaleString()}</td>
+        <td>${statusMap[o.status] || o.status}</td>
+        <td style="color:var(--gray);font-size:0.75rem">${new Date(o.created_at).toLocaleDateString("en",{day:"numeric",month:"short"})}</td>
+        <td>${actions}</td>
+      </tr>`;
+    }).join("")}</tbody>
   </table>`;
+
+  // Scroll to highlighted order
+  if (highlightId) {
+    setTimeout(() => {
+      const rows = container.querySelectorAll("tr");
+      rows.forEach(r => { if(r.style.borderLeft) r.scrollIntoView({behavior:"smooth",block:"center"}); });
+    }, 300);
+  }
 }
 
 // ── ACCOUNTING ──
@@ -1657,8 +1587,9 @@ async function deleteProduct(id) {
 // ── PAGE NAVIGATION ──
 function showPage(name, btn) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".topnav-tab").forEach(t => t.classList.remove("active"));
-  document.getElementById("page-"+name).classList.add("active");
+  document.querySelectorAll(".sb-btn").forEach(t => t.classList.remove("active"));
+  const pg = document.getElementById("page-"+name);
+  if(pg) pg.classList.add("active");
   if (btn) btn.classList.add("active");
 
   if (name === "products")   loadProducts();
@@ -1685,7 +1616,7 @@ function switchAccPeriod(period, btn) {
   document.getElementById("acc-"+period).classList.add("active");
 }
 
-async async function logout() {
+async async async function logout() {
   try {
     await sb.auth.signOut();
   } catch(e) {}
@@ -2054,7 +1985,85 @@ async function deletePost(postId) {
   loadFeedPage();
 }
 
+// ── CONFIRM / CANCEL ORDER ──
+async function confirmOrder(orderId) {
+  const btn = document.querySelector(`[data-confirm="${orderId}"]`);
+  if(btn){ btn.textContent="Confirming..."; btn.disabled=true; }
+  const { error } = await sb.from("orders")
+    .update({ status:"completed", confirmed_at: new Date().toISOString() })
+    .eq("id", orderId);
+  if(!error){
+    allOrders = allOrders.map(o => o.id===orderId ? {...o, status:"completed"} : o);
+    loadOrders();
+    loadStats();
+  } else {
+    if(btn){ btn.textContent="✅ Confirm Sale"; btn.disabled=false; }
+  }
+}
+
+async function cancelOrder(orderId) {
+  if(!confirm("Cancel this order?")) return;
+  await sb.from("orders").update({ status:"cancelled" }).eq("id", orderId);
+  allOrders = allOrders.map(o => o.id===orderId ? {...o, status:"cancelled"} : o);
+  loadOrders();
+}
+
 init();
+
+// SIDEBAR UPDATE
+function updateSidebarStore(store, products, orders) {
+  const logoEl = document.getElementById("sbStoreLogo");
+  if(store.logo){logoEl.innerHTML=`<img src="${store.logo}" alt="${store.store_name}">`;}
+  else{logoEl.textContent=store.store_name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();}
+  const n=document.getElementById("sbStoreName");
+  const p=document.getElementById("sbStorePlan");
+  const planIcons={basic:"⭐ Basic",standard:"⭐⭐ Standard",premium:"👑 Premium"};
+  if(n)n.textContent=store.store_name;
+  if(p)p.textContent=planIcons[store.subscription_plan]||"⭐ Basic";
+  const val=calcStoreValue(products||[],orders||[],0,0);
+  const ve=document.getElementById("sbStoreValue");
+  if(ve)ve.textContent="TZS "+val.toLocaleString();
+  // Topbar
+  const tt=document.getElementById("topbarTitle");
+  const ts=document.getElementById("topbarSub");
+  if(tt)tt.textContent=store.store_name;
+  if(ts)ts.textContent=store.category||store.store_category||"Your Dashboard";
+  const av=document.getElementById("navAvatar");
+  if(av)av.textContent=store.store_name.substring(0,2).toUpperCase();
+  // Pending badge
+  const pending=(allOrders||[]).filter(o=>o.status==="pending"||o.status==="in_process").length;
+  const pb=document.getElementById("pendingBadge");
+  if(pb){pb.style.display=pending>0?"inline-flex":"none";pb.textContent=pending;}
+  const sp=document.getElementById("statPending");
+  if(sp)sp.textContent=pending;
+}
+
+// Override updateNavStore
+function updateNavStore(store,products,orders){
+  updateSidebarStore(store,products,orders);
+  if(store.theme_color)applyTheme(store.theme_color);
+  buildQuickActions(store.theme_color||'#0D1B3E');
+}
+
+// Override showPage
+const _origShow=showPage;
+function showPage(name,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".sb-btn").forEach(t=>t.classList.remove("active"));
+  const pg=document.getElementById("page-"+name);
+  if(pg)pg.classList.add("active");
+  if(btn)btn.classList.add("active");
+  const titles=PAGE_TITLES[name]||[name,""];
+  const tt=document.getElementById("topbarTitle");
+  const ts=document.getElementById("topbarSub");
+  if(tt)tt.textContent=titles[0];
+  if(ts)ts.textContent=titles[1];
+  closeSidebar();
+  if(name==="subscription")loadSubscriptionStatus();
+  if(name==="orders")loadOrders();
+  if(name==="accounting")loadAccounting();
+  if(name==="marketing")loadMarketing();
+}
 </script>
 </body>
 </html>
