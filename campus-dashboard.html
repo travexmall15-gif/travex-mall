@@ -302,7 +302,7 @@ select,textarea,
           </div>
           <button onclick="doLogin()" id="loginBtn"
             style="width:100%;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:800;border:none;cursor:pointer">
-            Ingia Dashibodi →
+            Login to Dashboard →
           </button>
           <div style="text-align:center;margin-top:1rem">
             <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.3);cursor:pointer;text-decoration:underline">Forgot password?</a>
@@ -320,7 +320,7 @@ select,textarea,
             Tuma Link →
           </button>
           <div style="text-align:center">
-            <a onclick="showLoginForm()" style="font-size:0.78rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline">← Rudi Login</a>
+            <a onclick="showLoginForm()" style="font-size:0.78rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline">← Back to Login</a>
           </div>
         </div>
       </div>
@@ -475,17 +475,17 @@ select,textarea,
               </div>
               <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem">What You Get — Equivalent to PREMIUM:</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.7)">
-                <div>✅ Store yako kwenye app</div>
+                <div>✅ Your store in the app</div>
                 <div>✅ AI Business Assistant</div>
                 <div>✅ AI Marketing Tools</div>
                 <div>✅ AI Accounting Helper</div>
-                <div>✅ Product listings bila kikomo</div>
+                <div>✅ Unlimited product listings</div>
                 <div>✅ Orders management</div>
                 <div>✅ Sales analytics</div>
                 <div>✅ Campus leaderboard</div>
                 <div>✅ WhatsApp integration</div>
                 <div>✅ Verified badge</div>
-                <div style="color:#FCA5A5">❌ Social Vybe (B2C/B2B tu)</div>
+                <div style="color:#FCA5A5">❌ Social Vybe (B2C/B2B only)</div>
                 <div style="color:#FCA5A5">❌ Multi-store</div>
               </div>
             </div>
@@ -938,7 +938,7 @@ async function doLogin() {
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
   if (error) {
     showAuthError(errEl, "Imeshindwa: " + (error.message === "Invalid login credentials" ? "Invalid email or password." : error.message));
-    btn.textContent = "Ingia Dashibodi →";
+    btn.textContent = "Login to Dashboard →";
     btn.disabled = false;
     return;
   }
