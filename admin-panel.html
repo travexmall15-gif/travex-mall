@@ -817,7 +817,6 @@ function viewApp(id) {
     <div class="modal-section">Status</div>
     <div class="modal-row"><span class="modal-label">Status</span><span class="modal-val"><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></span></div>
     <div class="modal-row"><span class="modal-label">Submitted</span><span class="modal-val">${dt ? new Date(dt).toLocaleString('en-GB') : '—'}</span></div>
-    ${a.approved_at ? `<div class="modal-row"><span class="modal-label">Approved</span><span class="modal-val">${new Date(a.approved_at).toLocaleString('en-GB')}</span></div>` : ''}
   `;
 
   document.getElementById('modalFoot').innerHTML = `
