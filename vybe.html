@@ -451,7 +451,7 @@ function renderPosts(posts) {
           <span class="like-count">${post.likes_count||0}</span>
         </button>
         ${waLink ? `<a href="${waLink}" target="_blank" class="wa-pill">💬 WhatsApp</a>` : ""}
-        <a href="campus-university.html?uni=${post.university_abbr||store.university_abbr||''}" class="visit-btn">🏪 Visit Store →</a>
+        <a href="campus-university.html?uni=${post.university_abbr||store.university_abbr||''}" target="_blank" class="visit-btn" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.4rem 0.9rem;background:rgba(13,27,62,0.08);border:1.5px solid rgba(13,27,62,0.15);color:#0D1B3E;border-radius:20px;font-size:0.78rem;font-weight:700;text-decoration:none">🏪 Visit Shop</a>
       </div>
     </div>`;
   }).join("");
