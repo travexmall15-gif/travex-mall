@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body style="font-family:monospace;background:#0D1B3E;color:#fff;padding:2rem">
+<h2 style="color:#C9A84C">Checking campus_stores...</h2>
+<div id="out"></div>
+<script>
+const sb = supabase.createClient(
+  "https://bscecjbgnjitlfmgwcic.supabase.co",
+  "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos"
+);
+const out = document.getElementById('out');
+function log(msg,c='#fff'){out.innerHTML+=`<div style="color:${c};margin:3px 0">${msg}</div>`;}
+
+async function run(){
+  // 1. Read all stores
+  log('=== campus_stores ===','#C9A84C');
+  const {data,error} = await sb.from('campus_stores').select('*');
+  if(error){
+    log('❌ READ ERROR: '+error.message,'#f87171');
+    log('Code: '+error.code,'#f87171');
+  } else {
+    log(`✅ ${data.length} stores found`,'#4ade80');
+    if(data.length>0){
+      log('COLUMNS: '+Object.keys(data[0]).join(' | '),'#a78bfa');
+      data.forEach(s=>log(`  • ${JSON.stringify(s)}`,'#fbbf24'));
+    } else {
+      log('Table is EMPTY','#fbbf24');
+      // Try empty insert to see required columns
+      const {error:e2} = await sb.from('campus_stores').insert({});
+      log('Empty insert error: '+(e2?.message||'none'),'#fbbf24');
+    }
+  }
+
+  // 2. Read campus_applications to see what's approved
+  log('','#fff');
+  log('=== campus_applications (approved) ===','#C9A84C');
+  const {data:apps,error:ae} = await sb.from('campus_applications')
+    .select('*').eq('status','approved');
+  if(ae){
+    log('❌ ERROR: '+ae.message,'#f87171');
+  } else {
+    log(`✅ ${apps.length} approved applications`,'#4ade80');
+    if(apps.length>0){
+      log('COLUMNS: '+Object.keys(apps[0]).join(' | '),'#a78bfa');
+      apps.forEach(a=>log(`  • ${a.full_name} | ${a.shop_name} | ${a.university_abbr}`,'#fbbf24'));
+    }
+  }
+}
+run();
+</script>
+</body>
+</html>
