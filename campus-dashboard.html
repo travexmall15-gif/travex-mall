@@ -234,6 +234,11 @@ select,textarea,
   border-radius:16px!important;
 }
 /* fix any remaining 0-radius inline styles */
+
+.panel{display:none}
+.panel.active{display:block}
+.ai-tab{padding:0.6rem 1rem;font-size:0.78rem;font-weight:700;border:1.5px solid var(--lgray);background:#fff;color:var(--gray);cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;transition:all 0.15s}
+.ai-tab.active,.ai-tab:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
 </style>
 <style id="campus-reg-css">
 .reg-step{}
@@ -272,11 +277,11 @@ select,textarea,
       <div style="display:flex;border-bottom:2px solid rgba(255,255,255,0.1);margin-bottom:0">
         <button id="tab-login" onclick="switchCampusTab('login')"
           style="flex:1;padding:0.85rem;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;color:#C9A84C;border-bottom:2px solid #C9A84C;margin-bottom:-2px;cursor:pointer;transition:all 0.2s">
-          Ingia / Login
+          Login
         </button>
         <button id="tab-register" onclick="switchCampusTab('register')"
           style="flex:1;padding:0.85rem;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;color:rgba(255,255,255,0.4);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all 0.2s">
-          Jisajili / Register
+          Register
         </button>
       </div>
 
@@ -585,6 +590,270 @@ select,textarea,
   </div>
 </div>
 
+
+<!-- ══ MAIN DASHBOARD APP ══ -->
+<div id="dashApp" style="display:none;min-height:100vh;display:none">
+  <div style="display:flex;min-height:100vh">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div style="font-size:1rem;font-weight:800;color:#fff;font-family:'Playfair Display',serif">TRAVEX <span style="color:#C9A84C">CAMPUS</span></div>
+        <div class="sidebar-campus-badge">🎓 Seller Dashboard</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="sidebar-section">My Store</div>
+        <button class="sidebar-link active" onclick="showPanel('overview',this)">📊 Overview</button>
+        <button class="sidebar-link" onclick="showPanel('store',this)">🏪 My Shop</button>
+        <button class="sidebar-link" onclick="showPanel('products',this)">📦 Products</button>
+        <button class="sidebar-link" onclick="showPanel('orders',this)">🛍️ Orders</button>
+
+        <div class="sidebar-section">Grow</div>
+        <button class="sidebar-link" onclick="showPanel('vybe',this)">✦ Post to Social Vybe</button>
+        <button class="sidebar-link" onclick="showPanel('ai',this)">🤖 AI Assistants</button>
+        <button class="sidebar-link" onclick="showPanel('leaderboard',this)">🏆 Leaderboard</button>
+
+        <div class="sidebar-section">Account</div>
+        <button class="sidebar-link" onclick="showPanel('subscription',this)">💳 Subscription</button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="userInitials">—</div>
+          <div>
+            <div class="sidebar-user-name" id="userName">Loading...</div>
+            <div class="sidebar-user-uni" id="userUni">—</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem">
+          <a href="campus.html" style="font-size:0.72rem;color:rgba(255,255,255,0.3);text-decoration:none;padding:0.3rem 0;transition:color 0.2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">🌐 View Marketplace</a>
+          <button onclick="handleLogout()" style="background:none;border:none;font-size:0.72rem;color:rgba(255,255,255,0.3);cursor:pointer;text-align:left;padding:0.3rem 0;font-family:Inter,sans-serif;transition:color 0.2s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">🚪 Logout</button>
+          <a href="admin-panel.html" style="font-size:0.7rem;color:rgba(255,255,255,0.15);text-decoration:none;padding:0.2rem 0;transition:color 0.2s" onmouseover="this.style.color='rgba(201,168,76,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">⚙️ Admin Panel</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <!-- Topbar -->
+      <div style="height:64px;background:#fff;border-bottom:1px solid var(--lgray);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+        <div>
+          <div style="font-size:0.95rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif" id="pageTitle">Dashboard Overview</div>
+          <div style="font-size:0.7rem;color:var(--gray)" id="pageBread">Overview</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem">
+          <div id="subBanner" style="display:none;background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#D97706;padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:600;border-radius:6px">
+            ⏳ Shop pending activation — pay TZS 15,000 to activate
+          </div>
+        </div>
+      </div>
+
+      <!-- PANELS -->
+      <div style="padding:1.75rem;flex:1;overflow-y:auto">
+
+        <!-- OVERVIEW PANEL -->
+        <div class="panel active" id="panel-overview">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--purple)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Shop Status</div>
+              <div style="font-size:1rem;font-weight:800;color:var(--navy)" id="statShopStatus">—</div>
+              <div style="font-size:0.72rem;color:var(--gray);margin-top:0.25rem" id="statShopNum">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--gold)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Products</div>
+              <div style="font-size:1.75rem;font-weight:800;color:var(--navy)" id="statProducts">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--green)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Orders</div>
+              <div style="font-size:1.75rem;font-weight:800;color:var(--navy)" id="statOrders">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--navy)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Revenue (TZS)</div>
+              <div style="font-size:1.4rem;font-weight:800;color:var(--navy)" id="statRevenue">0</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:1.25rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy)">📦 Recent Orders</div>
+              <div id="recentOrders" style="padding:1rem"></div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:0.85rem;font-weight:700;color:var(--navy)">📦 Products <span id="productCount" style="background:rgba(13,27,62,0.07);padding:0.1rem 0.5rem;border-radius:20px;font-size:0.72rem">0</span></div>
+                <button onclick="showPanel('products',null)" style="font-size:0.75rem;font-weight:700;color:var(--purple);background:none;border:none;cursor:pointer">Add Product +</button>
+              </div>
+              <div id="productsContainer" style="padding:0.5rem"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STORE PANEL -->
+        <div class="panel" id="panel-store">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🏪 My Shop Settings</div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem;max-width:600px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Shop Name</label>
+                <input type="text" id="shopName" class="form-input" placeholder="e.g. Amina Fashion">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Category</label>
+                <select id="shopCategory" class="form-select">
+                  <option>Fashion & Clothing</option>
+                  <option>Food & Snacks</option>
+                  <option>Electronics & Accessories</option>
+                  <option>Beauty & Health</option>
+                  <option>Books & Stationery</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">WhatsApp</label>
+                <input type="text" id="shopWhatsapp" class="form-input" placeholder="+255 7XX XXX XXX">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">University</label>
+                <input type="text" id="shopUni" class="form-input" readonly style="background:var(--offwhite)">
+              </div>
+            </div>
+            <div style="margin-top:1rem">
+              <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Description</label>
+              <textarea id="shopDesc" class="form-input" style="resize:vertical;min-height:80px" placeholder="Describe your shop..."></textarea>
+            </div>
+            <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Logo Image</label>
+                <input type="file" id="logoInput" accept="image/*" class="form-input" style="padding:0.4rem">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Banner Image</label>
+                <input type="file" id="bannerInput" accept="image/*" class="form-input" style="padding:0.4rem">
+              </div>
+            </div>
+            <button onclick="saveShop()" style="margin-top:1.25rem;background:var(--navy);color:#fff;border:none;padding:0.75rem 2rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;width:100%">Save Shop Settings</button>
+          </div>
+        </div>
+
+        <!-- PRODUCTS PANEL -->
+        <div class="panel" id="panel-products">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+            <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif">📦 Products</div>
+            <button onclick="document.getElementById('productModal').classList.add('open');document.getElementById('productModalTitle').textContent='Add New Product';document.getElementById('editingProductId').value=''" style="background:var(--navy);color:#fff;border:none;padding:0.6rem 1.25rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem">+ Add Product</button>
+          </div>
+          <div id="ordersContainer" style="display:none"></div>
+          <div id="productsContainer2" style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1rem"></div>
+        </div>
+
+        <!-- ORDERS PANEL -->
+        <div class="panel" id="panel-orders">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🛍️ Orders</div>
+          <div id="ordersPanel" style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1rem"></div>
+        </div>
+
+        <!-- SOCIAL VYBE POST PANEL -->
+        <div class="panel" id="panel-vybe">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:0.25rem">✦ Post to Social Vybe</div>
+          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:1.5rem">Share your products and promotions with the campus community</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <!-- Post Form -->
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem">
+              <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:1rem">📝 Create New Post</div>
+              <div style="margin-bottom:1rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Caption *</label>
+                <textarea id="vybeCaption" style="width:100%;padding:0.75rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.85rem;outline:none;resize:vertical;min-height:100px;transition:border-color 0.2s" placeholder="Describe your product or promotion..." onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--lgray)'"></textarea>
+              </div>
+              <div style="margin-bottom:1rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Price (TZS) — optional</label>
+                <input type="number" id="vybePrice" style="width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" placeholder="e.g. 5000" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--lgray)'">
+              </div>
+              <div style="margin-bottom:1.25rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Image / Video</label>
+                <div id="vybeMediaDrop" style="border:2px dashed var(--lgray);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s" onclick="document.getElementById('vybeMediaInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--navy)'" ondragleave="this.style.borderColor='var(--lgray)'" ondrop="handleVybeDrop(event)">
+                  <div style="font-size:1.5rem;margin-bottom:0.3rem">📸</div>
+                  <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> or drag & drop</div>
+                  <div style="font-size:0.68rem;color:var(--gray);margin-top:0.2rem">Images (JPG, PNG) or Videos (MP4)</div>
+                  <img id="vybeImgPreview" style="display:none;max-width:100%;max-height:120px;margin-top:0.75rem;border-radius:6px">
+                  <video id="vybeVidPreview" style="display:none;max-width:100%;max-height:120px;margin-top:0.75rem;border-radius:6px" controls></video>
+                </div>
+                <input type="file" id="vybeMediaInput" accept="image/*,video/*" style="display:none" onchange="previewVybe(this)">
+              </div>
+              <button onclick="postToVybe()" id="vybePostBtn" style="width:100%;padding:0.8rem;background:linear-gradient(135deg,var(--purple),#9333EA);color:#fff;border:none;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.88rem;transition:all 0.2s">✦ Post to Social Vybe</button>
+              <div id="vybeMsg" style="display:none;margin-top:0.75rem;padding:0.6rem;border-radius:6px;font-size:0.8rem;text-align:center"></div>
+            </div>
+
+            <!-- My Past Posts -->
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:0.85rem;font-weight:700;color:var(--navy)">My Vybe Posts</div>
+                <a href="vybe.html" target="_blank" style="font-size:0.72rem;font-weight:700;color:var(--purple);text-decoration:none">Explore All Posts →</a>
+              </div>
+              <div id="myVybePosts" style="max-height:400px;overflow-y:auto">
+                <div style="padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem">Loading posts...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI PANEL -->
+        <div class="panel" id="panel-ai">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🤖 AI Assistants</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+            <button onclick="switchAI('customer',this)" class="ai-tab active" data-ai="customer">💬 Customer Care</button>
+            <button onclick="switchAI('marketing',this)" class="ai-tab" data-ai="marketing">📣 Marketing</button>
+            <button onclick="switchAI('accounting',this)" class="ai-tab" data-ai="accounting">💰 Accounting</button>
+          </div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.82rem;font-weight:700;color:var(--navy)" id="aiTitle">💬 AI Customer Care</div>
+            <div id="aiMessages" style="padding:1.25rem;min-height:200px;max-height:350px;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem"></div>
+            <div style="padding:1rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem">
+              <input type="text" id="aiInput" style="flex:1;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem;outline:none" placeholder="Ask AI assistant..." onkeydown="if(event.key==='Enter')sendAI(currentAI,this.value)">
+              <button onclick="sendAI(currentAI,document.getElementById('aiInput').value)" style="background:var(--navy);color:#fff;border:none;padding:0.65rem 1.25rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEADERBOARD PANEL -->
+        <div class="panel" id="panel-leaderboard">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🏆 Campus Leaderboard</div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.82rem;font-weight:700;color:var(--navy)">Top Stores — <span id="userUni2">Your University</span></div>
+            <div id="leaderboardList" style="padding:1rem"></div>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTION PANEL -->
+        <div class="panel" id="panel-subscription">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">💳 Subscription</div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem;max-width:480px">
+            <div style="text-align:center;padding:1rem">
+              <div style="font-size:2.5rem;margin-bottom:0.5rem">🎓</div>
+              <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem">Campus Plan</div>
+              <div style="font-size:1.75rem;font-weight:900;color:var(--gold);margin-bottom:0.25rem">TZS 15,000<span style="font-size:0.9rem;color:var(--gray);font-weight:400">/month</span></div>
+              <div style="font-size:0.78rem;color:var(--gray);margin-bottom:1.5rem">Pay to activate & keep your shop live</div>
+              <div style="text-align:left;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem">
+                <div style="font-size:0.82rem">✅ Your shop on Campus Marketplace</div>
+                <div style="font-size:0.82rem">✅ Unlimited product listings</div>
+                <div style="font-size:0.82rem">✅ AI Business Assistant</div>
+                <div style="font-size:0.82rem">✅ Social Vybe posting</div>
+                <div style="font-size:0.82rem">✅ Orders & Revenue tracking</div>
+              </div>
+              <div style="background:var(--offwhite);border:1px solid var(--lgray);border-radius:8px;padding:1rem;font-size:0.82rem;text-align:left;margin-bottom:1rem">
+                <div style="font-weight:700;color:var(--navy);margin-bottom:0.5rem">Pay via:</div>
+                <div>💳 CRDB Bank: <strong>0152774556100</strong></div>
+                <div style="margin-top:0.3rem">📱 M-Pesa: <strong>+255 651 919 915</strong></div>
+              </div>
+              <div style="font-size:0.75rem;color:var(--gray)">Send payment receipt on WhatsApp to activate</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
@@ -605,14 +874,19 @@ async function init() {
   }
   currentUser = session.user;
 
+  // Show dashboard, hide login
+  document.getElementById("campusLoginOverlay").style.display = "none";
+  document.getElementById("dashApp").style.display = "block";
+
   const name = currentUser.user_metadata?.name || currentUser.email.split("@")[0];
-  document.getElementById("userName").textContent    = name;
+  document.getElementById("userName").textContent     = name;
   document.getElementById("userInitials").textContent = name.substring(0,2).toUpperCase();
 
   await loadShop();
   await loadStats();
   await loadRecentOrders();
   await loadLeaderboard();
+  loadMyVybePosts();
 }
 
 // LOAD SHOP
@@ -818,11 +1092,12 @@ function showPanel(name, btn) {
   document.querySelectorAll(".sidebar-link").forEach(l => l.classList.remove("active"));
   document.getElementById("panel-" + name).classList.add("active");
   if (btn) btn.classList.add("active");
-  const titles = { overview:"Dashboard Overview", store:"My Shop", products:"Products", orders:"Orders", ai:"AI Assistants", leaderboard:"Campus Leaderboard", subscription:"Subscription" };
+  const titles = { overview:"Dashboard Overview", store:"My Shop", products:"Products", orders:"Orders", vybe:"Post to Social Vybe", ai:"AI Assistants", leaderboard:"Campus Leaderboard", subscription:"Subscription" };
   document.getElementById("pageTitle").textContent = titles[name] || name;
   document.getElementById("pageBread").textContent  = titles[name] || name;
   if (name === "products")    loadProducts();
   if (name === "orders")      loadOrders();
+  if (name === "vybe")        loadMyVybePosts();
   if (name === "leaderboard") loadLeaderboard();
 }
 
@@ -1142,6 +1417,169 @@ function regGoToSubscription() {
   document.getElementById("rsl-sub").textContent = "Step 5 of 5 — Payment";
   document.getElementById("campusLoginOverlay").scrollTop = 0;
 }
+
+// ── SOCIAL VYBE ──
+let currentAI = 'customer';
+let vybeMediaFile = null;
+let vybeMediaType = null;
+
+function previewVybe(input) {
+  const file = input.files[0];
+  if (!file) return;
+  vybeMediaFile = file;
+  vybeMediaType = file.type.startsWith('video') ? 'video' : 'image';
+  const url = URL.createObjectURL(file);
+  if (vybeMediaType === 'image') {
+    document.getElementById('vybeImgPreview').src = url;
+    document.getElementById('vybeImgPreview').style.display = 'block';
+    document.getElementById('vybeVidPreview').style.display = 'none';
+  } else {
+    document.getElementById('vybeVidPreview').src = url;
+    document.getElementById('vybeVidPreview').style.display = 'block';
+    document.getElementById('vybeImgPreview').style.display = 'none';
+  }
+}
+
+function handleVybeDrop(e) {
+  e.preventDefault();
+  document.getElementById('vybeMediaInput').files = e.dataTransfer.files;
+  previewVybe(document.getElementById('vybeMediaInput'));
+}
+
+async function postToVybe() {
+  const caption = document.getElementById('vybeCaption').value.trim();
+  const price   = document.getElementById('vybePrice').value;
+  const btn     = document.getElementById('vybePostBtn');
+  const msg     = document.getElementById('vybeMsg');
+
+  if (!caption) { showVybeMsg('Please write a caption!', 'error'); return; }
+  if (!currentShop) { showVybeMsg('You need an active shop to post.', 'error'); return; }
+
+  btn.disabled = true; btn.textContent = 'Posting...';
+
+  let mediaUrl = null;
+  // Upload media if provided
+  if (vybeMediaFile) {
+    const ext = vybeMediaFile.name.split('.').pop();
+    const path = `vybe/${currentShop.id}_${Date.now()}.${ext}`;
+    const { data: upData, error: upErr } = await sb.storage.from('campus-media').upload(path, vybeMediaFile, {cacheControl:'3600',upsert:false});
+    if (upErr) { showVybeMsg('Upload failed: ' + upErr.message, 'error'); btn.disabled=false; btn.textContent='✦ Post to Social Vybe'; return; }
+    const { data: urlData } = sb.storage.from('campus-media').getPublicUrl(path);
+    mediaUrl = urlData.publicUrl;
+  }
+
+  const { error } = await sb.from('feed_posts').insert({
+    store_id:       currentShop.id,
+    caption:        caption,
+    media_url:      mediaUrl,
+    media_type:     vybeMediaType || 'text',
+    price:          price ? Number(price) : null,
+    university_abbr: currentShop.university_abbr,
+    likes_count:    0
+  });
+
+  btn.disabled = false; btn.textContent = '✦ Post to Social Vybe';
+
+  if (error) {
+    showVybeMsg('Error: ' + error.message, 'error');
+  } else {
+    showVybeMsg('✅ Posted successfully! Your post is live on Social Vybe.', 'success');
+    document.getElementById('vybeCaption').value = '';
+    document.getElementById('vybePrice').value   = '';
+    document.getElementById('vybeImgPreview').style.display = 'none';
+    document.getElementById('vybeVidPreview').style.display = 'none';
+    vybeMediaFile = null;
+    loadMyVybePosts();
+  }
+}
+
+function showVybeMsg(text, type) {
+  const el = document.getElementById('vybeMsg');
+  el.textContent = text;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? 'rgba(5,150,105,0.1)' : 'rgba(220,38,38,0.1)';
+  el.style.color = type === 'success' ? 'var(--green)' : 'var(--red)';
+  el.style.border = '1px solid ' + (type === 'success' ? 'rgba(5,150,105,0.2)' : 'rgba(220,38,38,0.2)');
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+async function loadMyVybePosts() {
+  if (!currentShop) return;
+  const el = document.getElementById('myVybePosts');
+  const { data, error } = await sb.from('feed_posts')
+    .select('*')
+    .eq('store_id', currentShop.id)
+    .order('created_at', {ascending: false})
+    .limit(10);
+
+  if (error || !data?.length) {
+    el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem">No posts yet — create your first post! ✨</div>';
+    return;
+  }
+
+  el.innerHTML = data.map(p => `
+    <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;gap:0.75rem;align-items:flex-start">
+      ${p.media_url && p.media_type==='image' 
+        ? `<img src="${p.media_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0">`
+        : '<div style="width:50px;height:50px;background:var(--offwhite);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">✦</div>'}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.8rem;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:0.2rem">${p.caption||''}</div>
+        <div style="display:flex;gap:0.75rem;font-size:0.68rem;color:var(--gray)">
+          <span>❤️ ${p.likes_count||0}</span>
+          ${p.price ? `<span>TZS ${Number(p.price).toLocaleString()}</span>` : ''}
+          <span>${new Date(p.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── AI ──
+function switchAI(type, btn) {
+  currentAI = type;
+  document.querySelectorAll('.ai-tab').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const titles = {customer:'💬 AI Customer Care', marketing:'📣 AI Marketing', accounting:'💰 AI Accounting'};
+  document.getElementById('aiTitle').textContent = titles[type];
+  document.getElementById('aiMessages').innerHTML = '';
+  document.getElementById('aiInput').value = '';
+}
+
+async function sendAI(type, text) {
+  if (!text?.trim()) return;
+  const messages = document.getElementById('aiMessages');
+  const input    = document.getElementById('aiInput');
+  input.value    = '';
+
+  messages.innerHTML += `<div style="align-self:flex-end;background:var(--navy);color:#fff;padding:0.6rem 0.9rem;border-radius:10px 10px 2px 10px;font-size:0.82rem;max-width:80%">${text}</div>`;
+  messages.innerHTML += `<div id="aiTyping" style="align-self:flex-start;background:var(--offwhite);border:1px solid var(--lgray);padding:0.6rem 0.9rem;border-radius:10px 10px 10px 2px;font-size:0.82rem;color:var(--gray)">Thinking...</div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  const prompts = {
+    customer: `You are a Customer Care AI for ${currentShop?.store_name||'a campus shop'}. Help the seller respond to customer messages professionally and politely in English. Write actual response templates.`,
+    marketing: `You are a Marketing AI for ${currentShop?.store_name||'a campus shop'} selling ${currentShop?.category||'products'}. Help create compelling marketing posts and strategies for university students.`,
+    accounting: `You are an Accounting AI assistant for a small campus business. Help track expenses, calculate profit, and give simple financial advice. Keep it simple and practical.`
+  };
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: prompts[type],
+        messages: [{role:"user",content:text}]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "Sorry, I couldn't get a response.";
+    document.getElementById('aiTyping').outerHTML = `<div style="align-self:flex-start;background:var(--offwhite);border:1px solid var(--lgray);padding:0.6rem 0.9rem;border-radius:10px 10px 10px 2px;font-size:0.82rem;max-width:85%;line-height:1.6">${reply.replace(/\n/g,'<br>')}</div>`;
+  } catch(e) {
+    document.getElementById('aiTyping').outerHTML = `<div style="align-self:flex-start;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);padding:0.6rem 0.9rem;border-radius:10px;font-size:0.82rem;color:var(--red)">Error: ${e.message}</div>`;
+  }
+  messages.scrollTop = messages.scrollHeight;
+}
+
 </script>
 </body>
 </html>
