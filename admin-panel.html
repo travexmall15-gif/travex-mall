@@ -371,7 +371,7 @@ select,textarea,
 
     <div class="page" id="page-campus-applications">
       <div class="page-title">📋 Campus Applications</div>
-      <div class="page-sub">Maombi ya wanafunzi kutaka kufungua maduka — Pitia, Idhinisha au Kataa</div>
+      <div class="page-sub">Student shop applications — Review, Approve or Reject</div>
       <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
         <button class="filter-btn active" id="ca-filter-all"    onclick="filterApps('all',this)">Yote</button>
         <button class="filter-btn"       id="ca-filter-pending" onclick="filterApps('pending',this)">Pending ⏳</button>
@@ -385,7 +385,7 @@ select,textarea,
           <th>Jina / Mwaka</th><th>Email</th><th>Chuo</th><th>Duka / Kategoria</th><th>WhatsApp</th><th>ID ya Chuo</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
         </tr></thead>
         <tbody id="campus-apps-tbody">
-          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
+          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
         </tbody></table>
       </div>
     </div>
@@ -412,7 +412,7 @@ select,textarea,
           <th>#</th><th>Duka</th><th>Seller</th><th>Chuo</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
         </tr></thead>
         <tbody id="campus-stores-tbody">
-          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
+          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
         </tbody></table>
       </div>
     </div>
@@ -462,7 +462,7 @@ select,textarea,
         <div class="table-wrap" style="margin-top:0.5rem">
           <table><thead><tr><th>Seller</th><th>Chuo</th><th>Duka</th><th>Kiasi</th><th>Tarehe</th><th>Status</th></tr></thead>
           <tbody id="cr-payments-tbody">
-            <tr><td colspan="6" style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</td></tr>
+            <tr><td colspan="6" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
           </tbody></table>
         </div>
       </div>
@@ -883,7 +883,7 @@ async function approveStore(storeId) {
     subscription_grace_until: null
   }).eq("id", storeId);
 
-  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
+  if (error) { showToast("Failed: " + error.message, "error"); return; }
 
   // 2. Update subscription record
   if (sub) {
@@ -1017,22 +1017,22 @@ async function viewStore(storeId) {
 
   // STORE INFO
   body += sectionHead("Taarifa za Duka", "🏪");
-  body += row("Jina la Duka",   s.store_name,        {big:true});
+  body += row("Shop Name",   s.store_name,        {big:true});
   body += row("Aina ya Duka",   s.store_type==="b2b" ? "🥇 B2B Wholesale" : "🥈 B2C Retail");
   body += row("Plan",           s.subscription_plan==="premium" ? "👑 Premium" : s.subscription_plan==="standard" ? "⭐⭐ Standard" : "⭐ Basic");
   body += row("Status",         s.subscription_status==="approved" ? "✅ Active" : s.payment_status==="receipt_uploaded" ? "🔍 Risiti Inapitiwa" : "⏳ Pending",
               {color: s.subscription_status==="approved" ? "var(--green)" : "var(--red)"});
-  body += row("Kategoria",      s.category);
-  body += row("Mkoa",           s.region);
-  body += row("Maelezo",        s.description);
-  body += row("Wazi / Mfumo",  s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("sw") : null);
-  body += row("Inaisha",        expires ? `${expires.toLocaleDateString("sw")} ${daysLeft !== null ? "(siku "+daysLeft+")" : ""}` : null,
+  body += row("Category",      s.category);
+  body += row("Region",           s.region);
+  body += row("Description",        s.description);
+  body += row("Wazi / Mfumo",  s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("en-GB") : null);
+  body += row("Inaisha",        expires ? `${expires.toLocaleDateString("en-GB")} ${daysLeft !== null ? "(siku "+daysLeft+")" : ""}` : null,
               {color: daysLeft && daysLeft<=7 ? "var(--red)" : ""});
 
   // OWNER / CONTACT
   body += sectionHead("Taarifa za Mmiliki", "👤");
   body += row("Jina la Mmiliki", s.owner_name || s.seller_name);
-  body += row("Simu",            s.owner_phone || s.phone);
+  body += row("Phone",            s.owner_phone || s.phone);
   body += row("WhatsApp",        s.whatsapp_number ? `<a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${s.whatsapp_number} 💬</a>` : null);
   body += row("Email",           s.owner_email || s.email);
   body += row("Instagram",       s.instagram ? `<a href="https://instagram.com/${s.instagram}" target="_blank" style="color:#E1306C">@${s.instagram}</a>` : null);
@@ -1628,8 +1628,8 @@ async function loadCampusOverview() {
       <td>${a.university_abbr||"—"}</td>
       <td>${a.shop_name||a.business_category||"—"}</td>
       <td><span class="badge badge-${a.status}">${a.status}</span></td>
-      <td>${new Date(a.created_at).toLocaleDateString("sw")}</td>
-    </tr>`).join("") : "<tr><td colspan='5' style='text-align:center;color:var(--gray);padding:1rem'>Hakuna maombi bado</td></tr>";
+      <td>${new Date(a.created_at).toLocaleDateString("en-GB")}</td>
+    </tr>`).join("") : "<tr><td colspan='5' style='text-align:center;color:var(--gray);padding:1rem'>No applications yet</td></tr>";
 
   // Uni breakdown
   const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
@@ -1672,7 +1672,7 @@ async function loadCampusApplications() {
 function renderAppsTable(apps) {
   const tbody = document.getElementById("campus-apps-tbody");
   if (!apps.length) {
-    tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna maombi</td></tr>";
+    tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>No applications yet</td></tr>";
     return;
   }
   tbody.innerHTML = apps.map(a => `
@@ -1680,20 +1680,20 @@ function renderAppsTable(apps) {
       <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.year_of_study||""}</div></td>
       <td style="font-size:0.75rem">${a.email||"—"}</td>
       <td><strong>${a.university_abbr||"—"}</strong><div style="font-size:0.65rem;color:var(--gray)">${a.region||""}</div></td>
-      <td><strong>${a.shop_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.business_category||""}</div></td>
-      <td><a href="https://wa.me/${(a.whatsapp||a.phone||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp||a.phone||"—"}</a></td>
+      <td><strong>${a.shop_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.category||a.business_category||""}</div></td>
+      <td><a href="https://wa.me/${(a.whatsapp_number||a.whatsapp||a.phone||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp_number||a.whatsapp||a.phone||"—"}</a></td>
       <td>
         ${a.id_card_url
           ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="width:40px;height:30px;object-fit:cover;border:1px solid var(--lgray)" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:#7C3AED;font-size:0.72rem&quot;>Ona ID →</a>'"></a>`
           : '<span style="font-size:0.68rem;color:var(--gray)">—</span>'}
       </td>
       <td><span class="badge badge-${a.status}">${a.status}</span></td>
-      <td style="font-size:0.72rem">${new Date(a.created_at).toLocaleDateString("sw")}</td>
+      <td style="font-size:0.72rem">${new Date(a.created_at).toLocaleDateString("en-GB")}</td>
       <td>
         <button onclick="viewCampusApp('${a.id}')" style="background:var(--navy);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:0.3rem;display:block">👁 Taarifa</button>
         ${a.status==="pending" ? `
-          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.2rem">✅ Idhinisha</button>
-          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">❌ Kataa</button>
+          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.2rem">✅ Approve</button>
+          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">❌ Reject</button>
         ` : `<span style="font-size:0.72rem;color:var(--gray)">${a.status}</span>`}
       </td>
     </tr>`).join("");
@@ -1711,27 +1711,27 @@ function viewCampusApp(id) {
   let body = "";
 
   // Personal info
-  body += sectionHead("Taarifa za Mwanafunzi", "🎓");
-  body += row("Jina Kamili",    a.full_name);
+  body += sectionHead("Student Info", "🎓");
+  body += row("Full Name",    a.full_name);
   body += row("Email",          a.email);
-  body += row("Simu",           a.phone);
+  body += row("Phone",           a.phone);
   body += row("WhatsApp",       a.whatsapp ? `<a href="https://wa.me/${(a.whatsapp||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp} 💬</a>` : null);
-  body += row("Mwaka wa Masomo", a.year_of_study);
+  body += row("Year of Study", a.year_of_study);
 
   // University
-  body += sectionHead("Chuo & Eneo", "🏫");
-  body += row("Chuo",    a.university);
-  body += row("Kifupi",  a.university_abbr);
-  body += row("Mkoa",    a.region);
+  body += sectionHead("University & Location", "🏫");
+  body += row("University",    a.university);
+  body += row("Abbreviation",  a.university_abbr);
+  body += row("Region",    a.region);
 
   // Business
-  body += sectionHead("Biashara / Duka", "🏪");
-  body += row("Jina la Duka",    a.shop_name);
-  body += row("Kategoria",       a.business_category);
-  body += row("Maelezo",         a.business_description ? `<span style="font-size:0.78rem;line-height:1.6">${a.business_description}</span>` : null);
+  body += sectionHead("Business / Shop", "🏪");
+  body += row("Shop Name",    a.shop_name);
+  body += row("Category",       a.business_category);
+  body += row("Description",         a.business_description ? `<span style="font-size:0.78rem;line-height:1.6">${a.business_description}</span>` : null);
 
   // Student ID card
-  body += sectionHead("Kitambulisho cha Chuo", "🪪");
+  body += sectionHead("University ID Card", "🪪");
   if (a.id_card_url) {
     const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(a.id_card_url);
     body += `<div style="margin:0.5rem 0">
@@ -1739,21 +1739,21 @@ function viewCampusApp(id) {
       <a href="${a.id_card_url}" target="_blank" style="color:#7C3AED;font-weight:600;font-size:0.85rem">🪪 Angalia ID Kamili →</a>
     </div>`;
   } else {
-    body += `<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">Kitambulisho hakikupakiwa</div>`;
+    body += `<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">No ID card uploaded</div>`;
   }
 
   // Status & dates
-  body += sectionHead("Hali ya Maombi", "📋");
+  body += sectionHead("Application Status", "📋");
   body += row("Status",          `<span class="badge badge-${a.status}">${a.status}</span>`);
-  body += row("Tarehe ya Ombi",  new Date(a.created_at).toLocaleString("en"));
-  body += row("Idhinishwa",      a.approved_at ? new Date(a.approved_at).toLocaleString("en") : null);
+  body += row("Submitted",  new Date(a.created_at).toLocaleString("en"));
+  body += row("Approved",      a.approved_at ? new Date(a.approved_at).toLocaleString("en") : null);
 
   document.getElementById("modalStoreName").textContent = a.shop_name || a.full_name || "Application";
   document.getElementById("modalBody").innerHTML = body;
   document.getElementById("modalActions").innerHTML = `
     ${a.status==="pending" ? `
-      <button class="btn-approve" onclick="approveCampusApp('${a.id}');closeModal()">✅ Idhinisha</button>
-      <button class="btn-reject"  onclick="rejectCampusApp('${a.id}');closeModal()">❌ Kataa</button>
+      <button class="btn-approve" onclick="approveCampusApp('${a.id}');closeModal()">✅ Approve</button>
+      <button class="btn-reject"  onclick="rejectCampusApp('${a.id}');closeModal()">❌ Reject</button>
     ` : ""}
     ${a.whatsapp||a.phone ? `<a href="https://wa.me/${((a.whatsapp||a.phone||"")).replace(/\D/g,"")}" target="_blank" class="btn-view" style="background:#25D366;color:#fff">💬 WhatsApp</a>` : ""}
     ${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank" class="btn-view" style="background:#7C3AED;color:#fff">🪪 Ona ID</a>` : ""}
@@ -1784,7 +1784,7 @@ function filterAppsSearch(q) {
 async function approveCampusApp(id) {
   const app = allCampusApps.find(a=>a.id===id);
   if (!app) return;
-  if (!confirm(`Idhinisha maombi ya ${app.full_name}?\n\nDuka litawashwa MARA MOJA na atapewa maelekezo ya kulipa TZS 15,000.`)) return;
+  if (!confirm(`Approve application from ${app.full_name}?\n\nTheir shop will be activated immediately.`)) return;
 
   const now = new Date();
 
@@ -1792,7 +1792,7 @@ async function approveCampusApp(id) {
   const { error: e1 } = await sb.from("campus_applications").update({
     status: "approved", approved_at: now.toISOString()
   }).eq("id", id);
-  if (e1) { showToast("Imeshindwa: " + e1.message, "error"); return; }
+  if (e1) { showToast("Failed: " + e1.message, "error"); return; }
 
   // 2. Create campus_store — is_active=true so duka linaonekana mara moja
   const shopNumber = allCampusStores.filter(s => s.university_abbr === app.university_abbr && s.shop_number).length + 1;
@@ -1800,10 +1800,10 @@ async function approveCampusApp(id) {
   const { error: e2 } = await sb.from("campus_stores").upsert({
     user_id:             app.user_id || null,
     store_name:          app.shop_name || app.full_name + "'s Shop",
-    category:            app.business_category,
-    description:         app.business_description || "",
-    whatsapp_number:     app.whatsapp || app.phone,
-    university:          app.university,
+    category:            app.category || app.business_category || "",
+    description:         app.description || app.business_description || "",
+    whatsapp_number:     app.whatsapp_number || app.whatsapp || app.phone || "",
+    university:          app.university_name || app.university || "",
     university_abbr:     app.university_abbr,
     region:              app.region,
     seller_name:         app.full_name,
@@ -1815,21 +1815,21 @@ async function approveCampusApp(id) {
     subscription_expires: expires30.toISOString(),
     created_at:          now.toISOString()
   });
-  if (e2) { showToast("⚠️ Store haikuundwa vizuri: " + e2.message, "error"); }
+  if (e2) { showToast("⚠️ Store could not be created: " + e2.message, "error"); }
 
   // 3. Send approval email
   if (app.email) {
     await sendApprovalEmail({
       to:        app.email,
       ownerName: app.full_name,
-      storeName: app.shop_name || "Duka lako",
+      storeName: app.shop_name || "Your Shop",
       storeType: "CAMPUS",
       plan:      "🎓 Campus Premium",
       shopNum:   shopNumber,
       expires:   expires30.toLocaleDateString("sw", {day:"numeric", month:"long", year:"numeric"}),
       loginUrl:  window.location.origin + "/campus-dashboard.html",
       storeUrl:  window.location.origin + "/campus-university.html?uni=" + app.university_abbr,
-      payNote:   "Lipa TZS 15,000 kwa CRDB 0152774556100 au M-Pesa +255 651 919 915 ili kudumisha duka lako kila mwezi"
+      payNote:   "Pay TZS 15,000 via CRDB 0152774556100 or M-Pesa +255 651 919 915 to keep your shop active monthly"
     }).catch(() => {});
   }
 
@@ -1837,35 +1837,19 @@ async function approveCampusApp(id) {
   const phone = (app.whatsapp || app.phone || "").replace(/\D/g, "");
   if (phone) {
     const msg = encodeURIComponent(
-      `🎉 *Hongera ${app.full_name}!*
-
-` +
-      `Maombi yako ya Travex Uni-Student Market *yameidhinishwa!* 🎓
-
-` +
-      `*Duka lako:* ${app.shop_name}
-*Chuo:* ${app.university_abbr}
-*Shop No:* #${shopNumber}
-
-` +
-      `*Lipa Ada ya Activation:*
-` +
-      `💳 CRDB BANK: *0152774556100*
-📱 M-Pesa: *+255 651 919 915*
-💵 Kiasi: *TZS 15,000/mwezi*
-
-` +
-      `Tuma picha ya risiti hapa baada ya kulipa.
-` +
-      `Ingia dashibodi: ${window.location.origin}/campus-dashboard.html
-
-` +
-      `Karibu Travex Campus! 🎓`
+      `🎉 *Congratulations ${app.full_name}!*\n\n` +
+      `Your Travex Campus application has been *approved!* 🎓\n\n` +
+      `*Your Shop:* ${app.shop_name}\n*University:* ${app.university_abbr}\n*Shop No:* #${shopNumber}\n\n` +
+      `*Pay Activation Fee:*\n` +
+      `💳 CRDB BANK: *0152774556100*\n📱 M-Pesa: *+255 651 919 915*\n💵 Amount: *TZS 15,000/month*\n\n` +
+      `Send a photo of your receipt after payment.\n` +
+      `Login: ${window.location.origin}/campus-dashboard.html\n\n` +
+      `Welcome to Travex Campus! 🎓`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
   }
 
-  showToast(`✅ ${app.full_name} ameidhinishwa! Duka #${shopNumber} linaonekana sasa.${app.email ? " 📧 Email imetumwa." : ""}`, "success");
+  showToast(`✅ ${app.full_name} approved! Shop #${shopNumber} is now live.${app.email ? " 📧 Email sent." : ""}`, "success");
   await loadCampusData();
   renderAppsTable(allCampusApps);
   loadNotifications();
@@ -1874,10 +1858,10 @@ async function approveCampusApp(id) {
 async function rejectCampusApp(id) {
   const app = allCampusApps.find(a=>a.id===id);
   if (!app) return;
-  if (!confirm(`Kataa maombi ya ${app.full_name}?`)) return;
+  if (!confirm(`Reject application from ${app.full_name}?`)) return;
   const { error } = await sb.from("campus_applications").update({ status:"rejected" }).eq("id", id);
-  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
-  showToast("Maombi ya " + app.full_name + " yamekataliwa.");
+  if (error) { showToast("Failed: " + error.message, "error"); return; }
+  showToast("Application from " + app.full_name + " has been rejected.");
   await loadCampusData();
   renderAppsTable(allCampusApps);
 }
@@ -1902,7 +1886,7 @@ function renderCampusStoresTable(stores) {
       <td>${s.category||"—"}</td>
       <td><a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green)">${s.whatsapp_number||"—"}</a></td>
       <td><span class="badge badge-${s.is_active?"approved":"pending"}">${s.is_active?"Active":"Pending"}</span></td>
-      <td style="font-size:0.75rem">${new Date(s.created_at).toLocaleDateString("sw")}</td>
+      <td style="font-size:0.75rem">${new Date(s.created_at).toLocaleDateString("en-GB")}</td>
       <td>
         ${!s.is_active ? `<button onclick="activateCampusStore('${s.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Activate</button>` : ""}
         <button onclick="deactivateCampusStore('${s.id}','${s.is_active}')" style="background:${s.is_active?"var(--red)":"var(--gray)"};color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-left:0.2rem">${s.is_active?"Deactivate":"Remove"}</button>
@@ -1933,7 +1917,7 @@ async function activateCampusStore(id) {
     subscription_start: new Date().toISOString(),
     subscription_expires: new Date(Date.now() + 30*24*60*60*1000).toISOString()
   }).eq("id", id);
-  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
+  if (error) { showToast("Failed: " + error.message, "error"); return; }
   showToast("✅ Duka la " + store.store_name + " limewashwa! Shop #" + shopNumber);
   await loadCampusData();
   renderCampusStoresTable(allCampusStores);
@@ -1943,7 +1927,7 @@ async function deactivateCampusStore(id, isActive) {
   const store = allCampusStores.find(s=>s.id===id);
   if (!store || !confirm(`${isActive==="true"?"Deactivate":"Futa"} duka la "${store.store_name}"?`)) return;
   const { error } = await sb.from("campus_stores").update({ is_active: false, subscription_status:"pending" }).eq("id", id);
-  if (error) { showToast("Imeshindwa: " + error.message, "error"); return; }
+  if (error) { showToast("Failed: " + error.message, "error"); return; }
   showToast("Duka limezimwa.");
   await loadCampusData();
   renderCampusStoresTable(allCampusStores);
@@ -2038,7 +2022,7 @@ async function loadCampusRevenue(period, btn) {
       <td>${s.university_abbr||"—"}</td>
       <td>${s.store_name||"—"}</td>
       <td style="font-weight:700;color:var(--green)">TZS 15,000</td>
-      <td style="font-size:0.75rem">${s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("sw") : "—"}</td>
+      <td style="font-size:0.75rem">${s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("en-GB") : "—"}</td>
       <td><span class="badge badge-approved">Paid</span></td>
     </tr>`).join("") : "<tr><td colspan='6' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna malipo katika kipindi hiki</td></tr>";
 }
@@ -2164,8 +2148,8 @@ async function sendApprovalEmail(params) {
 
   const isCampus = storeType === "CAMPUS";
   const subject  = isCampus
-    ? `🎓 Hongera ${ownerName}! Duka lako la Campus limeidhinishwa — Travex Campus`
-    : `🎉 Hongera! Duka lako "${storeName}" limewashwa — Travex Mall`;
+    ? `🎓 Congratulations ${ownerName}! Your Campus Shop is Approved — Travex Campus`
+    : `🎉 Congratulations! Your shop "${storeName}" is now live — Travex Mall`;
 
   const htmlBody = `
 <!DOCTYPE html>
@@ -2188,8 +2172,8 @@ async function sendApprovalEmail(params) {
       <p style="font-size:1rem;font-weight:700;color:#0D1B3E;margin-bottom:0.5rem">Habari ${ownerName}! 👋</p>
       <p style="color:#6B7280;line-height:1.7;margin-bottom:1.5rem">
         ${isCampus
-          ? `Maombi yako ya kujiunga na <strong>Travex Uni-Student Market</strong> yameidhinishwa! Duka lako <strong>"${storeName}"</strong> limeundwa na linaonekana kwenye chuo chako.`
-          : `Hongana! Duka lako <strong>"${storeName}"</strong> limeidhinishwa na limewashwa kwenye <strong>Travex Mall</strong>. Unaweza kuanza kuuza sasa hivi!`
+          ? `Your application to join <strong>Travex Uni-Student Market</strong> has been approved! Your Shop <strong>"${storeName}"</strong> is now live kwenye chuo chako.`
+          : `Hongana! Your Shop <strong>"${storeName}"</strong> has been approved na limewashwa kwenye <strong>Travex Mall</strong>. Unaweza kuanza kuuza sasa hivi!`
         }
       </p>
 
@@ -2228,10 +2212,10 @@ async function sendApprovalEmail(params) {
           ${isCampus ? `
           ✅ Lipa TZS 15,000 kudumisha duka lako<br>
           📱 Tuma risiti WhatsApp: <strong>+255 651 919 915</strong><br>
-          🔑 Ingia dashibodi yako kuongeza bidhaa<br>
+          🔑 Login to your dashboard yako kuongeza bidhaa<br>
           📢 Tangaza duka lako kwa wanafunzi wenzako
           ` : `
-          ✅ Ingia dashibodi yako sasa<br>
+          ✅ Login to your dashboard yako sasa<br>
           📦 Ongeza bidhaa zako za kwanza<br>
           📢 Shiriki duka lako kwenye mitandao ya kijamii<br>
           💬 Wasiliana nasi kwa msaada: +255 651 919 915
