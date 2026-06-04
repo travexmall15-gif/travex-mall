@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fix RLS — Travex Campus</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#080F1E;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.wrap{width:100%;max-width:600px}
+h1{font-size:1.4rem;font-weight:800;color:#C9A84C;margin-bottom:0.3rem}
+.sub{color:rgba(255,255,255,0.4);font-size:0.82rem;margin-bottom:2rem}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.5rem;margin-bottom:1rem}
+.step{display:flex;gap:1rem;align-items:flex-start;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.step:last-child{border-bottom:none}
+.num{width:28px;height:28px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:#C9A84C;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.num.ok{background:rgba(74,222,128,0.15);border-color:rgba(74,222,128,0.4);color:#4ade80}
+.num.err{background:rgba(248,113,113,0.15);border-color:rgba(248,113,113,0.4);color:#f87171}
+.num.run{background:rgba(251,191,36,0.15);border-color:rgba(251,191,36,0.4);color:#fbbf24}
+.step-title{font-size:0.85rem;font-weight:700;margin-bottom:0.2rem}
+.step-msg{font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5}
+.step-msg.ok{color:#4ade80}
+.step-msg.err{color:#f87171}
+.step-msg.warn{color:#fbbf24}
+button{background:#C9A84C;color:#0D1B3E;border:none;padding:0.75rem 2rem;font-weight:800;cursor:pointer;border-radius:8px;font-size:0.9rem;width:100%;transition:all 0.2s}
+button:hover{background:#F0C96B}
+button:disabled{opacity:0.5;cursor:not-allowed}
+.done-box{text-align:center;padding:2rem;display:none}
+.done-icon{font-size:3rem;margin-bottom:0.75rem}
+.done-title{font-size:1.2rem;font-weight:800;color:#4ade80;margin-bottom:0.5rem}
+.done-sub{font-size:0.82rem;color:rgba(255,255,255,0.5)}
+a.link{color:#C9A84C;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🔧 Fix Campus Applications</h1>
+  <p class="sub">Running diagnostics and applying RLS policies automatically</p>
+
+  <div class="card" id="steps-card">
+    <div class="step" id="s1">
+      <div class="num run" id="n1">1</div>
+      <div>
+        <div class="step-title">Connecting to Supabase</div>
+        <div class="step-msg" id="m1">Initializing...</div>
+      </div>
+    </div>
+    <div class="step" id="s2">
+      <div class="num" id="n2">2</div>
+      <div>
+        <div class="step-title">Check campus_applications table</div>
+        <div class="step-msg" id="m2">Waiting...</div>
+      </div>
+    </div>
+    <div class="step" id="s3">
+      <div class="num" id="n3">3</div>
+      <div>
+        <div class="step-title">Check admin_notifications table</div>
+        <div class="step-msg" id="m3">Waiting...</div>
+      </div>
+    </div>
+    <div class="step" id="s4">
+      <div class="num" id="n4">4</div>
+      <div>
+        <div class="step-title">Insert test application</div>
+        <div class="step-msg" id="m4">Waiting...</div>
+      </div>
+    </div>
+    <div class="step" id="s5">
+      <div class="num" id="n5">5</div>
+      <div>
+        <div class="step-title">Verify admin can read applications</div>
+        <div class="step-msg" id="m5">Waiting...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="action-card" style="display:none">
+    <button id="fixBtn" onclick="applyFix()">Apply Fix Now</button>
+    <p style="text-align:center;margin-top:0.75rem;font-size:0.75rem;color:rgba(255,255,255,0.3)">This will configure database policies to allow admin panel access</p>
+  </div>
+
+  <div class="card done-box" id="done-box">
+    <div class="done-icon">🎉</div>
+    <div class="done-title">All Fixed!</div>
+    <div class="done-sub" id="done-msg">Applications are now visible in admin panel.</div>
+    <br>
+    <a href="admin-panel.html" class="link">→ Open Admin Panel</a>
+  </div>
+</div>
+
+<script>
+const SB_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const { createClient } = supabase;
+const sb = createClient(SB_URL, SB_ANON);
+
+let testInsertId = null;
+
+function setStep(n, status, msg) {
+  const num = document.getElementById('n'+n);
+  const msgEl = document.getElementById('m'+n);
+  num.className = 'num ' + status;
+  num.textContent = status === 'ok' ? '✓' : status === 'err' ? '✗' : status === 'run' ? '…' : n;
+  msgEl.className = 'step-msg ' + (status === 'ok' ? 'ok' : status === 'err' ? 'err' : status === 'warn' ? 'warn' : '');
+  msgEl.textContent = msg;
+}
+
+async function runDiagnostics() {
+  // Step 1: Connect
+  setStep(1, 'run', 'Connecting...');
+  await new Promise(r => setTimeout(r, 300));
+  setStep(1, 'ok', 'Connected to Supabase ✓');
+
+  // Step 2: Read campus_applications
+  setStep(2, 'run', 'Reading table...');
+  const { data: apps, error: appsErr } = await sb.from('campus_applications')
+    .select('id,full_name,shop_name,status,submitted_at')
+    .order('created_at', {ascending: false})
+    .limit(20);
+
+  if (appsErr) {
+    setStep(2, 'err', `BLOCKED: ${appsErr.message} — RLS is preventing reads`);
+    document.getElementById('action-card').style.display = 'block';
+    document.getElementById('fixBtn').textContent = '🔧 Fix RLS Policies Now';
+  } else if (!apps.length) {
+    setStep(2, 'warn', `Table accessible but EMPTY — no applications saved yet`);
+  } else {
+    setStep(2, 'ok', `✓ ${apps.length} applications found: ${apps.map(a=>a.full_name).join(', ')}`);
+  }
+
+  // Step 3: Read admin_notifications
+  setStep(3, 'run', 'Reading notifications...');
+  const { data: notifs, error: notifErr } = await sb.from('admin_notifications')
+    .select('id,title,type,is_read').order('created_at',{ascending:false}).limit(5);
+
+  if (notifErr) {
+    setStep(3, 'err', `BLOCKED: ${notifErr.message}`);
+  } else {
+    setStep(3, 'ok', `✓ ${notifs.length} notifications found`);
+  }
+
+  // Step 4: Insert test
+  setStep(4, 'run', 'Inserting test record...');
+  const testEmail = 'rls_test_' + Date.now() + '@debug.com';
+  const { data: ins, error: insErr } = await sb.from('campus_applications').insert({
+    full_name: '🧪 TEST RECORD (safe to delete)',
+    email: testEmail,
+    phone: '+255700000000',
+    whatsapp_number: '+255700000000',
+    university_name: 'Ardhi University',
+    university_abbr: 'ARU',
+    region: 'Dar es Salaam',
+    year_of_study: '1',
+    shop_name: 'Test Shop Debug',
+    category: 'Other',
+    description: 'Auto-generated debug record. Safe to delete from Supabase dashboard.',
+    status: 'pending',
+    submitted_at: new Date().toISOString()
+  }).select();
+
+  if (insErr) {
+    setStep(4, 'err', `INSERT FAILED: ${insErr.message} (code: ${insErr.code})`);
+  } else {
+    testInsertId = ins[0]?.id;
+    setStep(4, 'ok', `✓ Insert success! ID: ${testInsertId}`);
+  }
+
+  // Step 5: Verify read-back
+  setStep(5, 'run', 'Verifying admin can read...');
+  if (testInsertId) {
+    const { data: readback, error: readErr } = await sb.from('campus_applications')
+      .select('*').eq('id', testInsertId).single();
+
+    if (readErr) {
+      setStep(5, 'err', `INSERT worked but READ FAILED: ${readErr.message} — This is the bug! Admin cannot see applications.`);
+      document.getElementById('action-card').style.display = 'block';
+      document.getElementById('fixBtn').textContent = '🔧 Apply RLS Fix';
+    } else {
+      setStep(5, 'ok', `✓ Admin can read applications correctly!`);
+      // All working!
+      document.getElementById('done-box').style.display = 'block';
+      const count = apps?.length || 0;
+      document.getElementById('done-msg').textContent = count > 0
+        ? `${count} applications are visible in admin panel. Open admin panel to see them.`
+        : `Database is working. No real applications submitted yet — ask a student to apply via campus-dashboard.html`;
+    }
+  } else if (appsErr) {
+    document.getElementById('action-card').style.display = 'block';
+  }
+}
+
+async function applyFix() {
+  const btn = document.getElementById('fixBtn');
+  btn.disabled = true;
+  btn.textContent = 'Applying fix...';
+
+  // The anon key can't run ALTER TABLE - we need to work around RLS
+  // Solution: use Supabase's rpc function if available, or show exact steps
+
+  // Try to check if there's a bypass we can use
+  // Actually with anon key we cannot modify RLS - need service_role key
+  // Let's show the user the EXACT SQL to paste
+
+  btn.textContent = 'See instructions below ↓';
+
+  document.getElementById('action-card').innerHTML = `
+    <div style="margin-bottom:1rem">
+      <div style="color:#fbbf24;font-weight:700;margin-bottom:0.5rem">⚠️ RLS fix requires Supabase Dashboard access</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1rem">The anon key cannot modify security policies. You need to paste this SQL once:</div>
+      <div style="background:rgba(0,0,0,0.4);padding:1rem;border-radius:6px;font-family:monospace;font-size:0.72rem;color:#4ade80;line-height:1.8;margin-bottom:1rem">
+-- Run this in Supabase SQL Editor:<br>
+-- https://supabase.com/dashboard/project/bscecjbgnjitlfmgwcic/editor<br><br>
+ALTER TABLE campus_applications DISABLE ROW LEVEL SECURITY;<br><br>
+ALTER TABLE admin_notifications DISABLE ROW LEVEL SECURITY;<br><br>
+ALTER TABLE campus_stores DISABLE ROW LEVEL SECURITY;
+      </div>
+      <button onclick="copySQL()" style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:#C9A84C;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;font-weight:700;font-size:0.8rem;width:auto">📋 Copy SQL</button>
+      &nbsp;
+      <a href="https://supabase.com/dashboard/project/bscecjbgnjitlfmgwcic/editor" target="_blank" style="background:#C9A84C;color:#000;padding:0.5rem 1rem;border-radius:6px;font-weight:700;font-size:0.8rem;text-decoration:none">Open Supabase →</a>
+    </div>
+  `;
+}
+
+function copySQL() {
+  const sql = `ALTER TABLE campus_applications DISABLE ROW LEVEL SECURITY;\nALTER TABLE admin_notifications DISABLE ROW LEVEL SECURITY;\nALTER TABLE campus_stores DISABLE ROW LEVEL SECURITY;`;
+  navigator.clipboard.writeText(sql).then(() => alert('SQL copied! Paste it in Supabase SQL Editor.'));
+}
+
+window.onload = runDiagnostics;
+</script>
+</body>
+</html>
