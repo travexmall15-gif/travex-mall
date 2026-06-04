@@ -311,7 +311,7 @@ select,textarea,
 
         <!-- Reset Password (hidden) -->
         <div id="resetFormWrap" style="display:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:none;padding:2rem">
-          <div style="font-size:0.875rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Badilisha Nenosiri</div>
+          <div style="font-size:0.875rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Reset Password</div>
           <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:1.2rem;line-height:1.6">Enter your email — we'll send you a password reset link.</div>
           <div id="resetMsg" style="margin-bottom:1rem"></div>
           <input type="email" id="resetEmail" placeholder="email@example.com"
@@ -411,7 +411,7 @@ select,textarea,
               </div>
             </div>
             <div style="display:flex;gap:0.75rem">
-              <button onclick="regNextStep(1)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
+              <button onclick="regNextStep(1)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
               <button onclick="regNextStep(3)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Business</button>
             </div>
           </div>
@@ -420,11 +420,11 @@ select,textarea,
           <div id="reg-step3" class="reg-step" style="display:none">
             <div id="reg-err3" style="margin-bottom:1rem"></div>
             <div style="margin-bottom:0.75rem">
-              <label class="reg-label">Jina la Duka *</label>
+              <label class="reg-label">Shop Name *</label>
               <input type="text" id="reg-shopname" placeholder="Mfano: Amina Fashion UDSM" class="reg-input">
             </div>
             <div style="margin-bottom:0.75rem">
-              <label class="reg-label">Kategoria *</label>
+              <label class="reg-label">Category *</label>
               <select id="reg-category" class="reg-input" style="cursor:pointer">
                 <option value="">Select what you sell</option>
                 <option>Fashion & Clothing</option>
@@ -438,15 +438,15 @@ select,textarea,
               </select>
             </div>
             <div style="margin-bottom:0.75rem">
-              <label class="reg-label">WhatsApp ya Biashara *</label>
+              <label class="reg-label">Business WhatsApp *</label>
               <input type="tel" id="reg-whatsapp" placeholder="+255 712 000 000" class="reg-input">
             </div>
             <div style="margin-bottom:1.2rem">
-              <label class="reg-label">Maelezo ya Biashara * <span style="color:rgba(255,255,255,0.3);font-weight:400">(angalau herufi 50)</span></label>
+              <label class="reg-label">Business Description * <span style="color:rgba(255,255,255,0.3);font-weight:400">(at least 50 characters)</span></label>
               <textarea id="reg-desc" placeholder="Describe what you sell, your pricing, and why students should buy from you..." class="reg-input" style="min-height:80px;resize:vertical"></textarea>
             </div>
             <div style="display:flex;gap:0.75rem">
-              <button onclick="regNextStep(2)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
+              <button onclick="regNextStep(2)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
               <button onclick="regNextStep(4)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Review</button>
             </div>
           </div>
@@ -456,7 +456,7 @@ select,textarea,
             <div id="reg-err4" style="margin-bottom:1rem"></div>
             <div id="reg-review-body" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:1rem;margin-bottom:1rem;font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:2.2"></div>
             <div style="display:flex;gap:0.75rem">
-              <button onclick="regNextStep(3)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
+              <button onclick="regNextStep(3)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
               <button onclick="regGoToSubscription()" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Subscription →</button>
             </div>
           </div>
@@ -469,11 +469,11 @@ select,textarea,
                 <div>
                   <div style="font-size:0.65rem;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.12em">Travex Campus Plan</div>
                   <div style="font-size:1.3rem;font-weight:900;color:#fff">TZS 15,000</div>
-                  <div style="font-size:0.72rem;color:rgba(255,255,255,0.4)">kwa mwezi · Ghairi wakati wowote</div>
+                  <div style="font-size:0.72rem;color:rgba(255,255,255,0.4)">per month · Cancel anytime</div>
                 </div>
                 <div style="background:#C9A84C;color:#0D1B3E;padding:0.3rem 0.7rem;font-size:0.65rem;font-weight:800;text-transform:uppercase">PREMIUM</div>
               </div>
-              <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem">Huduma Unazopata — Sawa na PREMIUM:</div>
+              <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem">What You Get — Equivalent to PREMIUM:</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.7)">
                 <div>✅ Store yako kwenye app</div>
                 <div>✅ AI Business Assistant</div>
@@ -493,19 +493,19 @@ select,textarea,
               ℹ️ Only <strong style="color:#C9A84C">60 slots per university</strong>. After admin approval, you will be asked to pay the activation fee.
             </div>
             <div style="display:flex;gap:0.75rem">
-              <button onclick="regNextStep(4)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
-              <button onclick="submitRegApplication()" id="reg-submit-btn" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Tuma Maombi →</button>
+              <button onclick="regNextStep(4)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
+              <button onclick="submitRegApplication()" id="reg-submit-btn" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Submit Application →</button>
             </div>
           </div>
 
           <!-- ── REG SUCCESS ── -->
           <div id="reg-success" style="display:none;text-align:center;padding:1rem 0">
             <div style="font-size:3rem;margin-bottom:0.75rem">🎉</div>
-            <div style="font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:0.4rem">Maombi Yamepokelewa!</div>
-            <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:1.5rem">Tutakutumia email ndani ya <strong style="color:#C9A84C">dakika 60</strong> baada ya kupitia maombi yako. Angalia email yako!</div>
-            <a href="https://wa.me/255651919915?text=Nimetuma+maombi+ya+Travex+Campus!" target="_blank"
+            <div style="font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:0.4rem">Application Received!</div>
+            <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:1.5rem">We will email you within <strong style="color:#C9A84C">60 minutes</strong> after reviewing your application. Check your inbox!</div>
+            <a href="https://wa.me/255651919915?text=I+submitted+my+Travex+Campus+application!" target="_blank"
               style="display:block;padding:0.85rem;background:#25D366;color:#fff;font-family:'Inter',sans-serif;font-weight:700;text-decoration:none;margin-bottom:0.75rem">
-              💬 Wasiliana Nasi WhatsApp
+              💬 Contact Us on WhatsApp
             </a>
             <button onclick="switchCampusTab('login')" style="width:100%;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
               ← Login after approval
@@ -1057,7 +1057,7 @@ function regNextStep(target) {
 
 async function submitRegApplication() {
   const btn = document.getElementById("reg-submit-btn");
-  btn.textContent = "Inatuma...";
+  btn.textContent = "Submitting...";
   btn.disabled = true;
   regShowErr(4, "");
 
@@ -1086,20 +1086,21 @@ async function submitRegApplication() {
 
     // Insert application
     const { error: appErr } = await sb.from("campus_applications").insert({
-      full_name:            document.getElementById("reg-name").value.trim(),
-      email:                email,
-      phone:                document.getElementById("reg-phone").value.trim(),
-      whatsapp:             document.getElementById("reg-whatsapp").value.trim(),
-      university:           regUni.name,
-      university_abbr:      regUni.abbr,
-      region:               regUni.region,
-      year_of_study:        document.getElementById("reg-year").value,
-      shop_name:            document.getElementById("reg-shopname").value.trim(),
-      business_category:    document.getElementById("reg-category").value,
-      business_description: document.getElementById("reg-desc").value.trim(),
-      id_card_url:          idCardUrl,
-      user_id:              authData?.user?.id || null,
-      status:               "pending"
+      full_name:        document.getElementById("reg-name").value.trim(),
+      email:            email,
+      phone:            document.getElementById("reg-phone").value.trim(),
+      whatsapp_number:  document.getElementById("reg-whatsapp").value.trim(),
+      university_name:  regUni.name,
+      university_abbr:  regUni.abbr,
+      region:           regUni.region,
+      year_of_study:    document.getElementById("reg-year").value,
+      shop_name:        document.getElementById("reg-shopname").value.trim(),
+      category:         document.getElementById("reg-category").value,
+      description:      document.getElementById("reg-desc").value.trim(),
+      id_card_url:      idCardUrl,
+      user_id:          authData?.user?.id || null,
+      status:           "pending",
+      submitted_at:     new Date().toISOString()
     });
     if (appErr) throw appErr;
 
@@ -1122,8 +1123,8 @@ async function submitRegApplication() {
     document.getElementById("reg-success").style.display = "block";
 
   } catch (err) {
-    regShowErr(4, "Imeshindwa: " + (err.message || "Jaribu tena"));
-    btn.textContent = "Tuma Maombi →";
+    regShowErr(4, "Error: " + (err.message || "Please try again"));
+    btn.textContent = "Submit Application →";
     btn.disabled = false;
   }
 }
@@ -1138,8 +1139,8 @@ function regGoToSubscription() {
     if (c) { c.className = i < 5 ? "rp-step done" : "rp-step active"; }
     if (l) { l.className = i < 4 ? "rp-line done" : "rp-line"; }
   }
-  document.getElementById("rsl-title").textContent = "Subscription Yako";
-  document.getElementById("rsl-sub").textContent = "Hatua 5 ya 5 — Malipo";
+  document.getElementById("rsl-title").textContent = "Your Subscription";
+  document.getElementById("rsl-sub").textContent = "Step 5 of 5 — Payment";
   document.getElementById("campusLoginOverlay").scrollTop = 0;
 }
 </script>
