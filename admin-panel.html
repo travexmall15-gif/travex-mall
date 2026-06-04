@@ -731,7 +731,7 @@ async function approveApp(id) {
 
   // 1. Update status
   const {error:e1} = await sb.from('campus_applications')
-    .update({status:'approved', approved_at: new Date().toISOString()}).eq('id',id);
+    .update({status:'approved'}).eq('id',id);
   if (e1) { toast('Error: ' + e1.message, 'error'); return; }
 
   // 2. Create campus store — only use columns that exist in campus_stores table
