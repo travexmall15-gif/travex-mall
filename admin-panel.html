@@ -423,7 +423,7 @@ function renderAppsTable(){
       <td><b>${e(a.full_name||'—')}</b><div style="font-size:.68rem;color:var(--gray)">Year ${e(a.year_of_study||'—')}</div></td>
       <td><span class="uni-tag">${e(a.university_abbr||'—')}</span></td>
       <td><b style="font-size:.8rem">${e(a.shop_name||'—')}</b></td>
-      <td style="font-size:.76rem">${e(a.category||'—')}</td>
+      <td style="font-size:.76rem">${e(cat)}</td>
       <td>${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:.78rem;text-decoration:none">${e(wa)}</a>`:'—'}</td>
       <td>${a.id_card_url?`<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="width:44px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--lgray)" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:var(--purple);font-size:.72rem;font-weight:600&quot;>View →</a>'"></a>`:'<span style="color:var(--gray);font-size:.72rem">—</span>'}</td>
       <td><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></td>
@@ -555,11 +555,11 @@ async function approveApp(id){
 
   // Step 2: Create store with ONLY columns that exist in campus_stores
   const storeData = {
-    store_name:      app.shop_name,
+    store_name:      app.shop_name || (app.full_name + "'s Shop"),
     university_abbr: app.university_abbr,
-    category:        app.category,
-    description:     app.description||'',
-    whatsapp_number: app.whatsapp_number||app.phone||'',
+    category:        app.business_category || app.category || 'General',
+    description:     app.business_description || app.description || '',
+    whatsapp_number: app.whatsapp_number || app.whatsapp || app.phone || '',
     seller_name:     app.full_name,
     is_active:       true
   };
@@ -620,13 +620,13 @@ function viewApp(id){
     <div class="m-row"><span class="m-l">WhatsApp</span><span class="m-v">${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:700">${e(wa)} 💬</a>`:'—'}</span></div>
     <div class="m-row"><span class="m-l">Year</span><span class="m-v">Year ${e(a.year_of_study||'—')}</span></div>
     <div class="m-sec">University</div>
-    <div class="m-row"><span class="m-l">University</span><span class="m-v">${e(a.university_name||'—')}</span></div>
+    <div class="m-row"><span class="m-l">University</span><span class="m-v">${e(a.university_name||a.university||'—')}</span></div>
     <div class="m-row"><span class="m-l">Abbreviation</span><span class="m-v"><span class="uni-tag">${e(a.university_abbr||'—')}</span></span></div>
     <div class="m-row"><span class="m-l">Region</span><span class="m-v">${e(a.region||'—')}</span></div>
     <div class="m-sec">Shop</div>
     <div class="m-row"><span class="m-l">Shop Name</span><span class="m-v">${e(a.shop_name||'—')}</span></div>
-    <div class="m-row"><span class="m-l">Category</span><span class="m-v">${e(a.category||'—')}</span></div>
-    <div class="m-row"><span class="m-l">Description</span><span class="m-v" style="max-width:260px;line-height:1.5">${e(a.description||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Category</span><span class="m-v">${e(a.business_category||a.category||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Description</span><span class="m-v" style="max-width:260px;line-height:1.5">${e(a.business_description||a.description||'—')}</span></div>
     <div class="m-sec">ID Card</div>
     ${a.id_card_url
       ?`<div style="margin:.5rem 0"><img src="${a.id_card_url}" style="max-width:100%;max-height:170px;border-radius:6px;border:1px solid var(--lgray);display:block" onerror="this.style.display='none'">
