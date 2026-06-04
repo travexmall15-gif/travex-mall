@@ -1594,18 +1594,25 @@ let allCampusApps   = [];
 let allCampusStores = [];
 
 async function loadCampusData() {
-  const [{ data: apps }, { data: stores }, { data: subs }] = await Promise.all([
+  const [{ data: apps, error: appsErr }, { data: stores, error: storesErr }] = await Promise.all([
     sb.from("campus_applications").select("*").order("created_at",{ascending:false}),
-    sb.from("campus_stores").select("*").order("created_at", { ascending: false }),
-    sb.from("campus_subscriptions").select("*").order("created_at", { ascending: false })
+    sb.from("campus_stores").select("*").order("created_at", { ascending: false })
   ]);
+
+  if (appsErr)   console.error("campus_applications error:", appsErr.message);
+  if (storesErr) console.error("campus_stores error:", storesErr.message);
+
   allCampusApps   = apps   || [];
   allCampusStores = stores || [];
-  allCampusSubs   = subs   || [];
+  allCampusSubs   = [];
 
   // Update pending badge
   const pending = allCampusApps.filter(a => a.status === "pending");
-  setText("campusPendingCount", pending.length || "");
+  const badge = document.getElementById("campusPendingCount");
+  if (badge) {
+    badge.textContent = pending.length || "";
+    badge.style.display = pending.length > 0 ? "inline-block" : "none";
+  }
 }
 
 let allCampusSubs = [];
@@ -1616,7 +1623,7 @@ async function loadCampusOverview() {
   setText("c-stat-apps",    allCampusApps.length);
   setText("c-stat-pending", allCampusApps.filter(a=>a.status==="pending").length);
   setText("c-stat-stores",  allCampusStores.filter(s=>s.is_active).length);
-  const rev = allCampusSubs.filter(s=>s.status==="paid").reduce((sum,s)=>sum+Number(s.amount||15000),0);
+  const rev = 0; // campus_subscriptions table not yet created
   setText("c-stat-revenue", "TZS " + rev.toLocaleString());
 
   // Recent apps table
