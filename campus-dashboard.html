@@ -1369,9 +1369,8 @@ async function submitRegApplication() {
       university_abbr:      regUni.abbr,
       region:               regUni.region,
       year_of_study:        document.getElementById("reg-year").value,
-      shop_name:            document.getElementById("reg-shopname").value.trim(),
       business_category:    document.getElementById("reg-category").value,
-      business_description: document.getElementById("reg-desc").value.trim(),
+      business_description: "SHOP:" + document.getElementById("reg-shopname").value.trim() + "\n" + document.getElementById("reg-desc").value.trim(),
       id_card_url:          idCardUrl,
       user_id:              authData?.user?.id || null,
       status:               "pending"
@@ -1384,7 +1383,7 @@ async function submitRegApplication() {
     // Notify admin immediately via admin_notifications
     await sb.from("admin_notifications").insert({
       type: "campus_application",
-      title: `🎓 Campus Application — ${document.getElementById("reg-name").value.trim()}`,
+      title: `🎓 New Shop Application — ${document.getElementById("reg-shopname").value.trim()} (${document.getElementById("reg-name").value.trim()})`,
       body:  `University: ${regUni.abbr} | Shop: ${document.getElementById("reg-shopname").value.trim()} | Category: ${document.getElementById("reg-category").value} | WhatsApp: ${document.getElementById("reg-whatsapp").value.trim()}`,
       is_read: false,
       created_at: new Date().toISOString()
