@@ -2,405 +2,300 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Travex Campus — Admin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Travex Campus Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --navy:#0D1B3E;--navy2:#0A1628;--gold:#C9A84C;--gold2:#F0C96B;
-  --green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#D97706;
-  --white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;
-  --dark:#111827;--sidebar:240px;--topbar:60px;
-}
-body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:var(--dark);height:100vh;overflow:hidden}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0D1B3E;--navy2:#080F1E;--gold:#C9A84C;--gold2:#F0C96B;--green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#D97706;--lgray:#E5E7EB;--gray:#6B7280;--offwhite:#F8F9FC}
+body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:#111;height:100vh;overflow:hidden}
 
-/* ── LOGIN ── */
-#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy2) 0%,#0D1B3E 60%,#1a2f5e 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2.5rem;width:100%;max-width:380px;border-radius:12px;backdrop-filter:blur(10px)}
-.login-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.3rem}
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy2),var(--navy));display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:2.5rem;width:360px;border-radius:12px}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.2rem}
 .login-logo span{color:var(--gold)}
-.login-sub{font-size:0.75rem;color:rgba(255,255,255,0.3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem}
-.login-label{font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;display:block}
-.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;border-radius:8px;transition:border-color 0.2s;margin-bottom:1.25rem}
+.login-sub{font-size:0.72rem;color:rgba(255,255,255,0.3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem}
+.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;border-radius:8px;margin-bottom:1rem}
 .login-input:focus{border-color:var(--gold)}
-.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:800;border:none;cursor:pointer;border-radius:8px;transition:all 0.2s;letter-spacing:0.02em}
-.login-btn:hover{background:var(--gold2);transform:translateY(-1px)}
-.login-err{color:#f87171;font-size:0.8rem;margin-top:0.75rem;display:none;text-align:center}
+.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);font-family:'DM Sans',sans-serif;font-weight:800;font-size:0.9rem;border:none;cursor:pointer;border-radius:8px}
+.login-err{color:#f87171;font-size:0.8rem;margin-top:0.5rem;display:none;text-align:center}
 
-/* ── LAYOUT ── */
-#adminMain{display:none;height:100vh;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr}
+/* LAYOUT */
+#main{display:none;height:100vh;grid-template-columns:240px 1fr;grid-template-rows:60px 1fr}
 
-/* ── SIDEBAR ── */
-.sidebar{grid-row:1/3;background:var(--navy);display:flex;flex-direction:column;height:100vh;position:sticky;top:0}
-.sb-logo{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
-.sb-logo-text{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff}
-.sb-logo-text span{color:var(--gold)}
-.sb-badge{display:inline-block;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;font-size:0.6rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:20px;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.3rem}
-.sb-nav{flex:1;padding:0.75rem 0;overflow-y:auto}
-.sb-section{font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;padding:0.75rem 1.5rem 0.3rem}
-.sb-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 1.5rem;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;user-select:none}
-.sb-item:hover{color:#fff;background:rgba(255,255,255,0.04)}
+/* SIDEBAR */
+.sidebar{grid-row:1/3;background:var(--navy);display:flex;flex-direction:column;height:100vh}
+.sb-top{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sb-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff}
+.sb-brand span{color:var(--gold)}
+.sb-tag{display:inline-block;margin-top:0.3rem;font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em}
+.sb-nav{flex:1;padding:0.5rem 0;overflow-y:auto}
+.sb-sec{font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;padding:0.75rem 1.5rem 0.25rem}
+.sb-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 1.5rem;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.45);cursor:pointer;border-left:3px solid transparent;transition:all 0.15s;user-select:none}
+.sb-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
 .sb-item.active{color:#fff;background:rgba(255,255,255,0.08);border-left-color:var(--gold);font-weight:600}
-.sb-item .icon{font-size:0.95rem;width:18px;text-align:center;flex-shrink:0}
-.sb-badge-count{margin-left:auto;background:var(--purple);color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:20px;min-width:18px;text-align:center}
-.sb-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07)}
-.sb-links{display:flex;flex-direction:column;gap:0.4rem}
-.sb-ext{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.35);font-size:0.75rem;font-weight:500;text-decoration:none;border-radius:6px;transition:all 0.15s}
-.sb-ext:hover{background:rgba(255,255,255,0.06);color:#fff}
+.sb-count{margin-left:auto;background:var(--purple);color:#fff;font-size:0.6rem;font-weight:800;padding:0.1rem 0.45rem;border-radius:20px;min-width:18px;text-align:center;display:none}
+.sb-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;gap:0.35rem}
+.sb-link{display:flex;align-items:center;gap:0.5rem;color:rgba(255,255,255,0.25);font-size:0.75rem;text-decoration:none;padding:0.3rem 0;transition:color 0.15s}
+.sb-link:hover{color:var(--gold)}
 
-/* ── TOPBAR ── */
-.topbar{background:#fff;border-bottom:1px solid var(--lgray);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--navy)}
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:1px solid var(--lgray);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--navy)}
 .topbar-right{display:flex;align-items:center;gap:0.75rem}
-.topbar-stat{text-align:center;padding:0 0.75rem;border-right:1px solid var(--lgray)}
-.topbar-stat:last-of-type{border-right:none}
-.ts-val{font-size:1rem;font-weight:800;color:var(--navy);line-height:1}
-.ts-lbl{font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:1px}
-.notif-btn{position:relative;background:rgba(13,27,62,0.06);border:1px solid var(--lgray);color:var(--navy);padding:0.4rem 0.75rem;cursor:pointer;border-radius:6px;font-size:1rem;transition:all 0.2s}
-.notif-btn:hover{background:rgba(13,27,62,0.1)}
-.notif-dot{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:0.55rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center}
-.refresh-btn{background:var(--navy);color:#fff;border:none;padding:0.4rem 0.9rem;font-size:0.78rem;font-weight:700;cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;transition:all 0.2s}
-.refresh-btn:hover{background:#1a2f5e}
-
-/* ── NOTIFICATIONS DROPDOWN ── */
+.ts{text-align:center;padding:0 0.75rem;border-right:1px solid var(--lgray)}
+.ts:last-of-type{border:none}
+.ts-v{font-size:1rem;font-weight:800;color:var(--navy)}
+.ts-l{font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
 .notif-wrap{position:relative}
-.notif-panel{display:none;position:absolute;right:0;top:calc(100% + 8px);width:360px;background:#fff;border:1px solid var(--lgray);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.12);z-index:999;max-height:420px;overflow-y:auto}
+.notif-btn{background:var(--offwhite);border:1.5px solid var(--lgray);color:var(--navy);padding:0.4rem 0.8rem;cursor:pointer;border-radius:7px;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.8rem}
+.notif-badge{background:var(--red);color:#fff;font-size:0.58rem;font-weight:800;padding:0.1rem 0.4rem;border-radius:20px;display:none}
+.notif-panel{display:none;position:absolute;right:0;top:calc(100%+8px);width:340px;background:#fff;border:1px solid var(--lgray);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.1);z-index:500;max-height:400px;overflow-y:auto}
 .notif-panel.open{display:block}
-.notif-head{padding:0.85rem 1rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
-.notif-head strong{font-size:0.85rem;color:var(--navy)}
-.notif-mark{font-size:0.72rem;color:var(--purple);cursor:pointer;font-weight:600;background:none;border:none;font-family:'DM Sans',sans-serif}
-.notif-item{padding:0.85rem 1rem;border-bottom:1px solid var(--lgray);cursor:pointer;transition:background 0.15s}
-.notif-item:hover{background:var(--offwhite)}
-.notif-item.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
-.notif-item.unread:hover{background:#FEF3C7}
-.ni-title{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem;display:flex;align-items:center;gap:0.4rem}
-.ni-body{font-size:0.74rem;color:var(--gray);line-height:1.5;margin-bottom:0.3rem}
-.ni-time{font-size:0.67rem;color:var(--gray)}
-.ni-cta{display:inline-block;margin-top:0.3rem;font-size:0.72rem;font-weight:700;color:var(--purple);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0}
-.notif-empty{padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem}
+.notif-panel-head{padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
+.notif-panel-head strong{font-size:0.82rem;color:var(--navy)}
+.mark-all-btn{font-size:0.72rem;color:var(--purple);background:none;border:none;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif}
+.nitem{padding:0.8rem 1rem;border-bottom:1px solid var(--lgray);cursor:pointer}
+.nitem.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
+.nitem-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.15rem}
+.nitem-body{font-size:0.72rem;color:var(--gray);line-height:1.5;margin-bottom:0.2rem}
+.nitem-time{font-size:0.65rem;color:var(--gray)}
+.notif-empty{padding:1.5rem;text-align:center;color:var(--gray);font-size:0.8rem}
+.refresh-btn{background:var(--navy);color:#fff;border:none;padding:0.4rem 0.9rem;font-size:0.78rem;font-weight:700;cursor:pointer;border-radius:7px;font-family:'DM Sans',sans-serif}
 
-/* ── CONTENT ── */
-.content{overflow-y:auto;padding:1.75rem}
+/* CONTENT */
+.content{overflow-y:auto;padding:1.5rem}
 .page{display:none}
 .page.active{display:block}
-.page-header{margin-bottom:1.5rem}
-.page-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem}
-.page-sub{font-size:0.8rem;color:var(--gray)}
+.page-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
+.page-sub{font-size:0.78rem;color:var(--gray);margin-bottom:1.5rem}
 
-/* ── STAT CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
-.stat-card{background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--lgray)}
-.stat-card.purple{border-top-color:var(--purple)}
-.stat-card.orange{border-top-color:var(--orange)}
-.stat-card.green{border-top-color:var(--green)}
-.stat-card.gold{border-top-color:var(--gold)}
-.stat-card.red{border-top-color:var(--red)}
-.sc-label{font-size:0.72rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem}
-.sc-val{font-size:1.75rem;font-weight:800;color:var(--navy);line-height:1}
-.sc-sub{font-size:0.72rem;color:var(--gray);margin-top:0.3rem}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.sc{background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--lgray)}
+.sc.c1{border-top-color:var(--purple)}.sc.c2{border-top-color:var(--orange)}.sc.c3{border-top-color:var(--green)}.sc.c4{border-top-color:var(--gold)}
+.sc-l{font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem}
+.sc-v{font-size:1.8rem;font-weight:800;color:var(--navy);line-height:1}
+.sc-s{font-size:0.7rem;color:var(--gray);margin-top:0.25rem}
 
-/* ── TABLES ── */
+/* CARDS & TABLES */
 .card{background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden;margin-bottom:1.5rem}
-.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:0.88rem;font-weight:700;color:var(--navy)}
-.card-actions{display:flex;gap:0.5rem;align-items:center}
-.filter-tabs{display:flex;gap:0.25rem}
-.ftab{padding:0.3rem 0.75rem;font-size:0.75rem;font-weight:600;border:1px solid var(--lgray);background:#fff;color:var(--gray);cursor:pointer;border-radius:20px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
-.ftab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.search-input{padding:0.35rem 0.75rem;border:1.5px solid var(--lgray);font-family:'DM Sans',sans-serif;font-size:0.78rem;outline:none;border-radius:6px;width:180px;transition:border-color 0.2s}
-.search-input:focus{border-color:var(--navy)}
-.table-wrap{overflow-x:auto}
+.card-head{padding:0.9rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+.card-title{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.card-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+.ftab{padding:0.28rem 0.75rem;font-size:0.73rem;font-weight:600;border:1.5px solid var(--lgray);background:#fff;color:var(--gray);cursor:pointer;border-radius:20px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.ftab.active,.ftab:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.search{padding:0.32rem 0.75rem;border:1.5px solid var(--lgray);font-family:'DM Sans',sans-serif;font-size:0.78rem;outline:none;border-radius:7px;width:190px}
+.search:focus{border-color:var(--navy)}
+.tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{padding:0.65rem 1rem;text-align:left;font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--lgray);white-space:nowrap;background:var(--offwhite)}
-td{padding:0.75rem 1rem;font-size:0.82rem;border-bottom:1px solid var(--lgray);vertical-align:middle}
+th{padding:0.6rem 1rem;text-align:left;font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--lgray);background:var(--offwhite);white-space:nowrap}
+td{padding:0.7rem 1rem;font-size:0.81rem;border-bottom:1px solid var(--lgray);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(13,27,62,0.02)}
+tr:hover td{background:rgba(13,27,62,0.015)}
+.badge{display:inline-block;padding:0.18rem 0.6rem;font-size:0.67rem;font-weight:700;border-radius:20px;text-transform:capitalize}
+.bp{background:rgba(217,119,6,0.1);color:var(--orange)}
+.ba{background:rgba(5,150,105,0.1);color:var(--green)}
+.br{background:rgba(220,38,38,0.1);color:var(--red)}
+.btn{padding:0.28rem 0.65rem;font-size:0.71rem;font-weight:700;border:none;cursor:pointer;border-radius:5px;font-family:'DM Sans',sans-serif;transition:all 0.15s;white-space:nowrap}
+.b-ok{background:rgba(5,150,105,0.1);color:var(--green);border:1px solid rgba(5,150,105,0.2)}
+.b-ok:hover{background:var(--green);color:#fff}
+.b-no{background:rgba(220,38,38,0.1);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
+.b-no:hover{background:var(--red);color:#fff}
+.b-view{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)}
+.b-view:hover{background:var(--navy);color:#fff}
+.b-wa{background:rgba(37,211,102,0.1);color:#15803d;border:1px solid rgba(37,211,102,0.2)}
+.b-wa:hover{background:#25D366;color:#fff}
+.uni-tag{background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.69rem;font-weight:700}
+.empty{text-align:center;padding:2.5rem;color:var(--gray)}
+.empty-icon{font-size:2rem;margin-bottom:0.5rem}
 
-/* ── BADGES ── */
-.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.68rem;font-weight:700;border-radius:20px;text-transform:capitalize}
-.badge-pending{background:rgba(217,119,6,0.1);color:var(--orange)}
-.badge-approved{background:rgba(5,150,105,0.1);color:var(--green)}
-.badge-rejected{background:rgba(220,38,38,0.1);color:var(--red)}
-.badge-active{background:rgba(5,150,105,0.1);color:var(--green)}
+/* 2-col */
+.two-col{display:grid;grid-template-columns:1.6fr 1fr;gap:1.25rem}
 
-/* ── ACTION BUTTONS ── */
-.btn{padding:0.3rem 0.7rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;border-radius:5px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
-.btn-approve{background:rgba(5,150,105,0.1);color:var(--green);border:1px solid rgba(5,150,105,0.25)}
-.btn-approve:hover{background:var(--green);color:#fff}
-.btn-reject{background:rgba(220,38,38,0.1);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
-.btn-reject:hover{background:var(--red);color:#fff}
-.btn-view{background:rgba(13,27,62,0.06);color:var(--navy);border:1px solid var(--lgray)}
-.btn-view:hover{background:var(--navy);color:#fff}
-.btn-wa{background:rgba(37,211,102,0.1);color:#15803d;border:1px solid rgba(37,211,102,0.25)}
-.btn-wa:hover{background:#25D366;color:#fff}
-
-/* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9000;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:#fff;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
-.modal-head{padding:1.1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
-.modal-head-title{font-size:0.95rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif}
-.modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray);line-height:1;padding:0.2rem}
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:8000;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#fff;width:100%;max-width:540px;max-height:88vh;overflow-y:auto;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.2)}
+.modal-head{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.modal-head-t{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:var(--navy)}
+.modal-x{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray)}
 .modal-body{padding:1.5rem}
-.modal-section{font-size:0.62rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0 0.4rem;border-bottom:1px solid var(--lgray);margin-bottom:0.5rem;margin-top:1rem}
-.modal-section:first-child{margin-top:0}
-.modal-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.45rem 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:0.83rem;gap:1rem}
-.modal-row:last-child{border-bottom:none}
-.modal-label{color:var(--gray);flex-shrink:0;min-width:100px}
-.modal-val{font-weight:600;color:var(--navy);text-align:right;word-break:break-word}
-.modal-foot{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:flex-end;position:sticky;bottom:0;background:#fff}
+.m-sec{font-size:0.6rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0 0.35rem;border-bottom:1px solid var(--lgray);margin:1rem 0 0.5rem}
+.m-sec:first-child{margin-top:0}
+.m-row{display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:0.82rem}
+.m-row:last-child{border:none}
+.m-l{color:var(--gray);flex-shrink:0;min-width:90px}
+.m-v{font-weight:600;color:var(--navy);text-align:right;word-break:break-word;max-width:280px}
+.modal-foot{padding:0.9rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;position:sticky;bottom:0;background:#fff}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:0.7rem 1.5rem;border-radius:8px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;white-space:nowrap}
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:0.65rem 1.5rem;border-radius:8px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.success{background:var(--green)}
-.toast.error{background:var(--red)}
+.toast.ok{background:var(--green)}
+.toast.err{background:var(--red)}
 
-/* ── EMPTY STATE ── */
-.empty-state{text-align:center;padding:3rem;color:var(--gray)}
-.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
-.empty-text{font-size:0.85rem;font-weight:600;color:var(--navy);margin-bottom:0.25rem}
-.empty-sub{font-size:0.78rem}
-
-/* ── ID CARD IMAGE ── */
-.id-thumb{width:44px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--lgray);cursor:pointer}
-
-/* ── TWO COL LAYOUT ── */
-.two-col{display:grid;grid-template-columns:2fr 1fr;gap:1.25rem}
+/* NOTIF PAGE */
+.npage-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);cursor:pointer;transition:background 0.15s}
+.npage-item:hover{background:var(--offwhite)}
+.npage-item.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
+.npage-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN SCREEN ══ -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">TRAVEX <span>CAMPUS</span></div>
-    <div class="login-sub">Admin Panel</div>
-    <label class="login-label">Admin PIN</label>
-    <input type="password" class="login-input" id="adminPin" placeholder="Enter PIN"
+    <div class="login-sub">Admin Panel · Secure Access</div>
+    <input type="password" class="login-input" id="pin" placeholder="Enter admin PIN"
       onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
-    <div class="login-err" id="loginErr">❌ Wrong PIN. Try again.</div>
+    <div class="login-err" id="loginErr">❌ Wrong PIN</div>
   </div>
 </div>
 
-<!-- ══ ADMIN MAIN ══ -->
-<div id="adminMain">
-
-  <!-- SIDEBAR -->
+<!-- MAIN -->
+<div id="main">
   <aside class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-text">TRAVEX <span>CAMPUS</span></div>
-      <div class="sb-badge">🎓 Admin Panel</div>
+    <div class="sb-top">
+      <div class="sb-brand">TRAVEX <span>CAMPUS</span></div>
+      <div class="sb-tag">🎓 Admin Panel</div>
     </div>
     <nav class="sb-nav">
-      <div class="sb-section">Overview</div>
-      <div class="sb-item active" onclick="goPage('overview',this)">
-        <span class="icon">📊</span> Dashboard
-      </div>
+      <div class="sb-sec">Overview</div>
+      <div class="sb-item active" onclick="goPage('overview',this)">📊 Dashboard</div>
 
-      <div class="sb-section">Campus Market</div>
+      <div class="sb-sec">Campus Market</div>
       <div class="sb-item" onclick="goPage('applications',this)">
-        <span class="icon">📋</span> Applications
-        <span class="sb-badge-count" id="pendingBadge" style="display:none">0</span>
+        📋 Applications <span class="sb-count" id="pendingCount">0</span>
       </div>
-      <div class="sb-item" onclick="goPage('stores',this)">
-        <span class="icon">🏪</span> Active Stores
-      </div>
+      <div class="sb-item" onclick="goPage('stores',this)">🏪 Active Stores</div>
       <div class="sb-item" onclick="goPage('notifications',this)">
-        <span class="icon">🔔</span> Notifications
-        <span class="sb-badge-count" id="notifSidebarBadge" style="display:none">0</span>
+        🔔 Notifications <span class="sb-count" id="notifCount">0</span>
       </div>
 
-      <div class="sb-section">Quick Links</div>
-      <div class="sb-item" onclick="window.open('campus.html','_blank')">
-        <span class="icon">🌐</span> Campus Marketplace
-      </div>
-      <div class="sb-item" onclick="window.open('campus-dashboard.html','_blank')">
-        <span class="icon">🏪</span> Seller Dashboard
-      </div>
-      <div class="sb-item" onclick="window.open('campus-apply.html','_blank')">
-        <span class="icon">📝</span> Apply for Shop
-      </div>
+      <div class="sb-sec">Quick Links</div>
+      <div class="sb-item" onclick="window.open('campus.html','_blank')">🌐 Campus Marketplace</div>
+      <div class="sb-item" onclick="window.open('campus-dashboard.html','_blank')">🏪 Seller Dashboard</div>
+      <div class="sb-item" onclick="window.open('campus-apply.html','_blank')">📝 Apply for Shop</div>
     </nav>
     <div class="sb-bottom">
-      <div style="font-size:0.68rem;color:rgba(255,255,255,0.2);margin-bottom:0.5rem">Travex Campus v2.0</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.15);margin-bottom:0.25rem">Travex Campus v2.1</div>
     </div>
   </aside>
 
-  <!-- TOPBAR -->
   <header class="topbar">
     <div class="topbar-title" id="pageTitle">Dashboard</div>
     <div class="topbar-right">
-      <div class="topbar-stat">
-        <div class="ts-val" id="statShops">—</div>
-        <div class="ts-lbl">Shops</div>
-      </div>
-      <div class="topbar-stat">
-        <div class="ts-val" id="statPending">—</div>
-        <div class="ts-lbl">Pending</div>
-      </div>
-      <div class="topbar-stat">
-        <div class="ts-val" id="statApps">—</div>
-        <div class="ts-lbl">Total Apps</div>
-      </div>
-
-      <!-- NOTIFICATION BELL -->
+      <div class="ts"><div class="ts-v" id="tShops">—</div><div class="ts-l">Shops</div></div>
+      <div class="ts"><div class="ts-v" id="tPending">—</div><div class="ts-l">Pending</div></div>
+      <div class="ts"><div class="ts-v" id="tApps">—</div><div class="ts-l">Total Apps</div></div>
       <div class="notif-wrap">
-        <button class="notif-btn" onclick="toggleNotif()" id="notifBell">
-          🔔 <span class="notif-dot" id="notifDot">0</span>
+        <button class="notif-btn" onclick="toggleNotif()">
+          🔔 Notifications <span class="notif-badge" id="notifBadge">0</span>
         </button>
         <div class="notif-panel" id="notifPanel">
-          <div class="notif-head">
+          <div class="notif-panel-head">
             <strong>Notifications</strong>
-            <button class="notif-mark" onclick="markAllRead()">Mark all read</button>
+            <button class="mark-all-btn" onclick="markAllRead()">Mark all read</button>
           </div>
-          <div id="notifList"><div class="notif-empty">Loading...</div></div>
+          <div id="notifDropList"></div>
         </div>
       </div>
-
       <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
     </div>
   </header>
 
-  <!-- ══ PAGES ══ -->
   <main class="content">
 
-    <!-- PAGE: OVERVIEW -->
+    <!-- OVERVIEW -->
     <div class="page active" id="page-overview">
-      <div class="page-header">
-        <div class="page-title">🎓 Campus Dashboard</div>
-        <div class="page-sub">Live overview of Travex Campus student marketplace</div>
+      <div class="page-title">🎓 Campus Dashboard</div>
+      <div class="page-sub">Live overview of Travex Campus marketplace</div>
+      <div class="stats">
+        <div class="sc c1"><div class="sc-l">Active Shops</div><div class="sc-v" id="ovShops">—</div><div class="sc-s" id="ovShopsSub">—</div></div>
+        <div class="sc c2"><div class="sc-l">Pending Applications</div><div class="sc-v" id="ovPending">—</div><div class="sc-s">awaiting review</div></div>
+        <div class="sc c3"><div class="sc-l">Total Applications</div><div class="sc-v" id="ovTotal">—</div><div class="sc-s" id="ovApproved">—</div></div>
+        <div class="sc c4"><div class="sc-l">Universities</div><div class="sc-v" id="ovUnis">—</div><div class="sc-s">active</div></div>
       </div>
-
-      <div class="stats-grid">
-        <div class="stat-card purple">
-          <div class="sc-label">Active Shops</div>
-          <div class="sc-val" id="ov-shops">—</div>
-          <div class="sc-sub" id="ov-shops-sub">across all universities</div>
-        </div>
-        <div class="stat-card orange">
-          <div class="sc-label">Pending Applications</div>
-          <div class="sc-val" id="ov-pending">—</div>
-          <div class="sc-sub">awaiting review</div>
-        </div>
-        <div class="stat-card green">
-          <div class="sc-label">Total Applications</div>
-          <div class="sc-val" id="ov-total">—</div>
-          <div class="sc-sub" id="ov-approved-sub">— approved</div>
-        </div>
-        <div class="stat-card gold">
-          <div class="sc-label">Universities</div>
-          <div class="sc-val" id="ov-unis">—</div>
-          <div class="sc-sub">with campus presence</div>
-        </div>
-      </div>
-
       <div class="two-col">
         <div class="card">
           <div class="card-head">
             <div class="card-title">📋 Recent Applications</div>
-            <button class="btn btn-view" onclick="goPage('applications',null)">View All →</button>
+            <button class="btn b-view" onclick="goPage('applications',document.querySelector('[onclick*=applications]'))">View All →</button>
           </div>
-          <table>
-            <thead><tr>
-              <th>Student</th><th>University</th><th>Shop</th><th>Status</th><th>Action</th>
-            </tr></thead>
-            <tbody id="ov-apps-tbody">
-              <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr>
-            </tbody>
-          </table>
+          <table><thead><tr><th>Student</th><th>University</th><th>Shop</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="ovAppsTbl"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
         </div>
         <div class="card">
           <div class="card-head"><div class="card-title">🔔 Recent Notifications</div></div>
-          <div id="ov-notifs" style="max-height:320px;overflow-y:auto">
-            <div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.8rem">Loading...</div>
-          </div>
+          <div id="ovNotifs"></div>
         </div>
       </div>
     </div>
 
-    <!-- PAGE: APPLICATIONS -->
+    <!-- APPLICATIONS -->
     <div class="page" id="page-applications">
-      <div class="page-header">
-        <div class="page-title">📋 Applications</div>
-        <div class="page-sub">All student shop applications — review, approve or reject</div>
-      </div>
+      <div class="page-title">📋 Applications</div>
+      <div class="page-sub">All student shop applications — review, approve or reject</div>
       <div class="card">
         <div class="card-head">
-          <div class="filter-tabs">
-            <button class="ftab active" onclick="filterApps('all',this)">All</button>
-            <button class="ftab" onclick="filterApps('pending',this)">Pending ⏳</button>
-            <button class="ftab" onclick="filterApps('approved',this)">Approved ✅</button>
-            <button class="ftab" onclick="filterApps('rejected',this)">Rejected ❌</button>
-          </div>
           <div class="card-actions">
-            <input class="search-input" type="search" placeholder="Search name, shop, uni..."
-              oninput="searchApps(this.value)">
+            <button class="ftab active" onclick="filter('all',this)">All</button>
+            <button class="ftab" onclick="filter('pending',this)">Pending ⏳</button>
+            <button class="ftab" onclick="filter('approved',this)">Approved ✅</button>
+            <button class="ftab" onclick="filter('rejected',this)">Rejected ❌</button>
           </div>
+          <input class="search" type="search" placeholder="Search..." oninput="search(this.value)">
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr>
-              <th>Student</th><th>University</th><th>Shop</th><th>Category</th>
-              <th>WhatsApp</th><th>ID Card</th><th>Status</th><th>Date</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="apps-tbody">
-              <tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="tw"><table>
+          <thead><tr>
+            <th>Student</th><th>University</th><th>Shop</th><th>Category</th>
+            <th>WhatsApp</th><th>ID Card</th><th>Status</th><th>Date</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="appsTbl"><tr><td colspan="9" class="empty">Loading...</td></tr></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- PAGE: STORES -->
+    <!-- STORES -->
     <div class="page" id="page-stores">
-      <div class="page-header">
-        <div class="page-title">🏪 Active Stores</div>
-        <div class="page-sub">All approved campus stores</div>
-      </div>
+      <div class="page-title">🏪 Active Stores</div>
+      <div class="page-sub">All approved campus stores visible on marketplace</div>
       <div class="card">
-        <div class="table-wrap">
-          <table>
-            <thead><tr>
-              <th>Store</th><th>University</th><th>Category</th><th>Owner</th><th>WhatsApp</th><th>Status</th><th>Created</th>
-            </tr></thead>
-            <tbody id="stores-tbody">
-              <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="tw"><table>
+          <thead><tr><th>Store</th><th>University</th><th>Category</th><th>Seller</th><th>WhatsApp</th><th>Status</th><th>Created</th></tr></thead>
+          <tbody id="storesTbl"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- PAGE: NOTIFICATIONS -->
+    <!-- NOTIFICATIONS -->
     <div class="page" id="page-notifications">
-      <div class="page-header">
-        <div class="page-title">🔔 All Notifications</div>
-        <div class="page-sub" id="notif-page-sub">Loading...</div>
-      </div>
+      <div class="page-title">🔔 All Notifications</div>
+      <div class="page-sub" id="notifPageSub">Loading...</div>
       <div class="card">
         <div class="card-head">
           <div class="card-title">Notification History</div>
-          <button class="btn btn-view" onclick="markAllRead()">Mark All Read</button>
+          <button class="btn b-view" onclick="markAllRead()">✓ Mark All Read</button>
         </div>
-        <div id="notif-page-list">
-          <div style="padding:2rem;text-align:center;color:var(--gray)">Loading...</div>
-        </div>
+        <div id="notifPageList"></div>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- APPLICATION DETAIL MODAL -->
-<div class="modal-overlay" id="appModal" onclick="if(event.target===this)closeModal()">
+<!-- MODAL -->
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-title" id="modalTitle">Application Details</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-head-t" id="modalTitle">Application</div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-foot" id="modalFoot"></div>
@@ -410,496 +305,384 @@ tr:hover td{background:rgba(13,27,62,0.02)}
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════
-// SUPABASE SETUP
-// ══════════════════════════════════════
-const SB_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SB_KEY  = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
-const ADMIN_PIN = "admin2026";
-const { createClient } = supabase;
+const SB_URL = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const PIN    = "admin2026";
+const {createClient} = supabase;
 const sb = createClient(SB_URL, SB_KEY);
 
-// ── STATE ──
-let allApps   = [];
-let allStores = [];
-let allNotifs = [];
-let currentFilter = 'all';
-let currentSearch = '';
+let apps=[], stores=[], notifs=[], curFilter='all', curSearch='';
 
-// ══════════════════════════════════════
-// LOGIN
-// ══════════════════════════════════════
-function doLogin() {
-  const pin = document.getElementById('adminPin').value.trim();
-  if (pin === ADMIN_PIN) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminMain').style.display = 'grid';
+// ── LOGIN ──
+function doLogin(){
+  if(document.getElementById('pin').value.trim()===PIN){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('main').style.display='grid';
     loadAll();
   } else {
-    document.getElementById('loginErr').style.display = 'block';
-    document.getElementById('adminPin').value = '';
+    document.getElementById('loginErr').style.display='block';
+    document.getElementById('pin').value='';
   }
 }
 
-// ══════════════════════════════════════
-// LOAD ALL DATA
-// ══════════════════════════════════════
-async function loadAll() {
-  await Promise.all([
-    loadApps(),
-    loadStores(),
-    loadNotifs()
-  ]);
+// ── LOAD DATA ──
+async function loadAll(){
+  await Promise.all([loadApps(), loadStores(), loadNotifs()]);
   renderOverview();
 }
 
-async function loadApps() {
-  const { data, error } = await sb
-    .from('campus_applications')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('loadApps error:', error);
-    toast('Error loading applications: ' + error.message, 'error');
-    return;
-  }
-  allApps = data || [];
-
-  // Update badges
-  const pending = allApps.filter(a => a.status === 'pending').length;
-  const badge = document.getElementById('pendingBadge');
-  if (badge) {
-    badge.textContent = pending;
-    badge.style.display = pending > 0 ? 'inline-block' : 'none';
-  }
-  document.getElementById('statPending').textContent = pending;
-  document.getElementById('statApps').textContent = allApps.length;
+async function loadApps(){
+  const {data,error} = await sb.from('campus_applications')
+    .select('*').order('created_at',{ascending:false});
+  if(error){ showToast('Apps error: '+error.message,'err'); return; }
+  apps = data||[];
+  const p = apps.filter(a=>a.status==='pending').length;
+  s('tPending',p); s('tApps',apps.length);
+  const pc=document.getElementById('pendingCount');
+  pc.textContent=p; pc.style.display=p>0?'inline-block':'none';
 }
 
-async function loadStores() {
-  const { data, error } = await sb
-    .from('campus_stores')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) { console.error('loadStores error:', error); return; }
-  allStores = data || [];
-  document.getElementById('statShops').textContent = allStores.filter(s => s.is_active).length;
+async function loadStores(){
+  const {data,error} = await sb.from('campus_stores')
+    .select('*').order('created_at',{ascending:false});
+  if(error){ console.error('Stores:',error.message); return; }
+  stores = data||[];
+  s('tShops', stores.filter(x=>x.is_active).length);
 }
 
-async function loadNotifs() {
-  const { data, error } = await sb
-    .from('admin_notifications')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(50);
-
-  if (error) { console.error('loadNotifs error:', error); return; }
-  allNotifs = data || [];
-
-  const unread = allNotifs.filter(n => !n.is_read).length;
-  const dot = document.getElementById('notifDot');
-  const sideBadge = document.getElementById('notifSidebarBadge');
-  if (dot) { dot.textContent = unread; dot.style.display = unread > 0 ? 'flex' : 'none'; }
-  if (sideBadge) { sideBadge.textContent = unread; sideBadge.style.display = unread > 0 ? 'inline-block' : 'none'; }
-
+async function loadNotifs(){
+  const {data,error} = await sb.from('admin_notifications')
+    .select('*').order('created_at',{ascending:false}).limit(60);
+  if(error){ console.error('Notifs:',error.message); return; }
+  notifs = data||[];
+  const u = notifs.filter(n=>!n.is_read).length;
+  const nb=document.getElementById('notifBadge');
+  const nc=document.getElementById('notifCount');
+  nb.textContent=u; nb.style.display=u>0?'inline-block':'none';
+  nc.textContent=u; nc.style.display=u>0?'inline-block':'none';
   renderNotifDropdown();
 }
 
-// ══════════════════════════════════════
-// RENDER OVERVIEW
-// ══════════════════════════════════════
-function renderOverview() {
-  const active   = allStores.filter(s => s.is_active).length;
-  const pending  = allApps.filter(a => a.status === 'pending').length;
-  const approved = allApps.filter(a => a.status === 'approved').length;
-  const unis     = [...new Set(allStores.filter(s=>s.is_active).map(s=>s.university_abbr))].length;
+// ── OVERVIEW ──
+function renderOverview(){
+  const active   = stores.filter(x=>x.is_active).length;
+  const pending  = apps.filter(a=>a.status==='pending').length;
+  const approved = apps.filter(a=>a.status==='approved').length;
+  const unis     = [...new Set(stores.filter(x=>x.is_active).map(x=>x.university_abbr))].length;
+  s('ovShops',active);
+  s('ovShopsSub',stores.length+' total registered');
+  s('ovPending',pending);
+  s('ovTotal',apps.length);
+  s('ovApproved',approved+' approved');
+  s('ovUnis',unis||0);
 
-  setText('ov-shops',        active);
-  setText('ov-shops-sub',    allStores.length + ' total registered');
-  setText('ov-pending',      pending);
-  setText('ov-total',        allApps.length);
-  setText('ov-approved-sub', approved + ' approved');
-  setText('ov-unis',         unis || '—');
-
-  // Recent apps table (last 6)
-  const tbody = document.getElementById('ov-apps-tbody');
-  const recent = allApps.slice(0, 6);
-  if (!recent.length) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No applications yet</div></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = recent.map(a => `<tr>
-    <td><strong>${esc(a.full_name)}</strong><div style="font-size:0.7rem;color:var(--gray)">${esc(a.email||'')}</div></td>
-    <td><span style="background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:700">${esc(a.university_abbr||'—')}</span></td>
-    <td style="font-size:0.8rem">${esc(a.shop_name||'—')}</td>
-    <td><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></td>
-    <td>
-      ${a.status==='pending' ? `<button class="btn btn-approve" onclick="approveApp('${a.id}')">✓</button> <button class="btn btn-reject" onclick="rejectApp('${a.id}')">✗</button>` : ''}
-      <button class="btn btn-view" onclick="viewApp('${a.id}')">View</button>
+  const tbody=document.getElementById('ovAppsTbl');
+  const recent=apps.slice(0,6);
+  if(!recent.length){tbody.innerHTML='<tr><td colspan="5" class="empty"><div class="empty-icon">📋</div>No applications yet</td></tr>';return;}
+  tbody.innerHTML=recent.map(a=>`<tr>
+    <td><b>${e(a.full_name)}</b><div style="font-size:.7rem;color:var(--gray)">${e(a.email||'')}</div></td>
+    <td><span class="uni-tag">${e(a.university_abbr||'—')}</span></td>
+    <td style="font-size:.8rem">${e(a.shop_name||'—')}</td>
+    <td><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></td>
+    <td style="display:flex;gap:.3rem;flex-wrap:wrap">
+      ${a.status==='pending'?`<button class="btn b-ok" onclick="approveApp('${a.id}')">✓</button><button class="btn b-no" onclick="rejectApp('${a.id}')">✗</button>`:''}
+      <button class="btn b-view" onclick="viewApp('${a.id}')">View</button>
     </td>
   </tr>`).join('');
 
-  // Notifications in overview
-  renderOvNotifs();
-}
-
-function renderOvNotifs() {
-  const el = document.getElementById('ov-notifs');
-  const recent = allNotifs.slice(0, 8);
-  if (!recent.length) {
-    el.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
-    return;
-  }
-  el.innerHTML = recent.map(n => `
-    <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;border-left:3px solid ${n.is_read?'transparent':n.type==='campus_application'?'var(--purple)':'var(--gold)'}"
-      onclick="markRead('${n.id}');goPage('notifications',null)">
-      <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${esc(n.title||'Notification')}</div>
-      <div style="font-size:0.72rem;color:var(--gray);line-height:1.5">${esc(n.body||'')}</div>
-      <div style="font-size:0.65rem;color:var(--gray);margin-top:0.25rem">${timeAgo(n.created_at)}</div>
+  // Overview notifications
+  const oel=document.getElementById('ovNotifs');
+  if(!notifs.length){oel.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  oel.innerHTML=notifs.slice(0,6).map(n=>`
+    <div style="padding:.75rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;border-left:3px solid ${n.is_read?'transparent':'var(--gold)'}"
+      onclick="markRead('${n.id}')">
+      <div style="font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:.15rem">${e(n.title||'Notification')}</div>
+      <div style="font-size:.72rem;color:var(--gray);line-height:1.5">${e(n.body||'')}</div>
+      <div style="font-size:.65rem;color:var(--gray);margin-top:.2rem">${ago(n.created_at)}</div>
     </div>`).join('');
 }
 
-// ══════════════════════════════════════
-// RENDER APPLICATIONS TABLE
-// ══════════════════════════════════════
-function renderAppsTable() {
-  const tbody = document.getElementById('apps-tbody');
-  let apps = allApps;
-  if (currentFilter !== 'all') apps = apps.filter(a => a.status === currentFilter);
-  if (currentSearch) {
-    const q = currentSearch.toLowerCase();
-    apps = apps.filter(a =>
-      (a.full_name||'').toLowerCase().includes(q) ||
-      (a.shop_name||'').toLowerCase().includes(q) ||
-      (a.university_abbr||'').toLowerCase().includes(q) ||
-      (a.email||'').toLowerCase().includes(q)
-    );
+// ── APPLICATIONS TABLE ──
+function renderAppsTable(){
+  const tbody=document.getElementById('appsTbl');
+  let list=apps;
+  if(curFilter!=='all') list=list.filter(a=>a.status===curFilter);
+  if(curSearch){
+    const q=curSearch.toLowerCase();
+    list=list.filter(a=>`${a.full_name} ${a.shop_name} ${a.university_abbr} ${a.email}`.toLowerCase().includes(q));
   }
-  if (!apps.length) {
-    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No applications found</div><div class="empty-sub">Try changing the filter</div></div></td></tr>`;
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty"><div class="empty-icon">📋</div>No applications found</div></td></tr>`;
     return;
   }
-  tbody.innerHTML = apps.map(a => {
-    const cat = a.category || a.business_category || '—';
-    const wa  = a.whatsapp_number || a.whatsapp || a.phone || '';
-    const dt  = a.submitted_at || a.created_at;
+  // Use correct column names from campus_applications
+  tbody.innerHTML=list.map(a=>{
+    const wa = a.whatsapp_number||a.whatsapp||a.phone||'';
+    const dt = a.submitted_at||a.created_at;
     return `<tr>
-      <td><strong>${esc(a.full_name||'—')}</strong><div style="font-size:0.7rem;color:var(--gray)">${esc(a.year_of_study ? 'Year '+a.year_of_study : '')}</div></td>
-      <td><span style="background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:700">${esc(a.university_abbr||'—')}</span></td>
-      <td><strong style="font-size:0.82rem">${esc(a.shop_name||'—')}</strong></td>
-      <td style="font-size:0.78rem">${esc(cat)}</td>
-      <td>${wa ? `<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;text-decoration:none;font-size:0.78rem">${esc(wa)}</a>` : '—'}</td>
-      <td>${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" class="id-thumb" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:var(--purple);font-size:0.72rem&quot;>View ID →</a>'"></a>` : '<span style="color:var(--gray);font-size:0.72rem">—</span>'}</td>
-      <td><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></td>
-      <td style="font-size:0.72rem;color:var(--gray)">${dt ? new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '—'}</td>
-      <td>
-        <div style="display:flex;gap:0.3rem;flex-wrap:wrap">
-          ${a.status==='pending' ? `<button class="btn btn-approve" onclick="approveApp('${a.id}')">✓ Approve</button><button class="btn btn-reject" onclick="rejectApp('${a.id}')">✗</button>` : ''}
-          <button class="btn btn-view" onclick="viewApp('${a.id}')">View</button>
-          ${wa ? `<button class="btn btn-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')">💬</button>` : ''}
-        </div>
-      </td>
+      <td><b>${e(a.full_name||'—')}</b><div style="font-size:.68rem;color:var(--gray)">Year ${e(a.year_of_study||'—')}</div></td>
+      <td><span class="uni-tag">${e(a.university_abbr||'—')}</span></td>
+      <td><b style="font-size:.8rem">${e(a.shop_name||'—')}</b></td>
+      <td style="font-size:.76rem">${e(a.category||'—')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:.78rem;text-decoration:none">${e(wa)}</a>`:'—'}</td>
+      <td>${a.id_card_url?`<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="width:44px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--lgray)" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:var(--purple);font-size:.72rem;font-weight:600&quot;>View →</a>'"></a>`:'<span style="color:var(--gray);font-size:.72rem">—</span>'}</td>
+      <td><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></td>
+      <td style="font-size:.7rem;color:var(--gray)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'—'}</td>
+      <td><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+        ${a.status==='pending'?`<button class="btn b-ok" onclick="approveApp('${a.id}')">✓ Approve</button><button class="btn b-no" onclick="rejectApp('${a.id}')">✗</button>`:''}
+        <button class="btn b-view" onclick="viewApp('${a.id}')">View</button>
+        ${wa?`<button class="btn b-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')">💬</button>`:''}
+      </div></td>
     </tr>`;
   }).join('');
 }
 
-function filterApps(status, btn) {
-  currentFilter = status;
-  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+function filter(f,btn){
+  curFilter=f;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
   renderAppsTable();
 }
+function search(q){curSearch=q;renderAppsTable();}
 
-function searchApps(q) {
-  currentSearch = q;
-  renderAppsTable();
+// ── STORES TABLE ──
+function renderStoresTable(){
+  const tbody=document.getElementById('storesTbl');
+  if(!stores.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-icon">🏪</div>No stores yet</div></td></tr>';return;}
+  tbody.innerHTML=stores.map(s=>{
+    const wa=s.whatsapp_number||'';
+    return `<tr>
+      <td><b>${e(s.store_name||'—')}</b></td>
+      <td><span class="uni-tag">${e(s.university_abbr||'—')}</span></td>
+      <td style="font-size:.78rem">${e(s.category||'—')}</td>
+      <td style="font-size:.78rem">${e(s.seller_name||'—')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:.78rem;text-decoration:none">${e(wa)}</a>`:'—'}</td>
+      <td><span class="badge ${s.is_active?'ba':'br'}">${s.is_active?'Active':'Inactive'}</span></td>
+      <td style="font-size:.7rem;color:var(--gray)">${s.created_at?new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'—'}</td>
+    </tr>`;
+  }).join('');
 }
 
-// ══════════════════════════════════════
-// RENDER STORES TABLE
-// ══════════════════════════════════════
-function renderStoresTable() {
-  const tbody = document.getElementById('stores-tbody');
-  if (!allStores.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🏪</div><div class="empty-text">No stores yet</div></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = allStores.map(s => `<tr>
-    <td><strong>${esc(s.store_name||'—')}</strong></td>
-    <td><span style="background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:700">${esc(s.university_abbr||'—')}</span></td>
-    <td style="font-size:0.78rem">${esc(s.category||'—')}</td>
-    <td style="font-size:0.78rem">${esc(s.owner_name||s.seller_name||'—')}</td>
-    <td>${(s.whatsapp_number||s.seller_phone) ? `<a href="https://wa.me/${(s.whatsapp_number||s.seller_phone||'').replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:0.78rem;text-decoration:none">${esc(s.whatsapp_number||s.seller_phone||'')}</a>` : '—'}</td>
-    <td><span class="badge ${s.is_active?'badge-active':'badge-rejected'}">${s.is_active?'Active':'Inactive'}</span></td>
-    <td style="font-size:0.72rem;color:var(--gray)">${s.created_at ? new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '—'}</td>
-  </tr>`).join('');
-}
-
-// ══════════════════════════════════════
-// NOTIFICATIONS
-// ══════════════════════════════════════
-function renderNotifDropdown() {
-  const list = document.getElementById('notifList');
-  if (!allNotifs.length) {
-    list.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
-    return;
-  }
-  list.innerHTML = allNotifs.slice(0, 20).map(n => `
-    <div class="notif-item ${n.is_read?'':'unread'}" onclick="markRead('${n.id}')">
-      <div class="ni-title">
-        ${!n.is_read ? '<span style="width:7px;height:7px;background:var(--red);border-radius:50%;flex-shrink:0;display:inline-block"></span>' : ''}
-        ${esc(n.title||'Notification')}
-      </div>
-      <div class="ni-body">${esc(n.body||'')}</div>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="ni-time">${timeAgo(n.created_at)}</div>
-        ${n.type==='campus_application' ? `<button class="ni-cta" onclick="goPage('applications',null);closeNotif()">View Applications →</button>` : ''}
-      </div>
+// ── NOTIFICATIONS ──
+function renderNotifDropdown(){
+  const el=document.getElementById('notifDropList');
+  if(!notifs.length){el.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  el.innerHTML=notifs.slice(0,15).map(n=>`
+    <div class="nitem ${n.is_read?'':'unread'}" onclick="markRead('${n.id}')">
+      <div class="nitem-title">${!n.is_read?'<span style="display:inline-block;width:7px;height:7px;background:var(--red);border-radius:50%;margin-right:4px;vertical-align:middle"></span>':''}${e(n.title||'Notification')}</div>
+      <div class="nitem-body">${e(n.body||'')}</div>
+      <div class="nitem-time">${ago(n.created_at)}</div>
     </div>`).join('');
 }
 
-function renderNotifPage() {
-  const el = document.getElementById('notif-page-list');
-  const sub = document.getElementById('notif-page-sub');
-  const unread = allNotifs.filter(n=>!n.is_read).length;
-  sub.textContent = `${allNotifs.length} total — ${unread} unread`;
-
-  if (!allNotifs.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🔔</div><div class="empty-text">No notifications yet</div><div class="empty-sub">Notifications will appear here when students apply for shops</div></div>`;
-    return;
-  }
-  el.innerHTML = allNotifs.map(n => `
-    <div style="display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;transition:background 0.15s"
-      onclick="markRead('${n.id}')" onmouseover="this.style.background='var(--offwhite)'" onmouseout="this.style.background='${n.is_read?'#fff':'#FFFBEB'}'">
-      <div style="width:36px;height:36px;border-radius:50%;background:${n.type==='campus_application'?'rgba(124,58,237,0.1)':'rgba(201,168,76,0.1)'};display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+function renderNotifPage(){
+  const u=notifs.filter(n=>!n.is_read).length;
+  s('notifPageSub',`${notifs.length} total notifications · ${u} unread`);
+  const el=document.getElementById('notifPageList');
+  if(!notifs.length){el.innerHTML='<div class="empty" style="padding:3rem"><div class="empty-icon">🔔</div>No notifications yet<br><small>They will appear here when students apply</small></div>';return;}
+  el.innerHTML=notifs.map(n=>`
+    <div class="npage-item ${n.is_read?'':'unread'}" onclick="markRead('${n.id}')">
+      <div class="npage-icon" style="background:${n.type==='campus_application'?'rgba(124,58,237,0.1)':'rgba(201,168,76,0.1)'}">
         ${n.type==='campus_application'?'🎓':'🔔'}
       </div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem;display:flex;align-items:center;gap:0.5rem">
-          ${esc(n.title||'Notification')}
-          ${!n.is_read ? '<span style="width:7px;height:7px;background:var(--red);border-radius:50%;flex-shrink:0;display:inline-block"></span>' : ''}
+      <div style="flex:1">
+        <div style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.15rem;display:flex;align-items:center;gap:.5rem">
+          ${e(n.title||'Notification')}
+          ${!n.is_read?'<span style="display:inline-block;width:7px;height:7px;background:var(--red);border-radius:50%"></span>':''}
         </div>
-        <div style="font-size:0.78rem;color:var(--gray);line-height:1.6;margin-bottom:0.3rem">${esc(n.body||'')}</div>
-        <div style="font-size:0.68rem;color:var(--gray)">${timeAgo(n.created_at)} · ${new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
-        ${n.type==='campus_application' ? `<button onclick="goPage('applications',null)" style="margin-top:0.4rem;background:var(--purple);color:#fff;border:none;padding:0.3rem 0.8rem;border-radius:4px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Review Application →</button>` : ''}
+        <div style="font-size:.76rem;color:var(--gray);line-height:1.6;margin-bottom:.25rem">${e(n.body||'')}</div>
+        <div style="font-size:.67rem;color:var(--gray)">${ago(n.created_at)} · ${new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+        ${n.type==='campus_application'?`<button onclick="goPage('applications',null)" style="margin-top:.35rem;background:var(--purple);color:#fff;border:none;padding:.28rem .75rem;border-radius:4px;font-size:.71rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Review Applications →</button>`:''}
       </div>
     </div>`).join('');
 }
 
-function toggleNotif() {
-  document.getElementById('notifPanel').classList.toggle('open');
-}
+function toggleNotif(){document.getElementById('notifPanel').classList.toggle('open');}
+function closeNotif(){document.getElementById('notifPanel').classList.remove('open');}
 
-function closeNotif() {
-  document.getElementById('notifPanel').classList.remove('open');
-}
-
-async function markRead(id) {
+async function markRead(id){
   await sb.from('admin_notifications').update({is_read:true}).eq('id',id);
-  allNotifs = allNotifs.map(n => n.id===id ? {...n, is_read:true} : n);
-  const unread = allNotifs.filter(n=>!n.is_read).length;
-  const dot = document.getElementById('notifDot');
-  const sideBadge = document.getElementById('notifSidebarBadge');
-  dot.textContent = unread; dot.style.display = unread>0?'flex':'none';
-  sideBadge.textContent = unread; sideBadge.style.display = unread>0?'inline-block':'none';
+  notifs=notifs.map(n=>n.id===id?{...n,is_read:true}:n);
+  updateNotifBadge();
   renderNotifDropdown();
   renderOvNotifs();
-  if (document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
+  if(document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
 }
 
-async function markAllRead() {
+async function markAllRead(){
+  const unread=notifs.filter(n=>!n.is_read);
+  if(!unread.length){showToast('All already read');return;}
   await sb.from('admin_notifications').update({is_read:true}).eq('is_read',false);
-  allNotifs = allNotifs.map(n => ({...n, is_read:true}));
-  const dot = document.getElementById('notifDot');
-  const sideBadge = document.getElementById('notifSidebarBadge');
-  dot.style.display = 'none'; sideBadge.style.display = 'none';
+  notifs=notifs.map(n=>({...n,is_read:true}));
+  updateNotifBadge();
   renderNotifDropdown();
   renderOvNotifs();
-  if (document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
-  toast('All notifications marked as read');
+  if(document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
+  showToast('All marked as read ✓');
 }
 
-// ══════════════════════════════════════
-// APPROVE / REJECT
-// ══════════════════════════════════════
-async function approveApp(id) {
-  const app = allApps.find(a => a.id === id);
-  if (!app) return;
-  if (!confirm(`Approve application from ${app.full_name}?\n\nThis will create their shop immediately.`)) return;
+function updateNotifBadge(){
+  const u=notifs.filter(n=>!n.is_read).length;
+  const nb=document.getElementById('notifBadge');
+  const nc=document.getElementById('notifCount');
+  nb.textContent=u; nb.style.display=u>0?'inline-block':'none';
+  nc.textContent=u; nc.style.display=u>0?'inline-block':'none';
+}
 
-  // 1. Update status
+function renderOvNotifs(){
+  const oel=document.getElementById('ovNotifs');
+  if(!notifs.length){oel.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  oel.innerHTML=notifs.slice(0,6).map(n=>`
+    <div style="padding:.75rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;border-left:3px solid ${n.is_read?'transparent':'var(--gold)'}"
+      onclick="markRead('${n.id}')">
+      <div style="font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:.15rem">${e(n.title||'Notification')}</div>
+      <div style="font-size:.72rem;color:var(--gray);line-height:1.5">${e(n.body||'')}</div>
+      <div style="font-size:.65rem;color:var(--gray);margin-top:.2rem">${ago(n.created_at)}</div>
+    </div>`).join('');
+}
+
+// ── APPROVE / REJECT ──
+async function approveApp(id){
+  const app=apps.find(a=>a.id===id);
+  if(!app) return;
+  if(!confirm(`Approve ${app.full_name}?\nShop: ${app.shop_name}\nUniversity: ${app.university_abbr}\n\nThis will create their store immediately.`)) return;
+
+  // Step 1: Update application status only (no approved_at column)
   const {error:e1} = await sb.from('campus_applications')
-    .update({status:'approved'}).eq('id',id);
-  if (e1) { toast('Error: ' + e1.message, 'error'); return; }
+    .update({status:'approved'})
+    .eq('id',id);
+  if(e1){ showToast('Error updating application: '+e1.message,'err'); console.error(e1); return; }
 
-  // 2. Create campus store — only use columns that exist in campus_stores table
-  const {error:e2} = await sb.from('campus_stores').insert({
-    store_name:      app.shop_name || app.full_name + "'s Shop",
+  // Step 2: Create store with ONLY columns that exist in campus_stores
+  const storeData = {
+    store_name:      app.shop_name,
     university_abbr: app.university_abbr,
-    category:        app.business_category || app.category || 'General',
-    description:     app.business_description || app.description || '',
-    whatsapp_number: app.whatsapp || app.whatsapp_number || app.phone || '',
+    category:        app.category,
+    description:     app.description||'',
+    whatsapp_number: app.whatsapp_number||app.phone||'',
     seller_name:     app.full_name,
     is_active:       true
-  });
-  if (e2) { toast('⚠️ Store error: ' + e2.message, 'error'); console.error('Store error:', e2); return; }
+  };
+  const {error:e2} = await sb.from('campus_stores').insert(storeData);
+  if(e2){ showToast('Store error: '+e2.message,'err'); console.error('Store insert failed:',e2,storeData); return; }
 
-  // 3. WhatsApp notification
-  const phone = (app.whatsapp_number||app.whatsapp||app.phone||'').replace(/\D/g,'');
-  if (phone) {
-    const msg = encodeURIComponent(
-      `🎉 Congratulations ${app.full_name}!\n\n` +
-      `Your Travex Campus application has been approved! 🎓\n\n` +
-      `Shop: ${app.shop_name}\nUniversity: ${app.university_abbr}\nShop No: #${shopNum}\n\n` +
-      `Pay Activation Fee:\n💳 CRDB: 0152774556100\n📱 M-Pesa: +255 651 919 915\n💵 TZS 15,000/month\n\n` +
-      `Send receipt photo after payment.\nLogin: ${window.location.origin}/campus-dashboard.html\n\nWelcome to Travex Campus! 🎓`
+  // Step 3: Add notification
+  await sb.from('admin_notifications').insert({
+    type: 'campus_approved',
+    title: `✅ ${app.shop_name} Approved`,
+    body: `${app.full_name} from ${app.university_abbr} has been approved. Shop is now live.`,
+    is_read: false,
+    created_at: new Date().toISOString()
+  });
+
+  // Step 4: WhatsApp message
+  const phone=(app.whatsapp_number||app.phone||'').replace(/\D/g,'');
+  if(phone){
+    const msg=encodeURIComponent(
+      `🎉 Congratulations ${app.full_name}!\n\n`+
+      `Your Travex Campus application has been APPROVED! 🎓\n\n`+
+      `Shop: ${app.shop_name}\nUniversity: ${app.university_abbr}\n\n`+
+      `Pay Activation Fee:\n💳 CRDB: 0152774556100\n📱 M-Pesa: +255 651 919 915\n💵 TZS 15,000/month\n\n`+
+      `Send receipt photo after payment.\nLogin: ${location.origin}/campus-dashboard.html\n\nWelcome to Travex Campus! 🎓`
     );
-    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+    window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
   }
 
-  toast(`✅ ${app.full_name} approved! Shop #${shopNum} is live.`, 'success');
+  showToast(`✅ ${app.shop_name} approved & store created!`,'ok');
   await loadAll();
   renderAppsTable();
   renderStoresTable();
 }
 
-async function rejectApp(id) {
-  const app = allApps.find(a => a.id === id);
-  if (!app) return;
-  if (!confirm(`Reject application from ${app.full_name}?`)) return;
+async function rejectApp(id){
+  const app=apps.find(a=>a.id===id);
+  if(!app||!confirm(`Reject application from ${app.full_name}?`)) return;
   const {error} = await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);
-  if (error) { toast('Error: ' + error.message, 'error'); return; }
-  toast(`Application from ${app.full_name} rejected.`);
+  if(error){ showToast('Error: '+error.message,'err'); return; }
+  showToast(`Application from ${app.full_name} rejected.`);
   await loadApps();
   renderAppsTable();
   renderOverview();
 }
 
-// ══════════════════════════════════════
-// VIEW APP MODAL
-// ══════════════════════════════════════
-function viewApp(id) {
-  const a = allApps.find(x => x.id === id);
-  if (!a) return;
-  const cat = a.category || a.business_category || '—';
-  const desc = a.description || a.business_description || '—';
-  const wa = a.whatsapp_number || a.whatsapp || a.phone || '';
-  const uni = a.university_name || a.university || '—';
-  const dt = a.submitted_at || a.created_at;
-
-  document.getElementById('modalTitle').textContent = (a.shop_name || a.full_name) + ' — Application';
-  document.getElementById('modalBody').innerHTML = `
-    <div class="modal-section">Student Info</div>
-    <div class="modal-row"><span class="modal-label">Full Name</span><span class="modal-val">${esc(a.full_name||'—')}</span></div>
-    <div class="modal-row"><span class="modal-label">Email</span><span class="modal-val">${esc(a.email||'—')}</span></div>
-    <div class="modal-row"><span class="modal-label">Phone</span><span class="modal-val">${esc(a.phone||'—')}</span></div>
-    <div class="modal-row"><span class="modal-label">WhatsApp</span><span class="modal-val">${wa ? `<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:700">${esc(wa)} 💬</a>` : '—'}</span></div>
-    <div class="modal-row"><span class="modal-label">Year of Study</span><span class="modal-val">${esc(a.year_of_study||'—')}</span></div>
-
-    <div class="modal-section">University</div>
-    <div class="modal-row"><span class="modal-label">University</span><span class="modal-val">${esc(uni)}</span></div>
-    <div class="modal-row"><span class="modal-label">Abbreviation</span><span class="modal-val">${esc(a.university_abbr||'—')}</span></div>
-    <div class="modal-row"><span class="modal-label">Region</span><span class="modal-val">${esc(a.region||'—')}</span></div>
-
-    <div class="modal-section">Business / Shop</div>
-    <div class="modal-row"><span class="modal-label">Shop Name</span><span class="modal-val">${esc(a.shop_name||'—')}</span></div>
-    <div class="modal-row"><span class="modal-label">Category</span><span class="modal-val">${esc(cat)}</span></div>
-    <div class="modal-row"><span class="modal-label">Description</span><span class="modal-val" style="text-align:right;max-width:280px;line-height:1.5">${esc(desc)}</span></div>
-
-    <div class="modal-section">ID Card</div>
+// ── VIEW MODAL ──
+function viewApp(id){
+  const a=apps.find(x=>x.id===id);
+  if(!a) return;
+  const wa=a.whatsapp_number||a.phone||'';
+  const dt=a.submitted_at||a.created_at;
+  document.getElementById('modalTitle').textContent=`${a.shop_name||a.full_name} — Application`;
+  document.getElementById('modalBody').innerHTML=`
+    <div class="m-sec">Student Info</div>
+    <div class="m-row"><span class="m-l">Full Name</span><span class="m-v">${e(a.full_name||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Email</span><span class="m-v">${e(a.email||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Phone</span><span class="m-v">${e(a.phone||'—')}</span></div>
+    <div class="m-row"><span class="m-l">WhatsApp</span><span class="m-v">${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:700">${e(wa)} 💬</a>`:'—'}</span></div>
+    <div class="m-row"><span class="m-l">Year</span><span class="m-v">Year ${e(a.year_of_study||'—')}</span></div>
+    <div class="m-sec">University</div>
+    <div class="m-row"><span class="m-l">University</span><span class="m-v">${e(a.university_name||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Abbreviation</span><span class="m-v"><span class="uni-tag">${e(a.university_abbr||'—')}</span></span></div>
+    <div class="m-row"><span class="m-l">Region</span><span class="m-v">${e(a.region||'—')}</span></div>
+    <div class="m-sec">Shop</div>
+    <div class="m-row"><span class="m-l">Shop Name</span><span class="m-v">${e(a.shop_name||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Category</span><span class="m-v">${e(a.category||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Description</span><span class="m-v" style="max-width:260px;line-height:1.5">${e(a.description||'—')}</span></div>
+    <div class="m-sec">ID Card</div>
     ${a.id_card_url
-      ? `<div style="margin:0.75rem 0"><img src="${a.id_card_url}" style="max-width:100%;max-height:180px;border-radius:6px;border:1px solid var(--lgray);display:block" onerror="this.style.display='none'">
-         <a href="${a.id_card_url}" target="_blank" style="color:var(--purple);font-size:0.82rem;font-weight:600;text-decoration:none;display:inline-block;margin-top:0.5rem">🪪 View Full ID →</a></div>`
-      : '<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">No ID uploaded</div>'}
-
-    <div class="modal-section">Status</div>
-    <div class="modal-row"><span class="modal-label">Status</span><span class="modal-val"><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></span></div>
-    <div class="modal-row"><span class="modal-label">Submitted</span><span class="modal-val">${dt ? new Date(dt).toLocaleString('en-GB') : '—'}</span></div>
+      ?`<div style="margin:.5rem 0"><img src="${a.id_card_url}" style="max-width:100%;max-height:170px;border-radius:6px;border:1px solid var(--lgray);display:block" onerror="this.style.display='none'">
+        <a href="${a.id_card_url}" target="_blank" style="color:var(--purple);font-size:.8rem;font-weight:600;text-decoration:none;display:inline-block;margin-top:.4rem">🪪 View Full →</a></div>`
+      :'<div style="color:var(--gray);font-size:.8rem;padding:.4rem 0">No ID uploaded</div>'}
+    <div class="m-sec">Status</div>
+    <div class="m-row"><span class="m-l">Status</span><span class="m-v"><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></span></div>
+    <div class="m-row"><span class="m-l">Submitted</span><span class="m-v">${dt?new Date(dt).toLocaleString('en-GB'):'—'}</span></div>
   `;
-
-  document.getElementById('modalFoot').innerHTML = `
-    ${a.status==='pending' ? `
-      <button class="btn btn-approve" onclick="approveApp('${a.id}');closeModal()" style="padding:0.5rem 1.25rem">✓ Approve & Create Shop</button>
-      <button class="btn btn-reject" onclick="rejectApp('${a.id}');closeModal()" style="padding:0.5rem 1.25rem">✗ Reject</button>` : ''}
-    ${wa ? `<button class="btn btn-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')" style="padding:0.5rem 1rem">💬 WhatsApp</button>` : ''}
-    ${a.email ? `<button class="btn btn-view" onclick="window.open('mailto:${a.email}','_blank')" style="padding:0.5rem 1rem">📧 Email</button>` : ''}
+  document.getElementById('modalFoot').innerHTML=`
+    ${a.status==='pending'?`
+      <button class="btn b-ok" onclick="approveApp('${a.id}');closeModal()" style="padding:.5rem 1.25rem">✓ Approve & Create Shop</button>
+      <button class="btn b-no" onclick="rejectApp('${a.id}');closeModal()" style="padding:.5rem 1.25rem">✗ Reject</button>`:''}
+    ${wa?`<button class="btn b-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')" style="padding:.5rem 1rem">💬 WhatsApp</button>`:''}
   `;
-
-  document.getElementById('appModal').classList.add('open');
+  document.getElementById('modal').classList.add('open');
 }
+function closeModal(){document.getElementById('modal').classList.remove('open');}
 
-function closeModal() {
-  document.getElementById('appModal').classList.remove('open');
-}
-
-// ══════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════
-const pageTitles = {
-  overview: '🎓 Campus Dashboard',
-  applications: '📋 Applications',
-  stores: '🏪 Active Stores',
-  notifications: '🔔 Notifications'
-};
-
-function goPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
-  const page = document.getElementById('page-' + name);
-  if (page) page.classList.add('active');
-  if (el) el.classList.add('active');
-  document.getElementById('pageTitle').textContent = pageTitles[name] || name;
+// ── NAVIGATION ──
+function goPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg) pg.classList.add('active');
+  if(el) el.classList.add('active');
+  const titles={overview:'🎓 Campus Dashboard',applications:'📋 Applications',stores:'🏪 Active Stores',notifications:'🔔 Notifications'};
+  s('pageTitle',titles[name]||name);
   closeNotif();
-
-  // Trigger renders
-  if (name === 'applications') renderAppsTable();
-  if (name === 'stores')       renderStoresTable();
-  if (name === 'notifications') renderNotifPage();
-  if (name === 'overview')     renderOverview();
+  if(name==='applications') renderAppsTable();
+  if(name==='stores')       renderStoresTable();
+  if(name==='notifications') renderNotifPage();
+  if(name==='overview')     renderOverview();
 }
 
-// ══════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
+// ── UTILS ──
+function s(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function e(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast',3500);
 }
-
-function esc(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function ago(ts){
+  if(!ts) return '—';
+  const m=Math.floor((Date.now()-new Date(ts))/60000);
+  if(m<1) return 'just now';
+  if(m<60) return m+'m ago';
+  const h=Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  return Math.floor(h/24)+'d ago';
 }
-
-function toast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (type ? ' '+type : '');
-  setTimeout(() => t.className = 'toast', 3500);
-}
-
-function timeAgo(ts) {
-  if (!ts) return '—';
-  const diff = Date.now() - new Date(ts).getTime();
-  const mins = Math.floor(diff/60000);
-  if (mins < 1)  return 'just now';
-  if (mins < 60) return mins + 'm ago';
-  const hrs = Math.floor(mins/60);
-  if (hrs < 24)  return hrs + 'h ago';
-  return Math.floor(hrs/24) + 'd ago';
-}
-
-// Close notif panel on outside click
-document.addEventListener('click', e => {
-  const wrap = document.querySelector('.notif-wrap');
-  if (wrap && !wrap.contains(e.target)) closeNotif();
+document.addEventListener('click',e=>{
+  if(!document.querySelector('.notif-wrap')?.contains(e.target)) closeNotif();
 });
-
-// Close modal on Escape
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeModal(); closeNotif(); }
-});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeNotif();}});
 </script>
 </body>
 </html>
