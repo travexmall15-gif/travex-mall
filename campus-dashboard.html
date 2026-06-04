@@ -1086,21 +1086,20 @@ async function submitRegApplication() {
 
     // Insert application
     const { error: appErr } = await sb.from("campus_applications").insert({
-      full_name:        document.getElementById("reg-name").value.trim(),
-      email:            email,
-      phone:            document.getElementById("reg-phone").value.trim(),
-      whatsapp_number:  document.getElementById("reg-whatsapp").value.trim(),
-      university_name:  regUni.name,
-      university_abbr:  regUni.abbr,
-      region:           regUni.region,
-      year_of_study:    document.getElementById("reg-year").value,
-      shop_name:        document.getElementById("reg-shopname").value.trim(),
-      category:         document.getElementById("reg-category").value,
-      description:      document.getElementById("reg-desc").value.trim(),
-      id_card_url:      idCardUrl,
-      user_id:          authData?.user?.id || null,
-      status:           "pending",
-      submitted_at:     new Date().toISOString()
+      full_name:            document.getElementById("reg-name").value.trim(),
+      email:                email,
+      phone:                document.getElementById("reg-phone").value.trim(),
+      whatsapp_number:      document.getElementById("reg-whatsapp").value.trim(),
+      university:           regUni.name,
+      university_abbr:      regUni.abbr,
+      region:               regUni.region,
+      year_of_study:        document.getElementById("reg-year").value,
+      shop_name:            document.getElementById("reg-shopname").value.trim(),
+      business_category:    document.getElementById("reg-category").value,
+      business_description: document.getElementById("reg-desc").value.trim(),
+      id_card_url:          idCardUrl,
+      user_id:              authData?.user?.id || null,
+      status:               "pending"
     });
     if (appErr) throw appErr;
 
