@@ -554,14 +554,19 @@ async function approveApp(id){
   if(e1){ showToast('Error updating application: '+e1.message,'err'); console.error(e1); return; }
 
   // Step 2: Create store — using EXACT campus_stores schema columns
-  const slug = app.full_name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '-' + Date.now();
+  // Extract shop name: stored as first line of business_description prefixed with SHOP:
+  let shopName = app.full_name + "'s Shop";
+  if(app.business_description && app.business_description.startsWith('SHOP:')) {
+    shopName = app.business_description.split('\n')[0].replace('SHOP:','').trim();
+  }
+  const slug = shopName.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '-' + Date.now();
   const storeData = {
-    store_name:      app.full_name + "'s Shop",
+    store_name:      shopName,
     slug:            slug,
     university:      app.university || app.university_abbr,
     university_abbr: app.university_abbr,
     category:        app.business_category || 'General',
-    description:     app.business_description || '',
+    description:     app.business_description ? app.business_description.replace(/^SHOP:[^\n]*\n?/,'') : '',
     whatsapp_number: app.whatsapp_number || app.phone || '',
     is_active:       true
   };
@@ -572,7 +577,7 @@ async function approveApp(id){
   // Step 3: Add notification
   await sb.from('admin_notifications').insert({
     type: 'campus_approved',
-    title: '✅ ' + app.full_name + ' Approved',
+    title: '✅ ' + shopName + ' Approved',
     body: app.full_name + ' from ' + app.university_abbr + ' (' + app.business_category + ') approved. Store is now live.',
     is_read: false,
     created_at: new Date().toISOString()
@@ -591,7 +596,7 @@ async function approveApp(id){
     window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
   }
 
-  showToast('✅ ' + app.full_name + ' approved & store created!','ok');
+  showToast('✅ ' + shopName + ' — store created & live!','ok');
   await loadAll();
   renderAppsTable();
   renderStoresTable();
