@@ -42,7 +42,7 @@ nav{background:var(--uni-bg1);padding:0 5%;height:64px;display:flex;align-items:
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
 .uni-hero h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:0.4rem;animation:fadeInUp 0.8s ease 0.15s both}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-.uni-hero-swahili{font-size:0.9rem;color:rgba(255,255,255,0.45);margin-bottom:2rem;animation:fadeInUp 0.8s ease 0.25s both;font-style:italic}
+.uni-hero-subtitle{font-size:0.9rem;color:rgba(255,255,255,0.45);margin-bottom:2rem;animation:fadeInUp 0.8s ease 0.25s both;font-style:italic}
 .uni-hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;animation:fadeInUp 0.8s ease 0.35s both}
 .uni-hstat-val{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:800;color:var(--uni-accent)}
 .uni-hstat-lbl{font-size:0.65rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
@@ -169,7 +169,7 @@ button,input,select,textarea,
     <div class="uni-hero-left">
       <div class="uni-badge" id="uniBadge">🎓 TRAVEX CAMPUS</div>
       <h1 id="uniTitle">University</h1>
-      <div class="uni-hero-swahili" id="uniSwahili">—</div>
+      <div class="uni-hero-subtitle" id="uniSubtitle">—</div>
       <div class="uni-hero-stats">
         <div><div class="uni-hstat-val" id="statShops">0</div><div class="uni-hstat-lbl">Active Shops</div></div>
         <div><div class="uni-hstat-val" id="statSlots">200</div><div class="uni-hstat-lbl">Slots Remaining</div></div>
@@ -231,7 +231,7 @@ const UNI_IMAGES = {
 const UNI_DATA = {
   UDSM: {
     name:"University of Dar es Salaam",
-    swahili:"Chuo Kikuu cha Dar es Salaam",
+    fullname:"University of Dar es Salaam",
     bg1:"#0D1B3E", bg2:"#0A1628", accent:"#C9A84C", ring:"#C9A84C",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
       <circle cx="65" cy="65" r="65" fill="#0A1628"/>
@@ -242,7 +242,7 @@ const UNI_DATA = {
   },
   UDOM: {
     name:"University of Dodoma",
-    swahili:"Chuo Kikuu cha Dodoma",
+    fullname:"University of Dodoma",
     bg1:"#064e3b", bg2:"#065f46", accent:"#6ee7b7", ring:"#6ee7b7",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
       <circle cx="65" cy="65" r="65" fill="#065f46"/>
@@ -253,7 +253,7 @@ const UNI_DATA = {
   },
   ARU: {
     name:"Ardhi University",
-    swahili:"Chuo Kikuu cha Ardhi",
+    fullname:"Ardhi University",
     bg1:"#7c2d12", bg2:"#92400e", accent:"#fed7aa", ring:"#fed7aa",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
       <circle cx="65" cy="65" r="65" fill="#92400e"/>
@@ -264,7 +264,7 @@ const UNI_DATA = {
   },
   TIA: {
     name:"Tanzania Institute of Accountancy",
-    swahili:"Taasisi ya Uhasibu Tanzania",
+    fullname:"Tanzania Institute of Accountancy",
     bg1:"#1e3a5f", bg2:"#1e40af", accent:"#93c5fd", ring:"#93c5fd",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
       <circle cx="65" cy="65" r="65" fill="#1e40af"/>
@@ -275,7 +275,7 @@ const UNI_DATA = {
   },
   NIT: {
     name:"National Institute of Transport",
-    swahili:"Taasisi ya Usafirishaji Tanzania",
+    fullname:"National Institute of Transport",
     bg1:"#3b0764", bg2:"#4c1d95", accent:"#c4b5fd", ring:"#c4b5fd",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
       <circle cx="65" cy="65" r="65" fill="#4c1d95"/>
@@ -309,7 +309,7 @@ if (overlayEl) {
 // Fill uni info
 document.title = uni.name + " — Travex Campus";
 document.getElementById("uniTitle").textContent    = uni.name;
-document.getElementById("uniSwahili").textContent  = uni.swahili;
+document.getElementById("uniSubtitle").textContent  = uni.fullname;
 document.getElementById("uniWatermark").textContent= uniKey;
 document.getElementById("uniLogoWrap").innerHTML   = uni.svg;
 document.getElementById("bannerUni").textContent   = uni.name;
