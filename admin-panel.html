@@ -2,2506 +2,913 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin Panel — Travex Mall</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travex Campus — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--orange:#F97316}
-body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);min-height:100vh}
+:root{
+  --navy:#0D1B3E;--navy2:#0A1628;--gold:#C9A84C;--gold2:#F0C96B;
+  --green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#D97706;
+  --white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;
+  --dark:#111827;--sidebar:240px;--topbar:60px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:var(--dark);height:100vh;overflow:hidden}
 
-/* ── LOGIN SCREEN ── */
-.login-screen{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:1000}
-.login-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:2.5rem;width:100%;max-width:380px;text-align:center}
-.login-logo{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.3rem}
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy2) 0%,#0D1B3E 60%,#1a2f5e 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2.5rem;width:100%;max-width:380px;border-radius:12px;backdrop-filter:blur(10px)}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.3rem}
 .login-logo span{color:var(--gold)}
-.login-sub{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:2rem;letter-spacing:0.1em;text-transform:uppercase}
-.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-family:"Inter",sans-serif;font-size:0.9rem;outline:none;margin-bottom:0.75rem}
-.login-input::placeholder{color:rgba(255,255,255,0.3)}
-.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);border:none;font-family:"Inter",sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.2s}
-.login-btn:hover{background:#F0C96B}
-.login-err{font-size:0.8rem;color:var(--red);margin-top:0.5rem;display:none}
+.login-sub{font-size:0.75rem;color:rgba(255,255,255,0.3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem}
+.login-label{font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;display:block}
+.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;border-radius:8px;transition:border-color 0.2s;margin-bottom:1.25rem}
+.login-input:focus{border-color:var(--gold)}
+.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:800;border:none;cursor:pointer;border-radius:8px;transition:all 0.2s;letter-spacing:0.02em}
+.login-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.login-err{color:#f87171;font-size:0.8rem;margin-top:0.75rem;display:none;text-align:center}
 
-/* ── MAIN LAYOUT ── */
-.admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
-.sidebar{background:var(--navy);padding:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-.sidebar-logo{padding:1.2rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.08)}
-.sidebar-logo-txt{font-family:"Playfair Display",serif;font-size:1rem;font-weight:900;color:#fff}
-.sidebar-logo-txt span{color:var(--gold)}
-.sidebar-sub{font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
-.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
-.nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.7rem 1.5rem;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.2s;border-left:3px solid transparent}
-.nav-item:hover{color:#fff;background:rgba(255,255,255,0.04)}
-.nav-item.active{color:#fff;background:rgba(255,255,255,0.08);border-left-color:var(--gold)}
-.nav-item .ni{font-size:1rem;width:18px;text-align:center}
-.nav-section{font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;padding:1rem 1.5rem 0.3rem}
-.sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.08)}
-.admin-badge{font-size:0.68rem;color:rgba(255,255,255,0.4)}
+/* ── LAYOUT ── */
+#adminMain{display:none;height:100vh;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr}
 
-.main-content{overflow-y:auto}
-.topbar{background:#fff;border-bottom:1px solid var(--lgray);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.topbar-title{font-size:1rem;font-weight:700;color:var(--navy)}
-.topbar-right{display:flex;align-items:center;gap:1rem}
-.topbar-stats{display:flex;gap:1.5rem}
-.ts-item{text-align:center}
-.ts-val{font-size:1rem;font-weight:800;color:var(--navy)}
-.ts-lbl{font-size:0.58rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
-.refresh-btn{background:var(--offwhite);border:1px solid var(--lgray);padding:0.4rem 0.85rem;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;color:var(--navy);transition:all 0.2s}
-.refresh-btn:hover{background:var(--navy);color:#fff}
+/* ── SIDEBAR ── */
+.sidebar{grid-row:1/3;background:var(--navy);display:flex;flex-direction:column;height:100vh;position:sticky;top:0}
+.sb-logo{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sb-logo-text{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff}
+.sb-logo-text span{color:var(--gold)}
+.sb-badge{display:inline-block;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;font-size:0.6rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:20px;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.3rem}
+.sb-nav{flex:1;padding:0.75rem 0;overflow-y:auto}
+.sb-section{font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;padding:0.75rem 1.5rem 0.3rem}
+.sb-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 1.5rem;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;user-select:none}
+.sb-item:hover{color:#fff;background:rgba(255,255,255,0.04)}
+.sb-item.active{color:#fff;background:rgba(255,255,255,0.08);border-left-color:var(--gold);font-weight:600}
+.sb-item .icon{font-size:0.95rem;width:18px;text-align:center;flex-shrink:0}
+.sb-badge-count{margin-left:auto;background:var(--purple);color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:20px;min-width:18px;text-align:center}
+.sb-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07)}
+.sb-links{display:flex;flex-direction:column;gap:0.4rem}
+.sb-ext{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.35);font-size:0.75rem;font-weight:500;text-decoration:none;border-radius:6px;transition:all 0.15s}
+.sb-ext:hover{background:rgba(255,255,255,0.06);color:#fff}
 
-/* ── PAGES ── */
-.page{display:none;padding:2rem}
+/* ── TOPBAR ── */
+.topbar{background:#fff;border-bottom:1px solid var(--lgray);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--navy)}
+.topbar-right{display:flex;align-items:center;gap:0.75rem}
+.topbar-stat{text-align:center;padding:0 0.75rem;border-right:1px solid var(--lgray)}
+.topbar-stat:last-of-type{border-right:none}
+.ts-val{font-size:1rem;font-weight:800;color:var(--navy);line-height:1}
+.ts-lbl{font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:1px}
+.notif-btn{position:relative;background:rgba(13,27,62,0.06);border:1px solid var(--lgray);color:var(--navy);padding:0.4rem 0.75rem;cursor:pointer;border-radius:6px;font-size:1rem;transition:all 0.2s}
+.notif-btn:hover{background:rgba(13,27,62,0.1)}
+.notif-dot{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:0.55rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center}
+.refresh-btn{background:var(--navy);color:#fff;border:none;padding:0.4rem 0.9rem;font-size:0.78rem;font-weight:700;cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.refresh-btn:hover{background:#1a2f5e}
+
+/* ── NOTIFICATIONS DROPDOWN ── */
+.notif-wrap{position:relative}
+.notif-panel{display:none;position:absolute;right:0;top:calc(100% + 8px);width:360px;background:#fff;border:1px solid var(--lgray);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.12);z-index:999;max-height:420px;overflow-y:auto}
+.notif-panel.open{display:block}
+.notif-head{padding:0.85rem 1rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
+.notif-head strong{font-size:0.85rem;color:var(--navy)}
+.notif-mark{font-size:0.72rem;color:var(--purple);cursor:pointer;font-weight:600;background:none;border:none;font-family:'DM Sans',sans-serif}
+.notif-item{padding:0.85rem 1rem;border-bottom:1px solid var(--lgray);cursor:pointer;transition:background 0.15s}
+.notif-item:hover{background:var(--offwhite)}
+.notif-item.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
+.notif-item.unread:hover{background:#FEF3C7}
+.ni-title{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem;display:flex;align-items:center;gap:0.4rem}
+.ni-body{font-size:0.74rem;color:var(--gray);line-height:1.5;margin-bottom:0.3rem}
+.ni-time{font-size:0.67rem;color:var(--gray)}
+.ni-cta{display:inline-block;margin-top:0.3rem;font-size:0.72rem;font-weight:700;color:var(--purple);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0}
+.notif-empty{padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem}
+
+/* ── CONTENT ── */
+.content{overflow-y:auto;padding:1.75rem}
+.page{display:none}
 .page.active{display:block}
-.page-title{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
-.page-sub{font-size:0.82rem;color:var(--gray);margin-bottom:1.5rem}
+.page-header{margin-bottom:1.5rem}
+.page-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem}
+.page-sub{font-size:0.8rem;color:var(--gray)}
 
 /* ── STAT CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
-.stat-card{background:#fff;border:1px solid var(--lgray);padding:1.2rem;border-top:3px solid var(--navy)}
-.stat-card.pending{border-top-color:var(--orange)}
-.stat-card.active{border-top-color:var(--green)}
-.stat-card.revenue{border-top-color:var(--gold)}
-.stat-lbl{font-size:0.62rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
-.stat-val{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;color:var(--navy)}
-.stat-sub{font-size:0.7rem;color:var(--gray);margin-top:0.2rem}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+.stat-card{background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--lgray)}
+.stat-card.purple{border-top-color:var(--purple)}
+.stat-card.orange{border-top-color:var(--orange)}
+.stat-card.green{border-top-color:var(--green)}
+.stat-card.gold{border-top-color:var(--gold)}
+.stat-card.red{border-top-color:var(--red)}
+.sc-label{font-size:0.72rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem}
+.sc-val{font-size:1.75rem;font-weight:800;color:var(--navy);line-height:1}
+.sc-sub{font-size:0.72rem;color:var(--gray);margin-top:0.3rem}
 
-/* ── TABLE ── */
-.tcard{background:#fff;border:1px solid var(--lgray);margin-bottom:1.5rem;overflow:hidden}
-.tcard-head{padding:0.85rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
-.tcard-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
-.filter-row{display:flex;gap:0.5rem;flex-wrap:wrap}
-.filter-btn{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--lgray);background:#fff;color:var(--gray);font-family:"Inter",sans-serif;transition:all 0.2s}
-.filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.search-in{padding:0.4rem 0.75rem;border:1px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.78rem;outline:none;min-width:180px}
-.search-in:focus{border-color:var(--navy)}
-.tbl-wrap{overflow-x:auto}
+/* ── TABLES ── */
+.card{background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden;margin-bottom:1.5rem}
+.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:0.88rem;font-weight:700;color:var(--navy)}
+.card-actions{display:flex;gap:0.5rem;align-items:center}
+.filter-tabs{display:flex;gap:0.25rem}
+.ftab{padding:0.3rem 0.75rem;font-size:0.75rem;font-weight:600;border:1px solid var(--lgray);background:#fff;color:var(--gray);cursor:pointer;border-radius:20px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.ftab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.search-input{padding:0.35rem 0.75rem;border:1.5px solid var(--lgray);font-family:'DM Sans',sans-serif;font-size:0.78rem;outline:none;border-radius:6px;width:180px;transition:border-color 0.2s}
+.search-input:focus{border-color:var(--navy)}
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{background:var(--navy);color:rgba(255,255,255,0.7);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.7rem 1rem;text-align:left;white-space:nowrap}
-td{padding:0.8rem 1rem;font-size:0.82rem;border-bottom:1px solid var(--lgray);color:var(--dark);vertical-align:middle}
+th{padding:0.65rem 1rem;text-align:left;font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--lgray);white-space:nowrap;background:var(--offwhite)}
+td{padding:0.75rem 1rem;font-size:0.82rem;border-bottom:1px solid var(--lgray);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--offwhite)}
-.empty-row td{text-align:center;padding:2.5rem;color:var(--gray)}
+tr:hover td{background:rgba(13,27,62,0.02)}
 
 /* ── BADGES ── */
-.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.65rem;font-weight:700;border-radius:2px}
-.badge-pending{background:#FEF3C7;color:#92400E}
-.badge-approved{background:#D1FAE5;color:#065F46}
-.badge-expired{background:#FEE2E2;color:#991B1B}
-.badge-grace{background:#FFEDD5;color:#9A3412}
-.badge-b2c{background:rgba(192,192,192,0.15);color:#6B7280;border:1px solid rgba(192,192,192,0.3)}
-.badge-b2b{background:rgba(201,168,76,0.12);color:#92400E;border:1px solid rgba(201,168,76,0.25)}
-.badge-basic{background:#EFF6FF;color:#1E40AF}
-.badge-premium{background:#FDF4FF;color:#7E22CE}
+.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.68rem;font-weight:700;border-radius:20px;text-transform:capitalize}
+.badge-pending{background:rgba(217,119,6,0.1);color:var(--orange)}
+.badge-approved{background:rgba(5,150,105,0.1);color:var(--green)}
+.badge-rejected{background:rgba(220,38,38,0.1);color:var(--red)}
+.badge-active{background:rgba(5,150,105,0.1);color:var(--green)}
 
 /* ── ACTION BUTTONS ── */
-.btn-approve{background:var(--green);color:#fff;border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap}
-.btn-approve:hover{opacity:0.85}
-.btn-reject{background:var(--red);color:#fff;border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap}
-.btn-reject:hover{opacity:0.85}
-.btn-view{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray);padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap;text-decoration:none;display:inline-block}
+.btn{padding:0.3rem 0.7rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;border-radius:5px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-approve{background:rgba(5,150,105,0.1);color:var(--green);border:1px solid rgba(5,150,105,0.25)}
+.btn-approve:hover{background:var(--green);color:#fff}
+.btn-reject{background:rgba(220,38,38,0.1);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
+.btn-reject:hover{background:var(--red);color:#fff}
+.btn-view{background:rgba(13,27,62,0.06);color:var(--navy);border:1px solid var(--lgray)}
 .btn-view:hover{background:var(--navy);color:#fff}
-.btn-feature{background:var(--gold);color:var(--navy);border:none;padding:0.4rem 0.85rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;white-space:nowrap}
-.action-wrap{display:flex;gap:0.4rem;flex-wrap:wrap}
+.btn-wa{background:rgba(37,211,102,0.1);color:#15803d;border:1px solid rgba(37,211,102,0.25)}
+.btn-wa:hover{background:#25D366;color:#fff}
 
-/* ── STORE DETAIL MODAL ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
-.modal-bg.open{display:flex}
-.modal{background:#fff;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
-.modal-head{padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff}
-.modal-title{font-size:1rem;font-weight:700;color:var(--navy)}
-.modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray)}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal-head{padding:1.1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
+.modal-head-title{font-size:0.95rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif}
+.modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray);line-height:1;padding:0.2rem}
 .modal-body{padding:1.5rem}
-.modal-row{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--lgray);font-size:0.82rem}
+.modal-section{font-size:0.62rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0 0.4rem;border-bottom:1px solid var(--lgray);margin-bottom:0.5rem;margin-top:1rem}
+.modal-section:first-child{margin-top:0}
+.modal-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.45rem 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:0.83rem;gap:1rem}
 .modal-row:last-child{border-bottom:none}
-.modal-label{color:var(--gray);font-weight:500}
-.modal-val{font-weight:600;color:var(--navy);text-align:right}
-.modal-actions{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;flex-wrap:wrap}
+.modal-label{color:var(--gray);flex-shrink:0;min-width:100px}
+.modal-val{font-weight:600;color:var(--navy);text-align:right;word-break:break-word}
+.modal-foot{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:flex-end;position:sticky;bottom:0;background:#fff}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:#fff;padding:0.85rem 1.5rem;font-size:0.85rem;font-weight:600;z-index:999;transform:translateY(100px);opacity:0;transition:all 0.3s}
-.toast.show{transform:translateY(0);opacity:1}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:0.7rem 1.5rem;border-radius:8px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{background:var(--green)}
 .toast.error{background:var(--red)}
 
-/* ── SPINNER ── */
-.spinner{width:18px;height:18px;border:2px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:3rem;color:var(--gray)}
+.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
+.empty-text{font-size:0.85rem;font-weight:600;color:var(--navy);margin-bottom:0.25rem}
+.empty-sub{font-size:0.78rem}
 
-.store-logo-sm{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;overflow:hidden;flex-shrink:0}
-.store-logo-sm img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.store-name-wrap{display:flex;align-items:center;gap:0.65rem}
+/* ── ID CARD IMAGE ── */
+.id-thumb{width:44px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--lgray);cursor:pointer}
 
-.chart-wrap{background:#fff;border:1px solid var(--lgray);padding:1.5rem;margin-bottom:1.5rem}
-.chart-title{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between}
-.chart-period-tabs{display:flex;gap:0}
-.cpt{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--lgray);background:#fff;color:var(--gray);font-family:"Inter",sans-serif;transition:all 0.2s;margin-left:-1px}
-.cpt.active{background:var(--navy);color:#fff;border-color:var(--navy);z-index:1}
-.bar-chart{display:flex;align-items:flex-end;gap:4px;height:140px;padding-top:1rem}
-.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
-.bar-fill{width:100%;background:var(--navy);border-radius:2px 2px 0 0;transition:height 0.5s ease;min-height:2px;position:relative}
-.bar-fill:hover::after{content:attr(data-val);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:2px 6px;font-size:0.6rem;white-space:nowrap;font-family:"Inter",sans-serif}
-.bar-fill.gold{background:var(--gold)}
-.bar-fill.green{background:var(--green)}
-.bar-fill.blue{background:var(--blue)}
-.bar-lbl{font-size:0.58rem;color:var(--gray);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
-.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
-.kpi-card{background:#fff;border:1px solid var(--lgray);padding:1rem;text-align:center}
-.kpi-val{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:var(--navy)}
-.kpi-lbl{font-size:0.62rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px}
-.kpi-trend{font-size:0.72rem;margin-top:4px;font-weight:600}
-.trend-up{color:var(--green)}.trend-dn{color:var(--red)}.trend-flat{color:var(--gray)}
-.section-divider{height:1px;background:var(--lgray);margin:1.5rem 0}
-.move-stat{border-top:3px solid var(--blue)}
-.driver-online{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px}
-.driver-offline{width:8px;height:8px;border-radius:50%;background:var(--gray);display:inline-block;margin-right:4px}
-@media(max-width:768px){
-  .admin-wrap{grid-template-columns:1fr}
-  .sidebar{position:fixed;left:-220px;z-index:100;transition:left 0.3s;height:100vh}
-  .sidebar.open{left:0}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .topbar-stats{display:none}
-}
-
-/* ── Polish: soft corners + font smoothing + mobile ── */
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-button,input,select,textarea,
-[class*="btn"],[class*="card"],[class*="modal"],
-[class*="badge"],[class*="tab"],[class*="pill"],
-[class*="plan"],[class*="pricing"],[class*="sub-"]{border-radius:8px!important}
-@media(max-width:640px){
-  nav{padding:0 1rem!important;height:56px!important}
-  section,[class*="-section"]{padding-left:1.25rem!important;padding-right:1.25rem!important}
-  h1{font-size:clamp(1.6rem,7vw,2.4rem)!important;line-height:1.1!important;word-break:break-word}
-  h2{font-size:clamp(1.2rem,5vw,1.7rem)!important;line-height:1.15!important}
-  h3{font-size:clamp(1rem,4vw,1.3rem)!important}
-  p,li,span{font-size:0.875rem!important;line-height:1.65!important}
-  input,select,textarea{min-height:48px!important;font-size:16px!important;padding:0.75rem 1rem!important;border-radius:10px!important}
-  button,[class*="btn"]{min-height:48px!important;border-radius:10px!important;font-size:0.9rem!important}
-  [class*="-grid"]{grid-template-columns:1fr 1fr!important}
-  [class*="hero-grid"],[class*="-inner"]{grid-template-columns:1fr!important}
-}
-@media(max-width:400px){
-  h1{font-size:clamp(1.4rem,8vw,1.9rem)!important}
-  p,li{font-size:0.85rem!important}
-  [class*="-grid"]{grid-template-columns:1fr!important}
-}
-
-/* ── SOFT CORNERS: every button, input, form element ── */
-button,
-input[type="text"],input[type="email"],input[type="tel"],
-input[type="password"],input[type="number"],input[type="search"],
-input[type="url"],input[type="file"],
-select,textarea,
-[class*="btn"],[class*="-btn"],[class*="btn-"],
-[class*="nav-tab"],[class*="tab-btn"],[class*="cat-tab"],
-[class*="card"],[class*="-card"],
-[class*="modal"],[class*="popup"],[class*="overlay-box"],
-[class*="badge"],[class*="tag"],[class*="chip"],[class*="pill"],
-[class*="plan"],[class*="pricing"],[class*="sub-card"],
-[class*="step"],[class*="panel"],
-[class*="upload"],[class*="dropzone"],[class*="file-"],
-[class*="search"],[class*="filter"]{
-  border-radius:10px!important;
-}
-/* pill-shaped: small tags/badges */
-[class*="badge"],[class*="tag"],[class*="chip"],[class*="status"]{
-  border-radius:20px!important;
-}
-/* large modals/cards get more radius */
-[class*="modal"],[class*="plan-card"],[class*="pricing-card"]{
-  border-radius:16px!important;
-}
-/* fix any remaining 0-radius inline styles */
-
-.btn-sm{padding:0.25rem 0.6rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-sm.btn-approve{background:rgba(5,150,105,0.12);color:#059669;border:1px solid rgba(5,150,105,0.3)}
-.btn-sm.btn-approve:hover{background:#059669;color:#fff}
-.btn-sm.btn-reject{background:rgba(220,38,38,0.1);color:#DC2626;border:1px solid rgba(220,38,38,0.2)}
-.btn-sm.btn-reject:hover{background:#DC2626;color:#fff}
+/* ── TWO COL LAYOUT ── */
+.two-col{display:grid;grid-template-columns:2fr 1fr;gap:1.25rem}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div class="login-screen" id="loginScreen">
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">TRAVEX <span>MALL</span></div>
-    <div class="login-sub">Admin Control Panel</div>
-    <div style="position:relative">
-      <input type="password" class="login-input" id="adminPin" placeholder="Enter Admin PIN" onkeydown="if(event.key==='Enter')adminLogin()" style="padding-right:3rem">
-      <button onclick="var x=document.getElementById('adminPin');x.type=x.type==='password'?'text':'password'" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:0.75rem">Show</button>
-    </div>
-    <button class="login-btn" onclick="adminLogin()">Access Admin Panel →</button>
-    <div class="login-err" id="loginErr">Incorrect PIN. Try again.</div>
+    <div class="login-logo">TRAVEX <span>CAMPUS</span></div>
+    <div class="login-sub">Admin Panel</div>
+    <label class="login-label">Admin PIN</label>
+    <input type="password" class="login-input" id="adminPin" placeholder="Enter PIN"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
+    <div class="login-err" id="loginErr">❌ Wrong PIN. Try again.</div>
   </div>
 </div>
 
-<!-- MAIN ADMIN UI -->
-<div class="admin-wrap" id="adminMain" style="display:none">
+<!-- ══ ADMIN MAIN ══ -->
+<div id="adminMain">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-txt">TRAVEX <span>MALL</span></div>
-      <div class="sidebar-sub">Admin Panel</div>
+    <div class="sb-logo">
+      <div class="sb-logo-text">TRAVEX <span>CAMPUS</span></div>
+      <div class="sb-badge">🎓 Admin Panel</div>
     </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section">Overview</div>
-      <div class="nav-item active" onclick="showPage('overview',this)"><span class="ni">📊</span>Dashboard</div>
-
-      <div class="nav-section">🎓 Campus Market</div>
-      <div class="nav-item" onclick="showPage('campus-applications',this)"><span class="ni">📋</span>Applications <span id="campusPendingCount" style="margin-left:auto;background:#7C3AED;color:#fff;font-size:0.6rem;padding:0.1rem 0.4rem;font-weight:700"></span></div>
-      <div class="nav-item" onclick="showPage('campus-stores',this)"><span class="ni">🏪</span>Campus Stores</div>
-      <div class="nav-item" onclick="showPage('campus-revenue',this)"><span class="ni">💰</span>Revenue</div>
-      <div class="nav-item" onclick="showPage('campus-analytics',this)"><span class="ni">👁️</span>Traffic & Analytics</div>
-
-      <div class="nav-section">Quick Links</div>
-      <div class="nav-item" onclick="window.open('campus.html','_blank')"><span class="ni">🌐</span>Campus Marketplace</div>
-      <div class="nav-item" onclick="window.open('campus-dashboard.html','_blank')"><span class="ni">🏪</span>Seller Dashboard</div>
-      <div class="nav-item" onclick="window.open('campus-apply.html','_blank')"><span class="ni">📝</span>Apply for Shop</div>
-    
-  <!-- NOTIFICATION BELL -->
-  <div style="position:relative;display:inline-block;margin-left:auto">
-    <button onclick="toggleNotifPanel()" id="notifBell" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:0.5rem 0.75rem;cursor:pointer;font-size:1rem;position:relative;font-family:'Inter',sans-serif">
-      🔔 <span id="notifCount" style="display:none;position:absolute;top:-4px;right:-4px;background:#DC2626;color:#fff;font-size:0.6rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center">0</span>
-    </button>
-    <div id="notifPanel" style="display:none;position:absolute;right:0;top:110%;width:340px;background:#fff;border:1px solid var(--lgray);box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:9999;max-height:400px;overflow-y:auto">
-      <div style="padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:0.82rem;font-weight:700;color:var(--navy)">Notifications</div>
-        <button onclick="markAllRead()" style="font-size:0.72rem;color:var(--gold);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif">Mark all read</button>
+    <nav class="sb-nav">
+      <div class="sb-section">Overview</div>
+      <div class="sb-item active" onclick="goPage('overview',this)">
+        <span class="icon">📊</span> Dashboard
       </div>
-      <div id="notifList"><div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem">Loading...</div></div>
-    </div>
-  </div>
-</nav>
-    <div class="sidebar-footer">
-      <div class="admin-badge">🔐 Admin Access Only</div>
+
+      <div class="sb-section">Campus Market</div>
+      <div class="sb-item" onclick="goPage('applications',this)">
+        <span class="icon">📋</span> Applications
+        <span class="sb-badge-count" id="pendingBadge" style="display:none">0</span>
+      </div>
+      <div class="sb-item" onclick="goPage('stores',this)">
+        <span class="icon">🏪</span> Active Stores
+      </div>
+      <div class="sb-item" onclick="goPage('notifications',this)">
+        <span class="icon">🔔</span> Notifications
+        <span class="sb-badge-count" id="notifSidebarBadge" style="display:none">0</span>
+      </div>
+
+      <div class="sb-section">Quick Links</div>
+      <div class="sb-item" onclick="window.open('campus.html','_blank')">
+        <span class="icon">🌐</span> Campus Marketplace
+      </div>
+      <div class="sb-item" onclick="window.open('campus-dashboard.html','_blank')">
+        <span class="icon">🏪</span> Seller Dashboard
+      </div>
+      <div class="sb-item" onclick="window.open('campus-apply.html','_blank')">
+        <span class="icon">📝</span> Apply for Shop
+      </div>
+    </nav>
+    <div class="sb-bottom">
+      <div style="font-size:0.68rem;color:rgba(255,255,255,0.2);margin-bottom:0.5rem">Travex Campus v2.0</div>
     </div>
   </aside>
 
-  <!-- MAIN -->
-  <div class="main-content">
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="topbar-title" id="topbarTitle">Campus Dashboard</div>
-      <div class="topbar-right">
-        <div class="topbar-stats">
-          <div class="ts-item"><div class="ts-val" id="topStores">—</div><div class="ts-lbl">Shops</div></div>
-          <div class="ts-item"><div class="ts-val" id="topPending">—</div><div class="ts-lbl">Pending</div></div>
-          <div class="ts-item"><div class="ts-val" id="topRevenue">—</div><div class="ts-lbl">Revenue</div></div>
-        </div>
-        <a href="campus-dashboard.html" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);color:#7C3AED;padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:700;text-decoration:none;cursor:pointer">🏪 Seller Dashboard ↗</a>
-        <a href="campus.html" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:700;text-decoration:none;cursor:pointer">🌐 Campus Site ↗</a>
-        <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <div class="topbar-stat">
+        <div class="ts-val" id="statShops">—</div>
+        <div class="ts-lbl">Shops</div>
       </div>
+      <div class="topbar-stat">
+        <div class="ts-val" id="statPending">—</div>
+        <div class="ts-lbl">Pending</div>
+      </div>
+      <div class="topbar-stat">
+        <div class="ts-val" id="statApps">—</div>
+        <div class="ts-lbl">Total Apps</div>
+      </div>
+
+      <!-- NOTIFICATION BELL -->
+      <div class="notif-wrap">
+        <button class="notif-btn" onclick="toggleNotif()" id="notifBell">
+          🔔 <span class="notif-dot" id="notifDot">0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-head">
+            <strong>Notifications</strong>
+            <button class="notif-mark" onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div id="notifList"><div class="notif-empty">Loading...</div></div>
+        </div>
+      </div>
+
+      <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
     </div>
+  </header>
+
+  <!-- ══ PAGES ══ -->
+  <main class="content">
 
     <!-- PAGE: OVERVIEW -->
     <div class="page active" id="page-overview">
-      <div class="page-title">🎓 Campus Admin Dashboard</div>
-      <p class="page-sub" style="margin-bottom:1.75rem">Live overview of Travex Campus — university student marketplace.</p>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem">
-        <div class="stat-card" style="border-top:3px solid #7C3AED">
-          <div class="stat-label">Active Shops</div>
-          <div class="stat-val" id="topStores" style="font-size:2rem">—</div>
+      <div class="page-header">
+        <div class="page-title">🎓 Campus Dashboard</div>
+        <div class="page-sub">Live overview of Travex Campus student marketplace</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card purple">
+          <div class="sc-label">Active Shops</div>
+          <div class="sc-val" id="ov-shops">—</div>
+          <div class="sc-sub" id="ov-shops-sub">across all universities</div>
         </div>
-        <div class="stat-card" style="border-top:3px solid var(--orange)">
-          <div class="stat-label">Pending Applications</div>
-          <div class="stat-val" id="topPending" style="font-size:2rem">—</div>
+        <div class="stat-card orange">
+          <div class="sc-label">Pending Applications</div>
+          <div class="sc-val" id="ov-pending">—</div>
+          <div class="sc-sub">awaiting review</div>
         </div>
-        <div class="stat-card" style="border-top:3px solid var(--green)">
-          <div class="stat-label">Campus Revenue</div>
-          <div class="stat-val" id="topRevenue" style="font-size:2rem">—</div>
+        <div class="stat-card green">
+          <div class="sc-label">Total Applications</div>
+          <div class="sc-val" id="ov-total">—</div>
+          <div class="sc-sub" id="ov-approved-sub">— approved</div>
         </div>
-        <div class="stat-card" style="border-top:3px solid var(--gold)">
-          <div class="stat-label">Total Products</div>
-          <div class="stat-val" id="ovProducts">—</div>
+        <div class="stat-card gold">
+          <div class="sc-label">Universities</div>
+          <div class="sc-val" id="ov-unis">—</div>
+          <div class="sc-sub">with campus presence</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem">
-        <div class="tcard">
-          <div class="tcard-head">
-            <div class="tcard-title">📋 Recent Applications</div>
-            <button class="filter-btn" onclick="showPage('campus-applications',null)">View All →</button>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📋 Recent Applications</div>
+            <button class="btn btn-view" onclick="goPage('applications',null)">View All →</button>
           </div>
           <table>
-            <thead><tr><th>Student</th><th>University</th><th>Shop</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="ovAppsTbl"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr></tbody>
+            <thead><tr>
+              <th>Student</th><th>University</th><th>Shop</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody id="ov-apps-tbody">
+              <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr>
+            </tbody>
           </table>
         </div>
-        <div class="tcard">
-          <div class="tcard-head"><div class="tcard-title">📊 At a Glance</div></div>
-          <div style="padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0.6rem">
-            <div style="display:flex;justify-content:space-between;padding:0.6rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.85rem">
-              <span>Universities</span><strong id="ovUnis">—</strong>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:0.6rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.85rem">
-              <span>Total Orders</span><strong id="ovOrders">—</strong>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:0.6rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.85rem">
-              <span>Approved This Month</span><strong id="ovApprovedMonth" style="color:var(--green)">—</strong>
-            </div>
-          </div>
-          <div style="padding:0 1.25rem 1.25rem;display:flex;flex-direction:column;gap:0.5rem">
-            <a href="campus.html" target="_blank" style="display:block;padding:0.65rem;background:var(--navy);color:#fff;text-align:center;font-size:0.82rem;font-weight:700;text-decoration:none">🌐 View Campus Marketplace</a>
-            <a href="campus-dashboard.html" target="_blank" style="display:block;padding:0.65rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);color:#7C3AED;text-align:center;font-size:0.82rem;font-weight:700;text-decoration:none">🏪 Open Seller Dashboard</a>
-            <a href="campus-apply.html" target="_blank" style="display:block;padding:0.65rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);text-align:center;font-size:0.82rem;font-weight:700;text-decoration:none">📝 Apply for Shop</a>
+        <div class="card">
+          <div class="card-head"><div class="card-title">🔔 Recent Notifications</div></div>
+          <div id="ov-notifs" style="max-height:320px;overflow-y:auto">
+            <div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.8rem">Loading...</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="page" id="page-campus-overview">
-      <div class="page-title">📊 Campus Overview</div>
-      <p class="page-sub" style="margin-bottom:1.5rem">Detailed metrics across all campus universities.</p>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem">
-        <div class="stat-card" style="border-top:3px solid #7C3AED"><div class="stat-label">Active Shops</div><div class="stat-val" id="co-shops">—</div></div>
-        <div class="stat-card" style="border-top:3px solid var(--orange)"><div class="stat-label">Pending Apps</div><div class="stat-val" id="co-pending">—</div></div>
-        <div class="stat-card" style="border-top:3px solid var(--green)"><div class="stat-label">Revenue</div><div class="stat-val" id="co-revenue">—</div></div>
-        <div class="stat-card" style="border-top:3px solid var(--gold)"><div class="stat-label">Products</div><div class="stat-val" id="co-products">—</div></div>
+    <!-- PAGE: APPLICATIONS -->
+    <div class="page" id="page-applications">
+      <div class="page-header">
+        <div class="page-title">📋 Applications</div>
+        <div class="page-sub">All student shop applications — review, approve or reject</div>
       </div>
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">📋 Recent Applications</div><button class="filter-btn" onclick="showPage('campus-applications',null)">View All →</button></div>
-        <table><thead><tr><th>Student</th><th>University</th><th>Shop</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="coAppsTbl"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr></tbody></table>
-      </div>
-    </div>
-
-    <div class="page" id="page-campus-applications">
-      <div class="page-title">📋 Campus Applications</div>
-      <div class="page-sub">Student shop applications — Review, Approve or Reject</div>
-      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
-        <button class="filter-btn active" id="ca-filter-all"    onclick="filterApps('all',this)">All</button>
-        <button class="filter-btn"       id="ca-filter-pending" onclick="filterApps('pending',this)">Pending ⏳</button>
-        <button class="filter-btn"       id="ca-filter-approved" onclick="filterApps('approved',this)">Approved ✅</button>
-        <button class="filter-btn"       id="ca-filter-rejected" onclick="filterApps('rejected',this)">Rejected ❌</button>
-        <input type="search" id="ca-search" placeholder="Search name, university, shop..." oninput="filterAppsSearch(this.value)"
-          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
-      </div>
-      <div class="table-wrap">
-        <table><thead><tr>
-          <th>Name / Year</th><th>Email</th><th>University</th><th>Shop / Category</th><th>WhatsApp</th><th>University ID</th><th>Status</th><th>Date</th><th>Actions</th>
-        </tr></thead>
-        <tbody id="campus-apps-tbody">
-          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
-        </tbody></table>
-      </div>
-    </div>
-
-    <!-- PAGE: CAMPUS STORES -->
-    <div class="page" id="page-campus-stores">
-      <div class="page-title">🏪 Campus Stores</div>
-      <div class="page-sub">All active shops on Travex Campus Marketplace</div>
-      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
-        <select id="cs-uni-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
-          <option value="">Vyuo Vyote</option>
-          <option>UDSM</option><option>UDOM</option><option>ARU</option><option>TIA</option><option>NIT</option>
-        </select>
-        <select id="cs-status-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
-          <option value="">Status Yote</option>
-          <option value="true">Active</option>
-          <option value="false">Pending</option>
-        </select>
-        <input type="search" id="cs-search" placeholder="Tafuta duka..." oninput="filterCampusStores()"
-          style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
-      </div>
-      <div class="table-wrap">
-        <table><thead><tr>
-          <th>#</th><th>Duka</th><th>Seller</th><th>Chuo</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
-        </tr></thead>
-        <tbody id="campus-stores-tbody">
-          <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
-        </tbody></table>
-      </div>
-    </div>
-
-    <!-- PAGE: CAMPUS ANALYTICS -->
-    <div class="page" id="page-campus-analytics">
-      <div class="page-title">👁️ Campus Traffic</div>
-      <div class="page-sub">Visitors and traffic across Campus marketplace stores</div>
-      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
-        <button class="cpt active" onclick="loadCampusAnalytics('day',this)">Leo</button>
-        <button class="cpt" onclick="loadCampusAnalytics('week',this)">Wiki hii</button>
-        <button class="cpt" onclick="loadCampusAnalytics('month',this)">Mwezi huu</button>
-        <button class="cpt" onclick="loadCampusAnalytics('year',this)">Mwaka huu</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card" style="border-top:3px solid #7C3AED"><div class="kpi-val" id="ca-views">—</div><div class="kpi-lbl">Total Views</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--gold)"><div class="kpi-val" id="ca-stores-viewed">—</div><div class="kpi-lbl">Stores Viewed</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--green)"><div class="kpi-val" id="ca-top-uni">—</div><div class="kpi-lbl">Top University</div></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Traffic by University</div>
-        <div id="ca-uni-chart" style="display:grid;gap:0.75rem;margin-top:1rem"></div>
-      </div>
-    </div>
-
-    <!-- PAGE: CAMPUS REVENUE -->
-    <div class="page" id="page-campus-revenue">
-      <div class="page-title">💰 Campus Revenue</div>
-      <div class="page-sub">Revenue generated from Travex Campus Marketplace</div>
-      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
-        <button class="cpt active" onclick="loadCampusRevenue('day',this)">Leo</button>
-        <button class="cpt" onclick="loadCampusRevenue('week',this)">Wiki hii</button>
-        <button class="cpt" onclick="loadCampusRevenue('month',this)">Mwezi huu</button>
-        <button class="cpt" onclick="loadCampusRevenue('year',this)">Mwaka huu</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card" style="border-top:3px solid var(--gold)"><div class="kpi-val" id="cr-total">—</div><div class="kpi-lbl">Total Revenue</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--green)"><div class="kpi-val" id="cr-stores">—</div><div class="kpi-lbl">Paying Stores</div></div>
-        <div class="kpi-card" style="border-top:3px solid #7C3AED"><div class="kpi-val" id="cr-avg">—</div><div class="kpi-lbl">Avg per Store</div></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Mapato ya Campus kwa Chuo</div>
-        <div id="cr-breakdown" style="display:grid;gap:0.75rem;margin-top:1rem"></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Historia ya Malipo</div>
-        <div class="table-wrap" style="margin-top:0.5rem">
-          <table><thead><tr><th>Seller</th><th>Chuo</th><th>Duka</th><th>Kiasi</th><th>Tarehe</th><th>Status</th></tr></thead>
-          <tbody id="cr-payments-tbody">
-            <tr><td colspan="6" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
-          </tbody></table>
+      <div class="card">
+        <div class="card-head">
+          <div class="filter-tabs">
+            <button class="ftab active" onclick="filterApps('all',this)">All</button>
+            <button class="ftab" onclick="filterApps('pending',this)">Pending ⏳</button>
+            <button class="ftab" onclick="filterApps('approved',this)">Approved ✅</button>
+            <button class="ftab" onclick="filterApps('rejected',this)">Rejected ❌</button>
+          </div>
+          <div class="card-actions">
+            <input class="search-input" type="search" placeholder="Search name, shop, uni..."
+              oninput="searchApps(this.value)">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Student</th><th>University</th><th>Shop</th><th>Category</th>
+              <th>WhatsApp</th><th>ID Card</th><th>Status</th><th>Date</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="apps-tbody">
+              <tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-  </div><!-- /main-content -->
-</div><!-- /admin-wrap -->
+    <!-- PAGE: STORES -->
+    <div class="page" id="page-stores">
+      <div class="page-header">
+        <div class="page-title">🏪 Active Stores</div>
+        <div class="page-sub">All approved campus stores</div>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Store</th><th>University</th><th>Category</th><th>Owner</th><th>WhatsApp</th><th>Status</th><th>Created</th>
+            </tr></thead>
+            <tbody id="stores-tbody">
+              <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-<!-- STORE MODAL -->
-<div class="modal-bg" id="storeModal">
+    <!-- PAGE: NOTIFICATIONS -->
+    <div class="page" id="page-notifications">
+      <div class="page-header">
+        <div class="page-title">🔔 All Notifications</div>
+        <div class="page-sub" id="notif-page-sub">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Notification History</div>
+          <button class="btn btn-view" onclick="markAllRead()">Mark All Read</button>
+        </div>
+        <div id="notif-page-list">
+          <div style="padding:2rem;text-align:center;color:var(--gray)">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- APPLICATION DETAIL MODAL -->
+<div class="modal-overlay" id="appModal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title" id="modalStoreName">Store Details</div>
+      <div class="modal-head-title" id="modalTitle">Application Details</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-actions" id="modalActions"></div>
+    <div class="modal-foot" id="modalFoot"></div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-const SB_URL = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SB_KEY = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
-const {createClient} = supabase;
+// ══════════════════════════════════════
+// SUPABASE SETUP
+// ══════════════════════════════════════
+const SB_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY  = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const ADMIN_PIN = "admin2026";
+const { createClient } = supabase;
 const sb = createClient(SB_URL, SB_KEY);
 
-// ── ADMIN PIN (change this!) ──
-const ADMIN_PIN = "admin2026";
-
-let allStores = [], allSubs = [], allPosts = [];
+// ── STATE ──
+let allApps   = [];
+let allStores = [];
+let allNotifs = [];
 let currentFilter = 'all';
+let currentSearch = '';
 
-// ── LOGIN ──
-function adminLogin() {
-  const pin = document.getElementById("adminPin").value.trim();
-  if (pin === ADMIN_PIN || pin.toLowerCase() === ADMIN_PIN.toLowerCase()) {
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("adminMain").style.display = "grid";
+// ══════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════
+function doLogin() {
+  const pin = document.getElementById('adminPin').value.trim();
+  if (pin === ADMIN_PIN) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminMain').style.display = 'grid';
     loadAll();
-    setTimeout(showDebugBtn, 1000);
   } else {
-    document.getElementById("loginErr").style.display = "block";
-    document.getElementById("adminPin").value = "";
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('adminPin').value = '';
   }
 }
 
-// ── LOAD ALL DATA — Campus Only ──
+// ══════════════════════════════════════
+// LOAD ALL DATA
+// ══════════════════════════════════════
 async function loadAll() {
-  await loadCampusData();   // populate allCampusApps, allCampusStores
-  await loadOverview();
-  loadNotifications();
-}
-
-async function loadOverview() {
-  const [shopsRes, ordersRes, prodsRes] = await Promise.all([
-    sb.from("campus_stores").select("id,is_active,university_abbr"),
-    sb.from("campus_orders").select("total_price,created_at"),
-    sb.from("campus_products").select("id").eq("is_active",true)
+  await Promise.all([
+    loadApps(),
+    loadStores(),
+    loadNotifs()
   ]);
-
-  const shops   = allCampusStores.length ? allCampusStores : (shopsRes.data || []);
-  const apps    = allCampusApps;
-  const orders  = ordersRes.data || [];
-  const prods   = prodsRes.data  || [];
-  const pending = apps.filter(a => a.status === "pending");
-  const revenue = orders.reduce((s,o) => s + Number(o.total_price||0), 0);
-  const unis    = [...new Set(shops.filter(s=>s.is_active).map(s=>s.university_abbr))].length;
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const approvedMonth = apps.filter(a => a.status==="approved" && new Date(a.submitted_at) >= monthStart).length;
-
-  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
-  set("topStores",       shops.filter(s=>s.is_active).length);
-  set("topPending",      pending.length);
-  set("topRevenue",      "TZS "+(revenue/1000).toFixed(0)+"K");
-  set("ovProducts",      prods.length);
-  set("ovUnis",          unis);
-  set("ovOrders",        orders.length);
-  set("ovApprovedMonth", approvedMonth);
-
-  const badge = document.getElementById("campusPendingCount");
-  if(badge){ badge.textContent = pending.length; badge.style.display = pending.length > 0 ? "inline-block" : "none"; }
-
-  renderAppsTable("ovAppsTbl", apps.slice(0, 6));
+  renderOverview();
 }
 
-function renderAppsTable(tbodyId, apps) {
-  const tbody = document.getElementById(tbodyId);
-  if(!tbody) return;
-  if(!apps.length){
-    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;padding:2rem;color:var(--gray)'>No applications yet.</td></tr>";
+async function loadApps() {
+  const { data, error } = await sb
+    .from('campus_applications')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('loadApps error:', error);
+    toast('Error loading applications: ' + error.message, 'error');
+    return;
+  }
+  allApps = data || [];
+
+  // Update badges
+  const pending = allApps.filter(a => a.status === 'pending').length;
+  const badge = document.getElementById('pendingBadge');
+  if (badge) {
+    badge.textContent = pending;
+    badge.style.display = pending > 0 ? 'inline-block' : 'none';
+  }
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statApps').textContent = allApps.length;
+}
+
+async function loadStores() {
+  const { data, error } = await sb
+    .from('campus_stores')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) { console.error('loadStores error:', error); return; }
+  allStores = data || [];
+  document.getElementById('statShops').textContent = allStores.filter(s => s.is_active).length;
+}
+
+async function loadNotifs() {
+  const { data, error } = await sb
+    .from('admin_notifications')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (error) { console.error('loadNotifs error:', error); return; }
+  allNotifs = data || [];
+
+  const unread = allNotifs.filter(n => !n.is_read).length;
+  const dot = document.getElementById('notifDot');
+  const sideBadge = document.getElementById('notifSidebarBadge');
+  if (dot) { dot.textContent = unread; dot.style.display = unread > 0 ? 'flex' : 'none'; }
+  if (sideBadge) { sideBadge.textContent = unread; sideBadge.style.display = unread > 0 ? 'inline-block' : 'none'; }
+
+  renderNotifDropdown();
+}
+
+// ══════════════════════════════════════
+// RENDER OVERVIEW
+// ══════════════════════════════════════
+function renderOverview() {
+  const active   = allStores.filter(s => s.is_active).length;
+  const pending  = allApps.filter(a => a.status === 'pending').length;
+  const approved = allApps.filter(a => a.status === 'approved').length;
+  const unis     = [...new Set(allStores.filter(s=>s.is_active).map(s=>s.university_abbr))].length;
+
+  setText('ov-shops',        active);
+  setText('ov-shops-sub',    allStores.length + ' total registered');
+  setText('ov-pending',      pending);
+  setText('ov-total',        allApps.length);
+  setText('ov-approved-sub', approved + ' approved');
+  setText('ov-unis',         unis || '—');
+
+  // Recent apps table (last 6)
+  const tbody = document.getElementById('ov-apps-tbody');
+  const recent = allApps.slice(0, 6);
+  if (!recent.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No applications yet</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = recent.map(a => `<tr>
+    <td><strong>${esc(a.full_name)}</strong><div style="font-size:0.7rem;color:var(--gray)">${esc(a.email||'')}</div></td>
+    <td><span style="background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:700">${esc(a.university_abbr||'—')}</span></td>
+    <td style="font-size:0.8rem">${esc(a.shop_name||'—')}</td>
+    <td><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></td>
+    <td>
+      ${a.status==='pending' ? `<button class="btn btn-approve" onclick="approveApp('${a.id}')">✓</button> <button class="btn btn-reject" onclick="rejectApp('${a.id}')">✗</button>` : ''}
+      <button class="btn btn-view" onclick="viewApp('${a.id}')">View</button>
+    </td>
+  </tr>`).join('');
+
+  // Notifications in overview
+  renderOvNotifs();
+}
+
+function renderOvNotifs() {
+  const el = document.getElementById('ov-notifs');
+  const recent = allNotifs.slice(0, 8);
+  if (!recent.length) {
+    el.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
+    return;
+  }
+  el.innerHTML = recent.map(n => `
+    <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;border-left:3px solid ${n.is_read?'transparent':n.type==='campus_application'?'var(--purple)':'var(--gold)'}"
+      onclick="markRead('${n.id}');goPage('notifications',null)">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${esc(n.title||'Notification')}</div>
+      <div style="font-size:0.72rem;color:var(--gray);line-height:1.5">${esc(n.body||'')}</div>
+      <div style="font-size:0.65rem;color:var(--gray);margin-top:0.25rem">${timeAgo(n.created_at)}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+// RENDER APPLICATIONS TABLE
+// ══════════════════════════════════════
+function renderAppsTable() {
+  const tbody = document.getElementById('apps-tbody');
+  let apps = allApps;
+  if (currentFilter !== 'all') apps = apps.filter(a => a.status === currentFilter);
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    apps = apps.filter(a =>
+      (a.full_name||'').toLowerCase().includes(q) ||
+      (a.shop_name||'').toLowerCase().includes(q) ||
+      (a.university_abbr||'').toLowerCase().includes(q) ||
+      (a.email||'').toLowerCase().includes(q)
+    );
+  }
+  if (!apps.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No applications found</div><div class="empty-sub">Try changing the filter</div></div></td></tr>`;
     return;
   }
   tbody.innerHTML = apps.map(a => {
-    const cat = a.category || a.business_category || "—";
-    const ts  = a.submitted_at || a.created_at;
-    const dateStr = ts ? new Date(ts).toLocaleDateString("en",{day:"numeric",month:"short",year:"2-digit"}) : "—";
+    const cat = a.category || a.business_category || '—';
+    const wa  = a.whatsapp_number || a.whatsapp || a.phone || '';
+    const dt  = a.submitted_at || a.created_at;
     return `<tr>
-      <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.72rem;color:var(--gray)">${a.email||""}</div></td>
-      <td><span style="background:rgba(124,58,237,0.1);color:#7C3AED;padding:0.15rem 0.45rem;font-size:0.68rem;font-weight:700">${a.university_abbr||"—"}</span></td>
-      <td>${a.shop_name||"—"}</td>
-      <td style="font-size:0.78rem">${cat}</td>
-      <td><span class="badge badge-${a.status==="approved"?"approved":a.status==="rejected"?"rejected":"pending"}">${a.status||"pending"}</span><div style="font-size:0.68rem;color:var(--gray)">${dateStr}</div></td>
-      <td style="display:flex;gap:0.35rem;flex-wrap:wrap">
-        ${a.status==="pending"
-          ? `<button class="btn-sm btn-approve" onclick="approveApp('${a.id}',this)">✓ Approve</button>
-             <button class="btn-sm btn-reject" onclick="rejectApp('${a.id}',this)">✗</button>`
-          : ""}
-        <button class="btn-sm" style="background:var(--offwhite);border:1px solid var(--lgray)" onclick="viewApp('${a.id}')">View</button>
+      <td><strong>${esc(a.full_name||'—')}</strong><div style="font-size:0.7rem;color:var(--gray)">${esc(a.year_of_study ? 'Year '+a.year_of_study : '')}</div></td>
+      <td><span style="background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:700">${esc(a.university_abbr||'—')}</span></td>
+      <td><strong style="font-size:0.82rem">${esc(a.shop_name||'—')}</strong></td>
+      <td style="font-size:0.78rem">${esc(cat)}</td>
+      <td>${wa ? `<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;text-decoration:none;font-size:0.78rem">${esc(wa)}</a>` : '—'}</td>
+      <td>${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" class="id-thumb" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:var(--purple);font-size:0.72rem&quot;>View ID →</a>'"></a>` : '<span style="color:var(--gray);font-size:0.72rem">—</span>'}</td>
+      <td><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></td>
+      <td style="font-size:0.72rem;color:var(--gray)">${dt ? new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '—'}</td>
+      <td>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap">
+          ${a.status==='pending' ? `<button class="btn btn-approve" onclick="approveApp('${a.id}')">✓ Approve</button><button class="btn btn-reject" onclick="rejectApp('${a.id}')">✗</button>` : ''}
+          <button class="btn btn-view" onclick="viewApp('${a.id}')">View</button>
+          ${wa ? `<button class="btn btn-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')">💬</button>` : ''}
+        </div>
       </td>
     </tr>`;
-  }).join("");
+  }).join('');
 }
 
-async function approveApp(id, btn) {
-  if(!confirm("Approve this application and create their shop?")) return;
-  btn.disabled = true; btn.textContent = "...";
-  await sb.from("campus_applications").update({status:"approved"}).eq("id",id);
-  const {data:a} = await sb.from("campus_applications").select("*").eq("id",id).single();
-  if(a) await sb.from("campus_stores").upsert({
-    store_name:      a.shop_name,
-    university_abbr: a.university_abbr,
-    university_name: a.university_name || a.university,
-    category:        a.category || a.business_category,
-    whatsapp_number: a.whatsapp_number || a.whatsapp,
-    description:     a.description || a.business_description,
-    owner_name:      a.full_name,
-    owner_email:     a.email,
+function filterApps(status, btn) {
+  currentFilter = status;
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderAppsTable();
+}
+
+function searchApps(q) {
+  currentSearch = q;
+  renderAppsTable();
+}
+
+// ══════════════════════════════════════
+// RENDER STORES TABLE
+// ══════════════════════════════════════
+function renderStoresTable() {
+  const tbody = document.getElementById('stores-tbody');
+  if (!allStores.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🏪</div><div class="empty-text">No stores yet</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = allStores.map(s => `<tr>
+    <td><strong>${esc(s.store_name||'—')}</strong></td>
+    <td><span style="background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:700">${esc(s.university_abbr||'—')}</span></td>
+    <td style="font-size:0.78rem">${esc(s.category||'—')}</td>
+    <td style="font-size:0.78rem">${esc(s.owner_name||s.seller_name||'—')}</td>
+    <td>${(s.whatsapp_number||s.seller_phone) ? `<a href="https://wa.me/${(s.whatsapp_number||s.seller_phone||'').replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:0.78rem;text-decoration:none">${esc(s.whatsapp_number||s.seller_phone||'')}</a>` : '—'}</td>
+    <td><span class="badge ${s.is_active?'badge-active':'badge-rejected'}">${s.is_active?'Active':'Inactive'}</span></td>
+    <td style="font-size:0.72rem;color:var(--gray)">${s.created_at ? new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : '—'}</td>
+  </tr>`).join('');
+}
+
+// ══════════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════════
+function renderNotifDropdown() {
+  const list = document.getElementById('notifList');
+  if (!allNotifs.length) {
+    list.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
+    return;
+  }
+  list.innerHTML = allNotifs.slice(0, 20).map(n => `
+    <div class="notif-item ${n.is_read?'':'unread'}" onclick="markRead('${n.id}')">
+      <div class="ni-title">
+        ${!n.is_read ? '<span style="width:7px;height:7px;background:var(--red);border-radius:50%;flex-shrink:0;display:inline-block"></span>' : ''}
+        ${esc(n.title||'Notification')}
+      </div>
+      <div class="ni-body">${esc(n.body||'')}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="ni-time">${timeAgo(n.created_at)}</div>
+        ${n.type==='campus_application' ? `<button class="ni-cta" onclick="goPage('applications',null);closeNotif()">View Applications →</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function renderNotifPage() {
+  const el = document.getElementById('notif-page-list');
+  const sub = document.getElementById('notif-page-sub');
+  const unread = allNotifs.filter(n=>!n.is_read).length;
+  sub.textContent = `${allNotifs.length} total — ${unread} unread`;
+
+  if (!allNotifs.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🔔</div><div class="empty-text">No notifications yet</div><div class="empty-sub">Notifications will appear here when students apply for shops</div></div>`;
+    return;
+  }
+  el.innerHTML = allNotifs.map(n => `
+    <div style="display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;transition:background 0.15s"
+      onclick="markRead('${n.id}')" onmouseover="this.style.background='var(--offwhite)'" onmouseout="this.style.background='${n.is_read?'#fff':'#FFFBEB'}'">
+      <div style="width:36px;height:36px;border-radius:50%;background:${n.type==='campus_application'?'rgba(124,58,237,0.1)':'rgba(201,168,76,0.1)'};display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+        ${n.type==='campus_application'?'🎓':'🔔'}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem;display:flex;align-items:center;gap:0.5rem">
+          ${esc(n.title||'Notification')}
+          ${!n.is_read ? '<span style="width:7px;height:7px;background:var(--red);border-radius:50%;flex-shrink:0;display:inline-block"></span>' : ''}
+        </div>
+        <div style="font-size:0.78rem;color:var(--gray);line-height:1.6;margin-bottom:0.3rem">${esc(n.body||'')}</div>
+        <div style="font-size:0.68rem;color:var(--gray)">${timeAgo(n.created_at)} · ${new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+        ${n.type==='campus_application' ? `<button onclick="goPage('applications',null)" style="margin-top:0.4rem;background:var(--purple);color:#fff;border:none;padding:0.3rem 0.8rem;border-radius:4px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Review Application →</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function toggleNotif() {
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+
+function closeNotif() {
+  document.getElementById('notifPanel').classList.remove('open');
+}
+
+async function markRead(id) {
+  await sb.from('admin_notifications').update({is_read:true}).eq('id',id);
+  allNotifs = allNotifs.map(n => n.id===id ? {...n, is_read:true} : n);
+  const unread = allNotifs.filter(n=>!n.is_read).length;
+  const dot = document.getElementById('notifDot');
+  const sideBadge = document.getElementById('notifSidebarBadge');
+  dot.textContent = unread; dot.style.display = unread>0?'flex':'none';
+  sideBadge.textContent = unread; sideBadge.style.display = unread>0?'inline-block':'none';
+  renderNotifDropdown();
+  renderOvNotifs();
+  if (document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
+}
+
+async function markAllRead() {
+  await sb.from('admin_notifications').update({is_read:true}).eq('is_read',false);
+  allNotifs = allNotifs.map(n => ({...n, is_read:true}));
+  const dot = document.getElementById('notifDot');
+  const sideBadge = document.getElementById('notifSidebarBadge');
+  dot.style.display = 'none'; sideBadge.style.display = 'none';
+  renderNotifDropdown();
+  renderOvNotifs();
+  if (document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
+  toast('All notifications marked as read');
+}
+
+// ══════════════════════════════════════
+// APPROVE / REJECT
+// ══════════════════════════════════════
+async function approveApp(id) {
+  const app = allApps.find(a => a.id === id);
+  if (!app) return;
+  if (!confirm(`Approve application from ${app.full_name}?\n\nThis will create their shop immediately.`)) return;
+
+  // 1. Update status
+  const {error:e1} = await sb.from('campus_applications')
+    .update({status:'approved', approved_at: new Date().toISOString()}).eq('id',id);
+  if (e1) { toast('Error: ' + e1.message, 'error'); return; }
+
+  // 2. Create campus store
+  const shopNum = allStores.filter(s=>s.university_abbr===app.university_abbr).length + 1;
+  const {error:e2} = await sb.from('campus_stores').insert({
+    store_name:      app.shop_name || app.full_name + "'s Shop",
+    university_abbr: app.university_abbr,
+    university_name: app.university_name || app.university,
+    category:        app.category || app.business_category,
+    description:     app.description || app.business_description,
+    whatsapp_number: app.whatsapp_number || app.whatsapp || app.phone,
+    owner_name:      app.full_name,
+    owner_email:     app.email,
+    seller_name:     app.full_name,
+    user_id:         app.user_id || null,
     is_active:       true,
+    shop_number:     shopNum,
+    subscription_start: new Date().toISOString(),
     created_at:      new Date().toISOString()
   });
-  showToast("✅ Application approved — shop created!", "success");
-  loadAll();
+  if (e2) toast('⚠️ Store creation warning: ' + e2.message, 'error');
+
+  // 3. WhatsApp notification
+  const phone = (app.whatsapp_number||app.whatsapp||app.phone||'').replace(/\D/g,'');
+  if (phone) {
+    const msg = encodeURIComponent(
+      `🎉 Congratulations ${app.full_name}!\n\n` +
+      `Your Travex Campus application has been approved! 🎓\n\n` +
+      `Shop: ${app.shop_name}\nUniversity: ${app.university_abbr}\nShop No: #${shopNum}\n\n` +
+      `Pay Activation Fee:\n💳 CRDB: 0152774556100\n📱 M-Pesa: +255 651 919 915\n💵 TZS 15,000/month\n\n` +
+      `Send receipt photo after payment.\nLogin: ${window.location.origin}/campus-dashboard.html\n\nWelcome to Travex Campus! 🎓`
+    );
+    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+  }
+
+  toast(`✅ ${app.full_name} approved! Shop #${shopNum} is live.`, 'success');
+  await loadAll();
+  renderAppsTable();
+  renderStoresTable();
 }
 
-async function rejectApp(id, btn) {
-  if(!confirm("Reject this application?")) return;
-  btn.disabled = true;
-  await sb.from("campus_applications").update({status:"rejected"}).eq("id",id);
-  showToast("Application rejected.");
-  loadAll();
+async function rejectApp(id) {
+  const app = allApps.find(a => a.id === id);
+  if (!app) return;
+  if (!confirm(`Reject application from ${app.full_name}?`)) return;
+  const {error} = await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+  toast(`Application from ${app.full_name} rejected.`);
+  await loadApps();
+  renderAppsTable();
+  renderOverview();
 }
 
-async function viewApp(id) {
-  const {data:a} = await sb.from("campus_applications").select("*").eq("id",id).single();
-  if(!a) return;
-  const fmt = v => v||"—";
-  const cat  = a.category || a.business_category || "—";
-  const desc = a.description || a.business_description || "—";
-  const wa   = a.whatsapp_number || a.whatsapp || "—";
-  const uni  = a.university_name || a.university || "—";
-  document.getElementById("detailTitle").textContent = "Application — " + fmt(a.shop_name);
-  document.getElementById("detailBody").innerHTML = [
-    ["Full Name", fmt(a.full_name)], ["Email", fmt(a.email)], ["Phone", fmt(a.phone)],
-    ["University", `${uni} (${fmt(a.university_abbr)})`],
-    ["Student ID", fmt(a.student_id)], ["Year", fmt(a.year_of_study)],
-    ["Shop Name", fmt(a.shop_name)], ["Category", cat],
-    ["WhatsApp", wa], ["Description", desc],
-    ["Status", `<span class='badge badge-${a.status}'>${a.status||"pending"}</span>`],
-    ["Submitted", a.submitted_at ? new Date(a.submitted_at).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}) : "—"]
-  ].map(([l,v]) => `<div class="detail-row"><div class="detail-label">${l}</div><div class="detail-val">${v}</div></div>`).join("");
-  document.getElementById("detailFooter").innerHTML = a.status==="pending"
-    ? `<button class="btn-approve" onclick="approveApp('${a.id}',this.closest('[id]') ? document.createElement('button') : this);closeModal()">✓ Approve & Create Shop</button>
-       <button class="btn-reject" onclick="rejectApp('${a.id}',this);closeModal()">✗ Reject</button>`
-    : "";
-  document.getElementById("detailModal").classList.add("open");
+// ══════════════════════════════════════
+// VIEW APP MODAL
+// ══════════════════════════════════════
+function viewApp(id) {
+  const a = allApps.find(x => x.id === id);
+  if (!a) return;
+  const cat = a.category || a.business_category || '—';
+  const desc = a.description || a.business_description || '—';
+  const wa = a.whatsapp_number || a.whatsapp || a.phone || '';
+  const uni = a.university_name || a.university || '—';
+  const dt = a.submitted_at || a.created_at;
+
+  document.getElementById('modalTitle').textContent = (a.shop_name || a.full_name) + ' — Application';
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">Student Info</div>
+    <div class="modal-row"><span class="modal-label">Full Name</span><span class="modal-val">${esc(a.full_name||'—')}</span></div>
+    <div class="modal-row"><span class="modal-label">Email</span><span class="modal-val">${esc(a.email||'—')}</span></div>
+    <div class="modal-row"><span class="modal-label">Phone</span><span class="modal-val">${esc(a.phone||'—')}</span></div>
+    <div class="modal-row"><span class="modal-label">WhatsApp</span><span class="modal-val">${wa ? `<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:700">${esc(wa)} 💬</a>` : '—'}</span></div>
+    <div class="modal-row"><span class="modal-label">Year of Study</span><span class="modal-val">${esc(a.year_of_study||'—')}</span></div>
+
+    <div class="modal-section">University</div>
+    <div class="modal-row"><span class="modal-label">University</span><span class="modal-val">${esc(uni)}</span></div>
+    <div class="modal-row"><span class="modal-label">Abbreviation</span><span class="modal-val">${esc(a.university_abbr||'—')}</span></div>
+    <div class="modal-row"><span class="modal-label">Region</span><span class="modal-val">${esc(a.region||'—')}</span></div>
+
+    <div class="modal-section">Business / Shop</div>
+    <div class="modal-row"><span class="modal-label">Shop Name</span><span class="modal-val">${esc(a.shop_name||'—')}</span></div>
+    <div class="modal-row"><span class="modal-label">Category</span><span class="modal-val">${esc(cat)}</span></div>
+    <div class="modal-row"><span class="modal-label">Description</span><span class="modal-val" style="text-align:right;max-width:280px;line-height:1.5">${esc(desc)}</span></div>
+
+    <div class="modal-section">ID Card</div>
+    ${a.id_card_url
+      ? `<div style="margin:0.75rem 0"><img src="${a.id_card_url}" style="max-width:100%;max-height:180px;border-radius:6px;border:1px solid var(--lgray);display:block" onerror="this.style.display='none'">
+         <a href="${a.id_card_url}" target="_blank" style="color:var(--purple);font-size:0.82rem;font-weight:600;text-decoration:none;display:inline-block;margin-top:0.5rem">🪪 View Full ID →</a></div>`
+      : '<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">No ID uploaded</div>'}
+
+    <div class="modal-section">Status</div>
+    <div class="modal-row"><span class="modal-label">Status</span><span class="modal-val"><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></span></div>
+    <div class="modal-row"><span class="modal-label">Submitted</span><span class="modal-val">${dt ? new Date(dt).toLocaleString('en-GB') : '—'}</span></div>
+    ${a.approved_at ? `<div class="modal-row"><span class="modal-label">Approved</span><span class="modal-val">${new Date(a.approved_at).toLocaleString('en-GB')}</span></div>` : ''}
+  `;
+
+  document.getElementById('modalFoot').innerHTML = `
+    ${a.status==='pending' ? `
+      <button class="btn btn-approve" onclick="approveApp('${a.id}');closeModal()" style="padding:0.5rem 1.25rem">✓ Approve & Create Shop</button>
+      <button class="btn btn-reject" onclick="rejectApp('${a.id}');closeModal()" style="padding:0.5rem 1.25rem">✗ Reject</button>` : ''}
+    ${wa ? `<button class="btn btn-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')" style="padding:0.5rem 1rem">💬 WhatsApp</button>` : ''}
+    ${a.email ? `<button class="btn btn-view" onclick="window.open('mailto:${a.email}','_blank')" style="padding:0.5rem 1rem">📧 Email</button>` : ''}
+  `;
+
+  document.getElementById('appModal').classList.add('open');
 }
 
-function closeModal() { document.getElementById("detailModal").classList.remove("open"); }
-
-// ── STATS ──
-function updateStats() {
-  const now = new Date();
-  const pending  = allStores.filter(s => s.subscription_status === "pending");
-  const active   = allStores.filter(s => s.subscription_status === "approved" && s.is_active);
-  const b2c      = allStores.filter(s => s.store_type === "b2c");
-  const b2b      = allStores.filter(s => s.store_type === "b2b");
-  const revenue  = allSubs.filter(s=>s.status==="approved").reduce((sum,s) => sum+(Number(s.amount)||0), 0);
-  const thisMonth = allSubs.filter(s => {
-    const d = new Date(s.created_at);
-    return s.status==="approved" && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
-  }).reduce((sum,s) => sum+(Number(s.amount)||0), 0);
-  const expiring = allStores.filter(s => {
-    if (!s.subscription_expires) return false;
-    const days = Math.ceil((new Date(s.subscription_expires)-now)/(1000*60*60*24));
-    return days >= 0 && days <= 7;
-  });
-
-  setText("statPending",  pending.length);
-  setText("statActive",   active.length);
-  setText("statB2C",      b2c.length);
-  setText("statB2B",      b2b.length);
-  setText("statRevenue",  "TZS "+revenue.toLocaleString());
-  setText("statMonth",    "TZS "+thisMonth.toLocaleString());
-  setText("statExpiring", expiring.length);
-  setText("statPosts",    allPosts.length);
-  setText("topStores",    allStores.length);
-  setText("topPending",   pending.length);
-  setText("topRevenue",   "TZS "+(revenue/1000).toFixed(0)+"K");
-
-  const pc = document.getElementById("pendingCount");
-  if (pc) { pc.textContent = pending.length > 0 ? pending.length : ""; }
+function closeModal() {
+  document.getElementById('appModal').classList.remove('open');
 }
 
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+const pageTitles = {
+  overview: '🎓 Campus Dashboard',
+  applications: '📋 Applications',
+  stores: '🏪 Active Stores',
+  notifications: '🔔 Notifications'
+};
+
+function goPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[name] || name;
+  closeNotif();
+
+  // Trigger renders
+  if (name === 'applications') renderAppsTable();
+  if (name === 'stores')       renderStoresTable();
+  if (name === 'notifications') renderNotifPage();
+  if (name === 'overview')     renderOverview();
+}
+
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
 }
 
-// ── RENDER PENDING ──
-function renderPending(filter = "all") {
-  const tbody = document.getElementById("pendingBody");
-  if (!tbody) return;
-  let stores = allStores.filter(s => s.subscription_status === "pending");
-  if (filter !== "all") stores = stores.filter(s => s.store_type === filter);
-  if (!stores.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No pending stores ✅</td></tr>`; return; }
-  tbody.innerHTML = stores.map(s => storeRow(s, true)).join("");
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function renderRecentPending() {
-  const tbody = document.getElementById("recentPendingBody");
-  if (!tbody) return;
-  const stores = allStores.filter(s => s.subscription_status === "pending").slice(0, 5);
-  if (!stores.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No pending stores ✅</td></tr>`; return; }
-  tbody.innerHTML = stores.map(s => `
-    <tr>
-      <td><div class="store-name-wrap">${logoCell(s)}<div><div style="font-weight:600">${s.store_name||"—"}</div><div style="font-size:0.68rem;color:var(--gray)">${s.region||""}</div></div></div></td>
-      <td>${typeBadge(s.store_type)}</td>
-      <td>${planBadge(s.subscription_plan)}</td>
-      <td style="font-size:0.75rem;color:var(--gray)">${s.owner_phone||s.whatsapp_number||"—"}</td>
-      <td style="font-size:0.75rem;color:var(--gray)">${fmtDate(s.created_at)}</td>
-      <td><div class="action-wrap">
-        <button class="btn-approve" onclick="approveStore('${s.id}')">✅ Approve</button>
-        <button class="btn-view" onclick="viewStore('${s.id}')">View</button>
-      </div></td>
-    </tr>`).join("");
-}
-
-// ── RENDER ALL STORES ──
-function renderStores(filter = "all") {
-  const tbody = document.getElementById("storesBody");
-  if (!tbody) return;
-  let stores = [...allStores];
-  const now = new Date();
-  if (filter === "approved") stores = stores.filter(s => s.subscription_status==="approved" && new Date(s.subscription_expires)>now);
-  else if (filter === "pending") stores = stores.filter(s => s.subscription_status==="pending");
-  else if (filter === "expired") stores = stores.filter(s => s.subscription_expires && new Date(s.subscription_expires)<=now);
-  if (!stores.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No stores found</td></tr>`; return; }
-  tbody.innerHTML = stores.map(s => {
-    const expires = s.subscription_expires ? new Date(s.subscription_expires) : null;
-    const daysLeft = expires ? Math.ceil((expires-now)/(1000*60*60*24)) : null;
-    const statusBadge = s.subscription_status==="approved"
-      ? (daysLeft && daysLeft<=7 ? `<span class="badge badge-grace">⚠️ ${daysLeft}d left</span>` : `<span class="badge badge-approved">✅ Active</span>`)
-      : `<span class="badge badge-pending">⏳ Pending</span>`;
-    return `<tr>
-      <td><div class="store-name-wrap">${logoCell(s)}<div><div style="font-weight:600">${s.store_name||"—"}</div><div style="font-size:0.68rem;color:var(--gray)">${s.category||""} · ${s.region||""}</div></div></div></td>
-      <td>${typeBadge(s.store_type)}</td>
-      <td>${planBadge(s.subscription_plan)}</td>
-      <td>${statusBadge}</td>
-      <td style="font-size:0.75rem;color:${daysLeft&&daysLeft<=7?'var(--red)':'var(--gray)'}">${expires?expires.toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}):"—"}</td>
-      <td style="font-size:0.75rem;color:var(--gray)">${s.owner_phone||s.whatsapp_number||"—"}</td>
-      <td><div class="action-wrap">
-        ${s.subscription_status!=="approved"?`<button class="btn-approve" onclick="approveStore('${s.id}')">✅ Approve</button>`:""}
-        <button class="btn-view" onclick="viewStore('${s.id}')">View</button>
-        <a href="store.html?store=${s.slug}" target="_blank" class="btn-view">🔗 Visit</a>
-      </div></td>
-    </tr>`;
-  }).join("");
-}
-
-function renderB2CStores() {
-  const tbody = document.getElementById("b2cBody");
-  if (!tbody) return;
-  const stores = allStores.filter(s => s.store_type === "b2c");
-  renderTypeTable(tbody, stores);
-}
-function renderB2BStores() {
-  const tbody = document.getElementById("b2bBody");
-  if (!tbody) return;
-  const stores = allStores.filter(s => s.store_type === "b2b");
-  renderTypeTable(tbody, stores);
-}
-function renderTypeTable(tbody, stores) {
-  const now = new Date();
-  if (!stores.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="5">No stores found</td></tr>`; return; }
-  tbody.innerHTML = stores.map(s => {
-    const expires = s.subscription_expires ? new Date(s.subscription_expires) : null;
-    const daysLeft = expires ? Math.ceil((expires-now)/(1000*60*60*24)) : null;
-    const statusBadge = s.subscription_status==="approved"
-      ? `<span class="badge badge-approved">✅ Active</span>`
-      : `<span class="badge badge-pending">⏳ Pending</span>`;
-    return `<tr>
-      <td><div class="store-name-wrap">${logoCell(s)}<div><div style="font-weight:600">${s.store_name||"—"}</div><div style="font-size:0.68rem;color:var(--gray)">${s.region||""}</div></div></div></td>
-      <td>${planBadge(s.subscription_plan)}</td>
-      <td>${statusBadge}</td>
-      <td style="font-size:0.75rem;color:${daysLeft&&daysLeft<=7?'var(--red)':'var(--gray)'}">${expires?expires.toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}):"—"}</td>
-      <td><div class="action-wrap">
-        ${s.subscription_status!=="approved"?`<button class="btn-approve" onclick="approveStore('${s.id}')">✅ Approve</button>`:""}
-        <button class="btn-view" onclick="viewStore('${s.id}')">View</button>
-      </div></td>
-    </tr>`;
-  }).join("");
-}
-
-// ── RENDER SUBSCRIPTIONS ──
-function renderSubs(filter = "all") {
-  const tbody = document.getElementById("subsBody");
-  if (!tbody) return;
-  let subs = [...allSubs];
-  if (filter !== "all") subs = subs.filter(s => s.status === filter);
-  if (!subs.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No subscriptions found</td></tr>`; return; }
-  tbody.innerHTML = subs.map(sub => {
-    const store = allStores.find(s => s.id === sub.store_id);
-    const statusBadge = sub.status==="approved"
-      ? `<span class="badge badge-approved">✅ Approved</span>`
-      : `<span class="badge badge-pending">⏳ Pending</span>`;
-    return `<tr>
-      <td style="font-weight:600">${store?.store_name||"Unknown Store"}</td>
-      <td>${typeBadge(sub.store_type||store?.store_type)}</td>
-      <td>${planBadge(sub.plan_type||sub.plan)}</td>
-      <td>${sub.duration_months||1} month${(sub.duration_months||1)>1?"s":""}</td>
-      <td style="font-weight:700">TZS ${Number(sub.amount||0).toLocaleString()}</td>
-      <td>${statusBadge}</td>
-      <td style="font-size:0.72rem;color:var(--gray)">${fmtDate(sub.created_at)}</td>
-      <td>${sub.status!=="approved"
-        ? `<button class="btn-approve" onclick="approveSub('${sub.id}','${sub.store_id}','${sub.plan_type||sub.plan}',${sub.duration_months||1})">✅ Approve</button>`
-        : `<span style="font-size:0.72rem;color:var(--gray)">Approved by ${sub.approved_by||"Admin"}</span>`
-      }</td>
-    </tr>`;
-  }).join("");
-}
-
-// ── RENDER EXPIRING ──
-function renderExpiring() {
-  const tbody = document.getElementById("expiringBody");
-  if (!tbody) return;
-  const now = new Date();
-  const stores = allStores.filter(s => {
-    if (!s.subscription_expires) return false;
-    const days = Math.ceil((new Date(s.subscription_expires)-now)/(1000*60*60*24));
-    return days >= 0 && days <= 7;
-  }).sort((a,b) => new Date(a.subscription_expires)-new Date(b.subscription_expires));
-  if (!stores.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No stores expiring soon ✅</td></tr>`; return; }
-  tbody.innerHTML = stores.map(s => {
-    const expires = new Date(s.subscription_expires);
-    const daysLeft = Math.ceil((expires-now)/(1000*60*60*24));
-    const phone = s.owner_phone || s.whatsapp_number || "";
-    return `<tr>
-      <td style="font-weight:600">${s.store_name||"—"}</td>
-      <td>${typeBadge(s.store_type)}</td>
-      <td>${planBadge(s.subscription_plan)}</td>
-      <td style="font-size:0.75rem">${expires.toLocaleDateString("en",{day:"numeric",month:"short"})}</td>
-      <td><span style="font-weight:700;color:${daysLeft<=3?'var(--red)':'var(--orange)'}">${daysLeft}d</span></td>
-      <td style="font-size:0.75rem">${phone}</td>
-      <td><div class="action-wrap">
-        ${phone?`<a href="https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent('Hello '+s.store_name+'! Your Travex Mall subscription expires in '+daysLeft+' days. Renew now to keep your store active.')}" target="_blank" class="btn-approve">💬 Remind</a>`:""}
-        <button class="btn-view" onclick="viewStore('${s.id}')">View</button>
-      </div></td>
-    </tr>`;
-  }).join("");
-}
-
-// ── RENDER FEATURED ──
-function renderFeatured() {
-  const tbody = document.getElementById("featuredBody");
-  if (!tbody) return;
-  const premium = allStores.filter(s => s.subscription_plan==="premium" && s.subscription_status==="approved");
-  if (!premium.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="5">No premium stores yet</td></tr>`; return; }
-  tbody.innerHTML = premium.map(s => `
-    <tr>
-      <td><div class="store-name-wrap">${logoCell(s)}<div style="font-weight:600">${s.store_name||"—"}</div></div></td>
-      <td>${typeBadge(s.store_type)}</td>
-      <td>${planBadge(s.subscription_plan)}</td>
-      <td><span class="badge ${s.is_featured?'badge-approved':'badge-pending'}">${s.is_featured?"⭐ Featured":"—"}</span></td>
-      <td><button class="btn-feature" onclick="toggleFeatured('${s.id}',${!s.is_featured})">${s.is_featured?"Remove Featured":"⭐ Set Featured"}</button></td>
-    </tr>`).join("");
-}
-
-// ── RENDER VYBE ──
-function renderVybe() {
-  const tbody = document.getElementById("vybeBody");
-  if (!tbody) return;
-  if (!allPosts.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No posts yet</td></tr>`; return; }
-  tbody.innerHTML = allPosts.slice(0,50).map(p => `
-    <tr>
-      <td style="font-weight:600">${p.stores?.store_name||"—"}</td>
-      <td>${typeBadge(p.stores?.store_type)}</td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.caption||"—"}</td>
-      <td>❤️ ${p.likes_count||0}</td>
-      <td style="font-size:0.72rem;color:var(--gray)">${fmtDate(p.created_at)}</td>
-      <td><button class="btn-reject" onclick="deletePost('${p.id}')">🗑️ Remove</button></td>
-    </tr>`).join("");
-}
-
-// ── APPROVE STORE ──
-async function approveStore(storeId) {
-  const store = allStores.find(s => s.id === storeId);
-  if (!store) return;
-  if (!confirm(`Activate duka "${store.store_name}"?\n\nDuka litawashwa MARA MOJA na mmiliki atatumwa email ya kuthibitisha.`)) return;
-
-  const sub = allSubs.find(s => s.store_id === storeId && s.status === "pending");
-  const months = sub?.duration_months || 1;
-  const now = new Date();
-  const currExpiry = store.subscription_expires ? new Date(store.subscription_expires) : now;
-  const startFrom = currExpiry > now ? currExpiry : now;
-  const newExpiry = new Date(startFrom);
-  newExpiry.setMonth(newExpiry.getMonth() + months);
-
-  // 1. Activate store immediately — visible to customers NOW
-  const { error } = await sb.from("stores").update({
-    subscription_status:      "approved",
-    is_active:                true,
-    payment_status:           "paid",
-    subscription_start:       now.toISOString(),
-    subscription_expires:     newExpiry.toISOString(),
-    subscription_grace_until: null
-  }).eq("id", storeId);
-
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
-
-  // 2. Update subscription record
-  if (sub) {
-    await sb.from("subscriptions").update({
-      status: "approved", approved_at: now.toISOString(),
-      approved_by: "Admin",
-      starts_at: now.toISOString(), expires_at: newExpiry.toISOString()
-    }).eq("id", sub.id);
-  }
-
-  // 3. Send approval email via Supabase Edge Function
-  const ownerEmail = store.owner_email || store.email || null;
-  const ownerPhone = store.owner_phone || store.whatsapp_number || "";
-  const planName   = store.subscription_plan === "premium" ? "👑 Premium" : store.subscription_plan === "standard" ? "⭐⭐ Standard" : "⭐ Basic";
-
-  if (ownerEmail) {
-    await sendApprovalEmail({
-      to:        ownerEmail,
-      ownerName: store.owner_name || store.seller_name || "Seller",
-      storeName: store.store_name,
-      storeType: store.store_type?.toUpperCase() || "B2C",
-      plan:      planName,
-      expires:   newExpiry.toLocaleDateString("sw", {day:"numeric", month:"long", year:"numeric"}),
-      loginUrl:  window.location.origin + "/seller-login.html",
-      storeUrl:  window.location.origin + "/store.html?store=" + (store.slug || store.id)
-    }).catch(() => {});
-  }
-
-  // 4. Mark admin notification as handled
-  await sb.from("admin_notifications")
-    .update({ is_read: true })
-    .eq("type", "payment_receipt")
-    .ilike("body", `%${ownerPhone}%`)
-    .catch(() => {});
-
-  showToast(`✅ "${store.store_name}" imewashwa! Duka linaonekana sasa. ${ownerEmail ? "📧 Email imetumwa." : "⚠️ Hakuna email — tuma WhatsApp."}`, "success");
-  await loadAll();
-  loadNotifications();
-}
-
-// ── APPROVE SUBSCRIPTION ──
-async function approveSub(subId, storeId, plan, months) {
-  const store = allStores.find(s => s.id === storeId);
-  const now = new Date();
-  const currExpiry = store?.subscription_expires ? new Date(store.subscription_expires) : now;
-  const startFrom = currExpiry > now ? currExpiry : now;
-  const newExpiry = new Date(startFrom);
-  newExpiry.setMonth(newExpiry.getMonth() + (months||1));
-
-  await Promise.all([
-    sb.from("subscriptions").update({
-      status:"approved", approved_at:now.toISOString(), approved_by:"Admin",
-      starts_at:now.toISOString(), expires_at:newExpiry.toISOString()
-    }).eq("id", subId),
-    sb.from("stores").update({
-      subscription_status:"approved", subscription_plan:plan,
-      subscription_start:now.toISOString(), subscription_expires:newExpiry.toISOString(),
-      subscription_grace_until:null, is_active:true
-    }).eq("id", storeId)
-  ]);
-
-  showToast("✅ Subscription approved! New expiry: "+newExpiry.toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}), "success");
-  await loadAll();
-}
-
-// ── TOGGLE FEATURED ──
-async function toggleFeatured(storeId, featured) {
-  await sb.from("stores").update({ is_featured: featured }).eq("id", storeId);
-  showToast(featured ? "⭐ Store featured on homepage!" : "Store removed from featured", featured?"success":"");
-  await loadAll();
-}
-
-// ── DELETE POST ──
-async function deletePost(postId) {
-  if (!confirm("Remove this post from Vybe?")) return;
-  await sb.from("feed_posts").delete().eq("id", postId);
-  showToast("Post removed", "");
-  await loadAll();
-}
-
-// ── VIEW STORE MODAL — FULL DETAILS ──
-async function viewStore(storeId) {
-  const s = allStores.find(x => x.id === storeId);
-  if (!s) return;
-
-  // Also fetch pending_payment record for this store (has receipt)
-  const { data: payData } = await sb.from("pending_payments")
-    .select("*").eq("owner_phone", s.owner_phone || s.whatsapp_number).order("submitted_at",{ascending:false}).limit(1);
-  const pay = payData?.[0] || null;
-
-  const now      = new Date();
-  const expires  = s.subscription_expires ? new Date(s.subscription_expires) : null;
-  const daysLeft = expires ? Math.ceil((expires-now)/(1000*60*60*24)) : null;
-  const isPending = s.subscription_status !== "approved";
-
-  document.getElementById("modalStoreName").textContent = s.store_name || "Store";
-
-  // ── SECTION BUILDER ──
-  const row = (label, val, opts={}) => {
-    if (!val && val !== 0) return "";
-    const color = opts.color ? `color:${opts.color}` : "";
-    const big   = opts.big   ? "font-size:0.95rem;font-weight:700;" : "";
-    return `<div class="modal-row"><span class="modal-label">${label}</span><span class="modal-val" style="${color}${big}">${val}</span></div>`;
-  };
-
-  const sectionHead = (title, icon) =>
-    `<div style="background:var(--offwhite);padding:0.5rem 1rem;font-size:0.7rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.08em;margin:0.75rem -1.5rem 0.5rem;border-top:1px solid var(--lgray);border-bottom:1px solid var(--lgray)">${icon} ${title}</div>`;
-
-  // ── BUILD MODAL CONTENT ──
-  let body = "";
-
-  // BRANDING PREVIEW
-  const bannerStyle = s.banner ? `background-image:url(${s.banner});background-size:cover;background-position:center` : `background:linear-gradient(135deg,#0D1B3E,#1B3A6B)`;
-  const logoHtml = s.logo
-    ? `<img src="${s.logo}" style="width:60px;height:60px;object-fit:cover;border:3px solid #fff">`
-    : `<div style="width:60px;height:60px;background:var(--navy);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:var(--gold)">${(s.store_name||"ST").substring(0,2).toUpperCase()}</div>`;
-
-  body += `
-    <div style="margin:-1.5rem -1.5rem 1rem">
-      <div style="height:90px;${bannerStyle};position:relative">
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent)"></div>
-      </div>
-      <div style="padding:0 1.5rem;margin-top:-30px;position:relative;display:flex;align-items:flex-end;gap:1rem">
-        ${logoHtml}
-        <div style="padding-bottom:0.5rem">
-          <div style="font-size:1rem;font-weight:800;color:var(--navy)">${s.store_name||"—"}</div>
-          <div style="font-size:0.72rem;color:var(--gray)">${s.category||""} · ${s.region||""}</div>
-        </div>
-      </div>
-    </div>`;
-
-  // STORE INFO
-  body += sectionHead("Taarifa za Duka", "🏪");
-  body += row("Shop Name",   s.store_name,        {big:true});
-  body += row("Aina ya Duka",   s.store_type==="b2b" ? "🥇 B2B Wholesale" : "🥈 B2C Retail");
-  body += row("Plan",           s.subscription_plan==="premium" ? "👑 Premium" : s.subscription_plan==="standard" ? "⭐⭐ Standard" : "⭐ Basic");
-  body += row("Status",         s.subscription_status==="approved" ? "✅ Active" : s.payment_status==="receipt_uploaded" ? "🔍 Risiti Inapitiwa" : "⏳ Pending",
-              {color: s.subscription_status==="approved" ? "var(--green)" : "var(--red)"});
-  body += row("Category",      s.category);
-  body += row("Region",           s.region);
-  body += row("Description",        s.description);
-  body += row("Wazi / Mfumo",  s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("en-GB") : null);
-  body += row("Inaisha",        expires ? `${expires.toLocaleDateString("en-GB")} ${daysLeft !== null ? "(siku "+daysLeft+")" : ""}` : null,
-              {color: daysLeft && daysLeft<=7 ? "var(--red)" : ""});
-
-  // OWNER / CONTACT
-  body += sectionHead("Taarifa za Mmiliki", "👤");
-  body += row("Jina la Mmiliki", s.owner_name || s.seller_name);
-  body += row("Phone",            s.owner_phone || s.phone);
-  body += row("WhatsApp",        s.whatsapp_number ? `<a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${s.whatsapp_number} 💬</a>` : null);
-  body += row("Email",           s.owner_email || s.email);
-  body += row("Instagram",       s.instagram ? `<a href="https://instagram.com/${s.instagram}" target="_blank" style="color:#E1306C">@${s.instagram}</a>` : null);
-  body += row("TikTok",          s.tiktok    ? `<a href="https://tiktok.com/@${s.tiktok}"    target="_blank" style="color:#000">@${s.tiktok}</a>`    : null);
-  body += row("Facebook",        s.facebook  ? `<a href="${s.facebook}" target="_blank" style="color:#1877F2">Angalia →</a>` : null);
-
-  // B2B EXTRA
-  if (s.store_type === "b2b") {
-    body += sectionHead("Taarifa za Biashara (B2B)", "🏭");
-    body += row("Business Reg No.", s.business_reg_number);
-    body += row("TIN Number",       s.tin_number);
-    body += row("Min Order (MOQ)",  s.moq ? `TZS ${Number(s.moq).toLocaleString()}` : null);
-  }
-
-  // PAYMENT / RECEIPT
-  body += sectionHead("Malipo & Risiti", "💳");
-  body += row("Kiasi cha Malipo", pay ? `TZS ${Number(pay.amount||0).toLocaleString()}` : s.subscription_plan ? "Kulingana na Plan" : null);
-  body += row("Hali ya Malipo",  s.payment_status === "receipt_uploaded" ? "🔍 Risiti Imepakia — Inapitiwa" : s.subscription_status==="approved" ? "✅ Imelipwa" : "❌ Haijalipiwa",
-              {color: s.subscription_status==="approved" ? "var(--green)" : s.payment_status==="receipt_uploaded" ? "#92400E" : "var(--red)"});
-  
-  // RECEIPT IMAGE / LINK
-  const receiptUrl = s.receipt_url || pay?.receipt_url;
-  if (receiptUrl) {
-    const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(receiptUrl);
-    body += `<div class="modal-row"><span class="modal-label">Risiti ya Malipo</span><span class="modal-val">
-      ${isImg ? `<a href="${receiptUrl}" target="_blank"><img src="${receiptUrl}" style="max-width:160px;max-height:120px;border:1px solid var(--lgray);display:block;margin-bottom:0.3rem" onerror="this.style.display='none'"></a>` : ""}
-      <a href="${receiptUrl}" target="_blank" style="color:var(--gold);font-weight:600;font-size:0.8rem">📄 Angalia Risiti Kamili →</a>
-    </span></div>`;
-  } else {
-    body += `<div class="modal-row"><span class="modal-label">Risiti</span><span class="modal-val" style="color:var(--gray);font-size:0.78rem">Haijapakia bado</span></div>`;
-  }
-
-  // THEME
-  if (s.theme_color || s.theme_font) {
-    body += sectionHead("Mandhari ya Duka", "🎨");
-    if (s.theme_color) body += `<div class="modal-row"><span class="modal-label">Rangi</span><span class="modal-val" style="display:flex;align-items:center;gap:0.5rem"><span style="width:20px;height:20px;background:${s.theme_color};border:1px solid var(--lgray);display:inline-block"></span>${s.theme_color}</span></div>`;
-    body += row("Font",  s.theme_font);
-  }
-
-  document.getElementById("modalBody").innerHTML = body;
-  document.getElementById("modalActions").innerHTML = `
-    ${isPending ? `<button class="btn-approve" onclick="approveStore('${s.id}');closeModal()">✅ Approve Store</button>` : ""}
-    ${receiptUrl ? `<a href="${receiptUrl}" target="_blank" class="btn-view">📄 Ona Risiti</a>` : ""}
-    <a href="store.html?store=${s.slug||s.id}" target="_blank" class="btn-view">🔗 Visit Store</a>
-    ${s.whatsapp_number ? `<a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" class="btn-view" style="background:#25D366;color:#fff">💬 WhatsApp</a>` : ""}
-    ${!isPending ? `<button class="btn-reject" onclick="suspendStore('${s.id}');closeModal()">⛔ Suspend</button>` : `<button class="btn-reject" onclick="suspendStore('${s.id}');closeModal()">❌ Reject</button>`}
-  `;
-  document.getElementById("storeModal").classList.add("open");
-}
-function closeModal() { document.getElementById("storeModal").classList.remove("open"); }
-
-// ── SUSPEND STORE ──
-async function suspendStore(storeId) {
-  if (!confirm("Suspend this store? It will be hidden from browse.")) return;
-  await sb.from("stores").update({ subscription_status:"pending", is_active:true }).eq("id", storeId);
-  showToast("Store suspended", "error");
-  await loadAll();
-}
-
-// ── HELPERS ──
-function storeRow(s, isPending) {
-  const sub = allSubs.find(sub => sub.store_id === s.id && sub.status==="pending");
-  return `<tr>
-    <td><div class="store-name-wrap">${logoCell(s)}<div><div style="font-weight:600">${s.store_name||"—"}</div><div style="font-size:0.68rem;color:var(--gray)">${s.region||""} · ${s.category||""}</div></div></div></td>
-    <td>${typeBadge(s.store_type)}</td>
-    <td>${planBadge(s.subscription_plan)}</td>
-    <td>${sub?.duration_months||1}mo</td>
-    <td style="font-weight:700">TZS ${Number(sub?.amount||0).toLocaleString()}</td>
-    <td style="font-size:0.75rem">${s.owner_phone||s.whatsapp_number||"—"}</td>
-    <td style="font-size:0.72rem;color:var(--gray)">${fmtDate(s.created_at)}</td>
-    <td><div class="action-wrap">
-      <button class="btn-approve" onclick="approveStore('${s.id}')">✅ Approve</button>
-      <button class="btn-reject" onclick="suspendStore('${s.id}')">⛔</button>
-      <button class="btn-view" onclick="viewStore('${s.id}')">View</button>
-    </div></td>
-  </tr>`;
-}
-
-function logoCell(s) {
-  const init = (s.store_name||"TM").split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
-  return `<div class="store-logo-sm">${s.logo?`<img src="${s.logo}" alt="">`:`<span>${init}</span>`}</div>`;
-}
-
-function typeBadge(type) {
-  return type==="b2b"
-    ? `<span class="badge badge-b2b">🥇 B2B</span>`
-    : `<span class="badge badge-b2c">🥈 B2C</span>`;
-}
-
-function planBadge(plan) {
-  return plan==="premium"
-    ? `<span class="badge badge-premium">👑 Premium</span>`
-    : `<span class="badge badge-basic">⭐ Basic</span>`;
-}
-
-function fmtDate(d) {
-  if (!d) return "—";
-  return new Date(d).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"});
-}
-
-// ── FILTER FUNCTIONS ──
-function filterPending(type, btn) {
-  document.querySelectorAll("#page-pending .filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderPending(type);
-}
-function filterStores(type, btn) {
-  document.querySelectorAll("#page-stores .filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderStores(type);
-}
-function filterSubs(type, btn) {
-  document.querySelectorAll("#page-subs .filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderSubs(type);
-}
-function filterTable(tbodyId, query) {
-  const tbody = document.getElementById(tbodyId);
-  if (!tbody) return;
-  const q = query.toLowerCase();
-  tbody.querySelectorAll("tr").forEach(tr => {
-    tr.style.display = tr.textContent.toLowerCase().includes(q) ? "" : "none";
-  });
-}
-
-// ── PAGE NAVIGATION ──
-function showPage(name, el) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-  const page = document.getElementById("page-"+name);
-  if (page) page.classList.add("active");
-  if (el && el.classList) el.classList.add("active");
-  const title = el ? el.querySelector(".ni")
-    ? el.textContent.replace(el.querySelector(".ni").textContent,"").trim()
-    : el.textContent.trim()
-    : name;
-  document.getElementById("topbarTitle").textContent = title;
-  setTimeout(() => {
-    if(name==="overview")            loadOverview();
-    if(name==="campus-overview")     loadCampusOverview();
-    if(name==="campus-applications") loadCampusApplications();
-    if(name==="campus-stores")       loadCampusStores();
-    if(name==="campus-analytics")    loadCampusAnalytics("day", document.querySelector("#page-campus-analytics .cpt"));
-    if(name==="campus-revenue")      loadCampusRevenue("day",   document.querySelector("#page-campus-revenue .cpt"));
-  }, 50);
-}
-
-// ── TOAST ──
-function showToast(msg, type="") {
-  const t = document.getElementById("toast");
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = "toast show " + type;
-  setTimeout(() => t.className = "toast", 3500);
+  t.className = 'toast show' + (type ? ' '+type : '');
+  setTimeout(() => t.className = 'toast', 3500);
 }
 
-// ══════════════════════════════════════
-// ANALYTICS — VIEWERS & TRAFFIC
-// ══════════════════════════════════════
-async function loadAnalytics(period, btn) {
-  document.querySelectorAll("#page-analytics .cpt").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-
-  const now = new Date();
-  let start;
-  if (period==="day")   start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  else if (period==="week") { start = new Date(now); start.setDate(now.getDate()-7); }
-  else if (period==="month") start = new Date(now.getFullYear(),now.getMonth(),1);
-  else start = new Date(now.getFullYear(),0,1);
-
-  const {data:views} = await sb.from("store_views")
-    .select("*,stores(store_name,store_type)")
-    .gte("created_at", start.toISOString())
-    .order("created_at", {ascending:true});
-
-  const vArr = views || [];
-  const total = vArr.length;
-
-  // By type
-  const b2cViews = vArr.filter(v=>v.stores?.store_type==="b2c").length;
-  const b2bViews = vArr.filter(v=>v.stores?.store_type==="b2b").length;
-
-  // Top stores
-  const storeCounts = {};
-  vArr.forEach(v=>{ const n=v.stores?.store_name||"Unknown"; storeCounts[n]=(storeCounts[n]||0)+1; });
-  const topStores = Object.entries(storeCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
-  setText("av-total", total.toLocaleString());
-  setText("av-unique", Object.keys(storeCounts).length);
-  setText("av-top", topStores[0]?.[0] || "—");
-  setText("av-top-views", topStores[0] ? topStores[0][1]+" views" : "");
-  setText("av-b2c-views", b2cViews.toLocaleString());
-  setText("av-b2b-views", b2bViews.toLocaleString());
-
-  const labels = {day:"Today",week:"Last 7 Days",month:"This Month",year:"This Year"};
-  setText("av-period-lbl", labels[period]);
-
-  // Top stores list
-  const topEl = document.getElementById("av-top-stores");
-  if(topEl) topEl.innerHTML = topStores.length
-    ? topStores.map(([name,count],i)=>`
-      <div style="display:flex;justify-content:space-between;font-size:0.78rem;padding:0.3rem 0;border-bottom:1px solid var(--lgray)">
-        <span>${i+1}. ${name}</span>
-        <span style="font-weight:700;color:var(--navy)">${count} views</span>
-      </div>`).join("")
-    : '<div style="font-size:0.78rem;color:var(--gray)">No data yet</div>';
-
-  // Bar chart
-  buildBarChart("av-bar-chart","av-bar-labels", vArr, period, "blue");
-
-  // Yearly chart
-  buildYearlyChart("av-yearly-chart","av-yearly-labels", "views");
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const diff = Date.now() - new Date(ts).getTime();
+  const mins = Math.floor(diff/60000);
+  if (mins < 1)  return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins/60);
+  if (hrs < 24)  return hrs + 'h ago';
+  return Math.floor(hrs/24) + 'd ago';
 }
 
-// ══════════════════════════════════════
-// ACCOUNTING — REVENUE
-// ══════════════════════════════════════
-async function loadAccounting(period, btn) {
-  document.querySelectorAll("#page-accounting .cpt").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-
-  const now = new Date();
-  let start;
-  if (period==="day")   start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  else if (period==="week") { start = new Date(now); start.setDate(now.getDate()-7); }
-  else if (period==="month") start = new Date(now.getFullYear(),now.getMonth(),1);
-  else start = new Date(now.getFullYear(),0,1);
-
-  const {data:subs} = await sb.from("subscriptions")
-    .select("*")
-    .eq("status","approved")
-    .gte("approved_at", start.toISOString())
-    .order("approved_at", {ascending:true});
-
-  const arr = subs || [];
-  const totalRev = arr.reduce((s,x)=>s+(Number(x.amount)||0),0);
-  const count = arr.length;
-  const avg = count ? Math.round(totalRev/count) : 0;
-
-  const b2cRev = arr.filter(s=>s.store_type==="b2c").reduce((s,x)=>s+(Number(x.amount)||0),0);
-  const b2bRev = arr.filter(s=>s.store_type==="b2b").reduce((s,x)=>s+(Number(x.amount)||0),0);
-  const basicRev = arr.filter(s=>["basic"].includes(s.plan_type||s.plan)).reduce((s,x)=>s+(Number(x.amount)||0),0);
-  const premRev = arr.filter(s=>["premium"].includes(s.plan_type||s.plan)).reduce((s,x)=>s+(Number(x.amount)||0),0);
-
-  setText("ac-revenue","TZS "+totalRev.toLocaleString());
-  setText("ac-count", count);
-  setText("ac-avg","TZS "+avg.toLocaleString());
-  setText("ac-b2c-rev","TZS "+b2cRev.toLocaleString());
-  setText("ac-b2b-rev","TZS "+b2bRev.toLocaleString());
-  setText("ac-basic-rev","TZS "+basicRev.toLocaleString());
-  setText("ac-premium-rev","TZS "+premRev.toLocaleString());
-  const labels={day:"Today",week:"Last 7 Days",month:"This Month",year:"This Year"};
-  setText("ac-period-lbl", labels[period]);
-
-  buildBarChart("ac-bar-chart","ac-bar-labels", arr, period, "gold", "amount");
-  buildYearlyChart("ac-yearly-chart","ac-yearly-labels","revenue");
-
-  // Growth summary
-  const gs = document.getElementById("ac-growth-summary");
-  if(gs) {
-    const {data:prevSubs} = await sb.from("subscriptions").select("amount")
-      .eq("status","approved").lt("approved_at",start.toISOString());
-    const prevRev = (prevSubs||[]).reduce((s,x)=>s+(Number(x.amount)||0),0);
-    const growth = prevRev > 0 ? Math.round(((totalRev-prevRev)/prevRev)*100) : 0;
-    gs.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center">
-        <div><div style="font-size:1.2rem;font-weight:800;color:var(--navy)">TZS ${totalRev.toLocaleString()}</div><div style="font-size:0.65rem;color:var(--gray)">Period Revenue</div></div>
-        <div><div style="font-size:1.2rem;font-weight:800;color:${growth>=0?'var(--green)':'var(--red)'}">${growth>=0?"+":""}${growth}%</div><div style="font-size:0.65rem;color:var(--gray)">Growth vs Previous</div></div>
-        <div><div style="font-size:1.2rem;font-weight:800;color:var(--navy)">${count}</div><div style="font-size:0.65rem;color:var(--gray)">Subscriptions</div></div>
-      </div>`;
-  }
-
-  // Transactions table
-  const tbody = document.getElementById("ac-transactions");
-  if(tbody) {
-    const recent = [...arr].sort((a,b)=>new Date(b.approved_at)-new Date(a.approved_at)).slice(0,20);
-    if(!recent.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="7">No transactions yet</td></tr>`;return;}
-    tbody.innerHTML = recent.map(s=>{
-      const store = allStores.find(x=>x.id===s.store_id);
-      return `<tr>
-        <td style="font-weight:600">${store?.store_name||"—"}</td>
-        <td>${typeBadge(s.store_type||store?.store_type)}</td>
-        <td>${planBadge(s.plan_type||s.plan)}</td>
-        <td>${s.duration_months||1}mo</td>
-        <td style="font-weight:700;color:var(--green)">TZS ${Number(s.amount||0).toLocaleString()}</td>
-        <td style="font-size:0.72rem;color:var(--gray)">${fmtDate(s.approved_at||s.created_at)}</td>
-        <td><span class="badge badge-approved">✅ Paid</span></td>
-      </tr>`;
-    }).join("");
-  }
-}
-
-// ══════════════════════════════════════
-// TRAVEX MOVE — DRIVERS & DELIVERIES
-// ══════════════════════════════════════
-let allDrivers=[], allDeliveries=[];
-
-async function loadMoveData() {
-  const [{data:drivers},{data:deliveries}] = await Promise.all([
-    sb.from("drivers").select("*").order("created_at",{ascending:false}),
-    sb.from("move_deliveries").select("*").order("created_at",{ascending:false})
-  ]);
-  allDrivers   = drivers   || [];
-  allDeliveries = deliveries || [];
-  renderMoveOverview();
-  renderDrivers();
-  renderDeliveries();
-}
-
-function renderMoveOverview() {
-  const online   = allDrivers.filter(d=>d.is_online);
-  const pending  = allDrivers.filter(d=>d.subscription_status==="pending");
-  const pikipiki = allDrivers.filter(d=>d.vehicle_type==="pikipiki");
-  const bajaji   = allDrivers.filter(d=>d.vehicle_type==="bajaji");
-  const gari     = allDrivers.filter(d=>d.vehicle_type==="gari");
-  const delivered = allDeliveries.filter(d=>d.status==="delivered");
-  const revenue  = delivered.reduce((s,d)=>s+(Number(d.price)||0),0);
-  const active   = allDeliveries.filter(d=>["searching","accepted","picked_up"].includes(d.status));
-
-  setText("mv-total-drivers", allDrivers.length);
-  setText("mv-online",          `${online.length}`);
-  setText("mv-pending-drivers", pending.length);
-  setText("mv-deliveries",      delivered.length);
-  setText("mv-pikipiki",        pikipiki.length);
-  setText("mv-bajaji",          bajaji.length);
-  setText("mv-gari",            gari.length);
-  setText("mv-revenue",         "TZS "+revenue.toLocaleString());
-  setText("mv-active-count",    active.length+" active");
-
-  const tbody = document.getElementById("mv-active-body");
-  if(!tbody) return;
-  if(!active.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="7">No active deliveries</td></tr>`;return;}
-  tbody.innerHTML = active.map(d=>`<tr>
-    <td style="font-weight:700">${d.tracking_code}</td>
-    <td>${d.vehicle_type==="pikipiki"?"🏍️":d.vehicle_type==="bajaji"?"🛺":"🚗"} ${d.vehicle_type}</td>
-    <td style="font-size:0.75rem;max-width:120px;overflow:hidden;text-overflow:ellipsis">${d.pickup_address}</td>
-    <td style="font-size:0.75rem;max-width:120px;overflow:hidden;text-overflow:ellipsis">${d.dropoff_address}</td>
-    <td><span class="badge ${d.status==="delivered"?"badge-approved":"badge-pending"}">${d.status}</span></td>
-    <td style="font-weight:700">TZS ${Number(d.price||0).toLocaleString()}</td>
-    <td style="font-size:0.72rem;color:var(--gray)">${fmtDate(d.created_at)}</td>
-  </tr>`).join("");
-}
-
-function renderDrivers(filter="all") {
-  const tbody = document.getElementById("mv-drivers-body");
-  if(!tbody) return;
-  let drivers = [...allDrivers];
-  if(filter==="pending") drivers = drivers.filter(d=>d.subscription_status==="pending");
-  else if(filter==="approved") drivers = drivers.filter(d=>d.subscription_status==="approved");
-  else if(["pikipiki","bajaji","gari"].includes(filter)) drivers = drivers.filter(d=>d.vehicle_type===filter);
-  if(!drivers.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="8">No drivers found</td></tr>`;return;}
-  tbody.innerHTML = drivers.map(d=>`<tr>
-    <td style="font-weight:600">${d.full_name||"—"}</td>
-    <td>${d.phone||"—"}</td>
-    <td>${d.vehicle_type==="pikipiki"?"🏍️ Pikipiki":d.vehicle_type==="bajaji"?"🛺 Bajaji":"🚗 Gari"}</td>
-    <td style="font-size:0.75rem">${d.vehicle_reg||"—"}</td>
-    <td>
-      <span class="${d.is_online?"driver-online":"driver-offline"}"></span>
-      <span class="badge ${d.subscription_status==="approved"?"badge-approved":"badge-pending"}">${d.subscription_status==="approved"?"✅ Active":"⏳ Pending"}</span>
-    </td>
-    <td>${d.total_deliveries||0}</td>
-    <td>⭐ ${d.rating||5}</td>
-    <td><div class="action-wrap">
-      ${d.subscription_status!=="approved"?`<button class="btn-approve" onclick="approveDriver('${d.id}')">✅ Approve</button>`:""}
-      <button class="btn-reject" onclick="suspendDriver('${d.id}')">⛔</button>
-      ${d.phone?`<a href="https://wa.me/${d.phone.replace(/\D/g,"")}" target="_blank" class="btn-view">💬</a>`:""}
-    </div></td>
-  </tr>`).join("");
-}
-
-function renderDeliveries(filter="all") {
-  const tbody = document.getElementById("mv-del-body");
-  if(!tbody) return;
-  let deliveries = [...allDeliveries];
-  if(filter!=="all") deliveries = deliveries.filter(d=>d.status===filter);
-  if(!deliveries.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="8">No deliveries found</td></tr>`;return;}
-  tbody.innerHTML = deliveries.slice(0,50).map(d=>{
-    const driver = allDrivers.find(x=>x.id===d.driver_id);
-    return `<tr>
-      <td style="font-weight:700">${d.tracking_code}</td>
-      <td>${d.vehicle_type==="pikipiki"?"🏍️":d.vehicle_type==="bajaji"?"🛺":"🚗"} ${d.vehicle_type}</td>
-      <td style="font-size:0.75rem;max-width:100px;overflow:hidden;text-overflow:ellipsis">${d.pickup_address}</td>
-      <td style="font-size:0.75rem;max-width:100px;overflow:hidden;text-overflow:ellipsis">${d.dropoff_address}</td>
-      <td style="font-size:0.75rem">${driver?.full_name||"—"}</td>
-      <td style="font-weight:700">TZS ${Number(d.price||0).toLocaleString()}</td>
-      <td><span class="badge ${d.status==="delivered"?"badge-approved":d.status==="searching"?"badge-pending":"badge-grace"}">${d.status}</span></td>
-      <td style="font-size:0.72rem;color:var(--gray)">${fmtDate(d.created_at)}</td>
-    </tr>`;
-  }).join("");
-}
-
-async function approveDriver(driverId) {
-  const now = new Date();
-  const expiry = new Date(now); expiry.setMonth(expiry.getMonth()+1);
-  await sb.from("drivers").update({
-    subscription_status:"approved",
-    subscription_paid_until:expiry.toISOString()
-  }).eq("id",driverId);
-  showToast("✅ Driver approved!", "success");
-  await loadMoveData();
-}
-async function suspendDriver(driverId) {
-  if(!confirm("Suspend this driver?")) return;
-  await sb.from("drivers").update({subscription_status:"pending",is_online:false}).eq("id",driverId);
-  showToast("Driver suspended","error");
-  await loadMoveData();
-}
-
-function filterDrivers(type,btn) {
-  document.querySelectorAll("#page-move-drivers .filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderDrivers(type);
-}
-function filterDeliveries(type,btn) {
-  document.querySelectorAll("#page-move-deliveries .filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderDeliveries(type);
-}
-
-async function loadMoveRevenue(period,btn) {
-  document.querySelectorAll("#page-move-revenue .cpt").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  const now = new Date();
-  let start;
-  if(period==="day") start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  else if(period==="week"){start=new Date(now);start.setDate(now.getDate()-7);}
-  else if(period==="month") start=new Date(now.getFullYear(),now.getMonth(),1);
-  else start=new Date(now.getFullYear(),0,1);
-
-  const del = allDeliveries.filter(d=>d.status==="delivered"&&new Date(d.delivered_at||d.created_at)>=start);
-  const rev = del.reduce((s,d)=>s+(Number(d.price)||0),0);
-  const count = del.length;
-  const avg = count?Math.round(rev/count):0;
-  const pikiRev=del.filter(d=>d.vehicle_type==="pikipiki").reduce((s,d)=>s+(Number(d.price)||0),0);
-  const bajaRev=del.filter(d=>d.vehicle_type==="bajaji").reduce((s,d)=>s+(Number(d.price)||0),0);
-  const gariRev=del.filter(d=>d.vehicle_type==="gari").reduce((s,d)=>s+(Number(d.price)||0),0);
-  setText("mr-revenue","TZS "+rev.toLocaleString());
-  setText("mr-count",count);
-  setText("mr-avg","TZS "+avg.toLocaleString());
-  setText("mr-piki-rev","TZS "+pikiRev.toLocaleString());
-  setText("mr-baja-rev","TZS "+bajaRev.toLocaleString());
-  setText("mr-gari-rev","TZS "+gariRev.toLocaleString());
-  buildBarChart("mr-bar-chart","mr-bar-labels",del,period,"blue","price");
-}
-
-// ══════════════════════════════════════
-// CHART BUILDERS
-// ══════════════════════════════════════
-function buildBarChart(chartId, labelsId, data, period, color="navy", valueField=null) {
-  const chartEl = document.getElementById(chartId);
-  const labelsEl = document.getElementById(labelsId);
-  if(!chartEl) return;
-
-  // Group data by period
-  const groups = {};
-  const now = new Date();
-  let keys = [];
-
-  if(period==="day") {
-    for(let h=0;h<24;h+=2) keys.push(h);
-    keys.forEach(h=>groups[h]=0);
-    data.forEach(item=>{
-      const d = new Date(item.created_at||item.approved_at||item.delivered_at);
-      const h = Math.floor(d.getHours()/2)*2;
-      groups[h]=(groups[h]||0)+(valueField?Number(item[valueField]||0):1);
-    });
-  } else if(period==="week") {
-    const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-    days.forEach(d=>groups[d]=0);
-    keys=days;
-    data.forEach(item=>{
-      const d=new Date(item.created_at||item.approved_at);
-      const day=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];
-      groups[day]=(groups[day]||0)+(valueField?Number(item[valueField]||0):1);
-    });
-  } else if(period==="month") {
-    for(let i=1;i<=31;i+=2)keys.push(i);
-    keys.forEach(k=>groups[k]=0);
-    data.forEach(item=>{
-      const d=new Date(item.created_at||item.approved_at);
-      const day=Math.ceil(d.getDate()/2)*2-1;
-      groups[day]=(groups[day]||0)+(valueField?Number(item[valueField]||0):1);
-    });
-  } else {
-    const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    months.forEach(m=>groups[m]=0);
-    keys=months;
-    data.forEach(item=>{
-      const d=new Date(item.created_at||item.approved_at);
-      const m=months[d.getMonth()];
-      groups[m]=(groups[m]||0)+(valueField?Number(item[valueField]||0):1);
-    });
-  }
-
-  const vals = keys.map(k=>groups[k]||0);
-  const maxVal = Math.max(...vals,1);
-  const colors={navy:"var(--navy)",gold:"var(--gold)",green:"var(--green)",blue:"var(--blue)"};
-  const barColor = colors[color]||"var(--navy)";
-
-  chartEl.innerHTML = vals.map((v,i)=>{
-    const h = Math.max(Math.round((v/maxVal)*120),2);
-    const lbl = valueField ? "TZS "+Number(v).toLocaleString() : v;
-    return `<div class="bar-col" style="flex:1">
-      <div class="bar-fill ${color}" style="height:${h}px;background:${barColor};width:100%" data-val="${lbl}"></div>
-    </div>`;
-  }).join("");
-
-  if(labelsEl) labelsEl.innerHTML = keys.map((k,i)=>`
-    <div style="flex:1;text-align:center;font-size:0.58rem;color:var(--gray)">
-      ${period==="day"?k+":00":k}
-    </div>`).join("");
-}
-
-async function buildYearlyChart(chartId, labelsId, type) {
-  const chartEl=document.getElementById(chartId);
-  const labelsEl=document.getElementById(labelsId);
-  if(!chartEl) return;
-  const now=new Date();
-  const years=[now.getFullYear()-2,now.getFullYear()-1,now.getFullYear()];
-  const vals=[];
-  for(const yr of years){
-    const start=new Date(yr,0,1).toISOString();
-    const end=new Date(yr+1,0,1).toISOString();
-    if(type==="views"){
-      const {count}=await sb.from("store_views").select("*",{count:"exact",head:true}).gte("created_at",start).lt("created_at",end);
-      vals.push(count||0);
-    } else {
-      const {data}=await sb.from("subscriptions").select("amount").eq("status","approved").gte("approved_at",start).lt("approved_at",end);
-      vals.push((data||[]).reduce((s,x)=>s+(Number(x.amount)||0),0));
-    }
-  }
-  const maxVal=Math.max(...vals,1);
-  const growth=vals[1]>0?Math.round(((vals[2]-vals[1])/vals[1])*100):0;
-  chartEl.innerHTML=vals.map((v,i)=>{
-    const h=Math.max(Math.round((v/maxVal)*110),4);
-    const isLatest=i===vals.length-1;
-    return `<div class="bar-col" style="flex:1">
-      <div style="height:${h}px;background:${isLatest?"var(--gold)":"var(--navy)"};width:100%;border-radius:2px 2px 0 0;position:relative" data-val="${type==="revenue"?"TZS "+v.toLocaleString():v}"></div>
-    </div>`;
-  }).join("");
-  if(labelsEl) labelsEl.innerHTML=years.map((y,i)=>`
-    <div style="flex:1;text-align:center;font-size:0.65rem;color:var(--gray);margin-top:4px">
-      ${y}${i===years.length-1?` <span style="color:var(--green);font-weight:700">${growth>0?"+":""}${growth}%</span>`:""}
-    </div>`).join("");
-}
-
-// loadMoveData called inside loadAll directly
-
-
-
-// ── ENTER TO LOGIN ──
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("adminPin").focus();
+// Close notif panel on outside click
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.notif-wrap');
+  if (wrap && !wrap.contains(e.target)) closeNotif();
 });
 
-// ══════════════════════════════════════════════════
-// UNI-STUDENT MARKET — CAMPUS ADMIN FUNCTIONS
-// ══════════════════════════════════════════════════
-let allCampusApps   = [];
-let allCampusStores = [];
-
-async function loadCampusData() {
-  const [{ data: apps, error: appsErr }, { data: stores, error: storesErr }] = await Promise.all([
-    sb.from("campus_applications").select("*").order("created_at",{ascending:false}),
-    sb.from("campus_stores").select("*").order("created_at", { ascending: false })
-  ]);
-
-  if (appsErr)   console.error("campus_applications error:", appsErr.message);
-  if (storesErr) console.error("campus_stores error:", storesErr.message);
-
-  allCampusApps   = apps   || [];
-  allCampusStores = stores || [];
-  allCampusSubs   = [];
-
-  // Update pending badge
-  const pending = allCampusApps.filter(a => a.status === "pending");
-  const badge = document.getElementById("campusPendingCount");
-  if (badge) {
-    badge.textContent = pending.length || "";
-    badge.style.display = pending.length > 0 ? "inline-block" : "none";
-  }
-}
-
-let allCampusSubs = [];
-
-async function loadCampusOverview() {
-  await loadCampusData();
-
-  setText("c-stat-apps",    allCampusApps.length);
-  setText("c-stat-pending", allCampusApps.filter(a=>a.status==="pending").length);
-  setText("c-stat-stores",  allCampusStores.filter(s=>s.is_active).length);
-  const rev = 0; // campus_subscriptions table not yet created
-  setText("c-stat-revenue", "TZS " + rev.toLocaleString());
-
-  // Recent apps table
-  const tbody = document.getElementById("c-recent-apps");
-  const recent = allCampusApps.slice(0,5);
-  tbody.innerHTML = recent.length ? recent.map(a => `
-    <tr>
-      <td><strong>${a.full_name||"—"}</strong></td>
-      <td>${a.university_abbr||"—"}</td>
-      <td>${a.shop_name||a.business_category||"—"}</td>
-      <td><span class="badge badge-${a.status}">${a.status}</span></td>
-      <td>${new Date(a.created_at).toLocaleDateString("en-GB")}</td>
-    </tr>`).join("") : "<tr><td colspan='5' style='text-align:center;color:var(--gray);padding:1rem'>No applications yet</td></tr>";
-
-  // Uni breakdown
-  const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
-  const breakdown = document.getElementById("c-uni-breakdown");
-  const maxStores = Math.max(...unis.map(u => allCampusStores.filter(s=>s.university_abbr===u).length), 1);
-  breakdown.innerHTML = unis.map(uni => {
-    const count = allCampusStores.filter(s=>s.university_abbr===uni).length;
-    const active = allCampusStores.filter(s=>s.university_abbr===uni && s.is_active).length;
-    const pct = Math.round((count/maxStores)*100);
-    return `
-      <div style="margin-bottom:1rem">
-        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.3rem">
-          <span style="font-weight:700;color:var(--navy)">${uni}</span>
-          <span style="color:var(--gray)">${count} maduka (${active} active)</span>
-        </div>
-        <div style="background:var(--lgray);height:8px">
-          <div style="background:#7C3AED;height:8px;width:${pct}%;transition:width 0.5s"></div>
-        </div>
-      </div>`;
-  }).join("");
-  // Populate campus-overview page elements too
-  const coSet = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-  const {data: coShops} = await sb.from("campus_stores").select("id,is_active");
-  const {data: coApps}  = await sb.from("campus_applications").select("*");
-  const {data: coOrds}  = await sb.from("campus_orders").select("total_price");
-  const {data: coPrds}  = await sb.from("campus_products").select("id").eq("is_active",true);
-  const coRev = (coOrds||[]).reduce((s,o)=>s+Number(o.total_price||0),0);
-  coSet("co-shops",    (coShops||[]).filter(s=>s.is_active).length);
-  coSet("co-pending",  (coApps||[]).filter(a=>a.status==="pending").length);
-  coSet("co-revenue",  "TZS "+(coRev/1000).toFixed(0)+"K");
-  coSet("co-products", (coPrds||[]).length);
-  renderAppsTable("coAppsTbl", (coApps||[]).slice(0,8));
-}
-
-async function loadCampusApplications() {
-  if (!allCampusApps.length) await loadCampusData();
-  renderCampusAppsTable(allCampusApps);
-}
-
-function renderCampusAppsTable(apps) {
-  const tbody = document.getElementById("campus-apps-tbody");
-  if (!apps.length) {
-    tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>No applications yet</td></tr>";
-    return;
-  }
-  tbody.innerHTML = apps.map(a => `
-    <tr>
-      <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.year_of_study||""}</div></td>
-      <td style="font-size:0.75rem">${a.email||"—"}</td>
-      <td><strong>${a.university_abbr||"—"}</strong><div style="font-size:0.65rem;color:var(--gray)">${a.region||""}</div></td>
-      <td><strong>${a.shop_name||"—"}</strong><div style="font-size:0.68rem;color:var(--gray)">${a.category||a.business_category||""}</div></td>
-      <td><a href="https://wa.me/${(a.whatsapp_number||a.whatsapp||a.phone||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp_number||a.whatsapp||a.phone||"—"}</a></td>
-      <td>
-        ${a.id_card_url
-          ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="width:40px;height:30px;object-fit:cover;border:1px solid var(--lgray)" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:#7C3AED;font-size:0.72rem&quot;>Ona ID →</a>'"></a>`
-          : '<span style="font-size:0.68rem;color:var(--gray)">—</span>'}
-      </td>
-      <td><span class="badge badge-${a.status}">${a.status}</span></td>
-      <td style="font-size:0.72rem">${new Date(a.created_at).toLocaleDateString("en-GB")}</td>
-      <td>
-        <button onclick="viewCampusApp('${a.id}')" style="background:var(--navy);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:0.3rem;display:block">👁 Taarifa</button>
-        ${a.status==="pending" ? `
-          <button onclick="approveCampusApp('${a.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:0.2rem">✅ Approve</button>
-          <button onclick="rejectCampusApp('${a.id}')" style="background:var(--red);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">❌ Reject</button>
-        ` : `<span style="font-size:0.72rem;color:var(--gray)">${a.status}</span>`}
-      </td>
-    </tr>`).join("");
-}
-
-// ── CAMPUS APPLICATION DETAIL MODAL ──
-function viewCampusApp(id) {
-  const a = allCampusApps.find(x => x.id === id);
-  if (!a) return;
-
-  const sectionHead = (title, icon) =>
-    `<div style="background:var(--offwhite);padding:0.5rem 1rem;font-size:0.7rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.08em;margin:0.75rem -1.5rem 0.5rem;border-top:1px solid var(--lgray);border-bottom:1px solid var(--lgray)">${icon} ${title}</div>`;
-  const row = (label, val) => val ? `<div class="modal-row"><span class="modal-label">${label}</span><span class="modal-val">${val}</span></div>` : "";
-
-  let body = "";
-
-  // Personal info
-  body += sectionHead("Student Info", "🎓");
-  body += row("Full Name",    a.full_name);
-  body += row("Email",          a.email);
-  body += row("Phone",           a.phone);
-  body += row("WhatsApp",       a.whatsapp ? `<a href="https://wa.me/${(a.whatsapp||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green);font-weight:600">${a.whatsapp} 💬</a>` : null);
-  body += row("Year of Study", a.year_of_study);
-
-  // University
-  body += sectionHead("University & Location", "🏫");
-  body += row("University",    a.university);
-  body += row("Abbreviation",  a.university_abbr);
-  body += row("Region",    a.region);
-
-  // Business
-  body += sectionHead("Business / Shop", "🏪");
-  body += row("Shop Name",    a.shop_name);
-  body += row("Category",       a.business_category);
-  body += row("Description",         a.business_description ? `<span style="font-size:0.78rem;line-height:1.6">${a.business_description}</span>` : null);
-
-  // Student ID card
-  body += sectionHead("University ID Card", "🪪");
-  if (a.id_card_url) {
-    const isImg = /\.(jpg|jpeg|png|webp|gif)$/i.test(a.id_card_url);
-    body += `<div style="margin:0.5rem 0">
-      ${isImg ? `<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="max-width:100%;max-height:200px;border:1px solid var(--lgray);display:block;margin-bottom:0.5rem" onerror="this.style.display='none'"></a>` : ""}
-      <a href="${a.id_card_url}" target="_blank" style="color:#7C3AED;font-weight:600;font-size:0.85rem">🪪 Angalia ID Kamili →</a>
-    </div>`;
-  } else {
-    body += `<div style="color:var(--gray);font-size:0.82rem;padding:0.5rem 0">No ID card uploaded</div>`;
-  }
-
-  // Status & dates
-  body += sectionHead("Application Status", "📋");
-  body += row("Status",          `<span class="badge badge-${a.status}">${a.status}</span>`);
-  body += row("Submitted",  new Date(a.created_at).toLocaleString("en"));
-  body += row("Approved",      a.approved_at ? new Date(a.approved_at).toLocaleString("en") : null);
-
-  document.getElementById("modalStoreName").textContent = a.shop_name || a.full_name || "Application";
-  document.getElementById("modalBody").innerHTML = body;
-  document.getElementById("modalActions").innerHTML = `
-    ${a.status==="pending" ? `
-      <button class="btn-approve" onclick="approveCampusApp('${a.id}');closeModal()">✅ Approve</button>
-      <button class="btn-reject"  onclick="rejectCampusApp('${a.id}');closeModal()">❌ Reject</button>
-    ` : ""}
-    ${a.whatsapp||a.phone ? `<a href="https://wa.me/${((a.whatsapp||a.phone||"")).replace(/\D/g,"")}" target="_blank" class="btn-view" style="background:#25D366;color:#fff">💬 WhatsApp</a>` : ""}
-    ${a.id_card_url ? `<a href="${a.id_card_url}" target="_blank" class="btn-view" style="background:#7C3AED;color:#fff">🪪 Ona ID</a>` : ""}
-    ${a.email ? `<a href="mailto:${a.email}" class="btn-view">📧 Email</a>` : ""}
-  `;
-  document.getElementById("storeModal").classList.add("open");
-}
-
-let _appsFilter = "all";
-function filterApps(status, btn) {
-  _appsFilter = status;
-  document.querySelectorAll("#page-campus-applications .filter-btn").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  const filtered = status==="all" ? allCampusApps : allCampusApps.filter(a=>a.status===status);
-  renderCampusAppsTable(filtered);
-}
-function filterAppsSearch(q) {
-  const lq = q.toLowerCase();
-  const filtered = allCampusApps.filter(a =>
-    (a.full_name||"").toLowerCase().includes(lq) ||
-    (a.email||"").toLowerCase().includes(lq) ||
-    (a.university_abbr||"").toLowerCase().includes(lq) ||
-    (a.shop_name||"").toLowerCase().includes(lq)
-  );
-  renderAppsTable(_appsFilter==="all" ? filtered : filtered.filter(a=>a.status===_appsFilter));
-}
-
-async function approveCampusApp(id) {
-  const app = allCampusApps.find(a=>a.id===id);
-  if (!app) return;
-  if (!confirm(`Approve application from ${app.full_name}?\n\nTheir shop will be activated immediately.`)) return;
-
-  const now = new Date();
-
-  // 1. Update application status
-  const { error: e1 } = await sb.from("campus_applications").update({
-    status: "approved", approved_at: now.toISOString()
-  }).eq("id", id);
-  if (e1) { showToast("Failed: " + e1.message, "error"); return; }
-
-  // 2. Create campus_store — is_active=true so duka linaonekana mara moja
-  const shopNumber = allCampusStores.filter(s => s.university_abbr === app.university_abbr && s.shop_number).length + 1;
-  const expires30 = new Date(now.getTime() + 30*24*60*60*1000);
-  const { error: e2 } = await sb.from("campus_stores").upsert({
-    user_id:             app.user_id || null,
-    store_name:          app.shop_name || app.full_name + "'s Shop",
-    category:            app.category || app.business_category || "",
-    description:         app.description || app.business_description || "",
-    whatsapp_number:     app.whatsapp_number || app.whatsapp || app.phone || "",
-    university:          app.university_name || app.university || "",
-    university_abbr:     app.university_abbr,
-    region:              app.region,
-    seller_name:         app.full_name,
-    seller_email:        app.email,
-    is_active:           true,
-    subscription_status: "approved",
-    shop_number:         shopNumber,
-    subscription_start:  now.toISOString(),
-    subscription_expires: expires30.toISOString(),
-    created_at:          now.toISOString()
-  });
-  if (e2) { showToast("⚠️ Store could not be created: " + e2.message, "error"); }
-
-  // 3. Send approval email
-  if (app.email) {
-    await sendApprovalEmail({
-      to:        app.email,
-      ownerName: app.full_name,
-      storeName: app.shop_name || "Your Shop",
-      storeType: "CAMPUS",
-      plan:      "🎓 Campus Premium",
-      shopNum:   shopNumber,
-      expires:   expires30.toLocaleDateString("sw", {day:"numeric", month:"long", year:"numeric"}),
-      loginUrl:  window.location.origin + "/campus-dashboard.html",
-      storeUrl:  window.location.origin + "/campus-university.html?uni=" + app.university_abbr,
-      payNote:   "Pay TZS 15,000 via CRDB 0152774556100 or M-Pesa +255 651 919 915 to keep your shop active monthly"
-    }).catch(() => {});
-  }
-
-  // 4. Send WhatsApp with approval + payment instructions
-  const phone = (app.whatsapp || app.phone || "").replace(/\D/g, "");
-  if (phone) {
-    const msg = encodeURIComponent(
-      `🎉 *Congratulations ${app.full_name}!*\n\n` +
-      `Your Travex Campus application has been *approved!* 🎓\n\n` +
-      `*Your Shop:* ${app.shop_name}\n*University:* ${app.university_abbr}\n*Shop No:* #${shopNumber}\n\n` +
-      `*Pay Activation Fee:*\n` +
-      `💳 CRDB BANK: *0152774556100*\n📱 M-Pesa: *+255 651 919 915*\n💵 Amount: *TZS 15,000/month*\n\n` +
-      `Send a photo of your receipt after payment.\n` +
-      `Login: ${window.location.origin}/campus-dashboard.html\n\n` +
-      `Welcome to Travex Campus! 🎓`
-    );
-    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
-  }
-
-  showToast(`✅ ${app.full_name} approved! Shop #${shopNumber} is now live.${app.email ? " 📧 Email sent." : ""}`, "success");
-  await loadCampusData();
-  renderCampusAppsTable(allCampusApps);
-  loadNotifications();
-}
-
-async function rejectCampusApp(id) {
-  const app = allCampusApps.find(a=>a.id===id);
-  if (!app) return;
-  if (!confirm(`Reject application from ${app.full_name}?`)) return;
-  const { error } = await sb.from("campus_applications").update({ status:"rejected" }).eq("id", id);
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
-  showToast("Application from " + app.full_name + " has been rejected.");
-  await loadCampusData();
-  renderCampusAppsTable(allCampusApps);
-}
-
-async function loadCampusStores() {
-  if (!allCampusStores.length) await loadCampusData();
-  renderCampusStoresTable(allCampusStores);
-}
-
-function renderCampusStoresTable(stores) {
-  const tbody = document.getElementById("campus-stores-tbody");
-  if (!stores.length) {
-    tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna maduka bado</td></tr>";
-    return;
-  }
-  tbody.innerHTML = stores.map((s,i) => `
-    <tr>
-      <td style="font-weight:700;color:#7C3AED">#${s.shop_number||"—"}</td>
-      <td><strong>${s.store_name||"—"}</strong></td>
-      <td style="font-size:0.78rem">${s.seller_name||"—"}</td>
-      <td>${s.university_abbr||"—"}</td>
-      <td>${s.category||"—"}</td>
-      <td><a href="https://wa.me/${(s.whatsapp_number||"").replace(/\D/g,"")}" target="_blank" style="color:var(--green)">${s.whatsapp_number||"—"}</a></td>
-      <td><span class="badge badge-${s.is_active?"approved":"pending"}">${s.is_active?"Active":"Pending"}</span></td>
-      <td style="font-size:0.75rem">${new Date(s.created_at).toLocaleDateString("en-GB")}</td>
-      <td>
-        ${!s.is_active ? `<button onclick="activateCampusStore('${s.id}')" style="background:var(--green);color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Activate</button>` : ""}
-        <button onclick="deactivateCampusStore('${s.id}','${s.is_active}')" style="background:${s.is_active?"var(--red)":"var(--gray)"};color:#fff;border:none;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-left:0.2rem">${s.is_active?"Deactivate":"Remove"}</button>
-      </td>
-    </tr>`).join("");
-}
-
-function filterCampusStores() {
-  const uni    = document.getElementById("cs-uni-filter").value;
-  const status = document.getElementById("cs-status-filter").value;
-  const q      = document.getElementById("cs-search").value.toLowerCase();
-  let filtered = allCampusStores;
-  if (uni) filtered = filtered.filter(s=>s.university_abbr===uni);
-  if (status !== "") filtered = filtered.filter(s=>String(s.is_active)===status);
-  if (q) filtered = filtered.filter(s=>(s.store_name||"").toLowerCase().includes(q)||(s.seller_name||"").toLowerCase().includes(q));
-  renderCampusStoresTable(filtered);
-}
-
-async function activateCampusStore(id) {
-  const store = allCampusStores.find(s=>s.id===id);
-  if (!store || !confirm(`Activate duka la "${store.store_name}"?`)) return;
-  // Assign shop number if not set
-  const shopNumber = allCampusStores.filter(s=>s.university_abbr===store.university_abbr && s.shop_number).length + 1;
-  const { error } = await sb.from("campus_stores").update({
-    is_active: true,
-    subscription_status: "approved",
-    shop_number: shopNumber,
-    subscription_start: new Date().toISOString(),
-    subscription_expires: new Date(Date.now() + 30*24*60*60*1000).toISOString()
-  }).eq("id", id);
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
-  showToast("✅ Duka la " + store.store_name + " limewashwa! Shop #" + shopNumber);
-  await loadCampusData();
-  renderCampusStoresTable(allCampusStores);
-}
-
-async function deactivateCampusStore(id, isActive) {
-  const store = allCampusStores.find(s=>s.id===id);
-  if (!store || !confirm(`${isActive==="true"?"Deactivate":"Futa"} duka la "${store.store_name}"?`)) return;
-  const { error } = await sb.from("campus_stores").update({ is_active: false, subscription_status:"pending" }).eq("id", id);
-  if (error) { showToast("Failed: " + error.message, "error"); return; }
-  showToast("Duka limezimwa.");
-  await loadCampusData();
-  renderCampusStoresTable(allCampusStores);
-}
-
-async function loadCampusAnalytics(period, btn) {
-  document.querySelectorAll("#page-campus-analytics .cpt").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  
-  const now = new Date();
-  let start;
-  if (period==="day")   start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  else if(period==="week") { start=new Date(now); start.setDate(now.getDate()-7); }
-  else if(period==="month") start=new Date(now.getFullYear(),now.getMonth(),1);
-  else start=new Date(now.getFullYear(),0,1);
-
-  const { data:views } = await sb.from("campus_store_views").select("*,campus_stores(store_name,university_abbr)")
-    .gte("created_at", start.toISOString());
-  
-  const vArr = views || [];
-  setText("ca-views", vArr.length.toLocaleString());
-  const uniqueStores = new Set(vArr.map(v=>v.store_id)).size;
-  setText("ca-stores-viewed", uniqueStores);
-  
-  // By university
-  const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
-  const byUni = {};
-  unis.forEach(u => byUni[u] = 0);
-  vArr.forEach(v => { const u = v.campus_stores?.university_abbr; if(u && byUni[u]!==undefined) byUni[u]++; });
-  const topUni = Object.entries(byUni).sort((a,b)=>b[1]-a[1])[0];
-  setText("ca-top-uni", topUni ? topUni[0] + " (" + topUni[1] + ")" : "—");
-  
-  const maxViews = Math.max(...Object.values(byUni), 1);
-  const chart = document.getElementById("ca-uni-chart");
-  chart.innerHTML = unis.map(uni => {
-    const count = byUni[uni] || 0;
-    const pct = Math.round((count/maxViews)*100);
-    return `<div style="display:flex;align-items:center;gap:1rem">
-      <span style="width:50px;font-weight:700;font-size:0.82rem;color:var(--navy)">${uni}</span>
-      <div style="flex:1;background:var(--lgray);height:24px;position:relative">
-        <div style="background:#7C3AED;height:24px;width:${pct}%;transition:width 0.5s;display:flex;align-items:center;padding:0 0.5rem">
-          ${count>0?'<span style="font-size:0.7rem;font-weight:700;color:#fff">'+count+'</span>':''}
-        </div>
-      </div>
-      <span style="font-size:0.78rem;color:var(--gray);width:60px;text-align:right">${count} views</span>
-    </div>`;
-  }).join("");
-}
-
-async function loadCampusRevenue(period, btn) {
-  document.querySelectorAll("#page-campus-revenue .cpt").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  
-  if (!allCampusSubs.length) await loadCampusData();
-
-  const now = new Date();
-  let start;
-  if (period==="day")   start = new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  else if(period==="week") { start=new Date(now); start.setDate(now.getDate()-7); }
-  else if(period==="month") start=new Date(now.getFullYear(),now.getMonth(),1);
-  else start=new Date(now.getFullYear(),0,1);
-
-  // Use campus_stores subscription_start as proxy if no campus_subscriptions
-  const paidStores = allCampusStores.filter(s => {
-    if (!s.is_active || !s.subscription_start) return false;
-    return new Date(s.subscription_start) >= start;
-  });
-  
-  const total = paidStores.length * 15000;
-  setText("cr-total", "TZS " + total.toLocaleString());
-  setText("cr-stores", paidStores.length);
-  setText("cr-avg", paidStores.length ? "TZS 15,000" : "—");
-  
-  // By university
-  const unis = ["UDSM","UDOM","ARU","TIA","NIT"];
-  const breakdown = document.getElementById("cr-breakdown");
-  breakdown.innerHTML = unis.map(uni => {
-    const count = paidStores.filter(s=>s.university_abbr===uni).length;
-    const rev   = count * 15000;
-    return `<div style="display:flex;align-items:center;gap:1rem;padding:0.5rem 0;border-bottom:1px solid var(--lgray)">
-      <span style="width:60px;font-weight:700;font-size:0.85rem;color:#7C3AED">${uni}</span>
-      <span style="font-size:0.82rem;color:var(--gray)">${count} maduka</span>
-      <span style="margin-left:auto;font-weight:700;color:var(--navy)">TZS ${rev.toLocaleString()}</span>
-    </div>`;
-  }).join("");
-
-  // Payments table
-  const tbody = document.getElementById("cr-payments-tbody");
-  tbody.innerHTML = paidStores.length ? paidStores.map(s=>`
-    <tr>
-      <td><strong>${s.seller_name||"—"}</strong></td>
-      <td>${s.university_abbr||"—"}</td>
-      <td>${s.store_name||"—"}</td>
-      <td style="font-weight:700;color:var(--green)">TZS 15,000</td>
-      <td style="font-size:0.75rem">${s.subscription_start ? new Date(s.subscription_start).toLocaleDateString("en-GB") : "—"}</td>
-      <td><span class="badge badge-approved">Paid</span></td>
-    </tr>`).join("") : "<tr><td colspan='6' style='text-align:center;color:var(--gray);padding:2rem'>Hakuna malipo katika kipindi hiki</td></tr>";
-}
-
-// Add .badge styles if not present
-if (!document.querySelector("style#campus-styles")) {
-  const s = document.createElement("style");
-  s.id = "campus-styles";
-  s.textContent = `.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}.badge-pending{background:#FEF3C7;color:#92400E}.badge-approved{background:#D1FAE5;color:#065F46}.badge-rejected{background:#FEE2E2;color:#B91C1C}`;
-  document.head.appendChild(s);
-}
-
-// ══════════════════════════════════════════════════════════════
-// ADMIN REAL-TIME NOTIFICATIONS
-// ══════════════════════════════════════════════════════════════
-let notifChannel;
-
-async function loadNotifications() {
-  const { data } = await sb.from("admin_notifications")
-    .select("*").order("created_at", { ascending: false }).limit(30);
-  
-  const notifs = data || [];
-  const unread = notifs.filter(n => !n.is_read).length;
-  
-  // Update badge
-  const badge = document.getElementById("notifCount");
-  if (badge) {
-    badge.textContent = unread > 99 ? "99+" : unread;
-    badge.style.display = unread > 0 ? "flex" : "none";
-    // Flash bell if new
-    if (unread > 0) {
-      const bell = document.getElementById("notifBell");
-      if (bell) { bell.style.background = "rgba(201,168,76,0.15)"; bell.style.borderColor = "#C9A84C"; }
-    }
-  }
-
-  // Render notification list
-  const list = document.getElementById("notifList");
-  if (!list) return;
-  
-  if (!notifs.length) {
-    list.innerHTML = "<div style='padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem'>No notifications yet</div>";
-    return;
-  }
-
-  list.innerHTML = notifs.map(n => {
-    const time = new Date(n.created_at).toLocaleString("en");
-    const isPayment = n.type === "payment_receipt";
-    const isCampus  = n.type === "campus_application";
-    const bg = n.is_read ? "#fff" : "#FFFBEB";
-    const dot = n.is_read ? "" : `<span style="width:6px;height:6px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:4px"></span>`;
-    const receiptLink = n.receipt_url ? `<a href="${n.receipt_url}" target="_blank" style="font-size:0.7rem;color:var(--gold);font-weight:600">Ona Risiti →</a>` : "";
-    const ctaBtn = isPayment
-      ? `<button onclick="showPage('pending-payments',null);toggleNotifPanel()" style="font-size:0.7rem;color:var(--navy);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Review Payments →</button>`
-      : isCampus
-      ? `<button onclick="showPage('campus-applications',null);toggleNotifPanel()" style="font-size:0.7rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Review Applications →</button>`
-      : "";
-    return `<div onclick="markRead('${n.id}')" style="padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);background:${bg};cursor:pointer" onmouseover="this.style.background='var(--offwhite)'" onmouseout="this.style.background='${bg}'">
-      <div style="display:flex;gap:0.6rem;align-items:flex-start">
-        ${dot}
-        <div style="flex:1">
-          <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${n.title || "Notification"}</div>
-          <div style="font-size:0.72rem;color:var(--gray);line-height:1.5;margin-bottom:0.3rem">${n.body || ""}</div>
-          <div style="display:flex;gap:0.75rem;align-items:center">
-            <span style="font-size:0.65rem;color:var(--gray)">${time}</span>
-            ${receiptLink}
-            ${ctaBtn}
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-}
-
-async function markRead(id) {
-  await sb.from("admin_notifications").update({ is_read: true }).eq("id", id);
-  loadNotifications();
-}
-
-async function markAllRead() {
-  await sb.from("admin_notifications").update({ is_read: true }).eq("is_read", false);
-  loadNotifications();
-}
-
-function toggleNotifPanel() {
-  const p = document.getElementById("notifPanel");
-  if (!p) return;
-  const isOpen = p.style.display === "block";
-  p.style.display = isOpen ? "none" : "block";
-  if (!isOpen) loadNotifications();
-}
-
-// Close panel on outside click
-document.addEventListener("click", e => {
-  const panel = document.getElementById("notifPanel");
-  const bell  = document.getElementById("notifBell");
-  if (panel && !panel.contains(e.target) && bell && !bell.contains(e.target)) {
-    panel.style.display = "none";
-  }
+// Close modal on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeNotif(); }
 });
-
-// Subscribe to realtime notifications
-function subscribeToNotifications() {
-  notifChannel = sb.channel("admin-notifs")
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "admin_notifications" }, payload => {
-      loadNotifications();
-      // Show toast
-      const n = payload.new;
-      showToast("🔔 " + (n.title || "Notification mpya!"));
-    })
-    .subscribe();
-}
-
-// Load notifications on start + subscribe
-loadNotifications();
-subscribeToNotifications();
-
-// ══════════════════════════════════════════════════════════════════
-// SEND APPROVAL EMAIL via Supabase Edge Function / direct API
-// ══════════════════════════════════════════════════════════════════
-async function sendApprovalEmail(params) {
-  const { to, ownerName, storeName, storeType, plan, expires, loginUrl, storeUrl, shopNum, payNote } = params;
-
-  const isCampus = storeType === "CAMPUS";
-  const subject  = isCampus
-    ? `🎓 Congratulations ${ownerName}! Your Campus Shop is Approved — Travex Campus`
-    : `🎉 Congratulations! Your shop "${storeName}" is now live — Travex Mall`;
-
-  const htmlBody = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="font-family:'Inter',Arial,sans-serif;background:#F8F9FC;margin:0;padding:0">
-  <div style="max-width:560px;margin:0 auto;background:#fff">
-
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#0D1B3E,#1B3A6B);padding:2.5rem 2rem;text-align:center">
-      <div style="font-size:2.5rem;margin-bottom:0.5rem">${isCampus ? "🎓" : "🎉"}</div>
-      <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.25rem">
-        TRAVEX ${isCampus ? '<span style="color:#C9A84C">CAMPUS</span>' : '<span style="color:#C9A84C">MALL</span>'}
-      </div>
-      <div style="font-size:0.875rem;color:rgba(255,255,255,0.6)">Travex Digital Group · Tanzania</div>
-    </div>
-
-    <!-- Body -->
-    <div style="padding:2rem">
-      <p style="font-size:1rem;font-weight:700;color:#0D1B3E;margin-bottom:0.5rem">Habari ${ownerName}! 👋</p>
-      <p style="color:#6B7280;line-height:1.7;margin-bottom:1.5rem">
-        ${isCampus
-          ? `Your application to join <strong>Travex Uni-Student Market</strong> has been approved! Your Shop <strong>"${storeName}"</strong> is now live kwenye chuo chako.`
-          : `Hongana! Your Shop <strong>"${storeName}"</strong> has been approved na limewashwa kwenye <strong>Travex Mall</strong>. Unaweza kuanza kuuza sasa hivi!`
-        }
-      </p>
-
-      <!-- Store info box -->
-      <div style="background:#F8F9FC;border:1px solid #E5E7EB;padding:1.25rem;margin-bottom:1.5rem">
-        <div style="font-size:0.7rem;font-weight:700;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">📋 Taarifa za Duka Lako</div>
-        <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
-          <tr><td style="color:#6B7280;padding:0.3rem 0;width:40%">Jina la Duka</td><td style="font-weight:700;color:#111827">${storeName}</td></tr>
-          <tr><td style="color:#6B7280;padding:0.3rem 0">Aina</td><td style="font-weight:700;color:#111827">${storeType}</td></tr>
-          <tr><td style="color:#6B7280;padding:0.3rem 0">Plan</td><td style="font-weight:700;color:#C9A84C">${plan}</td></tr>
-          ${shopNum ? `<tr><td style="color:#6B7280;padding:0.3rem 0">Shop Number</td><td style="font-weight:700;color:#7C3AED">#${shopNum}</td></tr>` : ""}
-          <tr><td style="color:#6B7280;padding:0.3rem 0">Inaisha</td><td style="font-weight:700;color:#111827">${expires}</td></tr>
-        </table>
-      </div>
-
-      ${payNote ? `
-      <div style="background:#FEF3C7;border-left:3px solid #C9A84C;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:0.85rem;color:#92400E;line-height:1.6">
-        💳 <strong>Malipo:</strong> ${payNote}
-      </div>` : ""}
-
-      <!-- CTA Buttons -->
-      <div style="text-align:center;margin-bottom:1.5rem">
-        <a href="${loginUrl}" style="display:inline-block;background:#C9A84C;color:#0D1B3E;padding:0.875rem 2rem;font-weight:800;text-decoration:none;font-size:0.95rem;margin-bottom:0.75rem">
-          🔑 Ingia Dashibodi Yako →
-        </a>
-        <br>
-        <a href="${storeUrl}" style="display:inline-block;background:#0D1B3E;color:#fff;padding:0.75rem 2rem;font-weight:600;text-decoration:none;font-size:0.875rem">
-          🏪 Angalia Duka Lako →
-        </a>
-      </div>
-
-      <!-- Next steps -->
-      <div style="border-top:1px solid #E5E7EB;padding-top:1.25rem">
-        <div style="font-size:0.72rem;font-weight:700;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">Hatua Zako Zinazofuata:</div>
-        <div style="font-size:0.82rem;color:#6B7280;line-height:2.2">
-          ${isCampus ? `
-          ✅ Lipa TZS 15,000 kudumisha duka lako<br>
-          📱 Tuma risiti WhatsApp: <strong>+255 651 919 915</strong><br>
-          🔑 Login to your dashboard yako kuongeza bidhaa<br>
-          📢 Tangaza duka lako kwa wanafunzi wenzako
-          ` : `
-          ✅ Login to your dashboard yako sasa<br>
-          📦 Ongeza bidhaa zako za kwanza<br>
-          📢 Shiriki duka lako kwenye mitandao ya kijamii<br>
-          💬 Wasiliana nasi kwa msaada: +255 651 919 915
-          `}
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div style="background:#0D1B3E;padding:1.25rem 2rem;text-align:center">
-      <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.8">
-        <strong style="color:#C9A84C">Travex Digital Group (TDG)</strong><br>
-        📧 travexmall15@gmail.com &nbsp;·&nbsp; 📱 +255 651 919 915<br>
-        <a href="https://wa.me/255651919915" style="color:#25D366;text-decoration:none">💬 WhatsApp Support</a>
-      </div>
-    </div>
-
-  </div>
-
-<!-- DETAIL MODAL -->
-<div id="detailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)closeModal()">
-  <div style="background:#fff;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
-    <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1">
-      <div style="font-size:1rem;font-weight:700;color:var(--navy)" id="detailTitle">Details</div>
-      <button onclick="closeModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray);line-height:1">✕</button>
-    </div>
-    <div style="padding:1.5rem" id="detailBody"></div>
-    <div style="padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end" id="detailFooter"></div>
-  </div>
-</div>
-<style>
-#detailModal.open{display:flex!important}
-.detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.55rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem}
-.detail-row:last-child{border-bottom:none}
-.detail-label{color:var(--gray);flex-shrink:0;margin-right:1rem}
-.detail-val{font-weight:600;color:var(--navy);text-align:right}
-</style>
-
-<!-- ── INLINE DB DEBUG (remove after fixing) ── -->
-<div id="dbDebug" style="display:none;position:fixed;bottom:20px;right:20px;z-index:99999;width:420px;max-height:500px;overflow-y:auto;background:#0D1B3E;border:2px solid #C9A84C;border-radius:10px;padding:1.25rem;font-family:monospace;font-size:0.75rem;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-    <span style="color:#C9A84C;font-weight:800;font-size:0.85rem">🔍 DB Debug</span>
-    <button onclick="document.getElementById('dbDebug').style.display='none'" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.2rem">✕</button>
-  </div>
-  <div id="dbDebugOut">Click Run to test...</div>
-  <button onclick="runDbDebug()" style="margin-top:0.75rem;background:#C9A84C;color:#000;border:none;padding:0.4rem 1rem;border-radius:4px;font-weight:700;cursor:pointer;width:100%">▶ Run DB Test</button>
-</div>
-<button onclick="document.getElementById('dbDebug').style.display='block';runDbDebug()" 
-  style="position:fixed;bottom:20px;right:20px;z-index:99998;background:#C9A84C;color:#0D1B3E;border:none;padding:0.5rem 1rem;border-radius:6px;font-weight:800;cursor:pointer;font-size:0.8rem;display:none"
-  id="debugBtn">🔍 DB Test</button>
-
-<script>
-function showDebugBtn() {
-  document.getElementById('debugBtn').style.display = 'block';
-}
-
-async function runDbDebug() {
-  const out = document.getElementById('dbDebugOut');
-  out.innerHTML = '';
-  
-  function log(msg, color='#fff') {
-    out.innerHTML += `<div style="color:${color};margin:2px 0">${msg}</div>`;
-  }
-
-  log('Testing campus_applications...', '#fbbf24');
-  const {data:a, error:ae, count:ac} = await sb
-    .from('campus_applications')
-    .select('*', {count:'exact'})
-    .order('created_at', {ascending:false});
-
-  if (ae) {
-    log('❌ READ ERROR: ' + ae.message, '#f87171');
-    log('Code: ' + ae.code, '#f87171');
-    log('Hint: ' + (ae.hint||'none'), '#fbbf24');
-  } else {
-    log(`✅ campus_applications: ${ac} records`, '#4ade80');
-    if (a && a.length > 0) {
-      a.slice(0,3).forEach(x => {
-        log(`  • ${x.full_name} | ${x.shop_name} | ${x.status}`, '#C9A84C');
-      });
-    } else {
-      log('  ⚠️ TABLE IS EMPTY - no applications yet', '#fbbf24');
-    }
-  }
-
-  log('', '#fff');
-  log('Testing admin_notifications...', '#fbbf24');
-  const {data:n, error:ne} = await sb
-    .from('admin_notifications')
-    .select('id,title,is_read')
-    .order('created_at',{ascending:false})
-    .limit(3);
-
-  if (ne) {
-    log('❌ ERROR: ' + ne.message, '#f87171');
-  } else {
-    log(`✅ admin_notifications: ${n.length} records`, '#4ade80');
-    n.forEach(x => log(`  • ${x.title} | read:${x.is_read}`, '#C9A84C'));
-  }
-
-  log('', '#fff');
-  log('Testing INSERT...', '#fbbf24');
-  const {data:ins, error:inse} = await sb
-    .from('campus_applications')
-    .insert({
-      full_name: 'DEBUG_TEST_' + Date.now(),
-      email: 'debug_' + Date.now() + '@test.com',
-      phone: '+255700000000',
-      whatsapp_number: '+255700000000',
-      university_name: 'Ardhi University',
-      university_abbr: 'ARU',
-      region: 'Dar es Salaam',
-      year_of_study: '1',
-      shop_name: 'Debug Shop',
-      category: 'Other',
-      description: 'Debug test record',
-      status: 'pending',
-      submitted_at: new Date().toISOString()
-    }).select();
-
-  if (inse) {
-    log('❌ INSERT FAILED: ' + inse.message, '#f87171');
-    log('Code: ' + inse.code, '#f87171');
-    log('Details: ' + (inse.details||'none'), '#fbbf24');
-    log('Hint: ' + (inse.hint||'none'), '#fbbf24');
-  } else {
-    log('✅ INSERT OK! ID: ' + ins[0]?.id, '#4ade80');
-    log('Refreshing data...', '#fbbf24');
-    await loadAll();
-    log('✅ Done! Check applications page now.', '#4ade80');
-  }
-}
 </script>
-
-</body>
-</html>`;
-
-  // Try Supabase Edge Function first, fallback gracefully
-  try {
-    const { data: { session } } = await sb.auth.getSession();
-    const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
-      method: "POST",
-      headers: {
-        "Content-Type":  "application/json",
-        "Authorization": `Bearer ${session?.access_token || SUPABASE_ANON}`
-      },
-      body: JSON.stringify({ to, subject, html: htmlBody })
-    });
-    if (!resp.ok) throw new Error(await resp.text());
-    console.log("✅ Email sent to", to);
-  } catch (err) {
-    console.warn("Email send failed (Edge Function):", err.message);
-    // Log to admin_notifications as fallback
-    await sb.from("admin_notifications").insert({
-      type: "email_failed",
-      title: `⚠️ Email haikutumwa kwa ${to}`,
-      body:  `Subject: ${subject} | Error: ${err.message}. Tuma manually.`,
-      is_read: false,
-      created_at: new Date().toISOString()
-    }).catch(() => {});
-  }
-}
-</script>
-
-<!-- DETAIL MODAL -->
-<div id="detailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)closeModal()">
-  <div style="background:#fff;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
-    <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1">
-      <div style="font-size:1rem;font-weight:700;color:var(--navy)" id="detailTitle">Details</div>
-      <button onclick="closeModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray);line-height:1">✕</button>
-    </div>
-    <div style="padding:1.5rem" id="detailBody"></div>
-    <div style="padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end" id="detailFooter"></div>
-  </div>
-</div>
-<style>
-#detailModal.open{display:flex!important}
-.detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.55rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem}
-.detail-row:last-child{border-bottom:none}
-.detail-label{color:var(--gray);flex-shrink:0;margin-right:1rem}
-.detail-val{font-weight:600;color:var(--navy);text-align:right}
-</style>
-
-<!-- ── INLINE DB DEBUG (remove after fixing) ── -->
-<div id="dbDebug" style="display:none;position:fixed;bottom:20px;right:20px;z-index:99999;width:420px;max-height:500px;overflow-y:auto;background:#0D1B3E;border:2px solid #C9A84C;border-radius:10px;padding:1.25rem;font-family:monospace;font-size:0.75rem;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-    <span style="color:#C9A84C;font-weight:800;font-size:0.85rem">🔍 DB Debug</span>
-    <button onclick="document.getElementById('dbDebug').style.display='none'" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.2rem">✕</button>
-  </div>
-  <div id="dbDebugOut">Click Run to test...</div>
-  <button onclick="runDbDebug()" style="margin-top:0.75rem;background:#C9A84C;color:#000;border:none;padding:0.4rem 1rem;border-radius:4px;font-weight:700;cursor:pointer;width:100%">▶ Run DB Test</button>
-</div>
-<button onclick="document.getElementById('dbDebug').style.display='block';runDbDebug()" 
-  style="position:fixed;bottom:20px;right:20px;z-index:99998;background:#C9A84C;color:#0D1B3E;border:none;padding:0.5rem 1rem;border-radius:6px;font-weight:800;cursor:pointer;font-size:0.8rem;display:none"
-  id="debugBtn">🔍 DB Test</button>
-
-<script>
-function showDebugBtn() {
-  document.getElementById('debugBtn').style.display = 'block';
-}
-
-async function runDbDebug() {
-  const out = document.getElementById('dbDebugOut');
-  out.innerHTML = '';
-  
-  function log(msg, color='#fff') {
-    out.innerHTML += `<div style="color:${color};margin:2px 0">${msg}</div>`;
-  }
-
-  log('Testing campus_applications...', '#fbbf24');
-  const {data:a, error:ae, count:ac} = await sb
-    .from('campus_applications')
-    .select('*', {count:'exact'})
-    .order('created_at', {ascending:false});
-
-  if (ae) {
-    log('❌ READ ERROR: ' + ae.message, '#f87171');
-    log('Code: ' + ae.code, '#f87171');
-    log('Hint: ' + (ae.hint||'none'), '#fbbf24');
-  } else {
-    log(`✅ campus_applications: ${ac} records`, '#4ade80');
-    if (a && a.length > 0) {
-      a.slice(0,3).forEach(x => {
-        log(`  • ${x.full_name} | ${x.shop_name} | ${x.status}`, '#C9A84C');
-      });
-    } else {
-      log('  ⚠️ TABLE IS EMPTY - no applications yet', '#fbbf24');
-    }
-  }
-
-  log('', '#fff');
-  log('Testing admin_notifications...', '#fbbf24');
-  const {data:n, error:ne} = await sb
-    .from('admin_notifications')
-    .select('id,title,is_read')
-    .order('created_at',{ascending:false})
-    .limit(3);
-
-  if (ne) {
-    log('❌ ERROR: ' + ne.message, '#f87171');
-  } else {
-    log(`✅ admin_notifications: ${n.length} records`, '#4ade80');
-    n.forEach(x => log(`  • ${x.title} | read:${x.is_read}`, '#C9A84C'));
-  }
-
-  log('', '#fff');
-  log('Testing INSERT...', '#fbbf24');
-  const {data:ins, error:inse} = await sb
-    .from('campus_applications')
-    .insert({
-      full_name: 'DEBUG_TEST_' + Date.now(),
-      email: 'debug_' + Date.now() + '@test.com',
-      phone: '+255700000000',
-      whatsapp_number: '+255700000000',
-      university_name: 'Ardhi University',
-      university_abbr: 'ARU',
-      region: 'Dar es Salaam',
-      year_of_study: '1',
-      shop_name: 'Debug Shop',
-      category: 'Other',
-      description: 'Debug test record',
-      status: 'pending',
-      submitted_at: new Date().toISOString()
-    }).select();
-
-  if (inse) {
-    log('❌ INSERT FAILED: ' + inse.message, '#f87171');
-    log('Code: ' + inse.code, '#f87171');
-    log('Details: ' + (inse.details||'none'), '#fbbf24');
-    log('Hint: ' + (inse.hint||'none'), '#fbbf24');
-  } else {
-    log('✅ INSERT OK! ID: ' + ins[0]?.id, '#4ade80');
-    log('Refreshing data...', '#fbbf24');
-    await loadAll();
-    log('✅ Done! Check applications page now.', '#4ade80');
-  }
-}
-</script>
-
 </body>
 </html>
