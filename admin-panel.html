@@ -214,6 +214,12 @@ select,textarea,
   border-radius:16px!important;
 }
 /* fix any remaining 0-radius inline styles */
+
+.btn-sm{padding:0.25rem 0.6rem;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-sm.btn-approve{background:rgba(5,150,105,0.12);color:#059669;border:1px solid rgba(5,150,105,0.3)}
+.btn-sm.btn-approve:hover{background:#059669;color:#fff}
+.btn-sm.btn-reject{background:rgba(220,38,38,0.1);color:#DC2626;border:1px solid rgba(220,38,38,0.2)}
+.btn-sm.btn-reject:hover{background:#DC2626;color:#fff}
 </style>
 </head>
 <body>
@@ -245,36 +251,16 @@ select,textarea,
       <div class="nav-section">Overview</div>
       <div class="nav-item active" onclick="showPage('overview',this)"><span class="ni">📊</span>Dashboard</div>
 
-      <div class="nav-section">Stores</div>
-      <div class="nav-item" onclick="showPage('pending',this)"><span class="ni">⏳</span>Pending Approval <span id="pendingCount" style="margin-left:auto;background:var(--orange);color:#fff;font-size:0.6rem;padding:0.1rem 0.4rem;font-weight:700"></span></div>
-      <div class="nav-item" onclick="showPage('stores',this)"><span class="ni">🏪</span>All Stores</div>
-      <div class="nav-item" onclick="showPage('b2c',this)"><span class="ni">🥈</span>B2C Retailers</div>
-      <div class="nav-item" onclick="showPage('b2b',this)"><span class="ni">🥇</span>B2B Wholesalers</div>
-
-      <div class="nav-section">Subscriptions</div>
-      <div class="nav-item" onclick="showPage('subs',this)"><span class="ni">💳</span>Subscriptions</div>
-      <div class="nav-item" onclick="showPage('expiring',this)"><span class="ni">⚠️</span>Expiring Soon</div>
-
-      <div class="nav-section">Analytics</div>
-      <div class="nav-item" onclick="showPage('analytics',this)"><span class="ni">👁️</span>Viewers & Traffic</div>
-      <div class="nav-item" onclick="showPage('accounting',this)"><span class="ni">💰</span>Revenue Accounting</div>
-
-      <div class="nav-section">Content</div>
-      <div class="nav-item" onclick="showPage('featured',this)"><span class="ni">⭐</span>Top Rated / Featured</div>
-      <div class="nav-item" onclick="showPage('vybe',this)"><span class="ni">✦</span>Vybe Posts</div>
-
-      <div class="nav-section">🎓 Uni Market</div>
-      <div class="nav-item" onclick="showPage('campus-overview',this)"><span class="ni">📊</span>Campus Overview</div>
+      <div class="nav-section">🎓 Campus Market</div>
       <div class="nav-item" onclick="showPage('campus-applications',this)"><span class="ni">📋</span>Applications <span id="campusPendingCount" style="margin-left:auto;background:#7C3AED;color:#fff;font-size:0.6rem;padding:0.1rem 0.4rem;font-weight:700"></span></div>
       <div class="nav-item" onclick="showPage('campus-stores',this)"><span class="ni">🏪</span>Campus Stores</div>
-      <div class="nav-item" onclick="showPage('campus-analytics',this)"><span class="ni">👁️</span>Campus Traffic</div>
-      <div class="nav-item" onclick="showPage('campus-revenue',this)"><span class="ni">💰</span>Campus Revenue</div>
+      <div class="nav-item" onclick="showPage('campus-revenue',this)"><span class="ni">💰</span>Revenue</div>
+      <div class="nav-item" onclick="showPage('campus-analytics',this)"><span class="ni">👁️</span>Traffic & Analytics</div>
 
-      <div class="nav-section">Travex Move</div>
-      <div class="nav-item" onclick="showPage('move-overview',this)"><span class="ni">🚚</span>Move Dashboard</div>
-      <div class="nav-item" onclick="showPage('move-drivers',this)"><span class="ni">👤</span>Drivers</div>
-      <div class="nav-item" onclick="showPage('move-deliveries',this)"><span class="ni">📦</span>Deliveries</div>
-      <div class="nav-item" onclick="showPage('move-revenue',this)"><span class="ni">💵</span>Move Revenue</div>
+      <div class="nav-section">Quick Links</div>
+      <div class="nav-item" onclick="window.open('campus.html','_blank')"><span class="ni">🌐</span>Campus Marketplace</div>
+      <div class="nav-item" onclick="window.open('campus-dashboard.html','_blank')"><span class="ni">🏪</span>Seller Dashboard</div>
+      <div class="nav-item" onclick="window.open('campus-apply.html','_blank')"><span class="ni">📝</span>Apply for Shop</div>
     
   <!-- NOTIFICATION BELL -->
   <div style="position:relative;display:inline-block;margin-left:auto">
@@ -299,434 +285,90 @@ select,textarea,
   <div class="main-content">
     <!-- TOPBAR -->
     <div class="topbar">
-      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-title" id="topbarTitle">Campus Dashboard</div>
       <div class="topbar-right">
         <div class="topbar-stats">
-          <div class="ts-item"><div class="ts-val" id="topStores">—</div><div class="ts-lbl">Stores</div></div>
+          <div class="ts-item"><div class="ts-val" id="topStores">—</div><div class="ts-lbl">Shops</div></div>
           <div class="ts-item"><div class="ts-val" id="topPending">—</div><div class="ts-lbl">Pending</div></div>
           <div class="ts-item"><div class="ts-val" id="topRevenue">—</div><div class="ts-lbl">Revenue</div></div>
         </div>
+        <a href="campus-dashboard.html" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);color:#7C3AED;padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:700;text-decoration:none;cursor:pointer">🏪 Seller Dashboard ↗</a>
+        <a href="campus.html" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:700;text-decoration:none;cursor:pointer">🌐 Campus Site ↗</a>
         <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
       </div>
     </div>
 
     <!-- PAGE: OVERVIEW -->
     <div class="page active" id="page-overview">
-      <div class="page-title">📊 Dashboard Overview</div>
-      <div class="page-sub">Travex Mall control center — manage stores, subscriptions and content</div>
-      <div class="stats-grid">
-        <div class="stat-card pending"><div class="stat-lbl">Pending Approval</div><div class="stat-val" id="statPending">—</div><div class="stat-sub">Need review</div></div>
-        <div class="stat-card active"><div class="stat-lbl">Active Stores</div><div class="stat-val" id="statActive">—</div><div class="stat-sub">Live on marketplace</div></div>
-        <div class="stat-card"><div class="stat-lbl">B2C Retailers</div><div class="stat-val" id="statB2C">—</div><div class="stat-sub">🥈 Silver badge</div></div>
-        <div class="stat-card"><div class="stat-lbl">B2B Wholesalers</div><div class="stat-val" id="statB2B">—</div><div class="stat-sub">🥇 Gold badge</div></div>
-        <div class="stat-card revenue"><div class="stat-lbl">Total Revenue</div><div class="stat-val" id="statRevenue">—</div><div class="stat-sub">All subscriptions</div></div>
-        <div class="stat-card"><div class="stat-lbl">This Month</div><div class="stat-val" id="statMonth">—</div><div class="stat-sub">Subscription revenue</div></div>
-        <div class="stat-card"><div class="stat-lbl">Expiring ≤7 days</div><div class="stat-val" id="statExpiring">—</div><div class="stat-sub">Need renewal</div></div>
-        <div class="stat-card"><div class="stat-lbl">Vybe Posts</div><div class="stat-val" id="statPosts">—</div><div class="stat-sub">Total feed posts</div></div>
-      </div>
-
-      <!-- RECENT PENDING -->
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">⏳ Recent Pending Stores</div><button class="filter-btn" onclick="showPage('pending',null)">View All →</button></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Owner</th><th>Date</th><th>Action</th></tr></thead>
-          <tbody id="recentPendingBody"><tr class="empty-row"><td colspan="6"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: PENDING APPROVAL -->
-    <div class="page" id="page-pending">
-      <div class="page-title">⏳ Pending Approval</div>
-      <div class="page-sub">Stores waiting for subscription payment verification</div>
-      <div class="tcard">
-        <div class="tcard-head">
-          <div class="tcard-title">Pending Stores</div>
-          <div class="filter-row">
-            <input type="text" class="search-in" id="pendingSearch" placeholder="🔍 Search..." oninput="filterTable('pendingBody',this.value)">
-            <button class="filter-btn active" onclick="filterPending('all',this)">All</button>
-            <button class="filter-btn" onclick="filterPending('b2c',this)">🥈 B2C</button>
-            <button class="filter-btn" onclick="filterPending('b2b',this)">🥇 B2B</button>
-          </div>
+      <div class="page-title">🎓 Campus Admin Dashboard</div>
+      <p class="page-sub" style="margin-bottom:1.75rem">Live overview of Travex Campus — university student marketplace.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem">
+        <div class="stat-card" style="border-top:3px solid #7C3AED">
+          <div class="stat-label">Active Shops</div>
+          <div class="stat-val" id="topStores" style="font-size:2rem">—</div>
         </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Duration</th><th>Amount</th><th>Phone</th><th>Applied</th><th>Actions</th></tr></thead>
-          <tbody id="pendingBody"><tr class="empty-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: ALL STORES -->
-    <div class="page" id="page-stores">
-      <div class="page-title">🏪 All Stores</div>
-      <div class="page-sub">All registered stores on Travex Mall</div>
-      <div class="tcard">
-        <div class="tcard-head">
-          <div class="tcard-title">Stores</div>
-          <div class="filter-row">
-            <input type="text" class="search-in" id="storesSearch" placeholder="🔍 Search..." oninput="filterTable('storesBody',this.value)">
-            <button class="filter-btn active" onclick="filterStores('all',this)">All</button>
-            <button class="filter-btn" onclick="filterStores('approved',this)">✅ Active</button>
-            <button class="filter-btn" onclick="filterStores('pending',this)">⏳ Pending</button>
-            <button class="filter-btn" onclick="filterStores('expired',this)">❌ Expired</button>
-          </div>
+        <div class="stat-card" style="border-top:3px solid var(--orange)">
+          <div class="stat-label">Pending Applications</div>
+          <div class="stat-val" id="topPending" style="font-size:2rem">—</div>
         </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Status</th><th>Expires</th><th>Owner</th><th>Actions</th></tr></thead>
-          <tbody id="storesBody"><tr class="empty-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: B2C -->
-    <div class="page" id="page-b2c">
-      <div class="page-title">🥈 B2C Retail Stores</div>
-      <div class="page-sub">All retail stores (Silver badge)</div>
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">Retailers</div><input type="text" class="search-in" placeholder="🔍 Search..." oninput="filterTable('b2cBody',this.value)"></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Plan</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>
-          <tbody id="b2cBody"><tr class="empty-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: B2B -->
-    <div class="page" id="page-b2b">
-      <div class="page-title">🥇 B2B Wholesale Stores</div>
-      <div class="page-sub">All wholesale stores (Gold badge)</div>
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">Wholesalers</div><input type="text" class="search-in" placeholder="🔍 Search..." oninput="filterTable('b2bBody',this.value)"></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Plan</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>
-          <tbody id="b2bBody"><tr class="empty-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: SUBSCRIPTIONS -->
-    <div class="page" id="page-subs">
-      <div class="page-title">💳 Subscriptions</div>
-      <div class="page-sub">All subscription payments and renewals</div>
-      <div class="tcard">
-        <div class="tcard-head">
-          <div class="tcard-title">Subscription Records</div>
-          <div class="filter-row">
-            <input type="text" class="search-in" placeholder="🔍 Search..." oninput="filterTable('subsBody',this.value)">
-            <button class="filter-btn active" onclick="filterSubs('all',this)">All</button>
-            <button class="filter-btn" onclick="filterSubs('pending',this)">⏳ Pending</button>
-            <button class="filter-btn" onclick="filterSubs('approved',this)">✅ Approved</button>
-          </div>
+        <div class="stat-card" style="border-top:3px solid var(--green)">
+          <div class="stat-label">Campus Revenue</div>
+          <div class="stat-val" id="topRevenue" style="font-size:2rem">—</div>
         </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Duration</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
-          <tbody id="subsBody"><tr class="empty-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: EXPIRING -->
-    <div class="page" id="page-expiring">
-      <div class="page-title">⚠️ Expiring Soon</div>
-      <div class="page-sub">Stores expiring within 7 days — contact for renewal</div>
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">Expiring Stores</div></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Expires</th><th>Days Left</th><th>Phone</th><th>Action</th></tr></thead>
-          <tbody id="expiringBody"><tr class="empty-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: FEATURED -->
-    <div class="page" id="page-featured">
-      <div class="page-title">⭐ Top Rated / Featured</div>
-      <div class="page-sub">Feature premium stores on homepage Top Rated section</div>
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">Premium Stores — Toggle Featured</div><input type="text" class="search-in" placeholder="🔍 Search..." oninput="filterTable('featuredBody',this.value)"></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Featured</th><th>Action</th></tr></thead>
-          <tbody id="featuredBody"><tr class="empty-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- PAGE: VYBE -->
-    <div class="page" id="page-vybe">
-      <div class="page-title">✦ Vybe Posts</div>
-      <div class="page-sub">Manage Social Vybe feed posts</div>
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">Feed Posts</div><input type="text" class="search-in" placeholder="🔍 Search..." oninput="filterTable('vybeBody',this.value)"></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Caption</th><th>Likes</th><th>Date</th><th>Action</th></tr></thead>
-          <tbody id="vybeBody"><tr class="empty-row"><td colspan="6"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-
-    <!-- ══ PAGE: ANALYTICS (Viewers & Traffic) ══ -->
-    <div class="page" id="page-analytics">
-      <div class="page-title">👁️ Viewers & Traffic</div>
-      <div class="page-sub">Platform traffic — daily, weekly, monthly, yearly</div>
-      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
-        <button class="cpt active" onclick="loadAnalytics('day',this)">Today</button>
-        <button class="cpt" onclick="loadAnalytics('week',this)">This Week</button>
-        <button class="cpt" onclick="loadAnalytics('month',this)">This Month</button>
-        <button class="cpt" onclick="loadAnalytics('year',this)">This Year</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card"><div class="kpi-val" id="av-total">—</div><div class="kpi-lbl">Total Views</div><div class="kpi-trend" id="av-trend">—</div></div>
-        <div class="kpi-card"><div class="kpi-val" id="av-unique">—</div><div class="kpi-lbl">Store Visits</div><div class="kpi-trend trend-up" id="av-stores">—</div></div>
-        <div class="kpi-card"><div class="kpi-val" id="av-top">—</div><div class="kpi-lbl">Most Visited Store</div><div class="kpi-trend" id="av-top-views">—</div></div>
-      </div>
-      <div class="chart-grid">
-        <div class="chart-wrap">
-          <div class="chart-title">Store Views Over Time <span id="av-period-lbl" style="font-size:0.7rem;color:var(--gray);font-weight:400"></span></div>
-          <div class="bar-chart" id="av-bar-chart">
-            <div style="color:var(--gray);font-size:0.8rem;margin:auto">Loading...</div>
-          </div>
-          <div style="display:flex;gap:4px;margin-top:6px" id="av-bar-labels"></div>
+        <div class="stat-card" style="border-top:3px solid var(--gold)">
+          <div class="stat-label">Total Products</div>
+          <div class="stat-val" id="ovProducts">—</div>
         </div>
-        <div class="chart-wrap">
-          <div class="chart-title">Views by Store Type</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
-            <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
-              <div style="font-size:1.5rem;margin-bottom:0.25rem">🥈</div>
-              <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--navy)" id="av-b2c-views">—</div>
-              <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2C Views</div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem">
+        <div class="tcard">
+          <div class="tcard-head">
+            <div class="tcard-title">📋 Recent Applications</div>
+            <button class="filter-btn" onclick="showPage('campus-applications',null)">View All →</button>
+          </div>
+          <table>
+            <thead><tr><th>Student</th><th>University</th><th>Shop</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="ovAppsTbl"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tcard">
+          <div class="tcard-head"><div class="tcard-title">📊 At a Glance</div></div>
+          <div style="padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0.6rem">
+            <div style="display:flex;justify-content:space-between;padding:0.6rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.85rem">
+              <span>Universities</span><strong id="ovUnis">—</strong>
             </div>
-            <div style="text-align:center;padding:1rem;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2)">
-              <div style="font-size:1.5rem;margin-bottom:0.25rem">🥇</div>
-              <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)" id="av-b2b-views">—</div>
-              <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2B Views</div>
+            <div style="display:flex;justify-content:space-between;padding:0.6rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.85rem">
+              <span>Total Orders</span><strong id="ovOrders">—</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:0.6rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.85rem">
+              <span>Approved This Month</span><strong id="ovApprovedMonth" style="color:var(--green)">—</strong>
             </div>
           </div>
-          <div style="margin-top:1.2rem">
-            <div style="font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">Top 5 Stores Today</div>
-            <div id="av-top-stores" style="display:flex;flex-direction:column;gap:0.4rem">
-              <div style="font-size:0.78rem;color:var(--gray)">Loading...</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Yearly Growth Trend — Store Views</div>
-        <div class="bar-chart" id="av-yearly-chart" style="height:120px"></div>
-        <div style="display:flex;gap:4px;margin-top:6px" id="av-yearly-labels"></div>
-      </div>
-    </div>
-
-    <!-- ══ PAGE: ACCOUNTING (Revenue) ══ -->
-    <div class="page" id="page-accounting">
-      <div class="page-title">💰 Revenue Accounting</div>
-      <div class="page-sub">Automatic income tracking from subscriptions — daily, weekly, monthly, yearly</div>
-      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
-        <button class="cpt active" onclick="loadAccounting('day',this)">Today</button>
-        <button class="cpt" onclick="loadAccounting('week',this)">This Week</button>
-        <button class="cpt" onclick="loadAccounting('month',this)">This Month</button>
-        <button class="cpt" onclick="loadAccounting('year',this)">This Year</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card" style="border-top:3px solid var(--gold)"><div class="kpi-val" id="ac-revenue">—</div><div class="kpi-lbl">Total Revenue</div><div class="kpi-trend trend-up" id="ac-rev-trend">—</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--green)"><div class="kpi-val" id="ac-count">—</div><div class="kpi-lbl">Subscriptions Paid</div><div class="kpi-trend" id="ac-count-trend">—</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--navy)"><div class="kpi-val" id="ac-avg">—</div><div class="kpi-lbl">Avg per Subscription</div><div class="kpi-trend" id="ac-avg-trend">—</div></div>
-      </div>
-      <div class="chart-grid">
-        <div class="chart-wrap">
-          <div class="chart-title">Revenue Over Time <span id="ac-period-lbl" style="font-size:0.7rem;color:var(--gray);font-weight:400"></span></div>
-          <div class="bar-chart" id="ac-bar-chart" style="height:140px">
-            <div style="color:var(--gray);font-size:0.8rem;margin:auto">Loading...</div>
-          </div>
-          <div style="display:flex;gap:4px;margin-top:6px" id="ac-bar-labels"></div>
-        </div>
-        <div class="chart-wrap">
-          <div class="chart-title">Revenue by Type</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
-            <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
-              <div style="font-size:1.5rem;margin-bottom:0.25rem">🥈</div>
-              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--navy)" id="ac-b2c-rev">—</div>
-              <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2C Revenue</div>
-            </div>
-            <div style="text-align:center;padding:1rem;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2)">
-              <div style="font-size:1.5rem;margin-bottom:0.25rem">🥇</div>
-              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--gold)" id="ac-b2b-rev">—</div>
-              <div style="font-size:0.65rem;color:var(--gray);text-transform:uppercase">B2B Revenue</div>
-            </div>
-          </div>
-          <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
-            <div style="background:var(--offwhite);padding:0.75rem;text-align:center;border:1px solid var(--lgray)">
-              <div style="font-weight:700;color:var(--navy)" id="ac-basic-rev">—</div>
-              <div style="font-size:0.65rem;color:var(--gray)">⭐ Basic Plans</div>
-            </div>
-            <div style="background:var(--offwhite);padding:0.75rem;text-align:center;border:1px solid var(--lgray)">
-              <div style="font-weight:700;color:var(--navy)" id="ac-premium-rev">—</div>
-              <div style="font-size:0.65rem;color:var(--gray)">👑 Premium Plans</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- YEARLY GROWTH TREND -->
-      <div class="chart-wrap">
-        <div class="chart-title">📈 Yearly Revenue Growth Trend</div>
-        <div class="bar-chart" id="ac-yearly-chart" style="height:140px">
-          <div style="color:var(--gray);font-size:0.8rem;margin:auto">Loading...</div>
-        </div>
-        <div style="display:flex;gap:4px;margin-top:6px" id="ac-yearly-labels"></div>
-        <div style="margin-top:1rem;padding:0.85rem;background:var(--offwhite);border:1px solid var(--lgray);font-size:0.82rem" id="ac-growth-summary">
-          Loading growth analysis...
-        </div>
-      </div>
-      <!-- TRANSACTIONS TABLE -->
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">💳 Recent Transactions</div></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Store</th><th>Type</th><th>Plan</th><th>Duration</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
-          <tbody id="ac-transactions"><tr class="empty-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- ══ PAGE: MOVE OVERVIEW ══ -->
-    <div class="page" id="page-move-overview">
-      <div class="page-title">🚚 Travex Move Dashboard</div>
-      <div class="page-sub">Delivery platform overview and management</div>
-      <div class="stats-grid">
-        <div class="stat-card move-stat"><div class="stat-lbl">Total Drivers</div><div class="stat-val" id="mv-total-drivers">—</div><div class="stat-sub">Registered</div></div>
-        <div class="stat-card active"><div class="stat-lbl">Online Now</div><div class="stat-val" id="mv-online">—</div><div class="stat-sub">Available drivers</div></div>
-        <div class="stat-card pending"><div class="stat-lbl">Pending Drivers</div><div class="stat-val" id="mv-pending-drivers">—</div><div class="stat-sub">Need approval</div></div>
-        <div class="stat-card revenue"><div class="stat-lbl">Total Deliveries</div><div class="stat-val" id="mv-deliveries">—</div><div class="stat-sub">All time</div></div>
-        <div class="stat-card move-stat"><div class="stat-lbl">Pikipiki</div><div class="stat-val" id="mv-pikipiki">—</div><div class="stat-sub">Motorcycle drivers</div></div>
-        <div class="stat-card move-stat"><div class="stat-lbl">Bajaji</div><div class="stat-val" id="mv-bajaji">—</div><div class="stat-sub">Tuk-tuk drivers</div></div>
-        <div class="stat-card move-stat"><div class="stat-lbl">Gari</div><div class="stat-val" id="mv-gari">—</div><div class="stat-sub">Car drivers</div></div>
-        <div class="stat-card revenue"><div class="stat-lbl">Move Revenue</div><div class="stat-val" id="mv-revenue">—</div><div class="stat-sub">All deliveries</div></div>
-      </div>
-      <!-- Active deliveries -->
-      <div class="tcard">
-        <div class="tcard-head"><div class="tcard-title">📦 Active Deliveries</div><span id="mv-active-count" style="font-size:0.78rem;color:var(--gray)"></span></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Code</th><th>Vehicle</th><th>Pickup</th><th>Dropoff</th><th>Status</th><th>Price</th><th>Time</th></tr></thead>
-          <tbody id="mv-active-body"><tr class="empty-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- ══ PAGE: MOVE DRIVERS ══ -->
-    <div class="page" id="page-move-drivers">
-      <div class="page-title">👤 Drivers Management</div>
-      <div class="page-sub">Manage all registered Travex Move drivers</div>
-      <div class="tcard">
-        <div class="tcard-head">
-          <div class="tcard-title">All Drivers</div>
-          <div class="filter-row">
-            <input type="text" class="search-in" placeholder="🔍 Search..." oninput="filterTable('mv-drivers-body',this.value)">
-            <button class="filter-btn active" onclick="filterDrivers('all',this)">All</button>
-            <button class="filter-btn" onclick="filterDrivers('pending',this)">⏳ Pending</button>
-            <button class="filter-btn" onclick="filterDrivers('approved',this)">✅ Active</button>
-            <button class="filter-btn" onclick="filterDrivers('pikipiki',this)">🏍️</button>
-            <button class="filter-btn" onclick="filterDrivers('bajaji',this)">🛺</button>
-            <button class="filter-btn" onclick="filterDrivers('gari',this)">🚗</button>
-          </div>
-        </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Driver</th><th>Phone</th><th>Vehicle</th><th>Reg</th><th>Status</th><th>Deliveries</th><th>Rating</th><th>Actions</th></tr></thead>
-          <tbody id="mv-drivers-body"><tr class="empty-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- ══ PAGE: MOVE DELIVERIES ══ -->
-    <div class="page" id="page-move-deliveries">
-      <div class="page-title">📦 All Deliveries</div>
-      <div class="page-sub">All Travex Move delivery records</div>
-      <div class="tcard">
-        <div class="tcard-head">
-          <div class="tcard-title">Deliveries</div>
-          <div class="filter-row">
-            <input type="text" class="search-in" placeholder="🔍 Search code..." oninput="filterTable('mv-del-body',this.value)">
-            <button class="filter-btn active" onclick="filterDeliveries('all',this)">All</button>
-            <button class="filter-btn" onclick="filterDeliveries('searching',this)">🔍 Searching</button>
-            <button class="filter-btn" onclick="filterDeliveries('accepted',this)">🚚 Active</button>
-            <button class="filter-btn" onclick="filterDeliveries('delivered',this)">✅ Done</button>
-          </div>
-        </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Code</th><th>Vehicle</th><th>Pickup</th><th>Dropoff</th><th>Driver</th><th>Price</th><th>Status</th><th>Date</th></tr></thead>
-          <tbody id="mv-del-body"><tr class="empty-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- ══ PAGE: MOVE REVENUE ══ -->
-    <div class="page" id="page-move-revenue">
-      <div class="page-title">💵 Move Revenue</div>
-      <div class="page-sub">Travex Move delivery income — daily, weekly, monthly, yearly</div>
-      <div class="chart-period-tabs" style="margin-bottom:1.5rem">
-        <button class="cpt active" onclick="loadMoveRevenue('day',this)">Today</button>
-        <button class="cpt" onclick="loadMoveRevenue('week',this)">This Week</button>
-        <button class="cpt" onclick="loadMoveRevenue('month',this)">This Month</button>
-        <button class="cpt" onclick="loadMoveRevenue('year',this)">This Year</button>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card" style="border-top:3px solid var(--blue)"><div class="kpi-val" id="mr-revenue">—</div><div class="kpi-lbl">Move Revenue</div><div class="kpi-trend" id="mr-trend">—</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--green)"><div class="kpi-val" id="mr-count">—</div><div class="kpi-lbl">Deliveries Done</div><div class="kpi-trend" id="mr-count-trend">—</div></div>
-        <div class="kpi-card" style="border-top:3px solid var(--navy)"><div class="kpi-val" id="mr-avg">—</div><div class="kpi-lbl">Avg per Delivery</div><div class="kpi-trend" id="mr-avg-trend">—</div></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Move Revenue Over Time</div>
-        <div class="bar-chart" id="mr-bar-chart" style="height:140px"></div>
-        <div style="display:flex;gap:4px;margin-top:6px" id="mr-bar-labels"></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Revenue by Vehicle Type</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:0.5rem">
-          <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
-            <div style="font-size:2rem">🏍️</div>
-            <div style="font-weight:800;color:var(--navy)" id="mr-piki-rev">—</div>
-            <div style="font-size:0.65rem;color:var(--gray)">Pikipiki</div>
-          </div>
-          <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
-            <div style="font-size:2rem">🛺</div>
-            <div style="font-weight:800;color:var(--navy)" id="mr-baja-rev">—</div>
-            <div style="font-size:0.65rem;color:var(--gray)">Bajaji</div>
-          </div>
-          <div style="text-align:center;padding:1rem;background:var(--offwhite);border:1px solid var(--lgray)">
-            <div style="font-size:2rem">🚗</div>
-            <div style="font-weight:800;color:var(--navy)" id="mr-gari-rev">—</div>
-            <div style="font-size:0.65rem;color:var(--gray)">Gari</div>
+          <div style="padding:0 1.25rem 1.25rem;display:flex;flex-direction:column;gap:0.5rem">
+            <a href="campus.html" target="_blank" style="display:block;padding:0.65rem;background:var(--navy);color:#fff;text-align:center;font-size:0.82rem;font-weight:700;text-decoration:none">🌐 View Campus Marketplace</a>
+            <a href="campus-dashboard.html" target="_blank" style="display:block;padding:0.65rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);color:#7C3AED;text-align:center;font-size:0.82rem;font-weight:700;text-decoration:none">🏪 Open Seller Dashboard</a>
+            <a href="campus-apply.html" target="_blank" style="display:block;padding:0.65rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);text-align:center;font-size:0.82rem;font-weight:700;text-decoration:none">📝 Apply for Shop</a>
           </div>
         </div>
       </div>
     </div>
 
-
-    <!-- PAGE: CAMPUS OVERVIEW -->
     <div class="page" id="page-campus-overview">
-      <div class="page-title">📊 Uni-Student Market Overview</div>
-      <div class="page-sub">Muhtasari wa Travex Campus — Applications, Stores, Traffic na Mapato</div>
-      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
-        <div class="stat-card"><div class="stat-num" id="c-stat-apps">—</div><div class="stat-lbl">Total Applications</div><div class="stat-card-after" style="background:#7C3AED"></div></div>
-        <div class="stat-card"><div class="stat-num" id="c-stat-pending">—</div><div class="stat-lbl">Pending Review</div><div class="stat-card-after" style="background:var(--orange)"></div></div>
-        <div class="stat-card"><div class="stat-num" id="c-stat-stores">—</div><div class="stat-lbl">Active Campus Stores</div><div class="stat-card-after" style="background:var(--green)"></div></div>
-        <div class="stat-card"><div class="stat-num" id="c-stat-revenue">—</div><div class="stat-lbl">Campus Revenue (TZS)</div><div class="stat-card-after" style="background:var(--gold)"></div></div>
+      <div class="page-title">📊 Campus Overview</div>
+      <p class="page-sub" style="margin-bottom:1.5rem">Detailed metrics across all campus universities.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem">
+        <div class="stat-card" style="border-top:3px solid #7C3AED"><div class="stat-label">Active Shops</div><div class="stat-val" id="co-shops">—</div></div>
+        <div class="stat-card" style="border-top:3px solid var(--orange)"><div class="stat-label">Pending Apps</div><div class="stat-val" id="co-pending">—</div></div>
+        <div class="stat-card" style="border-top:3px solid var(--green)"><div class="stat-label">Revenue</div><div class="stat-val" id="co-revenue">—</div></div>
+        <div class="stat-card" style="border-top:3px solid var(--gold)"><div class="stat-label">Products</div><div class="stat-val" id="co-products">—</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
-        <div class="card-wrap">
-          <div class="card-title-row"><div class="ct">📋 Recent Applications</div><button class="filter-btn" onclick="showPage('campus-applications',null)">View All →</button></div>
-          <div class="table-wrap"><table><thead><tr><th>Jina</th><th>Chuo</th><th>Duka</th><th>Status</th><th>Tarehe</th></tr></thead><tbody id="c-recent-apps">
-            <tr><td colspan="5" style="text-align:center;color:var(--gray);padding:1.5rem">Inapakia...</td></tr>
-          </tbody></table></div>
-        </div>
-        <div class="card-wrap">
-          <div class="card-title-row"><div class="ct">🏫 Stores per University</div></div>
-          <div id="c-uni-breakdown" style="padding:0.5rem">
-            <div style="text-align:center;color:var(--gray);padding:2rem">Inapakia...</div>
-          </div>
-        </div>
+      <div class="tcard">
+        <div class="tcard-head"><div class="tcard-title">📋 Recent Applications</div><button class="filter-btn" onclick="showPage('campus-applications',null)">View All →</button></div>
+        <table><thead><tr><th>Student</th><th>University</th><th>Shop</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="coAppsTbl"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)">Loading...</td></tr></tbody></table>
       </div>
     </div>
 
-    <!-- PAGE: CAMPUS APPLICATIONS -->
     <div class="page" id="page-campus-applications">
       <div class="page-title">📋 Campus Applications</div>
       <div class="page-sub">Maombi ya wanafunzi kutaka kufungua maduka — Pitia, Idhinisha au Kataa</div>
@@ -869,32 +511,114 @@ function adminLogin() {
   }
 }
 
-// ── LOAD ALL DATA ──
+// ── LOAD ALL DATA — Campus Only ──
 async function loadAll() {
-  const [{ data: stores }, { data: subs }, { data: posts }] = await Promise.all([
-    sb.from("stores").select("*").order("created_at", { ascending: false }),
-    sb.from("subscriptions").select("*").order("created_at", { ascending: false }),
-    sb.from("feed_posts").select("*, stores(store_name,store_type)").order("created_at", { ascending: false }).limit(100)
-  ]);
-
-  allStores = stores || [];
-  allSubs   = subs   || [];
-  allPosts  = posts  || [];
-
-  updateStats();
-  renderPending();
-  renderStores();
-  renderSubs();
-  renderExpiring();
-  renderFeatured();
-  renderVybe();
-  renderB2CStores();
-  renderB2BStores();
-  renderRecentPending();
-  await loadMoveData();
-  await loadCampusData();
+  await loadOverview();
   loadNotifications();
 }
+
+async function loadOverview() {
+  const [shopsRes, appsRes, ordersRes, prodsRes] = await Promise.all([
+    sb.from("campus_stores").select("id,is_active,university_abbr"),
+    sb.from("campus_applications").select("id,status,submitted_at,full_name,university_abbr,shop_name,category,email,phone,whatsapp_number,description,student_id,year_of_study,university_name").order("submitted_at",{ascending:false}).limit(100),
+    sb.from("campus_orders").select("total_price,created_at"),
+    sb.from("campus_products").select("id").eq("is_active",true)
+  ]);
+
+  const shops   = shopsRes.data  || [];
+  const apps    = appsRes.data   || [];
+  const orders  = ordersRes.data || [];
+  const prods   = prodsRes.data  || [];
+  const pending = apps.filter(a => a.status === "pending");
+  const revenue = orders.reduce((s,o) => s + Number(o.total_price||0), 0);
+  const unis    = [...new Set(shops.filter(s=>s.is_active).map(s=>s.university_abbr))].length;
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const approvedMonth = apps.filter(a => a.status==="approved" && new Date(a.submitted_at) >= monthStart).length;
+
+  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  set("topStores",       shops.filter(s=>s.is_active).length);
+  set("topPending",      pending.length);
+  set("topRevenue",      "TZS "+(revenue/1000).toFixed(0)+"K");
+  set("ovProducts",      prods.length);
+  set("ovUnis",          unis);
+  set("ovOrders",        orders.length);
+  set("ovApprovedMonth", approvedMonth);
+
+  const badge = document.getElementById("campusPendingCount");
+  if(badge){ badge.textContent = pending.length; badge.style.display = pending.length > 0 ? "inline-block" : "none"; }
+
+  renderAppsTable("ovAppsTbl", apps.slice(0, 6));
+}
+
+function renderAppsTable(tbodyId, apps) {
+  const tbody = document.getElementById(tbodyId);
+  if(!tbody) return;
+  if(!apps.length){
+    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;padding:2rem;color:var(--gray)'>No applications yet.</td></tr>";
+    return;
+  }
+  tbody.innerHTML = apps.map(a => `<tr>
+    <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.72rem;color:var(--gray)">${a.email||""}</div></td>
+    <td><span style="background:rgba(124,58,237,0.1);color:#7C3AED;padding:0.15rem 0.45rem;font-size:0.68rem;font-weight:700">${a.university_abbr||"—"}</span></td>
+    <td>${a.shop_name||"—"}</td>
+    <td style="font-size:0.78rem">${a.category||"—"}</td>
+    <td><span class="badge badge-${a.status==="approved"?"approved":a.status==="rejected"?"rejected":"pending"}">${a.status||"pending"}</span></td>
+    <td style="display:flex;gap:0.35rem;flex-wrap:wrap">
+      ${a.status==="pending"
+        ? `<button class="btn-sm btn-approve" onclick="approveApp('${a.id}',this)">✓ Approve</button>
+           <button class="btn-sm btn-reject" onclick="rejectApp('${a.id}',this)">✗</button>`
+        : ""}
+      <button class="btn-sm" style="background:var(--offwhite);border:1px solid var(--lgray)" onclick="viewApp('${a.id}')">View</button>
+    </td>
+  </tr>`).join("");
+}
+
+async function approveApp(id, btn) {
+  if(!confirm("Approve this application and create their shop?")) return;
+  btn.disabled = true; btn.textContent = "...";
+  await sb.from("campus_applications").update({status:"approved"}).eq("id",id);
+  const {data:a} = await sb.from("campus_applications").select("*").eq("id",id).single();
+  if(a) await sb.from("campus_stores").upsert({
+    store_name: a.shop_name, university_abbr: a.university_abbr, university_name: a.university_name,
+    category: a.category, whatsapp_number: a.whatsapp_number, description: a.description,
+    owner_name: a.full_name, owner_email: a.email, is_active: true,
+    created_at: new Date().toISOString()
+  });
+  showToast("✅ Application approved — shop created!", "success");
+  loadAll();
+}
+
+async function rejectApp(id, btn) {
+  if(!confirm("Reject this application?")) return;
+  btn.disabled = true;
+  await sb.from("campus_applications").update({status:"rejected"}).eq("id",id);
+  showToast("Application rejected.");
+  loadAll();
+}
+
+async function viewApp(id) {
+  const {data:a} = await sb.from("campus_applications").select("*").eq("id",id).single();
+  if(!a) return;
+  const fmt = v => v||"—";
+  document.getElementById("detailTitle").textContent = "Application — " + fmt(a.shop_name);
+  document.getElementById("detailBody").innerHTML = [
+    ["Full Name", fmt(a.full_name)], ["Email", fmt(a.email)], ["Phone", fmt(a.phone)],
+    ["University", `${fmt(a.university_name)} (${fmt(a.university_abbr)})`],
+    ["Student ID", fmt(a.student_id)], ["Year", fmt(a.year_of_study)],
+    ["Shop Name", fmt(a.shop_name)], ["Category", fmt(a.category)],
+    ["WhatsApp", fmt(a.whatsapp_number)], ["Description", fmt(a.description)],
+    ["Status", `<span class='badge badge-${a.status}'>${a.status||"pending"}</span>`],
+    ["Submitted", a.submitted_at ? new Date(a.submitted_at).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}) : "—"]
+  ].map(([l,v]) => `<div class="detail-row"><div class="detail-label">${l}</div><div class="detail-val">${v}</div></div>`).join("");
+  document.getElementById("detailFooter").innerHTML = a.status==="pending"
+    ? `<button class="btn-approve" onclick="approveApp('${a.id}',this.closest('[id]') ? document.createElement('button') : this);closeModal()">✓ Approve & Create Shop</button>
+       <button class="btn-reject" onclick="rejectApp('${a.id}',this);closeModal()">✗ Reject</button>`
+    : "";
+  document.getElementById("detailModal").classList.add("open");
+}
+
+function closeModal() { document.getElementById("detailModal").classList.remove("open"); }
 
 // ── STATS ──
 function updateStats() {
@@ -1426,25 +1150,18 @@ function showPage(name, el) {
   const page = document.getElementById("page-"+name);
   if (page) page.classList.add("active");
   if (el && el.classList) el.classList.add("active");
-  const title = el ? el.querySelector(".ni") 
+  const title = el ? el.querySelector(".ni")
     ? el.textContent.replace(el.querySelector(".ni").textContent,"").trim()
-    : el.textContent.trim() 
+    : el.textContent.trim()
     : name;
   document.getElementById("topbarTitle").textContent = title;
-
-  // Load data for specific pages
   setTimeout(() => {
-    if(name==="analytics")     loadAnalytics("day",    document.querySelector("#page-analytics .cpt"));
-    if(name==="accounting")    loadAccounting("day",   document.querySelector("#page-accounting .cpt"));
-    if(name==="move-overview") renderMoveOverview();
-    if(name==="campus-overview")       loadCampusOverview();
-    if(name==="campus-applications")   loadCampusApplications();
-    if(name==="campus-stores")         loadCampusStores();
-    if(name==="campus-analytics")      loadCampusAnalytics("day",document.querySelector("#page-campus-analytics .cpt"));
-    if(name==="campus-revenue")         loadCampusRevenue("day",document.querySelector("#page-campus-revenue .cpt"));
-    if(name==="move-drivers")  renderDrivers();
-    if(name==="move-deliveries") renderDeliveries();
-    if(name==="move-revenue")  loadMoveRevenue("day",  document.querySelector("#page-move-revenue .cpt"));
+    if(name==="overview")            loadOverview();
+    if(name==="campus-overview")     loadCampusOverview();
+    if(name==="campus-applications") loadCampusApplications();
+    if(name==="campus-stores")       loadCampusStores();
+    if(name==="campus-analytics")    loadCampusAnalytics("day", document.querySelector("#page-campus-analytics .cpt"));
+    if(name==="campus-revenue")      loadCampusRevenue("day",   document.querySelector("#page-campus-revenue .cpt"));
   }, 50);
 }
 
@@ -1918,6 +1635,18 @@ async function loadCampusOverview() {
         </div>
       </div>`;
   }).join("");
+  // Populate campus-overview page elements too
+  const coSet = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  const {data: coShops} = await sb.from("campus_stores").select("id,is_active");
+  const {data: coApps}  = await sb.from("campus_applications").select("id,status,submitted_at,full_name,university_abbr,shop_name,category,email");
+  const {data: coOrds}  = await sb.from("campus_orders").select("total_price");
+  const {data: coPrds}  = await sb.from("campus_products").select("id").eq("is_active",true);
+  const coRev = (coOrds||[]).reduce((s,o)=>s+Number(o.total_price||0),0);
+  coSet("co-shops",    (coShops||[]).filter(s=>s.is_active).length);
+  coSet("co-pending",  (coApps||[]).filter(a=>a.status==="pending").length);
+  coSet("co-revenue",  "TZS "+(coRev/1000).toFixed(0)+"K");
+  coSet("co-products", (coPrds||[]).length);
+  renderAppsTable("coAppsTbl", (coApps||[]).slice(0,8));
 }
 
 async function loadCampusApplications() {
@@ -2348,9 +2077,9 @@ async function loadNotifications() {
     const dot = n.is_read ? "" : `<span style="width:6px;height:6px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:4px"></span>`;
     const receiptLink = n.receipt_url ? `<a href="${n.receipt_url}" target="_blank" style="font-size:0.7rem;color:var(--gold);font-weight:600">Ona Risiti →</a>` : "";
     const ctaBtn = isPayment
-      ? `<button onclick="showPage('pending-payments',null);toggleNotifPanel()" style="font-size:0.7rem;color:var(--navy);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Pitia Malipo →</button>`
+      ? `<button onclick="showPage('pending-payments',null);toggleNotifPanel()" style="font-size:0.7rem;color:var(--navy);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Review Payments →</button>`
       : isCampus
-      ? `<button onclick="showPage('campus-applications',null);toggleNotifPanel()" style="font-size:0.7rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Pitia Applications →</button>`
+      ? `<button onclick="showPage('campus-applications',null);toggleNotifPanel()" style="font-size:0.7rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600">Review Applications →</button>`
       : "";
     return `<div onclick="markRead('${n.id}')" style="padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);background:${bg};cursor:pointer" onmouseover="this.style.background='var(--offwhite)'" onmouseout="this.style.background='${bg}'">
       <div style="display:flex;gap:0.6rem;align-items:flex-start">
@@ -2506,6 +2235,25 @@ async function sendApprovalEmail(params) {
     </div>
 
   </div>
+
+<!-- DETAIL MODAL -->
+<div id="detailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)closeModal()">
+  <div style="background:#fff;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1">
+      <div style="font-size:1rem;font-weight:700;color:var(--navy)" id="detailTitle">Details</div>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray);line-height:1">✕</button>
+    </div>
+    <div style="padding:1.5rem" id="detailBody"></div>
+    <div style="padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end" id="detailFooter"></div>
+  </div>
+</div>
+<style>
+#detailModal.open{display:flex!important}
+.detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.55rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem}
+.detail-row:last-child{border-bottom:none}
+.detail-label{color:var(--gray);flex-shrink:0;margin-right:1rem}
+.detail-val{font-weight:600;color:var(--navy);text-align:right}
+</style>
 </body>
 </html>`;
 
@@ -2535,5 +2283,24 @@ async function sendApprovalEmail(params) {
   }
 }
 </script>
+
+<!-- DETAIL MODAL -->
+<div id="detailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)closeModal()">
+  <div style="background:#fff;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1">
+      <div style="font-size:1rem;font-weight:700;color:var(--navy)" id="detailTitle">Details</div>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray);line-height:1">✕</button>
+    </div>
+    <div style="padding:1.5rem" id="detailBody"></div>
+    <div style="padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end" id="detailFooter"></div>
+  </div>
+</div>
+<style>
+#detailModal.open{display:flex!important}
+.detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.55rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem}
+.detail-row:last-child{border-bottom:none}
+.detail-label{color:var(--gray);flex-shrink:0;margin-right:1rem}
+.detail-val{font-weight:600;color:var(--navy);text-align:right}
+</style>
 </body>
 </html>
