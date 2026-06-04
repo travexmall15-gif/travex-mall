@@ -1,49 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Campus Debug</title>
+<title>Campus DB Debug</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{font-family:monospace;background:#0D1B3E;color:#fff;padding:2rem}
-.box{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);padding:1.5rem;margin-bottom:1rem;border-radius:8px}
-.ok{color:#4ade80}.err{color:#f87171}.warn{color:#fbbf24}
-button{background:#C9A84C;color:#000;border:none;padding:0.6rem 1.5rem;font-weight:700;cursor:pointer;border-radius:6px;margin:0.3rem}
-pre{white-space:pre-wrap;word-break:break-all;font-size:0.8rem;margin-top:0.5rem}
-h2{color:#C9A84C;margin-bottom:0.5rem}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',monospace;background:#080F1E;color:#fff;padding:2rem;min-height:100vh}
+h1{color:#C9A84C;margin-bottom:0.3rem;font-size:1.5rem}
+.sub{color:rgba(255,255,255,0.4);font-size:0.8rem;margin-bottom:2rem}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:1.25rem;margin-bottom:1rem}
+.card h2{font-size:0.85rem;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem}
+.ok{color:#4ade80;font-weight:700}
+.err{color:#f87171;font-weight:700}
+.warn{color:#fbbf24;font-weight:700}
+pre{background:rgba(0,0,0,0.3);padding:0.75rem;border-radius:4px;font-size:0.72rem;overflow-x:auto;margin-top:0.5rem;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto}
+button{background:#C9A84C;color:#000;border:none;padding:0.5rem 1.2rem;font-weight:700;cursor:pointer;border-radius:6px;font-size:0.8rem;margin:0.25rem 0.25rem 0 0}
+button.sec{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.status{padding:0.5rem 0;font-size:0.85rem}
 </style>
 </head>
 <body>
-<h1>🔍 Campus Debug Panel</h1>
-<p style="color:rgba(255,255,255,0.5);margin-bottom:1.5rem">Diagnosing why applications don't appear in admin</p>
+<h1>🔍 Travex Campus — Database Diagnostics</h1>
+<p class="sub">Use this page to diagnose why applications don't appear in admin panel</p>
 
-<div class="box">
-  <h2>1. Supabase Connection</h2>
-  <div id="conn-status">Checking...</div>
+<div class="row">
+  <div class="card">
+    <h2>1. Connection Test</h2>
+    <div id="conn" class="status">Connecting...</div>
+  </div>
+  <div class="card">
+    <h2>2. Auth Session</h2>
+    <div id="auth" class="status">Checking...</div>
+  </div>
 </div>
 
-<div class="box">
-  <h2>2. campus_applications table</h2>
-  <button onclick="checkApps()">Check Table</button>
-  <div id="apps-status"></div>
+<div class="card">
+  <h2>3. campus_applications — Read Test (anon)</h2>
+  <div id="apps-read" class="status">Testing...</div>
 </div>
 
-<div class="box">
-  <h2>3. admin_notifications table</h2>
-  <button onclick="checkNotifs()">Check Notifications</button>
-  <div id="notif-status"></div>
+<div class="card">
+  <h2>4. admin_notifications — Read Test (anon)</h2>
+  <div id="notif-read" class="status">Testing...</div>
 </div>
 
-<div class="box">
-  <h2>4. Insert Test Application</h2>
-  <button onclick="insertTest()">Insert Test Record</button>
-  <div id="insert-status"></div>
+<div class="card">
+  <h2>5. campus_applications — Insert Test</h2>
+  <button onclick="doInsert()">🧪 Insert Test Record</button>
+  <button class="sec" onclick="doInsertNoAuth()">Insert Without Auth</button>
+  <div id="insert-result" class="status"></div>
 </div>
 
-<div class="box">
-  <h2>5. Auth Status</h2>
-  <button onclick="checkAuth()">Check Session</button>
-  <div id="auth-status"></div>
+<div class="card">
+  <h2>6. All Results Summary</h2>
+  <div id="summary" class="status">Run tests above first...</div>
+  <button onclick="runAll()">▶ Run All Tests</button>
+  <button class="sec" onclick="document.getElementById('raw-log').style.display=document.getElementById('raw-log').style.display==='none'?'block':'none'">Toggle Raw Log</button>
+  <pre id="raw-log" style="display:none"></pre>
 </div>
 
 <script>
@@ -52,99 +68,141 @@ const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// 1. Test connection
+const logs = [];
+function log(msg) { logs.push(msg); document.getElementById('raw-log').textContent = logs.join('\n'); }
+
 async function testConn() {
-  const el = document.getElementById("conn-status");
+  const el = document.getElementById('conn');
   try {
-    const { data, error } = await sb.from("campus_applications").select("count", {count:"exact",head:true});
+    const { data, error } = await sb.from('campus_applications').select('count', {count:'exact',head:true});
     if (error) {
-      el.innerHTML = `<span class="err">❌ Connection error: ${error.message} (code: ${error.code})</span>`;
-    } else {
-      el.innerHTML = `<span class="ok">✅ Connected! campus_applications row count: ${data}</span>`;
+      el.innerHTML = `<span class="err">❌ FAILED: ${error.message}</span><br><small style="color:#f87171">Code: ${error.code} | This likely means RLS is blocking anon reads</small>`;
+      log('CONN ERROR: ' + JSON.stringify(error));
+      return false;
     }
+    el.innerHTML = `<span class="ok">✅ Connected! Table readable. Count: ${data}</span>`;
+    log('CONN OK. Count: ' + data);
+    return true;
   } catch(e) {
     el.innerHTML = `<span class="err">❌ Exception: ${e.message}</span>`;
+    log('CONN EXCEPTION: ' + e.message);
+    return false;
   }
 }
 
-async function checkApps() {
-  const el = document.getElementById("apps-status");
-  el.innerHTML = "Loading...";
-  try {
-    const { data, error, count } = await sb.from("campus_applications")
-      .select("*", {count:"exact"})
-      .order("created_at", {ascending:false})
-      .limit(5);
-    
-    if (error) {
-      el.innerHTML = `<span class="err">❌ Error: ${error.message}<br>Code: ${error.code}<br>Details: ${error.details}<br>Hint: ${error.hint}</span>`;
-    } else {
-      el.innerHTML = `<span class="ok">✅ Found ${count} total records</span>
-        <pre>${JSON.stringify(data, null, 2)}</pre>`;
-    }
-  } catch(e) {
-    el.innerHTML = `<span class="err">❌ Exception: ${e.message}</span>`;
-  }
-}
-
-async function checkNotifs() {
-  const el = document.getElementById("notif-status");
-  el.innerHTML = "Loading...";
-  try {
-    const { data, error } = await sb.from("admin_notifications")
-      .select("*").order("created_at",{ascending:false}).limit(5);
-    if (error) {
-      el.innerHTML = `<span class="err">❌ Error: ${error.message} (${error.code})</span>`;
-    } else {
-      el.innerHTML = `<span class="ok">✅ ${data.length} notifications found</span>
-        <pre>${JSON.stringify(data, null, 2)}</pre>`;
-    }
-  } catch(e) {
-    el.innerHTML = `<span class="err">❌ Exception: ${e.message}</span>`;
-  }
-}
-
-async function insertTest() {
-  const el = document.getElementById("insert-status");
-  el.innerHTML = "Inserting...";
-  try {
-    const { data, error } = await sb.from("campus_applications").insert({
-      full_name: "Test Student Debug",
-      email: "debug_test_" + Date.now() + "@test.com",
-      phone: "+255700000000",
-      whatsapp_number: "+255700000000",
-      university_name: "Ardhi University",
-      university_abbr: "ARU",
-      region: "Dar es Salaam",
-      year_of_study: "2",
-      shop_name: "Debug Test Shop",
-      category: "Electronics & Accessories",
-      description: "This is a debug test record to verify the insert works correctly",
-      status: "pending",
-      submitted_at: new Date().toISOString()
-    }).select();
-    
-    if (error) {
-      el.innerHTML = `<span class="err">❌ Insert FAILED:<br>Message: ${error.message}<br>Code: ${error.code}<br>Details: ${error.details}<br>Hint: ${error.hint}</span>`;
-    } else {
-      el.innerHTML = `<span class="ok">✅ Insert SUCCESS! Record created:</span><pre>${JSON.stringify(data, null, 2)}</pre>`;
-    }
-  } catch(e) {
-    el.innerHTML = `<span class="err">❌ Exception: ${e.message}</span>`;
-  }
-}
-
-async function checkAuth() {
-  const el = document.getElementById("auth-status");
+async function testAuth() {
+  const el = document.getElementById('auth');
   const { data: { session } } = await sb.auth.getSession();
-  el.innerHTML = session 
-    ? `<span class="ok">✅ Logged in as: ${session.user.email}</span>`
-    : `<span class="warn">⚠️ Not logged in (anon access)</span>`;
+  if (session) {
+    el.innerHTML = `<span class="ok">✅ Logged in: ${session.user.email}</span>`;
+    log('AUTH: logged in as ' + session.user.email);
+  } else {
+    el.innerHTML = `<span class="warn">⚠️ Not logged in (anon). Admin panel uses anon key.</span>`;
+    log('AUTH: anon (not logged in)');
+  }
 }
 
-// Run connection test on load
-testConn();
-checkAuth();
+async function testAppsRead() {
+  const el = document.getElementById('apps-read');
+  el.innerHTML = 'Reading...';
+  const { data, error } = await sb.from('campus_applications')
+    .select('id,full_name,shop_name,status,submitted_at')
+    .order('created_at', {ascending:false})
+    .limit(5);
+  
+  if (error) {
+    el.innerHTML = `<span class="err">❌ READ FAILED: ${error.message}</span>
+      <br><small style="color:#f87171">Code: ${error.code}</small>
+      <br><br><strong style="color:#fbbf24">⚠️ FIX NEEDED: Go to Supabase Dashboard → Table Editor → campus_applications → RLS → Add policy: Allow anon SELECT</strong>`;
+    log('APPS READ ERROR: ' + JSON.stringify(error));
+  } else {
+    el.innerHTML = `<span class="ok">✅ Read success! Found ${data.length} records</span>
+      <pre>${JSON.stringify(data, null, 2)}</pre>`;
+    log('APPS READ OK: ' + data.length + ' records: ' + JSON.stringify(data));
+  }
+}
+
+async function testNotifsRead() {
+  const el = document.getElementById('notif-read');
+  el.innerHTML = 'Reading...';
+  const { data, error } = await sb.from('admin_notifications')
+    .select('id,title,type,is_read,created_at')
+    .order('created_at', {ascending:false})
+    .limit(5);
+  
+  if (error) {
+    el.innerHTML = `<span class="err">❌ READ FAILED: ${error.message} (Code: ${error.code})</span>
+      <br><strong style="color:#fbbf24">⚠️ admin_notifications also needs anon SELECT policy</strong>`;
+    log('NOTIF READ ERROR: ' + JSON.stringify(error));
+  } else {
+    el.innerHTML = `<span class="ok">✅ Read success! Found ${data.length} notifications</span>
+      <pre>${JSON.stringify(data, null, 2)}</pre>`;
+    log('NOTIF READ OK: ' + data.length);
+  }
+}
+
+async function doInsert() {
+  const el = document.getElementById('insert-result');
+  el.innerHTML = 'Inserting...';
+  const { data, error } = await sb.from('campus_applications').insert({
+    full_name: 'DEBUG TEST ' + new Date().toLocaleTimeString(),
+    email: 'debug_' + Date.now() + '@test.com',
+    phone: '+255700000001',
+    whatsapp_number: '+255700000001',
+    university_name: 'Ardhi University',
+    university_abbr: 'ARU',
+    region: 'Dar es Salaam',
+    year_of_study: '2',
+    shop_name: 'Debug Shop ' + Date.now(),
+    category: 'Electronics & Accessories',
+    description: 'Debug test record - can be deleted',
+    status: 'pending',
+    submitted_at: new Date().toISOString()
+  }).select();
+  
+  if (error) {
+    el.innerHTML = `<span class="err">❌ INSERT FAILED: ${error.message}</span><br>
+      <small style="color:#f87171">Code: ${error.code} | Details: ${error.details} | Hint: ${error.hint}</small>
+      <br><strong style="color:#fbbf24">⚠️ campus_applications needs anon INSERT policy</strong>`;
+    log('INSERT ERROR: ' + JSON.stringify(error));
+  } else {
+    el.innerHTML = `<span class="ok">✅ INSERT SUCCESS! Record ID: ${data[0]?.id}</span>
+      <pre>${JSON.stringify(data[0], null, 2)}</pre>
+      <br><span style="color:#4ade80">Now refresh admin panel — you should see this record!</span>`;
+    log('INSERT OK: ' + JSON.stringify(data));
+  }
+}
+
+async function doInsertNoAuth() {
+  await sb.auth.signOut();
+  await doInsert();
+}
+
+async function runAll() {
+  document.getElementById('summary').innerHTML = 'Running all tests...';
+  await testConn();
+  await testAuth();
+  await testAppsRead();
+  await testNotifsRead();
+  
+  document.getElementById('summary').innerHTML = `
+    <span class="ok">All tests complete.</span> Check results above.<br><br>
+    <strong style="color:#C9A84C">Most likely fix if reads are failing:</strong><br>
+    Go to <a href="https://supabase.com/dashboard/project/bscecjbgnjitlfmgwcic/editor" target="_blank" style="color:#C9A84C">Supabase SQL Editor</a> and run:<br>
+    <pre style="margin-top:0.5rem">-- Allow anon to read campus_applications
+ALTER TABLE campus_applications ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_read" ON campus_applications FOR SELECT TO anon USING (true);
+CREATE POLICY "anon_insert" ON campus_applications FOR INSERT TO anon WITH CHECK (true);
+
+-- Allow anon to read admin_notifications
+ALTER TABLE admin_notifications ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_read" ON admin_notifications FOR SELECT TO anon USING (true);
+CREATE POLICY "anon_insert" ON admin_notifications FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "anon_update" ON admin_notifications FOR UPDATE TO anon USING (true);</pre>`;
+}
+
+// Auto run on load
+window.onload = () => { runAll(); };
 </script>
 </body>
 </html>
