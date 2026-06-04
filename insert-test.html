@@ -19,79 +19,101 @@ function log(msg, ok) {
   out.innerHTML += `<div style="color:${ok?'#4ade80':'#f87171'};margin:4px 0">${msg}</div>`;
 }
 
-const apps = [
-  {
-    full_name: "Amina Hassan",
-    email: "amina.hassan.test@aru.ac.tz",
-    phone: "+255712345678",
-    whatsapp_number: "+255712345678",
-    university_name: "Ardhi University",
-    university_abbr: "ARU",
-    region: "Dar es Salaam",
-    year_of_study: "3",
-    shop_name: "Amina Fashion ARU",
-    category: "Fashion & Clothing",
-    description: "Ninaauza nguo za kisasa kwa bei nafuu. African print dresses, tops na accessories.",
-    id_card_url: "https://picsum.photos/400/250?random=1",
-    status: "pending",
-    submitted_at: new Date().toISOString()
-  },
-  {
-    full_name: "Brian Mwangi",
-    email: "brian.mwangi.test@udsm.ac.tz",
-    phone: "+255756789012",
-    whatsapp_number: "+255756789012",
-    university_name: "University of Dar es Salaam",
-    university_abbr: "UDSM",
-    region: "Dar es Salaam",
-    year_of_study: "2",
-    shop_name: "TechBro Electronics",
-    category: "Electronics & Accessories",
-    description: "Phone accessories, earphones, chargers na gadgets kwa bei nzuri. Delivery within campus.",
-    id_card_url: "https://picsum.photos/400/250?random=2",
-    status: "pending",
-    submitted_at: new Date().toISOString()
-  },
-  {
-    full_name: "Fatuma Ally",
-    email: "fatuma.ally.test@udom.ac.tz",
-    phone: "+255789012345",
-    whatsapp_number: "+255789012345",
-    university_name: "University of Dodoma",
-    university_abbr: "UDOM",
-    region: "Dodoma",
-    year_of_study: "4",
-    shop_name: "Fatuma Bites",
-    category: "Food & Snacks",
-    description: "Homemade snacks, maandazi, chapati na juice. Fresh daily. Order by 8am delivery by lunch.",
-    id_card_url: "https://picsum.photos/400/250?random=3",
-    status: "pending",
-    submitted_at: new Date().toISOString()
+// First let's check what columns actually exist
+async function checkColumns() {
+  log('Checking existing columns...', true);
+  const {data, error} = await sb.from('campus_applications').select('*').limit(1);
+  if (error) {
+    log('Read error: ' + error.message, false);
+    return null;
   }
-];
+  if (data && data.length > 0) {
+    log('Existing columns: ' + Object.keys(data[0]).join(', '), true);
+    return Object.keys(data[0]);
+  }
+  // Table empty — try minimal insert to discover columns
+  log('Table empty — trying minimal insert to discover schema...', true);
+  return null;
+}
 
 async function run() {
+  const cols = await checkColumns();
+
+  // Use original column names from the table
+  const apps = [
+    {
+      full_name: "Amina Hassan",
+      email: "amina.hassan.test2@aru.ac.tz",
+      phone: "+255712345678",
+      whatsapp: "+255712345678",
+      university: "Ardhi University",
+      university_abbr: "ARU",
+      region: "Dar es Salaam",
+      year_of_study: "3",
+      shop_name: "Amina Fashion ARU",
+      business_category: "Fashion & Clothing",
+      business_description: "Ninaauza nguo za kisasa kwa bei nafuu. African print dresses na accessories.",
+      id_card_url: "https://picsum.photos/400/250?random=10",
+      status: "pending"
+    },
+    {
+      full_name: "Brian Mwangi",
+      email: "brian.mwangi.test2@udsm.ac.tz",
+      phone: "+255756789012",
+      whatsapp: "+255756789012",
+      university: "University of Dar es Salaam",
+      university_abbr: "UDSM",
+      region: "Dar es Salaam",
+      year_of_study: "2",
+      shop_name: "TechBro Electronics",
+      business_category: "Electronics & Accessories",
+      business_description: "Phone accessories, earphones, chargers na gadgets kwa bei nzuri.",
+      id_card_url: "https://picsum.photos/400/250?random=11",
+      status: "pending"
+    },
+    {
+      full_name: "Fatuma Ally",
+      email: "fatuma.ally.test2@udom.ac.tz",
+      phone: "+255789012345",
+      whatsapp: "+255789012345",
+      university: "University of Dodoma",
+      university_abbr: "UDOM",
+      region: "Dodoma",
+      year_of_study: "4",
+      shop_name: "Fatuma Bites",
+      business_category: "Food & Snacks",
+      business_description: "Homemade snacks, maandazi, chapati na juice. Fresh daily.",
+      id_card_url: "https://picsum.photos/400/250?random=12",
+      status: "pending"
+    }
+  ];
+
   for (const app of apps) {
     const {data, error} = await sb.from('campus_applications').insert(app).select();
     if (error) {
-      log(`❌ FAILED ${app.full_name}: ${error.message} (${error.code}) hint:${error.hint}`, false);
+      log(`❌ FAILED ${app.full_name}: ${error.message} (${error.code})`, false);
+      // Try with even fewer fields
+      log(`  → Trying minimal insert...`, true);
+      const minimal = {
+        full_name: app.full_name,
+        email: app.email,
+        shop_name: app.shop_name,
+        university_abbr: app.university_abbr,
+        status: "pending"
+      };
+      const {data:d2, error:e2} = await sb.from('campus_applications').insert(minimal).select();
+      if (e2) {
+        log(`  ❌ Minimal also failed: ${e2.message} — Column: ${e2.details}`, false);
+      } else {
+        log(`  ✅ Minimal insert OK! ID: ${d2[0]?.id} — Columns: ${Object.keys(d2[0]).join(', ')}`, true);
+      }
     } else {
       log(`✅ INSERTED: ${app.full_name} | ${app.shop_name} | ID: ${data[0]?.id}`, true);
     }
   }
 
-  // Also insert notification
-  await sb.from('admin_notifications').insert({
-    type: 'campus_application',
-    title: '🎓 3 New Campus Applications',
-    body: 'ARU: Amina Fashion | UDSM: TechBro Electronics | UDOM: Fatuma Bites',
-    is_read: false,
-    created_at: new Date().toISOString()
-  });
-  log('✅ Notification inserted', true);
-
-  out.innerHTML += '<br><div style="color:#C9A84C;font-weight:700">Done! Open admin panel and refresh → you should see 3 applications</div>';
-  out.innerHTML += '<br><a href="admin-panel.html" style="color:#C9A84C">→ Open Admin Panel</a>';
+  out.innerHTML += '<br><div style="color:#C9A84C;font-weight:700">Done! Check results above.</div>';
+  out.innerHTML += '<br><a href="admin-panel.html" style="color:#C9A84C;font-size:1.1rem">→ Open Admin Panel</a>';
 }
 
 run();
