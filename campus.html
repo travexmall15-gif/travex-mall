@@ -227,7 +227,7 @@ button,input,select,textarea,
 
     <!-- CAMPUS APP DOWNLOAD -->
     <div id="campus-app-row" style="margin-bottom:2.5rem">
-      <div style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.65rem">📱 Pakua Travex Campus App:</div>
+      <div style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.65rem">📱 Download Travex Campus App:</div>
       <div style="display:flex;gap:0.65rem;flex-wrap:wrap;align-items:center">
         <!-- Android -->
         <button id="campusInstallBtn" onclick="triggerCampusInstall()" style="display:none;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(201,168,76,0.35);color:#fff;padding:0.55rem 1.15rem;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;transition:all 0.2s"
@@ -241,23 +241,23 @@ button,input,select,textarea,
           onmouseout="this.style.borderColor='rgba(201,168,76,0.35)';this.style.background='rgba(255,255,255,0.08)'">
           <span style="font-size:1.1rem"> </span> iPhone / iOS
         </button>
-        <span style="font-size:0.68rem;color:rgba(255,255,255,0.25);font-style:italic">Uni Market tu 🎓</span>
+        <span style="font-size:0.68rem;color:rgba(255,255,255,0.25);font-style:italic">Student Market only 🎓</span>
       </div>
       <!-- iOS Guide -->
       <div id="campus-ios-guide" style="display:none;margin-top:0.75rem;background:rgba(13,27,62,0.6);border:1px solid rgba(201,168,76,0.2);padding:1rem 1.2rem;max-width:380px">
-        <div style="font-size:0.75rem;font-weight:700;color:#C9A84C;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em"> Jinsi ya Kuinstall kwenye iPhone:</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#C9A84C;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em"> How to Install on iPhone:</div>
         <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);line-height:2.1">
-          <div>1️⃣ Fungua <strong style="color:#fff">Safari</strong> (si Chrome)</div>
-          <div>2️⃣ Bonyeza kitufe cha <strong style="color:#fff">Share ⬆️</strong> chini ya skrini</div>
-          <div>3️⃣ Chagua <strong style="color:#fff">"Add to Home Screen"</strong></div>
-          <div>4️⃣ Bonyeza <strong style="color:#fff">"Add"</strong> — Campus App iko! 🎓</div>
+          <div>1️⃣ Open <strong style="color:#fff">Safari</strong> (not Chrome)</div>
+          <div>2️⃣ Tap the <strong style="color:#fff">Share ⬆️</strong> button at the bottom</div>
+          <div>3️⃣ Select <strong style="color:#fff">"Add to Home Screen"</strong></div>
+          <div>4️⃣ Tap <strong style="color:#fff">"Add"</strong> — App installed! 🎓</div>
         </div>
         <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:0.6rem">URL: <span style="color:rgba(201,168,76,0.6)">travex-mall.vercel.app/campus.html</span></div>
       </div>
     </div>
 
     <div class="hero-stats">
-      <div><div class="stat-val">60</div><div class="stat-lbl">Nafasi kwa Kila Chuo</div></div>
+      <div><div class="stat-val">60</div><div class="stat-lbl">Slots Per University</div></div>
       <div><div class="stat-val">5</div><div class="stat-lbl">Universities</div></div>
       <div><div class="stat-val">TZS 15K</div><div class="stat-lbl">Per Month</div></div>
     </div>
@@ -397,7 +397,7 @@ button,input,select,textarea,
   <div class="cta-box">
     <div class="cta-icon">🎓</div>
     <div class="cta-title">Ready to Open Your Campus Shop?</div>
-    <div class="cta-desc">Nafasi ni <strong>60 tu kwa kila chuo</strong>. Tuma maombi sasa kupata nafasi yako kabla hazijaisha!</div>
+    <div class="cta-desc">Only <strong>60 slots per university</strong>. Apply now to secure your spot before they're gone!</div>
     <a href="campus-apply.html" class="btn-gold" style="font-size:1rem;padding:1rem 2.5rem">Apply for Your Shop Now →</a>
     <div class="cta-note">
       Questions? WhatsApp us: <strong>+255 651 919 915</strong> or <strong>+255 657 575 950</strong><br>
@@ -465,11 +465,11 @@ function makeSmallLogo(abbr) {
 }
 
 const UNIVERSITIES = [
-  { abbr:"UDSM", name:"University of Dar es Salaam", full:"Chuo Kikuu cha Dar es Salaam", color:"#0D1B3E" },
-  { abbr:"UDOM", name:"University of Dodoma",       full:"Chuo Kikuu cha Dodoma",         color:"#1B3A6B" },
-  { abbr:"ARU",  name:"Ardhi University",            full:"Chuo Kikuu cha Ardhi",          color:"#059669" },
-  { abbr:"TIA",  name:"Tanzania Institute of Accountancy", full:"Taasisi ya Uhasibu Tanzania", color:"#B45309" },
-  { abbr:"NIT",  name:"National Institute of Transport",   full:"Taasisi ya Usafirishaji Tanzania", color:"#7C3AED" }
+  { abbr:"UDSM", name:"University of Dar es Salaam", full:"University of Dar es Salaam", color:"#0D1B3E" },
+  { abbr:"UDOM", name:"University of Dodoma",       full:"University of Dodoma",         color:"#1B3A6B" },
+  { abbr:"ARU",  name:"Ardhi University",            full:"Ardhi University",          color:"#059669" },
+  { abbr:"TIA",  name:"Tanzania Institute of Accountancy", full:"Tanzania Institute of Accountancy", color:"#B45309" },
+  { abbr:"NIT",  name:"National Institute of Transport",   full:"National Institute of Transport", color:"#7C3AED" }
 ];
 
 async function loadUniversities() {
