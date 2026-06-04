@@ -671,7 +671,7 @@ select,textarea,
 <!-- STEP 5 — PAYMENT -->
 <div class="step-panel" id="step5">
   <div class="step-title">Malipo ya Subscription</div>
-  <div class="step-sub">Kamilisha malipo ili duka lako la wholesale lifunguliwe ndani ya masaa 2.</div>
+  <div class="step-sub">Complete your payment to activate your wholesale store within 2 hours.</div>
 
   <div id="payPanel-instructions">
     <div class="pay-page">
@@ -683,8 +683,8 @@ select,textarea,
       <div class="pay-steps">
         <div class="pay-step"><div class="pay-num">1</div><div class="pay-text">Hamisha <strong id="payAmt2">TZS 50,000</strong> kwenda CRDB Bank:<div class="copy-row"><span class="copy-val">0152774556100</span><button class="copy-btn" onclick="copyText('0152774556100',this)">Copy</button></div></div></div>
         <div class="pay-step"><div class="pay-num">2</div><div class="pay-text">Au lipa M-Pesa/Airtel:<div class="copy-row"><span class="copy-val">+255 651 919 915</span><button class="copy-btn" onclick="copyText('255651919915',this)">Copy</button></div></div></div>
-        <div class="pay-step"><div class="pay-num">3</div><div class="pay-text">Piga screenshot ya risiti yako</div></div>
-        <div class="pay-step"><div class="pay-num">4</div><div class="pay-text">Rudi hapa upaki risiti kupitia kitufe hapa chini</div></div>
+        <div class="pay-step"><div class="pay-num">3</div><div class="pay-text">Take a screenshot of your payment receipt</div></div>
+        <div class="pay-step"><div class="pay-num">4</div><div class="pay-text">Come back here and upload your receipt using the button below</div></div>
       </div>
       <button onclick="showReceiptUpload()" class="close-btn" style="background:var(--gold);color:var(--navy);border:none">✅ Nimelipa — Pakia Risiti →</button>
     </div>
@@ -698,13 +698,13 @@ select,textarea,
         ondrop="handleReceiptDrop(event)">
         <input type="file" id="receiptFile" accept="image/*,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%" onchange="previewReceipt(this)">
         <div style="font-size:2rem;margin-bottom:0.5rem" id="receiptDropIcon">🖼️</div>
-        <div style="font-size:0.85rem;color:var(--gray)" id="receiptDropLabel"><strong style="color:var(--navy)">Bonyeza kupakia</strong> au buruta picha hapa<br><span style="font-size:0.72rem">JPG, PNG, PDF — Max 5MB</span></div>
+        <div style="font-size:0.85rem;color:var(--gray)" id="receiptDropLabel"><strong style="color:var(--navy)">Click to upload</strong> or drag and drop your receipt here<br><span style="font-size:0.72rem">JPG, PNG, PDF — Max 5MB</span></div>
         <img id="receiptPreviewImg" style="display:none;max-width:100%;max-height:180px;margin-top:1rem" alt="Receipt">
       </div>
       <div id="receiptError" style="display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem"></div>
       <div style="display:flex;gap:0.75rem">
-        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">← Rudi</button>
-        <button onclick="submitReceipt()" id="receiptSubmitBtn" style="flex:1;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer">Tuma Risiti & Maliza →</button>
+        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">← Back</button>
+        <button onclick="submitReceipt()" id="receiptSubmitBtn" style="flex:1;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer">Submit Receipt & Finish →</button>
       </div>
     </div>
   </div>
@@ -713,12 +713,12 @@ select,textarea,
     <div class="pay-page" style="text-align:center">
       <div style="width:64px;height:64px;background:#D1FAE5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem">✅</div>
       <div style="font-size:1.2rem;font-weight:800;color:var(--green);margin-bottom:0.5rem">Risiti Imepokelewa!</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem">Risiti yako inafanyiwa verification. Utapata email ya uthibitisho <strong>ndani ya masaa 2</strong>.</div>
+      <div style="font-size:0.875rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem">Your receipt is being verified. You will receive a confirmation email <strong>within 2 hours</strong>.</div>
       <div style="background:#F0FDF4;border:1px solid #BBF7D0;padding:1.2rem;text-align:left;margin-bottom:1.5rem">
-        <div style="font-size:0.82rem;color:#065F46;line-height:2.1">📧 Angalia email yako kwa barua pepe ya uthibitisho<br>⏱️ Subiri masaa 2 — timu yetu itakagua risiti<br>🏪 Duka litafunguliwa na utajulishwa<br>🔑 Ingia Dashboard yako baada ya activation</div>
+        <div style="font-size:0.82rem;color:#065F46;line-height:2.1">📧 Check your email for a confirmation message<br>⏱️ Wait up to 2 hours — our team will review your receipt<br>🏪 Your store will be activated and you will be notified<br>🔑 Log in to your Dashboard after activation</div>
       </div>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:1rem;font-size:0.8rem;color:#1E3A5F;text-align:left;margin-bottom:1.5rem">📞 Tutawasiliana nawe: <strong id="confirmPhoneFinal">—</strong></div>
-      <a href="https://wa.me/255651919915?text=Nimetuma+risiti+ya+malipo+kwenye+Travex+Mall+B2B!" target="_blank" style="display:block;width:100%;padding:0.9rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;margin-bottom:0.75rem">💬 Wasiliana Nasi WhatsApp</a>
+      <a href="https://wa.me/255651919915?text=I+have+submitted+my+payment+receipt+on+Travex+Mall+B2B!" target="_blank" style="display:block;width:100%;padding:0.9rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;margin-bottom:0.75rem">💬 Contact Us on WhatsApp</a>
       <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">Nenda kwenye Login →</button>
     </div>
   </div>
@@ -1022,7 +1022,7 @@ function generateStoreForms() {
                   <div class="tprev-cat" style="font-size:0.65rem;color:#6B7280">Category · Region</div>
                 </div>
               </div>
-              <div style="padding:0 1rem 0.75rem;font-size:0.75rem;color:#6B7280" id="tprev-desc">Maelezo ya duka lako yataonekana hapa...</div>
+              <div style="padding:0 1rem 0.75rem;font-size:0.75rem;color:#6B7280" id="tprev-desc">Your store description will appear here...</div>
             </div>
           </div>
         </div>
@@ -1062,7 +1062,7 @@ function generateStoreForms() {
       const nm = document.getElementById("sName1")?.value || "Store Name";
       const ct = document.getElementById("sCat1")?.value || "Category";
       const rg = document.getElementById("sReg1")?.value || "Region";
-      const ds = document.getElementById("sDesc1")?.value || "Maelezo ya duka lako...";
+      const ds = document.getElementById("sDesc1")?.value || "Your store description...";
       const initials = nm.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase() || "TX";
       const nm_el = document.getElementById("tprev-storename");
       const catLabel = document.querySelector(".tprev-cat");
@@ -1085,7 +1085,7 @@ function buildPreview() {
 
   for (let i = 1; i <= n; i++) {
     const name    = document.getElementById("sName"+i)?.value || "Store Name";
-    const desc    = document.getElementById("sDesc"+i)?.value || "Maelezo ya store...";
+    const desc    = document.getElementById("sDesc"+i)?.value || "Store description...";
     const cat     = document.getElementById("sCat"+i)?.value || "Category";
     const reg     = document.getElementById("sReg"+i)?.value || "Region";
     const wa      = document.getElementById("sWa"+i)?.value || "—";
@@ -1498,7 +1498,7 @@ async function submitReceipt() {
   const file = document.getElementById("receiptFile").files[0];
   const errEl = document.getElementById("receiptError");
   const btn = document.getElementById("receiptSubmitBtn");
-  if (!file) { errEl.textContent = "Tafadhali pakia picha ya risiti."; errEl.style.display = "block"; return; }
+  if (!file) { errEl.textContent = "Please upload your receipt photo."; errEl.style.display = "block"; return; }
   errEl.style.display = "none"; btn.textContent = "Inatuma..."; btn.disabled = true;
   try {
     const ext = file.name.split(".").pop();
@@ -1524,7 +1524,7 @@ async function submitReceipt() {
     document.getElementById("confirmPhoneFinal").textContent = phone || "—";
   } catch(err) {
     errEl.textContent = "Imeshindwa: " + err.message; errEl.style.display = "block";
-    btn.textContent = "Tuma Risiti →"; btn.disabled = false;
+    btn.textContent = "Submit Receipt →"; btn.disabled = false;
   }
 }
 </script>
@@ -1534,7 +1534,7 @@ async function submitReceipt() {
     <div style="width:42px;height:42px;background:#C9A84C;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🚀</div>
     <div>
       <div style="font-size:0.72rem;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.15rem">Coming Soon</div>
-      <div style="font-size:0.95rem;font-weight:800;color:#fff">Duka lako la B2B linakuja hivi karibuni!</div>
+      <div style="font-size:0.95rem;font-weight:800;color:#fff">Your B2B Store is coming soon!</div>
       <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:0.1rem">Marketplace ya biashara kwa biashara — inatengenezwa. Jiandikishe ili upate taarifa kwanza.</div>
     </div>
   </div>
