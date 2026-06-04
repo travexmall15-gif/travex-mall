@@ -284,7 +284,7 @@ select,textarea,
       <div id="panel-login">
         <!-- Login Form -->
         <div id="loginFormWrap" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:none;padding:2rem">
-          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem;line-height:1.6">Tumia email na nenosiri uliyo pewa baada ya duka lako kuidhinishwa.</div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem;line-height:1.6">Use your email and password after your shop has been approved.</div>
           <div id="loginError" style="margin-bottom:1rem"></div>
           <div style="margin-bottom:1rem">
             <label style="display:block;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.45rem">Email</label>
@@ -305,14 +305,14 @@ select,textarea,
             Ingia Dashibodi →
           </button>
           <div style="text-align:center;margin-top:1rem">
-            <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.3);cursor:pointer;text-decoration:underline">Umesahau nenosiri?</a>
+            <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.3);cursor:pointer;text-decoration:underline">Forgot password?</a>
           </div>
         </div>
 
         <!-- Reset Password (hidden) -->
         <div id="resetFormWrap" style="display:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:none;padding:2rem">
           <div style="font-size:0.875rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Badilisha Nenosiri</div>
-          <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:1.2rem;line-height:1.6">Ingiza email yako — tutakutumia link ya kubadilisha nenosiri haraka.</div>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:1.2rem;line-height:1.6">Enter your email — we'll send you a password reset link.</div>
           <div id="resetMsg" style="margin-bottom:1rem"></div>
           <input type="email" id="resetEmail" placeholder="email@example.com"
             style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;margin-bottom:1rem">
@@ -362,23 +362,23 @@ select,textarea,
             </div>
             <div style="margin-bottom:0.75rem">
               <label class="reg-label">Nenosiri (angalau herufi 8) *</label>
-              <input type="password" id="reg-password" placeholder="Chagua nenosiri imara" class="reg-input">
+              <input type="password" id="reg-password" placeholder="Choose a strong password" class="reg-input">
             </div>
             <div style="margin-bottom:1.2rem">
               <label class="reg-label">Mwaka wa Masomo *</label>
               <select id="reg-year" class="reg-input" style="cursor:pointer">
-                <option value="">Chagua mwaka</option>
+                <option value="">Select year</option>
                 <option>Year 1</option><option>Year 2</option><option>Year 3</option>
                 <option>Year 4</option><option>Year 5</option><option>Postgraduate</option>
               </select>
             </div>
-            <button onclick="regNextStep(2)" style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Endelea → Chuo</button>
+            <button onclick="regNextStep(2)" style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → University</button>
           </div>
 
           <!-- ── REG STEP 2: University ── -->
           <div id="reg-step2" class="reg-step" style="display:none">
             <div id="reg-err2" style="margin-bottom:1rem"></div>
-            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1rem">Chagua chuo chako:</div>
+            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1rem">Select your university:</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:1rem">
               <div class="reg-uni-opt" onclick="regSelectUni(this,'UDSM','University of Dar es Salaam','Dar es Salaam')">
                 <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">UDSM</div>
@@ -402,17 +402,17 @@ select,textarea,
               </div>
             </div>
             <div style="margin-bottom:1rem">
-              <label class="reg-label">Pakia Kadi ya Chuo (ID) *</label>
+              <label class="reg-label">Upload University ID *</label>
               <div style="border:1.5px dashed rgba(255,255,255,0.2);padding:1rem;text-align:center;cursor:pointer;position:relative"
                 onclick="document.getElementById('reg-id-file').click()">
                 <div style="font-size:1.2rem;margin-bottom:0.3rem">📎</div>
-                <div id="reg-id-label" style="font-size:0.78rem;color:rgba(255,255,255,0.45)">Bonyeza kupakia picha ya ID yako</div>
+                <div id="reg-id-label" style="font-size:0.78rem;color:rgba(255,255,255,0.45)">Click to upload your university ID photo</div>
                 <input type="file" id="reg-id-file" accept="image/*,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer" onchange="regPreviewId(this)">
               </div>
             </div>
             <div style="display:flex;gap:0.75rem">
               <button onclick="regNextStep(1)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
-              <button onclick="regNextStep(3)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Endelea → Biashara</button>
+              <button onclick="regNextStep(3)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Business</button>
             </div>
           </div>
 
@@ -426,7 +426,7 @@ select,textarea,
             <div style="margin-bottom:0.75rem">
               <label class="reg-label">Kategoria *</label>
               <select id="reg-category" class="reg-input" style="cursor:pointer">
-                <option value="">Chagua unachouza</option>
+                <option value="">Select what you sell</option>
                 <option>Fashion & Clothing</option>
                 <option>Food & Snacks</option>
                 <option>Electronics & Accessories</option>
@@ -443,11 +443,11 @@ select,textarea,
             </div>
             <div style="margin-bottom:1.2rem">
               <label class="reg-label">Maelezo ya Biashara * <span style="color:rgba(255,255,255,0.3);font-weight:400">(angalau herufi 50)</span></label>
-              <textarea id="reg-desc" placeholder="Elezea unachouza, bei yako, na kwa nini wanafunzi wenzako wanunue kwako..." class="reg-input" style="min-height:80px;resize:vertical"></textarea>
+              <textarea id="reg-desc" placeholder="Describe what you sell, your pricing, and why students should buy from you..." class="reg-input" style="min-height:80px;resize:vertical"></textarea>
             </div>
             <div style="display:flex;gap:0.75rem">
               <button onclick="regNextStep(2)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
-              <button onclick="regNextStep(4)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Endelea → Pitia</button>
+              <button onclick="regNextStep(4)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Review</button>
             </div>
           </div>
 
@@ -457,7 +457,7 @@ select,textarea,
             <div id="reg-review-body" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:1rem;margin-bottom:1rem;font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:2.2"></div>
             <div style="display:flex;gap:0.75rem">
               <button onclick="regNextStep(3)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
-              <button onclick="regGoToSubscription()" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Endelea → Subscription →</button>
+              <button onclick="regGoToSubscription()" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Subscription →</button>
             </div>
           </div>
 
@@ -490,7 +490,7 @@ select,textarea,
               </div>
             </div>
             <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.75rem 1rem;font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;line-height:1.6">
-              ℹ️ Nafasi ni <strong style="color:#C9A84C">60 tu kwa kila chuo</strong>. Baada ya kuidhinishwa na admin, utaombwa kulipa ada ya activation.
+              ℹ️ Only <strong style="color:#C9A84C">60 slots per university</strong>. After admin approval, you will be asked to pay the activation fee.
             </div>
             <div style="display:flex;gap:0.75rem">
               <button onclick="regNextStep(4)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Rudi</button>
@@ -508,7 +508,7 @@ select,textarea,
               💬 Wasiliana Nasi WhatsApp
             </a>
             <button onclick="switchCampusTab('login')" style="width:100%;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
-              ← Ingia baada ya kuidhinishwa
+              ← Login after approval
             </button>
           </div>
 
@@ -831,7 +831,7 @@ function switchAI(type, btn) {
 const systemPrompts = {
   advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tanzania. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
   marketing:"You are a Marketing AI for Travex Campus student marketplace in Tanzania. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
-  care:     "You are a Customer Care assistant for Travex Campus sellers in Tanzania. Help students respond to customer messages professionally and politely in English or Swahili. Write actual response templates they can use.",
+  care:     "You are a Customer Care assistant for Travex Campus sellers. Help students respond to customer messages professionally and politely in English. Write actual response templates they can use.",
   learn:    "You are a Business Learning AI for Travex Campus student sellers in Tanzania. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
 };
 
@@ -923,7 +923,7 @@ async function doLogin() {
   const errEl = document.getElementById("loginError");
 
   if (!email || !pass) {
-    showAuthError(errEl, "Tafadhali jaza email na nenosiri.");
+    showAuthError(errEl, "Please enter your email and password.");
     return;
   }
   btn.textContent = "Inaingia...";
@@ -931,7 +931,7 @@ async function doLogin() {
 
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
   if (error) {
-    showAuthError(errEl, "Imeshindwa: " + (error.message === "Invalid login credentials" ? "Email au nenosiri si sahihi." : error.message));
+    showAuthError(errEl, "Imeshindwa: " + (error.message === "Invalid login credentials" ? "Invalid email or password." : error.message));
     btn.textContent = "Ingia Dashibodi →";
     btn.disabled = false;
     return;
@@ -945,7 +945,7 @@ async function doLogin() {
 async function doReset() {
   const email = document.getElementById("resetEmail").value.trim();
   const msgEl = document.getElementById("resetMsg");
-  if (!email) { showAuthError(msgEl, "Ingiza email yako."); return; }
+  if (!email) { showAuthError(msgEl, "Please enter your email."); return; }
   const { error } = await sb.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + "/campus-dashboard.html"
   });
@@ -993,7 +993,7 @@ function regUpdateProgress(step) {
     else if (i === step) { circle.className = "rp-step active"; if(line) line.className = "rp-line"; }
     else                 { circle.className = "rp-step"; if(line) line.className = "rp-line"; }
   }
-  const labels = ["Taarifa Zako","Chuo Chako","Biashara Yako","Pitia & Tuma"];
+  const labels = ["Your Info","Your University","Your Business","Review & Submit"];
   document.getElementById("rsl-title").textContent = labels[step-1];
   document.getElementById("rsl-sub").textContent   = "Hatua " + step + " ya 4";
 }
@@ -1013,14 +1013,14 @@ function regNextStep(target) {
       const email = document.getElementById("reg-email").value.trim();
       const pass  = document.getElementById("reg-password").value;
       const year  = document.getElementById("reg-year").value;
-      if (!name || !phone || !email || !pass || !year) { regShowErr(1,"Tafadhali jaza sehemu zote."); return; }
+      if (!name || !phone || !email || !pass || !year) { regShowErr(1,"Please fill in all required fields."); return; }
       if (pass.length < 8) { regShowErr(1,"Nenosiri lazima liwe na angalau herufi 8."); return; }
       if (!email.includes("@")) { regShowErr(1,"Email si sahihi."); return; }
       regShowErr(1,"");
     }
     if (regStep === 2) {
-      if (!regUni.abbr) { regShowErr(2,"Tafadhali chagua chuo chako."); return; }
-      if (!document.getElementById("reg-id-file").files[0]) { regShowErr(2,"Tafadhali pakia picha ya ID yako ya chuo."); return; }
+      if (!regUni.abbr) { regShowErr(2,"Please select your university."); return; }
+      if (!document.getElementById("reg-id-file").files[0]) { regShowErr(2,"Please upload your university ID photo."); return; }
       regShowErr(2,"");
     }
     if (regStep === 3) {
@@ -1028,7 +1028,7 @@ function regNextStep(target) {
       const cat  = document.getElementById("reg-category").value;
       const wa   = document.getElementById("reg-whatsapp").value.trim();
       const desc = document.getElementById("reg-desc").value.trim();
-      if (!shop || !cat || !wa || !desc) { regShowErr(3,"Tafadhali jaza sehemu zote."); return; }
+      if (!shop || !cat || !wa || !desc) { regShowErr(3,"Please fill in all required fields."); return; }
       if (desc.length < 50) { regShowErr(3,"Maelezo lazima yawe na angalau herufi 50."); return; }
       regShowErr(3,"");
       // Build review
@@ -1036,7 +1036,7 @@ function regNextStep(target) {
         👤 <strong style="color:#fff">Jina:</strong> \${document.getElementById("reg-name").value}<br>
         📧 <strong style="color:#fff">Email:</strong> \${document.getElementById("reg-email").value}<br>
         📱 <strong style="color:#fff">Simu:</strong> \${document.getElementById("reg-phone").value}<br>
-        🎓 <strong style="color:#fff">Chuo:</strong> \${regUni.abbr} — \${regUni.name}<br>
+        🎓 <strong style="color:#fff">University:</strong> \${regUni.abbr} — \${regUni.name}<br>
         🏪 <strong style="color:#fff">Duka:</strong> \${shop}<br>
         📦 <strong style="color:#fff">Kategoria:</strong> \${cat}\`;
     }
@@ -1104,7 +1104,7 @@ async function submitRegApplication() {
     await sb.from("admin_notifications").insert({
       type: "campus_application",
       title: `🎓 Campus Application — ${document.getElementById("reg-name").value.trim()}`,
-      body:  `Chuo: ${regUni.abbr} | Duka: ${document.getElementById("reg-shopname").value.trim()} | Kategoria: ${document.getElementById("reg-category").value} | WhatsApp: ${document.getElementById("reg-whatsapp").value.trim()}`,
+      body:  `University: ${regUni.abbr} | Shop: ${document.getElementById("reg-shopname").value.trim()} | Category: ${document.getElementById("reg-category").value} | WhatsApp: ${document.getElementById("reg-whatsapp").value.trim()}`,
       is_read: false,
       created_at: new Date().toISOString()
     }).catch(()=>{});
