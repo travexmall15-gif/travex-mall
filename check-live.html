@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body style="font-family:monospace;background:#0D1B3E;color:#fff;padding:2rem">
+<h2 style="color:#C9A84C">Live Data Check</h2>
+<div id="out"></div>
+<script>
+const sb = supabase.createClient(
+  "https://bscecjbgnjitlfmgwcic.supabase.co",
+  "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos"
+);
+const out = document.getElementById('out');
+function log(m,c='#fff'){out.innerHTML+=`<div style="color:${c};margin:2px 0">${m}</div>`;}
+function pre(o){out.innerHTML+=`<pre style="background:rgba(0,0,0,0.4);padding:0.5rem;font-size:0.75rem;white-space:pre-wrap;margin:4px 0">${JSON.stringify(o,null,2)}</pre>`;}
+
+async function run(){
+  // 1. All stores
+  log('=== ALL campus_stores ===','#C9A84C');
+  const {data:s,error:se} = await sb.from('campus_stores').select('id,store_name,university_abbr,university,is_active,slug,created_at');
+  if(se) log('❌ '+se.message,'#f87171');
+  else {
+    log(`${s.length} stores total`,'#4ade80');
+    s.forEach(x=>log(`  • "${x.store_name}" | abbr:"${x.university_abbr}" | uni:"${x.university}" | active:${x.is_active} | slug:"${x.slug}"`,'#fbbf24'));
+  }
+
+  // 2. Check approved apps  
+  log('\n=== Approved Applications ===','#C9A84C');
+  const {data:a,error:ae} = await sb.from('campus_applications')
+    .select('id,full_name,university_abbr,university,business_category,status').eq('status','approved');
+  if(ae) log('❌ '+ae.message,'#f87171');
+  else {
+    log(`${a.length} approved`,'#4ade80');
+    a.forEach(x=>log(`  • ${x.full_name} | abbr:"${x.university_abbr}" | uni:"${x.university}" | ${x.business_category}`,'#fbbf24'));
+  }
+
+  // 3. Test query exactly as campus-university does
+  log('\n=== Simulating campus-university query (ARU) ===','#C9A84C');
+  const {data:q,error:qe} = await sb.from('campus_stores')
+    .select('*').eq('university_abbr','ARU').eq('is_active',true);
+  if(qe) log('❌ '+qe.message,'#f87171');
+  else log(`ARU stores: ${q.length}`,'#4ade80');
+
+  log('\n=== Simulating (UDSM) ===','#C9A84C');
+  const {data:q2,error:qe2} = await sb.from('campus_stores')
+    .select('*').eq('university_abbr','UDSM').eq('is_active',true);
+  if(qe2) log('❌ '+qe2.message,'#f87171');
+  else log(`UDSM stores: ${q2.length}`,'#4ade80');
+
+  log('\n=== Simulating (UDOM) ===','#C9A84C');
+  const {data:q3} = await sb.from('campus_stores')
+    .select('*').eq('university_abbr','UDOM').eq('is_active',true);
+  log(`UDOM stores: ${q3?.length||0}`,'#4ade80');
+}
+run();
+</script>
+</body>
+</html>
