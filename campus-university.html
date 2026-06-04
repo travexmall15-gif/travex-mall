@@ -9,7 +9,7 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;
-  --uni-bg1:#0D1B3E;--uni-bg2:#1B3A6B;--uni-accent:#C9A84C}
+  --uni-bg1:#0D1B3E;--uni-bg2:#0A1628;--uni-accent:#C9A84C}
 html{scroll-behavior:smooth}
 body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark);overflow-x:hidden;visibility:hidden}
 body.loaded{visibility:visible}
@@ -163,7 +163,7 @@ button,input,select,textarea,
   <div id="uniHeroBg" style="position:absolute;inset:0;background-size:cover;background-position:center;z-index:0;transition:opacity 0.5s"></div>
   <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,27,62,0.88) 0%,rgba(13,27,62,0.72) 60%,rgba(13,27,62,0.55) 100%);z-index:1" id="uniHeroOverlay"></div>
   <div class="uni-hero-particles" id="particles" style="z-index:2"></div>
-  <div class="uni-hero-grid" style="z-index:2"></div>
+  
   <div class="uni-abbr-watermark" id="uniWatermark">—</div>
   <div class="uni-hero-content">
     <div class="uni-hero-left">
@@ -232,9 +232,9 @@ const UNI_DATA = {
   UDSM: {
     name:"University of Dar es Salaam",
     swahili:"Chuo Kikuu cha Dar es Salaam",
-    bg1:"#0D1B3E", bg2:"#1B3A6B", accent:"#C9A84C", ring:"#C9A84C",
+    bg1:"#0D1B3E", bg2:"#0A1628", accent:"#C9A84C", ring:"#C9A84C",
     svg:`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="65" cy="65" r="65" fill="#1B3A6B"/>
+      <circle cx="65" cy="65" r="65" fill="#0A1628"/>
       <circle cx="65" cy="65" r="58" fill="none" stroke="#C9A84C" stroke-width="2"/>
       <circle cx="65" cy="65" r="50" fill="#0D1B3E"/>
       <text x="65" y="76" font-family="Georgia,serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">UDSM</text>
