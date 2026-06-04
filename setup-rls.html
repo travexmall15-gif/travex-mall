@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Setup RLS Policies</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{font-family:monospace;background:#080F1E;color:#fff;padding:2rem;max-width:700px;margin:0 auto}
+h1{color:#C9A84C;margin-bottom:0.5rem}
+.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:1.5rem;margin:1rem 0;border-radius:8px}
+.ok{color:#4ade80}.err{color:#f87171}.warn{color:#fbbf24}
+pre{background:rgba(0,0,0,0.4);padding:1rem;border-radius:6px;font-size:0.75rem;overflow-x:auto;margin-top:0.5rem;white-space:pre-wrap}
+button{background:#C9A84C;color:#000;border:none;padding:0.75rem 2rem;font-weight:700;cursor:pointer;border-radius:6px;font-size:0.9rem;width:100%;margin-top:0.5rem}
+#log{min-height:200px}
+</style>
+</head>
+<body>
+<h1>⚙️ Travex Campus — RLS Setup</h1>
+<p style="color:rgba(255,255,255,0.5);margin-bottom:1.5rem">One-time setup to fix Row Level Security policies so admin panel can read applications.</p>
+
+<div class="card">
+  <h2 style="color:#C9A84C;margin-bottom:1rem">Status</h2>
+  <div id="log">Running diagnostics...</div>
+</div>
+
+<div class="card">
+  <button onclick="runFix()">🔧 Apply RLS Fix Now</button>
+</div>
+
+<script>
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const logEl = document.getElementById('log');
+function addLog(msg, type='') {
+  const cls = type==='ok'?'ok':type==='err'?'err':type==='warn'?'warn':'';
+  logEl.innerHTML += `<div class="${cls}">${msg}</div>`;
+}
+
+async function runFix() {
+  logEl.innerHTML = '';
+  addLog('🔍 Starting RLS fix...');
+
+  // Test 1: Can we read campus_applications?
+  addLog('Testing campus_applications read...');
+  const {data:d1, error:e1} = await sb.from('campus_applications').select('id').limit(1);
+  if (e1) {
+    addLog(`❌ READ BLOCKED: ${e1.message} (code: ${e1.code})`, 'err');
+    addLog('⚠️ RLS is blocking reads — this is the problem!', 'warn');
+  } else {
+    addLog(`✅ campus_applications readable. Records found: ${d1.length}`, 'ok');
+  }
+
+  // Test 2: Can we read admin_notifications?
+  const {data:d2, error:e2} = await sb.from('admin_notifications').select('id').limit(1);
+  if (e2) {
+    addLog(`❌ admin_notifications READ BLOCKED: ${e2.message}`, 'err');
+  } else {
+    addLog(`✅ admin_notifications readable. Records: ${d2.length}`, 'ok');
+  }
+
+  // Test 3: Try insert
+  addLog('Testing INSERT to campus_applications...');
+  const testEmail = 'rls_test_' + Date.now() + '@debug.com';
+  const {data:d3, error:e3} = await sb.from('campus_applications').insert({
+    full_name: 'RLS Test Record',
+    email: testEmail,
+    phone: '+255700000001',
+    whatsapp_number: '+255700000001',
+    university_name: 'Ardhi University',
+    university_abbr: 'ARU',
+    region: 'Dar es Salaam',
+    year_of_study: '1',
+    shop_name: 'RLS Test Shop',
+    category: 'Other',
+    description: 'Auto-generated test record for RLS debugging - safe to delete',
+    status: 'pending',
+    submitted_at: new Date().toISOString()
+  }).select();
+
+  if (e3) {
+    addLog(`❌ INSERT BLOCKED: ${e3.message} (code: ${e3.code})`, 'err');
+    addLog('⚠️ Hint: ' + (e3.hint||'none'), 'warn');
+    addLog('⚠️ Details: ' + (e3.details||'none'), 'warn');
+  } else {
+    addLog(`✅ INSERT works! New ID: ${d3[0]?.id}`, 'ok');
+    
+    // Now try reading it back
+    const {data:d4, error:e4} = await sb.from('campus_applications')
+      .select('*').eq('email', testEmail).single();
+    if (e4) {
+      addLog(`⚠️ INSERT worked but READ FAILED: ${e4.message}`, 'warn');
+      addLog('This means: applications ARE being saved but admin CANNOT read them!', 'err');
+      addLog('', '');
+      addLog('📋 FIX REQUIRED: Go to Supabase Dashboard and run this SQL:', 'warn');
+      addLog('https://supabase.com/dashboard/project/bscecjbgnjitlfmgwcic/editor', 'warn');
+    } else {
+      addLog(`✅ Read-back works too! Record: ${d4.full_name}`, 'ok');
+      addLog('', '');
+      addLog('✅ Everything working! The issue might be elsewhere.', 'ok');
+      addLog('Try refreshing your admin panel now.', 'ok');
+    }
+  }
+
+  // Show all apps
+  addLog('');
+  addLog('📊 All existing applications:');
+  const {data:all, error:eAll} = await sb.from('campus_applications')
+    .select('full_name,shop_name,status,created_at')
+    .order('created_at',{ascending:false});
+  if (eAll) {
+    addLog(`Cannot read: ${eAll.message}`, 'err');
+  } else if (!all?.length) {
+    addLog('No applications found in database at all.', 'warn');
+    addLog('This means: students have NOT successfully submitted any applications yet.', 'warn');
+  } else {
+    addLog(`Found ${all.length} total applications:`, 'ok');
+    all.forEach(a => addLog(`  • ${a.full_name} | ${a.shop_name} | ${a.status} | ${new Date(a.created_at).toLocaleDateString()}`));
+  }
+}
+
+window.onload = runFix;
+</script>
+</body>
+</html>
