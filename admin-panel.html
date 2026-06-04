@@ -373,16 +373,16 @@ select,textarea,
       <div class="page-title">📋 Campus Applications</div>
       <div class="page-sub">Student shop applications — Review, Approve or Reject</div>
       <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
-        <button class="filter-btn active" id="ca-filter-all"    onclick="filterApps('all',this)">Yote</button>
+        <button class="filter-btn active" id="ca-filter-all"    onclick="filterApps('all',this)">All</button>
         <button class="filter-btn"       id="ca-filter-pending" onclick="filterApps('pending',this)">Pending ⏳</button>
         <button class="filter-btn"       id="ca-filter-approved" onclick="filterApps('approved',this)">Approved ✅</button>
         <button class="filter-btn"       id="ca-filter-rejected" onclick="filterApps('rejected',this)">Rejected ❌</button>
-        <input type="search" id="ca-search" placeholder="Tafuta jina, chuo, duka..." oninput="filterAppsSearch(this.value)"
+        <input type="search" id="ca-search" placeholder="Search name, university, shop..." oninput="filterAppsSearch(this.value)"
           style="margin-left:auto;padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
       </div>
       <div class="table-wrap">
         <table><thead><tr>
-          <th>Jina / Mwaka</th><th>Email</th><th>Chuo</th><th>Duka / Kategoria</th><th>WhatsApp</th><th>ID ya Chuo</th><th>Status</th><th>Tarehe</th><th>Hatua</th>
+          <th>Name / Year</th><th>Email</th><th>University</th><th>Shop / Category</th><th>WhatsApp</th><th>University ID</th><th>Status</th><th>Date</th><th>Actions</th>
         </tr></thead>
         <tbody id="campus-apps-tbody">
           <tr><td colspan="9" style="text-align:center;color:var(--gray);padding:2rem">Loading...</td></tr>
@@ -393,7 +393,7 @@ select,textarea,
     <!-- PAGE: CAMPUS STORES -->
     <div class="page" id="page-campus-stores">
       <div class="page-title">🏪 Campus Stores</div>
-      <div class="page-sub">Maduka yote yanayotumika kwenye Travex Uni-Student Market</div>
+      <div class="page-sub">All active shops on Travex Campus Marketplace</div>
       <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
         <select id="cs-uni-filter" onchange="filterCampusStores()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none">
           <option value="">Vyuo Vyote</option>
@@ -420,7 +420,7 @@ select,textarea,
     <!-- PAGE: CAMPUS ANALYTICS -->
     <div class="page" id="page-campus-analytics">
       <div class="page-title">👁️ Campus Traffic</div>
-      <div class="page-sub">Watu wanaoingia kwenye maduka ya Uni-Student Market</div>
+      <div class="page-sub">Visitors and traffic across Campus marketplace stores</div>
       <div class="chart-period-tabs" style="margin-bottom:1.5rem">
         <button class="cpt active" onclick="loadCampusAnalytics('day',this)">Leo</button>
         <button class="cpt" onclick="loadCampusAnalytics('week',this)">Wiki hii</button>
@@ -441,7 +441,7 @@ select,textarea,
     <!-- PAGE: CAMPUS REVENUE -->
     <div class="page" id="page-campus-revenue">
       <div class="page-title">💰 Campus Revenue</div>
-      <div class="page-sub">Mapato yanayotoka kwenye Travex Uni-Student Market</div>
+      <div class="page-sub">Revenue generated from Travex Campus Marketplace</div>
       <div class="chart-period-tabs" style="margin-bottom:1.5rem">
         <button class="cpt active" onclick="loadCampusRevenue('day',this)">Leo</button>
         <button class="cpt" onclick="loadCampusRevenue('week',this)">Wiki hii</button>
@@ -513,20 +513,20 @@ function adminLogin() {
 
 // ── LOAD ALL DATA — Campus Only ──
 async function loadAll() {
+  await loadCampusData();   // populate allCampusApps, allCampusStores
   await loadOverview();
   loadNotifications();
 }
 
 async function loadOverview() {
-  const [shopsRes, appsRes, ordersRes, prodsRes] = await Promise.all([
+  const [shopsRes, ordersRes, prodsRes] = await Promise.all([
     sb.from("campus_stores").select("id,is_active,university_abbr"),
-    sb.from("campus_applications").select("*").order("created_at",{ascending:false}).limit(100),
     sb.from("campus_orders").select("total_price,created_at"),
     sb.from("campus_products").select("id").eq("is_active",true)
   ]);
 
-  const shops   = shopsRes.data  || [];
-  const apps    = appsRes.data   || [];
+  const shops   = allCampusStores.length ? allCampusStores : (shopsRes.data || []);
+  const apps    = allCampusApps;
   const orders  = ordersRes.data || [];
   const prods   = prodsRes.data  || [];
   const pending = apps.filter(a => a.status === "pending");
@@ -1666,10 +1666,10 @@ async function loadCampusOverview() {
 
 async function loadCampusApplications() {
   if (!allCampusApps.length) await loadCampusData();
-  renderAppsTable(allCampusApps);
+  renderCampusAppsTable(allCampusApps);
 }
 
-function renderAppsTable(apps) {
+function renderCampusAppsTable(apps) {
   const tbody = document.getElementById("campus-apps-tbody");
   if (!apps.length) {
     tbody.innerHTML = "<tr><td colspan='9' style='text-align:center;color:var(--gray);padding:2rem'>No applications yet</td></tr>";
@@ -1768,7 +1768,7 @@ function filterApps(status, btn) {
   document.querySelectorAll("#page-campus-applications .filter-btn").forEach(b=>b.classList.remove("active"));
   if(btn) btn.classList.add("active");
   const filtered = status==="all" ? allCampusApps : allCampusApps.filter(a=>a.status===status);
-  renderAppsTable(filtered);
+  renderCampusAppsTable(filtered);
 }
 function filterAppsSearch(q) {
   const lq = q.toLowerCase();
@@ -1851,7 +1851,7 @@ async function approveCampusApp(id) {
 
   showToast(`✅ ${app.full_name} approved! Shop #${shopNumber} is now live.${app.email ? " 📧 Email sent." : ""}`, "success");
   await loadCampusData();
-  renderAppsTable(allCampusApps);
+  renderCampusAppsTable(allCampusApps);
   loadNotifications();
 }
 
@@ -1863,7 +1863,7 @@ async function rejectCampusApp(id) {
   if (error) { showToast("Failed: " + error.message, "error"); return; }
   showToast("Application from " + app.full_name + " has been rejected.");
   await loadCampusData();
-  renderAppsTable(allCampusApps);
+  renderCampusAppsTable(allCampusApps);
 }
 
 async function loadCampusStores() {
