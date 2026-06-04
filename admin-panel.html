@@ -272,7 +272,7 @@ select,textarea,
         <div style="font-size:0.82rem;font-weight:700;color:var(--navy)">Notifications</div>
         <button onclick="markAllRead()" style="font-size:0.72rem;color:var(--gold);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif">Mark all read</button>
       </div>
-      <div id="notifList"><div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem">Inapakia...</div></div>
+      <div id="notifList"><div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem">Loading...</div></div>
     </div>
   </div>
 </nav>
@@ -520,7 +520,7 @@ async function loadAll() {
 async function loadOverview() {
   const [shopsRes, appsRes, ordersRes, prodsRes] = await Promise.all([
     sb.from("campus_stores").select("id,is_active,university_abbr"),
-    sb.from("campus_applications").select("id,status,submitted_at,full_name,university_abbr,shop_name,category,email,phone,whatsapp_number,description,student_id,year_of_study,university_name").order("submitted_at",{ascending:false}).limit(100),
+    sb.from("campus_applications").select("*").order("created_at",{ascending:false}).limit(100),
     sb.from("campus_orders").select("total_price,created_at"),
     sb.from("campus_products").select("id").eq("is_active",true)
   ]);
@@ -558,20 +558,25 @@ function renderAppsTable(tbodyId, apps) {
     tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;padding:2rem;color:var(--gray)'>No applications yet.</td></tr>";
     return;
   }
-  tbody.innerHTML = apps.map(a => `<tr>
-    <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.72rem;color:var(--gray)">${a.email||""}</div></td>
-    <td><span style="background:rgba(124,58,237,0.1);color:#7C3AED;padding:0.15rem 0.45rem;font-size:0.68rem;font-weight:700">${a.university_abbr||"—"}</span></td>
-    <td>${a.shop_name||"—"}</td>
-    <td style="font-size:0.78rem">${a.category||"—"}</td>
-    <td><span class="badge badge-${a.status==="approved"?"approved":a.status==="rejected"?"rejected":"pending"}">${a.status||"pending"}</span></td>
-    <td style="display:flex;gap:0.35rem;flex-wrap:wrap">
-      ${a.status==="pending"
-        ? `<button class="btn-sm btn-approve" onclick="approveApp('${a.id}',this)">✓ Approve</button>
-           <button class="btn-sm btn-reject" onclick="rejectApp('${a.id}',this)">✗</button>`
-        : ""}
-      <button class="btn-sm" style="background:var(--offwhite);border:1px solid var(--lgray)" onclick="viewApp('${a.id}')">View</button>
-    </td>
-  </tr>`).join("");
+  tbody.innerHTML = apps.map(a => {
+    const cat = a.category || a.business_category || "—";
+    const ts  = a.submitted_at || a.created_at;
+    const dateStr = ts ? new Date(ts).toLocaleDateString("en",{day:"numeric",month:"short",year:"2-digit"}) : "—";
+    return `<tr>
+      <td><strong>${a.full_name||"—"}</strong><div style="font-size:0.72rem;color:var(--gray)">${a.email||""}</div></td>
+      <td><span style="background:rgba(124,58,237,0.1);color:#7C3AED;padding:0.15rem 0.45rem;font-size:0.68rem;font-weight:700">${a.university_abbr||"—"}</span></td>
+      <td>${a.shop_name||"—"}</td>
+      <td style="font-size:0.78rem">${cat}</td>
+      <td><span class="badge badge-${a.status==="approved"?"approved":a.status==="rejected"?"rejected":"pending"}">${a.status||"pending"}</span><div style="font-size:0.68rem;color:var(--gray)">${dateStr}</div></td>
+      <td style="display:flex;gap:0.35rem;flex-wrap:wrap">
+        ${a.status==="pending"
+          ? `<button class="btn-sm btn-approve" onclick="approveApp('${a.id}',this)">✓ Approve</button>
+             <button class="btn-sm btn-reject" onclick="rejectApp('${a.id}',this)">✗</button>`
+          : ""}
+        <button class="btn-sm" style="background:var(--offwhite);border:1px solid var(--lgray)" onclick="viewApp('${a.id}')">View</button>
+      </td>
+    </tr>`;
+  }).join("");
 }
 
 async function approveApp(id, btn) {
@@ -580,10 +585,16 @@ async function approveApp(id, btn) {
   await sb.from("campus_applications").update({status:"approved"}).eq("id",id);
   const {data:a} = await sb.from("campus_applications").select("*").eq("id",id).single();
   if(a) await sb.from("campus_stores").upsert({
-    store_name: a.shop_name, university_abbr: a.university_abbr, university_name: a.university_name,
-    category: a.category, whatsapp_number: a.whatsapp_number, description: a.description,
-    owner_name: a.full_name, owner_email: a.email, is_active: true,
-    created_at: new Date().toISOString()
+    store_name:      a.shop_name,
+    university_abbr: a.university_abbr,
+    university_name: a.university_name || a.university,
+    category:        a.category || a.business_category,
+    whatsapp_number: a.whatsapp_number || a.whatsapp,
+    description:     a.description || a.business_description,
+    owner_name:      a.full_name,
+    owner_email:     a.email,
+    is_active:       true,
+    created_at:      new Date().toISOString()
   });
   showToast("✅ Application approved — shop created!", "success");
   loadAll();
@@ -601,13 +612,17 @@ async function viewApp(id) {
   const {data:a} = await sb.from("campus_applications").select("*").eq("id",id).single();
   if(!a) return;
   const fmt = v => v||"—";
+  const cat  = a.category || a.business_category || "—";
+  const desc = a.description || a.business_description || "—";
+  const wa   = a.whatsapp_number || a.whatsapp || "—";
+  const uni  = a.university_name || a.university || "—";
   document.getElementById("detailTitle").textContent = "Application — " + fmt(a.shop_name);
   document.getElementById("detailBody").innerHTML = [
     ["Full Name", fmt(a.full_name)], ["Email", fmt(a.email)], ["Phone", fmt(a.phone)],
-    ["University", `${fmt(a.university_name)} (${fmt(a.university_abbr)})`],
+    ["University", `${uni} (${fmt(a.university_abbr)})`],
     ["Student ID", fmt(a.student_id)], ["Year", fmt(a.year_of_study)],
-    ["Shop Name", fmt(a.shop_name)], ["Category", fmt(a.category)],
-    ["WhatsApp", fmt(a.whatsapp_number)], ["Description", fmt(a.description)],
+    ["Shop Name", fmt(a.shop_name)], ["Category", cat],
+    ["WhatsApp", wa], ["Description", desc],
     ["Status", `<span class='badge badge-${a.status}'>${a.status||"pending"}</span>`],
     ["Submitted", a.submitted_at ? new Date(a.submitted_at).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric"}) : "—"]
   ].map(([l,v]) => `<div class="detail-row"><div class="detail-label">${l}</div><div class="detail-val">${v}</div></div>`).join("");
@@ -1580,7 +1595,7 @@ let allCampusStores = [];
 
 async function loadCampusData() {
   const [{ data: apps }, { data: stores }, { data: subs }] = await Promise.all([
-    sb.from("campus_applications").select("*").order("created_at", { ascending: false }),
+    sb.from("campus_applications").select("*").order("created_at",{ascending:false}),
     sb.from("campus_stores").select("*").order("created_at", { ascending: false }),
     sb.from("campus_subscriptions").select("*").order("created_at", { ascending: false })
   ]);
@@ -1638,7 +1653,7 @@ async function loadCampusOverview() {
   // Populate campus-overview page elements too
   const coSet = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   const {data: coShops} = await sb.from("campus_stores").select("id,is_active");
-  const {data: coApps}  = await sb.from("campus_applications").select("id,status,submitted_at,full_name,university_abbr,shop_name,category,email");
+  const {data: coApps}  = await sb.from("campus_applications").select("*");
   const {data: coOrds}  = await sb.from("campus_orders").select("total_price");
   const {data: coPrds}  = await sb.from("campus_products").select("id").eq("is_active",true);
   const coRev = (coOrds||[]).reduce((s,o)=>s+Number(o.total_price||0),0);
@@ -1730,8 +1745,8 @@ function viewCampusApp(id) {
   // Status & dates
   body += sectionHead("Hali ya Maombi", "📋");
   body += row("Status",          `<span class="badge badge-${a.status}">${a.status}</span>`);
-  body += row("Tarehe ya Ombi",  new Date(a.created_at).toLocaleString("sw"));
-  body += row("Idhinishwa",      a.approved_at ? new Date(a.approved_at).toLocaleString("sw") : null);
+  body += row("Tarehe ya Ombi",  new Date(a.created_at).toLocaleString("en"));
+  body += row("Idhinishwa",      a.approved_at ? new Date(a.approved_at).toLocaleString("en") : null);
 
   document.getElementById("modalStoreName").textContent = a.shop_name || a.full_name || "Application";
   document.getElementById("modalBody").innerHTML = body;
@@ -2065,12 +2080,12 @@ async function loadNotifications() {
   if (!list) return;
   
   if (!notifs.length) {
-    list.innerHTML = "<div style='padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem'>Hakuna notifications bado</div>";
+    list.innerHTML = "<div style='padding:1.5rem;text-align:center;color:var(--gray);font-size:0.82rem'>No notifications yet</div>";
     return;
   }
 
   list.innerHTML = notifs.map(n => {
-    const time = new Date(n.created_at).toLocaleString("sw");
+    const time = new Date(n.created_at).toLocaleString("en");
     const isPayment = n.type === "payment_receipt";
     const isCampus  = n.type === "campus_application";
     const bg = n.is_read ? "#fff" : "#FFFBEB";
