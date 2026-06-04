@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body style="font-family:monospace;background:#0D1B3E;color:#fff;padding:2rem">
+<h2 style="color:#C9A84C">Getting Real Column Names</h2>
+<div id="out"></div>
+<script>
+const sb = supabase.createClient(
+  "https://bscecjbgnjitlfmgwcic.supabase.co",
+  "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos"
+);
+const out = document.getElementById('out');
+function log(msg,c='#fff'){out.innerHTML+=`<div style="color:${c};margin:3px 0">${msg}</div>`;}
+
+async function run(){
+  // Get campus_stores columns via empty select
+  log('=== campus_stores columns ===','#C9A84C');
+  const {data:s1, error:e1} = await sb.from('campus_stores').select('*').limit(0);
+  if(e1) log('Error: '+e1.message,'#f87171');
+  
+  // Try inserting with ONLY id to get error showing required columns
+  const {data:si, error:ei} = await sb.from('campus_stores').insert({store_name:'test'}).select();
+  if(ei){
+    log('Insert test error: '+ei.message,'#fbbf24');
+    log('Details: '+ei.details,'#fbbf24');
+  } else {
+    log('COLUMNS: '+Object.keys(si[0]).join(' | '),'#4ade80');
+    // Delete test record
+    await sb.from('campus_stores').delete().eq('store_name','test');
+    log('Test record deleted','#4ade80');
+  }
+
+  // Get campus_applications columns
+  log('\n=== campus_applications columns ===','#C9A84C');
+  const {data:apps, error:ae} = await sb.from('campus_applications').select('*').limit(1);
+  if(ae) log('Error: '+ae.message,'#f87171');
+  else if(apps?.length>0){
+    log('COLUMNS: '+Object.keys(apps[0]).join(' | '),'#4ade80');
+  } else {
+    log('Table empty — inserting test...','#fbbf24');
+    const {data:ai, error:aie} = await sb.from('campus_applications').insert({full_name:'test',email:'t@t.com',status:'pending'}).select();
+    if(aie) log('Error: '+aie.message+' | '+aie.details,'#f87171');
+    else {
+      log('COLUMNS: '+Object.keys(ai[0]).join(' | '),'#4ade80');
+      await sb.from('campus_applications').delete().eq('full_name','test');
+    }
+  }
+}
+run();
+</script>
+</body>
+</html>
