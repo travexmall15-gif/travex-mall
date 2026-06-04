@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body style="font-family:monospace;background:#0D1B3E;color:#fff;padding:2rem">
+<h2 style="color:#C9A84C">Full Store Diagnosis</h2>
+<div id="out"></div>
+<script>
+const sb = supabase.createClient(
+  "https://bscecjbgnjitlfmgwcic.supabase.co",
+  "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos"
+);
+const out = document.getElementById('out');
+function log(msg,c='#fff'){out.innerHTML+=`<div style="color:${c};margin:3px 0">${msg}</div>`;}
+function pre(o){out.innerHTML+=`<pre style="background:rgba(0,0,0,0.4);padding:0.5rem;margin:4px 0;font-size:0.75rem;white-space:pre-wrap">${JSON.stringify(o,null,2)}</pre>`;}
+
+async function run(){
+  // 1. Read campus_stores - all records, all columns
+  log('=== campus_stores (all records) ===','#C9A84C');
+  const {data:stores, error:se} = await sb.from('campus_stores').select('*');
+  if(se){ log('❌ '+se.message,'#f87171'); }
+  else {
+    log(`✅ ${stores.length} stores found`,'#4ade80');
+    if(stores.length>0){
+      log('COLUMNS: '+Object.keys(stores[0]).join(' | '),'#a78bfa');
+      stores.forEach(s=>pre(s));
+    } else {
+      log('TABLE IS EMPTY','#fbbf24');
+      // Try to manually insert a test store
+      log('\nTrying manual insert...','#fbbf24');
+      const {data:ins, error:ie} = await sb.from('campus_stores').insert({
+        store_name: 'Test Store Manual',
+        university_abbr: 'ARU',
+        is_active: true,
+        seller_name: 'Test Seller',
+        category: 'Other'
+      }).select();
+      if(ie){
+        log('INSERT FAILED: '+ie.message,'#f87171');
+        log('Code: '+ie.code,'#f87171');
+        log('Details: '+ie.details,'#f87171');
+        log('Hint: '+ie.hint,'#fbbf24');
+      } else {
+        log('INSERT SUCCESS! ID: '+ins[0]?.id,'#4ade80');
+        pre(ins[0]);
+        log('\n✅ Now refresh campus-university.html?uni=ARU — store should appear','#4ade80');
+      }
+    }
+  }
+
+  // 2. Read campus_applications approved
+  log('\n=== Approved Applications ===','#C9A84C');
+  const {data:apps, error:ae} = await sb.from('campus_applications')
+    .select('id,full_name,shop_name,university_abbr,status,business_category')
+    .eq('status','approved');
+  if(ae){ log('❌ '+ae.message,'#f87171'); }
+  else {
+    log(`✅ ${apps.length} approved apps`,'#4ade80');
+    apps.forEach(a=>log(`  • ${a.full_name} | ${a.shop_name} | ${a.university_abbr} | ${a.business_category}`,'#fbbf24'));
+  }
+}
+run();
+</script>
+</body>
+</html>
