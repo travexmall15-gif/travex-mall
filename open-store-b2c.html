@@ -667,7 +667,7 @@ select,textarea,
   <div id="payPanel-instructions">
     <div class="pay-page">
       <div class="pay-amount-box">
-        <div class="pay-amount-label">Kiasi cha Kulipa</div>
+        <div class="pay-amount-label">Quantity cha Kupay</div>
         <div class="pay-amount-val" id="payAmountDisplay">TZS 50,000</div>
         <div class="pay-amount-period">kwa mwezi · Ghairi wakati wowote</div>
       </div>
@@ -686,7 +686,7 @@ select,textarea,
         <div class="pay-step">
           <div class="pay-num">2</div>
           <div class="pay-text">
-            Au lipa kwa M-Pesa / Airtel Money:
+            Au pay kwa M-Pesa / Airtel Money:
             <div class="copy-row">
               <span class="copy-val">+255 651 919 915</span>
               <button class="copy-btn" onclick="copyText('255651919915',this)">Copy</button>
@@ -704,7 +704,7 @@ select,textarea,
       </div>
 
       <button onclick="showReceiptUpload()" class="close-btn" style="background:var(--gold);color:var(--navy);border:none">
-        ✅ Nimelipa — Pakia Risiti Sasa →
+        ✅ Nimepay — Upload Receipt Sasa →
       </button>
     </div>
   </div>
@@ -714,7 +714,7 @@ select,textarea,
     <div class="pay-page">
       <div style="text-align:center;margin-bottom:1.5rem">
         <div style="font-size:2.5rem;margin-bottom:0.5rem">📸</div>
-        <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem">Pakia Screenshot ya Risiti</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem">Upload Screenshot ya Receipt</div>
         <div style="font-size:0.82rem;color:var(--gray);line-height:1.6">Take a photo of your receipt from your bank or phone and upload it here</div>
       </div>
 
@@ -743,16 +743,16 @@ select,textarea,
   <div id="payPanel-success" style="display:none">
     <div class="pay-page" style="text-align:center">
       <div style="width:64px;height:64px;background:#D1FAE5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem">✅</div>
-      <div style="font-size:1.2rem;font-weight:800;color:var(--green);margin-bottom:0.5rem">Risiti Imepokelewa!</div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--green);margin-bottom:0.5rem">Receipt Imepokelewa!</div>
       <div style="font-size:0.875rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem">Your receipt has been received and is being verified. You will receive a confirmation email <strong style="color:var(--navy)">within 2 hours</strong>.</div>
 
       <div style="background:#F0FDF4;border:1px solid #BBF7D0;padding:1.2rem;margin-bottom:1.5rem;text-align:left">
-        <div style="font-size:0.72rem;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem">Hatua Zinazofuata:</div>
+        <div style="font-size:0.72rem;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem">Step Zinazofuata:</div>
         <div style="font-size:0.82rem;color:#065F46;line-height:2.1">
-          📧 <strong>Angalia Email yako</strong> — utapata barua pepe ya uthibitisho<br>
+          📧 <strong>View Email yako</strong> — utaget email ya uthibitisho<br>
           ⏱️ <strong>Wait up to 2 hours</strong> — our team will review your receipt<br>
           🏪 <strong>Store will be activated</strong> — you will be notified via email and phone<br>
-          🔑 <strong>Ingia Dashboard</strong> — tumia login credentials ulizoweka
+          🔑 <strong>Sign In Dashboard</strong> — tumia login credentials ulizoplace
         </div>
       </div>
 
@@ -765,7 +765,7 @@ select,textarea,
         💬 Contact Us on WhatsApp
       </a>
       <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:600;cursor:pointer;color:var(--dark)">
-        Nenda kwenye Lango la Kuingia →
+        Nenda kwenye Lango la Kusign in →
       </button>
     </div>
   </div>
@@ -946,7 +946,7 @@ function generateStoreForms() {
           </div>
           <div class="form-group">
             <label class="form-label">Store Description <span>*</span></label>
-            <textarea class="form-textarea" id="sDesc${i}" placeholder="Describe your store — unauza nini, ubora wako, kwa nini wateja wakuchague..."></textarea>
+            <textarea class="form-textarea" id="sDesc${i}" placeholder="Describe your store — unauza nini, ubora wako, kwa nini customers wakuchague..."></textarea>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -1582,7 +1582,7 @@ async function submitReceipt() {
     return;
   }
   errEl.style.display = "none";
-  btn.textContent = "Inatuma...";
+  btn.textContent = "Submitting...";
   btn.disabled = true;
 
   try {
@@ -1629,7 +1629,7 @@ async function submitReceipt() {
     // Notify admin via realtime
     await sb.from("admin_notifications").insert({
       type: "payment_receipt",
-      title: `💳 Risiti Mpya — ${document.getElementById("ownerName")?.value?.trim()}`,
+      title: `💳 Receipt Mpya — ${document.getElementById("ownerName")?.value?.trim()}`,
       body: `Store type: ${STORE_TYPE.toUpperCase()} | Plan: ${selectedPlan.name} | TZS ${selectedPlan.price.toLocaleString()} | Phone: ${phone}`,
       receipt_url: receiptUrl,
       is_read: false,
@@ -1637,7 +1637,7 @@ async function submitReceipt() {
     });
 
   } catch (err) {
-    errEl.textContent = "Imeshindwa kutuma: " + err.message + ". Jaribu tena au tuma WhatsApp.";
+    errEl.textContent = "Imeshindwa kusubmit: " + err.message + ". Try again au submit WhatsApp.";
     errEl.style.display = "block";
     btn.textContent = "Submit Receipt & Finish →";
     btn.disabled = false;
@@ -1651,7 +1651,7 @@ async function submitReceipt() {
     <div>
       <div style="font-size:0.72rem;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.15rem">Coming Soon</div>
       <div style="font-size:0.95rem;font-weight:800;color:#fff">Your B2C Store is coming soon!</div>
-      <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:0.1rem">Marketplace ya wauzaji na wateja — inatengenezwa. Jiandikishe ili upate taarifa kwanza.</div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:0.1rem">Marketplace for sellers and customers — coming soon. Jiandikishe ili upate taarifa kwanza.</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0">
