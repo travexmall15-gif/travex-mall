@@ -299,7 +299,7 @@ select,textarea,
               onkeypress="if(event.key==='Enter')doLogin()">
           </div>
           <div style="margin-bottom:1.5rem">
-            <label style="display:block;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.45rem">Nenosiri</label>
+            <label style="display:block;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.45rem">Password</label>
             <input type="password" id="loginPassword" placeholder="••••••••"
               style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"
@@ -322,7 +322,7 @@ select,textarea,
           <input type="email" id="resetEmail" placeholder="email@example.com"
             style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;margin-bottom:1rem">
           <button onclick="doReset()" style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;margin-bottom:0.75rem">
-            Tuma Link →
+            Submit Link →
           </button>
           <div style="text-align:center">
             <a onclick="showLoginForm()" style="font-size:0.78rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline">← Back to Login</a>
@@ -345,7 +345,7 @@ select,textarea,
           <!-- Step labels -->
           <div id="reg-step-label" style="text-align:center;margin-bottom:1.5rem">
             <div id="rsl-title" style="font-size:1rem;font-weight:700;color:#fff">Taarifa Zako</div>
-            <div id="rsl-sub" style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem">Hatua 1 ya 4</div>
+            <div id="rsl-sub" style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem">Step 1 ya 4</div>
           </div>
 
           <!-- ── REG STEP 1: Personal Info ── -->
@@ -357,7 +357,7 @@ select,textarea,
                 <input type="text" id="reg-name" placeholder="Jina lako kamili" class="reg-input">
               </div>
               <div>
-                <label class="reg-label">Namba ya Simu *</label>
+                <label class="reg-label">Namba ya Phone *</label>
                 <input type="tel" id="reg-phone" placeholder="+255 712 000 000" class="reg-input">
               </div>
             </div>
@@ -366,11 +366,11 @@ select,textarea,
               <input type="email" id="reg-email" placeholder="email@example.com" class="reg-input">
             </div>
             <div style="margin-bottom:0.75rem">
-              <label class="reg-label">Nenosiri (angalau herufi 8) *</label>
+              <label class="reg-label">Password (angalau herufi 8) *</label>
               <input type="password" id="reg-password" placeholder="Choose a strong password" class="reg-input">
             </div>
             <div style="margin-bottom:1.2rem">
-              <label class="reg-label">Mwaka wa Masomo *</label>
+              <label class="reg-label">Year of Study *</label>
               <select id="reg-year" class="reg-input" style="cursor:pointer">
                 <option value="">Select year</option>
                 <option>Year 1</option><option>Year 2</option><option>Year 3</option>
@@ -715,27 +715,6 @@ select,textarea,
               <div>
                 <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">University</label>
                 <input type="text" id="shopUni" class="form-input" readonly style="background:var(--offwhite)">
-              </div>
-              <div>
-                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Brand Color</label>
-                <div style="display:flex;gap:0.5rem;align-items:center">
-                  <input type="color" id="shopColor" class="form-input" style="padding:0.3rem;height:40px;width:60px;cursor:pointer">
-                  <span style="font-size:0.78rem;color:var(--gray)">Choose your brand color</span>
-                </div>
-              </div>
-              <div>
-                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Shop Font</label>
-                <select id="shopFont" class="form-select">
-                  <option value="">Default Font</option>
-                  <option value="Playfair Display">Playfair Display (Elegant)</option>
-                  <option value="Syne">Syne (Bold Modern)</option>
-                  <option value="Bebas Neue">Bebas Neue (Strong)</option>
-                  <option value="Cormorant Garamond">Cormorant Garamond (Luxury)</option>
-                  <option value="Nunito">Nunito (Friendly)</option>
-                  <option value="DM Serif Display">DM Serif Display (Classic)</option>
-                  <option value="Josefin Sans">Josefin Sans (Minimal)</option>
-                  <option value="Space Grotesk">Space Grotesk (Tech)</option>
-                </select>
               </div>
             </div>
             <div style="margin-top:1rem">
@@ -1228,7 +1207,7 @@ async function doLogin() {
     showAuthError(errEl, "Please enter your email and password.");
     return;
   }
-  btn.textContent = "Inaingia...";
+  btn.textContent = "Signing in...";
   btn.disabled = true;
 
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
@@ -1252,7 +1231,7 @@ async function doReset() {
     redirectTo: window.location.origin + "/campus-dashboard.html"
   });
   if (error) { showAuthError(msgEl, error.message); return; }
-  showAuthMsg(msgEl, "✅ Link imetumwa! Angalia email yako.", "#D1FAE5", "#059669");
+  showAuthMsg(msgEl, "✅ Link imetumwa! View email yako.", "#D1FAE5", "#059669");
 }
 
 function showAuthError(el, msg) {
@@ -1297,7 +1276,7 @@ function regUpdateProgress(step) {
   }
   const labels = ["Your Info","Your University","Your Business","Review & Submit"];
   document.getElementById("rsl-title").textContent = labels[step-1];
-  document.getElementById("rsl-sub").textContent   = "Hatua " + step + " ya 4";
+  document.getElementById("rsl-sub").textContent   = "Step " + step + " ya 4";
 }
 
 function regShowErr(step, msg) {
@@ -1316,7 +1295,7 @@ function regNextStep(target) {
       const pass  = document.getElementById("reg-password").value;
       const year  = document.getElementById("reg-year").value;
       if (!name || !phone || !email || !pass || !year) { regShowErr(1,"Please fill in all required fields."); return; }
-      if (pass.length < 8) { regShowErr(1,"Nenosiri lazima liwe na angalau herufi 8."); return; }
+      if (pass.length < 8) { regShowErr(1,"Password must be at least 8 characters."); return; }
       if (!email.includes("@")) { regShowErr(1,"Email si sahihi."); return; }
       regShowErr(1,"");
     }
@@ -1331,13 +1310,13 @@ function regNextStep(target) {
       const wa   = document.getElementById("reg-whatsapp").value.trim();
       const desc = document.getElementById("reg-desc").value.trim();
       if (!shop || !cat || !wa || !desc) { regShowErr(3,"Please fill in all required fields."); return; }
-      if (desc.length < 50) { regShowErr(3,"Maelezo lazima yawe na angalau herufi 50."); return; }
+      if (desc.length < 50) { regShowErr(3,"Description must be at least 50 characters."); return; }
       regShowErr(3,"");
       // Build review
       document.getElementById("reg-review-body").innerHTML = \`
         👤 <strong style="color:#fff">Jina:</strong> \${document.getElementById("reg-name").value}<br>
         📧 <strong style="color:#fff">Email:</strong> \${document.getElementById("reg-email").value}<br>
-        📱 <strong style="color:#fff">Simu:</strong> \${document.getElementById("reg-phone").value}<br>
+        📱 <strong style="color:#fff">Phone:</strong> \${document.getElementById("reg-phone").value}<br>
         🎓 <strong style="color:#fff">University:</strong> \${regUni.abbr} — \${regUni.name}<br>
         🏪 <strong style="color:#fff">Duka:</strong> \${shop}<br>
         📦 <strong style="color:#fff">Kategoria:</strong> \${cat}\`;
