@@ -89,7 +89,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 
           <option>Fashion & Clothing</option>
           <option>Electronics</option>
           <option>Food & Agriculture</option>
-          <option>Beauty & Health</option>
+          <option>Beorty & Health</option>
           <option>Hardware & Construction</option>
           <option>Home & Furniture</option>
           <option>Other</option>
@@ -154,7 +154,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 
     btn.textContent = 'Creating account...';
     btn.disabled = true;
 
-    const { data, error } = await sb.auth.signUp({
+    const { data, error } = await sb.orth.signUp({
       email, password,
       options: {
         data: { name, phone, category },
