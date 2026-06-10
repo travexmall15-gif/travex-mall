@@ -23,16 +23,16 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 .hero-tag{display:inline-block;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);color:var(--gold);padding:0.35rem 0.9rem;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.2rem}
 .hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:var(--white);margin-bottom:0.75rem}
 .hero h1 span{color:var(--gold)}
-.hero p{font-size:0.95rem;color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto;line-height:1.7}
+.hero p{font-size:0.95rem;color:rgba(255,255,255,0.6);max-width:480px;margin:0 orto;line-height:1.7}
 
 /* TOGGLE */
-.toggle-wrap{display:flex;justify-content:center;margin:3rem auto 0;gap:0;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);width:fit-content;position:relative;z-index:2}
+.toggle-wrap{display:flex;justify-content:center;margin:3rem orto 0;gap:0;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);width:fit-content;position:relative;z-index:2}
 .toggle-btn{padding:0.6rem 1.8rem;font-size:0.875rem;font-weight:600;color:rgba(255,255,255,0.6);background:transparent;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
 .toggle-btn.active{background:var(--gold);color:var(--navy)}
 .save-badge{display:inline-block;background:var(--green);color:var(--white);font-size:0.62rem;font-weight:700;padding:0.1rem 0.4rem;margin-left:0.4rem;vertical-align:middle}
 
 /* PLANS */
-.plans-section{padding:4rem 5%;max-width:1100px;margin:0 auto}
+.plans-section{padding:4rem 5%;max-width:1100px;margin:0 orto}
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 
 .plan-card{background:var(--white);border:2px solid var(--lgray);padding:2.5rem;position:relative;transition:all 0.3s;cursor:pointer}
@@ -69,7 +69,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 /* PAYMENT MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal{background:var(--white);width:100%;max-width:520px;max-height:90vh;overflow-y:orto}
 .modal-header{background:var(--navy);padding:1.5rem;display:flex;align-items:center;justify-content:space-between}
 .modal-header-title{font-size:1rem;font-weight:800;color:var(--white)}
 .modal-header-plan{font-size:0.75rem;color:var(--gold);margin-top:0.2rem}
@@ -123,7 +123,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 .btn-go-dash:hover{background:#1B3A6B}
 
 /* FAQ */
-.faq-section{padding:4rem 5%;max-width:700px;margin:0 auto}
+.faq-section{padding:4rem 5%;max-width:700px;margin:0 orto}
 .faq-title{font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:2rem;text-align:center}
 .faq-item{border:1px solid var(--lgray);margin-bottom:0.75rem;overflow:hidden}
 .faq-q{padding:1rem 1.2rem;font-size:0.875rem;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--white);transition:all 0.2s}
@@ -225,7 +225,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
   </div>
 
   <p style="text-align:center;margin-top:2rem;font-size:0.85rem;color:var(--gray)">
-    ✦ Zero commission for first 6 months — our launch offer for early sellers ✦
+    ✦ Zero commission for first 6 months — our lornch offer for early sellers ✦
   </p>
 </div>
 
@@ -425,7 +425,7 @@ function selectPlan(key) {
   document.getElementById("modalAmountRaw").value       = amount;
 
   // Pre-fill email if logged in
-  sb.auth.getSession().then(({ data: { session } }) => {
+  sb.orth.getSession().then(({ data: { session } }) => {
     if (session) {
       document.getElementById("payerEmail").value = session.user.email;
       const name = session.user.user_metadata?.name || "";
@@ -460,7 +460,7 @@ async function submitPayment() {
   btn.disabled    = true;
 
   try {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sb.orth.getSession();
     const amount = billing === "monthly" ? plans[selectedPlan].monthly : plans[selectedPlan].yearly;
 
     // Save subscription to Supabase
