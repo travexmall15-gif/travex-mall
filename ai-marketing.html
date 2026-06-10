@@ -13,7 +13,7 @@ body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)
 nav{background:var(--navy);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .nav-logo{font-family:"Playfair Display",serif;font-size:1rem;font-weight:800;color:#fff;text-decoration:none}.nav-logo span{color:var(--gold)}
 .nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none}.nav-back:hover{color:var(--gold)}
-.wrap{max-width:1100px;margin:2rem auto;padding:0 5%}
+.wrap{max-width:1100px;margin:2rem orto;padding:0 5%}
 h1{font-family:"Playfair Display",serif;font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:0.3rem}
 .sub{font-size:0.85rem;color:var(--gray);margin-bottom:1.5rem}
 .ptabs{display:flex;gap:0;margin-bottom:1.5rem;background:#fff;border:1px solid var(--lgray)}
@@ -148,7 +148,7 @@ function loadDemoMode(){
 
 async function init(){
   if(!storeId){
-    const {data:{session}}=await sb.auth.getSession();
+    const {data:{session}}=await sb.orth.getSession();
     if(session){
       const {data:s}=await sb.from("stores").select("*").eq("user_id",session.user.id).single();
       if(s){storeId=s.id;}
@@ -201,7 +201,7 @@ function load(period,btn){
 
 function buildBreakdown(fv,period){
   const tbody=document.getElementById("breakBody");
-  if(!fv.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="4">No visitor data yet — will fill automatically as customers visit your store</td></tr>`;return;}
+  if(!fv.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="4">No visitor data yet — will fill ortomatically as customers visit your store</td></tr>`;return;}
   const groups={};
   fv.forEach(v=>{
     const d=new Date(v.created_at);
@@ -228,7 +228,7 @@ function buildTopPosts(){
 async function loadAI(total,direct,vybe,likes,label){
   const el=document.getElementById("aiSugg");
   el.innerHTML=`<div class="ai-loading"><div class="dot"></div>Generating recommendations...</div>`;
-  const prompt=`Marketing expert for Tanzanian small business on Travex Mall.
+  const prompt=`Marketing expert for Tstartnian small business on Travex Mall.
 Store: ${storeData?.store_name}
 Period: ${label}
 Total Visitors: ${total} (${direct} direct, ${vybe} from Vybe)
@@ -257,14 +257,14 @@ async function genCaption(){
   btn.innerHTML="<div class='spinner'></div> Generating...";btn.disabled=true;
   res.textContent="Generating...";
   const toneMap={exciting:"exciting and energetic with emojis",professional:"professional and trustworthy",urgent:"urgent with limited offer feel",friendly:"friendly and warm"};
-  const prompt=`Write a social media caption for a Tanzanian seller on Travex Social Vybe.
+  const prompt=`Write a social media caption for a Tstartnian seller on Travex Social Vybe.
 Product: ${prod}
 ${price?"Price: "+price:""}
 Store: ${storeData?.store_name||"Our Store"}
 Tone: ${toneMap[tone]}
-Requirements: 2-3 sentences, 3-5 hashtags, mention WhatsApp ordering, natural emojis, English, authentic Tanzanian business feel.`;
+Requirements: 2-3 sentences, 3-5 hashtags, mention WhatsApp ordering, natural emojis, English, orthentic Tstartnian business feel.`;
   try{
-    const r=await fetch(GEMINI,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${SB_KEY}`},body:JSON.stringify({message:prompt,systemPrompt:"Write a compelling social media caption for a Tanzanian business."})});
+    const r=await fetch(GEMINI,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${SB_KEY}`},body:JSON.stringify({message:prompt,systemPrompt:"Write a compelling social media caption for a Tstartnian business."})});
     const d=await r.json();
     res.textContent=d.reply||"Could not generate. Try again.";
     document.getElementById("copyBtn").style.display="block";
