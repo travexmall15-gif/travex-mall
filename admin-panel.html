@@ -151,10 +151,12 @@ tr:hover td{background:rgba(13,27,62,0.015)}
   <div class="login-box">
     <div class="login-logo">TRAVEX <span>CAMPUS</span></div>
     <div class="login-sub">Admin Panel · Secure Access</div>
-    <input type="password" class="login-input" id="pin" placeholder="Enter admin PIN"
-      onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
-    <div class="login-err" id="loginErr">❌ Wrong PIN</div>
+    <input type="email" class="login-input" id="adminEmail" placeholder="Admin email address"
+      onkeydown="if(event.key==='Enter')document.getElementById('adminPass').focus()">
+    <input type="password" class="login-input" id="adminPass" placeholder="Password"
+      onkeydown="if(event.key==='Enter')doLogin()" style="margin-top:0.5rem">
+    <button class="login-btn" onclick="doLogin()" id="loginBtn">Sign In →</button>
+    <div class="login-err" id="loginErr">❌ Invalid credentials</div>
   </div>
 </div>
 
@@ -307,22 +309,61 @@ tr:hover td{background:rgba(13,27,62,0.015)}
 <script>
 const SB_URL = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SB_KEY = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
-const PIN    = "admin2026";
+// Auth via Supabase — no hardcoded PIN
 const {createClient} = supabase;
 const sb = createClient(SB_URL, SB_KEY);
+
+// Check existing session on load
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    const ADMIN_EMAILS = ['admin@travexdigital.com','jumanne@travexdigital.com'];
+    if (ADMIN_EMAILS.includes(session.user.email)) {
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('main').style.display='grid';
+      loadAll();
+    } else {
+      await sb.auth.signOut();
+    }
+  }
+})();
 
 let apps=[], stores=[], notifs=[], curFilter='all', curSearch='';
 
 // ── LOGIN ──
-function doLogin(){
-  if(document.getElementById('pin').value.trim()===PIN){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('main').style.display='grid';
-    loadAll();
-  } else {
-    document.getElementById('loginErr').style.display='block';
-    document.getElementById('pin').value='';
+async function doLogin(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPass').value.trim();
+  const btn   = document.getElementById('loginBtn');
+  const err   = document.getElementById('loginErr');
+
+  if(!email || !pass){ err.textContent='❌ Enter email and password'; err.style.display='block'; return; }
+
+  btn.textContent = 'Signing in...'; btn.disabled = true;
+  err.style.display = 'none';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  if(error || !data?.user){
+    err.textContent = '❌ Invalid credentials. Access denied.';
+    err.style.display = 'block';
+    btn.textContent = 'Sign In →'; btn.disabled = false;
+    return;
   }
+
+  // Verify admin email whitelist
+  const ADMIN_EMAILS = ['admin@travexdigital.com','jumanne@travexdigital.com'];
+  if(!ADMIN_EMAILS.includes(data.user.email)){
+    await sb.auth.signOut();
+    err.textContent = '❌ You are not authorized to access this panel.';
+    err.style.display = 'block';
+    btn.textContent = 'Sign In →'; btn.disabled = false;
+    return;
+  }
+
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('main').style.display='grid';
+  loadAll();
 }
 
 // ── LOAD DATA ──
