@@ -87,7 +87,7 @@ button,input,select,textarea,
     <div id="loginPanel">
       <div class="card-icon">🔐</div>
       <div class="card-title">Sign In Account Yako</div>
-      <div class="card-sub">Ingiza namba ya phone na password ulioweka wakati wa kuopen shop lako.</div>
+      <div class="card-sub">Enter your phone number and the password you set when opening your shop.</div>
 
       <div class="alert alert-error" id="loginError"></div>
       <div class="alert alert-warn"  id="loginWarn"></div>
@@ -123,7 +123,7 @@ button,input,select,textarea,
     <div id="resetPanel" style="display:none">
       <div class="card-icon">🔑</div>
       <div class="card-title">Edit Password</div>
-      <div class="card-sub">Ingiza namba yako ya phone — tutakutumia link ya kuedit password kwenye email yako.</div>
+      <div class="card-sub">Enter your phone number — we will send a password reset link to your email yako.</div>
 
       <div class="alert alert-error"   id="resetError"></div>
       <div class="alert alert-success" id="resetSuccess"></div>
@@ -199,8 +199,8 @@ async function doLogin() {
   const pass  = document.getElementById("password").value;
   const btn   = document.getElementById("loginBtn");
 
-  if (!phone) { showErr("loginError", "⚠️ Ingiza namba yako ya phone."); return; }
-  if (!pass)  { showErr("loginError", "⚠️ Ingiza password lako."); return; }
+  if (!phone) { showErr("loginError", "⚠️ Please enter your phone number."); return; }
+  if (!pass)  { showErr("loginError", "⚠️ Please enter your password."); return; }
 
   btn.textContent = "Signing in...";
   btn.disabled = true;
@@ -265,7 +265,7 @@ async function doReset() {
   const phone = document.getElementById("resetPhone").value.trim();
   const btn   = document.getElementById("resetBtn");
 
-  if (!phone) { showErr("resetError", "⚠️ Ingiza namba yako ya phone."); return; }
+  if (!phone) { showErr("resetError", "⚠️ Please enter your phone number."); return; }
 
   btn.textContent = "Submitting...";
   btn.disabled = true;
