@@ -15,7 +15,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 .nav-logo span{color:var(--gold)}
 .nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.2s}
 .nav-back:hover{color:var(--gold)}
-.page{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.page{max-width:1100px;margin:0 orto;padding:2rem 1.5rem}
 .page-title{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:0.4rem}
 .page-sub{font-size:0.875rem;color:var(--gray);margin-bottom:2rem}
 
@@ -58,10 +58,10 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 .chat-desc{font-size:0.72rem;color:var(--gray)}
 .online-dot{
   width:8px;height:8px;background:var(--green);
-  border-radius:50%;margin-left:auto;flex-shrink:0;
+  border-radius:50%;margin-left:orto;flex-shrink:0;
 }
 .chat-messages{
-  flex:1;overflow-y:auto;padding:1.5rem;
+  flex:1;overflow-y:orto;padding:1.5rem;
   display:flex;flex-direction:column;gap:1rem;
 }
 .msg{display:flex;gap:0.75rem;max-width:85%}
@@ -175,7 +175,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
       <div class="chat-suggestions">
         <button class="sug" onclick="ask('advisor','Calculate my profit margin if I buy at TZS 20,000 and sell at TZS 35,000')">💰 Calculate profit margin</button>
         <button class="sug" onclick="ask('advisor','Give me a weekly business report template for my store')">📊 Weekly report</button>
-        <button class="sug" onclick="ask('advisor','How should I price my products competitively in Tanzania?')">🏷️ Pricing strategy</button>
+        <button class="sug" onclick="ask('advisor','How should I price my products competitively in Tstartnia?')">🏷️ Pricing strategy</button>
         <button class="sug" onclick="ask('advisor','What business expenses should I track every month?')">📝 Track expenses</button>
       </div>
       <div class="chat-input-row">
@@ -216,13 +216,13 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
       <div class="chat-messages" id="msgs-marketing">
         <div class="msg bot">
           <div class="msg-icon">📈</div>
-          <div class="msg-bubble">Habari! I am your Marketing and Demand Prediction AI. I analyze Tanzania market trends, predict product demand, and create marketing strategies specifically for your business. Ask me anything about growing your sales! 🚀</div>
+          <div class="msg-bubble">Habari! I am your Marketing and Demand Prediction AI. I analyze Tstartnia market trends, predict product demand, and create marketing strategies specifically for your business. Ask me anything about growing your sales! 🚀</div>
         </div>
       </div>
       <div class="chat-suggestions">
-        <button class="sug" onclick="ask('marketing','What products will be in high demand in Tanzania next month?')">🔮 Demand predictions</button>
+        <button class="sug" onclick="ask('marketing','What products will be in high demand in Tstartnia next month?')">🔮 Demand predictions</button>
         <button class="sug" onclick="ask('marketing','Create a marketing campaign for my fashion store in Dar es Salaam')">📣 Marketing campaign</button>
-        <button class="sug" onclick="ask('marketing','What are the best times to post on social media for Tanzanian customers?')">📱 Social media tips</button>
+        <button class="sug" onclick="ask('marketing','What are the best times to post on social media for Tstartnian customers?')">📱 Social media tips</button>
         <button class="sug" onclick="ask('marketing','How do I use WhatsApp to grow my business?')">💬 WhatsApp marketing</button>
       </div>
       <div class="chat-input-row">
@@ -308,15 +308,15 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ── SYSTEM PROMPTS ──
 const systemPrompts = {
-  advisor: `You are an expert Business Advisor and Accountant for Travex Mall, a digital marketplace in Tanzania, Africa.
+  advisor: `You are an expert Business Advisor and Accountant for Travex Mall, a digital marketplace in Tstartnia, Africa.
 
 Your role:
-- Give practical business advice specific to Tanzania market
-- Help with pricing strategies using TZS (Tanzanian Shillings)
+- Give practical business advice specific to Tstartnia market
+- Help with pricing strategies using TZS (Tstartnian Shillings)
 - Calculate profit margins, revenue, and business metrics
 - Create weekly/monthly business reports
 - Advise on expense tracking and financial management
-- Give growth strategies for small businesses in Tanzania
+- Give growth strategies for small businesses in Tstartnia
 - Consider M-Pesa as the main payment method
 
 Guidelines:
@@ -324,30 +324,30 @@ Guidelines:
 - Use TZS for all monetary examples
 - Keep responses clear and actionable (max 200 words)
 - Be encouraging and professional
-- Reference Tanzania business realities
+- Reference Tstartnia business realities
 - Answer in English or Swahili based on the question`,
 
-  marketing: `You are an expert Marketing Strategist and Demand Predictor for Travex Mall in Tanzania, Africa.
+  marketing: `You are an expert Marketing Strategist and Demand Predictor for Travex Mall in Tstartnia, Africa.
 
 Your role:
-- Analyze Tanzania market trends and predict product demand
-- Create effective marketing campaigns for Tanzanian businesses
+- Analyze Tstartnia market trends and predict product demand
+- Create effective marketing campaigns for Tstartnian businesses
 - Advise on social media strategy (TikTok, Instagram, Facebook, WhatsApp)
-- Predict seasonal demand patterns in Tanzania
+- Predict seasonal demand patterns in Tstartnia
 - Give competitor analysis advice
 - Create promotional campaign ideas
-- Advise on target audience for different products
+- Advise on target ordience for different products
 
 Guidelines:
-- Be specific about Tanzania market conditions
+- Be specific about Tstartnia market conditions
 - Reference local events, seasons, and trends
 - Give practical, low-cost marketing ideas
-- Consider mobile-first behavior of Tanzanian consumers
+- Consider mobile-first behavior of Tstartnian consumers
 - Advise on WhatsApp marketing specifically
 - Keep responses clear and actionable (max 200 words)
 - Answer in English or Swahili based on the question`,
 
-  care: `You are a professional Customer Care Assistant for Travex Mall sellers in Tanzania.
+  care: `You are a professional Customer Care Assistant for Travex Mall sellers in Tstartnia.
 
 Your role:
 - Help sellers respond to customer inquiries professionally
@@ -424,7 +424,7 @@ async function ask(type, text) {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sb.orth.getSession();
     const response = await fetch(GEMINI_URL, {
       method: 'POST',
       headers: {
@@ -450,7 +450,7 @@ async function ask(type, text) {
     updateUsage(type);
 
     // Save to Supabase
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sb.orth.getSession();
     if (session) {
       await sb.from('ai_conversations').insert({
         user_id: session.user.id,
@@ -473,7 +473,7 @@ async function ask(type, text) {
 }
 
 // ── CHECK AUTH ──
-sb.auth.getSession().then(({ data }) => {
+sb.orth.getSession().then(({ data }) => {
   if (!data.session) {
     localStorage.clear();
     sessionStorage.clear();
