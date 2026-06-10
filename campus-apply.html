@@ -609,15 +609,16 @@ async function submitApplication() {
       full_name:            document.getElementById("fullName").value.trim(),
       email:                document.getElementById("email").value.trim(),
       phone:                document.getElementById("phone").value.trim(),
+      whatsapp_number:      document.getElementById("businessWhatsapp").value.trim(),
       university:           selectedUni.name,
       university_abbr:      selectedUni.abbr,
-      region:               selectedUni.region,
-      year_of_study:        document.getElementById("yearOfStudy").value,
-      business_category:    document.getElementById("businessCategory").value,
-      business_description: document.getElementById("businessDesc").value.trim(),
+      region:               selectedUni.region || "",
+      year_of_study:        document.getElementById("yearOfStudy")?.value || "",
+      business_category:    document.getElementById("businessCategory")?.value || "",
+      business_description: "SHOP:" + (document.getElementById("shopName")?.value || "").trim() + "\n" + (document.getElementById("businessDesc")?.value || "").trim(),
       id_card_url:          idCardUrl,
       status:               "pending"
-    });
+    })
 
     if (error) throw error;
 
