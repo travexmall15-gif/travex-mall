@@ -20,13 +20,13 @@ body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)
 .sidebar-logo{font-size:1rem;font-weight:800;color:var(--white);text-decoration:none;display:block}
 .sidebar-logo span{color:var(--gold)}
 .sidebar-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-size:0.62rem;font-weight:700;padding:0.2rem 0.6rem;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.4rem}
-.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto;scrollbar-width:none}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:orto;scrollbar-width:none}
 .sidebar-nav::-webkit-scrollbar{display:none}
 .sidebar-section{font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em;padding:0.75rem 1.5rem 0.4rem}
 .sidebar-link{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.5rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;cursor:pointer;border-left:3px solid transparent;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;font-family:"Inter",sans-serif;position:relative}
 .sidebar-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
 .sidebar-link.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
-.sidebar-badge-count{background:var(--gold);color:var(--navy);font-size:0.6rem;font-weight:800;padding:0.1rem 0.4rem;min-width:18px;text-align:center;margin-left:auto;display:none}
+.sidebar-badge-count{background:var(--gold);color:var(--navy);font-size:0.6rem;font-weight:800;padding:0.1rem 0.4rem;min-width:18px;text-align:center;margin-left:orto;display:none}
 .sidebar-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07)}
 .sidebar-user{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
 .sidebar-avatar{width:36px;height:36px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;flex-shrink:0}
@@ -116,7 +116,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
 .btn-save:hover{background:var(--gold);color:var(--navy)}
 
 /* PRODUCTS GRID */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;padding:1.5rem}
+.products-grid{display:grid;grid-template-columns:repeat(orto-fill,minmax(200px,1fr));gap:1.25rem;padding:1.5rem}
 .product-card{border:1px solid var(--lgray);background:var(--white);transition:all 0.2s}
 .product-card:hover{border-color:var(--navy);box-shadow:0 4px 12px rgba(13,27,62,0.1)}
 .product-img{width:100%;height:140px;object-fit:cover;background:var(--offwhite);display:flex;align-items:center;justify-content:center;font-size:2rem}
@@ -133,7 +133,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal{background:var(--white);width:100%;max-width:560px;max-height:90vh;overflow-y:orto}
 .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
 .modal-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
 .modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray)}
@@ -146,7 +146,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
 
 /* AI CHAT */
 .ai-chat{display:flex;flex-direction:column;height:360px;padding:1rem 1.5rem}
-.ai-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem}
+.ai-messages{flex:1;overflow-y:orto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem}
 .ai-msg{display:flex;gap:0.5rem;align-items:flex-start}
 .ai-msg.user{flex-direction:row-reverse}
 .ai-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0}
@@ -295,13 +295,13 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
       <div class="panel active" id="panel-overview">
         <div id="pendingBannerWrap" style="display:none">
           <div class="pending-banner">
-            <div class="pending-banner-text">⏳ Duka lako bado halijawashwa. Kamilisha malipo ili kuanza kuuza.</div>
-            <button class="card-btn" onclick="showPanel('subscription',null)">Angalia Subscription →</button>
+            <div class="pending-banner-text">⏳ Shop lako bado halijawashwa. Kamilisha payment ili kustart kuuza.</div>
+            <button class="card-btn" onclick="showPanel('subscription',null)">View Subscription →</button>
           </div>
         </div>
         <div class="store-banner" id="storeBanner">
           <div class="store-banner-text">
-            <div class="store-name" id="overviewStoreName">Duka Lako</div>
+            <div class="store-name" id="overviewStoreName">Shop Lako</div>
             <div class="store-sub" id="overviewStoreSub">Seller Dashboard</div>
           </div>
           <div class="store-value">
@@ -373,7 +373,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">Store Name *</label>
-                <input type="text" id="storeName" class="form-input" placeholder="Jina la duka lako">
+                <input type="text" id="storeName" class="form-input" placeholder="Name la shop lako">
               </div>
               <div class="form-group">
                 <label class="form-label">WhatsApp Number *</label>
@@ -382,23 +382,23 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
             </div>
             <div class="form-group">
               <label class="form-label">Description</label>
-              <textarea id="storeDesc" class="form-textarea" placeholder="Elezea duka lako..."></textarea>
+              <textarea id="storeDesc" class="form-textarea" placeholder="Elezea shop lako..."></textarea>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">Category</label>
                 <select id="storeCat" class="form-select">
-                  <option value="">Chagua category</option>
+                  <option value="">Select category</option>
                   <option>Fashion & Clothing</option><option>Electronics</option><option>Food & Drinks</option>
-                  <option>Health & Beauty</option><option>Home & Living</option><option>Books & Stationery</option>
+                  <option>Health & Beorty</option><option>Home & Living</option><option>Books & Stationery</option>
                   <option>Sports & Fitness</option><option>Agriculture</option><option>Services</option><option>Other</option>
                 </select>
               </div>
               <div class="form-group">
                 <label class="form-label">Region</label>
                 <select id="storeRegion" class="form-select">
-                  <option value="">Chagua mkoa</option>
-                  <option>Dar es Salaam</option><option>Arusha</option><option>Mwanza</option><option>Dodoma</option>
+                  <option value="">Select region</option>
+                  <option>Dar es Salaam</option><option>Arusha</option><option>Mwstart</option><option>Dodoma</option>
                   <option>Mbeya</option><option>Morogoro</option><option>Tanga</option><option>Zanzibar</option><option>Other</option>
                 </select>
               </div>
@@ -427,7 +427,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
               <div class="form-group">
                 <label class="form-label">Logo</label>
                 <div class="upload-zone" onclick="document.getElementById('logoInput').click()">
-                  <img id="logoPreview" src="" style="display:none;max-height:80px;margin:0 auto">
+                  <img id="logoPreview" src="" style="display:none;max-height:80px;margin:0 orto">
                   <div id="logoLabel">📷 Click to upload logo</div>
                   <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="previewImage(this,'logoPreview','logoLabel')">
                 </div>
@@ -435,7 +435,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
               <div class="form-group">
                 <label class="form-label">Banner</label>
                 <div class="upload-zone" onclick="document.getElementById('bannerInput').click()">
-                  <img id="bannerPreview" src="" style="display:none;max-height:80px;margin:0 auto">
+                  <img id="bannerPreview" src="" style="display:none;max-height:80px;margin:0 orto">
                   <div id="bannerLabel">🖼️ Click to upload banner</div>
                   <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="previewImage(this,'bannerPreview','bannerLabel')">
                 </div>
@@ -561,20 +561,20 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
           </div>
           <div class="ai-panel active" id="ai-caption">
             <div class="ai-suggestions" id="sug-caption">
-              <button class="ai-sug" onclick="sendAI('caption','Write a short Swahili product caption','Niandikia caption ya bidhaa yangu mpya')">Caption ya bidhaa</button>
-              <button class="ai-sug" onclick="sendAI('caption','Write an Instagram caption for a product launch','Product launch caption')">Launch caption</button>
+              <button class="ai-sug" onclick="sendAI('caption','Write a short Swahili product caption','Niandikia caption ya products yangu mpya')">Caption ya products</button>
+              <button class="ai-sug" onclick="sendAI('caption','Write an Instagram caption for a product lornch','Product lornch caption')">Lornch caption</button>
               <button class="ai-sug" onclick="sendAI('caption','Write a WhatsApp status for my store','WhatsApp status')">WhatsApp Status</button>
             </div>
             <div class="ai-messages" id="msgs-caption"></div>
             <div class="ai-input-row">
-              <input class="ai-input" id="inp-caption" placeholder="Omba AI iandike caption..." onkeypress="if(event.key==='Enter')sendAI('caption',null,null)">
+              <input class="ai-input" id="inp-caption" placeholder="Ask AI to write a caption..." onkeypress="if(event.key==='Enter')sendAI('caption',null,null)">
               <button class="ai-send" onclick="sendAI('caption',null,null)">Send →</button>
             </div>
           </div>
           <div class="ai-panel" id="ai-care">
             <div class="ai-suggestions">
               <button class="ai-sug" onclick="sendAI('care','You are a customer service helper','Niambie jinsi ya kujibu customer anayelalamika')">Handle complaint</button>
-              <button class="ai-sug" onclick="sendAI('care','You are a customer service helper','Niandikia template ya kujibu maswali ya wateja')">Reply template</button>
+              <button class="ai-sug" onclick="sendAI('care','You are a customer service helper','Niandikia template ya kujibu maswali ya customers')">Reply template</button>
             </div>
             <div class="ai-messages" id="msgs-care"></div>
             <div class="ai-input-row">
@@ -584,19 +584,19 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
           </div>
           <div class="ai-panel" id="ai-pricing">
             <div class="ai-suggestions">
-              <button class="ai-sug" onclick="sendAI('pricing','You are a pricing strategy expert for Tanzanian SMEs','Nisaidie kuweka bei nzuri ya bidhaa zangu')">Bei strategy</button>
-              <button class="ai-sug" onclick="sendAI('pricing','You are a pricing strategy expert for Tanzanian SMEs','Nishawishi wateja wanunue kwa bei yangu')">Justify pricing</button>
+              <button class="ai-sug" onclick="sendAI('pricing','You are a pricing strategy expert for Tstartnian SMEs','Nisaidie kuweka price nzuri ya products zangu')">Price strategy</button>
+              <button class="ai-sug" onclick="sendAI('pricing','You are a pricing strategy expert for Tstartnian SMEs','Nishawishi customers wanunue kwa price yangu')">Justify pricing</button>
             </div>
             <div class="ai-messages" id="msgs-pricing"></div>
             <div class="ai-input-row">
-              <input class="ai-input" id="inp-pricing" placeholder="Uliza kuhusu bei za bidhaa..." onkeypress="if(event.key==='Enter')sendAI('pricing',null,null)">
+              <input class="ai-input" id="inp-pricing" placeholder="Uliza about price za products..." onkeypress="if(event.key==='Enter')sendAI('pricing',null,null)">
               <button class="ai-send" onclick="sendAI('pricing',null,null)">Send →</button>
             </div>
           </div>
           <div class="ai-panel" id="ai-general">
             <div class="ai-messages" id="msgs-general"></div>
             <div class="ai-input-row">
-              <input class="ai-input" id="inp-general" placeholder="Uliza swali lolote la biashara..." onkeypress="if(event.key==='Enter')sendAI('general',null,null)">
+              <input class="ai-input" id="inp-general" placeholder="Uliza swali lolote la business..." onkeypress="if(event.key==='Enter')sendAI('general',null,null)">
               <button class="ai-send" onclick="sendAI('general',null,null)">Send →</button>
             </div>
           </div>
@@ -613,7 +613,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
           <div style="padding:1.5rem">
             <div style="background:var(--navy);padding:1.5rem;margin-bottom:1.5rem;border-left:4px solid var(--gold)">
               <div style="font-size:0.9rem;font-weight:700;color:var(--gold);margin-bottom:0.3rem">What is Social Vybe?</div>
-              <div style="font-size:0.82rem;color:rgba(255,255,255,0.65);line-height:1.7">Vybe ni social feed ya Travex Mall ambapo unaweza kushare picha na video za bidhaa zako. Wateja wanaona posts zako na wanaweza kuagiza moja kwa moja.</div>
+              <div style="font-size:0.82rem;color:rgba(255,255,255,0.65);line-height:1.7">Vybe ni social feed ya Travex Mall ambapo unaweza kushare photo na video za products zako. Customers wanaona posts zako na wanaweza kuorder moja kwa moja.</div>
             </div>
             <div id="vybePostsList"><div class="loading"><div class="spinner"></div>Loading posts...</div></div>
           </div>
@@ -677,12 +677,12 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Product Name *</label>
-        <input type="text" id="productName" class="form-input" placeholder="Jina la bidhaa">
+        <input type="text" id="productName" class="form-input" placeholder="Name la products">
       </div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Price (TZS) *</label>
-          <input type="number" id="productPrice" class="form-input" placeholder="Bei">
+          <input type="number" id="productPrice" class="form-input" placeholder="Price">
         </div>
         <div class="form-group">
           <label class="form-label">Stock Quantity</label>
@@ -691,12 +691,12 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
       </div>
       <div class="form-group">
         <label class="form-label">Description</label>
-        <textarea id="productDesc" class="form-textarea" placeholder="Elezea bidhaa..."></textarea>
+        <textarea id="productDesc" class="form-textarea" placeholder="Elezea products..."></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Product Image</label>
         <div class="upload-zone" onclick="document.getElementById('productImageInput').click()">
-          <img id="productImagePreview" src="" style="display:none;max-height:120px;margin:0 auto">
+          <img id="productImagePreview" src="" style="display:none;max-height:120px;margin:0 orto">
           <div id="productImageLabel">📷 Click to upload image</div>
           <input type="file" id="productImageInput" accept="image/*" style="display:none" onchange="previewImage(this,'productImagePreview','productImageLabel')">
         </div>
@@ -727,7 +727,7 @@ tbody tr:hover{background:var(--offwhite);cursor:pointer}
       </div>
       <div class="form-group">
         <div class="upload-zone" onclick="document.getElementById('postMediaInput').click()">
-          <img id="postMediaPreview" src="" style="display:none;max-height:150px;margin:0 auto">
+          <img id="postMediaPreview" src="" style="display:none;max-height:150px;margin:0 orto">
           <div id="postMediaLabel">📷 Click to upload media</div>
           <input type="file" id="postMediaInput" accept="image/*,video/*" style="display:none" onchange="previewPostMedia(this)">
         </div>
@@ -787,7 +787,7 @@ function closeSidebar() {
 
 // ── INIT ──
 async function init() {
-  const { data: { session: s } } = await sb.auth.getSession();
+  const { data: { session: s } } = await sb.orth.getSession();
   if (!s) { window.location.replace("seller-login.html"); return; }
   session = s;
   currentUser = s.user;
@@ -813,25 +813,25 @@ async function init() {
 function showPendingGate(status) {
   const overlay = document.getElementById("pendingGateOverlay");
   const store = currentStores[0];
-  const storeName = store?.store_name || "Duka Lako";
+  const storeName = store?.store_name || "Shop Lako";
   const ownerName = currentUser.user_metadata?.name || "Seller";
 
   let icon, title, body, cta;
   if (status === "no_store") {
-    icon = "🏪"; title = "Haujafungua Duka Bado";
-    body = "Akaunti yako ipo, lakini bado hujafungua duka. Bonyeza hapa chini kuanza.";
-    cta  = `<a href="open-store-b2c.html" style="display:block;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-weight:700;text-decoration:none;text-align:center">🏪 Fungua Duka Langu →</a>`;
+    icon = "🏪"; title = "Horjaopen Shop Bado";
+    body = "Account yako ipo, lakini bado hujaopen shop. Click hapa chini kustart.";
+    cta  = `<a href="open-store-b2c.html" style="display:block;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-weight:700;text-decoration:none;text-align:center">🏪 Open Shop Langu →</a>`;
   } else if (status === "receipt_uploaded" || status === "pending_verification") {
-    icon = "🔍"; title = "Risiti Inapitiwa!";
-    body = "Risiti yako imepokelewa na inafanyiwa verification. Utapata email ndani ya masaa 2.";
+    icon = "🔍"; title = "Receipt Inapitiwa!";
+    body = "Receipt yako imepokelewa na inafanyiwa verification. Utapata email ndani ya masaa 2.";
     cta  = `<div style="display:flex;gap:0.75rem">
       <a href="https://wa.me/255651919915" target="_blank" style="flex:1;display:block;padding:0.85rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;text-align:center">💬 WhatsApp</a>
       <button onclick="location.reload()" style="flex:0 0 100px;padding:0.85rem;background:#E5E7EB;border:none;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer">🔄 Refresh</button>
     </div>`;
   } else {
-    icon = "⏳"; title = "Duka Linasubiri Activation";
-    body = `Asante ${ownerName}! Kamilisha malipo ili duka lako liwashwe.`;
-    cta  = `<a href="seller-login.html" style="display:block;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-weight:700;text-decoration:none;text-align:center">💳 Kamilisha Malipo →</a>`;
+    icon = "⏳"; title = "Shop Lpending Activation";
+    body = `Thank you ${ownerName}! Kamilisha payment ili shop lako liwashwe.`;
+    cta  = `<a href="seller-login.html" style="display:block;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-weight:700;text-decoration:none;text-align:center">💳 Kamilisha Payment →</a>`;
   }
 
   overlay.innerHTML = `
@@ -848,7 +848,7 @@ function showPendingGate(status) {
         </div>` : ""}
         <div style="display:flex;flex-direction:column;gap:0.75rem">${cta}</div>
         <div style="text-align:center;margin-top:1.5rem">
-          <button onclick="sb.auth.signOut().then(()=>location.replace('seller-login.html'))"
+          <button onclick="sb.orth.signOut().then(()=>location.replace('seller-login.html'))"
             style="font-size:0.78rem;color:#6B7280;background:none;border:none;cursor:pointer;text-decoration:underline">Ondoka (Logout)</button>
         </div>
       </div>
@@ -865,7 +865,7 @@ async function loadStores() {
 
   document.getElementById('sidebarStore').textContent = activeStore.store_name;
   document.getElementById('overviewStoreName').textContent = activeStore.store_name;
-  document.getElementById('overviewStoreSub').textContent = `${activeStore.category || 'Store'} · ${activeStore.region || 'Tanzania'}`;
+  document.getElementById('overviewStoreSub').textContent = `${activeStore.category || 'Store'} · ${activeStore.region || 'Tstartnia'}`;
   document.getElementById('shareStoreUrl').textContent = `travexmall.vercel.app/store.html?id=${activeStore.id}`;
 
   if (!activeStore.is_active) document.getElementById('pendingBannerWrap').style.display = 'block';
@@ -1052,19 +1052,19 @@ async function generateMarketingPlan() {
   const container = document.getElementById('marketingPlanContent');
   container.innerHTML = '<div class="loading"><div class="spinner"></div>Generating AI plan...</div>';
   try {
-    const storeName = activeStore?.store_name || 'Duka';
+    const storeName = activeStore?.store_name || 'Shop';
     const category  = activeStore?.category || 'Retail';
     const response  = await fetch(GEMINI_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${session?.access_token||SUPABASE_ANON}`},
-      body: JSON.stringify({messages:[{role:'user',content:`Generate a short marketing plan in Swahili for a Tanzanian store called "${storeName}" in the ${category} category. Include 3-4 specific tips.`}]})
+      body: JSON.stringify({messages:[{role:'user',content:`Generate a short marketing plan in Swahili for a Tstartnian store called "${storeName}" in the ${category} category. Include 3-4 specific tips.`}]})
     });
     const data = await response.json();
-    const text = data.content?.[0]?.text || data.choices?.[0]?.message?.content || 'Imeshindwa kupata plan.';
+    const text = data.content?.[0]?.text || data.choices?.[0]?.message?.content || 'Failed kupata plan.';
     container.innerHTML = `<div style="padding:1.5rem;font-size:0.875rem;line-height:1.8;color:var(--dark);white-space:pre-wrap">${text}</div>
       <div style="padding:0 1.5rem 1.5rem"><button onclick="generateMarketingPlan()" class="card-btn">🔄 Regenerate</button></div>`;
   } catch(e) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Imeshindwa. Jaribu tena.</div></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Failed. Try again.</div></div>';
   }
 }
 
@@ -1088,7 +1088,7 @@ async function sendAI(type, sys, preset) {
   msgs.innerHTML += `<div class="ai-msg bot" id="typing-${type}"><div class="ai-icon">AI</div><div class="ai-bubble" style="color:var(--gray)">Inaandika...</div></div>`;
   msgs.scrollTop = msgs.scrollHeight;
 
-  const system = sys || (type==='caption' ? 'You are a social media expert for Tanzanian SMEs. Write engaging Swahili/English captions.' : type==='care' ? 'You are a helpful customer service assistant for a Tanzanian online store.' : type==='pricing' ? 'You are a pricing strategy expert for Tanzanian SMEs.' : 'You are a helpful business assistant for Tanzanian entrepreneurs.');
+  const system = sys || (type==='caption' ? 'You are a social media expert for Tstartnian SMEs. Write engaging Swahili/English captions.' : type==='care' ? 'You are a helpful customer service assistant for a Tstartnian online store.' : type==='pricing' ? 'You are a pricing strategy expert for Tstartnian SMEs.' : 'You are a helpful business assistant for Tstartnian entrepreneurs.');
 
   try {
     const r = await fetch(GEMINI_URL, {
@@ -1097,10 +1097,10 @@ async function sendAI(type, sys, preset) {
       body: JSON.stringify({messages:[{role:'user',content:`System: ${system}\n\nUser: ${text}`}]})
     });
     const data = await r.json();
-    const reply = data.content?.[0]?.text || data.choices?.[0]?.message?.content || 'Imeshindwa.';
+    const reply = data.content?.[0]?.text || data.choices?.[0]?.message?.content || 'Failed.';
     document.getElementById(`typing-${type}`).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">AI</div><div class="ai-bubble">${reply.replace(/\n/g,'<br>')}</div></div>`;
   } catch(e) {
-    document.getElementById(`typing-${type}`).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">AI</div><div class="ai-bubble" style="color:var(--red)">Imeshindwa. Jaribu tena.</div></div>`;
+    document.getElementById(`typing-${type}`).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">AI</div><div class="ai-bubble" style="color:var(--red)">Failed. Try again.</div></div>`;
   }
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -1125,9 +1125,9 @@ async function loadVybePosts() {
   if (!activeStore) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-title">No store yet</div></div>'; return; }
   const { data: posts } = await sb.from("vybe_posts").select("*").eq("store_id", activeStore.id).order("created_at",{ascending:false});
   if (!posts || !posts.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-title">Hakuna posts bado</div><div style="font-size:0.78rem;color:var(--gray);margin-bottom:1rem">Anza kushare bidhaa zako kwa Vybe</div><button class="card-btn gold" onclick="openPostModal()">✦ Create First Post</button></div>'; return;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-title">Hakuna posts bado</div><div style="font-size:0.78rem;color:var(--gray);margin-bottom:1rem">Start kushare products zako kwa Vybe</div><button class="card-btn gold" onclick="openPostModal()">✦ Create First Post</button></div>'; return;
   }
-  container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem">${posts.map(p=>`
+  container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(orto-fill,minmax(200px,1fr));gap:1rem">${posts.map(p=>`
     <div style="border:1px solid var(--lgray);background:var(--white)">
       ${p.media_url ? `<img src="${p.media_url}" style="width:100%;height:140px;object-fit:cover">` : '<div style="height:140px;background:var(--offwhite);display:flex;align-items:center;justify-content:center;font-size:2rem">🔥</div>'}
       <div style="padding:0.75rem"><div style="font-size:0.8rem;color:var(--dark);line-height:1.5">${p.caption||''}</div>
@@ -1166,9 +1166,9 @@ async function saveStore() {
     Object.assign(activeStore, updates);
     document.getElementById('sidebarStore').textContent = updates.store_name;
     document.getElementById('overviewStoreName').textContent = updates.store_name;
-    alert('✅ Duka lako limesasishwa!');
+    alert('✅ Shop lako limesasishwa!');
   } else {
-    alert('❌ Imeshindwa: ' + error.message);
+    alert('❌ Failed: ' + error.message);
   }
 }
 
@@ -1191,7 +1191,7 @@ async function saveProduct() {
   btn.textContent = 'Saving...'; btn.disabled = true;
   const name = document.getElementById('productName').value.trim();
   const price = Number(document.getElementById('productPrice').value);
-  if (!name || !price) { alert('Jaza jina na bei'); btn.textContent='Save Product'; btn.disabled=false; return; }
+  if (!name || !price) { alert('Fill in name na price'); btn.textContent='Save Product'; btn.disabled=false; return; }
 
   let imageUrl = editProductId ? (allProducts.find(p=>p.id===editProductId)?.image_url || null) : null;
   const imgFile = document.getElementById('productImageInput').files[0];
@@ -1226,7 +1226,7 @@ async function editProduct(id) {
 }
 
 async function deleteProduct(id) {
-  if (!confirm('Una uhakika kutaka kufuta bidhaa hii?')) return;
+  if (!confirm('Una uhakika kutaka kufuta products hii?')) return;
   await sb.from("products").update({is_active:false}).eq("id", id);
   await loadProducts();
 }
@@ -1250,7 +1250,7 @@ function previewPostMedia(input) {
 async function submitPost() {
   const btn = document.getElementById('submitPostBtn');
   const caption = document.getElementById('postCaption').value.trim();
-  if (!caption) { alert('Andika caption kwanza'); return; }
+  if (!caption) { alert('Andika caption kwstart'); return; }
   btn.textContent = 'Posting...'; btn.disabled = true;
 
   let mediaUrl = null;
@@ -1281,7 +1281,7 @@ function copyStoreLink() {
 }
 
 async function logout() {
-  await sb.auth.signOut();
+  await sb.orth.signOut();
   window.location.replace("seller-login.html");
 }
 
