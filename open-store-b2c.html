@@ -49,6 +49,21 @@ function updateLiveTheme() {
   const heroBanner = prev.querySelector(".tprev-banner");
   if (heroBanner) { heroBanner.style.background = `linear-gradient(135deg,${color},${color}cc)`; }
 }
+
+// ── XSS PROTECTION ──
+function sanitize(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+// Alias
+if (typeof e === 'undefined') { var e = sanitize; }
+// ── END XSS PROTECTION ──
 </script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
