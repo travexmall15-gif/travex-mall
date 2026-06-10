@@ -57,6 +57,21 @@ function showRemainingHint(containerId) {
   }
 }
 // ── END RATE LIMIT ──
+
+// ── XSS PROTECTION ──
+function sanitize(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+// Alias
+if (typeof e === 'undefined') { var e = sanitize; }
+// ── END XSS PROTECTION ──
 </script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
