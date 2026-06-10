@@ -77,7 +77,7 @@ button,input,select,textarea,
 
 <div class="topbar">
   <a href="index.html" class="logo">TRAVEX <span>MALL</span></a>
-  <a href="index.html" class="back-link">← Rudi Marketplace</a>
+  <a href="index.html" class="back-link">← Back Marketplace</a>
 </div>
 
 <div class="card-wrap">
@@ -86,62 +86,62 @@ button,input,select,textarea,
     <!-- ── LOGIN PANEL ── -->
     <div id="loginPanel">
       <div class="card-icon">🔐</div>
-      <div class="card-title">Ingia Akaunti Yako</div>
-      <div class="card-sub">Ingiza namba ya simu na nenosiri ulioweka wakati wa kufungua duka lako.</div>
+      <div class="card-title">Sign In Account Yako</div>
+      <div class="card-sub">Ingiza namba ya phone na password ulioweka wakati wa kuopen shop lako.</div>
 
       <div class="alert alert-error" id="loginError"></div>
       <div class="alert alert-warn"  id="loginWarn"></div>
 
       <div class="form-group">
-        <label class="form-label">Namba ya Simu</label>
+        <label class="form-label">Namba ya Phone</label>
         <input type="tel" class="form-input" id="phone" placeholder="+255 712 000 000"
-          autocomplete="tel" onkeypress="if(event.key==='Enter')doLogin()">
+          ortocomplete="tel" onkeypress="if(event.key==='Enter')doLogin()">
       </div>
       <div class="form-group">
-        <label class="form-label">Nenosiri</label>
+        <label class="form-label">Password</label>
         <div class="pass-wrap">
-          <input type="password" class="form-input" id="password" placeholder="Nenosiri lako"
-            autocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()">
+          <input type="password" class="form-input" id="password" placeholder="Password lako"
+            ortocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()">
           <button class="pass-toggle" type="button" onclick="togglePass('password',this)">Onyesha</button>
         </div>
-        <button class="forgot-link" onclick="showPanel('resetPanel')">Umesahau nenosiri?</button>
+        <button class="forgot-link" onclick="showPanel('resetPanel')">Umesahor password?</button>
       </div>
 
-      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Ingia Dashibodi →</button>
+      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Sign In Dashboard →</button>
 
-      <div style="text-align:center;margin:1rem 0;font-size:0.72rem;color:var(--gray)">— au —</div>
+      <div style="text-align:center;margin:1rem 0;font-size:0.72rem;color:var(--gray)">— or —</div>
       <a href="store-landing.html" style="display:block;width:100%;padding:0.875rem;background:var(--gold);color:var(--navy);font-size:0.875rem;font-weight:700;text-align:center;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='var(--gold2)'" onmouseout="this.style.background='var(--gold)'">
-        🏪 Fungua Duka Jipya →
+        🏪 Open Shop Jipya →
       </a>
 
       <div class="card-footer">
-        <p>Msaada? <a href="https://wa.me/255651919915">WhatsApp: +255 651 919 915</a></p>
+        <p>Help? <a href="https://wa.me/255651919915">WhatsApp: +255 651 919 915</a></p>
       </div>
     </div>
 
     <!-- ── RESET PANEL ── -->
     <div id="resetPanel" style="display:none">
       <div class="card-icon">🔑</div>
-      <div class="card-title">Badilisha Nenosiri</div>
-      <div class="card-sub">Ingiza namba yako ya simu — tutakutumia link ya kubadilisha nenosiri kwenye email yako.</div>
+      <div class="card-title">Edit Password</div>
+      <div class="card-sub">Ingiza namba yako ya phone — tutakutumia link ya kuedit password kwenye email yako.</div>
 
       <div class="alert alert-error"   id="resetError"></div>
       <div class="alert alert-success" id="resetSuccess"></div>
 
       <div class="form-group">
-        <label class="form-label">Namba ya Simu</label>
+        <label class="form-label">Namba ya Phone</label>
         <input type="tel" class="form-input" id="resetPhone" placeholder="+255 712 000 000"
           onkeypress="if(event.key==='Enter')doReset()">
       </div>
 
-      <button class="btn-primary" id="resetBtn" onclick="doReset()">Tuma Link ya Reset →</button>
-      <button class="btn-secondary" onclick="showPanel('loginPanel')">← Rudi Login</button>
+      <button class="btn-primary" id="resetBtn" onclick="doReset()">Submit Link ya Reset →</button>
+      <button class="btn-secondary" onclick="showPanel('loginPanel')">← Back Login</button>
     </div>
 
   </div>
 </div>
 
-<div class="page-footer"><p>© 2026 Travex Mall · Travex Digital Group (TDG) · Tanzania</p></div>
+<div class="page-footer"><p>© 2026 Travex Mall · Travex Digital Group (TDG) · Tstartnia</p></div>
 
 <script>
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
@@ -150,7 +150,7 @@ const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Already logged in → redirect to dashboard
-sb.auth.getSession().then(({ data: { session } }) => {
+sb.orth.getSession().then(({ data: { session } }) => {
   if (session) window.location.replace("seller-dashboard.html");
 });
 
@@ -199,29 +199,29 @@ async function doLogin() {
   const pass  = document.getElementById("password").value;
   const btn   = document.getElementById("loginBtn");
 
-  if (!phone) { showErr("loginError", "⚠️ Ingiza namba yako ya simu."); return; }
-  if (!pass)  { showErr("loginError", "⚠️ Ingiza nenosiri lako."); return; }
+  if (!phone) { showErr("loginError", "⚠️ Ingiza namba yako ya phone."); return; }
+  if (!pass)  { showErr("loginError", "⚠️ Ingiza password lako."); return; }
 
-  btn.textContent = "Inaingia...";
+  btn.textContent = "Signing in...";
   btn.disabled = true;
 
   const email = phoneToEmail(phone);
-  const { data, error } = await sb.auth.signInWithPassword({
+  const { data, error } = await sb.orth.signInWithPassword({
     email,
     password: pass + "TRX!"
   });
 
   if (error) {
-    btn.textContent = "Ingia Dashibodi →";
+    btn.textContent = "Sign In Dashboard →";
     btn.disabled = false;
 
     const msg = error.message.toLowerCase();
     if (msg.includes("invalid") || msg.includes("credentials")) {
-      showErr("loginError", "❌ Namba ya simu au nenosiri si sahihi. Tafadhali angalia na ujaribu tena.");
+      showErr("loginError", "❌ Namba ya phone or password si sahihi. Please view na utry again.");
     } else if (msg.includes("email not confirmed")) {
-      showWarn("loginWarn", "📧 Tafadhali thibitisha email yako kwanza. Angalia inbox na ubonyeze link ya uthibitisho.");
+      showWarn("loginWarn", "📧 Please confirm email yako kwstart. View inbox na ubonyeze link ya uthibitisho.");
     } else if (msg.includes("too many")) {
-      showErr("loginError", "⏳ Umejaribu mara nyingi. Subiri dakika 5 kisha jaribu tena.");
+      showErr("loginError", "⏳ Umejaribu mara nyingi. Subiri dakika 5 kisha try again.");
     } else {
       showErr("loginError", "❌ " + error.message);
     }
@@ -237,25 +237,25 @@ async function doLogin() {
 
   if (stores && stores.length > 0 && !stores[0].is_active) {
     const status = stores[0].payment_status || "pending";
-    const storeName = stores[0].store_name || "Duka lako";
+    const storeName = stores[0].store_name || "Shop lako";
 
     if (status === "receipt_uploaded" || status === "pending_verification") {
       showWarn("loginWarn",
-        `🔍 <strong>Risiti yako inafanyiwa verification!</strong><br>
-        Duka "<strong>${storeName}</strong>" bado halijawashwa. Subiri masaa 2 — utajulishwa kwa email na simu. Utapelekwa dashibodi kwa sekunde 3...`
+        `🔍 <strong>Receipt yako inafanyiwa verification!</strong><br>
+        Shop "<strong>${storeName}</strong>" is not yet activated. Wait up to 2 hours — you will be notified via email and phone. Utapelekwa dashibodi kwa sekunde 3...`
       );
     } else {
       showWarn("loginWarn",
-        `⏳ <strong>Duka bado halijawashwa.</strong><br>
-        Malipo ya "${storeName}" hayajakamilika. Utapelekwa dashibodi kwa sekunde 3...`
+        `⏳ <strong>Shop bado halijawashwa.</strong><br>
+        Payment ya "${storeName}" payment not yet completed. Redirecting to dashboard in 3 seconds...`
       );
     }
-    btn.textContent = "Inapakia...";
+    btn.textContent = "Loading...";
     setTimeout(() => window.location.replace("seller-dashboard.html"), 3000);
     return;
   }
 
-  btn.textContent = "✅ Karibu! Inapakia...";
+  btn.textContent = "✅ Welcome! Loading...";
   window.location.replace("seller-dashboard.html");
 }
 
@@ -265,19 +265,19 @@ async function doReset() {
   const phone = document.getElementById("resetPhone").value.trim();
   const btn   = document.getElementById("resetBtn");
 
-  if (!phone) { showErr("resetError", "⚠️ Ingiza namba yako ya simu."); return; }
+  if (!phone) { showErr("resetError", "⚠️ Ingiza namba yako ya phone."); return; }
 
-  btn.textContent = "Inatuma...";
+  btn.textContent = "Submitting...";
   btn.disabled = true;
 
   const email = phoneToEmail(phone);
-  await sb.auth.resetPasswordForEmail(email, {
+  await sb.orth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + "/seller-dashboard.html"
   });
 
   // Always show success (security: don't reveal if account exists)
-  showOk("resetSuccess", "✅ Link imetumwa! Kama namba hiyo ipo kwenye mfumo, angalia email inayohusiana na akaunti yako.");
-  btn.textContent = "Tuma Link ya Reset →";
+  showOk("resetSuccess", "✅ Link imetumwa! Kama namba hiyo ipo kwenye mfumo, view email inayohusiana na akornti yako.");
+  btn.textContent = "Submit Link ya Reset →";
   btn.disabled = false;
 }
 </script>
