@@ -9,53 +9,11 @@
 // ── RATE LIMIT — 30 messages per day ──
 const DAILY_LIMIT = 30;
 const LIMIT_KEY   = 'travex_ai_usage';
-
-function getRateLimit() {
-  try {
-    const data = JSON.parse(localStorage.getItem(LIMIT_KEY) || '{}');
-    const today = new Date().toDateString();
-    if (data.date !== today) return { date: today, count: 0 };
-    return data;
-  } catch { return { date: new Date().toDateString(), count: 0 }; }
-}
-
-function incrementRateLimit() {
-  const data = getRateLimit();
-  data.count += 1;
-  localStorage.setItem(LIMIT_KEY, JSON.stringify(data));
-  return data.count;
-}
-
-function checkRateLimit() {
-  const data = getRateLimit();
-  return data.count < DAILY_LIMIT;
-}
-
-function getRemainingMessages() {
-  return Math.max(0, DAILY_LIMIT - getRateLimit().count);
-}
-
-function showLimitBanner(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  const banner = document.createElement('div');
-  banner.style.cssText = 'background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;padding:0.85rem 1rem;border-radius:10px;font-size:0.82rem;font-weight:600;text-align:center;margin:0.5rem 0;line-height:1.5';
-  banner.innerHTML = '⚠️ You have reached your daily limit of <strong>30 AI messages</strong>.<br>Your limit resets tomorrow at midnight.';
-  el.appendChild(banner);
-  el.scrollTop = el.scrollHeight;
-}
-
-function showRemainingHint(containerId) {
-  const rem = getRemainingMessages();
-  if (rem <= 5 && rem > 0) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    const hint = document.createElement('div');
-    hint.style.cssText = 'color:#F59E0B;font-size:0.72rem;font-weight:600;text-align:center;padding:0.3rem;opacity:0.8';
-    hint.textContent = `⚡ ${rem} AI message${rem===1?'':'s'} remaining today`;
-    el.appendChild(hint);
-  }
-}
+function getRateLimit(){try{const d=JSON.parse(localStorage.getItem(LIMIT_KEY)||'{}');const t=new Date().toDateString();if(d.date!==t)return{date:t,count:0};return d;}catch{return{date:new Date().toDateString(),count:0};}}
+function incrementRateLimit(){const d=getRateLimit();d.count+=1;localStorage.setItem(LIMIT_KEY,JSON.stringify(d));return d.count;}
+function checkRateLimit(){return getRateLimit().count<DAILY_LIMIT;}
+function getRemainingMessages(){return Math.max(0,DAILY_LIMIT-getRateLimit().count);}
+function showLimitWarning(containerId){const el=document.getElementById(containerId);if(!el)return;const d=document.createElement('div');d.style.cssText='background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;padding:0.75rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:600;text-align:center;margin:0.5rem 0';d.innerHTML='⚠️ Daily limit of <strong>30 messages</strong> reached. Resets tomorrow.';el.appendChild(d);el.scrollTop=el.scrollHeight;}
 // ── END RATE LIMIT ──
 </script>
 <style>
@@ -664,6 +622,8 @@ select,textarea,
         <div class="sidebar-section">Grow</div>
         <button class="sidebar-link" onclick="showPanel('vybe',this)">✦ Post to Social Vybe</button>
         <button class="sidebar-link" onclick="showPanel('ai',this)">🤖 AI Assistants</button>
+        <button class="sidebar-link" onclick="showPanel('marketing',this)">📣 Marketing Plan</button>
+        <button class="sidebar-link" onclick="showPanel('accounting',this)">💰 Accounting</button>
         <button class="sidebar-link" onclick="showPanel('leaderboard',this)">🏆 Leaderboard</button>
 
         <div class="sidebar-section">Account</div>
@@ -767,6 +727,27 @@ select,textarea,
               <div>
                 <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">University</label>
                 <input type="text" id="shopUni" class="form-input" readonly style="background:var(--offwhite)">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Brand Color</label>
+                <div style="display:flex;align-items:center;gap:0.75rem">
+                  <input type="color" id="shopColor" class="form-input" style="padding:0.2rem;height:42px;width:60px;cursor:pointer" value="#0D1B3E">
+                  <span style="font-size:0.78rem;color:var(--gray)">Choose your shop brand color</span>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Shop Font</label>
+                <select id="shopFont" class="form-select">
+                  <option value="">Default Font</option>
+                  <option value="Playfair Display">Playfair Display — Elegant</option>
+                  <option value="Syne">Syne — Bold Modern</option>
+                  <option value="Bebas Neue">Bebas Neue — Strong</option>
+                  <option value="Cormorant Garamond">Cormorant Garamond — Luxury</option>
+                  <option value="Nunito">Nunito — Friendly</option>
+                  <option value="DM Serif Display">DM Serif Display — Classic</option>
+                  <option value="Josefin Sans">Josefin Sans — Minimal</option>
+                  <option value="Space Grotesk">Space Grotesk — Tech</option>
+                </select>
               </div>
             </div>
             <div style="margin-top:1rem">
@@ -872,6 +853,68 @@ select,textarea,
           <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
             <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.82rem;font-weight:700;color:var(--navy)">Top Stores — <span id="userUni2">Your University</span></div>
             <div id="leaderboardList" style="padding:1rem"></div>
+          </div>
+        </div>
+
+
+        <!-- ACCOUNTING PANEL -->
+        <div class="panel" id="panel-accounting">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">💰 Accounting & Revenue</div>
+          <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem">
+            <button onclick="switchAccPeriod('daily',this)" style="padding:0.4rem 1rem;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" class="acc-tab">Daily</button>
+            <button onclick="switchAccPeriod('weekly',this)" style="padding:0.4rem 1rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);border-radius:6px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" class="acc-tab">Weekly</button>
+            <button onclick="switchAccPeriod('monthly',this)" style="padding:0.4rem 1rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);border-radius:6px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" class="acc-tab">Monthly</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--green)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Total Revenue</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--navy)" id="acc-total-rev">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--gold)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Total Orders</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--navy)" id="acc-total-orders">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--purple)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Avg Order Value</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--navy)" id="acc-avg-order">—</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+            <div style="padding:0.9rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy)">📋 Order Breakdown</div>
+            <div id="acc-orders-list" style="padding:1rem">
+              <div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">Loading accounting data...</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- MARKETING PANEL -->
+        <div class="panel" id="panel-marketing">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:0.25rem">📣 AI Marketing Plan</div>
+          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:1.5rem">Get a custom marketing strategy for your campus shop</div>
+          <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:1.25rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem">
+              <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:1rem">📝 Shop Details</div>
+              <div style="margin-bottom:0.75rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem">Target Audience</label>
+                <input id="mkt-audience" type="text" placeholder="e.g. Female students aged 18-25" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none">
+              </div>
+              <div style="margin-bottom:0.75rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem">Main Products</label>
+                <input id="mkt-products" type="text" placeholder="e.g. Fashion, Accessories" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none">
+              </div>
+              <div style="margin-bottom:1rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem">Monthly Budget (TZS)</label>
+                <input id="mkt-budget" type="number" placeholder="e.g. 50000" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none">
+              </div>
+              <button onclick="generateMarketingPlan()" id="mkt-btn" style="width:100%;padding:0.75rem;background:var(--navy);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif">🚀 Generate Marketing Plan</button>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:0.9rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy)">📊 Your Marketing Plan</div>
+              <div id="mkt-plan-content" style="padding:1.25rem;min-height:300px;font-size:0.82rem;line-height:1.7;color:var(--gray)">
+                Fill in the details and click Generate to get your custom AI marketing plan.
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1050,7 +1093,7 @@ async function saveShop() {
   const bannerFile = document.getElementById("bannerInput").files[0];
   if (bannerFile) bannerUrl = await uploadImg("campus-assets", bannerFile, `banners/${currentUser.id}.${bannerFile.name.split(".").pop()}`);
 
-  const shopData = { user_id: currentUser.id, store_name: name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now(), description: desc, category, whatsapp_number: whatsapp, university: document.getElementById("shopUni").value, university_abbr: userUniAbbr, logo: logoUrl, banner: bannerUrl };
+  const shopData = { user_id: currentUser.id, store_name: name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now(), description: desc, category, whatsapp_number: whatsapp, university: document.getElementById("shopUni").value, university_abbr: userUniAbbr, logo: logoUrl, banner: bannerUrl, primary_color: document.getElementById("shopColor")?.value || "", font: document.getElementById("shopFont")?.value || "" };
 
   let error;
   if (currentShop) {
@@ -1151,6 +1194,7 @@ function showPanel(name, btn) {
   if (name === "orders")      loadOrders();
   if (name === "vybe")        loadMyVybePosts();
   if (name === "leaderboard") loadLeaderboard();
+  if (name === "accounting")  loadAccounting();
 }
 
 // AI CHAT
@@ -1611,13 +1655,9 @@ async function sendAI(type, text) {
     accounting: `You are an Accounting AI assistant for a small campus business. Help track expenses, calculate profit, and give simple financial advice. Keep it simple and practical.`
   };
 
-  if (!checkRateLimit()) {
-    const el=document.getElementById("aiMessages");
-    if(el){ const d=document.createElement("div"); d.className="msg ai"; d.style.cssText="background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;font-size:0.82rem;padding:0.65rem 0.9rem;border-radius:10px;max-width:85%"; d.textContent="⚠️ Daily limit of 30 messages reached. Your limit resets tomorrow."; el.appendChild(d); el.scrollTop=el.scrollHeight; }
-    return;
-  }
-  incrementRateLimit();
   try {
+    if (!checkRateLimit()) { const el=document.getElementById('aiMessages'); if(el){const d=document.createElement('div');d.className='msg ai';d.style.cssText='background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;font-size:0.82rem;padding:0.65rem';d.textContent='⚠️ Daily limit of 30 messages reached. Resets tomorrow.';el.appendChild(d);el.scrollTop=el.scrollHeight;} return; }
+    incrementRateLimit();
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {"Content-Type":"application/json"},
@@ -1635,6 +1675,142 @@ async function sendAI(type, text) {
     document.getElementById('aiTyping').outerHTML = `<div style="align-self:flex-start;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);padding:0.6rem 0.9rem;border-radius:10px;font-size:0.82rem;color:var(--red)">Error: ${e.message}</div>`;
   }
   messages.scrollTop = messages.scrollHeight;
+}
+
+
+// ── ACCOUNTING ──
+let accPeriod = 'daily';
+
+function switchAccPeriod(period, btn) {
+  accPeriod = period;
+  document.querySelectorAll('.acc-tab').forEach(b => {
+    b.style.background = 'var(--offwhite)';
+    b.style.color = 'var(--gray)';
+    b.style.border = '1px solid var(--lgray)';
+  });
+  if (btn) {
+    btn.style.background = 'var(--navy)';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+  }
+  loadAccounting();
+}
+
+async function loadAccounting() {
+  if (!currentShop) return;
+  const el = document.getElementById('acc-orders-list');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">Loading...</div>';
+
+  const now = new Date();
+  let from;
+  if (accPeriod === 'daily') {
+    from = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+  } else if (accPeriod === 'weekly') {
+    const d = new Date(now); d.setDate(d.getDate() - 7);
+    from = d.toISOString();
+  } else {
+    const d = new Date(now); d.setDate(d.getDate() - 30);
+    from = d.toISOString();
+  }
+
+  const { data: orders, error } = await sb.from('campus_orders')
+    .select('*').eq('store_id', currentShop.id)
+    .gte('created_at', from).order('created_at', { ascending: false });
+
+  if (error || !orders) {
+    el.innerHTML = '<div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">No data found.</div>';
+    return;
+  }
+
+  const totalRev = orders.reduce((sum, o) => sum + (Number(o.total_price)||0), 0);
+  const avgOrder = orders.length ? totalRev / orders.length : 0;
+
+  const fmt = n => 'TZS ' + Math.round(n).toLocaleString();
+  document.getElementById('acc-total-rev') && (document.getElementById('acc-total-rev').textContent = fmt(totalRev));
+  document.getElementById('acc-total-orders') && (document.getElementById('acc-total-orders').textContent = orders.length);
+  document.getElementById('acc-avg-order') && (document.getElementById('acc-avg-order').textContent = fmt(avgOrder));
+
+  if (!orders.length) {
+    el.innerHTML = '<div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">No orders in this period yet.</div>';
+    return;
+  }
+
+  el.innerHTML = orders.map(o => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0;border-bottom:1px solid var(--lgray)">
+      <div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--navy)">${o.product_name||'Order'}</div>
+        <div style="font-size:0.7rem;color:var(--gray)">${o.customer_name||''} · ${new Date(o.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:0.85rem;font-weight:800;color:var(--navy)">${o.total_price?'TZS '+Number(o.total_price).toLocaleString():'—'}</div>
+        <div style="font-size:0.68rem;font-weight:700;color:${o.status==='delivered'?'var(--green)':o.status==='confirmed'?'var(--purple)':'var(--orange)'}">
+          ${o.status||'pending'}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── MARKETING PLAN ──
+async function generateMarketingPlan() {
+  if (!checkRateLimit()) { showLimitWarning('mkt-plan-content'); return; }
+  
+  const audience = document.getElementById('mkt-audience')?.value.trim() || 'university students';
+  const products = document.getElementById('mkt-products')?.value.trim() || currentShop?.category || 'general products';
+  const budget   = document.getElementById('mkt-budget')?.value || '50000';
+  const btn      = document.getElementById('mkt-btn');
+  const content  = document.getElementById('mkt-plan-content');
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
+  if (content) content.innerHTML = '<div style="color:var(--gray);font-style:italic">AI is creating your personalized marketing plan...</div>';
+
+  const prompt = `Create a practical marketing plan for a campus shop on Travex Campus marketplace in Tanzania.
+
+Shop details:
+- Shop Name: ${currentShop?.store_name || 'Campus Shop'}
+- Category: ${currentShop?.category || products}
+- University: ${currentShop?.university || 'University'}
+- Target Audience: ${audience}
+- Main Products: ${products}
+- Monthly Budget: TZS ${budget}
+
+Provide a structured plan with:
+1. Social Media Strategy (Instagram, TikTok, WhatsApp)
+2. Weekly posting schedule
+3. Promotion ideas that fit the budget
+4. How to use Social Vybe effectively
+5. 3 quick wins to get first 10 customers
+
+Keep it practical and specific to the Tanzanian university market. Format with clear sections and bullet points.`;
+
+  try {
+    incrementRateLimit();
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const plan = data.content?.[0]?.text || 'Failed to generate plan.';
+    if (content) content.innerHTML = '<pre style="white-space:pre-wrap;font-family:DM Sans,sans-serif;font-size:0.82rem;line-height:1.7;color:#111">' + plan + '</pre>';
+  } catch(e) {
+    if (content) content.innerHTML = '<div style="color:var(--red)">Error: ' + e.message + '</div>';
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = '🚀 Generate Marketing Plan'; }
+}
+
+// ── UPDATE ORDER STATUS ──
+async function updateOrderStatus(orderId, newStatus) {
+  const { error } = await sb.from('campus_orders').update({ status: newStatus }).eq('id', orderId);
+  if (error) { showToast('Error: ' + error.message, 'err'); return; }
+  showToast('Order status updated to ' + newStatus, 'ok');
+  await loadOrders();
+  if (accPeriod) loadAccounting();
 }
 
 </script>
