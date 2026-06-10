@@ -151,7 +151,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Already logged in → redirect to dashboard
 sb.orth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.replace("seller-dashboard.html");
+  if (session) window.location.replace("campus-dashboard.html");
 });
 
 // ── HELPERS ────────────────────────────────────────────────────
@@ -251,12 +251,12 @@ async function doLogin() {
       );
     }
     btn.textContent = "Loading...";
-    setTimeout(() => window.location.replace("seller-dashboard.html"), 3000);
+    setTimeout(() => window.location.replace("campus-dashboard.html"), 3000);
     return;
   }
 
   btn.textContent = "✅ Welcome! Loading...";
-  window.location.replace("seller-dashboard.html");
+  window.location.replace("campus-dashboard.html");
 }
 
 // ── RESET PASSWORD ──────────────────────────────────────────────
@@ -272,7 +272,7 @@ async function doReset() {
 
   const email = phoneToEmail(phone);
   await sb.orth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + "/seller-dashboard.html"
+    redirectTo: window.location.origin + "/campus-dashboard.html"
   });
 
   // Always show success (security: don't reveal if account exists)
