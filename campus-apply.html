@@ -18,7 +18,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 
 /* PROGRESS */
 .progress-wrap{background:var(--white);border-bottom:1px solid var(--lgray);padding:1.5rem 5%}
-.progress-steps{display:flex;align-items:center;max-width:700px;margin:0 auto}
+.progress-steps{display:flex;align-items:center;max-width:700px;margin:0 orto}
 .prog-step{display:flex;align-items:center;gap:0.6rem;flex:1}
 .prog-circle{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;border:2px solid var(--lgray);color:var(--gray);flex-shrink:0;transition:all 0.3s}
 .prog-circle.active{background:var(--navy);border-color:var(--navy);color:var(--gold)}
@@ -28,7 +28,7 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 .prog-line{flex:1;height:2px;background:var(--lgray);margin:0 0.5rem;transition:background 0.3s}
 .prog-line.done{background:var(--green)}
 
-main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
+main{max-width:700px;margin:0 orto;padding:2.5rem 1.5rem}
 
 /* STEP PANELS */
 .step-panel{display:none}
@@ -206,7 +206,7 @@ select,textarea,
 <main>
 
   <!-- SUCCESS SCREEN -->
-  <div id="successScreen" style="display:none;max-width:680px;margin:2rem auto;padding:0">
+  <div id="successScreen" style="display:none;max-width:680px;margin:2rem orto;padding:0">
     <div style="background:linear-gradient(135deg,#0D1B3E,#0A1628);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden">
       <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.05) 1px,transparent 1px);background-size:30px 30px"></div>
       <div style="font-size:4rem;margin-bottom:1rem;position:relative">🎉</div>
@@ -227,7 +227,7 @@ select,textarea,
       </div>
       <div style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #E5E7EB">
         <div style="width:36px;height:36px;background:#0D1B3E;color:#C9A84C;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0">2</div>
-        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Pay Ada ya Duka 💳</div>
+        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Pay Ada ya Shop 💳</div>
         <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">After approval, pay <strong style="color:#0D1B3E">TZS 15,000</strong> via CRDB BANK <strong style="color:#0D1B3E">0152774556100</strong> or M-Pesa <strong style="color:#0D1B3E">+255 651 919 915</strong></div></div>
       </div>
       <div style="display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #E5E7EB">
@@ -237,7 +237,7 @@ select,textarea,
       </div>
       <div style="display:flex;gap:1rem;padding:1rem 0">
         <div style="width:36px;height:36px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0">4</div>
-        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Duka Lako Linafunguliwa! 🏪</div>
+        <div><div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:0.2rem">Shop Lako Linafunguliwa! 🏪</div>
         <div style="font-size:0.82rem;color:#6B7280;line-height:1.6">You will get your login credentials and shop number via email. Sign In <strong style="color:#0D1B3E">campus-dashboard.html</strong> and start selling!</div></div>
       </div>
       <div style="background:#F8F9FC;border:1px solid #E5E7EB;padding:1.2rem;margin-top:1.5rem;margin-bottom:1.5rem" id="successApplicantInfo"></div>
@@ -318,7 +318,7 @@ select,textarea,
             <div class="uni-opt-abbr">ARU</div>
             <div class="uni-opt-name">Ardhi</div>
           </div>
-          <div class="uni-option" onclick="selectUni(this,'TIA','Tanzania Institute of Accountancy','Dar es Salaam')">
+          <div class="uni-option" onclick="selectUni(this,'TIA','Tstartnia Institute of Accountancy','Dar es Salaam')">
             <div class="uni-opt-abbr">TIA</div>
             <div class="uni-opt-name">Accountancy</div>
           </div>
@@ -379,7 +379,7 @@ select,textarea,
             <option>Fashion & Clothing</option>
             <option>Food & Snacks</option>
             <option>Electronics & Accessories</option>
-            <option>Beauty & Health</option>
+            <option>Beorty & Health</option>
             <option>Books & Stationery</option>
             <option>Art & Crafts</option>
             <option>Services</option>
@@ -616,12 +616,12 @@ async function submitApplication() {
       const email = document.getElementById("email").value;
       const uni = selectedUni.abbr + " — " + selectedUni.name;
       const shop = document.getElementById("shopName").value;
-      info.innerHTML = `<div style="font-size:0.72rem;font-weight:800;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.6rem">Taarifa Zako:</div>
+      info.innerHTML = `<div style="font-size:0.72rem;font-weight:800;color:#0D1B3E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.6rem">Notifications Zako:</div>
         <div style="font-size:0.85rem;color:#374151;line-height:2.1">
-          👤 <strong>Jina:</strong> ${name}<br>
+          👤 <strong>Name:</strong> ${name}<br>
           📧 <strong>Email:</strong> ${email}<br>
           🎓 <strong>University:</strong> ${uni}<br>
-          🏪 <strong>Duka:</strong> ${shop}
+          🏪 <strong>Shop:</strong> ${shop}
         </div>`;
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
