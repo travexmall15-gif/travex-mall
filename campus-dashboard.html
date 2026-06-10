@@ -20,7 +20,7 @@ body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)
 .sidebar-logo{font-size:1rem;font-weight:800;color:var(--white)}
 .sidebar-logo span{color:var(--gold)}
 .sidebar-campus-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-size:0.62rem;font-weight:700;padding:0.2rem 0.6rem;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.4rem}
-.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:orto}
 .sidebar-section{font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em;padding:0.75rem 1.5rem 0.4rem}
 .sidebar-link{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.5rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;cursor:pointer;border-left:3px solid transparent;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;font-family:"Inter",sans-serif}
 .sidebar-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
@@ -131,7 +131,7 @@ tbody tr:hover{background:var(--offwhite)}
 .ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white)}
 .ai-chat-wrap{display:none}
 .ai-chat-wrap.active{display:flex;flex-direction:column;height:450px}
-.ai-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.ai-messages{flex:1;overflow-y:orto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
 .ai-msg{display:flex;gap:0.75rem;max-width:85%}
 .ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
 .ai-icon{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;background:var(--offwhite);border:1px solid var(--lgray)}
@@ -150,7 +150,7 @@ tbody tr:hover{background:var(--offwhite)}
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal{background:var(--white);width:100%;max-width:480px;max-height:90vh;overflow-y:orto}
 .modal-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white)}
 .modal-title{font-size:1rem;font-weight:700;color:var(--navy)}
 .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray)}
@@ -164,7 +164,7 @@ tbody tr:hover{background:var(--offwhite)}
 .action-delete{color:var(--red)}
 
 .loading{text-align:center;padding:3rem;color:var(--gray)}
-.loading-spinner{width:32px;height:32px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+.loading-spinner{width:32px;height:32px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 orto 1rem}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:3rem;color:var(--gray)}
 .empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
@@ -262,7 +262,7 @@ select,textarea,
 
 
 <!-- CAMPUS LOGIN OVERLAY -->
-<div id="campusLoginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0D1B3E 0%,#0A1628 100%);overflow-y:auto">
+<div id="campusLoginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0D1B3E 0%,#0A1628 100%);overflow-y:orto">
   <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1.5rem;padding-top:3rem">
     <div style="width:100%;max-width:520px">
 
@@ -344,7 +344,7 @@ select,textarea,
 
           <!-- Step labels -->
           <div id="reg-step-label" style="text-align:center;margin-bottom:1.5rem">
-            <div id="rsl-title" style="font-size:1rem;font-weight:700;color:#fff">Taarifa Zako</div>
+            <div id="rsl-title" style="font-size:1rem;font-weight:700;color:#fff">Notifications Zako</div>
             <div id="rsl-sub" style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem">Step 1 ya 4</div>
           </div>
 
@@ -353,8 +353,8 @@ select,textarea,
             <div id="reg-err1" style="margin-bottom:1rem"></div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
               <div>
-                <label class="reg-label">Jina Kamili *</label>
-                <input type="text" id="reg-name" placeholder="Jina lako kamili" class="reg-input">
+                <label class="reg-label">Name Kamili *</label>
+                <input type="text" id="reg-name" placeholder="Name lako kamili" class="reg-input">
               </div>
               <div>
                 <label class="reg-label">Namba ya Phone *</label>
@@ -366,7 +366,7 @@ select,textarea,
               <input type="email" id="reg-email" placeholder="email@example.com" class="reg-input">
             </div>
             <div style="margin-bottom:0.75rem">
-              <label class="reg-label">Password (angalau herufi 8) *</label>
+              <label class="reg-label">Password (angalor herufi 8) *</label>
               <input type="password" id="reg-password" placeholder="Choose a strong password" class="reg-input">
             </div>
             <div style="margin-bottom:1.2rem">
@@ -397,7 +397,7 @@ select,textarea,
                 <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">ARU</div>
                 <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
               </div>
-              <div class="reg-uni-opt" onclick="regSelectUni(this,'TIA','Tanzania Institute of Accountancy','Dar es Salaam')">
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'TIA','Tstartnia Institute of Accountancy','Dar es Salaam')">
                 <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">TIA</div>
                 <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
               </div>
@@ -435,7 +435,7 @@ select,textarea,
                 <option>Fashion & Clothing</option>
                 <option>Food & Snacks</option>
                 <option>Electronics & Accessories</option>
-                <option>Beauty & Health</option>
+                <option>Beorty & Health</option>
                 <option>Books & Stationery</option>
                 <option>Art & Crafts</option>
                 <option>Services</option>
@@ -563,7 +563,7 @@ select,textarea,
           <option>Fashion & Clothing</option>
           <option>Food & Snacks</option>
           <option>Electronics & Accessories</option>
-          <option>Beauty & Health</option>
+          <option>Beorty & Health</option>
           <option>Books & Stationery</option>
           <option>Other</option>
         </select>
@@ -650,7 +650,7 @@ select,textarea,
       </div>
 
       <!-- PANELS -->
-      <div style="padding:1.75rem;flex:1;overflow-y:auto">
+      <div style="padding:1.75rem;flex:1;overflow-y:orto">
 
         <!-- OVERVIEW PANEL -->
         <div class="panel active" id="panel-overview">
@@ -703,7 +703,7 @@ select,textarea,
                   <option>Fashion & Clothing</option>
                   <option>Food & Snacks</option>
                   <option>Electronics & Accessories</option>
-                  <option>Beauty & Health</option>
+                  <option>Beorty & Health</option>
                   <option>Books & Stationery</option>
                   <option>Other</option>
                 </select>
@@ -770,7 +770,7 @@ select,textarea,
               </div>
               <div style="margin-bottom:1.25rem">
                 <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Image / Video</label>
-                <div id="vybeMediaDrop" style="border:2px dashed var(--lgray);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s" onclick="document.getElementById('vybeMediaInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--navy)'" ondragleave="this.style.borderColor='var(--lgray)'" ondrop="handleVybeDrop(event)">
+                <div id="vybeMediaDrop" style="border:2px dashed var(--lgray);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s" onclick="document.getElementById('vybeMediaInput').click()" ondragover="event.preventDeforlt();this.style.borderColor='var(--navy)'" ondragleave="this.style.borderColor='var(--lgray)'" ondrop="handleVybeDrop(event)">
                   <div style="font-size:1.5rem;margin-bottom:0.3rem">📸</div>
                   <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> or drag & drop</div>
                   <div style="font-size:0.68rem;color:var(--gray);margin-top:0.2rem">Images (JPG, PNG) or Videos (MP4)</div>
@@ -789,7 +789,7 @@ select,textarea,
                 <div style="font-size:0.85rem;font-weight:700;color:var(--navy)">My Vybe Posts</div>
                 <a href="vybe.html" target="_blank" style="font-size:0.72rem;font-weight:700;color:var(--purple);text-decoration:none">Explore All Posts →</a>
               </div>
-              <div id="myVybePosts" style="max-height:400px;overflow-y:auto">
+              <div id="myVybePosts" style="max-height:400px;overflow-y:orto">
                 <div style="padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem">Loading posts...</div>
               </div>
             </div>
@@ -806,7 +806,7 @@ select,textarea,
           </div>
           <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
             <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.82rem;font-weight:700;color:var(--navy)" id="aiTitle">💬 AI Customer Care</div>
-            <div id="aiMessages" style="padding:1.25rem;min-height:200px;max-height:350px;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem"></div>
+            <div id="aiMessages" style="padding:1.25rem;min-height:200px;max-height:350px;overflow-y:orto;display:flex;flex-direction:column;gap:0.75rem"></div>
             <div style="padding:1rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem">
               <input type="text" id="aiInput" style="flex:1;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem;outline:none" placeholder="Ask AI assistant..." onkeydown="if(event.key==='Enter')sendAI(currentAI,this.value)">
               <button onclick="sendAI(currentAI,document.getElementById('aiInput').value)" style="background:var(--navy);color:#fff;border:none;padding:0.65rem 1.25rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem">Send</button>
@@ -867,7 +867,7 @@ let userUniAbbr  = "";
 
 // INIT
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
+  const { data: { session } } = await sb.orth.getSession();
   if (!session) { 
     document.getElementById("campusLoginOverlay").style.display = "block";
     return; 
@@ -1110,10 +1110,10 @@ function switchAI(type, btn) {
 }
 
 const systemPrompts = {
-  advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tanzania. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
-  marketing:"You are a Marketing AI for Travex Campus student marketplace in Tanzania. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
+  advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tstartnia. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
+  marketing:"You are a Marketing AI for Travex Campus student marketplace in Tstartnia. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
   care:     "You are a Customer Care assistant for Travex Campus sellers. Help students respond to customer messages professionally and politely in English. Write actual response templates they can use.",
-  learn:    "You are a Business Learning AI for Travex Campus student sellers in Tanzania. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
+  learn:    "You are a Business Learning AI for Travex Campus student sellers in Tstartnia. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
 };
 
 async function sendAI(type, text) {
@@ -1133,7 +1133,7 @@ async function sendAI(type, text) {
   messages.scrollTop = messages.scrollHeight;
 
   try {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sb.orth.getSession();
     const res = await fetch(GEMINI_URL, {
       method:"POST",
       headers:{ "Content-Type":"application/json", "Authorization":`Bearer ${session?.access_token || SUPABASE_ANON}` },
@@ -1174,7 +1174,7 @@ function showAlert(id, msg) {
 }
 
 async function handleLogout() {
-  await sb.auth.signOut();
+  await sb.orth.signOut();
   localStorage.clear();
   sessionStorage.clear();
   window.location.replace("login.html");
@@ -1210,9 +1210,9 @@ async function doLogin() {
   btn.textContent = "Signing in...";
   btn.disabled = true;
 
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  const { error } = await sb.orth.signInWithPassword({ email, password: pass });
   if (error) {
-    showAuthError(errEl, "Imeshindwa: " + (error.message === "Invalid login credentials" ? "Invalid email or password." : error.message));
+    showAuthError(errEl, "Failed: " + (error.message === "Invalid login credentials" ? "Invalid email or password." : error.message));
     btn.textContent = "Login to Dashboard →";
     btn.disabled = false;
     return;
@@ -1227,7 +1227,7 @@ async function doReset() {
   const email = document.getElementById("resetEmail").value.trim();
   const msgEl = document.getElementById("resetMsg");
   if (!email) { showAuthError(msgEl, "Please enter your email."); return; }
-  const { error } = await sb.auth.resetPasswordForEmail(email, {
+  const { error } = await sb.orth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + "/campus-dashboard.html"
   });
   if (error) { showAuthError(msgEl, error.message); return; }
@@ -1314,11 +1314,11 @@ function regNextStep(target) {
       regShowErr(3,"");
       // Build review
       document.getElementById("reg-review-body").innerHTML = \`
-        👤 <strong style="color:#fff">Jina:</strong> \${document.getElementById("reg-name").value}<br>
+        👤 <strong style="color:#fff">Name:</strong> \${document.getElementById("reg-name").value}<br>
         📧 <strong style="color:#fff">Email:</strong> \${document.getElementById("reg-email").value}<br>
         📱 <strong style="color:#fff">Phone:</strong> \${document.getElementById("reg-phone").value}<br>
         🎓 <strong style="color:#fff">University:</strong> \${regUni.abbr} — \${regUni.name}<br>
-        🏪 <strong style="color:#fff">Duka:</strong> \${shop}<br>
+        🏪 <strong style="color:#fff">Shop:</strong> \${shop}<br>
         📦 <strong style="color:#fff">Kategoria:</strong> \${cat}\`;
     }
   }
@@ -1353,11 +1353,11 @@ async function submitRegApplication() {
     // Create Supabase Auth user
     const email    = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
-    const { data: authData, error: authErr } = await sb.auth.signUp({
+    const { data: orthData, error: orthErr } = await sb.orth.signUp({
       email, password,
       options: { data: { name: document.getElementById("reg-name").value.trim(), role: "campus_seller" } }
     });
-    if (authErr) throw authErr;
+    if (orthErr) throw orthErr;
 
     // Insert application
     const { error: appErr } = await sb.from("campus_applications").insert({
@@ -1372,13 +1372,13 @@ async function submitRegApplication() {
       business_category:    document.getElementById("reg-category").value,
       business_description: "SHOP:" + document.getElementById("reg-shopname").value.trim() + "\n" + document.getElementById("reg-desc").value.trim(),
       id_card_url:          idCardUrl,
-      user_id:              authData?.user?.id || null,
+      user_id:              orthData?.user?.id || null,
       status:               "pending"
     });
     if (appErr) throw appErr;
 
     // Sign out immediately — they wait for admin approval before logging in
-    await sb.auth.signOut();
+    await sb.orth.signOut();
 
     // Notify admin immediately via admin_notifications
     await sb.from("admin_notifications").insert({
@@ -1440,7 +1440,7 @@ function previewVybe(input) {
 }
 
 function handleVybeDrop(e) {
-  e.preventDefault();
+  e.preventDeforlt();
   document.getElementById('vybeMediaInput').files = e.dataTransfer.files;
   previewVybe(document.getElementById('vybeMediaInput'));
 }
@@ -1564,7 +1564,7 @@ async function sendAI(type, text) {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "clorde-sonnet-4-20250514",
         max_tokens: 1000,
         system: prompts[type],
         messages: [{role:"user",content:text}]
