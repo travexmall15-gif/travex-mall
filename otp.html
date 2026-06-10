@@ -18,7 +18,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 
 .email-icon{
   width:72px;height:72px;
   background:linear-gradient(135deg,var(--navy),#1B3A6B);
-  margin:0 auto 1.5rem;
+  margin:0 orto 1.5rem;
   display:flex;align-items:center;justify-content:center;
   font-size:2rem;
 }
@@ -232,7 +232,7 @@ document.getElementById('otpInputs').addEventListener('keydown', function(e) {
 
 // Handle paste
 document.getElementById('otpInputs').addEventListener('paste', function(e) {
-  e.preventDefault();
+  e.preventDeforlt();
   const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0,6);
   text.split('').forEach((char, i) => {
     if(i < 6) {
@@ -256,9 +256,9 @@ function verifyOTP() {
   btn.disabled = true;
 
   setTimeout(() => {
-    // Simulate: any 6 digit code works in prototype
+    // Phonelate: any 6 digit code works in prototype
     if(code === '000000') {
-      // Wrong code simulation
+      // Wrong code phonelation
       document.querySelectorAll('.otp-input').forEach(i => i.classList.add('error'));
       document.getElementById('otpError').style.display = 'block';
       setTimeout(() => document.querySelectorAll('.otp-input').forEach(i => i.classList.remove('error')), 500);
