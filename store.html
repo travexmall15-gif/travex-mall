@@ -5,7 +5,59 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shop — Travex Campus</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@400;600;700;800&family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// ── RATE LIMIT — 30 messages per day ──
+const DAILY_LIMIT = 30;
+const LIMIT_KEY   = 'travex_ai_usage';
+
+function getRateLimit() {
+  try {
+    const data = JSON.parse(localStorage.getItem(LIMIT_KEY) || '{}');
+    const today = new Date().toDateString();
+    if (data.date !== today) return { date: today, count: 0 };
+    return data;
+  } catch { return { date: new Date().toDateString(), count: 0 }; }
+}
+
+function incrementRateLimit() {
+  const data = getRateLimit();
+  data.count += 1;
+  localStorage.setItem(LIMIT_KEY, JSON.stringify(data));
+  return data.count;
+}
+
+function checkRateLimit() {
+  const data = getRateLimit();
+  return data.count < DAILY_LIMIT;
+}
+
+function getRemainingMessages() {
+  return Math.max(0, DAILY_LIMIT - getRateLimit().count);
+}
+
+function showLimitBanner(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const banner = document.createElement('div');
+  banner.style.cssText = 'background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;padding:0.85rem 1rem;border-radius:10px;font-size:0.82rem;font-weight:600;text-align:center;margin:0.5rem 0;line-height:1.5';
+  banner.innerHTML = '⚠️ You have reached your daily limit of <strong>30 AI messages</strong>.<br>Your limit resets tomorrow at midnight.';
+  el.appendChild(banner);
+  el.scrollTop = el.scrollHeight;
+}
+
+function showRemainingHint(containerId) {
+  const rem = getRemainingMessages();
+  if (rem <= 5 && rem > 0) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color:#F59E0B;font-size:0.72rem;font-weight:600;text-align:center;padding:0.3rem;opacity:0.8';
+    hint.textContent = `⚡ ${rem} AI message${rem===1?'':'s'} remaining today`;
+    el.appendChild(hint);
+  }
+}
+// ── END RATE LIMIT ──
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -663,6 +715,13 @@ Your job:
     {role:'user', content:userMsg}
   ];
 
+  if (!checkRateLimit()) {
+    document.getElementById('typingMsg')?.remove();
+    const el = document.getElementById('chatMessages');
+    if (el) { const d=document.createElement('div'); d.className='msg ai'; d.style.cssText='background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;font-size:0.82rem'; d.textContent='⚠️ Daily limit of 30 messages reached. Resets tomorrow.'; el.appendChild(d); el.scrollTop=el.scrollHeight; }
+    return;
+  }
+  incrementRateLimit();
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
