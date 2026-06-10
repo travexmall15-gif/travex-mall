@@ -301,6 +301,25 @@ function resendCode() {
 
 // Focus first input on load
 document.getElementById('otp0').focus();
+
+// ── SAFE REDIRECT ──
+function safeRedirect(url) {
+  // Only allow relative URLs or trusted domains
+  const trusted = ['travex-mall.vercel.app', 'localhost', '127.0.0.1'];
+  try {
+    const u = new URL(url, window.location.origin);
+    if (u.origin === window.location.origin || trusted.includes(u.hostname)) {
+      window.location.href = url;
+    } else {
+      console.warn('Blocked redirect to:', url);
+      window.location.href = 'index.html';
+    }
+  } catch {
+    // Relative URL - safe
+    window.location.href = url;
+  }
+}
+// ── END SAFE REDIRECT ──
 </script>
 </body>
 </html>
