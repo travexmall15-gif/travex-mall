@@ -78,7 +78,7 @@ export default function MarketPage() {
             <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-sm font-semibold text-gold mb-6">
               <Briefcase className="h-4 w-4" /> Business Marketplace
             </span>
-            <h1 className="font-heading text-5xl font-black leading-tight md:text-6xl mb-6"
+            <h1 className="text-5xl font-black leading-tight md:text-6xl mb-6"
               style={{ fontFamily: 'Playfair Display, serif' }}>
               Grow Your Business <span className="text-gold">Across Tanzania</span>
             </h1>
