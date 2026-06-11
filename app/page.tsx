@@ -1,88 +1,115 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { Particles } from '@/components/particles'
 import { ShopCard } from '@/components/shop-card'
 import { shops, universities } from '@/lib/data'
 import {
-  Store, GraduationCap, Briefcase, FileText, ShieldCheck,
-  Rocket, TrendingUp, Sparkles, Heart, Zap, ArrowRight,
-  Star, Phone, Download, Users, Globe, Package,
+  Store, GraduationCap, Briefcase, FileText,
+  ShieldCheck, Rocket, TrendingUp, Sparkles,
+  Heart, Zap, ArrowRight, Star,
 } from 'lucide-react'
 
-// ── DATA ──
-const stats = [
-  { value: '175+', label: 'Active Shops' },
-  { value: '4', label: 'Universities' },
-  { value: '12K+', label: 'Monthly Orders' },
-  { value: '8', label: 'Cities' },
-]
-
 const steps = [
-  { icon: FileText,    title: 'Apply',   desc: 'Submit your shop application with student ID.' },
-  { icon: ShieldCheck, title: 'Verify',  desc: 'Our team reviews and approves within 48 hours.' },
+  { icon: FileText,    title: 'Apply',   desc: 'Submit your application with student ID.' },
+  { icon: ShieldCheck, title: 'Verify',  desc: 'We review and approve within 48 hours.' },
   { icon: Rocket,      title: 'Launch',  desc: 'Add products and go live instantly.' },
-  { icon: TrendingUp,  title: 'Earn',    desc: 'Receive WhatsApp orders and grow your revenue.' },
+  { icon: TrendingUp,  title: 'Earn',    desc: 'Get WhatsApp orders and grow.' },
 ]
 
 const benefits = [
-  { icon: Zap,      title: 'Instant WhatsApp Orders', desc: 'Customers order via WhatsApp — no complex checkout.' },
-  { icon: Sparkles, title: 'Built-in AI Assistants',  desc: 'AI for customer care, marketing and pricing.' },
-  { icon: Heart,    title: 'Social Vybe Feed',         desc: 'Promote products on campus social commerce feed.' },
-  { icon: TrendingUp, title: 'Sales Analytics',       desc: 'Track revenue and orders in real-time.' },
-  { icon: ShieldCheck, title: 'Verified Badge',        desc: 'Build trust with a verified shop badge.' },
-  { icon: Globe,    title: 'Nationwide Reach',         desc: 'Reach customers across all of Tanzania.' },
+  { icon: Zap,         title: 'WhatsApp Orders',    desc: 'Customers order via WhatsApp — simple and fast.' },
+  { icon: Sparkles,    title: 'AI Assistants',       desc: 'AI for customer care, marketing and pricing.' },
+  { icon: Heart,       title: 'Social Vybe Feed',    desc: 'Promote products on campus social commerce feed.' },
+  { icon: TrendingUp,  title: 'Sales Analytics',     desc: 'Track revenue and orders in real-time.' },
+  { icon: ShieldCheck, title: 'Verified Badge',       desc: 'Build trust with a verified shop badge.' },
+  { icon: Store,       title: 'Your Own Storefront',  desc: 'Custom shop page with your brand and products.' },
 ]
 
-const b2cFeatures = ['Personal shop page', 'Unlimited products', 'WhatsApp orders', 'AI Customer Care', 'Social Vybe posting', 'Sales dashboard']
-const b2bFeatures = ['Business verification', 'Multiple products', 'Bulk orders', 'Business analytics', 'Priority listing', 'Dedicated support']
-
 const testimonials = [
-  { name: 'Amina Hassan', role: 'Fashion Seller, UDSM', text: 'I went from selling at the hostel gate to getting 50+ orders a week on Travex. The WhatsApp integration is genius!', rating: 5 },
-  { name: 'John Mushi', role: 'Electronics, ARU', text: 'The AI assistant answers my customers even when I am in class. My revenue doubled in 2 months.', rating: 5 },
-  { name: 'Grace Temba', role: 'Food Vendor, UDOM', text: 'Setting up my shop took 5 minutes. Now I get lunch orders every day before 10am.', rating: 5 },
+  { name: 'Amina Hassan', role: 'Fashion · UDSM', quote: 'I went from selling at the hostel gate to 50+ orders a week. The WhatsApp integration is genius!', rating: 5 },
+  { name: 'John Mushi',   role: 'Electronics · ARU',  quote: 'The AI assistant answers my customers even when I am in class. Revenue doubled in 2 months.', rating: 5 },
+  { name: 'Grace Temba',  role: 'Food Vendor · UDOM', quote: 'Setting up my shop took 5 minutes. Now I get lunch orders every morning before 10am.', rating: 5 },
 ]
 
 export default function HomePage() {
   return (
-    <main className="bg-offwhite">
+    <main style={{ fontFamily: 'Inter, sans-serif', background: '#F8F9FC' }}>
       <SiteNav />
 
       {/* ── HERO ── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-navy pt-16 text-white">
-        <div className="absolute inset-0 bg-cover bg-center opacity-25"
-          style={{ backgroundImage: 'url(/hero-marketplace.png)' }} aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-blue-900/80" aria-hidden />
+      <section style={{
+        position: 'relative', minHeight: '100vh', display: 'flex',
+        alignItems: 'center', overflow: 'hidden', background: '#0D1B3E',
+        paddingTop: '64px', color: '#fff'
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0, backgroundImage: 'url(/hero-marketplace.png)',
+          backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(135deg, #0D1B3E 0%, rgba(13,27,62,0.92) 60%, rgba(27,58,107,0.8) 100%)'
+        }} />
         <Particles />
-        <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-6">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-sm font-semibold text-gold mb-6">
-              <Sparkles className="h-4 w-4" /> Tanzania's #1 Digital Marketplace
-            </span>
-            <h1 className="mt-2 text-5xl font-black leading-tight md:text-7xl mb-6"
-              style={{ fontFamily: 'Playfair Display, serif' }}>
-              Tanzania's <span className="text-gold">Digital</span> Marketplace
+        <div style={{ position: 'relative', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '5rem 5% 4rem' }}>
+          <div style={{ maxWidth: '680px' }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.35)',
+              color: '#C9A84C', padding: '0.35rem 1rem', borderRadius: '20px',
+              fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.5rem'
+            }}>
+              ◆ Africa's #1 AI-Powered Marketplace — Tanzania 2026
+            </div>
+            <h1 style={{
+              fontFamily: '"Playfair Display", Georgia, serif',
+              fontSize: 'clamp(2.4rem, 6vw, 4.8rem)',
+              fontWeight: 900, lineHeight: 1.08, color: '#fff',
+              marginBottom: '1.25rem', letterSpacing: '-0.01em'
+            }}>
+              Africa's{' '}
+              <span style={{
+                color: '#C9A84C',
+                textShadow: '0 0 40px rgba(201,168,76,0.3)'
+              }}>Intelligent</span>
+              <br />Digital Marketplace
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl leading-relaxed">
-              Shop, sell and connect across campuses and businesses. From your hostel to nationwide delivery — Travex Mall powers commerce for students and SMEs.
+            <p style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1.05rem)', lineHeight: 1.75,
+              color: 'rgba(255,255,255,0.65)', marginBottom: '2rem',
+              maxWidth: '520px', fontWeight: 400
+            }}>
+              Create your online store in minutes. Sell across Tanzania. Grow your business with AI-powered tools — designed for every African entrepreneur.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Link href="/campus"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-7 py-3.5 text-base font-bold text-navy hover:bg-gold-light transition-all hover:shadow-lg">
-                <Store className="h-5 w-5" /> Browse Mall
+            <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+              <Link href="/campus-apply" style={{
+                background: '#C9A84C', color: '#0D1B3E', padding: '0.85rem 2rem',
+                borderRadius: '10px', fontWeight: 700, fontSize: '0.9rem',
+                textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                transition: 'all 0.2s'
+              }}>
+                Login to Your Shop →
               </Link>
-              <Link href="/campus-apply"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/5 px-7 py-3.5 text-base font-semibold text-white hover:bg-white/10 backdrop-blur transition-all">
-                Open Your Shop <ArrowRight className="h-5 w-5" />
+              <Link href="/open-store-b2c" style={{
+                background: 'rgba(255,255,255,0.08)', color: '#fff',
+                border: '1px solid rgba(255,255,255,0.25)', padding: '0.85rem 2rem',
+                borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem',
+                textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                backdropFilter: 'blur(8px)', transition: 'all 0.2s'
+              }}>
+                Open New Store
               </Link>
             </div>
-            {/* Hero stats */}
-            <div className="flex flex-wrap gap-8">
-              {stats.map(s => (
-                <div key={s.label}>
-                  <div className="text-2xl font-black text-gold" style={{ fontFamily: 'Playfair Display, serif' }}>{s.value}</div>
-                  <div className="text-sm text-white/50">{s.label}</div>
+            <div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
+              {[['3M+','Tanzania SMEs'],['$75B','Africa Market'],['30%+','Annual Growth']].map(([v,l]) => (
+                <div key={l}>
+                  <div style={{
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: 'clamp(1.4rem, 3vw, 2rem)',
+                    fontWeight: 900, color: '#C9A84C'
+                  }}>{v}</div>
+                  <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>{l}</div>
                 </div>
               ))}
             </div>
@@ -90,109 +117,119 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── TWO MARKETS ── */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:py-24 md:px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-navy mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
-            One Mall. Two Markets.
+      {/* ── B2C SECTION ── */}
+      <section style={{ background: '#F8F9FC', padding: '5rem 5%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '-120px', left: '-80px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(13,27,62,0.05), transparent 65%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-80px', right: '-80px', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,168,76,0.06), transparent 65%)', pointerEvents: 'none' }} />
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#1B3A6B', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.6rem' }}>
+            For Individual Sellers
+          </div>
+          <h2 style={{
+            fontFamily: '"Playfair Display", Georgia, serif',
+            fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
+            fontWeight: 800, color: '#0D1B3E', marginBottom: '0.6rem'
+          }}>
+            Sell Anything. Reach Everyone.
           </h2>
-          <p className="text-gray-500 max-w-xl mx-auto">Whether you are a student or a business owner, Travex Mall has the right marketplace for you.</p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Campus Market */}
-          <Link href="/campus"
-            className="group relative overflow-hidden rounded-2xl bg-navy p-8 text-white shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all md:p-10">
-            <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-gold/5 -translate-y-16 translate-x-16" />
-            <GraduationCap className="h-12 w-12 text-gold" />
-            <h2 className="mt-5 text-3xl font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>Campus Market</h2>
-            <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-gold">For University Students</p>
-            <p className="mt-4 text-white/70">Shop, sell and connect within your campus. Run your verified student shop for just TZS 15,000/month.</p>
-            <ul className="mt-6 space-y-2">
-              {['ARU · UDSM · UDOM · TIA', '60 slots per university', 'WhatsApp orders + AI'].map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/60">
-                  <ShieldCheck className="h-4 w-4 text-gold flex-shrink-0" /> {f}
-                </li>
-              ))}
-            </ul>
-            <span className="mt-6 inline-flex items-center gap-2 font-semibold text-gold">
-              Explore Campus <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
-
-          {/* Business Market */}
-          <Link href="/market"
-            className="group relative overflow-hidden rounded-2xl bg-gold p-8 text-navy shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all md:p-10">
-            <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-navy/5 -translate-y-16 translate-x-16" />
-            <Briefcase className="h-12 w-12 text-navy" />
-            <h2 className="mt-5 text-3xl font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>Business Market</h2>
-            <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-navy/60">For Businesses & SMEs</p>
-            <p className="mt-4 text-navy/80">Reach customers across Tanzania. List products, manage orders and scale your business nationwide.</p>
-            <ul className="mt-6 space-y-2">
-              {['B2C from TZS 25,000/month', 'B2B from TZS 75,000/month', 'Nationwide delivery'].map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-navy/70">
-                  <ShieldCheck className="h-4 w-4 text-navy flex-shrink-0" /> {f}
-                </li>
-              ))}
-            </ul>
-            <span className="mt-6 inline-flex items-center gap-2 font-bold text-navy">
-              Explore Business <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
-        </div>
-      </section>
-
-      {/* ── STATS BAR ── */}
-      <section className="bg-navy py-14">
-        <div className="mx-auto max-w-7xl px-4 grid grid-cols-2 gap-8 md:grid-cols-4 md:px-6">
-          {stats.map(s => (
-            <div key={s.label} className="text-center">
-              <p className="text-5xl font-black text-gold" style={{ fontFamily: 'Playfair Display, serif' }}>{s.value}</p>
-              <p className="mt-1 text-sm font-medium text-white/60">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS ── */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:py-24 md:px-6">
-        <div className="mx-auto max-w-2xl text-center mb-12">
-          <h2 className="text-4xl font-bold text-navy mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>How It Works</h2>
-          <p className="text-gray-500">Launch your shop in four simple steps.</p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-4">
-          {steps.map((step, i) => (
-            <div key={step.title}
-              className="relative rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm hover:shadow-md transition-all">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-0.5 text-xs font-bold text-navy">
-                Step {i + 1}
-              </span>
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-navy/5 mb-4">
-                <step.icon className="h-7 w-7 text-navy" />
+          <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '3rem', maxWidth: '480px', margin: '0 auto 3rem' }}>
+            Open your B2C shop and start receiving WhatsApp orders from customers across Tanzania. From TZS 25,000/month.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', maxWidth: '900px', margin: '0 auto 2.5rem' }}>
+            {[
+              { plan: 'Basic', price: 'TZS 25,000/mo', features: ['Personal shop page', 'Unlimited products', 'WhatsApp orders', 'AI Customer Care'] },
+              { plan: 'Premium', price: 'TZS 45,000/mo', features: ['All Basic features', 'Priority listing', 'Marketing AI tools', 'Accounting dashboard'], highlight: true },
+            ].map(p => (
+              <div key={p.plan} style={{
+                background: p.highlight ? '#0D1B3E' : '#fff',
+                color: p.highlight ? '#fff' : '#0D1B3E',
+                border: `2px solid ${p.highlight ? '#C9A84C' : '#E5E7EB'}`,
+                borderRadius: '16px', padding: '2rem', textAlign: 'left', position: 'relative'
+              }}>
+                {p.highlight && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#C9A84C', color: '#0D1B3E', fontSize: '0.62rem', fontWeight: 700, padding: '0.2rem 0.8rem', borderRadius: '20px', whiteSpace: 'nowrap' }}>Most Popular</div>}
+                <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '0.4rem' }}>B2C {p.plan}</div>
+                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', fontWeight: 900, marginBottom: '1.25rem' }}>{p.price}</div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {p.features.map(f => <li key={f} style={{ fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: p.highlight ? 'rgba(255,255,255,0.75)' : '#374151' }}><span style={{ color: '#C9A84C' }}>✓</span>{f}</li>)}
+                </ul>
+                <Link href="/open-store-b2c" style={{
+                  display: 'block', textAlign: 'center', background: p.highlight ? '#C9A84C' : '#0D1B3E',
+                  color: p.highlight ? '#0D1B3E' : '#fff', padding: '0.75rem', borderRadius: '8px',
+                  fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none'
+                }}>Get Started →</Link>
               </div>
-              <h3 className="font-bold text-navy text-lg mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{step.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+          <Link href="/open-store-b2c" style={{ fontSize: '0.85rem', color: '#1B3A6B', fontWeight: 600, textDecoration: 'none' }}>
+            View all B2C plans →
+          </Link>
         </div>
       </section>
 
-      {/* ── TOP RATED SHOPS CAROUSEL ── */}
-      <section className="bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+      {/* ── B2B SECTION ── */}
+      <section style={{ background: '#fff', padding: '5rem 5%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#1B3A6B', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.6rem' }}>
+            For Businesses & SMEs
+          </div>
+          <h2 style={{
+            fontFamily: '"Playfair Display", Georgia, serif',
+            fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
+            fontWeight: 800, color: '#0D1B3E', marginBottom: '0.6rem'
+          }}>
+            Scale Your Business Across Tanzania.
+          </h2>
+          <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '3rem', maxWidth: '480px', margin: '0 auto 3rem' }}>
+            Get a verified business shop, manage bulk orders and reach customers in every region of Tanzania. From TZS 75,000/month.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', maxWidth: '900px', margin: '0 auto 2.5rem' }}>
+            {[
+              { plan: 'Basic', price: 'TZS 75,000/mo', features: ['Business verification', 'Multiple products', 'Bulk order management', 'Business analytics'] },
+              { plan: 'Premium', price: 'TZS 110,000/mo', features: ['All Basic features', 'Featured placement', 'Priority support', 'Custom branding'], highlight: true },
+            ].map(p => (
+              <div key={p.plan} style={{
+                background: p.highlight ? '#0D1B3E' : '#F8F9FC',
+                color: p.highlight ? '#fff' : '#0D1B3E',
+                border: `2px solid ${p.highlight ? '#C9A84C' : '#E5E7EB'}`,
+                borderRadius: '16px', padding: '2rem', textAlign: 'left', position: 'relative'
+              }}>
+                {p.highlight && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#C9A84C', color: '#0D1B3E', fontSize: '0.62rem', fontWeight: 700, padding: '0.2rem 0.8rem', borderRadius: '20px', whiteSpace: 'nowrap' }}>Most Popular</div>}
+                <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '0.4rem' }}>B2B {p.plan}</div>
+                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', fontWeight: 900, marginBottom: '1.25rem' }}>{p.price}</div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {p.features.map(f => <li key={f} style={{ fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: p.highlight ? 'rgba(255,255,255,0.75)' : '#374151' }}><span style={{ color: '#C9A84C' }}>✓</span>{f}</li>)}
+                </ul>
+                <Link href="/open-store-b2b" style={{
+                  display: 'block', textAlign: 'center', background: p.highlight ? '#C9A84C' : '#0D1B3E',
+                  color: p.highlight ? '#0D1B3E' : '#fff', padding: '0.75rem', borderRadius: '8px',
+                  fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none'
+                }}>Get Started →</Link>
+              </div>
+            ))}
+          </div>
+          <Link href="/open-store-b2b" style={{ fontSize: '0.85rem', color: '#1B3A6B', fontWeight: 600, textDecoration: 'none' }}>
+            View all B2B plans →
+          </Link>
+        </div>
+      </section>
+
+      {/* ── TOP RATED CAROUSEL ── */}
+      <section style={{ background: '#F8F9FC', padding: '5rem 5%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <div className="text-xs font-bold text-gold uppercase tracking-widest mb-2">Editor's Choice</div>
-              <h2 className="text-4xl font-bold text-navy" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.4rem' }}>
+                // Editor's Choice
+              </div>
+              <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.3rem, 2.5vw, 1.6rem)', fontWeight: 800, color: '#0D1B3E' }}>
                 Top Rated Shops ⭐⭐⭐⭐⭐
               </h2>
-              <p className="text-gray-500 mt-2">Discover highest-rated shops across all campuses.</p>
             </div>
-            <Link href="/campus" className="inline-flex items-center gap-1 font-semibold text-navy hover:text-gold transition-colors">
-              View all <ArrowRight className="h-4 w-4" />
+            <Link href="/campus" style={{ fontSize: '0.82rem', color: '#1B3A6B', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              View all shops <ArrowRight size={14} />
             </Link>
           </div>
-          {/* Horizontal scroll on mobile, grid on desktop */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
             {shops.slice(0, 6).map(shop => (
               <ShopCard key={shop.slug} shop={shop} />
             ))}
@@ -200,131 +237,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── B2C SECTION ── */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:py-24 md:px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="text-xs font-bold text-gold uppercase tracking-widest mb-3">For Individual Sellers</div>
-            <h2 className="text-4xl font-bold text-navy mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Sell Anything. <br />Reach Everyone.
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Whether you sell fashion, food, electronics or services — open your B2C shop and start receiving WhatsApp orders from customers across Tanzania.
-            </p>
-            <ul className="space-y-3 mb-8">
-              {b2cFeatures.map(f => (
-                <li key={f} className="flex items-center gap-3 text-sm text-gray-700">
-                  <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-                    <ShieldCheck className="h-3 w-3 text-gold" />
-                  </div>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <div className="flex gap-3">
-              <Link href="/open-store-b2c"
-                className="inline-flex items-center gap-2 rounded-xl bg-navy px-6 py-3 font-bold text-white hover:bg-blue-900 transition-all">
-                <Store className="h-4 w-4" /> Open B2C Shop
-              </Link>
-              <Link href="/market"
-                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-6 py-3 font-semibold text-navy hover:bg-gray-50 transition-all">
-                Learn More <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-          <div className="rounded-2xl overflow-hidden bg-navy p-8 text-white">
-            <div className="text-gold font-bold text-sm uppercase tracking-wider mb-2">B2C Pricing</div>
-            <div className="text-5xl font-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>TZS 25,000</div>
-            <div className="text-white/50 text-sm mb-6">per month · Basic Plan</div>
-            <div className="text-3xl font-bold mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>TZS 45,000</div>
-            <div className="text-white/50 text-sm mb-6">per month · Premium Plan</div>
-            <Link href="/open-store-b2c"
-              className="block text-center bg-gold text-navy font-bold py-3 rounded-xl hover:bg-gold-light transition-all">
-              Start Selling Today →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── B2B SECTION ── */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="rounded-2xl overflow-hidden bg-gold p-8 text-navy order-2 md:order-1">
-              <div className="font-bold text-sm uppercase tracking-wider mb-2 text-navy/60">B2B Pricing</div>
-              <div className="text-5xl font-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>TZS 75,000</div>
-              <div className="text-navy/50 text-sm mb-6">per month · Basic Plan</div>
-              <div className="text-3xl font-bold mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>TZS 110,000</div>
-              <div className="text-navy/50 text-sm mb-6">per month · Premium Plan</div>
-              <Link href="/open-store-b2b"
-                className="block text-center bg-navy text-white font-bold py-3 rounded-xl hover:bg-blue-900 transition-all">
-                Open Business Shop →
-              </Link>
-            </div>
-            <div className="order-1 md:order-2">
-              <div className="text-xs font-bold text-gold uppercase tracking-widest mb-3">For Businesses & SMEs</div>
-              <h2 className="text-4xl font-bold text-navy mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Scale Your Business <br />Across Tanzania.
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                Get a verified business shop, manage bulk orders, track analytics and reach customers in every region of Tanzania.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {b2bFeatures.map(f => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-gray-700">
-                    <div className="w-5 h-5 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
-                      <ShieldCheck className="h-3 w-3 text-navy" />
-                    </div>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/open-store-b2b"
-                className="inline-flex items-center gap-2 rounded-xl bg-navy px-6 py-3 font-bold text-white hover:bg-blue-900 transition-all">
-                <Briefcase className="h-4 w-4" /> Open B2B Shop
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SOCIAL VYBE SECTION ── */}
-      <section className="bg-offwhite py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="overflow-hidden rounded-2xl bg-[#07010E] p-8 md:p-12">
-            <div className="grid items-center gap-8 md:grid-cols-2">
+      {/* ── SOCIAL VYBE ── */}
+      <section style={{ background: '#F8F9FC', padding: '0 5% 5rem' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ background: '#07010E', borderRadius: '20px', padding: 'clamp(2rem, 5vw, 3.5rem)', overflow: 'hidden' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
               <div>
-                <span className="inline-flex items-center gap-2 rounded-full bg-gold/15 px-3 py-1 text-sm font-semibold text-gold mb-4">
-                  <Sparkles className="h-4 w-4" /> Social Commerce
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(201,168,76,0.12)', color: '#C9A84C', padding: '0.3rem 0.85rem', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, marginBottom: '1.25rem' }}>
+                  <Sparkles size={12} /> Social Commerce
                 </span>
-                <h2 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff', marginBottom: '1rem' }}>
                   Social Vybe Feed
                 </h2>
-                <p className="text-white/70 mb-6 leading-relaxed">
-                  A campus social commerce feed where shops post products, customers like and discover, then order on WhatsApp instantly. Campus TikTok — but for business.
+                <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: '1.75rem' }}>
+                  A campus social commerce feed where shops post products, customers like and discover, then order on WhatsApp instantly.
                 </p>
-                <div className="flex gap-3">
-                  <Link href="/vybe"
-                    className="inline-flex items-center gap-2 rounded-xl bg-gold px-6 py-3 font-bold text-navy hover:bg-gold-light transition-all">
-                    Open Social Vybe <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link href="/campus-dashboard"
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-white hover:bg-white/10 transition-all">
-                    Post from Dashboard
-                  </Link>
-                </div>
+                <Link href="/vybe" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                  background: '#C9A84C', color: '#0D1B3E', padding: '0.8rem 1.75rem',
+                  borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
+                }}>
+                  Open Social Vybe <ArrowRight size={16} />
+                </Link>
               </div>
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  '/social-vybe-ankara-fashion-flatlay.png',
-                  '/clean-white-sneakers-product-shot.png',
-                  '/skincare-cosmetics-flatlay-beauty.png',
-                  '/tanzanian-pilau-rice-meal.png',
-                  '/wireless-earbuds-product-photo.png',
-                  '/smoothie-bowl-healthy-breakfast.png',
-                ].map(src => (
-                  <img key={src} src={src} alt="Vybe post"
-                    className="aspect-square w-full rounded-xl object-cover" />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                {['/social-vybe-ankara-fashion-flatlay.png','/clean-white-sneakers-product-shot.png','/skincare-cosmetics-flatlay-beauty.png','/tanzanian-pilau-rice-meal.png','/wireless-earbuds-product-photo.png','/smoothie-bowl-healthy-breakfast.png'].map(src => (
+                  <img key={src} src={src} alt="" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: '10px' }} />
                 ))}
               </div>
             </div>
@@ -332,76 +270,117 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── UNIVERSITY CAMPUS MARKET ── */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="text-center mb-12">
-            <div className="text-xs font-bold text-gold uppercase tracking-widest mb-3">Campus Marketplace</div>
-            <h2 className="text-4xl font-bold text-navy mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+      {/* ── UNIVERSITY STUDENT MARKET ── */}
+      <section id="uni" style={{ background: '#fff', padding: '5rem 5%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#1B3A6B', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.6rem' }}>
+              Student Marketplace
+            </div>
+            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.5rem' }}>
               Your University. Your Market.
             </h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Each university has its own dedicated marketplace. 60 seller slots — apply before they fill up.</p>
+            <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, maxWidth: '440px', margin: '0 auto' }}>
+              60 seller slots per university. Apply before they fill up.
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
             {universities.map(uni => (
-              <Link key={uni.slug} href={`/campus/${uni.slug}`}
-                className="group rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all">
-                <div className="h-28 bg-navy flex flex-col items-center justify-center p-4 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-transparent" />
-                  <div className="relative text-3xl font-black text-gold mb-1"
-                    style={{ fontFamily: 'Playfair Display, serif' }}>{uni.abbr}</div>
-                  <div className="relative text-xs text-white/60 text-center">{uni.city}</div>
-                </div>
-                <div className="p-4 bg-white">
-                  <div className="text-sm font-bold text-navy mb-2 line-clamp-1">{uni.name}</div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500">{uni.activeShops} shops</span>
-                    <span className={`font-bold ${(uni.totalSlots - uni.activeShops) < 10 ? 'text-red-500' : 'text-green-600'}`}>
-                      {uni.totalSlots - uni.activeShops} left
-                    </span>
+              <Link key={uni.slug} href={`/campus/${uni.slug}`} style={{ textDecoration: 'none' }}>
+                <div className="hover:-translate-y-1 hover:shadow-lg transition-all" style={{
+                  borderRadius: '14px', overflow: 'hidden', border: '1.5px solid #E5E7EB',
+                  cursor: 'pointer'
+                }}
+                  
+                  >
+                  <div style={{ height: '90px', background: 'linear-gradient(135deg, #0D1B3E, #1B3A6B)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.75rem', fontWeight: 900, color: '#C9A84C' }}>{uni.abbr}</div>
+                    <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>{uni.city}</div>
                   </div>
-                  <div className="mt-2 w-full bg-gray-100 rounded-full h-1.5">
-                    <div className="h-1.5 rounded-full bg-gold"
-                      style={{ width: `${(uni.activeShops / uni.totalSlots) * 100}%` }} />
+                  <div style={{ padding: '0.85rem 1rem', background: '#fff' }}>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.5rem', lineHeight: 1.3 }}>{uni.name}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', marginBottom: '0.4rem' }}>
+                      <span style={{ color: '#6B7280' }}>{uni.activeShops} active shops</span>
+                      <span style={{ color: (uni.totalSlots - uni.activeShops) < 10 ? '#DC2626' : '#059669', fontWeight: 700 }}>
+                        {uni.totalSlots - uni.activeShops} slots left
+                      </span>
+                    </div>
+                    <div style={{ height: '4px', background: '#E5E7EB', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${(uni.activeShops / uni.totalSlots) * 100}%`, background: '#C9A84C', borderRadius: '4px' }} />
+                    </div>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Link href="/campus-apply"
-              className="inline-flex items-center gap-2 rounded-xl bg-gold px-8 py-3.5 font-bold text-navy hover:bg-gold-light transition-all">
-              <GraduationCap className="h-5 w-5" /> Apply for a Campus Shop
+          <div style={{ textAlign: 'center' }}>
+            <Link href="/campus-apply" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              background: '#C9A84C', color: '#0D1B3E', padding: '0.85rem 2rem',
+              borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
+            }}>
+              <GraduationCap size={18} /> Apply for a Campus Shop
             </Link>
           </div>
         </div>
       </section>
 
+      {/* ── HOW IT WORKS ── */}
+      <section style={{ background: '#F8F9FC', padding: '5rem 5%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.5rem' }}>
+              How It Works
+            </h2>
+            <p style={{ fontSize: '0.9rem', color: '#6B7280' }}>Launch your shop in four simple steps.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+            {steps.map((step, i) => (
+              <div key={step.title} style={{
+                background: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB',
+                padding: '1.75rem 1.5rem', textAlign: 'center', position: 'relative'
+              }}>
+                <div style={{
+                  position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)',
+                  background: '#C9A84C', color: '#0D1B3E', fontSize: '0.62rem', fontWeight: 700,
+                  padding: '0.18rem 0.7rem', borderRadius: '20px'
+                }}>Step {i + 1}</div>
+                <div style={{ width: '52px', height: '52px', background: 'rgba(13,27,62,0.06)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                  <step.icon size={24} color="#0D1B3E" />
+                </div>
+                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.05rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.4rem' }}>{step.title}</div>
+                <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.65 }}>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── TESTIMONIALS ── */}
-      <section className="bg-navy py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="text-center text-white mb-12">
-            <div className="text-xs font-bold text-gold uppercase tracking-widest mb-3">Success Stories</div>
-            <h2 className="text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>
+      <section style={{ background: '#0D1B3E', padding: '5rem 5%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>Success Stories</div>
+            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff' }}>
               What Our Sellers Say
             </h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
             {testimonials.map(t => (
-              <div key={t.name} className="rounded-2xl border border-white/10 bg-white/5 p-7">
-                <div className="flex mb-4">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-gold fill-gold" />
-                  ))}
+              <div key={t.name} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', padding: '1.75rem' }}>
+                <div style={{ display: 'flex', gap: '2px', marginBottom: '1rem' }}>
+                  {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} color="#C9A84C" fill="#C9A84C" />)}
                 </div>
-                <p className="text-white/80 text-sm leading-relaxed mb-6 italic">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center font-bold text-navy text-sm">
+                <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, fontStyle: 'italic', marginBottom: '1.5rem' }}>
+                  "{t.quote}"
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#0D1B3E', fontSize: '0.85rem', flexShrink: 0 }}>
                     {t.name[0]}
                   </div>
                   <div>
-                    <div className="font-bold text-white text-sm">{t.name}</div>
-                    <div className="text-white/40 text-xs">{t.role}</div>
+                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff' }}>{t.name}</div>
+                    <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>{t.role}</div>
                   </div>
                 </div>
               </div>
@@ -411,22 +390,21 @@ export default function HomePage() {
       </section>
 
       {/* ── BENEFITS ── */}
-      <section className="bg-offwhite py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-navy mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+      <section style={{ background: '#fff', padding: '5rem 5%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0D1B3E' }}>
               Why Sellers Love Travex Mall
             </h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
             {benefits.map(b => (
-              <div key={b.title}
-                className="rounded-2xl border border-gray-100 bg-white p-7 hover:shadow-md transition-all">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy/5 mb-5">
-                  <b.icon className="h-6 w-6 text-navy" />
+              <div key={b.title} style={{ background: '#F8F9FC', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '1.75rem', transition: 'all 0.2s' }}>
+                <div style={{ width: '48px', height: '48px', background: 'rgba(13,27,62,0.06)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                  <b.icon size={22} color="#0D1B3E" />
                 </div>
-                <h3 className="font-bold text-navy text-lg mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{b.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{b.desc}</p>
+                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.4rem' }}>{b.title}</div>
+                <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.65 }}>{b.desc}</p>
               </div>
             ))}
           </div>
@@ -434,23 +412,29 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-gold py-16 md:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-4xl font-black text-navy mb-4 md:text-5xl"
-            style={{ fontFamily: 'Playfair Display, serif' }}>
+      <section style={{ background: '#C9A84C', padding: '5rem 5%', textAlign: 'center' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.6rem, 4vw, 2.8rem)', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.75rem' }}>
             Open Your Shop Today
           </h2>
-          <p className="text-navy/70 mb-8 max-w-xl mx-auto">
+          <p style={{ fontSize: '0.9rem', color: 'rgba(13,27,62,0.65)', marginBottom: '2rem', lineHeight: 1.7 }}>
             Join {universities.length} universities and hundreds of sellers already growing on Travex Mall.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/campus-apply"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-navy px-8 py-4 font-bold text-white hover:bg-blue-900 transition-all">
-              <GraduationCap className="h-5 w-5" /> Open Campus Shop — TZS 15,000/mo
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/campus-apply" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              background: '#0D1B3E', color: '#fff', padding: '0.9rem 2rem',
+              borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
+            }}>
+              <GraduationCap size={18} /> Open Campus Shop
             </Link>
-            <Link href="/open-store-b2c"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-navy px-8 py-4 font-bold text-navy hover:bg-navy hover:text-white transition-all">
-              <Briefcase className="h-5 w-5" /> Open Business Shop
+            <Link href="/open-store-b2c" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              background: 'transparent', color: '#0D1B3E',
+              border: '2px solid #0D1B3E', padding: '0.9rem 2rem',
+              borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
+            }}>
+              <Briefcase size={18} /> Open Business Shop
             </Link>
           </div>
         </div>
