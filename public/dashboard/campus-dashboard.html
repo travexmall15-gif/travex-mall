@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Dashboard — Travex Campus</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// ── RATE LIMIT — 30 messages per day ──
+const DAILY_LIMIT = 30;
+const LIMIT_KEY   = 'travex_ai_usage';
+function getRateLimit(){try{const d=JSON.parse(localStorage.getItem(LIMIT_KEY)||'{}');const t=new Date().toDateString();if(d.date!==t)return{date:t,count:0};return d;}catch{return{date:new Date().toDateString(),count:0};}}
+function incrementRateLimit(){const d=getRateLimit();d.count+=1;localStorage.setItem(LIMIT_KEY,JSON.stringify(d));return d.count;}
+function checkRateLimit(){return getRateLimit().count<DAILY_LIMIT;}
+function getRemainingMessages(){return Math.max(0,DAILY_LIMIT-getRateLimit().count);}
+function showLimitWarning(containerId){const el=document.getElementById(containerId);if(!el)return;const d=document.createElement('div');d.style.cssText='background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;padding:0.75rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:600;text-align:center;margin:0.5rem 0';d.innerHTML='⚠️ Daily limit of <strong>30 messages</strong> reached. Resets tomorrow.';el.appendChild(d);el.scrollTop=el.scrollHeight;}
+// ── END RATE LIMIT ──
+
+// ── XSS PROTECTION ──
+function sanitize(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+// Alias
+if (typeof e === 'undefined') { var e = sanitize; }
+// ── END XSS PROTECTION ──
+</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B3E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626;--sidebar:240px}
+body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sidebar-top{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sidebar-logo{font-size:1rem;font-weight:800;color:var(--white)}
+.sidebar-logo span{color:var(--gold)}
+.sidebar-campus-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-size:0.62rem;font-weight:700;padding:0.2rem 0.6rem;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.4rem}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:orto}
+.sidebar-section{font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em;padding:0.75rem 1.5rem 0.4rem}
+.sidebar-link{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.5rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;cursor:pointer;border-left:3px solid transparent;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;font-family:"Inter",sans-serif}
+.sidebar-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.sidebar-link.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
+.sidebar-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07)}
+.sidebar-user{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.sidebar-avatar{width:36px;height:36px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;flex-shrink:0}
+.sidebar-user-name{font-size:0.8rem;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user-uni{font-size:0.68rem;color:rgba(255,255,255,0.4)}
+.btn-logout{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(255,255,255,0.4);cursor:pointer;background:none;border:none;font-family:"Inter",sans-serif;transition:color 0.2s}
+.btn-logout:hover{color:var(--red)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topnav{background:var(--white);border-bottom:1px solid var(--lgray);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
+.page-bread{font-size:0.78rem;color:var(--gray)}
+.topnav-btn{background:var(--gold);color:var(--navy);padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.topnav-btn:hover{background:var(--gold2)}
+
+.content{padding:2rem;flex:1}
+.panel{display:none}
+.panel.active{display:block}
+
+/* WINNER BANNER */
+.winner-banner{background:linear-gradient(135deg,#B45309,#D97706);padding:1.2rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem;border-left:4px solid var(--gold2)}
+.winner-icon{font-size:2rem;flex-shrink:0}
+.winner-text{}
+.winner-title{font-size:0.9rem;font-weight:800;color:var(--white);margin-bottom:0.2rem}
+.winner-sub{font-size:0.78rem;color:rgba(255,255,255,0.7)}
+
+/* SUBSCRIPTION BANNER */
+.sub-banner{background:var(--navy);padding:1rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;border-left:4px solid var(--gold)}
+.sub-banner-text{font-size:0.875rem;color:var(--white)}
+.sub-banner-title{font-weight:700;color:var(--gold);margin-bottom:0.2rem}
+.sub-banner-btn{background:var(--gold);color:var(--navy);padding:0.5rem 1.2rem;font-size:0.8rem;font-weight:700;border:none;cursor:pointer;white-space:nowrap;font-family:"Inter",sans-serif}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
+.stat-card{background:var(--white);padding:1.5rem;border:1px solid var(--lgray)}
+.stat-label{font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--navy)}
+.stat-sub{font-size:0.72rem;color:var(--green);margin-top:0.3rem}
+
+/* GRID 2 */
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
+.card-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.card-btn{background:var(--navy);color:var(--white);padding:0.45rem 1rem;font-size:0.78rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.card-btn:hover{background:var(--blue)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+thead th{padding:0.75rem 1.5rem;text-align:left;font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;background:var(--offwhite);border-bottom:1px solid var(--lgray)}
+tbody td{padding:1rem 1.5rem;font-size:0.875rem;color:var(--dark);border-bottom:1px solid var(--lgray)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--offwhite)}
+.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-completed{background:#D1FAE5;color:#065F46}
+.badge-cancelled{background:#FEE2E2;color:#991B1B}
+
+/* QUICK ACTIONS */
+.quick-actions{padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem}
+.qa{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:var(--offwhite);border:1px solid var(--lgray);cursor:pointer;transition:all 0.2s;background:none;width:100%;font-family:"Inter",sans-serif;border:1px solid var(--lgray)}
+.qa:hover{background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.qa-icon{width:32px;height:32px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.qa-text{font-size:0.85rem;font-weight:600;color:var(--navy)}
+
+/* LEADERBOARD */
+.leaderboard{list-style:none;padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem}
+.lb-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:var(--offwhite);border:1px solid var(--lgray)}
+.lb-item.you{border-color:var(--gold);background:#FFFBEB}
+.lb-rank{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;flex-shrink:0}
+.lb-rank.gold{background:var(--gold);color:var(--navy)}
+.lb-rank.silver{background:#9CA3AF;color:var(--white)}
+.lb-rank.bronze{background:#B45309;color:var(--white)}
+.lb-rank.other{background:var(--lgray);color:var(--gray)}
+.lb-name{flex:1;font-size:0.85rem;font-weight:600;color:var(--navy)}
+.lb-you-badge{font-size:0.65rem;background:var(--gold);color:var(--navy);padding:0.1rem 0.4rem;font-weight:700;margin-left:0.4rem}
+.lb-uni{font-size:0.7rem;color:var(--gray)}
+.lb-sales{font-size:0.85rem;font-weight:700;color:var(--navy)}
+
+/* FORM */
+.form-section{padding:1.5rem;border-bottom:1px solid var(--lgray)}
+.form-section:last-child{border-bottom:none}
+.form-section-title{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:1.2rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
+.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-input:focus{border-color:var(--navy)}
+.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
+.form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
+.upload-area{border:2px dashed var(--lgray);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative}
+.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.form-actions{padding:1.5rem;border-top:1px solid var(--lgray);display:flex;gap:1rem}
+.btn-save{background:var(--navy);color:var(--white);padding:0.75rem 2rem;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+.btn-save:hover{background:#0A1628}
+
+/* AI CHAT */
+.ai-tabs{display:flex;gap:0;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.ai-tab{flex:1;padding:0.75rem;font-size:0.8rem;font-weight:600;color:var(--gray);border:none;cursor:pointer;transition:all 0.2s;font-family:"Inter",sans-serif;background:transparent;border-bottom:2px solid transparent}
+.ai-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--white)}
+.ai-chat-wrap{display:none}
+.ai-chat-wrap.active{display:flex;flex-direction:column;height:450px}
+.ai-messages{flex:1;overflow-y:orto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.ai-msg{display:flex;gap:0.75rem;max-width:85%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-icon{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-msg.user .ai-icon{background:var(--gold);color:var(--navy);font-size:0.65rem;font-weight:800}
+.ai-bubble{padding:0.75rem 1rem;font-size:0.85rem;line-height:1.6}
+.ai-msg.bot .ai-bubble{background:var(--offwhite);border:1px solid var(--lgray)}
+.ai-msg.user .ai-bubble{background:var(--navy);color:var(--white)}
+.ai-sugs{padding:0.75rem 1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;border-top:1px solid var(--lgray)}
+.ai-sug{background:var(--offwhite);border:1px solid var(--lgray);padding:0.35rem 0.75rem;font-size:0.72rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.ai-sug:hover{border-color:var(--navy);color:var(--navy)}
+.ai-input-row{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem}
+.ai-input{flex:1;padding:0.7rem 1rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;outline:none}
+.ai-input:focus{border-color:var(--navy)}
+.ai-send{background:var(--gold);color:var(--navy);padding:0.7rem 1.2rem;font-weight:700;font-size:0.8rem;border:none;cursor:pointer;font-family:"Inter",sans-serif}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);width:100%;max-width:480px;max-height:90vh;overflow-y:orto}
+.modal-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white)}
+.modal-title{font-size:1rem;font-weight:700;color:var(--navy)}
+.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray)}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.75rem;justify-content:flex-end}
+.btn-cancel{background:var(--white);color:var(--gray);padding:0.7rem 1.5rem;font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif}
+
+/* ACTION BTNS */
+.action-btn{background:none;border:none;cursor:pointer;font-family:"Inter",sans-serif;font-size:0.8rem;font-weight:600;padding:0.3rem 0.5rem;transition:color 0.2s}
+.action-edit{color:#2563EB}
+.action-delete{color:var(--red)}
+
+.loading{text-align:center;padding:3rem;color:var(--gray)}
+.loading-spinner{width:32px;height:32px;border:3px solid var(--lgray);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 orto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gray)}
+.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
+
+.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
+.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
+.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green)}
+
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+}
+
+/* ── Polish: soft corners + font smoothing + mobile ── */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button,input,select,textarea,
+[class*="btn"],[class*="card"],[class*="modal"],
+[class*="badge"],[class*="tab"],[class*="pill"],
+[class*="plan"],[class*="pricing"],[class*="sub-"]{border-radius:8px!important}
+@media(max-width:640px){
+  nav{padding:0 1rem!important;height:56px!important}
+  section,[class*="-section"]{padding-left:1.25rem!important;padding-right:1.25rem!important}
+  h1{font-size:clamp(1.6rem,7vw,2.4rem)!important;line-height:1.1!important;word-break:break-word}
+  h2{font-size:clamp(1.2rem,5vw,1.7rem)!important;line-height:1.15!important}
+  h3{font-size:clamp(1rem,4vw,1.3rem)!important}
+  p,li,span{font-size:0.875rem!important;line-height:1.65!important}
+  input,select,textarea{min-height:48px!important;font-size:16px!important;padding:0.75rem 1rem!important;border-radius:10px!important}
+  button,[class*="btn"]{min-height:48px!important;border-radius:10px!important;font-size:0.9rem!important}
+  [class*="-grid"]{grid-template-columns:1fr 1fr!important}
+  [class*="hero-grid"],[class*="-inner"]{grid-template-columns:1fr!important}
+}
+@media(max-width:400px){
+  h1{font-size:clamp(1.4rem,8vw,1.9rem)!important}
+  p,li{font-size:0.85rem!important}
+  [class*="-grid"]{grid-template-columns:1fr!important}
+}
+
+/* ── SOFT CORNERS: every button, input, form element ── */
+button,
+input[type="text"],input[type="email"],input[type="tel"],
+input[type="password"],input[type="number"],input[type="search"],
+input[type="url"],input[type="file"],
+select,textarea,
+[class*="btn"],[class*="-btn"],[class*="btn-"],
+[class*="nav-tab"],[class*="tab-btn"],[class*="cat-tab"],
+[class*="card"],[class*="-card"],
+[class*="modal"],[class*="popup"],[class*="overlay-box"],
+[class*="badge"],[class*="tag"],[class*="chip"],[class*="pill"],
+[class*="plan"],[class*="pricing"],[class*="sub-card"],
+[class*="step"],[class*="panel"],
+[class*="upload"],[class*="dropzone"],[class*="file-"],
+[class*="search"],[class*="filter"]{
+  border-radius:10px!important;
+}
+/* pill-shaped: small tags/badges */
+[class*="badge"],[class*="tag"],[class*="chip"],[class*="status"]{
+  border-radius:20px!important;
+}
+/* large modals/cards get more radius */
+[class*="modal"],[class*="plan-card"],[class*="pricing-card"]{
+  border-radius:16px!important;
+}
+/* fix any remaining 0-radius inline styles */
+
+.panel{display:none}
+.panel.active{display:block}
+.ai-tab{padding:0.6rem 1rem;font-size:0.78rem;font-weight:700;border:1.5px solid var(--lgray);background:#fff;color:var(--gray);cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;transition:all 0.15s}
+.ai-tab.active,.ai-tab:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+</style>
+<style id="campus-reg-css">
+.reg-step{}
+.reg-label{display:block;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.45rem}
+.reg-input{width:100%;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:"Inter",sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;font-size:0.875rem}
+.reg-input::placeholder{color:rgba(255,255,255,0.25)}
+.reg-input:focus{border-color:#C9A84C}
+.reg-input option{background:#0D1B3E;color:#fff}
+.reg-uni-opt{padding:0.75rem 0.5rem;border:1.5px solid rgba(255,255,255,0.1);cursor:pointer;text-align:center;transition:all 0.2s}
+.reg-uni-opt:hover{border-color:#C9A84C;background:rgba(201,168,76,0.08)}
+.reg-uni-opt.selected{border-color:#C9A84C;background:rgba(201,168,76,0.15)}
+.rp-step{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;border-radius:50%;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);flex-shrink:0;transition:all 0.3s}
+.rp-step.active{background:#C9A84C;color:#0D1B3E}
+.rp-step.done{background:#059669;color:#fff}
+.rp-line{flex:1;height:2px;background:rgba(255,255,255,0.08);transition:background 0.3s}
+.rp-line.done{background:#059669}
+</style>
+
+</head>
+<body>
+
+
+<!-- CAMPUS LOGIN OVERLAY -->
+<div id="campusLoginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0D1B3E 0%,#0A1628 100%);overflow-y:orto">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1.5rem;padding-top:3rem">
+    <div style="width:100%;max-width:520px">
+
+      <!-- Logo -->
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <div style="font-size:1.6rem;margin-bottom:0.4rem">🎓</div>
+        <div style="font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:0.2rem">TRAVEX <span style="color:#C9A84C">CAMPUS</span></div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);letter-spacing:0.15em;text-transform:uppercase">Student Seller Dashboard</div>
+      </div>
+
+      <!-- TABS -->
+      <div style="display:flex;border-bottom:2px solid rgba(255,255,255,0.1);margin-bottom:0">
+        <button id="tab-login" onclick="switchCampusTab('login')"
+          style="flex:1;padding:0.85rem;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;color:#C9A84C;border-bottom:2px solid #C9A84C;margin-bottom:-2px;cursor:pointer;transition:all 0.2s">
+          Login
+        </button>
+        <button id="tab-register" onclick="switchCampusTab('register')"
+          style="flex:1;padding:0.85rem;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;color:rgba(255,255,255,0.4);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all 0.2s">
+          Register
+        </button>
+      </div>
+
+      <!-- ═══ TAB: LOGIN ═══ -->
+      <div id="panel-login">
+        <!-- Login Form -->
+        <div id="loginFormWrap" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:none;padding:2rem">
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem;line-height:1.6">Use your email and password after your shop has been approved.</div>
+          <div id="loginError" style="margin-bottom:1rem"></div>
+          <div style="margin-bottom:1rem">
+            <label style="display:block;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.45rem">Email</label>
+            <input type="email" id="loginEmail" placeholder="email@example.com"
+              style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"
+              onkeypress="if(event.key==='Enter')doLogin()">
+          </div>
+          <div style="margin-bottom:1.5rem">
+            <label style="display:block;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.45rem">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••"
+              style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"
+              onkeypress="if(event.key==='Enter')doLogin()">
+          </div>
+          <button onclick="doLogin()" id="loginBtn"
+            style="width:100%;padding:0.9rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:800;border:none;cursor:pointer">
+            Login to Dashboard →
+          </button>
+          <div style="text-align:center;margin-top:1rem">
+            <a onclick="showResetPass()" style="font-size:0.78rem;color:rgba(255,255,255,0.3);cursor:pointer;text-decoration:underline">Forgot password?</a>
+          </div>
+        </div>
+
+        <!-- Reset Password (hidden) -->
+        <div id="resetFormWrap" style="display:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:none;padding:2rem">
+          <div style="font-size:0.875rem;font-weight:700;color:#fff;margin-bottom:0.3rem">Reset Password</div>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:1.2rem;line-height:1.6">Enter your email — we'll send you a password reset link.</div>
+          <div id="resetMsg" style="margin-bottom:1rem"></div>
+          <input type="email" id="resetEmail" placeholder="email@example.com"
+            style="width:100%;padding:0.75rem 0.9rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;box-sizing:border-box;margin-bottom:1rem">
+          <button onclick="doReset()" style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:700;border:none;cursor:pointer;margin-bottom:0.75rem">
+            Submit Link →
+          </button>
+          <div style="text-align:center">
+            <a onclick="showLoginForm()" style="font-size:0.78rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline">← Back to Login</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ TAB: REGISTER ═══ -->
+      <div id="panel-register" style="display:none">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:none;padding:1.5rem 2rem">
+
+          <!-- Progress bar for registration -->
+          <div id="reg-progress" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1.5rem;padding-top:0.5rem">
+            <div class="rp-step active" id="rp1">1</div><div class="rp-line" id="rl1"></div>
+            <div class="rp-step" id="rp2">2</div><div class="rp-line" id="rl2"></div>
+            <div class="rp-step" id="rp3">3</div><div class="rp-line" id="rl3"></div>
+            <div class="rp-step" id="rp4">4</div>
+          </div>
+
+          <!-- Step labels -->
+          <div id="reg-step-label" style="text-align:center;margin-bottom:1.5rem">
+            <div id="rsl-title" style="font-size:1rem;font-weight:700;color:#fff">Notifications Zako</div>
+            <div id="rsl-sub" style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem">Step 1 ya 4</div>
+          </div>
+
+          <!-- ── REG STEP 1: Personal Info ── -->
+          <div id="reg-step1" class="reg-step">
+            <div id="reg-err1" style="margin-bottom:1rem"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+              <div>
+                <label class="reg-label">Name Kamili *</label>
+                <input type="text" id="reg-name" placeholder="Name lako kamili" class="reg-input">
+              </div>
+              <div>
+                <label class="reg-label">Namba ya Phone *</label>
+                <input type="tel" id="reg-phone" placeholder="+255 712 000 000" class="reg-input">
+              </div>
+            </div>
+            <div style="margin-bottom:0.75rem">
+              <label class="reg-label">Email *</label>
+              <input type="email" id="reg-email" placeholder="email@example.com" class="reg-input">
+            </div>
+            <div style="margin-bottom:0.75rem">
+              <label class="reg-label">Password (angalor herufi 8) *</label>
+              <input type="password" id="reg-password" placeholder="Choose a strong password" class="reg-input">
+            </div>
+            <div style="margin-bottom:1.2rem">
+              <label class="reg-label">Year of Study *</label>
+              <select id="reg-year" class="reg-input" style="cursor:pointer">
+                <option value="">Select year</option>
+                <option>Year 1</option><option>Year 2</option><option>Year 3</option>
+                <option>Year 4</option><option>Year 5</option><option>Postgraduate</option>
+              </select>
+            </div>
+            <button onclick="regNextStep(2)" style="width:100%;padding:0.85rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → University</button>
+          </div>
+
+          <!-- ── REG STEP 2: University ── -->
+          <div id="reg-step2" class="reg-step" style="display:none">
+            <div id="reg-err2" style="margin-bottom:1rem"></div>
+            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1rem">Select your university:</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:1rem">
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'UDSM','University of Dar es Salaam','Dar es Salaam')">
+                <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">UDSM</div>
+                <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
+              </div>
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'UDOM','University of Dodoma','Dodoma')">
+                <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">UDOM</div>
+                <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dodoma</div>
+              </div>
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'ARU','Ardhi University','Dar es Salaam')">
+                <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">ARU</div>
+                <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
+              </div>
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'TIA','Tstartnia Institute of Accountancy','Dar es Salaam')">
+                <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">TIA</div>
+                <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
+              </div>
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'NIT','National Institute of Transport','Dar es Salaam')">
+                <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">NIT</div>
+                <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
+              </div>
+            </div>
+            <div style="margin-bottom:1rem">
+              <label class="reg-label">Upload University ID *</label>
+              <div style="border:1.5px dashed rgba(255,255,255,0.2);padding:1rem;text-align:center;cursor:pointer;position:relative"
+                onclick="document.getElementById('reg-id-file').click()">
+                <div style="font-size:1.2rem;margin-bottom:0.3rem">📎</div>
+                <div id="reg-id-label" style="font-size:0.78rem;color:rgba(255,255,255,0.45)">Click to upload your university ID photo</div>
+                <input type="file" id="reg-id-file" accept="image/*,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer" onchange="regPreviewId(this)">
+              </div>
+            </div>
+            <div style="display:flex;gap:0.75rem">
+              <button onclick="regNextStep(1)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
+              <button onclick="regNextStep(3)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Business</button>
+            </div>
+          </div>
+
+          <!-- ── REG STEP 3: Business Details ── -->
+          <div id="reg-step3" class="reg-step" style="display:none">
+            <div id="reg-err3" style="margin-bottom:1rem"></div>
+            <div style="margin-bottom:0.75rem">
+              <label class="reg-label">Shop Name *</label>
+              <input type="text" id="reg-shopname" placeholder="Mfano: Amina Fashion UDSM" class="reg-input">
+            </div>
+            <div style="margin-bottom:0.75rem">
+              <label class="reg-label">Category *</label>
+              <select id="reg-category" class="reg-input" style="cursor:pointer">
+                <option value="">Select what you sell</option>
+                <option>Fashion & Clothing</option>
+                <option>Food & Snacks</option>
+                <option>Electronics & Accessories</option>
+                <option>Beorty & Health</option>
+                <option>Books & Stationery</option>
+                <option>Art & Crafts</option>
+                <option>Services</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div style="margin-bottom:0.75rem">
+              <label class="reg-label">Business WhatsApp *</label>
+              <input type="tel" id="reg-whatsapp" placeholder="+255 712 000 000" class="reg-input">
+            </div>
+            <div style="margin-bottom:1.2rem">
+              <label class="reg-label">Business Description * <span style="color:rgba(255,255,255,0.3);font-weight:400">(at least 50 characters)</span></label>
+              <textarea id="reg-desc" placeholder="Describe what you sell, your pricing, and why students should buy from you..." class="reg-input" style="min-height:80px;resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:0.75rem">
+              <button onclick="regNextStep(2)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
+              <button onclick="regNextStep(4)" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Review</button>
+            </div>
+          </div>
+
+          <!-- ── REG STEP 4: Review & Submit ── -->
+          <div id="reg-step4" class="reg-step" style="display:none">
+            <div id="reg-err4" style="margin-bottom:1rem"></div>
+            <div id="reg-review-body" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:1rem;margin-bottom:1rem;font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:2.2"></div>
+            <div style="display:flex;gap:0.75rem">
+              <button onclick="regNextStep(3)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
+              <button onclick="regGoToSubscription()" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Continue → Subscription →</button>
+            </div>
+          </div>
+
+          <!-- ── REG STEP 5: Subscription Preview ── -->
+          <div id="reg-step5" class="reg-step" style="display:none">
+            <!-- Subscription features card -->
+            <div style="background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.04));border:1px solid rgba(201,168,76,0.3);padding:1.2rem;margin-bottom:1rem">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+                <div>
+                  <div style="font-size:0.65rem;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.12em">Travex Campus Plan</div>
+                  <div style="font-size:1.3rem;font-weight:900;color:#fff">TZS 15,000</div>
+                  <div style="font-size:0.72rem;color:rgba(255,255,255,0.4)">per month · Cancel anytime</div>
+                </div>
+                <div style="background:#C9A84C;color:#0D1B3E;padding:0.3rem 0.7rem;font-size:0.65rem;font-weight:800;text-transform:uppercase">PREMIUM</div>
+              </div>
+              <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem">What You Get — Equivalent to PREMIUM:</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.7)">
+                <div>✅ Your store in the app</div>
+                <div>✅ AI Business Assistant</div>
+                <div>✅ AI Marketing Tools</div>
+                <div>✅ AI Accounting Helper</div>
+                <div>✅ Unlimited product listings</div>
+                <div>✅ Orders management</div>
+                <div>✅ Sales analytics</div>
+                <div>✅ Campus leaderboard</div>
+                <div>✅ WhatsApp integration</div>
+                <div>✅ Verified badge</div>
+                <div style="color:#FCA5A5">❌ Social Vybe (B2C/B2B only)</div>
+                <div style="color:#FCA5A5">❌ Multi-store</div>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.75rem 1rem;font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;line-height:1.6">
+              ℹ️ Only <strong style="color:#C9A84C">60 slots per university</strong>. After admin approval, you will be asked to pay the activation fee.
+            </div>
+            <div style="display:flex;gap:0.75rem">
+              <button onclick="regNextStep(4)" style="flex:0 0 80px;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">← Back</button>
+              <button onclick="submitRegApplication()" id="reg-submit-btn" style="flex:1;padding:0.75rem;background:#C9A84C;color:#0D1B3E;font-family:'Inter',sans-serif;font-weight:700;border:none;cursor:pointer">Submit Application →</button>
+            </div>
+          </div>
+
+          <!-- ── REG SUCCESS ── -->
+          <div id="reg-success" style="display:none;text-align:center;padding:1rem 0">
+            <div style="font-size:3rem;margin-bottom:0.75rem">🎉</div>
+            <div style="font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:0.4rem">Application Received!</div>
+            <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:1.5rem">We will email you within <strong style="color:#C9A84C">60 minutes</strong> after reviewing your application. Check your inbox!</div>
+            <a href="https://wa.me/255651919915?text=I+submitted+my+Travex+Campus+application!" target="_blank"
+              style="display:block;padding:0.85rem;background:#25D366;color:#fff;font-family:'Inter',sans-serif;font-weight:700;text-decoration:none;margin-bottom:0.75rem">
+              💬 Contact Us on WhatsApp
+            </a>
+            <button onclick="switchCampusTab('login')" style="width:100%;padding:0.75rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
+              ← Login after approval
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- Admin Panel link -->
+  <div style="text-align:center;padding:1.25rem 0 0.5rem;border-top:1px solid rgba(255,255,255,0.07);margin-top:1rem">
+    <a href="admin-panel.html" style="font-size:0.72rem;color:rgba(255,255,255,0.25);text-decoration:none;display:inline-flex;align-items:center;gap:0.35rem;transition:color 0.2s" onmouseover="this.style.color='rgba(201,168,76,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">
+      ⚙️ Admin Panel
+    </a>
+  </div>
+</div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="productModalTitle">Add New Product</div>
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error" id="productError"></div>
+      <div class="form-group">
+        <label class="form-label">Product Name *</label>
+        <input type="text" class="form-input" id="productName" placeholder="e.g. Blue Ankara Dress">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price (TZS) *</label>
+          <input type="number" class="form-input" id="productPrice" placeholder="e.g. 8000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stock *</label>
+          <input type="number" class="form-input" id="productStock" placeholder="e.g. 10">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="productCategory">
+          <option>Fashion & Clothing</option>
+          <option>Food & Snacks</option>
+          <option>Electronics & Accessories</option>
+          <option>Beorty & Health</option>
+          <option>Books & Stationery</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:Inter,sans-serif;font-size:0.875rem;outline:none;resize:vertical;min-height:80px" id="productDesc" placeholder="Describe your product..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Image</label>
+        <div class="upload-area">
+          <input type="file" id="productImgInput" accept="image/*" onchange="previewImg(this,'productImgPreview')">
+          <div style="font-size:1.8rem;margin-bottom:0.3rem">📸</div>
+          <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> image</div>
+          <img id="productImgPreview" src="" style="display:none;max-width:100%;max-height:100px;margin-top:0.5rem">
+        </div>
+      </div>
+      <input type="hidden" id="editingProductId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+      <button class="btn-save" id="productSaveBtn" onclick="saveProduct()">Add Product</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ MAIN DASHBOARD APP ══ -->
+<div id="dashApp" style="display:none;min-height:100vh;display:none">
+  <div style="display:flex;min-height:100vh">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div style="font-size:1rem;font-weight:800;color:#fff;font-family:'Playfair Display',serif">TRAVEX <span style="color:#C9A84C">CAMPUS</span></div>
+        <div class="sidebar-campus-badge">🎓 Seller Dashboard</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="sidebar-section">My Store</div>
+        <button class="sidebar-link active" onclick="showPanel('overview',this)">📊 Overview</button>
+        <button class="sidebar-link" onclick="showPanel('store',this)">🏪 My Shop</button>
+        <button class="sidebar-link" onclick="showPanel('products',this)">📦 Products</button>
+        <button class="sidebar-link" onclick="showPanel('orders',this)">🛍️ Orders</button>
+
+        <div class="sidebar-section">Grow</div>
+        <button class="sidebar-link" onclick="showPanel('vybe',this)">✦ Post to Social Vybe</button>
+        <button class="sidebar-link" onclick="showPanel('ai',this)">🤖 AI Assistants</button>
+        <button class="sidebar-link" onclick="showPanel('marketing',this)">📣 Marketing Plan</button>
+        <button class="sidebar-link" onclick="showPanel('accounting',this)">💰 Accounting</button>
+        <button class="sidebar-link" onclick="showPanel('leaderboard',this)">🏆 Leaderboard</button>
+
+        <div class="sidebar-section">Account</div>
+        <button class="sidebar-link" onclick="showPanel('subscription',this)">💳 Subscription</button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="userInitials">—</div>
+          <div>
+            <div class="sidebar-user-name" id="userName">Loading...</div>
+            <div class="sidebar-user-uni" id="userUni">—</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem">
+          <a href="campus.html" style="font-size:0.72rem;color:rgba(255,255,255,0.3);text-decoration:none;padding:0.3rem 0;transition:color 0.2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">🌐 View Marketplace</a>
+          <button onclick="handleLogout()" style="background:none;border:none;font-size:0.72rem;color:rgba(255,255,255,0.3);cursor:pointer;text-align:left;padding:0.3rem 0;font-family:Inter,sans-serif;transition:color 0.2s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">🚪 Logout</button>
+          <a href="admin-panel.html" style="font-size:0.7rem;color:rgba(255,255,255,0.15);text-decoration:none;padding:0.2rem 0;transition:color 0.2s" onmouseover="this.style.color='rgba(201,168,76,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">⚙️ Admin Panel</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <!-- Topbar -->
+      <div style="height:64px;background:#fff;border-bottom:1px solid var(--lgray);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+        <div>
+          <div style="font-size:0.95rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif" id="pageTitle">Dashboard Overview</div>
+          <div style="font-size:0.7rem;color:var(--gray)" id="pageBread">Overview</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem">
+          <div id="subBanner" style="display:none;background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#D97706;padding:0.4rem 0.9rem;font-size:0.75rem;font-weight:600;border-radius:6px">
+            ⏳ Shop pending activation — pay TZS 15,000 to activate
+          </div>
+        </div>
+      </div>
+
+      <!-- PANELS -->
+      <div style="padding:1.75rem;flex:1;overflow-y:orto">
+
+        <!-- OVERVIEW PANEL -->
+        <div class="panel active" id="panel-overview">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--purple)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Shop Status</div>
+              <div style="font-size:1rem;font-weight:800;color:var(--navy)" id="statShopStatus">—</div>
+              <div style="font-size:0.72rem;color:var(--gray);margin-top:0.25rem" id="statShopNum">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--gold)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Products</div>
+              <div style="font-size:1.75rem;font-weight:800;color:var(--navy)" id="statProducts">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--green)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Orders</div>
+              <div style="font-size:1.75rem;font-weight:800;color:var(--navy)" id="statOrders">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--navy)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Revenue (TZS)</div>
+              <div style="font-size:1.4rem;font-weight:800;color:var(--navy)" id="statRevenue">0</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:1.25rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy)">📦 Recent Orders</div>
+              <div id="recentOrders" style="padding:1rem"></div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:0.85rem;font-weight:700;color:var(--navy)">📦 Products <span id="productCount" style="background:rgba(13,27,62,0.07);padding:0.1rem 0.5rem;border-radius:20px;font-size:0.72rem">0</span></div>
+                <button onclick="showPanel('products',null)" style="font-size:0.75rem;font-weight:700;color:var(--purple);background:none;border:none;cursor:pointer">Add Product +</button>
+              </div>
+              <div id="productsContainer" style="padding:0.5rem"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STORE PANEL -->
+        <div class="panel" id="panel-store">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🏪 My Shop Settings</div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem;max-width:600px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Shop Name</label>
+                <input type="text" id="shopName" class="form-input" placeholder="e.g. Amina Fashion">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Category</label>
+                <select id="shopCategory" class="form-select">
+                  <option>Fashion & Clothing</option>
+                  <option>Food & Snacks</option>
+                  <option>Electronics & Accessories</option>
+                  <option>Beorty & Health</option>
+                  <option>Books & Stationery</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">WhatsApp</label>
+                <input type="text" id="shopWhatsapp" class="form-input" placeholder="+255 7XX XXX XXX">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">University</label>
+                <input type="text" id="shopUni" class="form-input" readonly style="background:var(--offwhite)">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Brand Color</label>
+                <div style="display:flex;align-items:center;gap:0.75rem">
+                  <input type="color" id="shopColor" class="form-input" style="padding:0.2rem;height:42px;width:60px;cursor:pointer" value="#0D1B3E">
+                  <span style="font-size:0.78rem;color:var(--gray)">Choose your shop brand color</span>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Shop Font</label>
+                <select id="shopFont" class="form-select">
+                  <option value="">Default Font</option>
+                  <option value="Playfair Display">Playfair Display — Elegant</option>
+                  <option value="Syne">Syne — Bold Modern</option>
+                  <option value="Bebas Neue">Bebas Neue — Strong</option>
+                  <option value="Cormorant Garamond">Cormorant Garamond — Luxury</option>
+                  <option value="Nunito">Nunito — Friendly</option>
+                  <option value="DM Serif Display">DM Serif Display — Classic</option>
+                  <option value="Josefin Sans">Josefin Sans — Minimal</option>
+                  <option value="Space Grotesk">Space Grotesk — Tech</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:1rem">
+              <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Description</label>
+              <textarea id="shopDesc" class="form-input" style="resize:vertical;min-height:80px" placeholder="Describe your shop..."></textarea>
+            </div>
+            <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Logo Image</label>
+                <input type="file" id="logoInput" accept="image/*" class="form-input" style="padding:0.4rem">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Banner Image</label>
+                <input type="file" id="bannerInput" accept="image/*" class="form-input" style="padding:0.4rem">
+              </div>
+            </div>
+            <button onclick="saveShop()" style="margin-top:1.25rem;background:var(--navy);color:#fff;border:none;padding:0.75rem 2rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;width:100%">Save Shop Settings</button>
+          </div>
+        </div>
+
+        <!-- PRODUCTS PANEL -->
+        <div class="panel" id="panel-products">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+            <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif">📦 Products</div>
+            <button onclick="document.getElementById('productModal').classList.add('open');document.getElementById('productModalTitle').textContent='Add New Product';document.getElementById('editingProductId').value=''" style="background:var(--navy);color:#fff;border:none;padding:0.6rem 1.25rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem">+ Add Product</button>
+          </div>
+          <div id="ordersContainer" style="display:none"></div>
+          <div id="productsContainer2" style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1rem"></div>
+        </div>
+
+        <!-- ORDERS PANEL -->
+        <div class="panel" id="panel-orders">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🛍️ Orders</div>
+          <div id="ordersPanel" style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1rem"></div>
+        </div>
+
+        <!-- SOCIAL VYBE POST PANEL -->
+        <div class="panel" id="panel-vybe">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:0.25rem">✦ Post to Social Vybe</div>
+          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:1.5rem">Share your products and promotions with the campus community</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <!-- Post Form -->
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem">
+              <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:1rem">📝 Create New Post</div>
+              <div style="margin-bottom:1rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Caption *</label>
+                <textarea id="vybeCaption" style="width:100%;padding:0.75rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.85rem;outline:none;resize:vertical;min-height:100px;transition:border-color 0.2s" placeholder="Describe your product or promotion..." onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--lgray)'"></textarea>
+              </div>
+              <div style="margin-bottom:1rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Price (TZS) — optional</label>
+                <input type="number" id="vybePrice" style="width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" placeholder="e.g. 5000" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--lgray)'">
+              </div>
+              <div style="margin-bottom:1.25rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Image / Video</label>
+                <div id="vybeMediaDrop" style="border:2px dashed var(--lgray);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s" onclick="document.getElementById('vybeMediaInput').click()" ondragover="event.preventDeforlt();this.style.borderColor='var(--navy)'" ondragleave="this.style.borderColor='var(--lgray)'" ondrop="handleVybeDrop(event)">
+                  <div style="font-size:1.5rem;margin-bottom:0.3rem">📸</div>
+                  <div style="font-size:0.78rem;color:var(--gray)"><strong style="color:var(--navy)">Click to upload</strong> or drag & drop</div>
+                  <div style="font-size:0.68rem;color:var(--gray);margin-top:0.2rem">Images (JPG, PNG) or Videos (MP4)</div>
+                  <img id="vybeImgPreview" style="display:none;max-width:100%;max-height:120px;margin-top:0.75rem;border-radius:6px">
+                  <video id="vybeVidPreview" style="display:none;max-width:100%;max-height:120px;margin-top:0.75rem;border-radius:6px" controls></video>
+                </div>
+                <input type="file" id="vybeMediaInput" accept="image/*,video/*" style="display:none" onchange="previewVybe(this)">
+              </div>
+              <button onclick="postToVybe()" id="vybePostBtn" style="width:100%;padding:0.8rem;background:linear-gradient(135deg,var(--purple),#9333EA);color:#fff;border:none;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.88rem;transition:all 0.2s">✦ Post to Social Vybe</button>
+              <div id="vybeMsg" style="display:none;margin-top:0.75rem;padding:0.6rem;border-radius:6px;font-size:0.8rem;text-align:center"></div>
+            </div>
+
+            <!-- My Past Posts -->
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:0.85rem;font-weight:700;color:var(--navy)">My Vybe Posts</div>
+                <a href="vybe.html" target="_blank" style="font-size:0.72rem;font-weight:700;color:var(--purple);text-decoration:none">Explore All Posts →</a>
+              </div>
+              <div id="myVybePosts" style="max-height:400px;overflow-y:orto">
+                <div style="padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem">Loading posts...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI PANEL -->
+        <div class="panel" id="panel-ai">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🤖 AI Assistants</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+            <button onclick="switchAI('customer',this)" class="ai-tab active" data-ai="customer">💬 Customer Care</button>
+            <button onclick="switchAI('marketing',this)" class="ai-tab" data-ai="marketing">📣 Marketing</button>
+            <button onclick="switchAI('accounting',this)" class="ai-tab" data-ai="accounting">💰 Accounting</button>
+          </div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.82rem;font-weight:700;color:var(--navy)" id="aiTitle">💬 AI Customer Care</div>
+            <div id="aiMessages" style="padding:1.25rem;min-height:200px;max-height:350px;overflow-y:orto;display:flex;flex-direction:column;gap:0.75rem"></div>
+            <div style="padding:1rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem">
+              <input type="text" id="aiInput" style="flex:1;padding:0.65rem 0.9rem;border:1.5px solid var(--lgray);border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem;outline:none" placeholder="Ask AI assistant..." onkeydown="if(event.key==='Enter')sendAI(currentAI,this.value)">
+              <button onclick="sendAI(currentAI,document.getElementById('aiInput').value)" style="background:var(--navy);color:#fff;border:none;padding:0.65rem 1.25rem;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;font-size:0.82rem">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEADERBOARD PANEL -->
+        <div class="panel" id="panel-leaderboard">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">🏆 Campus Leaderboard</div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.82rem;font-weight:700;color:var(--navy)">Top Stores — <span id="userUni2">Your University</span></div>
+            <div id="leaderboardList" style="padding:1rem"></div>
+          </div>
+        </div>
+
+
+        <!-- ACCOUNTING PANEL -->
+        <div class="panel" id="panel-accounting">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">💰 Accounting & Revenue</div>
+          <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem">
+            <button onclick="switchAccPeriod('daily',this)" style="padding:0.4rem 1rem;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" class="acc-tab">Daily</button>
+            <button onclick="switchAccPeriod('weekly',this)" style="padding:0.4rem 1rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);border-radius:6px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" class="acc-tab">Weekly</button>
+            <button onclick="switchAccPeriod('monthly',this)" style="padding:0.4rem 1rem;background:var(--offwhite);color:var(--gray);border:1px solid var(--lgray);border-radius:6px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" class="acc-tab">Monthly</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--green)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Total Revenue</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--navy)" id="acc-total-rev">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--gold)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Total Orders</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--navy)" id="acc-total-orders">—</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--purple)">
+              <div style="font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Avg Order Value</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--navy)" id="acc-avg-order">—</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+            <div style="padding:0.9rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy)">📋 Order Breakdown</div>
+            <div id="acc-orders-list" style="padding:1rem">
+              <div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">Loading accounting data...</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- MARKETING PANEL -->
+        <div class="panel" id="panel-marketing">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:0.25rem">📣 AI Marketing Plan</div>
+          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:1.5rem">Get a custom marketing strategy for your campus shop</div>
+          <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:1.25rem">
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem">
+              <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:1rem">📝 Shop Details</div>
+              <div style="margin-bottom:0.75rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem">Target Audience</label>
+                <input id="mkt-audience" type="text" placeholder="e.g. Female students aged 18-25" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none">
+              </div>
+              <div style="margin-bottom:0.75rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem">Main Products</label>
+                <input id="mkt-products" type="text" placeholder="e.g. Fashion, Accessories" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none">
+              </div>
+              <div style="margin-bottom:1rem">
+                <label style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem">Monthly Budget (TZS)</label>
+                <input id="mkt-budget" type="number" placeholder="e.g. 50000" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid var(--lgray);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none">
+              </div>
+              <button onclick="generateMarketingPlan()" id="mkt-btn" style="width:100%;padding:0.75rem;background:var(--navy);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif">🚀 Generate Marketing Plan</button>
+            </div>
+            <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden">
+              <div style="padding:0.9rem 1.25rem;border-bottom:1px solid var(--lgray);font-size:0.85rem;font-weight:700;color:var(--navy)">📊 Your Marketing Plan</div>
+              <div id="mkt-plan-content" style="padding:1.25rem;min-height:300px;font-size:0.82rem;line-height:1.7;color:var(--gray)">
+                Fill in the details and click Generate to get your custom AI marketing plan.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTION PANEL -->
+        <div class="panel" id="panel-subscription">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:1.25rem">💳 Subscription</div>
+          <div style="background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.5rem;max-width:480px">
+            <div style="text-align:center;padding:1rem">
+              <div style="font-size:2.5rem;margin-bottom:0.5rem">🎓</div>
+              <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem">Campus Plan</div>
+              <div style="font-size:1.75rem;font-weight:900;color:var(--gold);margin-bottom:0.25rem">TZS 15,000<span style="font-size:0.9rem;color:var(--gray);font-weight:400">/month</span></div>
+              <div style="font-size:0.78rem;color:var(--gray);margin-bottom:1.5rem">Pay to activate & keep your shop live</div>
+              <div style="text-align:left;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem">
+                <div style="font-size:0.82rem">✅ Your shop on Campus Marketplace</div>
+                <div style="font-size:0.82rem">✅ Unlimited product listings</div>
+                <div style="font-size:0.82rem">✅ AI Business Assistant</div>
+                <div style="font-size:0.82rem">✅ Social Vybe posting</div>
+                <div style="font-size:0.82rem">✅ Orders & Revenue tracking</div>
+              </div>
+              <div style="background:var(--offwhite);border:1px solid var(--lgray);border-radius:8px;padding:1rem;font-size:0.82rem;text-align:left;margin-bottom:1rem">
+                <div style="font-weight:700;color:var(--navy);margin-bottom:0.5rem">Pay via:</div>
+                <div>💳 CRDB Bank: <strong>0152774556100</strong></div>
+                <div style="margin-top:0.3rem">📱 M-Pesa: <strong>+255 651 919 915</strong></div>
+              </div>
+              <div style="font-size:0.75rem;color:var(--gray)">Send payment receipt on WhatsApp to activate</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const GEMINI_URL    = "https://bscecjbgnjitlfmgwcic.supabase.co/functions/v1/gemini-chat";
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser  = null;
+let currentShop  = null;
+let userUniAbbr  = "";
+
+// INIT
+async function init() {
+  const { data: { session } } = await sb.orth.getSession();
+  if (!session) { 
+    document.getElementById("campusLoginOverlay").style.display = "block";
+    return; 
+  }
+  currentUser = session.user;
+
+  // Show dashboard, hide login
+  document.getElementById("campusLoginOverlay").style.display = "none";
+  document.getElementById("dashApp").style.display = "block";
+
+  const name = currentUser.user_metadata?.name || currentUser.email.split("@")[0];
+  document.getElementById("userName").textContent     = name;
+  document.getElementById("userInitials").textContent = name.substring(0,2).toUpperCase();
+
+  await loadShop();
+  await loadStats();
+  await loadRecentOrders();
+  await loadLeaderboard();
+  loadMyVybePosts();
+}
+
+// LOAD SHOP
+async function loadShop() {
+  const { data } = await sb.from("campus_stores").select("*").eq("user_id", currentUser.id).single();
+  currentShop = data;
+
+  if (currentShop) {
+    userUniAbbr = currentShop.university_abbr;
+    document.getElementById("userUni").textContent     = currentShop.university_abbr;
+    document.getElementById("shopName").value          = currentShop.store_name || "";
+    document.getElementById("shopWhatsapp").value      = currentShop.whatsapp_number || "";
+    document.getElementById("shopDesc").value          = currentShop.description || "";
+    document.getElementById("shopCategory").value      = currentShop.category || "";
+    document.getElementById("shopUni").value           = currentShop.university || "";
+    document.getElementById("statShopNum").textContent = currentShop.shop_number ? "#" + currentShop.shop_number : "Pending";
+    document.getElementById("statShopStatus").textContent = currentShop.is_active ? "✅ Active" : "⏳ Pending activation";
+    if (!currentShop.is_active) document.getElementById("subBanner").style.display = "flex";
+  } else {
+    document.getElementById("subBanner").style.display = "flex";
+  }
+}
+
+// LOAD STATS
+async function loadStats() {
+  if (!currentShop) return;
+  const { count: pCount } = await sb.from("campus_products").select("*", {count:"exact",head:true}).eq("store_id", currentShop.id);
+  const { data: orders }  = await sb.from("campus_orders").select("total_price").eq("store_id", currentShop.id);
+  document.getElementById("statProducts").textContent = pCount || 0;
+  document.getElementById("statOrders").textContent   = orders?.length || 0;
+  const rev = orders?.reduce((s,o) => s + Number(o.total_price), 0) || 0;
+  document.getElementById("statRevenue").textContent  = rev.toLocaleString();
+  document.getElementById("productCount").textContent = pCount || 0;
+}
+
+// LOAD RECENT ORDERS
+async function loadRecentOrders() {
+  const container = document.getElementById("recentOrders");
+  if (!currentShop) { container.innerHTML = '<div class="empty"><div class="empty-icon">🏪</div><div>Set up your shop first</div></div>'; return; }
+  const { data: orders } = await sb.from("campus_orders").select("*").eq("store_id", currentShop.id).order("created_at",{ascending:false}).limit(5);
+  if (!orders?.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><div>No orders yet — add products and start selling!</div></div>'; return; }
+  container.innerHTML = `<table><thead><tr><th>Customer</th><th>Total</th><th>Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.customer_name}</td><td>TZS ${Number(o.total_price).toLocaleString()}</td><td><span class="badge badge-${o.status}">${o.status}</span></td></tr>`).join("")}</tbody></table>`;
+}
+
+// LOAD PRODUCTS
+async function loadProducts() {
+  const container = document.getElementById("productsContainer");
+  if (!currentShop) { container.innerHTML = '<div class="empty"><div class="empty-icon">🏪</div><div>Set up your shop first</div></div>'; return; }
+  const { data: products } = await sb.from("campus_products").select("*").eq("store_id", currentShop.id).order("created_at",{ascending:false});
+  document.getElementById("productCount").textContent = products?.length || 0;
+  if (!products?.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><div style="font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.4rem">No products yet</div><div style="font-size:0.8rem;color:var(--gray)">Add your first product to start selling!</div></div>'; return; }
+  container.innerHTML = `<table><thead><tr><th>Product</th><th>Price (TZS)</th><th>Stock</th><th>Category</th><th>Actions</th></tr></thead><tbody>${products.map(p=>`<tr><td><strong>${p.name}</strong></td><td>${Number(p.price).toLocaleString()}</td><td>${p.stock}</td><td>${p.category||"—"}</td><td><button class="action-btn action-edit" onclick="editProduct('${p.id}','${p.name}',${p.price},${p.stock},'${p.category||""}','${p.description||""}')">Edit</button><button class="action-btn action-delete" onclick="deleteProduct('${p.id}')">Delete</button></td></tr>`).join("")}</tbody></table>`;
+}
+
+// LOAD ORDERS
+async function loadOrders() {
+  const container = document.getElementById("ordersContainer");
+  if (!currentShop) { container.innerHTML = '<div class="empty">Set up your shop first</div>'; return; }
+  const { data: orders } = await sb.from("campus_orders").select("*").eq("store_id", currentShop.id).order("created_at",{ascending:false});
+  if (!orders?.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">🛍️</div><div>No orders yet</div></div>'; return; }
+  container.innerHTML = `<table><thead><tr><th>Customer</th><th>Phone</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${o.customer_name}</td><td>${o.phone}</td><td>${o.quantity}</td><td>TZS ${Number(o.total_price).toLocaleString()}</td><td><span class="badge badge-${o.status}">${o.status}</span></td><td>${new Date(o.created_at).toLocaleDateString()}</td></tr>`).join("")}</tbody></table>`;
+}
+
+// LOAD LEADERBOARD
+async function loadLeaderboard() {
+  const list = document.getElementById("leaderboardList");
+  const { data: shops } = await sb.from("campus_stores").select("id,store_name,university_abbr,user_id").eq("is_active",true);
+  if (!shops?.length) { list.innerHTML = '<div class="empty">No sellers yet — be the first!</div>'; return; }
+
+  // Get order totals per shop
+  const totals = [];
+  for (const shop of shops) {
+    const { data: orders } = await sb.from("campus_orders").select("total_price").eq("store_id", shop.id);
+    const total = orders?.reduce((s,o) => s + Number(o.total_price), 0) || 0;
+    totals.push({ ...shop, total });
+  }
+  totals.sort((a,b) => b.total - a.total);
+
+  const rankClasses = ["gold","silver","bronze"];
+  list.innerHTML = totals.slice(0,10).map((shop, i) => {
+    const isYou = shop.user_id === currentUser?.id;
+    const rankClass = rankClasses[i] || "other";
+    return `<li class="lb-item ${isYou?"you":""}">
+      <div class="lb-rank ${rankClass}">${i===0?"👑":i+1}</div>
+      <div>
+        <div class="lb-name">${shop.store_name} ${isYou?'<span class="lb-you-badge">YOU</span>':""}</div>
+        <div class="lb-uni">${shop.university_abbr}</div>
+      </div>
+      <div class="lb-sales">TZS ${shop.total.toLocaleString()}</div>
+    </li>`;
+  }).join("");
+}
+
+// SAVE SHOP
+async function saveShop() {
+  const name     = document.getElementById("shopName").value.trim();
+  const whatsapp = document.getElementById("shopWhatsapp").value.trim();
+  const desc     = document.getElementById("shopDesc").value.trim();
+  const category = document.getElementById("shopCategory").value;
+
+  if (!name || !whatsapp || !desc) { showAlert("shopError","Please fill in all fields."); return; }
+
+  let logoUrl  = currentShop?.logo   || null;
+  let bannerUrl= currentShop?.banner || null;
+
+  const logoFile = document.getElementById("logoInput").files[0];
+  if (logoFile) logoUrl = await uploadImg("campus-assets", logoFile, `logos/${currentUser.id}.${logoFile.name.split(".").pop()}`);
+
+  const bannerFile = document.getElementById("bannerInput").files[0];
+  if (bannerFile) bannerUrl = await uploadImg("campus-assets", bannerFile, `banners/${currentUser.id}.${bannerFile.name.split(".").pop()}`);
+
+  const shopData = { user_id: currentUser.id, store_name: name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now(), description: desc, category, whatsapp_number: whatsapp, university: document.getElementById("shopUni").value, university_abbr: userUniAbbr, logo: logoUrl, banner: bannerUrl, primary_color: document.getElementById("shopColor")?.value || "", font: document.getElementById("shopFont")?.value || "" };
+
+  let error;
+  if (currentShop) {
+    const r = await sb.from("campus_stores").update(shopData).eq("id", currentShop.id);
+    error = r.error;
+  } else {
+    const r = await sb.from("campus_stores").insert(shopData);
+    error = r.error;
+  }
+
+  if (error) { showAlert("shopError", error.message); return; }
+  showAlert("shopSuccess","Shop saved! ✅");
+  await loadShop();
+}
+
+// SAVE PRODUCT
+async function saveProduct() {
+  const name     = document.getElementById("productName").value.trim();
+  const price    = document.getElementById("productPrice").value;
+  const stock    = document.getElementById("productStock").value;
+  const category = document.getElementById("productCategory").value;
+  const desc     = document.getElementById("productDesc").value.trim();
+  const editId   = document.getElementById("editingProductId").value;
+
+  if (!name || !price || !stock) { showAlert("productError","Please fill in all required fields."); return; }
+  if (!currentShop) { showAlert("productError","Please set up your shop first."); return; }
+
+  let imageUrl = null;
+  const imgFile = document.getElementById("productImgInput").files[0];
+  if (imgFile) imageUrl = await uploadImg("campus-assets", imgFile, `products/${currentUser.id}/${Date.now()}.${imgFile.name.split(".").pop()}`);
+
+  const productData = { store_id: currentShop.id, name, price: Number(price), stock: Number(stock), category, description: desc, images: imageUrl ? [imageUrl] : [] };
+
+  let error;
+  if (editId) {
+    const r = await sb.from("campus_products").update(productData).eq("id", editId);
+    error = r.error;
+  } else {
+    const r = await sb.from("campus_products").insert(productData);
+    error = r.error;
+  }
+
+  if (error) { showAlert("productError", error.message); return; }
+  closeProductModal();
+  await loadProducts();
+  await loadStats();
+}
+
+async function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+  await sb.from("campus_products").update({is_active:false}).eq("id",id);
+  await loadProducts();
+  await loadStats();
+}
+
+function editProduct(id,name,price,stock,category,desc) {
+  document.getElementById("editingProductId").value   = id;
+  document.getElementById("productName").value        = name;
+  document.getElementById("productPrice").value       = price;
+  document.getElementById("productStock").value       = stock;
+  document.getElementById("productCategory").value    = category;
+  document.getElementById("productDesc").value        = desc;
+  document.getElementById("productModalTitle").textContent = "Edit Product";
+  document.getElementById("productSaveBtn").textContent    = "Update Product";
+  openProductModal();
+}
+
+// UPLOAD IMAGE
+async function uploadImg(bucket, file, path) {
+  const { error } = await sb.storage.from(bucket).upload(path, file, { upsert: true });
+  if (error) return null;
+  const { data } = sb.storage.from(bucket).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+function previewImg(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById(previewId);
+    preview.src = e.target.result;
+    preview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
+
+// PANEL NAV
+function showPanel(name, btn) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".sidebar-link").forEach(l => l.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  if (btn) btn.classList.add("active");
+  const titles = { overview:"Dashboard Overview", store:"My Shop", products:"Products", orders:"Orders", vybe:"Post to Social Vybe", ai:"AI Assistants", leaderboard:"Campus Leaderboard", subscription:"Subscription" };
+  document.getElementById("pageTitle").textContent = titles[name] || name;
+  document.getElementById("pageBread").textContent  = titles[name] || name;
+  if (name === "products")    loadProducts();
+  if (name === "orders")      loadOrders();
+  if (name === "vybe")        loadMyVybePosts();
+  if (name === "leaderboard") loadLeaderboard();
+  if (name === "accounting")  loadAccounting();
+}
+
+// AI CHAT
+function switchAI(type, btn) {
+  document.querySelectorAll(".ai-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".ai-chat-wrap").forEach(w => w.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("ai-" + type).classList.add("active");
+}
+
+const systemPrompts = {
+  advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tstartnia. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
+  marketing:"You are a Marketing AI for Travex Campus student marketplace in Tstartnia. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
+  care:     "You are a Customer Care assistant for Travex Campus sellers. Help students respond to customer messages professionally and politely in English. Write actual response templates they can use.",
+  learn:    "You are a Business Learning AI for Travex Campus student sellers in Tstartnia. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
+};
+
+async function sendAI(type, text) {
+  const input    = document.getElementById("input-" + type);
+  const messages = document.getElementById("msgs-" + type);
+  const msg      = text || input.value.trim();
+  if (!msg) return;
+
+  const icons = { advisor:"🤖", marketing:"📈", care:"💬", learn:"📚" };
+
+  messages.innerHTML += `<div class="ai-msg user"><div class="ai-icon">ME</div><div class="ai-bubble">${msg}</div></div>`;
+  input.value = "";
+  messages.scrollTop = messages.scrollHeight;
+
+  const typingId = "t-" + Date.now();
+  messages.innerHTML += `<div class="ai-msg bot" id="${typingId}"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble">...</div></div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    const { data: { session } } = await sb.orth.getSession();
+    const res = await fetch(GEMINI_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Authorization":`Bearer ${session?.access_token || SUPABASE_ANON}` },
+      body: JSON.stringify({ message: msg, systemPrompt: systemPrompts[type] })
+    });
+    const data = await res.json();
+    const reply = data.reply || "Sorry, try again.";
+    document.getElementById(typingId).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble">${reply.replace(/\n/g,"<br>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")}</div></div>`;
+  } catch {
+    document.getElementById(typingId).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble" style="color:var(--red)">Connection error. Please try again.</div></div>`;
+  }
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// MODAL
+function openProductModal() { document.getElementById("productModal").classList.add("open"); }
+function closeProductModal() {
+  document.getElementById("productModal").classList.remove("open");
+  document.getElementById("editingProductId").value = "";
+  document.getElementById("productName").value  = "";
+  document.getElementById("productPrice").value = "";
+  document.getElementById("productStock").value = "";
+  document.getElementById("productDesc").value  = "";
+  document.getElementById("productModalTitle").textContent = "Add New Product";
+  document.getElementById("productSaveBtn").textContent    = "Add Product";
+  document.getElementById("productError").style.display   = "none";
+}
+
+document.getElementById("productModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("productModal")) closeProductModal();
+});
+
+function showAlert(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 5000);
+}
+
+async function handleLogout() {
+  await sb.orth.signOut();
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace("login.html");
+}
+
+init();
+
+// ── CAMPUS AUTH FUNCTIONS ────────────────────────────────
+function switchAuthTab(tab) { /* legacy - not used */ }
+
+function showResetPass() {
+  const overlay = document.getElementById("campusLoginOverlay");
+  overlay.querySelectorAll("[id$='Form']").forEach(f => f.style.display = "none");
+  document.getElementById("resetForm").style.display = "block";
+}
+function showLoginForm() {
+  const overlay = document.getElementById("campusLoginOverlay");
+  overlay.querySelectorAll("[id$='Form']").forEach(f => f.style.display = "none");
+  // The main login card is not a form with id — just hide reset
+  document.getElementById("resetForm").style.display = "none";
+}
+
+async function doLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass  = document.getElementById("loginPassword").value;
+  const btn   = document.getElementById("loginBtn");
+  const errEl = document.getElementById("loginError");
+
+  if (!email || !pass) {
+    showAuthError(errEl, "Please enter your email and password.");
+    return;
+  }
+  btn.textContent = "Signing in...";
+  btn.disabled = true;
+
+  const { error } = await sb.orth.signInWithPassword({ email, password: pass });
+  if (error) {
+    showAuthError(errEl, "Failed: " + (error.message === "Invalid login credentials" ? "Invalid email or password." : error.message));
+    btn.textContent = "Login to Dashboard →";
+    btn.disabled = false;
+    return;
+  }
+  document.getElementById("campusLoginOverlay").style.display = "none";
+  await init();
+}
+
+// doSignup removed — registration handled by admin approval flow
+
+async function doReset() {
+  const email = document.getElementById("resetEmail").value.trim();
+  const msgEl = document.getElementById("resetMsg");
+  if (!email) { showAuthError(msgEl, "Please enter your email."); return; }
+  const { error } = await sb.orth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + "/campus-dashboard.html"
+  });
+  if (error) { showAuthError(msgEl, error.message); return; }
+  showAuthMsg(msgEl, "✅ Link imetumwa! View email yako.", "#D1FAE5", "#059669");
+}
+
+function showAuthError(el, msg) {
+  el.innerHTML = \`<div style="padding:0.75rem 1rem;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;font-size:0.82rem;margin-bottom:0">\${msg}</div>\`;
+}
+function showAuthMsg(el, msg, bg, color) {
+  el.innerHTML = \`<div style="padding:0.75rem 1rem;background:\${bg};border:1px solid \${color};color:\${color};font-size:0.82rem;margin-bottom:0">\${msg}</div>\`;
+}
+
+// ── CAMPUS REGISTRATION (embedded steps) ────────────────
+let regStep = 1;
+let regUni = { abbr:"", name:"", region:"" };
+
+function switchCampusTab(tab) {
+  const isLogin = tab === "login";
+  document.getElementById("panel-login").style.display    = isLogin ? "block" : "none";
+  document.getElementById("panel-register").style.display = isLogin ? "none"  : "block";
+  document.getElementById("tab-login").style.color        = isLogin ? "#C9A84C" : "rgba(255,255,255,0.4)";
+  document.getElementById("tab-login").style.borderBottomColor    = isLogin ? "#C9A84C" : "transparent";
+  document.getElementById("tab-register").style.color     = isLogin ? "rgba(255,255,255,0.4)" : "#C9A84C";
+  document.getElementById("tab-register").style.borderBottomColor = isLogin ? "transparent" : "#C9A84C";
+}
+
+function regSelectUni(el, abbr, name, region) {
+  document.querySelectorAll(".reg-uni-opt").forEach(o => o.classList.remove("selected"));
+  el.classList.add("selected");
+  regUni = { abbr, name, region };
+}
+
+function regPreviewId(input) {
+  const f = input.files[0];
+  if (f) document.getElementById("reg-id-label").textContent = "✅ " + f.name;
+}
+
+function regUpdateProgress(step) {
+  for (let i = 1; i <= 4; i++) {
+    const circle = document.getElementById("rp" + i);
+    const line   = document.getElementById("rl" + i);
+    if (i < step)       { circle.className = "rp-step done"; if(line) line.className = "rp-line done"; }
+    else if (i === step) { circle.className = "rp-step active"; if(line) line.className = "rp-line"; }
+    else                 { circle.className = "rp-step"; if(line) line.className = "rp-line"; }
+  }
+  const labels = ["Your Info","Your University","Your Business","Review & Submit"];
+  document.getElementById("rsl-title").textContent = labels[step-1];
+  document.getElementById("rsl-sub").textContent   = "Step " + step + " ya 4";
+}
+
+function regShowErr(step, msg) {
+  const el = document.getElementById("reg-err" + step);
+  if (!el) return;
+  el.innerHTML = msg ? `<div style="padding:0.65rem 0.9rem;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);color:#FCA5A5;font-size:0.8rem;margin-bottom:0.5rem">${msg}</div>` : "";
+}
+
+function regNextStep(target) {
+  // Validate current before moving forward
+  if (target > regStep) {
+    if (regStep === 1) {
+      const name  = document.getElementById("reg-name").value.trim();
+      const phone = document.getElementById("reg-phone").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const pass  = document.getElementById("reg-password").value;
+      const year  = document.getElementById("reg-year").value;
+      if (!name || !phone || !email || !pass || !year) { regShowErr(1,"Please fill in all required fields."); return; }
+      if (pass.length < 8) { regShowErr(1,"Password must be at least 8 characters."); return; }
+      if (!email.includes("@")) { regShowErr(1,"Email si sahihi."); return; }
+      regShowErr(1,"");
+    }
+    if (regStep === 2) {
+      if (!regUni.abbr) { regShowErr(2,"Please select your university."); return; }
+      if (!document.getElementById("reg-id-file").files[0]) { regShowErr(2,"Please upload your university ID photo."); return; }
+      regShowErr(2,"");
+    }
+    if (regStep === 3) {
+      const shop = document.getElementById("reg-shopname").value.trim();
+      const cat  = document.getElementById("reg-category").value;
+      const wa   = document.getElementById("reg-whatsapp").value.trim();
+      const desc = document.getElementById("reg-desc").value.trim();
+      if (!shop || !cat || !wa || !desc) { regShowErr(3,"Please fill in all required fields."); return; }
+      if (desc.length < 50) { regShowErr(3,"Description must be at least 50 characters."); return; }
+      regShowErr(3,"");
+      // Build review
+      document.getElementById("reg-review-body").innerHTML = \`
+        👤 <strong style="color:#fff">Name:</strong> \${document.getElementById("reg-name").value}<br>
+        📧 <strong style="color:#fff">Email:</strong> \${document.getElementById("reg-email").value}<br>
+        📱 <strong style="color:#fff">Phone:</strong> \${document.getElementById("reg-phone").value}<br>
+        🎓 <strong style="color:#fff">University:</strong> \${regUni.abbr} — \${regUni.name}<br>
+        🏪 <strong style="color:#fff">Shop:</strong> \${shop}<br>
+        📦 <strong style="color:#fff">Kategoria:</strong> \${cat}\`;
+    }
+  }
+
+  document.getElementById("reg-step" + regStep).style.display = "none";
+  document.getElementById("reg-step" + target).style.display  = "block";
+  regStep = target;
+  regUpdateProgress(target);
+  document.getElementById("campusLoginOverlay").scrollTop = 0;
+}
+
+async function submitRegApplication() {
+  const btn = document.getElementById("reg-submit-btn");
+  btn.textContent = "Submitting...";
+  btn.disabled = true;
+  regShowErr(4, "");
+
+  try {
+    // Upload ID card
+    const idFile = document.getElementById("reg-id-file").files[0];
+    let idCardUrl = null;
+    if (idFile) {
+      const ext  = idFile.name.split(".").pop();
+      const path = \`id-cards/\${Date.now()}.\${ext}\`;
+      const { error: upErr } = await sb.storage.from("campus-assets").upload(path, idFile);
+      if (!upErr) {
+        const { data } = sb.storage.from("campus-assets").getPublicUrl(path);
+        idCardUrl = data.publicUrl;
+      }
+    }
+
+    // Create Supabase Auth user
+    const email    = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+    const { data: orthData, error: orthErr } = await sb.orth.signUp({
+      email, password,
+      options: { data: { name: document.getElementById("reg-name").value.trim(), role: "campus_seller" } }
+    });
+    if (orthErr) throw orthErr;
+
+    // Insert application
+    const { error: appErr } = await sb.from("campus_applications").insert({
+      full_name:            document.getElementById("reg-name").value.trim(),
+      email:                email,
+      phone:                document.getElementById("reg-phone").value.trim(),
+      whatsapp_number:      document.getElementById("reg-whatsapp").value.trim(),
+      university:           regUni.name,
+      university_abbr:      regUni.abbr,
+      region:               regUni.region,
+      year_of_study:        document.getElementById("reg-year").value,
+      business_category:    document.getElementById("reg-category").value,
+      business_description: "SHOP:" + document.getElementById("reg-shopname").value.trim() + "\n" + document.getElementById("reg-desc").value.trim(),
+      id_card_url:          idCardUrl,
+      user_id:              orthData?.user?.id || null,
+      status:               "pending"
+    });
+    if (appErr) throw appErr;
+
+    // Sign out immediately — they wait for admin approval before logging in
+    await sb.orth.signOut();
+
+    // Notify admin immediately via admin_notifications
+    await sb.from("admin_notifications").insert({
+      type: "campus_application",
+      title: `🎓 New Shop Application — ${document.getElementById("reg-shopname").value.trim()} (${document.getElementById("reg-name").value.trim()})`,
+      body:  `University: ${regUni.abbr} | Shop: ${document.getElementById("reg-shopname").value.trim()} | Category: ${document.getElementById("reg-category").value} | WhatsApp: ${document.getElementById("reg-whatsapp").value.trim()}`,
+      is_read: false,
+      created_at: new Date().toISOString()
+    }).catch(()=>{});
+
+    // Show success screen
+    for (let i = 1; i <= 4; i++) document.getElementById("reg-step" + i).style.display = "none";
+    document.getElementById("reg-progress").style.display = "none";
+    document.getElementById("reg-step-label").style.display = "none";
+    document.getElementById("reg-success").style.display = "block";
+
+  } catch (err) {
+    regShowErr(4, "Error: " + (err.message || "Please try again"));
+    btn.textContent = "Submit Application →";
+    btn.disabled = false;
+  }
+}
+
+function regGoToSubscription() {
+  document.getElementById("reg-step4").style.display = "none";
+  document.getElementById("reg-step5").style.display = "block";
+  // Update progress
+  for (let i = 1; i <= 4; i++) {
+    const c = document.getElementById("rp" + i);
+    const l = document.getElementById("rl" + i);
+    if (c) { c.className = i < 5 ? "rp-step done" : "rp-step active"; }
+    if (l) { l.className = i < 4 ? "rp-line done" : "rp-line"; }
+  }
+  document.getElementById("rsl-title").textContent = "Your Subscription";
+  document.getElementById("rsl-sub").textContent = "Step 5 of 5 — Payment";
+  document.getElementById("campusLoginOverlay").scrollTop = 0;
+}
+
+// ── SOCIAL VYBE ──
+let currentAI = 'customer';
+let vybeMediaFile = null;
+let vybeMediaType = null;
+
+function previewVybe(input) {
+  const file = input.files[0];
+  if (!file) return;
+  vybeMediaFile = file;
+  vybeMediaType = file.type.startsWith('video') ? 'video' : 'image';
+  const url = URL.createObjectURL(file);
+  if (vybeMediaType === 'image') {
+    document.getElementById('vybeImgPreview').src = url;
+    document.getElementById('vybeImgPreview').style.display = 'block';
+    document.getElementById('vybeVidPreview').style.display = 'none';
+  } else {
+    document.getElementById('vybeVidPreview').src = url;
+    document.getElementById('vybeVidPreview').style.display = 'block';
+    document.getElementById('vybeImgPreview').style.display = 'none';
+  }
+}
+
+function handleVybeDrop(e) {
+  e.preventDeforlt();
+  document.getElementById('vybeMediaInput').files = e.dataTransfer.files;
+  previewVybe(document.getElementById('vybeMediaInput'));
+}
+
+async function postToVybe() {
+  const caption = document.getElementById('vybeCaption').value.trim();
+  const price   = document.getElementById('vybePrice').value;
+  const btn     = document.getElementById('vybePostBtn');
+  const msg     = document.getElementById('vybeMsg');
+
+  if (!caption) { showVybeMsg('Please write a caption!', 'error'); return; }
+  if (!currentShop) { showVybeMsg('You need an active shop to post.', 'error'); return; }
+
+  btn.disabled = true; btn.textContent = 'Posting...';
+
+  let mediaUrl = null;
+  // Upload media if provided
+  if (vybeMediaFile) {
+    const ext = vybeMediaFile.name.split('.').pop();
+    const path = `vybe/${currentShop.id}_${Date.now()}.${ext}`;
+    const { data: upData, error: upErr } = await sb.storage.from('campus-media').upload(path, vybeMediaFile, {cacheControl:'3600',upsert:false});
+    if (upErr) { showVybeMsg('Upload failed: ' + upErr.message, 'error'); btn.disabled=false; btn.textContent='✦ Post to Social Vybe'; return; }
+    const { data: urlData } = sb.storage.from('campus-media').getPublicUrl(path);
+    mediaUrl = urlData.publicUrl;
+  }
+
+  const { error } = await sb.from('feed_posts').insert({
+    store_id:       currentShop.id,
+    caption:        caption,
+    media_url:      mediaUrl,
+    media_type:     vybeMediaType || 'text',
+    price:          price ? Number(price) : null,
+    university_abbr: currentShop.university_abbr,
+    likes_count:    0
+  });
+
+  btn.disabled = false; btn.textContent = '✦ Post to Social Vybe';
+
+  if (error) {
+    showVybeMsg('Error: ' + error.message, 'error');
+  } else {
+    showVybeMsg('✅ Posted successfully! Your post is live on Social Vybe.', 'success');
+    document.getElementById('vybeCaption').value = '';
+    document.getElementById('vybePrice').value   = '';
+    document.getElementById('vybeImgPreview').style.display = 'none';
+    document.getElementById('vybeVidPreview').style.display = 'none';
+    vybeMediaFile = null;
+    loadMyVybePosts();
+  }
+}
+
+function showVybeMsg(text, type) {
+  const el = document.getElementById('vybeMsg');
+  el.textContent = text;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? 'rgba(5,150,105,0.1)' : 'rgba(220,38,38,0.1)';
+  el.style.color = type === 'success' ? 'var(--green)' : 'var(--red)';
+  el.style.border = '1px solid ' + (type === 'success' ? 'rgba(5,150,105,0.2)' : 'rgba(220,38,38,0.2)');
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+async function loadMyVybePosts() {
+  if (!currentShop) return;
+  const el = document.getElementById('myVybePosts');
+  const { data, error } = await sb.from('feed_posts')
+    .select('*')
+    .eq('store_id', currentShop.id)
+    .order('created_at', {ascending: false})
+    .limit(10);
+
+  if (error || !data?.length) {
+    el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray);font-size:0.82rem">No posts yet — create your first post! ✨</div>';
+    return;
+  }
+
+  el.innerHTML = data.map(p => `
+    <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;gap:0.75rem;align-items:flex-start">
+      ${p.media_url && p.media_type==='image' 
+        ? `<img src="${p.media_url}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0">`
+        : '<div style="width:50px;height:50px;background:var(--offwhite);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">✦</div>'}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.8rem;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:0.2rem">${p.caption||''}</div>
+        <div style="display:flex;gap:0.75rem;font-size:0.68rem;color:var(--gray)">
+          <span>❤️ ${p.likes_count||0}</span>
+          ${p.price ? `<span>TZS ${Number(p.price).toLocaleString()}</span>` : ''}
+          <span>${new Date(p.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── AI ──
+function switchAI(type, btn) {
+  currentAI = type;
+  document.querySelectorAll('.ai-tab').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const titles = {customer:'💬 AI Customer Care', marketing:'📣 AI Marketing', accounting:'💰 AI Accounting'};
+  document.getElementById('aiTitle').textContent = titles[type];
+  document.getElementById('aiMessages').innerHTML = '';
+  document.getElementById('aiInput').value = '';
+}
+
+async function sendAI(type, text) {
+  if (!text?.trim()) return;
+  const messages = document.getElementById('aiMessages');
+  const input    = document.getElementById('aiInput');
+  input.value    = '';
+
+  messages.innerHTML += `<div style="align-self:flex-end;background:var(--navy);color:#fff;padding:0.6rem 0.9rem;border-radius:10px 10px 2px 10px;font-size:0.82rem;max-width:80%">${text}</div>`;
+  messages.innerHTML += `<div id="aiTyping" style="align-self:flex-start;background:var(--offwhite);border:1px solid var(--lgray);padding:0.6rem 0.9rem;border-radius:10px 10px 10px 2px;font-size:0.82rem;color:var(--gray)">Thinking...</div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  const prompts = {
+    customer: `You are a Customer Care AI for ${currentShop?.store_name||'a campus shop'}. Help the seller respond to customer messages professionally and politely in English. Write actual response templates.`,
+    marketing: `You are a Marketing AI for ${currentShop?.store_name||'a campus shop'} selling ${currentShop?.category||'products'}. Help create compelling marketing posts and strategies for university students.`,
+    accounting: `You are an Accounting AI assistant for a small campus business. Help track expenses, calculate profit, and give simple financial advice. Keep it simple and practical.`
+  };
+
+  try {
+    if (!checkRateLimit()) { const el=document.getElementById('aiMessages'); if(el){const d=document.createElement('div');d.className='msg ai';d.style.cssText='background:#FEF3C7;border:1px solid #F59E0B;color:#92400E;font-size:0.82rem;padding:0.65rem';d.textContent='⚠️ Daily limit of 30 messages reached. Resets tomorrow.';el.appendChild(d);el.scrollTop=el.scrollHeight;} return; }
+    incrementRateLimit();
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model: "clorde-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: prompts[type],
+        messages: [{role:"user",content:text}]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "Sorry, I couldn't get a response.";
+    document.getElementById('aiTyping').outerHTML = `<div style="align-self:flex-start;background:var(--offwhite);border:1px solid var(--lgray);padding:0.6rem 0.9rem;border-radius:10px 10px 10px 2px;font-size:0.82rem;max-width:85%;line-height:1.6">${reply.replace(/\n/g,'<br>')}</div>`;
+  } catch(e) {
+    document.getElementById('aiTyping').outerHTML = `<div style="align-self:flex-start;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);padding:0.6rem 0.9rem;border-radius:10px;font-size:0.82rem;color:var(--red)">Error: ${e.message}</div>`;
+  }
+  messages.scrollTop = messages.scrollHeight;
+}
+
+
+// ── ACCOUNTING ──
+let accPeriod = 'daily';
+
+function switchAccPeriod(period, btn) {
+  accPeriod = period;
+  document.querySelectorAll('.acc-tab').forEach(b => {
+    b.style.background = 'var(--offwhite)';
+    b.style.color = 'var(--gray)';
+    b.style.border = '1px solid var(--lgray)';
+  });
+  if (btn) {
+    btn.style.background = 'var(--navy)';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+  }
+  loadAccounting();
+}
+
+async function loadAccounting() {
+  if (!currentShop) return;
+  const el = document.getElementById('acc-orders-list');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">Loading...</div>';
+
+  const now = new Date();
+  let from;
+  if (accPeriod === 'daily') {
+    from = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+  } else if (accPeriod === 'weekly') {
+    const d = new Date(now); d.setDate(d.getDate() - 7);
+    from = d.toISOString();
+  } else {
+    const d = new Date(now); d.setDate(d.getDate() - 30);
+    from = d.toISOString();
+  }
+
+  const { data: orders, error } = await sb.from('campus_orders')
+    .select('*').eq('store_id', currentShop.id)
+    .gte('created_at', from).order('created_at', { ascending: false });
+
+  if (error || !orders) {
+    el.innerHTML = '<div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">No data found.</div>';
+    return;
+  }
+
+  const totalRev = orders.reduce((sum, o) => sum + (Number(o.total_price)||0), 0);
+  const avgOrder = orders.length ? totalRev / orders.length : 0;
+
+  const fmt = n => 'TZS ' + Math.round(n).toLocaleString();
+  document.getElementById('acc-total-rev') && (document.getElementById('acc-total-rev').textContent = fmt(totalRev));
+  document.getElementById('acc-total-orders') && (document.getElementById('acc-total-orders').textContent = orders.length);
+  document.getElementById('acc-avg-order') && (document.getElementById('acc-avg-order').textContent = fmt(avgOrder));
+
+  if (!orders.length) {
+    el.innerHTML = '<div style="text-align:center;color:var(--gray);padding:2rem;font-size:0.82rem">No orders in this period yet.</div>';
+    return;
+  }
+
+  el.innerHTML = orders.map(o => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0;border-bottom:1px solid var(--lgray)">
+      <div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--navy)">${o.product_name||'Order'}</div>
+        <div style="font-size:0.7rem;color:var(--gray)">${o.customer_name||''} · ${new Date(o.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:0.85rem;font-weight:800;color:var(--navy)">${o.total_price?'TZS '+Number(o.total_price).toLocaleString():'—'}</div>
+        <div style="font-size:0.68rem;font-weight:700;color:${o.status==='delivered'?'var(--green)':o.status==='confirmed'?'var(--purple)':'var(--orange)'}">
+          ${o.status||'pending'}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── MARKETING PLAN ──
+async function generateMarketingPlan() {
+  if (!checkRateLimit()) { showLimitWarning('mkt-plan-content'); return; }
+  
+  const audience = document.getElementById('mkt-audience')?.value.trim() || 'university students';
+  const products = document.getElementById('mkt-products')?.value.trim() || currentShop?.category || 'general products';
+  const budget   = document.getElementById('mkt-budget')?.value || '50000';
+  const btn      = document.getElementById('mkt-btn');
+  const content  = document.getElementById('mkt-plan-content');
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
+  if (content) content.innerHTML = '<div style="color:var(--gray);font-style:italic">AI is creating your personalized marketing plan...</div>';
+
+  const prompt = `Create a practical marketing plan for a campus shop on Travex Campus marketplace in Tanzania.
+
+Shop details:
+- Shop Name: ${currentShop?.store_name || 'Campus Shop'}
+- Category: ${currentShop?.category || products}
+- University: ${currentShop?.university || 'University'}
+- Target Audience: ${audience}
+- Main Products: ${products}
+- Monthly Budget: TZS ${budget}
+
+Provide a structured plan with:
+1. Social Media Strategy (Instagram, TikTok, WhatsApp)
+2. Weekly posting schedule
+3. Promotion ideas that fit the budget
+4. How to use Social Vybe effectively
+5. 3 quick wins to get first 10 customers
+
+Keep it practical and specific to the Tanzanian university market. Format with clear sections and bullet points.`;
+
+  try {
+    incrementRateLimit();
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const plan = data.content?.[0]?.text || 'Failed to generate plan.';
+    if (content) content.innerHTML = '<pre style="white-space:pre-wrap;font-family:DM Sans,sans-serif;font-size:0.82rem;line-height:1.7;color:#111">' + plan + '</pre>';
+  } catch(e) {
+    if (content) content.innerHTML = '<div style="color:var(--red)">Error: ' + e.message + '</div>';
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = '🚀 Generate Marketing Plan'; }
+}
+
+// ── UPDATE ORDER STATUS ──
+async function updateOrderStatus(orderId, newStatus) {
+  const { error } = await sb.from('campus_orders').update({ status: newStatus }).eq('id', orderId);
+  if (error) { showToast('Error: ' + error.message, 'err'); return; }
+  showToast('Order status updated to ' + newStatus, 'ok');
+  await loadOrders();
+  if (accPeriod) loadAccounting();
+}
+
+</script>
+</body>
+</html>
