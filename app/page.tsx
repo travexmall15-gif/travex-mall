@@ -1,115 +1,71 @@
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { Particles } from '@/components/particles'
-import { ShopCard } from '@/components/shop-card'
 import { shops, universities } from '@/lib/data'
-import {
-  Store, GraduationCap, Briefcase, FileText,
-  ShieldCheck, Rocket, TrendingUp, Sparkles,
-  Heart, Zap, ArrowRight, Star,
-} from 'lucide-react'
+import { ArrowRight, GraduationCap, Briefcase } from 'lucide-react'
 
-const steps = [
-  { icon: FileText,    title: 'Apply',   desc: 'Submit your application with student ID.' },
-  { icon: ShieldCheck, title: 'Verify',  desc: 'We review and approve within 48 hours.' },
-  { icon: Rocket,      title: 'Launch',  desc: 'Add products and go live instantly.' },
-  { icon: TrendingUp,  title: 'Earn',    desc: 'Get WhatsApp orders and grow.' },
-]
-
-const benefits = [
-  { icon: Zap,         title: 'WhatsApp Orders',    desc: 'Customers order via WhatsApp — simple and fast.' },
-  { icon: Sparkles,    title: 'AI Assistants',       desc: 'AI for customer care, marketing and pricing.' },
-  { icon: Heart,       title: 'Social Vybe Feed',    desc: 'Promote products on campus social commerce feed.' },
-  { icon: TrendingUp,  title: 'Sales Analytics',     desc: 'Track revenue and orders in real-time.' },
-  { icon: ShieldCheck, title: 'Verified Badge',       desc: 'Build trust with a verified shop badge.' },
-  { icon: Store,       title: 'Your Own Storefront',  desc: 'Custom shop page with your brand and products.' },
-]
-
-const testimonials = [
-  { name: 'Amina Hassan', role: 'Fashion · UDSM', quote: 'I went from selling at the hostel gate to 50+ orders a week. The WhatsApp integration is genius!', rating: 5 },
-  { name: 'John Mushi',   role: 'Electronics · ARU',  quote: 'The AI assistant answers my customers even when I am in class. Revenue doubled in 2 months.', rating: 5 },
-  { name: 'Grace Temba',  role: 'Food Vendor · UDOM', quote: 'Setting up my shop took 5 minutes. Now I get lunch orders every morning before 10am.', rating: 5 },
+const UNIS = [
+  { abbr: 'UDSM', name: 'Univ. of Dar es Salaam', city: 'Dar es Salaam', slug: 'udsm', shops: 58, total: 60 },
+  { abbr: 'UDOM', name: 'Univ. of Dodoma', city: 'Dodoma', slug: 'udom', shops: 31, total: 60 },
+  { abbr: 'ARU',  name: 'Ardhi University', city: 'Dar es Salaam', slug: 'aru', shops: 42, total: 60 },
+  { abbr: 'TIA',  name: 'Tanzania Inst. of Accountancy', city: 'Dar es Salaam', slug: 'tia', shops: 24, total: 60 },
+  { abbr: 'NIT',  name: 'Nelson Mandela African Inst. of Science', city: 'Arusha', slug: 'nit', shops: 12, total: 60 },
 ]
 
 export default function HomePage() {
   return (
-    <main style={{ fontFamily: 'Inter, sans-serif', background: '#F8F9FC' }}>
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8F9FC', overflowX: 'hidden' }}>
+      {/* Google Fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+        :root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--green:#059669}
+        *{box-sizing:border-box}
+        .hover-lift{transition:all 0.25s ease}
+        .hover-lift:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.12)}
+        .shop-card-home{background:#fff;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;transition:all 0.2s}
+        .shop-card-home:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.1)}
+        @media(max-width:768px){
+          .hero-h1{font-size:clamp(2rem,8vw,3rem)!important}
+          .hero-sub{font-size:0.88rem!important}
+          .section-headline{font-size:clamp(1.4rem,5vw,2rem)!important}
+          .bebas-big{font-size:clamp(2.8rem,12vw,8rem)!important}
+          .uni-grid{flex-direction:column!important;align-items:stretch!important}
+          .uni-card{min-width:unset!important;width:100%!important}
+          .footer-grid-inner{grid-template-columns:1fr 1fr!important}
+        }
+      `}</style>
+
       <SiteNav />
 
-      {/* ── HERO ── */}
-      <section style={{
-        position: 'relative', minHeight: '100vh', display: 'flex',
-        alignItems: 'center', overflow: 'hidden', background: '#0D1B3E',
-        paddingTop: '64px', color: '#fff'
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0, backgroundImage: 'url(/hero-marketplace.png)',
-          backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2
-        }} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(135deg, #0D1B3E 0%, rgba(13,27,62,0.92) 60%, rgba(27,58,107,0.8) 100%)'
-        }} />
+      {/* ══════════ HERO ══════════ */}
+      <section style={{position:'relative',minHeight:'100vh',display:'flex',alignItems:'center',overflow:'hidden',background:'#0D1B3E',paddingTop:'64px',color:'#fff'}}>
+        <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero-marketplace.png)',backgroundSize:'cover',backgroundPosition:'center',opacity:0.2}} />
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(13,27,62,0.96) 0%,rgba(13,27,62,0.88) 60%,rgba(27,58,107,0.75) 100%)'}} />
         <Particles />
-        <div style={{ position: 'relative', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '5rem 5% 4rem' }}>
-          <div style={{ maxWidth: '680px' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.35)',
-              color: '#C9A84C', padding: '0.35rem 1rem', borderRadius: '20px',
-              fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.5rem'
-            }}>
+        <div style={{position:'relative',width:'100%',maxWidth:'1200px',margin:'0 auto',padding:'5rem 5% 4rem'}}>
+          <div style={{maxWidth:'680px'}}>
+            <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.35)',color:'#C9A84C',padding:'0.35rem 1rem',borderRadius:'20px',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.05em',marginBottom:'1.5rem'}}>
               ◆ Africa's #1 AI-Powered Marketplace — Tanzania 2026
             </div>
-            <h1 style={{
-              fontFamily: '"Playfair Display", Georgia, serif',
-              fontSize: 'clamp(2.4rem, 6vw, 4.8rem)',
-              fontWeight: 900, lineHeight: 1.08, color: '#fff',
-              marginBottom: '1.25rem', letterSpacing: '-0.01em'
-            }}>
-              Africa's{' '}
-              <span style={{
-                color: '#C9A84C',
-                textShadow: '0 0 40px rgba(201,168,76,0.3)'
-              }}>Intelligent</span>
-              <br />Digital Marketplace
+            <h1 className="hero-h1" style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(2.4rem,6vw,4.8rem)',fontWeight:900,lineHeight:1.06,color:'#fff',marginBottom:'1.2rem',letterSpacing:'-0.01em'}}>
+              Africa's <span style={{color:'#C9A84C'}}>Intelligent</span><br/>Digital Marketplace
             </h1>
-            <p style={{
-              fontSize: 'clamp(0.9rem, 2vw, 1.05rem)', lineHeight: 1.75,
-              color: 'rgba(255,255,255,0.65)', marginBottom: '2rem',
-              maxWidth: '520px', fontWeight: 400
-            }}>
-              Create your online store in minutes. Sell across Tanzania. Grow your business with AI-powered tools — designed for every African entrepreneur.
+            <p className="hero-sub" style={{fontSize:'clamp(0.88rem,1.8vw,1.05rem)',lineHeight:1.75,color:'rgba(255,255,255,0.65)',marginBottom:'2rem',maxWidth:'520px',fontWeight:400}}>
+              Create your online store in minutes. Sell across Tanzania. Grow your business with AI-powered intelligence — designed for every African entrepreneur.
             </p>
-            <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-              <Link href="/campus-apply" style={{
-                background: '#C9A84C', color: '#0D1B3E', padding: '0.85rem 2rem',
-                borderRadius: '10px', fontWeight: 700, fontSize: '0.9rem',
-                textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                transition: 'all 0.2s'
-              }}>
+            <div style={{display:'flex',gap:'0.85rem',flexWrap:'wrap',marginBottom:'2.5rem'}}>
+              <Link href="/login" style={{background:'#C9A84C',color:'#0D1B3E',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:700,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
                 Login to Your Shop →
               </Link>
-              <Link href="/open-store-b2c" style={{
-                background: 'rgba(255,255,255,0.08)', color: '#fff',
-                border: '1px solid rgba(255,255,255,0.25)', padding: '0.85rem 2rem',
-                borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem',
-                textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                backdropFilter: 'blur(8px)', transition: 'all 0.2s'
-              }}>
+              <Link href="/open-store-b2c" style={{background:'rgba(255,255,255,0.08)',color:'#fff',border:'1px solid rgba(255,255,255,0.25)',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:600,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
                 Open New Store
               </Link>
             </div>
-            <div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
-              {[['3M+','Tanzania SMEs'],['$75B','Africa Market'],['30%+','Annual Growth']].map(([v,l]) => (
+            <div style={{display:'flex',gap:'2.5rem',flexWrap:'wrap'}}>
+              {[['3M+','Tanzania SMEs'],['$75B','Africa Market'],['30%+','Annual Growth']].map(([v,l])=>(
                 <div key={l}>
-                  <div style={{
-                    fontFamily: '"Playfair Display", serif',
-                    fontSize: 'clamp(1.4rem, 3vw, 2rem)',
-                    fontWeight: 900, color: '#C9A84C'
-                  }}>{v}</div>
-                  <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>{l}</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(1.4rem,3vw,2rem)',fontWeight:900,color:'#C9A84C'}}>{v}</div>
+                  <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.45)',marginTop:'2px'}}>{l}</div>
                 </div>
               ))}
             </div>
@@ -117,330 +73,240 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── B2C SECTION ── */}
-      <section style={{ background: '#F8F9FC', padding: '5rem 5%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-120px', left: '-80px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(13,27,62,0.05), transparent 65%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-80px', right: '-80px', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,168,76,0.06), transparent 65%)', pointerEvents: 'none' }} />
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#1B3A6B', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.6rem' }}>
-            For Individual Sellers
+      {/* ══════════ B2C SECTION ══════════ */}
+      <section style={{position:'relative',overflow:'hidden',background:'#F8F9FC',padding:'6rem 5%',textAlign:'center'}}>
+        <div style={{position:'absolute',top:'-150px',left:'-100px',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(13,27,62,0.06),transparent 65%)',pointerEvents:'none'}} />
+        <div style={{position:'absolute',bottom:'-100px',right:'-100px',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.05),transparent 65%)',pointerEvents:'none'}} />
+        <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(rgba(13,27,62,0.03) 1px,transparent 1px)',backgroundSize:'28px 28px',pointerEvents:'none'}} />
+        <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(13,27,62,0.15),transparent)'}} />
+        <div style={{position:'relative',zIndex:1,maxWidth:'900px',margin:'0 auto'}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(192,192,192,0.12)',border:'1px solid rgba(192,192,192,0.25)',color:'#9CA3AF',padding:'0.32rem 1rem',fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.22em',textTransform:'uppercase',marginBottom:'1.5rem'}}>
+            <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#9CA3AF',flexShrink:0}} />
+            RETAIL MARKET · B2C
           </div>
-          <h2 style={{
-            fontFamily: '"Playfair Display", Georgia, serif',
-            fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-            fontWeight: 800, color: '#0D1B3E', marginBottom: '0.6rem'
-          }}>
-            Sell Anything. Reach Everyone.
-          </h2>
-          <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '3rem', maxWidth: '480px', margin: '0 auto 3rem' }}>
-            Open your B2C shop and start receiving WhatsApp orders from customers across Tanzania. From TZS 25,000/month.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', maxWidth: '900px', margin: '0 auto 2.5rem' }}>
-            {[
-              { plan: 'Basic', price: 'TZS 25,000/mo', features: ['Personal shop page', 'Unlimited products', 'WhatsApp orders', 'AI Customer Care'] },
-              { plan: 'Premium', price: 'TZS 45,000/mo', features: ['All Basic features', 'Priority listing', 'Marketing AI tools', 'Accounting dashboard'], highlight: true },
-            ].map(p => (
-              <div key={p.plan} style={{
-                background: p.highlight ? '#0D1B3E' : '#fff',
-                color: p.highlight ? '#fff' : '#0D1B3E',
-                border: `2px solid ${p.highlight ? '#C9A84C' : '#E5E7EB'}`,
-                borderRadius: '16px', padding: '2rem', textAlign: 'left', position: 'relative'
-              }}>
-                {p.highlight && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#C9A84C', color: '#0D1B3E', fontSize: '0.62rem', fontWeight: 700, padding: '0.2rem 0.8rem', borderRadius: '20px', whiteSpace: 'nowrap' }}>Most Popular</div>}
-                <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '0.4rem' }}>B2C {p.plan}</div>
-                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', fontWeight: 900, marginBottom: '1.25rem' }}>{p.price}</div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {p.features.map(f => <li key={f} style={{ fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: p.highlight ? 'rgba(255,255,255,0.75)' : '#374151' }}><span style={{ color: '#C9A84C' }}>✓</span>{f}</li>)}
-                </ul>
-                <Link href="/open-store-b2c" style={{
-                  display: 'block', textAlign: 'center', background: p.highlight ? '#C9A84C' : '#0D1B3E',
-                  color: p.highlight ? '#0D1B3E' : '#fff', padding: '0.75rem', borderRadius: '8px',
-                  fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none'
-                }}>Get Started →</Link>
-              </div>
-            ))}
+          <div style={{lineHeight:0.88,marginBottom:'1rem'}}>
+            <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,10vw,8rem)',color:'#0D1B3E',letterSpacing:'0.03em',display:'block'}}>SHOP FROM</div>
+            <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,10vw,8rem)',letterSpacing:'0.03em',background:'linear-gradient(135deg,#0D1B3E,#1B3A6B,#C9A84C)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',display:'block'}}>LOCAL RETAILERS</div>
           </div>
-          <Link href="/open-store-b2c" style={{ fontSize: '0.85rem', color: '#1B3A6B', fontWeight: 600, textDecoration: 'none' }}>
-            View all B2C plans →
-          </Link>
-        </div>
-      </section>
-
-      {/* ── B2B SECTION ── */}
-      <section style={{ background: '#fff', padding: '5rem 5%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#1B3A6B', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.6rem' }}>
-            For Businesses & SMEs
-          </div>
-          <h2 style={{
-            fontFamily: '"Playfair Display", Georgia, serif',
-            fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-            fontWeight: 800, color: '#0D1B3E', marginBottom: '0.6rem'
-          }}>
-            Scale Your Business Across Tanzania.
-          </h2>
-          <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '3rem', maxWidth: '480px', margin: '0 auto 3rem' }}>
-            Get a verified business shop, manage bulk orders and reach customers in every region of Tanzania. From TZS 75,000/month.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', maxWidth: '900px', margin: '0 auto 2.5rem' }}>
-            {[
-              { plan: 'Basic', price: 'TZS 75,000/mo', features: ['Business verification', 'Multiple products', 'Bulk order management', 'Business analytics'] },
-              { plan: 'Premium', price: 'TZS 110,000/mo', features: ['All Basic features', 'Featured placement', 'Priority support', 'Custom branding'], highlight: true },
-            ].map(p => (
-              <div key={p.plan} style={{
-                background: p.highlight ? '#0D1B3E' : '#F8F9FC',
-                color: p.highlight ? '#fff' : '#0D1B3E',
-                border: `2px solid ${p.highlight ? '#C9A84C' : '#E5E7EB'}`,
-                borderRadius: '16px', padding: '2rem', textAlign: 'left', position: 'relative'
-              }}>
-                {p.highlight && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#C9A84C', color: '#0D1B3E', fontSize: '0.62rem', fontWeight: 700, padding: '0.2rem 0.8rem', borderRadius: '20px', whiteSpace: 'nowrap' }}>Most Popular</div>}
-                <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '0.4rem' }}>B2B {p.plan}</div>
-                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', fontWeight: 900, marginBottom: '1.25rem' }}>{p.price}</div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {p.features.map(f => <li key={f} style={{ fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: p.highlight ? 'rgba(255,255,255,0.75)' : '#374151' }}><span style={{ color: '#C9A84C' }}>✓</span>{f}</li>)}
-                </ul>
-                <Link href="/open-store-b2b" style={{
-                  display: 'block', textAlign: 'center', background: p.highlight ? '#C9A84C' : '#0D1B3E',
-                  color: p.highlight ? '#0D1B3E' : '#fff', padding: '0.75rem', borderRadius: '8px',
-                  fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none'
-                }}>Get Started →</Link>
-              </div>
-            ))}
-          </div>
-          <Link href="/open-store-b2b" style={{ fontSize: '0.85rem', color: '#1B3A6B', fontWeight: 600, textDecoration: 'none' }}>
-            View all B2B plans →
-          </Link>
-        </div>
-      </section>
-
-      {/* ── TOP RATED CAROUSEL ── */}
-      <section style={{ background: '#F8F9FC', padding: '5rem 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.4rem' }}>
-                // Editor's Choice
-              </div>
-              <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.3rem, 2.5vw, 1.6rem)', fontWeight: 800, color: '#0D1B3E' }}>
-                Top Rated Shops ⭐⭐⭐⭐⭐
-              </h2>
-            </div>
-            <Link href="/campus" style={{ fontSize: '0.82rem', color: '#1B3A6B', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              View all shops <ArrowRight size={14} />
+          <div style={{fontFamily:"'Inter',sans-serif",fontSize:'clamp(0.82rem,1.8vw,1rem)',fontWeight:600,color:'#9CA3AF',letterSpacing:'0.25em',textTransform:'uppercase',marginBottom:'1.2rem'}}>Find · Buy · Trust · 🥈 Silver Verified</div>
+          <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'#6B7280',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Discover verified local sellers across Tanzania. Fashion, electronics, food and more — all in one place.</p>
+          <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
+            <Link href="/market" style={{background:'#0D1B3E',color:'#fff',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+              🛍️ Browse Retail Stores
+            </Link>
+            <Link href="/login" style={{background:'transparent',color:'#0D1B3E',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid #0D1B3E',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+              Login to Your Shop →
             </Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
-            {shops.slice(0, 6).map(shop => (
-              <ShopCard key={shop.slug} shop={shop} />
+        </div>
+      </section>
+      <div style={{height:'1px',background:'linear-gradient(90deg,transparent,rgba(13,27,62,0.12),transparent)'}} />
+
+      {/* ══════════ B2B SECTION ══════════ */}
+      <section style={{position:'relative',overflow:'hidden',background:'#080A0F',padding:'6rem 5%',textAlign:'center'}}>
+        <div style={{position:'absolute',top:'-120px',left:'-100px',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.12),transparent 65%)',filter:'blur(50px)',pointerEvents:'none'}} />
+        <div style={{position:'absolute',bottom:'-80px',right:'-80px',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.08),transparent 65%)',filter:'blur(40px)',pointerEvents:'none'}} />
+        <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px)',backgroundSize:'28px 28px',pointerEvents:'none'}} />
+        <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(201,168,76,0.4),transparent)'}} />
+        <div style={{position:'relative',zIndex:1,maxWidth:'900px',margin:'0 auto'}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(201,168,76,0.08)',border:'1px solid rgba(201,168,76,0.2)',color:'rgba(201,168,76,0.8)',padding:'0.32rem 1rem',fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.22em',textTransform:'uppercase',marginBottom:'1.5rem'}}>
+            <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#C9A84C',flexShrink:0}} />
+            WHOLESALE MARKET · B2B
+          </div>
+          <div style={{lineHeight:0.88,marginBottom:'1rem'}}>
+            <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,10vw,8rem)',color:'#fff',letterSpacing:'0.03em',display:'block'}}>BUY IN BULK FROM</div>
+            <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,10vw,8rem)',letterSpacing:'0.03em',background:'linear-gradient(135deg,#C9A84C,#F0C96B,#C9A84C)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',display:'block'}}>WHOLESALERS</div>
+          </div>
+          <div style={{fontSize:'clamp(0.82rem,1.8vw,1rem)',fontWeight:600,color:'rgba(201,168,76,0.5)',letterSpacing:'0.25em',textTransform:'uppercase',marginBottom:'1.2rem'}}>Source · Bulk · Verified · 🥇 Gold Certified</div>
+          <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'rgba(255,255,255,0.35)',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Connect with verified manufacturers, importers and distributors. Best bulk prices across Tanzania.</p>
+          <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
+            <Link href="/market" style={{background:'#C9A84C',color:'#111',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+              🏭 Browse Wholesalers
+            </Link>
+            <Link href="/login" style={{background:'transparent',color:'rgba(255,255,255,0.6)',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid rgba(255,255,255,0.15)',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+              Login to Your Shop →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ TOP RATED CAROUSEL ══════════ */}
+      <section id="top-rated" style={{background:'#F8F9FC',padding:'5rem 5%'}}>
+        <div style={{maxWidth:'1200px',margin:'0 auto'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:'2rem',flexWrap:'wrap',gap:'1rem',paddingRight:'0'}}>
+            <div>
+              <div style={{fontSize:'0.68rem',fontWeight:700,color:'#C9A84C',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.4rem'}}>// Editor's Choice</div>
+              <div className="section-headline" style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(1.3rem,2.5vw,1.6rem)',fontWeight:800,color:'#0D1B3E'}}>Top Rated Shops ⭐⭐⭐⭐⭐</div>
+              <div style={{fontSize:'0.82rem',color:'#6B7280',marginTop:'0.2rem'}}>Highest rated verified stores</div>
+            </div>
+            <Link href="/campus" style={{fontSize:'0.82rem',color:'#1B3A6B',fontWeight:600,textDecoration:'none',display:'flex',alignItems:'center',gap:'0.3rem'}}>
+              View all <ArrowRight size={14} />
+            </Link>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:'1.25rem'}}>
+            {shops.slice(0,6).map(shop=>{
+              const init = shop.name.split(' ').map((w:string)=>w[0]).join('').substring(0,2).toUpperCase()
+              const wa = shop.whatsapp.replace(/\D/g,'')
+              return (
+                <div key={shop.slug} className="shop-card-home">
+                  <div style={{height:'56px',background:`linear-gradient(135deg,${shop.logoColor},#0D1B3E)`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.75rem',fontWeight:800,color:'#fff',fontFamily:"'Playfair Display',serif"}}>
+                    {init}
+                  </div>
+                  <div style={{padding:'0.85rem 1rem'}}>
+                    <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:'0.3rem'}}>
+                      <div style={{fontWeight:700,fontSize:'0.85rem',color:'#0D1B3E'}}>{shop.name}</div>
+                      {shop.verified && <span style={{fontSize:'0.6rem',background:'rgba(5,150,105,0.1)',color:'#059669',padding:'0.1rem 0.4rem',borderRadius:'6px',fontWeight:700,flexShrink:0,marginLeft:'0.4rem'}}>✓ Verified</span>}
+                    </div>
+                    <div style={{fontSize:'0.68rem',background:'rgba(201,168,76,0.1)',color:'#92741a',padding:'0.15rem 0.5rem',borderRadius:'8px',display:'inline-block',fontWeight:700,marginBottom:'0.5rem'}}>{shop.category}</div>
+                    <p style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.5,marginBottom:'0.75rem',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{shop.description}</p>
+                    <div style={{display:'flex',gap:'0.4rem'}}>
+                      <a href={`https://wa.me/${wa}`} target="_blank" style={{flex:1,padding:'0.4rem',background:'#25D366',color:'#fff',border:'none',borderRadius:'7px',fontSize:'0.7rem',fontWeight:700,textAlign:'center',textDecoration:'none'}}>💬 WhatsApp</a>
+                      <Link href={`/campus/${shop.university}`} style={{flex:1,padding:'0.4rem',background:'#0D1B3E',color:'#fff',borderRadius:'7px',fontSize:'0.7rem',fontWeight:700,textAlign:'center',textDecoration:'none'}}>🏪 Visit</Link>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ SOCIAL VYBE ══════════ */}
+      <section style={{position:'relative',overflow:'hidden',background:'#0A0A0F',padding:'5rem 5%'}}>
+        <div style={{position:'absolute',top:'-120px',left:'-100px',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(255,0,128,0.2),transparent 65%)',filter:'blur(60px)',pointerEvents:'none'}} />
+        <div style={{position:'absolute',bottom:'-80px',right:'-80px',width:'450px',height:'450px',borderRadius:'50%',background:'radial-gradient(circle,rgba(120,0,255,0.18),transparent 65%)',filter:'blur(60px)',pointerEvents:'none'}} />
+        <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(rgba(255,255,255,0.03) 1px,transparent 1px)',backgroundSize:'28px 28px',pointerEvents:'none'}} />
+        <div style={{position:'absolute',top:0,left:0,right:0,height:'1.5px',background:'linear-gradient(90deg,transparent,#FF0080,#7800FF,#00C8FF,transparent)'}} />
+        <div style={{position:'absolute',bottom:0,left:0,right:0,height:'1.5px',background:'linear-gradient(90deg,transparent,#00C8FF,#7800FF,#FF0080,transparent)'}} />
+        <div style={{position:'relative',zIndex:2,maxWidth:'900px',margin:'0 auto',textAlign:'center'}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',marginBottom:'1.5rem',padding:'0.35rem 1.1rem',border:'1px solid rgba(255,0,128,0.35)',background:'rgba(255,0,128,0.07)'}}>
+            <span style={{width:'7px',height:'7px',borderRadius:'50%',background:'#FF0080',flexShrink:0}} />
+            <span style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:'0.62rem',fontWeight:700,color:'rgba(255,0,128,0.85)',letterSpacing:'0.2em',textTransform:'uppercase'}}>NEW INSIDE TRAVEX MALL</span>
+          </div>
+          <div style={{marginBottom:'0.75rem',lineHeight:0.88}}>
+            <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,9vw,7.5rem)',color:'#fff',letterSpacing:'0.03em',display:'block'}}>TRAVEX</div>
+            <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,9vw,7.5rem)',letterSpacing:'0.03em',background:'linear-gradient(135deg,#FF0080,#7800FF,#00C8FF)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',display:'block'}}>SOCIAL VYBE</div>
+          </div>
+          <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:'clamp(0.82rem,2vw,1.1rem)',fontWeight:600,color:'rgba(255,255,255,0.45)',letterSpacing:'0.25em',textTransform:'uppercase',marginBottom:'1.5rem'}}>Be Seen &nbsp;·&nbsp; Be Sold &nbsp;·&nbsp; Be Vybe</div>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:'clamp(0.85rem,1.5vw,1rem)',color:'rgba(255,255,255,0.45)',lineHeight:1.85,marginBottom:'2.5rem',maxWidth:'640px',marginLeft:'auto',marginRight:'auto',fontWeight:300}}>
+            Tanzania's first <strong style={{color:'rgba(255,255,255,0.8)',fontWeight:600}}>Business Social Network</strong> — powered by Travex Mall. Post your products, grow your brand and connect directly with buyers across Tanzania. Like Instagram, but built for <strong style={{color:'rgba(255,255,255,0.8)',fontWeight:600}}>African business</strong>.
+          </p>
+          <div style={{display:'flex',gap:'0.75rem',flexWrap:'wrap',justifyContent:'center',marginBottom:'3rem'}}>
+            <Link href="/vybe" style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.9rem 2.2rem',fontFamily:"'Space Grotesk',sans-serif",fontSize:'0.9rem',fontWeight:700,textDecoration:'none',borderRadius:'6px'}}>
+              ✦ Explore Social Vybe
+            </Link>
+            <Link href="/campus-dashboard" style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'transparent',color:'rgba(255,255,255,0.6)',padding:'0.9rem 2.2rem',fontFamily:"'Space Grotesk',sans-serif",fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'1px solid rgba(255,255,255,0.15)',borderRadius:'6px'}}>
+              Post Your Business →
+            </Link>
+          </div>
+          <div style={{display:'flex',justifyContent:'center',flexWrap:'wrap',border:'1px solid rgba(255,255,255,0.06)'}}>
+            {[['POST','#FF0080','Daily Content'],['LIKE','#7800FF','Real Engagement'],['SELL','#00C8FF','Direct to Buyers']].map(([word,color,sub],i,arr)=>(
+              <div key={word} style={{padding:'1rem 2.5rem',borderRight:i<arr.length-1?'1px solid rgba(255,255,255,0.06)':'none',flex:1,minWidth:'100px',textAlign:'center'}}>
+                <div style={{fontFamily:"'Bebas Neue',cursive",fontSize:'1.5rem',color,letterSpacing:'0.05em'}}>{word}</div>
+                <div style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:'0.58rem',color:'rgba(255,255,255,0.25)',textTransform:'uppercase',letterSpacing:'0.12em',marginTop:'2px'}}>{sub}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── SOCIAL VYBE ── */}
-      <section style={{ background: '#F8F9FC', padding: '0 5% 5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ background: '#07010E', borderRadius: '20px', padding: 'clamp(2rem, 5vw, 3.5rem)', overflow: 'hidden' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
-              <div>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(201,168,76,0.12)', color: '#C9A84C', padding: '0.3rem 0.85rem', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, marginBottom: '1.25rem' }}>
-                  <Sparkles size={12} /> Social Commerce
-                </span>
-                <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff', marginBottom: '1rem' }}>
-                  Social Vybe Feed
-                </h2>
-                <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: '1.75rem' }}>
-                  A campus social commerce feed where shops post products, customers like and discover, then order on WhatsApp instantly.
-                </p>
-                <Link href="/vybe" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                  background: '#C9A84C', color: '#0D1B3E', padding: '0.8rem 1.75rem',
-                  borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
-                }}>
-                  Open Social Vybe <ArrowRight size={16} />
-                </Link>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
-                {['/social-vybe-ankara-fashion-flatlay.png','/clean-white-sneakers-product-shot.png','/skincare-cosmetics-flatlay-beauty.png','/tanzanian-pilau-rice-meal.png','/wireless-earbuds-product-photo.png','/smoothie-bowl-healthy-breakfast.png'].map(src => (
-                  <img key={src} src={src} alt="" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: '10px' }} />
-                ))}
-              </div>
+      {/* ══════════ UNI STUDENT MARKET ══════════ */}
+      <section id="uni" style={{position:'relative',overflow:'hidden',background:'#0D1B3E',padding:'5rem 5%',color:'#fff'}}>
+        <div style={{position:'absolute',inset:0,backgroundImage:'url(/campus-hero.png)',backgroundSize:'cover',backgroundPosition:'center',opacity:0.12}} />
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(13,27,62,0.96),rgba(27,58,107,0.9))'}} />
+        <div style={{position:'relative',zIndex:2,maxWidth:'1100px',margin:'0 auto'}}>
+          <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
+            <div style={{display:'inline-block',background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.3)',color:'#C9A84C',padding:'0.35rem 1rem',borderRadius:'20px',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.06em',marginBottom:'1rem'}}>
+              🎓 Exclusively For University Students
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── UNIVERSITY STUDENT MARKET ── */}
-      <section id="uni" style={{ background: '#fff', padding: '5rem 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#1B3A6B', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.6rem' }}>
-              Student Marketplace
-            </div>
-            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.5rem' }}>
-              Your University. Your Market.
+            <h2 className="section-headline" style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(1.6rem,4vw,2.6rem)',fontWeight:800,color:'#fff',marginBottom:'0.75rem'}}>
+              Travex <span style={{color:'#C9A84C'}}>Uni-Student</span> Market
             </h2>
-            <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, maxWidth: '440px', margin: '0 auto' }}>
-              60 seller slots per university. Apply before they fill up.
+            <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'rgba(255,255,255,0.55)',lineHeight:1.75,maxWidth:'520px',margin:'0 auto 1.5rem'}}>
+              Tanzania's first verified student marketplace. Buy from trusted student entrepreneurs at your own university.
             </p>
+            <div style={{display:'flex',justifyContent:'center',gap:'2.5rem',flexWrap:'wrap',marginBottom:'2rem'}}>
+              {[['200','Founding Shops'],['5','Universities'],['TZS 15K','Per Month']].map(([v,l])=>(
+                <div key={l} style={{textAlign:'center'}}>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(1.2rem,3vw,1.8rem)',fontWeight:900,color:'#C9A84C'}}>{v}</div>
+                  <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.4)',textTransform:'uppercase',letterSpacing:'0.08em'}}>{l}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap',marginBottom:'2.5rem'}}>
+              <Link href="/campus" style={{background:'#C9A84C',color:'#0D1B3E',padding:'0.85rem 2rem',borderRadius:'10px',fontWeight:700,fontSize:'0.88rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+                <GraduationCap size={18}/> Explore Student Market →
+              </Link>
+              <Link href="/campus-apply" style={{background:'transparent',color:'rgba(255,255,255,0.75)',border:'1px solid rgba(255,255,255,0.25)',padding:'0.85rem 2rem',borderRadius:'10px',fontWeight:600,fontSize:'0.88rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+                Open Your Shop →
+              </Link>
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
-            {universities.map(uni => (
-              <Link key={uni.slug} href={`/campus/${uni.slug}`} style={{ textDecoration: 'none' }}>
-                <div className="hover:-translate-y-1 hover:shadow-lg transition-all" style={{
-                  borderRadius: '14px', overflow: 'hidden', border: '1.5px solid #E5E7EB',
-                  cursor: 'pointer'
-                }}
-                  
-                  >
-                  <div style={{ height: '90px', background: 'linear-gradient(135deg, #0D1B3E, #1B3A6B)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                    <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.75rem', fontWeight: 900, color: '#C9A84C' }}>{uni.abbr}</div>
-                    <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>{uni.city}</div>
-                  </div>
-                  <div style={{ padding: '0.85rem 1rem', background: '#fff' }}>
-                    <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.5rem', lineHeight: 1.3 }}>{uni.name}</div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', marginBottom: '0.4rem' }}>
-                      <span style={{ color: '#6B7280' }}>{uni.activeShops} active shops</span>
-                      <span style={{ color: (uni.totalSlots - uni.activeShops) < 10 ? '#DC2626' : '#059669', fontWeight: 700 }}>
-                        {uni.totalSlots - uni.activeShops} slots left
-                      </span>
-                    </div>
-                    <div style={{ height: '4px', background: '#E5E7EB', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${(uni.activeShops / uni.totalSlots) * 100}%`, background: '#C9A84C', borderRadius: '4px' }} />
-                    </div>
-                  </div>
+          {/* Universities horizontal scroll */}
+          <div className="uni-grid" style={{display:'flex',gap:'1rem',overflowX:'auto',paddingBottom:'0.75rem',WebkitOverflowScrolling:'touch',scrollbarWidth:'thin',scrollbarColor:'rgba(201,168,76,0.3) transparent'}}>
+            {UNIS.map(u=>(
+              <Link key={u.slug} href={`/campus/${u.slug}`} className="uni-card hover-lift" style={{textDecoration:'none',background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.12)',padding:'1.2rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.75rem',transition:'all 0.3s',cursor:'pointer',minWidth:'160px',flexShrink:0,borderRadius:'12px'}}>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'1.6rem',fontWeight:900,color:'#C9A84C'}}>{u.abbr}</div>
+                <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.55)',textAlign:'center',lineHeight:1.4}}>{u.name}</div>
+                <div style={{fontSize:'0.62rem',color:'rgba(255,255,255,0.35)'}}>{u.city}</div>
+                <div style={{display:'flex',gap:'0.4rem',flexWrap:'wrap',justifyContent:'center'}}>
+                  <span style={{fontSize:'0.58rem',background:'rgba(201,168,76,0.15)',color:'#C9A84C',padding:'0.1rem 0.45rem',borderRadius:'6px',fontWeight:700}}>{u.shops} shops</span>
+                  <span style={{fontSize:'0.58rem',background:u.total-u.shops<10?'rgba(220,38,38,0.15)':'rgba(5,150,105,0.15)',color:u.total-u.shops<10?'#f87171':'#34d399',padding:'0.1rem 0.45rem',borderRadius:'6px',fontWeight:700}}>{u.total-u.shops} left</span>
                 </div>
               </Link>
             ))}
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <Link href="/campus-apply" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              background: '#C9A84C', color: '#0D1B3E', padding: '0.85rem 2rem',
-              borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
-            }}>
-              <GraduationCap size={18} /> Apply for a Campus Shop
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section style={{ background: '#F8F9FC', padding: '5rem 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.5rem' }}>
-              How It Works
-            </h2>
-            <p style={{ fontSize: '0.9rem', color: '#6B7280' }}>Launch your shop in four simple steps.</p>
+      {/* ══════════ FOOTER ══════════ */}
+      <footer id="contact" style={{background:'#060B18',color:'rgba(255,255,255,0.55)',fontFamily:"'Inter',sans-serif"}}>
+        <div style={{borderBottom:'1px solid rgba(255,255,255,0.06)',padding:'1.5rem 5%',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'1rem'}}>
+          <div>
+            <div style={{fontSize:'0.6rem',color:'rgba(255,255,255,0.25)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.3rem'}}>Parent Company</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontWeight:800,fontSize:'1.1rem',color:'#fff'}}>TRAVEX <span style={{color:'#C9A84C'}}>DIGITAL GROUP</span></div>
+            <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.3)',marginTop:'0.15rem'}}>Innovate · Connect · Grow</div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-            {steps.map((step, i) => (
-              <div key={step.title} style={{
-                background: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB',
-                padding: '1.75rem 1.5rem', textAlign: 'center', position: 'relative'
-              }}>
-                <div style={{
-                  position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)',
-                  background: '#C9A84C', color: '#0D1B3E', fontSize: '0.62rem', fontWeight: 700,
-                  padding: '0.18rem 0.7rem', borderRadius: '20px'
-                }}>Step {i + 1}</div>
-                <div style={{ width: '52px', height: '52px', background: 'rgba(13,27,62,0.06)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
-                  <step.icon size={24} color="#0D1B3E" />
-                </div>
-                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.05rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.4rem' }}>{step.title}</div>
-                <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.65 }}>{step.desc}</p>
-              </div>
+          <div style={{display:'flex',gap:'0.6rem',flexWrap:'wrap'}}>
+            {[['🏪 Travex Mall','/'],['🎓 Travex Campus','/campus'],['🏨 Travex Stay','#'],['🚚 Travex Move','#']].map(([label,href])=>(
+              <Link key={label} href={href} style={{fontSize:'0.75rem',color:'rgba(255,255,255,0.45)',padding:'0.35rem 0.85rem',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'6px',textDecoration:'none',transition:'all 0.2s'}}>
+                {label}
+              </Link>
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ── TESTIMONIALS ── */}
-      <section style={{ background: '#0D1B3E', padding: '5rem 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>Success Stories</div>
-            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff' }}>
-              What Our Sellers Say
-            </h2>
+        <div className="footer-grid-inner" style={{maxWidth:'1200px',margin:'0 auto',padding:'3rem 5%',display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:'2.5rem'}}>
+          <div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontWeight:800,fontSize:'1rem',color:'#fff',marginBottom:'0.75rem'}}>TRAVEX <span style={{color:'#C9A84C'}}>MALL</span></div>
+            <p style={{fontSize:'0.8rem',lineHeight:1.7,color:'rgba(255,255,255,0.4)',marginBottom:'1.25rem',maxWidth:'300px'}}>Africa's intelligent digital marketplace — empowering businesses and students across Tanzania and beyond.</p>
+            <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
+              <a href="mailto:travexmall15@gmail.com" style={{fontSize:'0.78rem',color:'rgba(255,255,255,0.4)',textDecoration:'none',display:'flex',alignItems:'center',gap:'0.4rem'}}>📧 travexmall15@gmail.com</a>
+              <a href="https://wa.me/255651919915" target="_blank" style={{fontSize:'0.78rem',color:'rgba(255,255,255,0.4)',textDecoration:'none',display:'flex',alignItems:'center',gap:'0.4rem'}}>💬 +255 651 919 915</a>
+              <a href="https://wa.me/255657575950" target="_blank" style={{fontSize:'0.78rem',color:'rgba(255,255,255,0.4)',textDecoration:'none',display:'flex',alignItems:'center',gap:'0.4rem'}}>💬 +255 657 575 950</a>
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
-            {testimonials.map(t => (
-              <div key={t.name} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', padding: '1.75rem' }}>
-                <div style={{ display: 'flex', gap: '2px', marginBottom: '1rem' }}>
-                  {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} color="#C9A84C" fill="#C9A84C" />)}
-                </div>
-                <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, fontStyle: 'italic', marginBottom: '1.5rem' }}>
-                  "{t.quote}"
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#0D1B3E', fontSize: '0.85rem', flexShrink: 0 }}>
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff' }}>{t.name}</div>
-                    <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>{t.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {[
+            ['Products',[['Travex Mall','/'],['Travex Campus','/campus'],['Social Vybe','/vybe'],['Business Market','/market']]],
+            ['Company',[['Travex Digital Group','https://travex-digital-group.vercel.app'],['Our Story','https://travex-digital-group.vercel.app/story.html'],['Our Team','https://travex-digital-group.vercel.app/team.html'],['Contact TDG','https://travex-digital-group.vercel.app/contact.html']]],
+            ['Support',[['Email Support','mailto:travexmall15@gmail.com'],['WhatsApp 1','https://wa.me/255651919915'],['WhatsApp 2','https://wa.me/255657575950'],['Open Shop','/campus-apply']]],
+          ].map(([title,links])=>(
+            <div key={title as string}>
+              <h4 style={{fontSize:'0.72rem',fontWeight:700,color:'rgba(255,255,255,0.7)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'1rem'}}>{title as string}</h4>
+              <ul style={{listStyle:'none',padding:0,margin:0,display:'flex',flexDirection:'column',gap:'0.5rem'}}>
+                {(links as [string,string][]).map(([l,h])=>(
+                  <li key={l}><a href={h} style={{fontSize:'0.78rem',color:'rgba(255,255,255,0.35)',textDecoration:'none',transition:'color 0.2s'}}>{l}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-      </section>
-
-      {/* ── BENEFITS ── */}
-      <section style={{ background: '#fff', padding: '5rem 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0D1B3E' }}>
-              Why Sellers Love Travex Mall
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
-            {benefits.map(b => (
-              <div key={b.title} style={{ background: '#F8F9FC', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '1.75rem', transition: 'all 0.2s' }}>
-                <div style={{ width: '48px', height: '48px', background: 'rgba(13,27,62,0.06)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                  <b.icon size={22} color="#0D1B3E" />
-                </div>
-                <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.4rem' }}>{b.title}</div>
-                <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.65 }}>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section style={{ background: '#C9A84C', padding: '5rem 5%', textAlign: 'center' }}>
-        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: 'clamp(1.6rem, 4vw, 2.8rem)', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.75rem' }}>
-            Open Your Shop Today
-          </h2>
-          <p style={{ fontSize: '0.9rem', color: 'rgba(13,27,62,0.65)', marginBottom: '2rem', lineHeight: 1.7 }}>
-            Join {universities.length} universities and hundreds of sellers already growing on Travex Mall.
+        <div style={{borderTop:'1px solid rgba(255,255,255,0.06)',padding:'1.25rem 5%',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'0.75rem'}}>
+          <p style={{fontSize:'0.72rem',color:'rgba(255,255,255,0.25)'}}>
+            © 2026 <a href="https://travex-digital-group.vercel.app" target="_blank" style={{color:'#C9A84C',textDecoration:'none',fontWeight:700}}>Travex Digital Group</a>. All rights reserved.
           </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/campus-apply" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              background: '#0D1B3E', color: '#fff', padding: '0.9rem 2rem',
-              borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
-            }}>
-              <GraduationCap size={18} /> Open Campus Shop
-            </Link>
-            <Link href="/open-store-b2c" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              background: 'transparent', color: '#0D1B3E',
-              border: '2px solid #0D1B3E', padding: '0.9rem 2rem',
-              borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none'
-            }}>
-              <Briefcase size={18} /> Open Business Shop
-            </Link>
-          </div>
+          <p style={{fontSize:'0.68rem',color:'rgba(201,168,76,0.3)',fontStyle:'italic'}}>Africa's Intelligent Business Ecosystem</p>
         </div>
-      </section>
-
-      <SiteFooter />
+      </footer>
     </main>
   )
 }
