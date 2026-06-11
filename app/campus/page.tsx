@@ -58,7 +58,7 @@ export default function CampusPage() {
               { value: '85', label: 'Slots Left' },
             ].map((s) => (
               <div key={s.label}>
-                <p className="font-heading text-3xl font-black text-gold">
+                <p style={{  fontFamily: "'Playfair Display', serif" , fontFamily: "Playfair Display, serif" }} className="font-heading_unused text-3xl font-black text-gold">
                   {s.value}
                 </p>
                 <p className="text-sm text-white/60">{s.label}</p>
@@ -70,7 +70,7 @@ export default function CampusPage() {
 
       {/* University grid */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-20">
-        <h2 className="font-heading text-3xl font-bold text-navy">
+        <h2 style={{  fontFamily: "'Playfair Display', serif" , fontFamily: "Playfair Display, serif" }} className="font-heading_unused text-3xl font-bold text-navy">
           Select Your University
         </h2>
         <p className="mt-2 text-muted-foreground">
@@ -163,7 +163,7 @@ export default function CampusPage() {
               key={step.title}
               className="relative rounded-xl border border-border bg-card p-6 shadow-sm"
             >
-              <span className="font-heading text-4xl font-black text-gold/30">
+              <span style={{  fontFamily: "'Playfair Display', serif" , fontFamily: "Playfair Display, serif" }} className="font-heading_unused text-4xl font-black text-gold/30">
                 0{i + 1}
               </span>
               <step.icon className="mt-2 h-7 w-7 text-navy" />
