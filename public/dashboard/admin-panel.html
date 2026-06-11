@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Travex Campus Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0D1B3E;--navy2:#080F1E;--gold:#C9A84C;--gold2:#F0C96B;--green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#D97706;--lgray:#E5E7EB;--gray:#6B7280;--offwhite:#F8F9FC}
+body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:#111;height:100vh;overflow:hidden}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy2),var(--navy));display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:2.5rem;width:360px;border-radius:12px}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.2rem}
+.login-logo span{color:var(--gold)}
+.login-sub{font-size:0.72rem;color:rgba(255,255,255,0.3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem}
+.login-input{width:100%;padding:0.85rem 1rem;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;border-radius:8px;margin-bottom:1rem}
+.login-input:focus{border-color:var(--gold)}
+.login-btn{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);font-family:'DM Sans',sans-serif;font-weight:800;font-size:0.9rem;border:none;cursor:pointer;border-radius:8px}
+.login-err{color:#f87171;font-size:0.8rem;margin-top:0.5rem;display:none;text-align:center}
+
+/* LAYOUT */
+#main{display:none;height:100vh;grid-template-columns:240px 1fr;grid-template-rows:60px 1fr}
+
+/* SIDEBAR */
+.sidebar{grid-row:1/3;background:var(--navy);display:flex;flex-direction:column;height:100vh}
+.sb-top{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sb-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff}
+.sb-brand span{color:var(--gold)}
+.sb-tag{display:inline-block;margin-top:0.3rem;font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em}
+.sb-nav{flex:1;padding:0.5rem 0;overflow-y:orto}
+.sb-sec{font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;padding:0.75rem 1.5rem 0.25rem}
+.sb-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 1.5rem;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.45);cursor:pointer;border-left:3px solid transparent;transition:all 0.15s;user-select:none}
+.sb-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.sb-item.active{color:#fff;background:rgba(255,255,255,0.08);border-left-color:var(--gold);font-weight:600}
+.sb-count{margin-left:orto;background:var(--purple);color:#fff;font-size:0.6rem;font-weight:800;padding:0.1rem 0.45rem;border-radius:20px;min-width:18px;text-align:center;display:none}
+.sb-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;gap:0.35rem}
+.sb-link{display:flex;align-items:center;gap:0.5rem;color:rgba(255,255,255,0.25);font-size:0.75rem;text-decoration:none;padding:0.3rem 0;transition:color 0.15s}
+.sb-link:hover{color:var(--gold)}
+
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:1px solid var(--lgray);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--navy)}
+.topbar-right{display:flex;align-items:center;gap:0.75rem}
+.ts{text-align:center;padding:0 0.75rem;border-right:1px solid var(--lgray)}
+.ts:last-of-type{border:none}
+.ts-v{font-size:1rem;font-weight:800;color:var(--navy)}
+.ts-l{font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
+.notif-wrap{position:relative}
+.notif-btn{background:var(--offwhite);border:1.5px solid var(--lgray);color:var(--navy);padding:0.4rem 0.8rem;cursor:pointer;border-radius:7px;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.8rem}
+.notif-badge{background:var(--red);color:#fff;font-size:0.58rem;font-weight:800;padding:0.1rem 0.4rem;border-radius:20px;display:none}
+.notif-panel{display:none;position:absolute;right:0;top:calc(100%+8px);width:340px;background:#fff;border:1px solid var(--lgray);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.1);z-index:500;max-height:400px;overflow-y:orto}
+.notif-panel.open{display:block}
+.notif-panel-head{padding:0.75rem 1rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center}
+.notif-panel-head strong{font-size:0.82rem;color:var(--navy)}
+.mark-all-btn{font-size:0.72rem;color:var(--purple);background:none;border:none;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif}
+.nitem{padding:0.8rem 1rem;border-bottom:1px solid var(--lgray);cursor:pointer}
+.nitem.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
+.nitem-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.15rem}
+.nitem-body{font-size:0.72rem;color:var(--gray);line-height:1.5;margin-bottom:0.2rem}
+.nitem-time{font-size:0.65rem;color:var(--gray)}
+.notif-empty{padding:1.5rem;text-align:center;color:var(--gray);font-size:0.8rem}
+.refresh-btn{background:var(--navy);color:#fff;border:none;padding:0.4rem 0.9rem;font-size:0.78rem;font-weight:700;cursor:pointer;border-radius:7px;font-family:'DM Sans',sans-serif}
+
+/* CONTENT */
+.content{overflow-y:orto;padding:1.5rem}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
+.page-sub{font-size:0.78rem;color:var(--gray);margin-bottom:1.5rem}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.sc{background:#fff;border:1px solid var(--lgray);border-radius:10px;padding:1.25rem;border-top:3px solid var(--lgray)}
+.sc.c1{border-top-color:var(--purple)}.sc.c2{border-top-color:var(--orange)}.sc.c3{border-top-color:var(--green)}.sc.c4{border-top-color:var(--gold)}
+.sc-l{font-size:0.68rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem}
+.sc-v{font-size:1.8rem;font-weight:800;color:var(--navy);line-height:1}
+.sc-s{font-size:0.7rem;color:var(--gray);margin-top:0.25rem}
+
+/* CARDS & TABLES */
+.card{background:#fff;border:1px solid var(--lgray);border-radius:10px;overflow:hidden;margin-bottom:1.5rem}
+.card-head{padding:0.9rem 1.25rem;border-bottom:1px solid var(--lgray);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+.card-title{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.card-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+.ftab{padding:0.28rem 0.75rem;font-size:0.73rem;font-weight:600;border:1.5px solid var(--lgray);background:#fff;color:var(--gray);cursor:pointer;border-radius:20px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.ftab.active,.ftab:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.search{padding:0.32rem 0.75rem;border:1.5px solid var(--lgray);font-family:'DM Sans',sans-serif;font-size:0.78rem;outline:none;border-radius:7px;width:190px}
+.search:focus{border-color:var(--navy)}
+.tw{overflow-x:orto}
+table{width:100%;border-collapse:collapse}
+th{padding:0.6rem 1rem;text-align:left;font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--lgray);background:var(--offwhite);white-space:nowrap}
+td{padding:0.7rem 1rem;font-size:0.81rem;border-bottom:1px solid var(--lgray);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(13,27,62,0.015)}
+.badge{display:inline-block;padding:0.18rem 0.6rem;font-size:0.67rem;font-weight:700;border-radius:20px;text-transform:capitalize}
+.bp{background:rgba(217,119,6,0.1);color:var(--orange)}
+.ba{background:rgba(5,150,105,0.1);color:var(--green)}
+.br{background:rgba(220,38,38,0.1);color:var(--red)}
+.btn{padding:0.28rem 0.65rem;font-size:0.71rem;font-weight:700;border:none;cursor:pointer;border-radius:5px;font-family:'DM Sans',sans-serif;transition:all 0.15s;white-space:nowrap}
+.b-ok{background:rgba(5,150,105,0.1);color:var(--green);border:1px solid rgba(5,150,105,0.2)}
+.b-ok:hover{background:var(--green);color:#fff}
+.b-no{background:rgba(220,38,38,0.1);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
+.b-no:hover{background:var(--red);color:#fff}
+.b-view{background:var(--offwhite);color:var(--navy);border:1px solid var(--lgray)}
+.b-view:hover{background:var(--navy);color:#fff}
+.b-wa{background:rgba(37,211,102,0.1);color:#15803d;border:1px solid rgba(37,211,102,0.2)}
+.b-wa:hover{background:#25D366;color:#fff}
+.uni-tag{background:rgba(124,58,237,0.1);color:var(--purple);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.69rem;font-weight:700}
+.empty{text-align:center;padding:2.5rem;color:var(--gray)}
+.empty-icon{font-size:2rem;margin-bottom:0.5rem}
+
+/* 2-col */
+.two-col{display:grid;grid-template-columns:1.6fr 1fr;gap:1.25rem}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:8000;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#fff;width:100%;max-width:540px;max-height:88vh;overflow-y:orto;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.2)}
+.modal-head{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.modal-head-t{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:var(--navy)}
+.modal-x{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray)}
+.modal-body{padding:1.5rem}
+.m-sec{font-size:0.6rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0 0.35rem;border-bottom:1px solid var(--lgray);margin:1rem 0 0.5rem}
+.m-sec:first-child{margin-top:0}
+.m-row{display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:0.82rem}
+.m-row:last-child{border:none}
+.m-l{color:var(--gray);flex-shrink:0;min-width:90px}
+.m-v{font-weight:600;color:var(--navy);text-align:right;word-break:break-word;max-width:280px}
+.modal-foot{padding:0.9rem 1.5rem;border-top:1px solid var(--lgray);display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;position:sticky;bottom:0;background:#fff}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:0.65rem 1.5rem;border-radius:8px;font-size:0.82rem;font-weight:600;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--green)}
+.toast.err{background:var(--red)}
+
+/* NOTIF PAGE */
+.npage-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);cursor:pointer;transition:background 0.15s}
+.npage-item:hover{background:var(--offwhite)}
+.npage-item.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
+.npage-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">TRAVEX <span>CAMPUS</span></div>
+    <div class="login-sub">Admin Panel · Secure Access</div>
+    <input type="email" class="login-input" id="adminEmail" placeholder="Admin email address"
+      onkeydown="if(event.key==='Enter')document.getElementById('adminPass').focus()">
+    <input type="password" class="login-input" id="adminPass" placeholder="Password"
+      onkeydown="if(event.key==='Enter')doLogin()" style="margin-top:0.5rem">
+    <button class="login-btn" onclick="doLogin()" id="loginBtn">Sign In →</button>
+    <div class="login-err" id="loginErr">❌ Invalid credentials</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-brand">TRAVEX <span>CAMPUS</span></div>
+      <div class="sb-tag">🎓 Admin Panel</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-sec">Overview</div>
+      <div class="sb-item active" onclick="goPage('overview',this)">📊 Dashboard</div>
+
+      <div class="sb-sec">Campus Market</div>
+      <div class="sb-item" onclick="goPage('applications',this)">
+        📋 Applications <span class="sb-count" id="pendingCount">0</span>
+      </div>
+      <div class="sb-item" onclick="goPage('stores',this)">🏪 Active Stores</div>
+      <div class="sb-item" onclick="goPage('notifications',this)">
+        🔔 Notifications <span class="sb-count" id="notifCount">0</span>
+      </div>
+
+      <div class="sb-sec">Quick Links</div>
+      <div class="sb-item" onclick="window.open('campus.html','_blank')">🌐 Campus Marketplace</div>
+      <div class="sb-item" onclick="window.open('campus-dashboard.html','_blank')">🏪 Seller Dashboard</div>
+      <div class="sb-item" onclick="window.open('campus-apply.html','_blank')">📝 Apply for Shop</div>
+    </nav>
+    <div class="sb-bottom">
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.15);margin-bottom:0.25rem">Travex Campus v2.1</div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="topbar-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <div class="ts"><div class="ts-v" id="tShops">—</div><div class="ts-l">Shops</div></div>
+      <div class="ts"><div class="ts-v" id="tPending">—</div><div class="ts-l">Pending</div></div>
+      <div class="ts"><div class="ts-v" id="tApps">—</div><div class="ts-l">Total Apps</div></div>
+      <div class="notif-wrap">
+        <button class="notif-btn" onclick="toggleNotif()">
+          🔔 Notifications <span class="notif-badge" id="notifBadge">0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-head">
+            <strong>Notifications</strong>
+            <button class="mark-all-btn" onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div id="notifDropList"></div>
+        </div>
+      </div>
+      <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- OVERVIEW -->
+    <div class="page active" id="page-overview">
+      <div class="page-title">🎓 Campus Dashboard</div>
+      <div class="page-sub">Live overview of Travex Campus marketplace</div>
+      <div class="stats">
+        <div class="sc c1"><div class="sc-l">Active Shops</div><div class="sc-v" id="ovShops">—</div><div class="sc-s" id="ovShopsSub">—</div></div>
+        <div class="sc c2"><div class="sc-l">Pending Applications</div><div class="sc-v" id="ovPending">—</div><div class="sc-s">awaiting review</div></div>
+        <div class="sc c3"><div class="sc-l">Total Applications</div><div class="sc-v" id="ovTotal">—</div><div class="sc-s" id="ovApproved">—</div></div>
+        <div class="sc c4"><div class="sc-l">Universities</div><div class="sc-v" id="ovUnis">—</div><div class="sc-s">active</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📋 Recent Applications</div>
+            <button class="btn b-view" onclick="goPage('applications',document.querySelector('[onclick*=applications]'))">View All →</button>
+          </div>
+          <table><thead><tr><th>Student</th><th>University</th><th>Shop</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="ovAppsTbl"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">🔔 Recent Notifications</div></div>
+          <div id="ovNotifs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div class="page" id="page-applications">
+      <div class="page-title">📋 Applications</div>
+      <div class="page-sub">All student shop applications — review, approve or reject</div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-actions">
+            <button class="ftab active" onclick="filter('all',this)">All</button>
+            <button class="ftab" onclick="filter('pending',this)">Pending ⏳</button>
+            <button class="ftab" onclick="filter('approved',this)">Approved ✅</button>
+            <button class="ftab" onclick="filter('rejected',this)">Rejected ❌</button>
+          </div>
+          <input class="search" type="search" placeholder="Search..." oninput="search(this.value)">
+        </div>
+        <div class="tw"><table>
+          <thead><tr>
+            <th>Student</th><th>University</th><th>Shop</th><th>Category</th>
+            <th>WhatsApp</th><th>ID Card</th><th>Status</th><th>Date</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="appsTbl"><tr><td colspan="9" class="empty">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- STORES -->
+    <div class="page" id="page-stores">
+      <div class="page-title">🏪 Active Stores</div>
+      <div class="page-sub">All approved campus stores visible on marketplace</div>
+      <div class="card">
+        <div class="tw"><table>
+          <thead><tr><th>Store</th><th>University</th><th>Category</th><th>Seller</th><th>WhatsApp</th><th>Status</th><th>Created</th></tr></thead>
+          <tbody id="storesTbl"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="page" id="page-notifications">
+      <div class="page-title">🔔 All Notifications</div>
+      <div class="page-sub" id="notifPageSub">Loading...</div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Notification History</div>
+          <button class="btn b-view" onclick="markAllRead()">✓ Mark All Read</button>
+        </div>
+        <div id="notifPageList"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-head-t" id="modalTitle">Application</div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = "https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+// Auth via Supabase — no hardcoded PIN
+const {createClient} = supabase;
+const sb = createClient(SB_URL, SB_KEY);
+
+// Check existing session on load
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    const ADMIN_EMAILS = ['admin@travexdigital.com','jumanne@travexdigital.com'];
+    if (ADMIN_EMAILS.includes(session.user.email)) {
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('main').style.display='grid';
+      loadAll();
+    } else {
+      await sb.auth.signOut();
+    }
+  }
+})();
+
+let apps=[], stores=[], notifs=[], curFilter='all', curSearch='';
+
+// ── LOGIN ──
+async function doLogin(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPass').value.trim();
+  const btn   = document.getElementById('loginBtn');
+  const err   = document.getElementById('loginErr');
+
+  if(!email || !pass){ err.textContent='❌ Enter email and password'; err.style.display='block'; return; }
+
+  btn.textContent = 'Signing in...'; btn.disabled = true;
+  err.style.display = 'none';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  if(error || !data?.user){
+    err.textContent = '❌ Invalid credentials. Access denied.';
+    err.style.display = 'block';
+    btn.textContent = 'Sign In →'; btn.disabled = false;
+    return;
+  }
+
+  // Verify admin email whitelist
+  const ADMIN_EMAILS = ['admin@travexdigital.com','jumanne@travexdigital.com'];
+  if(!ADMIN_EMAILS.includes(data.user.email)){
+    await sb.auth.signOut();
+    err.textContent = '❌ You are not authorized to access this panel.';
+    err.style.display = 'block';
+    btn.textContent = 'Sign In →'; btn.disabled = false;
+    return;
+  }
+
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('main').style.display='grid';
+  loadAll();
+}
+
+// ── LOAD DATA ──
+async function loadAll(){
+  await Promise.all([loadApps(), loadStores(), loadNotifs()]);
+  renderOverview();
+}
+
+async function loadApps(){
+  const {data,error} = await sb.from('campus_applications')
+    .select('*').order('created_at',{ascending:false});
+  if(error){ showToast('Apps error: '+error.message,'err'); return; }
+  apps = data||[];
+  const p = apps.filter(a=>a.status==='pending').length;
+  s('tPending',p); s('tApps',apps.length);
+  const pc=document.getElementById('pendingCount');
+  pc.textContent=p; pc.style.display=p>0?'inline-block':'none';
+}
+
+async function loadStores(){
+  const {data,error} = await sb.from('campus_stores')
+    .select('*').order('created_at',{ascending:false});
+  if(error){ console.error('Stores:',error.message); return; }
+  stores = data||[];
+  s('tShops', stores.filter(x=>x.is_active).length);
+}
+
+async function loadNotifs(){
+  const {data,error} = await sb.from('admin_notifications')
+    .select('*').order('created_at',{ascending:false}).limit(60);
+  if(error){ console.error('Notifs:',error.message); return; }
+  notifs = data||[];
+  const u = notifs.filter(n=>!n.is_read).length;
+  const nb=document.getElementById('notifBadge');
+  const nc=document.getElementById('notifCount');
+  nb.textContent=u; nb.style.display=u>0?'inline-block':'none';
+  nc.textContent=u; nc.style.display=u>0?'inline-block':'none';
+  renderNotifDropdown();
+}
+
+// ── OVERVIEW ──
+function renderOverview(){
+  const active   = stores.filter(x=>x.is_active).length;
+  const pending  = apps.filter(a=>a.status==='pending').length;
+  const approved = apps.filter(a=>a.status==='approved').length;
+  const unis     = [...new Set(stores.filter(x=>x.is_active).map(x=>x.university_abbr))].length;
+  s('ovShops',active);
+  s('ovShopsSub',stores.length+' total registered');
+  s('ovPending',pending);
+  s('ovTotal',apps.length);
+  s('ovApproved',approved+' approved');
+  s('ovUnis',unis||0);
+
+  const tbody=document.getElementById('ovAppsTbl');
+  const recent=apps.slice(0,6);
+  if(!recent.length){tbody.innerHTML='<tr><td colspan="5" class="empty"><div class="empty-icon">📋</div>No applications yet</td></tr>';return;}
+  tbody.innerHTML=recent.map(a=>`<tr>
+    <td><b>${e(a.full_name)}</b><div style="font-size:.7rem;color:var(--gray)">${e(a.email||'')}</div></td>
+    <td><span class="uni-tag">${e(a.university_abbr||'—')}</span></td>
+    <td style="font-size:.8rem">${e(a.full_name||'—')}<div style="font-size:0.7rem;color:var(--gray)">${e(a.business_category||'')}</div></td>
+    <td><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></td>
+    <td style="display:flex;gap:.3rem;flex-wrap:wrap">
+      ${a.status==='pending'?`<button class="btn b-ok" onclick="approveApp('${a.id}')">✓</button><button class="btn b-no" onclick="rejectApp('${a.id}')">✗</button>`:''}
+      <button class="btn b-view" onclick="viewApp('${a.id}')">View</button>
+    </td>
+  </tr>`).join('');
+
+  // Overview notifications
+  const oel=document.getElementById('ovNotifs');
+  if(!notifs.length){oel.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  oel.innerHTML=notifs.slice(0,6).map(n=>`
+    <div style="padding:.75rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;border-left:3px solid ${n.is_read?'transparent':'var(--gold)'}"
+      onclick="markRead('${n.id}')">
+      <div style="font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:.15rem">${e(n.title||'Notification')}</div>
+      <div style="font-size:.72rem;color:var(--gray);line-height:1.5">${e(n.body||'')}</div>
+      <div style="font-size:.65rem;color:var(--gray);margin-top:.2rem">${ago(n.created_at)}</div>
+    </div>`).join('');
+}
+
+// ── APPLICATIONS TABLE ──
+function renderAppsTable(){
+  const tbody=document.getElementById('appsTbl');
+  let list=apps;
+  if(curFilter!=='all') list=list.filter(a=>a.status===curFilter);
+  if(curSearch){
+    const q=curSearch.toLowerCase();
+    list=list.filter(a=>`${a.full_name} ${a.shop_name} ${a.university_abbr} ${a.email}`.toLowerCase().includes(q));
+  }
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty"><div class="empty-icon">📋</div>No applications found</div></td></tr>`;
+    return;
+  }
+  // Use correct column names from campus_applications
+  tbody.innerHTML=list.map(a=>{
+    const wa = a.whatsapp_number||a.whatsapp||a.phone||'';
+    const dt = a.submitted_at||a.created_at;
+    return `<tr>
+      <td><b>${e(a.full_name||'—')}</b><div style="font-size:.68rem;color:var(--gray)">Year ${e(a.year_of_study||'—')}</div></td>
+      <td><span class="uni-tag">${e(a.university_abbr||'—')}</span></td>
+      <td><b style="font-size:.8rem">${e(a.full_name||'—')}</b><div style="font-size:0.7rem;color:var(--gray)">${e(a.business_category||'—')}</div></td>
+      <td style="font-size:.76rem">${e(cat)}</td>
+      <td>${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:.78rem;text-decoration:none">${e(wa)}</a>`:'—'}</td>
+      <td>${a.id_card_url?`<a href="${a.id_card_url}" target="_blank"><img src="${a.id_card_url}" style="width:44px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--lgray)" onerror="this.outerHTML='<a href=&quot;${a.id_card_url}&quot; target=&quot;_blank&quot; style=&quot;color:var(--purple);font-size:.72rem;font-weight:600&quot;>View →</a>'"></a>`:'<span style="color:var(--gray);font-size:.72rem">—</span>'}</td>
+      <td><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></td>
+      <td style="font-size:.7rem;color:var(--gray)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'—'}</td>
+      <td><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+        ${a.status==='pending'?`<button class="btn b-ok" onclick="approveApp('${a.id}')">✓ Approve</button><button class="btn b-no" onclick="rejectApp('${a.id}')">✗</button>`:''}
+        <button class="btn b-view" onclick="viewApp('${a.id}')">View</button>
+        ${wa?`<button class="btn b-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')">💬</button>`:''}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function filter(f,btn){
+  curFilter=f;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderAppsTable();
+}
+function search(q){curSearch=q;renderAppsTable();}
+
+// ── STORES TABLE ──
+function renderStoresTable(){
+  const tbody=document.getElementById('storesTbl');
+  if(!stores.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-icon">🏪</div>No stores yet</div></td></tr>';return;}
+  tbody.innerHTML=stores.map(s=>{
+    const wa=s.whatsapp_number||'';
+    return `<tr>
+      <td><b>${e(s.store_name||'—')}</b></td>
+      <td><span class="uni-tag">${e(s.university_abbr||'—')}</span></td>
+      <td style="font-size:.78rem">${e(s.category||'—')}</td>
+      <td style="font-size:.78rem">${e(s.seller_name||'—')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:600;font-size:.78rem;text-decoration:none">${e(wa)}</a>`:'—'}</td>
+      <td><span class="badge ${s.is_active?'ba':'br'}">${s.is_active?'Active':'Inactive'}</span></td>
+      <td style="font-size:.7rem;color:var(--gray)">${s.created_at?new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── NOTIFICATIONS ──
+function renderNotifDropdown(){
+  const el=document.getElementById('notifDropList');
+  if(!notifs.length){el.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  el.innerHTML=notifs.slice(0,15).map(n=>`
+    <div class="nitem ${n.is_read?'':'unread'}" onclick="markRead('${n.id}')">
+      <div class="nitem-title">${!n.is_read?'<span style="display:inline-block;width:7px;height:7px;background:var(--red);border-radius:50%;margin-right:4px;vertical-align:middle"></span>':''}${e(n.title||'Notification')}</div>
+      <div class="nitem-body">${e(n.body||'')}</div>
+      <div class="nitem-time">${ago(n.created_at)}</div>
+    </div>`).join('');
+}
+
+function renderNotifPage(){
+  const u=notifs.filter(n=>!n.is_read).length;
+  s('notifPageSub',`${notifs.length} total notifications · ${u} unread`);
+  const el=document.getElementById('notifPageList');
+  if(!notifs.length){el.innerHTML='<div class="empty" style="padding:3rem"><div class="empty-icon">🔔</div>No notifications yet<br><small>They will appear here when students apply</small></div>';return;}
+  el.innerHTML=notifs.map(n=>`
+    <div class="npage-item ${n.is_read?'':'unread'}" onclick="markRead('${n.id}')">
+      <div class="npage-icon" style="background:${n.type==='campus_application'?'rgba(124,58,237,0.1)':'rgba(201,168,76,0.1)'}">
+        ${n.type==='campus_application'?'🎓':'🔔'}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.15rem;display:flex;align-items:center;gap:.5rem">
+          ${e(n.title||'Notification')}
+          ${!n.is_read?'<span style="display:inline-block;width:7px;height:7px;background:var(--red);border-radius:50%"></span>':''}
+        </div>
+        <div style="font-size:.76rem;color:var(--gray);line-height:1.6;margin-bottom:.25rem">${e(n.body||'')}</div>
+        <div style="font-size:.67rem;color:var(--gray)">${ago(n.created_at)} · ${new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+        ${n.type==='campus_application'?`<button onclick="goPage('applications',null)" style="margin-top:.35rem;background:var(--purple);color:#fff;border:none;padding:.28rem .75rem;border-radius:4px;font-size:.71rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Review Applications →</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function toggleNotif(){document.getElementById('notifPanel').classList.toggle('open');}
+function closeNotif(){document.getElementById('notifPanel').classList.remove('open');}
+
+async function markRead(id){
+  await sb.from('admin_notifications').update({is_read:true}).eq('id',id);
+  notifs=notifs.map(n=>n.id===id?{...n,is_read:true}:n);
+  updateNotifBadge();
+  renderNotifDropdown();
+  renderOvNotifs();
+  if(document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
+}
+
+async function markAllRead(){
+  const unread=notifs.filter(n=>!n.is_read);
+  if(!unread.length){showToast('All already read');return;}
+  await sb.from('admin_notifications').update({is_read:true}).eq('is_read',false);
+  notifs=notifs.map(n=>({...n,is_read:true}));
+  updateNotifBadge();
+  renderNotifDropdown();
+  renderOvNotifs();
+  if(document.getElementById('page-notifications').classList.contains('active')) renderNotifPage();
+  showToast('All marked as read ✓');
+}
+
+function updateNotifBadge(){
+  const u=notifs.filter(n=>!n.is_read).length;
+  const nb=document.getElementById('notifBadge');
+  const nc=document.getElementById('notifCount');
+  nb.textContent=u; nb.style.display=u>0?'inline-block':'none';
+  nc.textContent=u; nc.style.display=u>0?'inline-block':'none';
+}
+
+function renderOvNotifs(){
+  const oel=document.getElementById('ovNotifs');
+  if(!notifs.length){oel.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  oel.innerHTML=notifs.slice(0,6).map(n=>`
+    <div style="padding:.75rem 1.25rem;border-bottom:1px solid var(--lgray);background:${n.is_read?'#fff':'#FFFBEB'};cursor:pointer;border-left:3px solid ${n.is_read?'transparent':'var(--gold)'}"
+      onclick="markRead('${n.id}')">
+      <div style="font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:.15rem">${e(n.title||'Notification')}</div>
+      <div style="font-size:.72rem;color:var(--gray);line-height:1.5">${e(n.body||'')}</div>
+      <div style="font-size:.65rem;color:var(--gray);margin-top:.2rem">${ago(n.created_at)}</div>
+    </div>`).join('');
+}
+
+// ── APPROVE / REJECT ──
+async function approveApp(id){
+  const app=apps.find(a=>a.id===id);
+  if(!app) return;
+  if(!confirm(`Approve ${app.full_name}?\nUniversity: ${app.university_abbr}\nBusiness: ${app.business_category}\n\nThis will create their store immediately.`)) return;
+
+  // Step 1: Update application status only (no approved_at column)
+  const {error:e1} = await sb.from('campus_applications')
+    .update({status:'approved'})
+    .eq('id',id);
+  if(e1){ showToast('Error updating application: '+e1.message,'err'); console.error(e1); return; }
+
+  // Step 2: Create store — using EXACT campus_stores schema columns
+  // Extract shop name: stored as first line of business_description prefixed with SHOP:
+  let shopName = app.full_name + "'s Shop";
+  if(app.business_description && app.business_description.startsWith('SHOP:')) {
+    shopName = app.business_description.split('\n')[0].replace('SHOP:','').trim();
+  }
+  const slug = shopName.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '-' + Date.now();
+  const storeData = {
+    store_name:      shopName,
+    slug:            slug,
+    university:      app.university || app.university_abbr,
+    university_abbr: app.university_abbr,
+    category:        app.business_category || 'General',
+    description:     app.business_description ? app.business_description.replace(/^SHOP:[^\n]*\n?/,'') : '',
+    whatsapp_number: app.whatsapp_number || app.phone || '',
+    is_active:       true
+  };
+  const {data:newStore, error:e2} = await sb.from('campus_stores').insert(storeData).select();
+  if(e2){ showToast('Store error: '+e2.message,'err'); console.error('Store insert failed:',e2,storeData); return; }
+  console.log('✅ Store created:', newStore);
+
+  // Step 3: Add notification
+  await sb.from('admin_notifications').insert({
+    type: 'campus_approved',
+    title: '✅ ' + shopName + ' Approved',
+    body: app.full_name + ' from ' + app.university_abbr + ' (' + app.business_category + ') approved. Store is now live.',
+    is_read: false,
+    created_at: new Date().toISOString()
+  });
+
+  // Step 4: WhatsApp message
+  const phone=(app.whatsapp_number||app.phone||'').replace(/\D/g,'');
+  if(phone){
+    const msg=encodeURIComponent(
+      `🎉 Congratulations ${app.full_name}!\n\n`+
+      `Your Travex Campus application has been APPROVED! 🎓\n\n`+
+      `University: ${app.university_abbr}\nBusiness: ${app.business_category}\n\n`+
+      `Pay Activation Fee:\n💳 CRDB: 0152774556100\n📱 M-Pesa: +255 651 919 915\n💵 TZS 15,000/month\n\n`+
+      `Send receipt photo after payment.\nLogin: ${location.origin}/campus-dashboard.html\n\nWelcome to Travex Campus! 🎓`
+    );
+    window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
+  }
+
+  showToast('✅ ' + shopName + ' — store created & live!','ok');
+  await loadAll();
+  renderAppsTable();
+  renderStoresTable();
+}
+
+async function rejectApp(id){
+  const app=apps.find(a=>a.id===id);
+  if(!app||!confirm(`Reject application from ${app.full_name}?`)) return;
+  const {error} = await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);
+  if(error){ showToast('Error: '+error.message,'err'); return; }
+  showToast(`Application from ${app.full_name} rejected.`);
+  await loadApps();
+  renderAppsTable();
+  renderOverview();
+}
+
+// ── VIEW MODAL ──
+function viewApp(id){
+  const a=apps.find(x=>x.id===id);
+  if(!a) return;
+  const wa=a.whatsapp_number||a.phone||'';
+  const dt=a.submitted_at||a.created_at;
+  document.getElementById('modalTitle').textContent=`${a.shop_name||a.full_name} — Application`;
+  document.getElementById('modalBody').innerHTML=`
+    <div class="m-sec">Student Info</div>
+    <div class="m-row"><span class="m-l">Full Name</span><span class="m-v">${e(a.full_name||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Email</span><span class="m-v">${e(a.email||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Phone</span><span class="m-v">${e(a.phone||'—')}</span></div>
+    <div class="m-row"><span class="m-l">WhatsApp</span><span class="m-v">${wa?`<a href="https://wa.me/${wa.replace(/\D/g,'')}" target="_blank" style="color:var(--green);font-weight:700">${e(wa)} 💬</a>`:'—'}</span></div>
+    <div class="m-row"><span class="m-l">Year</span><span class="m-v">Year ${e(a.year_of_study||'—')}</span></div>
+    <div class="m-sec">University</div>
+    <div class="m-row"><span class="m-l">University</span><span class="m-v">${e(a.university||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Abbreviation</span><span class="m-v"><span class="uni-tag">${e(a.university_abbr||'—')}</span></span></div>
+    <div class="m-row"><span class="m-l">Region</span><span class="m-v">${e(a.region||'—')}</span></div>
+    <div class="m-sec">Shop</div>
+    <div class="m-row"><span class="m-l">Shop Name</span><span class="m-v">${e(a.shop_name||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Category</span><span class="m-v">${e(a.business_category||'—')}</span></div>
+    <div class="m-row"><span class="m-l">Description</span><span class="m-v" style="max-width:260px;line-height:1.5">${e(a.business_description||'—')}</span></div>
+    <div class="m-sec">ID Card</div>
+    ${a.id_card_url
+      ?`<div style="margin:.5rem 0"><img src="${a.id_card_url}" style="max-width:100%;max-height:170px;border-radius:6px;border:1px solid var(--lgray);display:block" onerror="this.style.display='none'">
+        <a href="${a.id_card_url}" target="_blank" style="color:var(--purple);font-size:.8rem;font-weight:600;text-decoration:none;display:inline-block;margin-top:.4rem">🪪 View Full →</a></div>`
+      :'<div style="color:var(--gray);font-size:.8rem;padding:.4rem 0">No ID uploaded</div>'}
+    <div class="m-sec">Status</div>
+    <div class="m-row"><span class="m-l">Status</span><span class="m-v"><span class="badge ${a.status==='approved'?'ba':a.status==='rejected'?'br':'bp'}">${a.status||'pending'}</span></span></div>
+    <div class="m-row"><span class="m-l">Submitted</span><span class="m-v">${dt?new Date(dt).toLocaleString('en-GB'):'—'}</span></div>
+  `;
+  document.getElementById('modalFoot').innerHTML=`
+    ${a.status==='pending'?`
+      <button class="btn b-ok" onclick="approveApp('${a.id}');closeModal()" style="padding:.5rem 1.25rem">✓ Approve & Create Shop</button>
+      <button class="btn b-no" onclick="rejectApp('${a.id}');closeModal()" style="padding:.5rem 1.25rem">✗ Reject</button>`:''}
+    ${wa?`<button class="btn b-wa" onclick="window.open('https://wa.me/${wa.replace(/\D/g,'')}','_blank')" style="padding:.5rem 1rem">💬 WhatsApp</button>`:''}
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+// ── NAVIGATION ──
+function goPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg) pg.classList.add('active');
+  if(el) el.classList.add('active');
+  const titles={overview:'🎓 Campus Dashboard',applications:'📋 Applications',stores:'🏪 Active Stores',notifications:'🔔 Notifications'};
+  s('pageTitle',titles[name]||name);
+  closeNotif();
+  if(name==='applications') renderAppsTable();
+  if(name==='stores')       renderStoresTable();
+  if(name==='notifications') renderNotifPage();
+  if(name==='overview')     renderOverview();
+}
+
+// ── UTILS ──
+function s(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function e(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast',3500);
+}
+function ago(ts){
+  if(!ts) return '—';
+  const m=Math.floor((Date.now()-new Date(ts))/60000);
+  if(m<1) return 'just now';
+  if(m<60) return m+'m ago';
+  const h=Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  return Math.floor(h/24)+'d ago';
+}
+document.addEventListener('click',e=>{
+  if(!document.querySelector('.notif-wrap')?.contains(e.target)) closeNotif();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeNotif();}});
+</script>
+</body>
+</html>
