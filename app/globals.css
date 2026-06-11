@@ -6,8 +6,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -16,11 +14,6 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -37,28 +30,37 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  
-  /* Travex Brand Colors */
+
+  /* ── Travex Brand Colors ── */
   --color-navy: #0D1B3E;
   --color-blue: #1B3A6B;
   --color-gold: #C9A84C;
   --color-gold-light: #F0C96B;
   --color-offwhite: #F8F9FC;
+  --color-green: #059669;
+
+  /* ── Fonts ── */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
 }
 
 :root {
+  /* Brand */
   --navy: #0D1B3E;
   --blue: #1B3A6B;
   --gold: #C9A84C;
   --gold-light: #F0C96B;
   --offwhite: #F8F9FC;
+  --green: #059669;
+
+  /* Shadcn */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: #0D1B3E;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -70,14 +72,9 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: #0D1B3E;
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
@@ -85,12 +82,39 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-* {
+/* ── Global Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #111827;
+  background: #F8F9FC;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background: var(--offwhite);
-  font-family: 'Inter', sans-serif;
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0D1B3E;
 }
+
+.font-heading {
+  font-family: 'Playfair Display', Georgia, serif !important;
+}
+
+/* ── Tailwind color aliases ── */
+.text-navy   { color: #0D1B3E; }
+.bg-navy     { background-color: #0D1B3E; }
+.text-gold   { color: #C9A84C; }
+.bg-gold     { background-color: #C9A84C; }
+.bg-offwhite { background-color: #F8F9FC; }
+.border-gold { border-color: #C9A84C; }
+.bg-secondary{ background-color: #1B3A6B; }
+.hover\:bg-gold-light:hover { background-color: #F0C96B; }
