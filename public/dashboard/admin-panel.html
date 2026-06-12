@@ -176,7 +176,8 @@ tr:hover td{background:rgba(13,27,62,0.015)}
         📋 Applications <span class="sb-count" id="pendingCount">0</span>
       </div>
       <div class="sb-item" onclick="goPage('stores',this)">🏪 Active Stores</div>
-      <div class="sb-item" onclick="goPage('notifications',this)">
+      <div class="sb-item" onclick="goPage('market')">Market Apps</a>
+        <a onclick="goPage('notifications',this)">
         🔔 Notifications <span class="sb-count" id="notifCount">0</span>
       </div>
 
@@ -306,6 +307,18 @@ tr:hover td{background:rgba(13,27,62,0.015)}
 
 <div class="toast" id="toast"></div>
 
+  <!-- ── MARKET APPLICATIONS PANEL ── -->
+  <div id="panel-market" class="panel" style="display:none">
+    <div class="panel-header">
+      <div class="panel-title">Market Applications</div>
+      <div class="panel-sub">Pending shop applications from Business Market</div>
+    </div>
+    <div id="marketAppsContainer">
+      <div class="loading-state">Loading market applications...</div>
+    </div>
+  </div>
+
+
 <script>
 const SB_URL = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SB_KEY = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
@@ -389,6 +402,11 @@ async function loadStores(){
   if(error){ console.error('Stores:',error.message); return; }
   stores = data||[];
   s('tShops', stores.filter(x=>x.is_active).length);
+  // Also count pending market applications
+  const {count:pendingMarket} = await sb.from('pending_payments')
+    .select('*',{count:'exact',head:true}).eq('status','pending');
+  const pendingEl = document.getElementById('tPendingMarket');
+  if(pendingEl) pendingEl.textContent = pendingMarket || 0;
 }
 
 async function loadNotifs(){
@@ -450,7 +468,7 @@ function renderAppsTable(){
   if(curFilter!=='all') list=list.filter(a=>a.status===curFilter);
   if(curSearch){
     const q=curSearch.toLowerCase();
-    list=list.filter(a=>`${a.full_name} ${a.shop_name} ${a.university_abbr} ${a.email}`.toLowerCase().includes(q));
+    list=list.filter(a=>`${a.full_name} ${a.business_description?.startsWith("SHOP:") ? a.business_description.split("\n")[0].replace("SHOP:","").trim() : (a.shop_name || a.full_name + "'s Shop")} ${a.university_abbr} ${a.email}`.toLowerCase().includes(q));
   }
   if(!list.length){
     tbody.innerHTML=`<tr><td colspan="9"><div class="empty"><div class="empty-icon">📋</div>No applications found</div></td></tr>`;
@@ -620,8 +638,7 @@ async function approveApp(id){
     type: 'campus_approved',
     title: '✅ ' + shopName + ' Approved',
     body: app.full_name + ' from ' + app.university_abbr + ' (' + app.business_category + ') approved. Store is now live.',
-    is_read: false,
-    created_at: new Date().toISOString()
+    is_read: false
   });
 
   // Step 4: WhatsApp message
@@ -631,8 +648,8 @@ async function approveApp(id){
       `🎉 Congratulations ${app.full_name}!\n\n`+
       `Your Travex Campus application has been APPROVED! 🎓\n\n`+
       `University: ${app.university_abbr}\nBusiness: ${app.business_category}\n\n`+
-      `Pay Activation Fee:\n💳 CRDB: 0152774556100\n📱 M-Pesa: +255 651 919 915\n💵 TZS 15,000/month\n\n`+
-      `Send receipt photo after payment.\nLogin: ${location.origin}/campus-dashboard.html\n\nWelcome to Travex Campus! 🎓`
+      `Campus Market Subscription:\n💳 CRDB: 0152774556100\n📱 M-Pesa: +255 651 919 915\n💵 TZS 15,000/month\n\n`+
+      `Send receipt photo after payment.\nLogin: https://travex-mall.vercel.app/campus-dashboard\n\nWelcome to Travex Campus! 🎓`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
   }
@@ -732,6 +749,76 @@ document.addEventListener('click',e=>{
   if(!document.querySelector('.notif-wrap')?.contains(e.target)) closeNotif();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeNotif();}});
+
+async function loadMarketApps() {
+  const container = document.getElementById('marketAppsContainer');
+  if (!container) return;
+  
+  const { data, error } = await sb.from('pending_payments')
+    .select('*').order('created_at', { ascending: false });
+  
+  if (error) { container.innerHTML = '<div class="error">Error: ' + error.message + '</div>'; return; }
+  if (!data?.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏪</div><div>No market applications yet</div></div>';
+    return;
+  }
+  
+  container.innerHTML = `
+    <table class="data-table">
+      <thead><tr>
+        <th>Owner</th><th>Shop Name</th><th>Category</th><th>Region</th>
+        <th>Plan</th><th>Amount</th><th>Status</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        ${data.map(app => `
+          <tr>
+            <td><strong>${sanitize(app.owner_name)}</strong><br><small>${sanitize(app.owner_email||'')}</small></td>
+            <td>${sanitize(app.shop_name||'')}</td>
+            <td><span class="badge">${sanitize(app.shop_category||'')}</span></td>
+            <td>${sanitize(app.shop_region||'')}</td>
+            <td><span class="badge ${app.plan==='premium'?'badge-gold':'badge-gray'}">${app.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
+            <td><strong>TZS ${Number(app.amount||0).toLocaleString()}</strong></td>
+            <td><span class="status-badge status-${app.status||'pending'}">${app.status||'pending'}</span></td>
+            <td>
+              <button class="btn-sm btn-approve" onclick="approveMarketApp('${app.id}')">✅ Approve</button>
+              <button class="btn-sm btn-reject" onclick="rejectMarketApp('${app.id}')">❌ Reject</button>
+              ${app.receipt_url ? `<a href="${app.receipt_url}" target="_blank" class="btn-sm">🧾 Receipt</a>` : ''}
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+async function approveMarketApp(id) {
+  const { data: app } = await sb.from('pending_payments').select('*').eq('id', id).single();
+  if (!app || !confirm(`Approve ${app.shop_name}?`)) return;
+  
+  // Update status
+  await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
+  
+  // Notify via WhatsApp
+  const phone = (app.owner_phone || '').replace(/\D/g, '');
+  if (phone) {
+    const msg = encodeURIComponent(
+      `✅ Congratulations ${app.owner_name}!\n\n` +
+      `Your ${app.plan === 'premium' ? '🥇 Premium' : '🥈 Basic'} shop "${app.shop_name}" on Travex Mall has been APPROVED!\n\n` +
+      `Login to your dashboard:\nhttps://travex-mall.vercel.app/campus-dashboard\n\n` +
+      `Welcome to Travex Mall! 🏪`
+    );
+    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+  }
+  
+  showToast('✅ Market shop approved!', 'ok');
+  loadMarketApps();
+}
+
+async function rejectMarketApp(id) {
+  const { data: app } = await sb.from('pending_payments').select('*').eq('id', id).single();
+  if (!app || !confirm(`Reject ${app.shop_name}?`)) return;
+  await sb.from('pending_payments').update({ status: 'rejected' }).eq('id', id);
+  showToast('Application rejected', 'ok');
+  loadMarketApps();
+}
 </script>
 </body>
 </html>
