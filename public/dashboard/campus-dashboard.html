@@ -422,7 +422,7 @@ select,textarea,
                 <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">ARU</div>
                 <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
               </div>
-              <div class="reg-uni-opt" onclick="regSelectUni(this,'TIA','Tstartnia Institute of Accountancy','Dar es Salaam')">
+              <div class="reg-uni-opt" onclick="regSelectUni(this,'TIA','Tanzania Institute of Accountancy','Dar es Salaam')">
                 <div style="font-size:1.1rem;font-weight:900;color:#C9A84C">TIA</div>
                 <div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Dar es Salaam</div>
               </div>
@@ -967,7 +967,6 @@ select,textarea,
 <script>
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
 const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
-const GEMINI_URL    = "https://bscecjbgnjitlfmgwcic.supabase.co/functions/v1/gemini-chat";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -977,7 +976,7 @@ let userUniAbbr  = "";
 
 // INIT
 async function init() {
-  const { data: { session } } = await sb.orth.getSession();
+  const { data: { session } } = await sb.auth.getSession();
   if (!session) { 
     document.getElementById("campusLoginOverlay").style.display = "block";
     return; 
@@ -1221,13 +1220,18 @@ function switchAI(type, btn) {
 }
 
 const systemPrompts = {
-  advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tstartnia. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
-  marketing:"You are a Marketing AI for Travex Campus student marketplace in Tstartnia. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
+  advisor:  "You are an expert Business Advisor for Travex Campus student marketplace in Tanzania. Help students with pricing, profit calculations, business strategy, and financial management. Use TZS for all amounts. Be practical and encouraging.",
+  marketing:"You are a Marketing AI for Travex Campus student marketplace in Tanzania. Help students create campus marketing campaigns, predict what sells among university students, and grow their customer base. Be specific and practical.",
   care:     "You are a Customer Care assistant for Travex Campus sellers. Help students respond to customer messages professionally and politely in English. Write actual response templates they can use.",
-  learn:    "You are a Business Learning AI for Travex Campus student sellers in Tstartnia. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
+  learn:    "You are a Business Learning AI for Travex Campus student sellers in Tanzania. Teach business concepts in simple, practical ways that apply to campus selling. Make lessons engaging and relevant to student life."
 };
 
 async function sendAI(type, text) {
+  if (!checkRateLimit()) {
+    showToast('Daily limit of 30 messages reached. Try again tomorrow.', 'error');
+    return;
+  }
+
   const input    = document.getElementById("input-" + type);
   const messages = document.getElementById("msgs-" + type);
   const msg      = text || input.value.trim();
@@ -1235,31 +1239,48 @@ async function sendAI(type, text) {
 
   const icons = { advisor:"🤖", marketing:"📈", care:"💬", learn:"📚" };
 
-  messages.innerHTML += `<div class="ai-msg user"><div class="ai-icon">ME</div><div class="ai-bubble">${msg}</div></div>`;
+  appendMsg(messages, "user", "ME", msg);
   input.value = "";
-  messages.scrollTop = messages.scrollHeight;
 
   const typingId = "t-" + Date.now();
-  messages.innerHTML += `<div class="ai-msg bot" id="${typingId}"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble">...</div></div>`;
-  messages.scrollTop = messages.scrollHeight;
+  appendMsg(messages, "bot", icons[type], "...", typingId);
 
   try {
-    const { data: { session } } = await sb.orth.getSession();
-    const res = await fetch(GEMINI_URL, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json", "Authorization":`Bearer ${session?.access_token || SUPABASE_ANON}` },
-      body: JSON.stringify({ message: msg, systemPrompt: systemPrompts[type] })
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model:      "claude-haiku-4-5-20251001",
+        max_tokens: 800,
+        system:     systemPrompts[type] + (currentShop ? `\n\nShop: "${currentShop.store_name}", University: ${currentShop.university_abbr}, Category: ${currentShop.category || "General"}.` : ""),
+        messages:   [{ role: "user", content: msg }]
+      })
     });
-    const data = await res.json();
-    const reply = data.reply || "Sorry, try again.";
-    document.getElementById(typingId).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble">${reply.replace(/\n/g,"<br>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")}</div></div>`;
-  } catch {
-    document.getElementById(typingId).outerHTML = `<div class="ai-msg bot"><div class="ai-icon">${icons[type]}</div><div class="ai-bubble" style="color:var(--red)">Connection error. Please try again.</div></div>`;
+    const data  = await res.json();
+    const reply = data.content?.[0]?.text || "Sorry, try again.";
+    document.getElementById(typingId).outerHTML = buildBotMsg(icons[type], reply);
+    incrementRateLimit();
+  } catch(e) {
+    document.getElementById(typingId).outerHTML = buildBotMsg(icons[type], "Connection error. Please try again.", true);
   }
   messages.scrollTop = messages.scrollHeight;
 }
 
-// MODAL
+function appendMsg(container, role, icon, text, id="") {
+  const div = document.createElement("div");
+  div.className = "ai-msg " + (role === "user" ? "user" : "bot");
+  if (id) div.id = id;
+  div.innerHTML = `<div class="ai-icon">${icon}</div><div class="ai-bubble">${text}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function buildBotMsg(icon, text, isError=false) {
+  const formatted = text.replace(/\n/g,"<br>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
+  return `<div class="ai-msg bot"><div class="ai-icon">${icon}</div><div class="ai-bubble"${isError?' style="color:var(--red)"':''}>${formatted}</div></div>`;
+}
+
+
 function openProductModal() { document.getElementById("productModal").classList.add("open"); }
 function closeProductModal() {
   document.getElementById("productModal").classList.remove("open");
@@ -1285,7 +1306,7 @@ function showAlert(id, msg) {
 }
 
 async function handleLogout() {
-  await sb.orth.signOut();
+  await sb.auth.signOut();
   localStorage.clear();
   sessionStorage.clear();
   window.location.replace("login.html");
@@ -1321,7 +1342,7 @@ async function doLogin() {
   btn.textContent = "Signing in...";
   btn.disabled = true;
 
-  const { error } = await sb.orth.signInWithPassword({ email, password: pass });
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
   if (error) {
     showAuthError(errEl, "Failed: " + (error.message === "Invalid login credentials" ? "Invalid email or password." : error.message));
     btn.textContent = "Login to Dashboard →";
@@ -1338,7 +1359,7 @@ async function doReset() {
   const email = document.getElementById("resetEmail").value.trim();
   const msgEl = document.getElementById("resetMsg");
   if (!email) { showAuthError(msgEl, "Please enter your email."); return; }
-  const { error } = await sb.orth.resetPasswordForEmail(email, {
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + "/campus-dashboard.html"
   });
   if (error) { showAuthError(msgEl, error.message); return; }
@@ -1464,7 +1485,7 @@ async function submitRegApplication() {
     // Create Supabase Auth user
     const email    = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
-    const { data: orthData, error: orthErr } = await sb.orth.signUp({
+    const { data: orthData, error: orthErr } = await sb.auth.signUp({
       email, password,
       options: { data: { name: document.getElementById("reg-name").value.trim(), role: "campus_seller" } }
     });
@@ -1489,7 +1510,7 @@ async function submitRegApplication() {
     if (appErr) throw appErr;
 
     // Sign out immediately — they wait for admin approval before logging in
-    await sb.orth.signOut();
+    await sb.auth.signOut();
 
     // Notify admin immediately via admin_notifications
     await sb.from("admin_notifications").insert({
@@ -1768,58 +1789,64 @@ async function loadAccounting() {
 
 // ── MARKETING PLAN ──
 async function generateMarketingPlan() {
-  if (!checkRateLimit()) { showLimitWarning('mkt-plan-content'); return; }
-  
-  const audience = document.getElementById('mkt-audience')?.value.trim() || 'university students';
-  const products = document.getElementById('mkt-products')?.value.trim() || currentShop?.category || 'general products';
-  const budget   = document.getElementById('mkt-budget')?.value || '50000';
-  const btn      = document.getElementById('mkt-btn');
-  const content  = document.getElementById('mkt-plan-content');
+  if (!checkRateLimit()) {
+    showToast('Daily limit reached. Try again tomorrow.', 'error');
+    return;
+  }
+  const audience = document.getElementById("mktAudience")?.value.trim() || "";
+  const products = document.getElementById("mktProducts")?.value.trim() || "";
+  const budget   = document.getElementById("mktBudget")?.value.trim() || "";
+  const output   = document.getElementById("mktOutput");
+  const btn      = document.getElementById("mktBtn");
 
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
-  if (content) content.innerHTML = '<div style="color:var(--gray);font-style:italic">AI is creating your personalized marketing plan...</div>';
+  if (!products) { showToast("Please enter your main products first.", "error"); return; }
 
-  const prompt = `Create a practical marketing plan for a campus shop on Travex Campus marketplace in Tanzania.
-
-Shop details:
-- Shop Name: ${currentShop?.store_name || 'Campus Shop'}
-- Category: ${currentShop?.category || products}
-- University: ${currentShop?.university || 'University'}
-- Target Audience: ${audience}
-- Main Products: ${products}
-- Monthly Budget: TZS ${budget}
-
-Provide a structured plan with:
-1. Social Media Strategy (Instagram, TikTok, WhatsApp)
-2. Weekly posting schedule
-3. Promotion ideas that fit the budget
-4. How to use Social Vybe effectively
-5. 3 quick wins to get first 10 customers
-
-Keep it practical and specific to the Tanzanian university market. Format with clear sections and bullet points.`;
+  btn.disabled = true;
+  btn.textContent = "Generating plan...";
+  output.innerHTML = '<div style="color:var(--gray);font-style:italic;padding:1rem">✍️ Writing your marketing plan...</div>';
 
   try {
-    incrementRateLimit();
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const shopInfo = currentShop ? `Shop: "${currentShop.store_name}" at ${currentShop.university_abbr}. Category: ${currentShop.category || "General"}.` : "";
+    const prompt = `Create a practical 30-day campus marketing plan for a student seller on Travex Mall.
+${shopInfo}
+Products: ${products}
+Target audience: ${audience || "university students"}
+Monthly budget: ${budget ? "TZS " + budget : "Limited budget"}
+
+Format the plan with:
+1. Week-by-week action items
+2. Social Vybe posting strategy
+3. WhatsApp marketing tips
+4. Pricing recommendations
+5. Quick win ideas
+
+Keep it practical, actionable and specific for Tanzanian campus market.`;
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
+        model:      "claude-haiku-4-5-20251001",
+        max_tokens: 1200,
+        messages:   [{ role: "user", content: prompt }]
       })
     });
-    const data = await res.json();
-    const plan = data.content?.[0]?.text || 'Failed to generate plan.';
-    if (content) content.innerHTML = '<pre style="white-space:pre-wrap;font-family:DM Sans,sans-serif;font-size:0.82rem;line-height:1.7;color:#111">' + plan + '</pre>';
+    const data  = await res.json();
+    const reply = data.content?.[0]?.text || "Could not generate plan.";
+    output.innerHTML = reply
+      .replace(/\n/g, "<br>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/^##\s+(.+)/gm, '<h4 style="color:var(--navy);font-family:Playfair Display,serif;margin:1rem 0 0.4rem">$1</h4>')
+      .replace(/^\d+\.\s+/gm, '<br><strong>$&</strong>');
+    incrementRateLimit();
   } catch(e) {
-    if (content) content.innerHTML = '<div style="color:var(--red)">Error: ' + e.message + '</div>';
+    output.innerHTML = '<div style="color:var(--red)">Error generating plan. Check connection.</div>';
   }
-
-  if (btn) { btn.disabled = false; btn.textContent = '🚀 Generate Marketing Plan'; }
+  btn.disabled = false;
+  btn.textContent = "Generate Plan";
 }
 
-// ── UPDATE ORDER STATUS ──
+
 async function updateOrderStatus(orderId, newStatus) {
   const { error } = await sb.from('campus_orders').update({ status: newStatus }).eq('id', orderId);
   if (error) { showToast('Error: ' + error.message, 'err'); return; }
