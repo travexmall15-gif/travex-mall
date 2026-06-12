@@ -1494,5 +1494,36 @@ function previewProductImage(input){ const f=input.files[0]; if(!f) return; cons
   if(session) await init();
 })();
 </script>
+<style id="travex-polish-v2">
+/* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:linear-gradient(160deg,#050B1A 0%,#061020 50%,#0A1B3C 100%)!important}
+body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:-1;
+  background:linear-gradient(112deg,transparent 32%,rgba(110,150,235,0.14) 46%,rgba(201,168,76,0.09) 56%,transparent 72%);
+  filter:blur(48px)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:0.04;
+  background-image:linear-gradient(rgba(255,255,255,0.7) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,0.7) 1px,transparent 1px);
+  background-size:56px 56px}
+.topbar{background:rgba(7,14,28,0.85)!important;backdrop-filter:blur(22px)}
+.sidebar{background:rgba(5,12,26,0.92)!important}
+.stat-card{border-radius:16px!important;
+  background:linear-gradient(160deg,rgba(255,255,255,0.055),rgba(255,255,255,0.022))!important;
+  transition:all 0.25s}
+.stat-card:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.30)!important;
+  box-shadow:0 12px 32px rgba(0,0,0,0.35)}
+.content-card{border-radius:16px!important;
+  background:linear-gradient(160deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))!important}
+.auth-card{border-radius:24px!important;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.auth-input{border-radius:12px!important}
+.auth-input:focus{box-shadow:0 0 0 3px rgba(201,168,76,0.18)}
+.auth-btn{border-radius:999px!important;box-shadow:0 8px 22px rgba(201,168,76,0.28);transition:all 0.2s}
+.auth-btn:hover{transform:translateY(-1px)}
+.auth-tabs{border-radius:999px!important;overflow:hidden}
+.auth-tab{border-radius:999px!important}
+.nav-item{border-radius:12px!important}
+.topbar-badge,.nav-badge,.stat-trend{border-radius:999px!important}
+.topbar-avatar,.sidebar-av{box-shadow:0 4px 14px rgba(201,168,76,0.25)}
+</style>
 </body>
 </html>
