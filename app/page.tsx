@@ -54,10 +54,10 @@ export default function HomePage() {
               Create your online store in minutes. Sell across Tanzania. Grow your business with AI-powered intelligence — designed for every African entrepreneur.
             </p>
             <div style={{display:'flex',gap:'0.85rem',flexWrap:'wrap',marginBottom:'2.5rem'}}>
-              <Link href="/login" style={{background:'#C9A84C',color:'#0D1B3E',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:700,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+              <Link href="/campus-dashboard" style={{background:'#C9A84C',color:'#0D1B3E',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:700,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
                 Login to Your Shop →
               </Link>
-              <Link href="/open-store-b2c" style={{background:'rgba(255,255,255,0.08)',color:'#fff',border:'1px solid rgba(255,255,255,0.25)',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:600,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+              <Link href="/market" style={{background:'rgba(255,255,255,0.08)',color:'#fff',border:'1px solid rgba(255,255,255,0.25)',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:600,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
                 Open New Store
               </Link>
             </div>
@@ -92,9 +92,9 @@ export default function HomePage() {
           <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'#6B7280',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Discover verified local sellers across Tanzania. Fashion, electronics, food and more — all in one place.</p>
           <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
             <Link href="/market" style={{background:'#0D1B3E',color:'#fff',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
-              🛍️ Browse Retail Stores
+              🛍️ Browse Market
             </Link>
-            <Link href="/login" style={{background:'transparent',color:'#0D1B3E',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid #0D1B3E',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+            <Link href="/campus-dashboard" style={{background:'transparent',color:'#0D1B3E',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid #0D1B3E',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
               Login to Your Shop →
             </Link>
           </div>
@@ -121,9 +121,9 @@ export default function HomePage() {
           <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'rgba(255,255,255,0.35)',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Connect with verified manufacturers, importers and distributors. Best bulk prices across Tanzania.</p>
           <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
             <Link href="/market" style={{background:'#C9A84C',color:'#111',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
-              🏭 Browse Wholesalers
+              🏭 Browse All Shops
             </Link>
-            <Link href="/login" style={{background:'transparent',color:'rgba(255,255,255,0.6)',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid rgba(255,255,255,0.15)',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+            <Link href="/campus-dashboard" style={{background:'transparent',color:'rgba(255,255,255,0.6)',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid rgba(255,255,255,0.15)',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
               Login to Your Shop →
             </Link>
           </div>
