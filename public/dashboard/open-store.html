@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Open Your Shop — Travex Mall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--green:#059669;--red:#DC2626}
+body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--navy);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Playfair Display',serif}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,27,62,0.97);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 5%;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08)}
+.nav-logo{font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none;display:flex;align-items:center;gap:0.35rem}
+
+/* HERO */
+.page-hero{background:var(--navy);padding:6rem 5% 3rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08),transparent 60%)}
+.page-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:0.75rem;position:relative}
+.page-hero h1 span{color:var(--gold)}
+.page-hero p{font-size:0.95rem;color:rgba(255,255,255,0.55);max-width:480px;margin:0 auto;line-height:1.75;position:relative}
+
+/* PROGRESS */
+.progress-wrap{max-width:680px;margin:0 auto;padding:2.5rem 5% 0}
+.progress-bar{display:flex;align-items:center;margin-bottom:2.5rem}
+.prog-step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;transition:all 0.3s;border:2px solid var(--lgray);background:#fff;color:var(--gray)}
+.prog-step.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.prog-step.done{background:var(--green);color:#fff;border-color:var(--green)}
+.prog-line{flex:1;height:2px;background:var(--lgray);transition:background 0.3s;margin:0 4px}
+.prog-line.done{background:var(--green)}
+.prog-labels{display:flex;justify-content:space-between;margin-top:0.5rem;margin-bottom:2rem}
+.prog-label{font-size:0.62rem;font-weight:600;color:var(--gray);text-align:center;flex:1;text-transform:uppercase;letter-spacing:0.05em}
+.prog-label.active{color:var(--navy)}
+.prog-label.done{color:var(--green)}
+
+/* FORM */
+.form-wrap{max-width:680px;margin:0 auto;padding:0 5% 5rem}
+.step{display:none}
+.step.active{display:block}
+.step-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
+.step-sub{font-size:0.85rem;color:var(--gray);margin-bottom:1.75rem;line-height:1.65}
+
+/* FORM ELEMENTS */
+.form-card{background:#fff;border:1px solid var(--lgray);border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
+.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.card-head-title{font-size:0.82rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.06em}
+.card-body{padding:1.25rem}
+.form-group{margin-bottom:1.1rem}
+.form-group:last-child{margin-bottom:0}
+.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--navy);margin-bottom:0.4rem}
+.form-label span{color:var(--red)}
+.form-input{width:100%;padding:0.65rem 0.85rem;border:1.5px solid var(--lgray);border-radius:8px;font-size:0.85rem;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:border-color 0.2s;background:#fff}
+.form-input:focus{border-color:var(--navy)}
+.form-input.error{border-color:var(--red)}
+textarea.form-input{resize:vertical;min-height:90px}
+.form-hint{font-size:0.7rem;color:var(--gray);margin-top:0.3rem}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:500px){.input-row{grid-template-columns:1fr}}
+
+/* PLAN CARDS */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+@media(max-width:500px){.plan-grid{grid-template-columns:1fr}}
+.plan-card{border:2px solid var(--lgray);border-radius:14px;padding:1.5rem;cursor:pointer;transition:all 0.2s;position:relative;background:#fff}
+.plan-card:hover{border-color:#aaa}
+.plan-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.04)}
+.plan-card.selected.premium-card{border-color:var(--navy);background:rgba(13,27,62,0.03)}
+.plan-badge{font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem}
+.plan-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
+.plan-price{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--navy);margin-bottom:0.1rem}
+.plan-period{font-size:0.72rem;color:var(--gray);margin-bottom:1rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:0.35rem}
+.plan-features li{font-size:0.78rem;color:var(--gray);display:flex;align-items:center;gap:0.4rem}
+.plan-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0}
+.plan-check{position:absolute;top:0.75rem;right:0.75rem;width:20px;height:20px;border-radius:50%;border:2px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all 0.2s}
+.plan-card.selected .plan-check{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.plan-card.selected.premium-card .plan-check{background:var(--navy);border-color:var(--navy);color:#fff}
+.popular-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:0.6rem;font-weight:700;padding:0.2rem 0.75rem;border-radius:20px;white-space:nowrap}
+
+/* COLOR PICKER */
+.color-grid{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem}
+.color-swatch{width:32px;height:32px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all 0.15s}
+.color-swatch.selected{border-color:var(--navy);transform:scale(1.15)}
+
+/* FONT PICKER */
+.font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.6rem;margin-top:0.5rem}
+.font-opt{padding:0.6rem 0.75rem;border:1.5px solid var(--lgray);border-radius:8px;cursor:pointer;font-size:0.8rem;text-align:center;transition:all 0.15s}
+.font-opt.selected{border-color:var(--navy);background:rgba(13,27,62,0.04);font-weight:600}
+
+/* REVIEW */
+.review-section{background:#fff;border:1px solid var(--lgray);border-radius:12px;overflow:hidden;margin-bottom:1rem}
+.review-head{padding:0.75rem 1rem;background:var(--offwhite);border-bottom:1px solid var(--lgray);font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em}
+.review-row{display:flex;justify-content:space-between;padding:0.65rem 1rem;border-bottom:1px solid #f3f4f6;font-size:0.82rem}
+.review-row:last-child{border-bottom:none}
+.review-label{color:var(--gray)}
+.review-val{font-weight:600;color:var(--navy);text-align:right;max-width:60%}
+
+/* PAYMENT */
+.payment-box{background:#fff;border:1px solid var(--lgray);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem}
+.pay-method{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;border:1.5px solid var(--lgray);border-radius:10px;cursor:pointer;transition:all 0.15s;margin-bottom:0.6rem}
+.pay-method.selected{border-color:var(--navy);background:rgba(13,27,62,0.03)}
+.pay-method-icon{font-size:1.3rem;flex-shrink:0}
+.pay-method-info{flex:1}
+.pay-method-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.pay-method-detail{font-size:0.75rem;color:var(--gray)}
+.copy-btn{font-size:0.68rem;background:var(--offwhite);border:1px solid var(--lgray);border-radius:6px;padding:0.25rem 0.6rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--navy);transition:all 0.15s}
+.copy-btn:hover{background:var(--lgray)}
+
+/* BUTTONS */
+.btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--lgray)}
+.btn{padding:0.75rem 1.75rem;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.4rem}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--blue)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+.btn-secondary{background:#fff;color:var(--navy);border:1.5px solid var(--lgray)}
+.btn-secondary:hover{border-color:#aaa}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.25rem;border-radius:10px;font-size:0.82rem;font-weight:600;z-index:9999;animation:slideIn 0.3s ease;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+.toast.success{background:var(--green);color:#fff}
+.toast.error{background:var(--red);color:#fff}
+@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ALERT */
+.alert{padding:0.75rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:500;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-error{background:rgba(220,38,38,0.08);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
+
+/* SUCCESS */
+.success-page{text-align:center;padding:4rem 2rem;display:none}
+.success-page.show{display:block}
+.success-icon{width:80px;height:80px;border-radius:50%;background:rgba(5,150,105,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem}
+.success-page h2{font-size:1.75rem;font-weight:800;color:var(--navy);margin-bottom:0.75rem}
+.success-page p{font-size:0.9rem;color:var(--gray);line-height:1.75;max-width:420px;margin:0 auto 2rem}
+.detail-box{background:var(--offwhite);border:1px solid var(--lgray);border-radius:12px;padding:1.25rem;text-align:left;max-width:380px;margin:0 auto 1.75rem}
+.detail-row{display:flex;justify-content:space-between;font-size:0.82rem;padding:0.4rem 0;border-bottom:1px solid var(--lgray)}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:var(--gray)}
+.detail-val{font-weight:700;color:var(--navy)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="/market" class="nav-back">← Back to Market</a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Open Your <span>Travex Shop</span></h1>
+  <p>Join Tanzania's unified business marketplace. Choose Basic or Premium — start selling in minutes.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-bar">
+    <div class="prog-step active" id="prog1">1</div>
+    <div class="prog-line" id="line1"></div>
+    <div class="prog-step" id="prog2">2</div>
+    <div class="prog-line" id="line2"></div>
+    <div class="prog-step" id="prog3">3</div>
+    <div class="prog-line" id="line3"></div>
+    <div class="prog-step" id="prog4">4</div>
+    <div class="prog-line" id="line4"></div>
+    <div class="prog-step" id="prog5">5</div>
+  </div>
+  <div class="prog-labels">
+    <div class="prog-label active" id="lbl1">Account</div>
+    <div class="prog-label" id="lbl2">Plan</div>
+    <div class="prog-label" id="lbl3">Shop</div>
+    <div class="prog-label" id="lbl4">Payment</div>
+    <div class="prog-label" id="lbl5">Review</div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+
+  <!-- STEP 1: Account -->
+  <div class="step active" id="step1">
+    <div class="step-title">Create Your Account</div>
+    <div class="step-sub">Enter your details to create your Travex seller account.</div>
+    <div class="alert alert-error" id="err1"></div>
+    <div class="form-card">
+      <div class="card-head"><div class="card-head-title">Owner Information</div></div>
+      <div class="card-body">
+        <div class="input-row">
+          <div class="form-group">
+            <label class="form-label">Full Name <span>*</span></label>
+            <input class="form-input" id="ownerName" type="text" placeholder="John Mwanza" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">WhatsApp Number <span>*</span></label>
+            <input class="form-input" id="ownerPhone" type="tel" placeholder="+255 7XX XXX XXX" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address <span>*</span></label>
+          <input class="form-input" id="ownerEmail" type="email" placeholder="you@email.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password <span>*</span></label>
+          <input class="form-input" id="ownerPass" type="password" placeholder="Min. 8 characters" />
+          <div class="form-hint">Use a strong password — this protects your shop and orders.</div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <div></div>
+      <button class="btn btn-primary" onclick="goStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Plan Selection -->
+  <div class="step" id="step2">
+    <div class="step-title">Choose Your Plan</div>
+    <div class="step-sub">Both plans give you a full shop on Travex Mall. Upgrade or downgrade anytime.</div>
+    <div class="alert alert-error" id="err2"></div>
+    <div class="plan-grid">
+      <!-- BASIC -->
+      <div class="plan-card" id="cardBasic" onclick="selectPlan('basic')">
+        <div class="plan-check" id="checkBasic"></div>
+        <div class="plan-badge" style="color:#6B7280">🥈 Silver · Basic</div>
+        <div class="plan-name">Basic</div>
+        <div class="plan-price">TZS 25,000</div>
+        <div class="plan-period">per month</div>
+        <ul class="plan-features">
+          <li>Your own shop page</li>
+          <li>Unlimited products</li>
+          <li>WhatsApp orders</li>
+          <li>AI Customer Care</li>
+          <li>Social Vybe posting</li>
+          <li>Basic analytics</li>
+        </ul>
+      </div>
+      <!-- PREMIUM -->
+      <div class="plan-card premium-card" id="cardPremium" onclick="selectPlan('premium')">
+        <div class="popular-tag">⭐ Most Popular</div>
+        <div class="plan-check" id="checkPremium"></div>
+        <div class="plan-badge" style="color:#C9A84C">🥇 Gold · Premium</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-price">TZS 45,000</div>
+        <div class="plan-period">per month</div>
+        <ul class="plan-features">
+          <li>Everything in Basic</li>
+          <li>🥇 Gold badge + top listing</li>
+          <li>Marketing AI tools</li>
+          <li>Accounting dashboard</li>
+          <li>Priority support</li>
+          <li>Featured on homepage</li>
+        </ul>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Shop Details -->
+  <div class="step" id="step3">
+    <div class="step-title">Set Up Your Shop</div>
+    <div class="step-sub">Tell customers about your shop — name, category and what you sell.</div>
+    <div class="alert alert-error" id="err3"></div>
+    <div class="form-card">
+      <div class="card-head"><div class="card-head-title">Shop Identity</div></div>
+      <div class="card-body">
+        <div class="input-row">
+          <div class="form-group">
+            <label class="form-label">Shop Name <span>*</span></label>
+            <input class="form-input" id="shopName" type="text" placeholder="e.g. Amina Fashion House" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category <span>*</span></label>
+            <select class="form-input" id="shopCategory">
+              <option value="">Select category...</option>
+              <option>Fashion & Clothing</option>
+              <option>Electronics</option>
+              <option>Food & Groceries</option>
+              <option>Beauty & Health</option>
+              <option>Services</option>
+              <option>Agriculture</option>
+              <option>Books & Stationery</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="form-group">
+            <label class="form-label">Region <span>*</span></label>
+            <select class="form-input" id="shopRegion">
+              <option value="">Select region...</option>
+              <option>Dar es Salaam</option>
+              <option>Arusha</option>
+              <option>Dodoma</option>
+              <option>Mwanza</option>
+              <option>Mbeya</option>
+              <option>Morogoro</option>
+              <option>Tanga</option>
+              <option>Zanzibar</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business WhatsApp <span>*</span></label>
+            <input class="form-input" id="shopWhatsapp" type="tel" placeholder="+255 7XX XXX XXX" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Shop Description <span>*</span></label>
+          <textarea class="form-input" id="shopDesc" placeholder="Describe what you sell, your target customers, and what makes your shop unique..."></textarea>
+          <div class="form-hint">Min. 30 characters. Be clear — this appears on your shop page.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="card-head"><div class="card-head-title">Brand Color</div></div>
+      <div class="card-body">
+        <div class="form-hint" style="margin-bottom:0.75rem">Choose the primary color for your shop banner and theme.</div>
+        <div class="color-grid" id="colorGrid">
+          <div class="color-swatch selected" style="background:#0D1B3E" data-color="#0D1B3E" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#C9A84C" data-color="#C9A84C" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#059669" data-color="#059669" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#DC2626" data-color="#DC2626" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#7C3AED" data-color="#7C3AED" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#1B3A6B" data-color="#1B3A6B" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#111827" data-color="#111827" onclick="pickColor(this)"></div>
+        </div>
+        <input type="color" id="customColor" style="margin-top:0.75rem;width:100%;height:36px;border:1.5px solid var(--lgray);border-radius:8px;cursor:pointer;padding:2px" onchange="pickCustomColor(this.value)" />
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Payment -->
+  <div class="step" id="step4">
+    <div class="step-title">Make Payment</div>
+    <div class="step-sub">Send your subscription payment via CRDB or M-Pesa, then upload your receipt.</div>
+    <div class="alert alert-error" id="err4"></div>
+
+    <div class="payment-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem">Amount Due</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:var(--navy)" id="amountDue">TZS 25,000</div>
+          <div style="font-size:0.72rem;color:var(--gray)" id="planLabel">Basic Plan · per month</div>
+        </div>
+        <div style="text-align:right">
+          <div id="planBadgePay" style="font-size:0.72rem;font-weight:700;background:rgba(13,27,62,0.08);color:var(--navy);padding:0.3rem 0.75rem;border-radius:20px">🥈 Silver Basic</div>
+        </div>
+      </div>
+
+      <div class="pay-method selected" id="payCredit" onclick="selectPayMethod('crdb')">
+        <div class="pay-method-icon">🏦</div>
+        <div class="pay-method-info">
+          <div class="pay-method-name">CRDB Bank Transfer</div>
+          <div class="pay-method-detail">Account: <strong>0152774556100</strong> &nbsp;
+            <button class="copy-btn" onclick="copyText('0152774556100')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pay-method" id="payMpesa" onclick="selectPayMethod('mpesa')">
+        <div class="pay-method-icon">📱</div>
+        <div class="pay-method-info">
+          <div class="pay-method-name">M-Pesa / Tigopesa</div>
+          <div class="pay-method-detail">Number: <strong>+255 651 919 915</strong> &nbsp;
+            <button class="copy-btn" onclick="copyText('255651919915')">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="card-head"><div class="card-head-title">Upload Payment Receipt</div></div>
+      <div class="card-body">
+        <label style="display:block;border:2px dashed var(--lgray);border-radius:10px;padding:1.75rem;text-align:center;cursor:pointer;transition:all 0.2s" id="receiptLabel"
+          onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='var(--lgray)'">
+          <div style="font-size:2rem;margin-bottom:0.5rem">📎</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--navy);margin-bottom:0.25rem">Upload Receipt Screenshot</div>
+          <div style="font-size:0.72rem;color:var(--gray)">JPG, PNG — max 5MB</div>
+          <input type="file" id="receiptFile" accept="image/*" style="display:none" onchange="previewReceipt(this)" />
+        </label>
+        <div id="receiptPreview" style="display:none;margin-top:0.75rem;text-align:center">
+          <img id="receiptImg" style="max-height:160px;border-radius:8px;border:1px solid var(--lgray)" />
+          <div style="font-size:0.75rem;color:var(--green);margin-top:0.4rem;font-weight:600">✅ Receipt uploaded</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(5)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Review + Submit -->
+  <div class="step" id="step5">
+    <div class="step-title">Review & Submit</div>
+    <div class="step-sub">Check your details carefully before submitting.</div>
+    <div class="alert alert-error" id="err5"></div>
+
+    <div class="review-section">
+      <div class="review-head">Account</div>
+      <div class="review-row"><span class="review-label">Name</span><span class="review-val" id="rv-name">—</span></div>
+      <div class="review-row"><span class="review-label">WhatsApp</span><span class="review-val" id="rv-phone">—</span></div>
+      <div class="review-row"><span class="review-label">Email</span><span class="review-val" id="rv-email">—</span></div>
+    </div>
+    <div class="review-section">
+      <div class="review-head">Plan</div>
+      <div class="review-row"><span class="review-label">Selected Plan</span><span class="review-val" id="rv-plan">—</span></div>
+      <div class="review-row"><span class="review-label">Monthly Price</span><span class="review-val" id="rv-price">—</span></div>
+    </div>
+    <div class="review-section">
+      <div class="review-head">Shop</div>
+      <div class="review-row"><span class="review-label">Shop Name</span><span class="review-val" id="rv-shop">—</span></div>
+      <div class="review-row"><span class="review-label">Category</span><span class="review-val" id="rv-cat">—</span></div>
+      <div class="review-row"><span class="review-label">Region</span><span class="review-val" id="rv-region">—</span></div>
+    </div>
+    <div class="review-section">
+      <div class="review-head">Payment</div>
+      <div class="review-row"><span class="review-label">Method</span><span class="review-val" id="rv-pay">—</span></div>
+      <div class="review-row"><span class="review-label">Receipt</span><span class="review-val" id="rv-receipt">—</span></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
+      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">🚀 Submit Application</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-page" id="successPage">
+    <div class="success-icon">🎉</div>
+    <h2>Application Submitted!</h2>
+    <p>Your shop application has been received. Our team will review and activate your shop within <strong>24 hours</strong>.</p>
+    <div class="detail-box" id="successDetail"></div>
+    <a href="/market" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--navy);color:#fff;padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:0.88rem;text-decoration:none;margin-right:0.75rem">← Back to Market</a>
+    <a href="/campus-dashboard" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--gold);color:var(--navy);padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:0.88rem;text-decoration:none">Open Dashboard →</a>
+  </div>
+
+</div><!-- /form-wrap -->
+
+<script>
+const sb = supabase.createClient(
+  'https://bscecjbgnjitlfmgwcic.supabase.co',
+  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+)
+
+// State
+let selectedPlan = 'basic'
+let selectedColor = '#0D1B3E'
+let selectedPayMethod = 'crdb'
+let currentStep = 1
+const PRICES = { basic: 25000, premium: 45000 }
+const fmt = n => 'TZS ' + Number(n).toLocaleString('en-US')
+
+// ── NAVIGATION ──
+function goStep(n) {
+  if (n > currentStep && !validateStep(currentStep)) return
+  document.getElementById(`step${currentStep}`).classList.remove('active')
+  document.getElementById(`prog${currentStep}`).classList.remove('active')
+  document.getElementById(`prog${currentStep}`).classList.add('done')
+  document.getElementById(`prog${currentStep}`).innerHTML = '✓'
+  document.getElementById(`lbl${currentStep}`).classList.remove('active')
+  document.getElementById(`lbl${currentStep}`).classList.add('done')
+  document.getElementById(`line${currentStep}`) && document.getElementById(`line${currentStep}`).classList.add('done')
+
+  currentStep = n
+  document.getElementById(`step${currentStep}`).classList.add('active')
+  document.getElementById(`prog${currentStep}`).classList.add('active')
+  document.getElementById(`lbl${currentStep}`).classList.add('active')
+
+  // Update payment amount display
+  if (n === 4) updatePaymentDisplay()
+  // Build review
+  if (n === 5) buildReview()
+
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// ── VALIDATION ──
+function validateStep(n) {
+  const err = document.getElementById(`err${n}`)
+  err.classList.remove('show')
+
+  if (n === 1) {
+    const name  = document.getElementById('ownerName').value.trim()
+    const phone = document.getElementById('ownerPhone').value.trim()
+    const email = document.getElementById('ownerEmail').value.trim()
+    const pass  = document.getElementById('ownerPass').value
+    if (!name)  return showErr(err, 'Enter your full name')
+    if (!phone) return showErr(err, 'Enter your WhatsApp number')
+    if (!email || !email.includes('@')) return showErr(err, 'Enter a valid email address')
+    if (pass.length < 8) return showErr(err, 'Password must be at least 8 characters')
+  }
+  if (n === 2) {
+    if (!selectedPlan) return showErr(document.getElementById('err2'), 'Please select a plan')
+  }
+  if (n === 3) {
+    const shop = document.getElementById('shopName').value.trim()
+    const cat  = document.getElementById('shopCategory').value
+    const reg  = document.getElementById('shopRegion').value
+    const wa   = document.getElementById('shopWhatsapp').value.trim()
+    const desc = document.getElementById('shopDesc').value.trim()
+    if (!shop) return showErr(document.getElementById('err3'), 'Enter your shop name')
+    if (!cat)  return showErr(document.getElementById('err3'), 'Select a category')
+    if (!reg)  return showErr(document.getElementById('err3'), 'Select your region')
+    if (!wa)   return showErr(document.getElementById('err3'), 'Enter your shop WhatsApp number')
+    if (desc.length < 30) return showErr(document.getElementById('err3'), 'Description must be at least 30 characters')
+  }
+  if (n === 4) {
+    const file = document.getElementById('receiptFile').files[0]
+    if (!file) return showErr(document.getElementById('err4'), 'Please upload your payment receipt')
+  }
+  return true
+}
+
+function showErr(el, msg) {
+  el.textContent = msg
+  el.classList.add('show')
+  return false
+}
+
+// ── PLAN SELECTION ──
+function selectPlan(plan) {
+  selectedPlan = plan
+  document.getElementById('cardBasic').classList.toggle('selected', plan === 'basic')
+  document.getElementById('cardPremium').classList.toggle('selected', plan === 'premium')
+}
+// Default select basic on load
+selectPlan('basic')
+
+// ── COLOR PICKER ──
+function pickColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'))
+  el.classList.add('selected')
+  selectedColor = el.dataset.color
+}
+function pickCustomColor(val) {
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'))
+  selectedColor = val
+}
+
+// ── PAYMENT ──
+function selectPayMethod(m) {
+  selectedPayMethod = m
+  document.getElementById('payCredit').classList.toggle('selected', m === 'crdb')
+  document.getElementById('payMpesa').classList.toggle('selected', m === 'mpesa')
+}
+function updatePaymentDisplay() {
+  const price = PRICES[selectedPlan]
+  document.getElementById('amountDue').textContent = fmt(price)
+  document.getElementById('planLabel').textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan · per month'
+  document.getElementById('planBadgePay').textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
+}
+function previewReceipt(input) {
+  const file = input.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = e => {
+    document.getElementById('receiptImg').src = e.target.result
+    document.getElementById('receiptPreview').style.display = 'block'
+  }
+  reader.readAsDataURL(file)
+}
+
+// ── REVIEW ──
+function buildReview() {
+  document.getElementById('rv-name').textContent    = document.getElementById('ownerName').value
+  document.getElementById('rv-phone').textContent   = document.getElementById('ownerPhone').value
+  document.getElementById('rv-email').textContent   = document.getElementById('ownerEmail').value
+  document.getElementById('rv-plan').textContent    = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
+  document.getElementById('rv-price').textContent   = fmt(PRICES[selectedPlan]) + '/month'
+  document.getElementById('rv-shop').textContent    = document.getElementById('shopName').value
+  document.getElementById('rv-cat').textContent     = document.getElementById('shopCategory').value
+  document.getElementById('rv-region').textContent  = document.getElementById('shopRegion').value
+  document.getElementById('rv-pay').textContent     = selectedPayMethod === 'crdb' ? 'CRDB Bank' : 'M-Pesa / Tigopesa'
+  document.getElementById('rv-receipt').textContent = document.getElementById('receiptFile').files[0]?.name || '—'
+}
+
+// ── SUBMIT ──
+async function submitApplication() {
+  const btn = document.getElementById('submitBtn')
+  btn.textContent = 'Submitting...'
+  btn.disabled = true
+
+  try {
+    const name     = document.getElementById('ownerName').value.trim()
+    const phone    = document.getElementById('ownerPhone').value.trim()
+    const email    = document.getElementById('ownerEmail').value.trim()
+    const pass     = document.getElementById('ownerPass').value
+    const shopName = document.getElementById('shopName').value.trim()
+    const category = document.getElementById('shopCategory').value
+    const region   = document.getElementById('shopRegion').value
+    const waNum    = document.getElementById('shopWhatsapp').value.trim()
+    const desc     = document.getElementById('shopDesc').value.trim()
+    const price    = PRICES[selectedPlan]
+
+    // Upload receipt
+    let receiptUrl = null
+    const receiptFile = document.getElementById('receiptFile').files[0]
+    if (receiptFile) {
+      const ext = receiptFile.name.split('.').pop()
+      const path = `receipts/${Date.now()}.${ext}`
+      const { data: up } = await sb.storage.from('campus-assets').upload(path, receiptFile)
+      if (up) {
+        const { data: pu } = sb.storage.from('campus-assets').getPublicUrl(up.path)
+        receiptUrl = pu.publicUrl
+      }
+    }
+
+    // Create auth account
+    const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pass })
+    if (authErr && !authErr.message.includes('already')) throw authErr
+
+    // Create slug
+    const slug = shopName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now()
+
+    // Save to pending_payments table
+    const { error: ppErr } = await sb.from('pending_payments').insert({
+      owner_name:    name,
+      owner_phone:   phone,
+      owner_email:   email,
+      shop_name:     shopName,
+      shop_category: category,
+      shop_region:   region,
+      shop_whatsapp: waNum,
+      shop_desc:     desc,
+      shop_color:    selectedColor,
+      plan:          selectedPlan,
+      amount:        price,
+      pay_method:    selectedPayMethod,
+      receipt_url:   receiptUrl,
+      status:        'pending',
+      slug:          slug,
+    })
+    if (ppErr) throw ppErr
+
+    // Notify admin
+    await sb.from('admin_notifications').insert({
+      type:     'new_shop_application',
+      title:    `🏪 New Shop Application — ${shopName}`,
+      body:     `${name} applied for a ${selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,
+      is_read:  false,
+    })
+
+    // Show success
+    document.getElementById(`step${currentStep}`).classList.remove('active')
+    document.getElementById('progressWrap') && (document.getElementById('progressWrap').style.display = 'none')
+    const successPage = document.getElementById('successPage')
+    successPage.classList.add('show')
+    document.getElementById('successDetail').innerHTML = `
+      <div class="detail-row"><span class="detail-key">Shop Name</span><span class="detail-val">${shopName}</span></div>
+      <div class="detail-row"><span class="detail-key">Plan</span><span class="detail-val">${selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic'}</span></div>
+      <div class="detail-row"><span class="detail-key">Amount Paid</span><span class="detail-val">${fmt(price)}/mo</span></div>
+      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)">✅ Under Review</span></div>
+    `
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    toast('Application submitted! We\'ll review within 24 hours.', 'success')
+
+  } catch (e) {
+    console.error(e)
+    document.getElementById(`err5`).textContent = e.message || 'Submission failed. Try again.'
+    document.getElementById(`err5`).classList.add('show')
+    btn.textContent = '🚀 Submit Application'
+    btn.disabled = false
+  }
+}
+
+// ── HELPERS ──
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => toast('Copied!', 'success'))
+}
+function toast(msg, type = 'success') {
+  const t = document.createElement('div')
+  t.className = `toast ${type}`
+  t.textContent = msg
+  document.body.appendChild(t)
+  setTimeout(() => t.remove(), 3000)
+}
+</script>
+</body>
+</html>
