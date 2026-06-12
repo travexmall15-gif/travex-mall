@@ -695,5 +695,37 @@ function toast(msg, type = 'success') {
   setTimeout(() => t.remove(), 3000)
 }
 </script>
+<style id="travex-polish-v2">
+/* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:#F3F5FA!important}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
+  background-size:56px 56px}
+
+.page-hero{background:linear-gradient(150deg,#080F24 0%,#0D1B3E 48%,#16306B 100%)!important}
+.page-hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
+  background:linear-gradient(112deg,transparent 30%,rgba(110,150,235,0.24) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
+  filter:blur(42px)}
+.page-hero>*{position:relative;z-index:1}
+
+.nav{background:rgba(8,15,36,0.92)!important;backdrop-filter:blur(14px)}
+.form-card{border-radius:18px!important;border-color:#E9ECF3!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
+.form-input{border-radius:12px!important;background:#F8F9FC!important}
+.form-input:focus{background:#fff!important;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
+.btn{border-radius:999px!important;transition:all 0.2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{box-shadow:0 8px 20px rgba(13,27,62,0.25)}
+.btn-gold{box-shadow:0 8px 20px rgba(201,168,76,0.28)}
+.plan-card{border-radius:18px!important;transition:all 0.25s}
+.plan-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(13,27,62,0.10)}
+.plan-badge,.popular-tag,.copy-btn{border-radius:999px!important}
+.pay-method{border-radius:14px!important}
+.review-section{border-radius:16px!important}
+.payment-box{border-radius:16px!important}
+.toast{border-radius:14px!important;box-shadow:0 16px 40px rgba(4,10,30,0.30)}
+.prog-step{box-shadow:0 4px 12px rgba(13,27,62,0.12)}
+</style>
 </body>
 </html>
