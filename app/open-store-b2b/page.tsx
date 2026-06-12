@@ -1,6 +1,6 @@
-export default function OpenStoreB2BPage() {
-  if (typeof window !== 'undefined') {
-    window.location.replace('/dashboard/open-store-b2b.html')
-  }
+'use client'
+import { useEffect } from 'react'
+export default function OpenStorePage() {
+  useEffect(() => { window.location.replace('/dashboard/open-store.html') }, [])
   return null
 }
