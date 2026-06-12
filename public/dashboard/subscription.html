@@ -167,11 +167,27 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
   <div class="plans-grid">
 
     <!-- BASIC -->
-    <div class="plan-card" id="card-basic" onclick="selectPlan('basic')">
-      <div class="plan-tier">⭐ Basic</div>
+    <div class="plan-card" <div class="plan-card" id="card-campus" onclick="selectPlan('campus')">
+        <div class="plan-tier">🎓 Campus Plan</div>
+        <div class="plan-price" id="price-campus">TZS 15,000</div>
+        <div class="plan-period">per month</div>
+        <div class="plan-original" id="original-campus">For University Students</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Campus marketplace listing</li>
+          <li><span class="check">✓</span> WhatsApp order system</li>
+          <li><span class="check">✓</span> AI Customer Care</li>
+          <li><span class="check">✓</span> Social Vybe posting</li>
+          <li><span class="check">✓</span> 60 slots per university</li>
+        </ul>
+        <button class="plan-btn" id="btn-campus" onclick="selectPlan('campus')">Get Campus Plan</button>
+      </div>
+
+      <div class="plan-card" id="card-basic" onclick="selectPlan('basic')">
+      <div class="plan-tier">🥈 Basic Plan</div>
       <div class="plan-price" id="price-basic">TZS 25,000</div>
       <div class="plan-period">per month</div>
-      <div class="plan-original" id="original-basic">TZS 25,000/mo</div>
+      <div class="plan-original" id="original-basic">For Individual Sellers</div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li><span class="check">✓</span> 1 digital store</li>
@@ -184,9 +200,9 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
     </div>
 
     <!-- STANDARD -->
-    <div class="plan-card popular" id="card-standard" onclick="selectPlan('standard')">
+    <div class="plan-card popular" id="card-basic" onclick="selectPlan('standard')">
       <div class="popular-badge">Most Popular</div>
-      <div class="plan-tier">⭐⭐ Standard</div>
+      <div class="plan-tier">🥈 Basic Plan</div>
       <div class="plan-price" id="price-standard">TZS 50,000</div>
       <div class="plan-period">per month</div>
       <div class="plan-original" id="original-standard">TZS 50,000/mo</div>
@@ -205,10 +221,10 @@ nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:cen
 
     <!-- PREMIUM -->
     <div class="plan-card" id="card-premium" onclick="selectPlan('premium')">
-      <div class="plan-tier">👑 Premium</div>
-      <div class="plan-price" id="price-premium">TZS 80,000</div>
+      <div class="plan-tier">🥇 Premium Plan</div>
+      <div class="plan-price" id="price-premium">TZS 45,000</div>
       <div class="plan-period">per month</div>
-      <div class="plan-original" id="original-premium">TZS 80,000/mo</div>
+      <div class="plan-original" id="original-premium">TZS 45,000/mo</div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li><span class="check">✓</span> Up to 3 stores</li>
@@ -382,9 +398,9 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Plan data
 const plans = {
-  basic:    { name:"Basic",    monthly:25000, yearly:20000,  label:"⭐ Basic" },
-  standard: { name:"Standard", monthly:50000, yearly:40000,  label:"⭐⭐ Standard" },
-  premium:  { name:"Premium",  monthly:80000, yearly:64000,  label:"👑 Premium" }
+  campus:  { name:"Campus Plan",   label:"🎓 Campus Plan",   monthly:15000,  yearly:150000,  badge:"🎓" },
+  basic:   { name:"Basic Plan",    label:"🥈 Basic Plan",    monthly:25000,  yearly:250000,  badge:"🥈" },
+  premium: { name:"Premium Plan",  label:"🥇 Premium Plan",  monthly:45000,  yearly:450000,  badge:"🥇" },
 };
 
 let billing     = "monthly";
@@ -425,7 +441,7 @@ function selectPlan(key) {
   document.getElementById("modalAmountRaw").value       = amount;
 
   // Pre-fill email if logged in
-  sb.orth.getSession().then(({ data: { session } }) => {
+  sb.auth.getSession().then(({ data: { session } }) => {
     if (session) {
       document.getElementById("payerEmail").value = session.user.email;
       const name = session.user.user_metadata?.name || "";
@@ -460,7 +476,7 @@ async function submitPayment() {
   btn.disabled    = true;
 
   try {
-    const { data: { session } } = await sb.orth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     const amount = billing === "monthly" ? plans[selectedPlan].monthly : plans[selectedPlan].yearly;
 
     // Save subscription to Supabase
@@ -475,27 +491,17 @@ async function submitPayment() {
 
     if (error) throw error;
 
-    // Send confirmation email via Supabase Edge Function
-    try {
-      await fetch(`${SUPABASE_URL}/functions/v1/send-subscription-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session?.access_token || SUPABASE_ANON}`
-        },
-        body: JSON.stringify({
-          email,
-          name,
-          plan:   plans[selectedPlan].name,
-          amount: amount,
-          ref,
-          method
-        })
-      });
-    } catch (emailErr) {
-      // Email failure shouldn't block the submission
-      console.log("Email notification pending:", emailErr);
-    }
+    // Notify admin via WhatsApp
+    const adminWA = '255651919915';
+    const adminMsg = encodeURIComponent(
+      `💳 *New Subscription Payment*\n\n` +
+      `*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}\n` +
+      `*Plan:* ${plans[selectedPlan].label}\n*Amount:* TZS ${amount.toLocaleString()}\n` +
+      `*Method:* ${method}\n*Reference:* ${ref}\n\n` +
+      `_Please verify and activate the account._`
+    );
+    // Open WhatsApp to admin (non-blocking)
+    setTimeout(() => window.open(`https://wa.me/${adminWA}?text=${adminMsg}`, '_blank'), 500);
 
     // Show success
     document.getElementById("paymentForm").style.display   = "none";
