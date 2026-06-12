@@ -150,7 +150,7 @@ const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Already logged in → redirect to dashboard
-sb.orth.getSession().then(({ data: { session } }) => {
+sb.auth.getSession().then(({ data: { session } }) => {
   if (session) window.location.replace("campus-dashboard.html");
 });
 
@@ -206,7 +206,7 @@ async function doLogin() {
   btn.disabled = true;
 
   const email = phoneToEmail(phone);
-  const { data, error } = await sb.orth.signInWithPassword({
+  const { data, error } = await sb.auth.signInWithPassword({
     email,
     password: pass + "TRX!"
   });
@@ -230,7 +230,7 @@ async function doLogin() {
 
   // ── Check store status ──
   const userId = data.user.id;
-  const { data: stores } = await sb.from("stores")
+  const { data: stores } = await sb.from("campus_stores")
     .select("store_name, is_active, payment_status, store_type")
     .eq("user_id", userId)
     .limit(1);
@@ -271,7 +271,7 @@ async function doReset() {
   btn.disabled = true;
 
   const email = phoneToEmail(phone);
-  await sb.orth.resetPasswordForEmail(email, {
+  await sb.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + "/campus-dashboard.html"
   });
 
