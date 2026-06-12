@@ -1,205 +1,198 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import {
-  Store, ShieldCheck, TrendingUp, Zap, Users, Globe,
-  ArrowRight, Briefcase, Package, Star
-} from 'lucide-react'
+  marketShops, marketStats, marketCategories,
+  MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS,
+  type MarketShop, formatTZS,
+} from '@/lib/data'
+import { Search, ShieldCheck, MessageCircle, Store, ArrowRight, Star, Filter } from 'lucide-react'
 
-const categories = [
-  { icon: '👗', name: 'Fashion & Clothing', count: 24 },
-  { icon: '📱', name: 'Electronics', count: 18 },
-  { icon: '🍔', name: 'Food & Groceries', count: 31 },
-  { icon: '💄', name: 'Beauty & Health', count: 22 },
-  { icon: '🔧', name: 'Services', count: 15 },
-  { icon: '🌾', name: 'Agriculture', count: 9 },
-]
-
-const plans = [
-  {
-    name: 'B2C Basic',
-    price: 'TZS 25,000',
-    period: '/month',
-    desc: 'For individual sellers',
-    features: ['1 shop page', 'Unlimited products', 'WhatsApp orders', 'AI Customer Care', 'Social Vybe posting'],
-    cta: '/open-store-b2c',
-    highlight: false,
-  },
-  {
-    name: 'B2C Premium',
-    price: 'TZS 45,000',
-    period: '/month',
-    desc: 'For growing sellers',
-    features: ['Everything in Basic', 'Priority listing', 'Marketing AI tools', 'Accounting dashboard', 'Leaderboard ranking'],
-    cta: '/open-store-b2c',
-    highlight: true,
-  },
-  {
-    name: 'B2B Basic',
-    price: 'TZS 75,000',
-    period: '/month',
-    desc: 'For businesses',
-    features: ['Business verification', 'Multiple products', 'Bulk order management', 'Business analytics', 'Dedicated support'],
-    cta: '/open-store-b2b',
-    highlight: false,
-  },
-  {
-    name: 'B2B Premium',
-    price: 'TZS 110,000',
-    period: '/month',
-    desc: 'For large businesses',
-    features: ['Everything in B2B Basic', 'Featured placement', 'API access', 'Custom branding', 'Account manager'],
-    cta: '/open-store-b2b',
-    highlight: false,
-  },
-]
-
-const benefits = [
-  { icon: Globe, title: 'Nationwide Reach', desc: 'Reach customers across all 8 regions of Tanzania.' },
-  { icon: Zap, title: 'WhatsApp Orders', desc: 'Customers order via WhatsApp — no complex checkout.' },
-  { icon: Zap, title: 'AI Tools', desc: 'Built-in AI for customer care, marketing and pricing.' },
-  { icon: ShieldCheck, title: 'Verified Badge', desc: 'Get a verified badge to build customer trust.' },
-  { icon: TrendingUp, title: 'Analytics', desc: 'Track revenue, orders and growth in real-time.' },
-  { icon: Users, title: 'Community', desc: 'Join thousands of sellers already growing on Travex.' },
-]
+const ALL_CATEGORIES = ['All', ...marketCategories.map(c => c.name)]
+const ALL_PLANS = ['All', 'Premium 🥇', 'Basic 🥈']
 
 export default function MarketPage() {
+  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState('All')
+  const [plan, setPlan] = useState('All')
+
+  const filtered = marketShops.filter(s => {
+    const matchSearch = !search || s.name.toLowerCase().includes(search.toLowerCase()) || s.description.toLowerCase().includes(search.toLowerCase())
+    const matchCat = category === 'All' || s.category === category
+    const matchPlan = plan === 'All' || (plan.includes('Premium') ? s.plan === 'premium' : s.plan === 'basic')
+    return matchSearch && matchCat && matchPlan
+  })
+
+  const slotsLeft = MARKET_TOTAL_SLOTS - marketStats.activeShops
+
   return (
-    <main className="bg-offwhite min-h-screen">
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8F9FC', minHeight: '100vh' }}>
       <SiteNav />
 
-      {/* Hero */}
-      <section className="relative bg-navy pt-16 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20"
-          style={{ backgroundImage: 'url(/business-market-hero.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-blue-900/80" />
-        <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-28">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-sm font-semibold text-gold mb-6">
-              <Briefcase className="h-4 w-4" /> Business Marketplace
-            </span>
-            <h1 className="text-5xl font-black leading-tight md:text-6xl mb-6"
-              style={{ fontFamily: 'Playfair Display, serif' }}>
-              Grow Your Business <span className="text-gold">Across Tanzania</span>
-            </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl">
-              List your products, reach customers nationwide, manage orders and scale your business — all from one platform.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/open-store-b2c"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-7 py-3.5 text-base font-bold text-navy hover:bg-gold-light transition-all">
-                <Store className="h-5 w-5" /> Open B2C Shop
-              </Link>
-              <Link href="/open-store-b2b"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/5 px-7 py-3.5 text-base font-semibold text-white hover:bg-white/10 transition-all">
-                <Briefcase className="h-5 w-5" /> Open B2B Shop <ArrowRight className="h-4 w-4" />
-              </Link>
+      {/* ── HERO ── */}
+      <section style={{ background: '#0D1B3E', paddingTop: '64px', paddingBottom: 0, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/business-market-hero.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,rgba(13,27,62,0.97) 0%,rgba(13,27,62,0.88) 100%)' }} />
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 5% 3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', marginBottom: '2.5rem' }}>
+            <div style={{ maxWidth: '600px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C', padding: '0.3rem 1rem', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', marginBottom: '1.25rem' }}>
+                <Store size={12} /> Travex Business Market
+              </div>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.85rem' }}>
+                One Market.<br /><span style={{ color: '#C9A84C' }}>500 Seller Slots.</span>
+              </h1>
+              <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.95rem)', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, maxWidth: '480px' }}>
+                Tanzania's unified business marketplace. Premium and Basic listings — all sellers, all categories, one platform.
+              </p>
+            </div>
+
+            {/* Slots counter */}
+            <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '1.5rem 2rem', textAlign: 'center', minWidth: '200px' }}>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{slotsLeft}</div>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.4rem' }}>Slots Remaining</div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', marginTop: '0.85rem', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${(marketStats.activeShops / MARKET_TOTAL_SLOTS) * 100}%`, background: 'linear-gradient(90deg,#C9A84C,#F0C96B)', borderRadius: '4px' }} />
+              </div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.3)', marginTop: '0.4rem' }}>{marketStats.activeShops} of {MARKET_TOTAL_SLOTS} filled</div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Stats */}
-      <section className="bg-navy py-10">
-        <div className="mx-auto max-w-7xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[['500+','Active Sellers'],['8','Regions'],['50K+','Monthly Orders'],['4.8★','Avg Rating']].map(([v,l]) => (
-            <div key={l} className="text-center">
-              <div className="text-3xl font-black text-gold" style={{ fontFamily: 'Playfair Display, serif' }}>{v}</div>
-              <div className="text-sm text-white/50 mt-1">{l}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-navy mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Browse Categories</h2>
-          <p className="text-gray-500">Find products and services across Tanzania</p>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          {categories.map(cat => (
-            <div key={cat.name}
-              className="bg-white rounded-xl p-5 text-center border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer">
-              <div className="text-3xl mb-2">{cat.icon}</div>
-              <div className="text-sm font-bold text-navy">{cat.name}</div>
-              <div className="text-xs text-gray-400 mt-1">{cat.count} shops</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="bg-white py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-navy mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Choose Your Plan</h2>
-            <p className="text-gray-500">Start selling in minutes — no setup fees</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {plans.map(plan => (
-              <div key={plan.name}
-                className={`rounded-2xl p-6 border-2 transition-all hover:-translate-y-1 hover:shadow-lg ${plan.highlight ? 'border-gold bg-navy text-white' : 'border-gray-100 bg-white'}`}>
-                {plan.highlight && (
-                  <div className="text-xs font-bold text-navy bg-gold px-3 py-1 rounded-full inline-block mb-4">Most Popular</div>
-                )}
-                <div className={`text-sm font-semibold mb-1 ${plan.highlight ? 'text-gold' : 'text-gray-500'}`}>{plan.desc}</div>
-                <div className={`text-2xl font-black mb-1 ${plan.highlight ? 'text-white' : 'text-navy'}`}
-                  style={{ fontFamily: 'Playfair Display, serif' }}>{plan.price}</div>
-                <div className={`text-sm mb-4 ${plan.highlight ? 'text-white/50' : 'text-gray-400'}`}>{plan.period}</div>
-                <div className={`text-lg font-bold mb-4 ${plan.highlight ? 'text-white' : 'text-navy'}`}>{plan.name}</div>
-                <ul className="space-y-2 mb-6">
-                  {plan.features.map(f => (
-                    <li key={f} className={`flex items-center gap-2 text-sm ${plan.highlight ? 'text-white/80' : 'text-gray-600'}`}>
-                      <ShieldCheck className="h-4 w-4 flex-shrink-0 text-gold" /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={plan.cta}
-                  className={`block text-center py-3 rounded-xl font-bold text-sm transition-all ${plan.highlight ? 'bg-gold text-navy hover:bg-gold-light' : 'bg-navy text-white hover:bg-blue-900'}`}>
-                  Get Started →
-                </Link>
+          {/* Stats row */}
+          <div style={{ display: 'flex', gap: '0', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.5rem', flexWrap: 'wrap' }}>
+            {[
+              ['🥇', `${marketStats.premiumShops}`, 'Premium Shops', '#C9A84C'],
+              ['🥈', `${marketStats.basicShops}`, 'Basic Shops', 'rgba(255,255,255,0.5)'],
+              ['💰', formatTZS(MARKET_BASIC_PRICE), 'Basic Plan/mo', 'rgba(255,255,255,0.5)'],
+              ['💎', formatTZS(MARKET_PREMIUM_PRICE), 'Premium Plan/mo', '#C9A84C'],
+            ].map(([icon, val, label, color]) => (
+              <div key={label} style={{ flex: 1, minWidth: '140px', padding: '0 1.5rem 0 0' }}>
+                <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{icon}</div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1rem, 2vw, 1.4rem)', fontWeight: 800, color: color as string }}>{val}</div>
+                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Benefits */}
-      <section className="bg-navy py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="text-center text-white mb-12">
-            <h2 className="text-3xl font-bold mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Why Sell on Travex Business Market?</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {benefits.map(b => (
-              <div key={b.title} className="rounded-xl border border-white/10 bg-white/5 p-6">
-                <div className="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center mb-4">
-                  <b.icon className="h-6 w-6 text-gold" />
+        {/* Pricing strip */}
+        <div style={{ background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem 5%', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span style={{ fontSize: '1rem' }}>🥈</span>
+                <div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff' }}>Basic Plan</div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>Silver badge · {formatTZS(MARKET_BASIC_PRICE)}/month</div>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{b.title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed">{b.desc}</p>
               </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span style={{ fontSize: '1rem' }}>🥇</span>
+                <div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C9A84C' }}>Premium Plan</div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>Gold badge · Top listing · {formatTZS(MARKET_PREMIUM_PRICE)}/month</div>
+                </div>
+              </div>
+            </div>
+            <Link href="/open-store-b2c" style={{ background: '#C9A84C', color: '#0D1B3E', padding: '0.65rem 1.75rem', borderRadius: '8px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
+              <Store size={15} /> Open Your Shop <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CATEGORIES ── */}
+      <section style={{ background: '#fff', borderBottom: '1px solid #E5E7EB' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.25rem 5%', overflowX: 'auto' }}>
+          <div style={{ display: 'flex', gap: '0.6rem', minWidth: 'max-content' }}>
+            {ALL_CATEGORIES.map(cat => (
+              <button key={cat} onClick={() => setCategory(cat)}
+                style={{ padding: '0.45rem 1rem', borderRadius: '20px', border: '1.5px solid', borderColor: category === cat ? '#0D1B3E' : '#E5E7EB', background: category === cat ? '#0D1B3E' : '#fff', color: category === cat ? '#fff' : '#6B7280', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+                {cat}
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-gold py-16">
-        <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="text-4xl font-black text-navy mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-            Ready to Start Selling?
-          </h2>
-          <p className="text-navy/70 mb-8">Join thousands of sellers growing their business on Travex Mall.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/open-store-b2c"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-navy px-8 py-4 font-bold text-white hover:bg-blue-900 transition-all">
-              <Package className="h-5 w-5" /> Open B2C Shop — TZS 25,000/mo
+      {/* ── SEARCH + FILTER + RESULTS ── */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 5%' }}>
+        {/* Search + plan filter */}
+        <div style={{ display: 'flex', gap: '0.85rem', marginBottom: '1.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+            <Search size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+            <input
+              value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Search shops, products, categories..."
+              style={{ width: '100%', paddingLeft: '2.4rem', paddingRight: '1rem', paddingTop: '0.65rem', paddingBottom: '0.65rem', border: '1.5px solid #E5E7EB', borderRadius: '10px', fontSize: '0.85rem', outline: 'none', fontFamily: "'Inter', sans-serif" }}
+            />
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            {ALL_PLANS.map(p => (
+              <button key={p} onClick={() => setPlan(p)}
+                style={{ padding: '0.6rem 1.1rem', borderRadius: '8px', border: '1.5px solid', borderColor: plan === p ? '#C9A84C' : '#E5E7EB', background: plan === p ? 'rgba(201,168,76,0.1)' : '#fff', color: plan === p ? '#92741a' : '#6B7280', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+                {p}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize: '0.78rem', color: '#9CA3AF', flexShrink: 0 }}>
+            {filtered.length} shops
+          </div>
+        </div>
+
+        {/* Premium shops first */}
+        {plan === 'All' && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <span style={{ fontSize: '1rem' }}>🥇</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0D1B3E' }}>Premium Shops</span>
+              <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: 500 }}>Top listing · Gold verified</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1.1rem', marginBottom: '2.5rem' }}>
+              {filtered.filter(s => s.plan === 'premium').map(shop => <ShopCard key={shop.id} shop={shop} />)}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <span style={{ fontSize: '1rem' }}>🥈</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0D1B3E' }}>Basic Shops</span>
+              <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: 500 }}>Silver verified</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1.1rem' }}>
+              {filtered.filter(s => s.plan === 'basic').map(shop => <ShopCard key={shop.id} shop={shop} />)}
+            </div>
+          </>
+        )}
+
+        {/* Filtered view */}
+        {plan !== 'All' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1.1rem' }}>
+            {filtered.length === 0 ? (
+              <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem 0' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏪</div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.5rem' }}>No shops found</div>
+                <p style={{ fontSize: '0.85rem', color: '#9CA3AF' }}>Try changing filters or search term</p>
+              </div>
+            ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}
+          </div>
+        )}
+
+        {/* Open shop CTA */}
+        <div style={{ marginTop: '4rem', background: '#0D1B3E', borderRadius: '20px', padding: '2.5rem', textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.3rem, 3vw, 2rem)', fontWeight: 800, color: '#fff', marginBottom: '0.75rem' }}>
+            {slotsLeft} Slots Remaining — Secure Yours Now
+          </div>
+          <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.5)', marginBottom: '1.75rem' }}>
+            Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo · Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo
+          </p>
+          <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/open-store-b2c" style={{ background: '#C9A84C', color: '#0D1B3E', padding: '0.85rem 2rem', borderRadius: '10px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+              🥇 Open Premium Shop
             </Link>
-            <Link href="/open-store-b2b"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-navy px-8 py-4 font-bold text-navy hover:bg-navy hover:text-white transition-all">
-              <Briefcase className="h-5 w-5" /> Open B2B Shop — TZS 75,000/mo
+            <Link href="/open-store-b2c" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', padding: '0.85rem 2rem', borderRadius: '10px', fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+              🥈 Open Basic Shop
             </Link>
           </div>
         </div>
@@ -207,5 +200,51 @@ export default function MarketPage() {
 
       <SiteFooter />
     </main>
+  )
+}
+
+function ShopCard({ shop }: { shop: MarketShop }) {
+  const init = shop.name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
+  const wa = shop.whatsapp.replace(/\D/g, '')
+  const isPremium = shop.plan === 'premium'
+
+  return (
+    <div style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.35)' : '#E5E7EB'}`, borderRadius: '14px', overflow: 'hidden', transition: 'all 0.2s', cursor: 'pointer' }}
+      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 10px 28px rgba(0,0,0,0.1)' }}
+      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'none'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}>
+      {/* Banner */}
+      <div style={{ height: '56px', background: `linear-gradient(135deg,${shop.logoColor},#0D1B3E)`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.85rem', fontWeight: 800, color: '#fff' }}>{init}</span>
+        <div style={{ position: 'absolute', top: '8px', right: '8px', background: isPremium ? 'rgba(201,168,76,0.9)' : 'rgba(255,255,255,0.15)', color: isPremium ? '#0D1B3E' : '#fff', fontSize: '0.58rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '6px' }}>
+          {shop.badge}
+        </div>
+      </div>
+      {/* Body */}
+      <div style={{ padding: '0.85rem 1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.3rem', gap: '0.5rem' }}>
+          <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0D1B3E', lineHeight: 1.3 }}>{shop.name}</div>
+          {shop.verified && <span style={{ fontSize: '0.6rem', background: 'rgba(5,150,105,0.1)', color: '#059669', padding: '0.1rem 0.4rem', borderRadius: '6px', fontWeight: 700, flexShrink: 0 }}>✓</span>}
+        </div>
+        <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '0.62rem', background: 'rgba(201,168,76,0.1)', color: '#92741a', padding: '0.1rem 0.45rem', borderRadius: '6px', fontWeight: 700 }}>{shop.category}</span>
+          <span style={{ fontSize: '0.62rem', background: 'rgba(13,27,62,0.06)', color: '#6B7280', padding: '0.1rem 0.45rem', borderRadius: '6px' }}>{shop.region}</span>
+        </div>
+        <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.75rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{shop.description}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <Star size={11} fill="#C9A84C" color="#C9A84C" />
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0D1B3E' }}>{shop.rating}</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '0.4rem' }}>
+          <a href={`https://wa.me/${wa}`} target="_blank" style={{ flex: 1, padding: '0.45rem', background: '#25D366', color: '#fff', border: 'none', borderRadius: '7px', fontSize: '0.7rem', fontWeight: 700, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+            <MessageCircle size={12} /> WhatsApp
+          </a>
+          <Link href={`/store/${shop.id}`} style={{ flex: 1, padding: '0.45rem', background: '#0D1B3E', color: '#fff', borderRadius: '7px', fontSize: '0.7rem', fontWeight: 700, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+            <Store size={12} /> Visit Shop
+          </Link>
+        </div>
+      </div>
+    </div>
   )
 }
