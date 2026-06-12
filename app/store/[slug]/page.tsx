@@ -30,7 +30,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
       const { data: s } = await sb.from('campus_stores').select('*').eq('id', slug).single()
       setStore(s)
       if (s) {
-        const { data: p } = await sb.from('campus_products').select('*').eq('store_id', slug).order('created_at', { ascending: false })
+        const { data: p } = await sb.from('campus_products').select('*').eq('store_id', s.id).order('created_at', { ascending: false })
         setProducts(p || [])
       }
       setLoading(false)
@@ -44,11 +44,29 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
     await sb.from('campus_orders').insert({ store_id: store.id, product_id: orderItem.id, product_name: orderItem.name, customer_name: orderName, customer_phone: orderPhone, delivery_location: orderLocation, quantity: qty, total_price: total, status: 'pending' })
     const wa = (store.whatsapp_number || '').replace(/\D/g, '')
     if (wa) {
-      const msg = encodeURIComponent(`🛍️ New Order!\n\nProduct: ${orderItem.name}\nQty: ${qty}\nTotal: ${fmtTZS(total)}\n\nCustomer: ${orderName}\nWhatsApp: ${orderPhone}${orderLocation ? '\nLocation: ' + orderLocation : ''}\n\nPlease confirm! 🎓`)
+      const msg = encodeURIComponent(`🛍️ *ORDER via Travex Mall*\n\n*Product:* ${orderItem.name}\n*Quantity:* ${qty}\n*Total:* ${fmtTZS(total)}\n\n*Customer:* ${orderName}\n*WhatsApp:* ${orderPhone}${orderLocation ? '\n*Delivery:* ' + orderLocation : ''}\n\n_Sent via Travex Campus Mall_ 🎓`)
       window.open(`https://wa.me/${wa}?text=${msg}`, '_blank')
     }
-    setOrders(prev => [...prev, { id: Date.now().toString(), store_id: store.id, product_id: orderItem.id, product_name: orderItem.name, customer_name: orderName, customer_phone: orderPhone, delivery_location: orderLocation, quantity: qty, total_price: total, status: 'pending', created_at: new Date().toISOString() }])
+    // Add to local orders list
+    setOrders(prev => [...prev, {
+      id: Date.now().toString(),
+      store_id: store.id,
+      product_id: orderItem.id,
+      product_name: orderItem.name,
+      customer_name: orderName,
+      customer_phone: orderPhone,
+      delivery_location: orderLocation,
+      quantity: qty,
+      total_price: total,
+      status: 'pending',
+      created_at: new Date().toISOString()
+    }])
     setOrderSuccess(true)
+    // Reset form
+    setOrderName('')
+    setOrderPhone('')
+    setOrderLocation('')
+    setQty(1)
   }
 
   async function sendChat() {
@@ -61,7 +79,14 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
       const productList = products.length ? products.map(p => `- ${p.name}: ${p.price ? fmtTZS(p.price) : 'Free'}${p.description ? ' (' + p.description + ')' : ''}`).join('\n') : 'No products yet'
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 500, system: `You are AI for "${store.store_name}" campus shop at ${store.university_abbr}. Products:\n${productList}\nBe helpful, friendly, concise. Max 3 sentences.`, messages: [{ role: 'user', content: msg }] })
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 500, system: `You are the friendly AI assistant for "${store.store_name}" — a student shop at ${store.university_abbr} university on Travex Campus Mall. 
+
+Products available:
+${productList}
+
+WhatsApp: ${store.whatsapp_number || 'Ask seller'}
+
+Answer customer questions about products, prices, ordering and delivery. Be warm, helpful and concise. Respond in the same language the customer uses (English or Swahili). Keep replies under 4 sentences.`, messages: [{ role: 'user', content: msg }] })
       })
       const d = await res.json()
       setChatMsgs(prev => [...prev, { role: 'ai', text: d.content?.[0]?.text || 'Sorry, try again.' }])
