@@ -10,9 +10,9 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 :root{
-  --navy:#0D1B3E;--navy-deep:#080F24;--blue:#1B3A6B;--blue-soft:#2B4F8E;
+  --navy:#0D1B3E;--navy-deep:#07102A;--blue:#1B3A6B;--blue-soft:#2B4F8E;
   --gold:#C9A84C;--gold2:#F0C96B;
-  --white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;
+  --white:#fff;--offwhite:#EEF1F8;--gray:#64748B;--lgray:#E8ECF4;--dark:#1A1D2E;
   --green:#059669;--red:#DC2626;
   --radius-card:24px;--radius-input:12px;--radius-pill:999px;
 }
@@ -28,7 +28,7 @@ body{
 .bg-beam{
   position:fixed;inset:-20%;pointer-events:none;z-index:0;
   background:
-    linear-gradient(112deg,transparent 32%,rgba(110,150,235,0.22) 46%,rgba(201,168,76,0.14) 56%,transparent 72%);
+    linear-gradient(112deg,transparent 32%,rgba(66,99,235,0.28) 46%,rgba(201,168,76,0.14) 56%,transparent 72%);
   filter:blur(48px);
   transform:translateZ(0);
 }
@@ -95,7 +95,7 @@ body{
   outline:none;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;
 }
 .form-input:focus{border-color:var(--navy);background:var(--white);box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
-.form-input::placeholder{color:#9CA3AF}
+.form-input::placeholder{color:#94A3B8}
 .pass-wrap{position:relative}
 .pass-wrap .form-input{padding-right:4.6rem}
 .pass-toggle{
