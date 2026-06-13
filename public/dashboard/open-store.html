@@ -577,14 +577,6 @@ function updatePaymentDisplay() {
   document.getElementById('planLabel').textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan · per month'
   document.getElementById('planBadgePay').textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
 }
-function previewReceipt(input) {
-  const file = input.files[0]
-  if (!file) return
-  const reader = new FileReader()
-  reader.onload = e => {
-    document.getElementById('receiptImg').src = e.target.result
-    document.getElementById('receiptPreview').style.display = 'block'
-  }
   reader.readAsDataURL(file)
 }
 
@@ -625,7 +617,6 @@ async function submitApplication() {
     const price    = PRICES[selectedPlan]
 
     // Free registration — no receipt needed
-    let receiptUrl = null
 
     // Create auth account
     const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pass })
@@ -648,7 +639,6 @@ async function submitApplication() {
       plan:          selectedPlan,
       amount:        0,
       pay_method:    'free',
-      receipt_url:   null,
       status:        'pending',
       slug:          slug,
     })
