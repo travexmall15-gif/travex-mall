@@ -82,19 +82,38 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* ── Global Base ── */
-*, *::before, *::after { box-sizing: border-box; }
+/* ════════════════════════════════════════
+   TRAVEX POLISH V2 — FinTrack design layer
+   Applies to ALL Next.js pages globally
+   ════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 html { scroll-behavior: smooth; }
 
+/* ── Body: light off-white + subtle grid ── */
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: #111827;
-  background: #F8F9FC;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: #F3F5FA;
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(13,27,62,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13,27,62,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
 
 /* ── Typography ── */
@@ -104,10 +123,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   color: #0D1B3E;
 }
-
-.font-heading {
-  font-family: 'Playfair Display', Georgia, serif !important;
-}
+.font-heading { font-family: 'Playfair Display', Georgia, serif !important; }
 
 /* ── Tailwind color aliases ── */
 .text-navy   { color: #0D1B3E; }
@@ -118,3 +134,217 @@ h1, h2, h3, h4, h5, h6 {
 .border-gold { border-color: #C9A84C; }
 .bg-secondary{ background-color: #1B3A6B; }
 .hover\:bg-gold-light:hover { background-color: #F0C96B; }
+
+/* ════ NAV ════ */
+header[class*="fixed"] {
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+/* Dark nav: richer gradient */
+header.border-white\/10 {
+  background: rgba(7, 14, 28, 0.88) !important;
+  border-bottom-color: rgba(255,255,255,0.07) !important;
+}
+
+/* ════ HERO SECTIONS (dark navy) ════ */
+/* The homepage hero already has navy bg — we enhance it */
+section[style*="background:'#0D1B3E'"],
+section[style*='background:"#0D1B3E"'],
+section[style*="background: '#0D1B3E'"],
+section[style*='background: "#0D1B3E"'],
+section[style*="background:#0D1B3E"],
+section[style*='background: #0D1B3E'],
+section[style*="background:'#080A0F'"],
+section[style*='background:"#080A0F"'],
+section[style*="background:#080A0F"] {
+  position: relative;
+  overflow: hidden;
+}
+section[style*="background:#0D1B3E"]::after,
+section[style*="background:#080A0F"]::after,
+section[style*="background:'#0D1B3E'"]::after,
+section[style*="background:'#080A0F'"]::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    112deg,
+    transparent 30%,
+    rgba(110, 150, 235, 0.20) 46%,
+    rgba(201, 168, 76, 0.13) 56%,
+    transparent 72%
+  );
+  filter: blur(48px);
+}
+
+/* ════ CARDS & SURFACES ════ */
+/* White cards: soft shadow + larger radius */
+.rounded-xl  { border-radius: 16px !important; }
+.rounded-2xl { border-radius: 20px !important; }
+.rounded-lg  { border-radius: 14px !important; }
+.rounded-md  { border-radius: 10px !important; }
+
+/* shadcn Card */
+.bg-card,
+[class*="bg-white"],
+div[class*="shadow"] {
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+/* Shop cards hover lift */
+.shop-card-home,
+[class*="shop-card"],
+.hover-lift {
+  transition: all 0.25s ease !important;
+}
+.shop-card-home:hover,
+[class*="shop-card"]:hover,
+.hover-lift:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 16px 40px rgba(13,27,62,0.12) !important;
+}
+
+/* ════ BUTTONS — pill style ════ */
+/* All link/button elements styled with bg-gold, bg-navy get pill radius */
+a[style*="borderRadius:'10px'"],
+a[style*="borderRadius: '10px'"],
+a[style*='borderRadius:"10px"'],
+a[style*="border-radius:10px"],
+button[style*="borderRadius:'10px'"] {
+  border-radius: 999px !important;
+  transition: transform 0.15s, box-shadow 0.2s !important;
+}
+a[style*="borderRadius:'10px'"]:hover,
+button[style*="borderRadius:'10px'"]:hover {
+  transform: translateY(-1px) !important;
+}
+/* Gold buttons */
+a[style*="background:'#C9A84C'"],
+a[style*='background:"#C9A84C"'],
+a[style*="background:#C9A84C"] {
+  border-radius: 999px !important;
+  box-shadow: 0 8px 22px rgba(201,168,76,0.30) !important;
+  transition: transform 0.15s, box-shadow 0.2s !important;
+}
+a[style*="background:'#C9A84C'"]:hover,
+a[style*="background:#C9A84C"]:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 12px 28px rgba(201,168,76,0.40) !important;
+}
+/* Navy buttons */
+a[style*="background:'#0D1B3E'"],
+a[style*='background:"#0D1B3E"'],
+a[style*="background:#0D1B3E"] {
+  border-radius: 999px !important;
+  box-shadow: 0 8px 20px rgba(13,27,62,0.28) !important;
+  transition: transform 0.15s, box-shadow 0.2s !important;
+}
+a[style*="background:'#0D1B3E'"]:hover,
+a[style*="background:#0D1B3E"]:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 12px 26px rgba(13,27,62,0.35) !important;
+}
+
+/* Tailwind button classes */
+.bg-gold.rounded-lg,
+.bg-navy.rounded-lg,
+a.rounded-lg[class*="bg-gold"],
+a.rounded-lg[class*="bg-navy"],
+button.rounded-lg[class*="bg-gold"],
+button.rounded-lg[class*="bg-navy"] {
+  border-radius: 999px !important;
+}
+
+/* ════ INPUTS & FORMS ════ */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+select,
+textarea {
+  border-radius: 12px !important;
+  background: #F8F9FC !important;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s !important;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(13,27,62,0.10) !important;
+  outline: none !important;
+}
+
+/* ════ BADGES & PILLS ════ */
+.inline-flex[style*="borderRadius:'20px'"],
+.inline-flex[style*="borderRadius:'999px'"],
+span[style*="borderRadius:'20px'"],
+div[style*="borderRadius:'20px'"],
+div[style*="border-radius:20px"] {
+  border-radius: 999px !important;
+}
+
+/* ════ STAT NUMBERS (polished gold) ════ */
+div[style*="color:'#C9A84C'"],
+div[style*='color:"#C9A84C"'],
+div[style*="color:#C9A84C"] {
+  text-shadow: 0 2px 12px rgba(201,168,76,0.15);
+}
+
+/* ════ FOOTER ════ */
+footer.bg-navy {
+  background: linear-gradient(180deg, #0A1628 0%, #0D1B3E 60%, #112350 100%) !important;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+footer a:hover {
+  color: #C9A84C !important;
+}
+/* Social icon circles */
+footer a.rounded-lg {
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+/* ════ UNIVERSITY CARDS ════ */
+.uni-card,
+div[style*="minWidth:'280px'"],
+div[style*='minWidth:"280px"'] {
+  border-radius: 18px !important;
+  transition: all 0.25s !important;
+}
+
+/* ════ VYBE FEED ════ */
+[class*="vybe"],
+[class*="feed"] {
+  border-radius: 16px !important;
+}
+
+/* ════ CAMPUS/MARKET PAGE: cards polish ════ */
+.rounded-2xl { box-shadow: 0 4px 18px rgba(13,27,62,0.06); }
+.rounded-2xl:hover { box-shadow: 0 14px 36px rgba(13,27,62,0.10) !important; transform: translateY(-3px); }
+
+/* ════ STORE PAGE: product cards ════ */
+[class*="product"],
+[class*="Product"] {
+  border-radius: 16px !important;
+}
+
+/* ════ MODAL / DIALOG ════ */
+[role="dialog"],
+[data-radix-dialog-content] {
+  border-radius: 20px !important;
+  box-shadow: 0 30px 80px rgba(4,10,30,0.35) !important;
+}
+
+/* ════ SCROLLBAR (subtle) ════ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(13,27,62,0.18); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(13,27,62,0.32); }
+
+/* ════ SELECTION ════ */
+::selection { background: rgba(201,168,76,0.25); color: #0D1B3E; }
