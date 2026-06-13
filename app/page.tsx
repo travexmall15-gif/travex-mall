@@ -14,7 +14,7 @@ const UNIS = [
 
 export default function HomePage() {
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F3F5FA', overflowX: 'hidden' }}>
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#EEF1F8', overflowX: 'hidden' }}>
       {/* Google Fonts */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -42,7 +42,7 @@ export default function HomePage() {
         <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero-marketplace.png)',backgroundSize:'cover',backgroundPosition:'center',opacity:0.2}} />
         <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(13,27,62,0.96) 0%,rgba(13,27,62,0.88) 60%,rgba(27,58,107,0.75) 100%)'}} />
         {/* Beam */}
-        <div style={{position:'absolute',inset:'-30%',pointerEvents:'none',zIndex:0,background:'linear-gradient(112deg,transparent 30%,rgba(110,150,235,0.22) 46%,rgba(201,168,76,0.14) 56%,transparent 72%)',filter:'blur(48px)'}} />
+        <div style={{position:'absolute',inset:'-30%',pointerEvents:'none',zIndex:0,background:'linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.28) 46%,rgba(201,168,76,0.14) 56%,transparent 72%)',filter:'blur(48px)'}} />
         {/* Grid */}
         <div style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:0,opacity:0.05,backgroundImage:'linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.8) 1px,transparent 1px)',backgroundSize:'56px 56px'}} />
         <Particles />
@@ -78,22 +78,22 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ B2C SECTION ══════════ */}
-      <section style={{position:'relative',overflow:'hidden',background:'#F3F5FA',padding:'6rem 5%',textAlign:'center'}}>
+      <section style={{position:'relative',overflow:'hidden',background:'#EEF1F8',padding:'6rem 5%',textAlign:'center'}}>
         <div style={{position:'absolute',top:'-150px',left:'-100px',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(13,27,62,0.06),transparent 65%)',pointerEvents:'none'}} />
         <div style={{position:'absolute',bottom:'-100px',right:'-100px',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.05),transparent 65%)',pointerEvents:'none'}} />
         <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(rgba(13,27,62,0.03) 1px,transparent 1px)',backgroundSize:'28px 28px',pointerEvents:'none'}} />
         <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:'linear-gradient(90deg,transparent,rgba(13,27,62,0.15),transparent)'}} />
         <div style={{position:'relative',zIndex:1,maxWidth:'900px',margin:'0 auto'}}>
-          <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(192,192,192,0.12)',border:'1px solid rgba(192,192,192,0.25)',color:'#9CA3AF',padding:'0.32rem 1rem',fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.22em',textTransform:'uppercase',marginBottom:'1.5rem'}}>
-            <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#9CA3AF',flexShrink:0}} />
+          <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(192,192,192,0.12)',border:'1px solid rgba(192,192,192,0.25)',color:'#94A3B8',padding:'0.32rem 1rem',fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.22em',textTransform:'uppercase',marginBottom:'1.5rem'}}>
+            <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#94A3B8',flexShrink:0}} />
             RETAIL MARKET · B2C
           </div>
           <div style={{lineHeight:0.88,marginBottom:'1rem'}}>
             <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,10vw,8rem)',color:'#0D1B3E',letterSpacing:'0.03em',display:'block'}}>SHOP FROM</div>
             <div className="bebas-big" style={{fontFamily:"'Bebas Neue',cursive",fontSize:'clamp(3.5rem,10vw,8rem)',letterSpacing:'0.03em',background:'linear-gradient(135deg,#0D1B3E,#1B3A6B,#C9A84C)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',display:'block'}}>LOCAL RETAILERS</div>
           </div>
-          <div style={{fontFamily:"'Inter',sans-serif",fontSize:'clamp(0.82rem,1.8vw,1rem)',fontWeight:600,color:'#9CA3AF',letterSpacing:'0.25em',textTransform:'uppercase',marginBottom:'1.2rem'}}>Find · Buy · Trust · 🥈 Silver Verified</div>
-          <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'#6B7280',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Discover verified local sellers across Tanzania. Fashion, electronics, food and more — all in one place.</p>
+          <div style={{fontFamily:"'Inter',sans-serif",fontSize:'clamp(0.82rem,1.8vw,1rem)',fontWeight:600,color:'#94A3B8',letterSpacing:'0.25em',textTransform:'uppercase',marginBottom:'1.2rem'}}>Find · Buy · Trust · 🥈 Silver Verified</div>
+          <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'#64748B',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Discover verified local sellers across Tanzania. Fashion, electronics, food and more — all in one place.</p>
           <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
             <Link href="/market" style={{background:'#0D1B3E',color:'#fff',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'999px',boxShadow:'0 8px 20px rgba(13,27,62,0.22)'}}>
               🛍️ Browse Market
@@ -107,7 +107,7 @@ export default function HomePage() {
       <div style={{height:'1px',background:'linear-gradient(90deg,transparent,rgba(13,27,62,0.12),transparent)'}} />
 
       {/* ══════════ B2B SECTION ══════════ */}
-      <section style={{position:'relative',overflow:'hidden',background:'#080A0F',padding:'6rem 5%',textAlign:'center'}}>
+      <section style={{position:'relative',overflow:'hidden',background:'#070D22',padding:'6rem 5%',textAlign:'center'}}>
         <div style={{position:'absolute',top:'-120px',left:'-100px',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.12),transparent 65%)',filter:'blur(50px)',pointerEvents:'none'}} />
         <div style={{position:'absolute',bottom:'-80px',right:'-80px',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.08),transparent 65%)',filter:'blur(40px)',pointerEvents:'none'}} />
         <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px)',backgroundSize:'28px 28px',pointerEvents:'none'}} />
@@ -135,13 +135,13 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ TOP RATED CAROUSEL ══════════ */}
-      <section id="top-rated" style={{background:'#F3F5FA',padding:'5rem 5%'}}>
+      <section id="top-rated" style={{background:'#EEF1F8',padding:'5rem 5%'}}>
         <div style={{maxWidth:'1200px',margin:'0 auto'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:'2rem',flexWrap:'wrap',gap:'1rem',paddingRight:'0'}}>
             <div>
               <div style={{fontSize:'0.68rem',fontWeight:700,color:'#C9A84C',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.4rem'}}>// Editor's Choice</div>
               <div className="section-headline" style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(1.3rem,2.5vw,1.6rem)',fontWeight:800,color:'#0D1B3E'}}>Top Rated Shops ⭐⭐⭐⭐⭐</div>
-              <div style={{fontSize:'0.82rem',color:'#6B7280',marginTop:'0.2rem'}}>Highest rated verified stores</div>
+              <div style={{fontSize:'0.82rem',color:'#64748B',marginTop:'0.2rem'}}>Highest rated verified stores</div>
             </div>
             <Link href="/campus" style={{fontSize:'0.82rem',color:'#1B3A6B',fontWeight:600,textDecoration:'none',display:'flex',alignItems:'center',gap:'0.3rem'}}>
               View all <ArrowRight size={14} />
@@ -162,7 +162,7 @@ export default function HomePage() {
                       {shop.verified && <span style={{fontSize:'0.6rem',background:'rgba(5,150,105,0.1)',color:'#059669',padding:'0.1rem 0.4rem',borderRadius:'6px',fontWeight:700,flexShrink:0,marginLeft:'0.4rem'}}>✓ Verified</span>}
                     </div>
                     <div style={{fontSize:'0.68rem',background:'rgba(201,168,76,0.1)',color:'#92741a',padding:'0.15rem 0.5rem',borderRadius:'8px',display:'inline-block',fontWeight:700,marginBottom:'0.5rem'}}>{shop.category}</div>
-                    <p style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.5,marginBottom:'0.75rem',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{shop.description}</p>
+                    <p style={{fontSize:'0.75rem',color:'#64748B',lineHeight:1.5,marginBottom:'0.75rem',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{shop.description}</p>
                     <div style={{display:'flex',gap:'0.4rem'}}>
                       <a href={`https://wa.me/${wa}`} target="_blank" style={{flex:1,padding:'0.4rem',background:'#25D366',color:'#fff',border:'none',borderRadius:'7px',fontSize:'0.7rem',fontWeight:700,textAlign:'center',textDecoration:'none'}}>💬 WhatsApp</a>
                       <Link href={`/campus/${shop.university}`} style={{flex:1,padding:'0.4rem',background:'#0D1B3E',color:'#fff',borderRadius:'7px',fontSize:'0.7rem',fontWeight:700,textAlign:'center',textDecoration:'none'}}>🏪 Visit</Link>
