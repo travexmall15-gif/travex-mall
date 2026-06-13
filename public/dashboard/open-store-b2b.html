@@ -29,7 +29,7 @@ function pickFont(font, el) {
   updateLiveTheme();
 }
 function updateLiveTheme() {
-  const color = document.getElementById("selectedColor")?.value || "#0D1B3E";
+  const color = document.getElementById("selectedColor")?.value || "#050B2E";
   const font  = document.getElementById("selectedFont")?.value || "Playfair Display";
   const prev  = document.getElementById("themePreviewCard");
   if (!prev) return;
@@ -58,8 +58,8 @@ if (typeof e === 'undefined') { var e = sanitize; }
 </script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#EEF1F8;--gray:#64748B;--lgray:#E8ECF4;--dark:#1A1D2E;--green:#059669;--red:#DC2626}
-body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
+:root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--dark:#0F172A;--green:#059669;--red:#DC2626}
+body{font-family:"Inter",sans-serif;background:#F8FAFF;color:var(--dark)}
 
 nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .nav-logo{font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none}
@@ -88,7 +88,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 /* FORM */
 .form-card{background:var(--white);border:1px solid var(--lgray);margin-bottom:1.5rem}
-.card-head{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.card-head{padding:1rem 1.5rem;border-bottom:1px solid var(--lgray);background:#F8FAFF}
 .card-head-title{font-size:0.875rem;font-weight:700;color:var(--navy)}
 .card-body{padding:1.5rem}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -114,7 +114,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .dur-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;min-width:460px}
 .dur-card{border:2px solid var(--lgray);padding:1rem;cursor:pointer;transition:all 0.25s;text-align:center;background:var(--white);position:relative;min-width:105px}
 .dur-card:hover{border-color:var(--navy);transform:translateY(-2px)}
-.dur-card.selected{border-color:var(--navy);background:var(--offwhite);box-shadow:0 6px 20px rgba(13,27,62,0.1)}
+.dur-card.selected{border-color:var(--navy);background:#F8FAFF;box-shadow:0 6px 20px rgba(13,27,62,0.1)}
 .dur-months{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
 .dur-discount{font-size:0.72rem;color:var(--gray);margin-bottom:0.4rem}
 .dur-badge{display:inline-block;background:var(--green);color:var(--white);font-size:0.6rem;font-weight:800;padding:0.15rem 0.5rem;text-transform:uppercase;letter-spacing:0.05em}
@@ -124,7 +124,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-bottom:0;min-width:320px}
 .plan-card{border:2px solid var(--lgray);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:var(--white)}
 .plan-card:hover{transform:translateY(-3px)}
-.plan-card.selected.basic{border-color:var(--gray);background:var(--offwhite);box-shadow:0 12px 30px rgba(0,0,0,0.08)}
+.plan-card.selected.basic{border-color:var(--gray);background:#F8FAFF;box-shadow:0 12px 30px rgba(0,0,0,0.08)}
 .plan-card.selected.standard{border-color:var(--navy);background:linear-gradient(135deg,#EFF6FF,#DBEAFE);box-shadow:0 12px 30px rgba(13,27,62,0.15)}
 .plan-card.selected.premium{border-color:var(--gold);background:linear-gradient(135deg,#FFFBEB,#FEF3C7);box-shadow:0 12px 30px rgba(201,168,76,0.2)}
 .plan-popular{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:0.6rem;font-weight:800;padding:0.2rem 0.7rem;text-transform:uppercase;white-space:nowrap}
@@ -149,7 +149,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 /* UPLOAD */
 .upload-area{border:2px dashed var(--lgray);padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.upload-area:hover{border-color:var(--navy);background:var(--offwhite)}
+.upload-area:hover{border-color:var(--navy);background:#F8FAFF}
 .upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-preview{max-width:100%;max-height:100px;margin-top:0.5rem;display:none}
 
@@ -184,13 +184,13 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .pay-num{width:28px;height:28px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0}
 .pay-text{font-size:0.85rem;color:var(--gray);line-height:1.55}
 .pay-text strong{color:var(--dark)}
-.copy-row{display:flex;justify-content:space-between;align-items:center;background:var(--offwhite);border:1px solid var(--lgray);padding:0.55rem 0.85rem;margin-top:0.4rem}
+.copy-row{display:flex;justify-content:space-between;align-items:center;background:#F8FAFF;border:1px solid var(--lgray);padding:0.55rem 0.85rem;margin-top:0.4rem}
 .copy-val{font-size:0.875rem;font-weight:700;color:var(--navy)}
 .copy-btn{background:var(--navy);color:var(--white);border:none;padding:0.28rem 0.7rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif}
 .copy-btn:hover{background:var(--gold);color:var(--navy)}
 .wa-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:#25D366;color:var(--white);font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;margin-bottom:1rem;transition:all 0.2s;text-decoration:none}
 .wa-btn:hover{background:#128C7E}
-.close-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:var(--offwhite);color:var(--gray);font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
+.close-btn{display:flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;padding:0.85rem;background:#F8FAFF;color:var(--gray);font-size:0.875rem;font-weight:600;border:1.5px solid var(--lgray);cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
 .close-btn:hover{background:var(--lgray)}
 
 /* ACTIONS */
@@ -214,7 +214,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .thankyou-icon{font-size:4rem;margin-bottom:1rem}
 .thankyou-title{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem}
 .thankyou-sub{font-size:0.9rem;color:var(--gray);line-height:1.7;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
-.thankyou-info{background:var(--offwhite);border:1px solid var(--lgray);padding:1.2rem;text-align:left;margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
+.thankyou-info{background:#F8FAFF;border:1px solid var(--lgray);padding:1.2rem;text-align:left;margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
 .thankyou-info-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
 .thankyou-item{font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;display:flex;gap:0.5rem}
 .thankyou-item strong{color:var(--dark)}
@@ -247,7 +247,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .ai-tool-name{font-size:0.875rem;font-weight:700;color:var(--navy)}
 .ai-tool-desc{font-size:0.78rem;color:var(--gray)}
 .ai-tool-badge{font-size:0.62rem;font-weight:700;padding:0.15rem 0.5rem;margin-left:auto;flex-shrink:0}
-.ai-chat-preview{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem;font-size:0.78rem;color:var(--gray);border-left:3px solid var(--navy)}
+.ai-chat-preview{background:#F8FAFF;border:1px solid var(--lgray);padding:0.75rem;font-size:0.78rem;color:var(--gray);border-left:3px solid var(--navy)}
 .locked-overlay{position:absolute;inset:0;background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:var(--gray);z-index:10}
 
 
@@ -280,7 +280,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .dash-card-body{padding:1rem}
 .dash-empty{text-align:center;padding:1.5rem;color:var(--gray);font-size:0.78rem}
 .dash-empty-icon{font-size:1.8rem;margin-bottom:0.4rem}
-.dash-store-card{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;opacity:0.9}
+.dash-store-card{background:#F8FAFF;border:1px solid var(--lgray);padding:0.75rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;opacity:0.9}
 .dash-store-logo{width:36px;height:36px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--gold);flex-shrink:0}
 .dash-store-name{font-size:0.82rem;font-weight:700;color:var(--navy)}
 .dash-store-cat{font-size:0.7rem;color:var(--gray)}
@@ -298,7 +298,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 /* OVERVIEW STORES TABLE */
 .overview-stores-grid{display:flex;flex-direction:column;gap:0.5rem}
-.ov-store-row{background:var(--offwhite);border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem}
+.ov-store-row{background:#F8FAFF;border:1px solid var(--lgray);padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem}
 .ov-store-num{width:28px;height:28px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0}
 .ov-store-info{flex:1}
 .ov-store-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
@@ -600,7 +600,7 @@ select,textarea,
     🔒 <span><strong>Preview Mode</strong> — Buttons are locked until payment is complete. This is exactly what you will get!</span>
   </div>
 
-  <div id="dashPreview" style="border:2px solid var(--lgray);overflow:hidden;background:var(--offwhite)">
+  <div id="dashPreview" style="border:2px solid var(--lgray);overflow:hidden;background:#F8FAFF">
 
     <div style="background:var(--navy);padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
       <div style="font-size:0.9rem;font-weight:800;color:var(--white)">TRAVEX <span style="color:var(--gold)">MALL</span> <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);font-weight:400">· Seller Dashboard</span></div>
@@ -718,7 +718,7 @@ select,textarea,
       </div>
       <div id="receiptError" style="display:none;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:0.75rem 1rem;font-size:0.82rem;margin-bottom:1rem"></div>
       <div style="display:flex;gap:0.75rem">
-        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">← Back</button>
+        <button onclick="document.getElementById('payPanel-receipt').style.display='none';document.getElementById('payPanel-instructions').style.display='block'" style="flex:0 0 100px;padding:0.85rem;background:#F8FAFF;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">← Back</button>
         <button onclick="submitReceipt()" id="receiptSubmitBtn" style="flex:1;padding:0.85rem;background:var(--navy);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer">Submit Receipt & Finish →</button>
       </div>
     </div>
@@ -734,7 +734,7 @@ select,textarea,
       </div>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:1rem;font-size:0.8rem;color:#1E3A5F;text-align:left;margin-bottom:1.5rem">📞 Tutacontact nawe: <strong id="confirmPhoneFinal">—</strong></div>
       <a href="https://wa.me/255651919915?text=I+have+submitted+my+payment+receipt+on+Travex+Mall+B2B!" target="_blank" style="display:block;width:100%;padding:0.9rem;background:#25D366;color:#fff;font-weight:700;text-decoration:none;margin-bottom:0.75rem">💬 Contact Us on WhatsApp</a>
-      <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:var(--offwhite);border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">Nenda kwenye Login →</button>
+      <button onclick="finishAndThankYou()" style="width:100%;padding:0.85rem;background:#F8FAFF;border:1.5px solid var(--lgray);font-family:'Inter',sans-serif;cursor:pointer">Nenda kwenye Login →</button>
     </div>
   </div>
 </div>
@@ -993,34 +993,34 @@ function generateStoreForms() {
           <div class="form-group">
             <label class="form-label">Dashboard Color</label>
             <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.75rem" id="colorPicker">
-              <div onclick="pickColor('#0D1B3E',this)" style="width:36px;height:36px;background:#0D1B3E;cursor:pointer;border:3px solid #0D1B3E;outline:2px solid #C9A84C" title="Navy (Deforlt)"></div>
+              <div onclick="pickColor('#050B2E',this)" style="width:36px;height:36px;background:#050B2E;cursor:pointer;border:3px solid #050B2E;outline:2px solid #C9A84C" title="Navy (Deforlt)"></div>
               <div onclick="pickColor('#7C3AED',this)" style="width:36px;height:36px;background:#7C3AED;cursor:pointer;border:3px solid #7C3AED" title="Purple"></div>
               <div onclick="pickColor('#059669',this)" style="width:36px;height:36px;background:#059669;cursor:pointer;border:3px solid #059669" title="Green"></div>
               <div onclick="pickColor('#DC2626',this)" style="width:36px;height:36px;background:#DC2626;cursor:pointer;border:3px solid #DC2626" title="Red"></div>
               <div onclick="pickColor('#F97316',this)" style="width:36px;height:36px;background:#F97316;cursor:pointer;border:3px solid #F97316" title="Orange"></div>
               <div onclick="pickColor('#0891B2',this)" style="width:36px;height:36px;background:#0891B2;cursor:pointer;border:3px solid #0891B2" title="Cyan"></div>
               <div onclick="pickColor('#BE185D',this)" style="width:36px;height:36px;background:#BE185D;cursor:pointer;border:3px solid #BE185D" title="Pink"></div>
-              <div onclick="pickColor('#1A1D2E',this)" style="width:36px;height:36px;background:#1A1D2E;cursor:pointer;border:3px solid #1A1D2E" title="Black"></div>
-              <input type="color" id="customColor" value="#0D1B3E" onchange="pickColorCustom(this.value)" style="width:36px;height:36px;cursor:pointer;border:none;padding:0" title="Custom color">
+              <div onclick="pickColor('#0F172A',this)" style="width:36px;height:36px;background:#0F172A;cursor:pointer;border:3px solid #0F172A" title="Black"></div>
+              <input type="color" id="customColor" value="#050B2E" onchange="pickColorCustom(this.value)" style="width:36px;height:36px;cursor:pointer;border:none;padding:0" title="Custom color">
             </div>
-            <input type="hidden" id="selectedColor" value="#0D1B3E">
+            <input type="hidden" id="selectedColor" value="#050B2E">
           </div>
           <div class="form-group">
             <label class="form-label">Store Name Font</label>
             <div style="display:flex;flex-direction:column;gap:0.5rem" id="fontPicker">
-              <div onclick="pickFont('Playfair Display',this)" style="padding:0.6rem 1rem;border:2px solid var(--gold);cursor:pointer;background:var(--offwhite)" class="font-opt selected-font">
+              <div onclick="pickFont('Playfair Display',this)" style="padding:0.6rem 1rem;border:2px solid var(--gold);cursor:pointer;background:#F8FAFF" class="font-opt selected-font">
                 <span style="font-family:'Playfair Display',serif;font-size:1.1rem">Playfair Display</span> — <span style="font-size:0.72rem;color:var(--gray)">Elegant, luxury</span>
               </div>
-              <div onclick="pickFont('Bebas Neue',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+              <div onclick="pickFont('Bebas Neue',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:#F8FAFF" class="font-opt">
                 <span style="font-family:'Bebas Neue',cursive;font-size:1.1rem">BEBAS NEUE</span> — <span style="font-size:0.72rem;color:var(--gray)">Bold, modern</span>
               </div>
-              <div onclick="pickFont('Inter',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+              <div onclick="pickFont('Inter',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:#F8FAFF" class="font-opt">
                 <span style="font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:700">Inter Bold</span> — <span style="font-size:0.72rem;color:var(--gray)">Clean, professional</span>
               </div>
-              <div onclick="pickFont('Montserrat',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+              <div onclick="pickFont('Montserrat',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:#F8FAFF" class="font-opt">
                 <span style="font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:700">Montserrat</span> — <span style="font-size:0.72rem;color:var(--gray)">Strong, corporate</span>
               </div>
-              <div onclick="pickFont('Poppins',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:var(--offwhite)" class="font-opt">
+              <div onclick="pickFont('Poppins',this)" style="padding:0.6rem 1rem;border:1px solid var(--lgray);cursor:pointer;background:#F8FAFF" class="font-opt">
                 <span style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:600">Poppins</span> — <span style="font-size:0.72rem;color:var(--gray)">Soft, trendy</span>
               </div>
             </div>
@@ -1029,11 +1029,11 @@ function generateStoreForms() {
           <div style="margin-top:1rem">
             <label class="form-label">Live Preview:</label>
             <div id="themePreviewCard" style="border:1px solid var(--lgray);overflow:hidden;max-width:340px">
-              <div class="tprev-banner" style="height:60px;background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"></div>
+              <div class="tprev-banner" style="height:60px;background:linear-gradient(135deg,#050B2E,#0A1858)"></div>
               <div style="padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem;margin-top:-18px;position:relative">
-                <div class="tprev-badge" style="width:36px;height:36px;background:#0D1B3E;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0" id="tprev-initials">TX</div>
+                <div class="tprev-badge" style="width:36px;height:36px;background:#050B2E;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0" id="tprev-initials">TX</div>
                 <div>
-                  <div class="tprev-name" style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:#1A1D2E" id="tprev-storename">Store Name</div>
+                  <div class="tprev-name" style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:#0F172A" id="tprev-storename">Store Name</div>
                   <div class="tprev-cat" style="font-size:0.65rem;color:#64748B">Category · Region</div>
                 </div>
               </div>
@@ -1114,7 +1114,7 @@ function buildPreview() {
     html += `
     <div class="preview-box" style="${i>1?"margin-top:1.5rem":""}">
       ${n>1?`<div style="background:var(--navy);color:var(--gold);padding:0.4rem 1rem;font-size:0.75rem;font-weight:700">Store ${i}</div>`:""}
-      <div class="preview-banner" style="${bSrc?`background-image:url(${bSrc});background-size:cover;background-position:center`:"background:linear-gradient(135deg,#0D1B3E,#1B3A6B)"}">
+      <div class="preview-banner" style="${bSrc?`background-image:url(${bSrc});background-size:cover;background-position:center`:"background:linear-gradient(135deg,#050B2E,#0A1858)"}">
         <div class="preview-overlay"></div>
       </div>
       <div class="preview-header">
@@ -1197,7 +1197,7 @@ async function submitAndProceed() {
       const instagram = (document.getElementById("sInsta"+i)?.value || "").trim().replace("@","");
       const tiktok    = (document.getElementById("sTiktok"+i)?.value || "").trim().replace("@","");
       const facebook  = (document.getElementById("sFacebook"+i)?.value || "").trim();
-      const themeColor = document.getElementById("selectedColor")?.value || "#0D1B3E";
+      const themeColor = document.getElementById("selectedColor")?.value || "#050B2E";
       const themeFont  = document.getElementById("selectedFont")?.value || "Playfair Display";
 
       await sb.from("stores").insert({
@@ -1385,9 +1385,9 @@ function buildStoreCard(i) {
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
-      <div style="font-size:0.75rem;padding:0.5rem;background:var(--offwhite)"><span style="color:var(--gray)">Region: </span><strong>${reg}</strong></div>
-      <div style="font-size:0.75rem;padding:0.5rem;background:var(--offwhite)"><span style="color:var(--gray)">WhatsApp: </span><strong>${wa}</strong></div>
-      <div style="font-size:0.75rem;padding:0.5rem;background:var(--offwhite);grid-column:1/-1"><span style="color:var(--gray)">About: </span>${desc}</div>
+      <div style="font-size:0.75rem;padding:0.5rem;background:#F8FAFF"><span style="color:var(--gray)">Region: </span><strong>${reg}</strong></div>
+      <div style="font-size:0.75rem;padding:0.5rem;background:#F8FAFF"><span style="color:var(--gray)">WhatsApp: </span><strong>${wa}</strong></div>
+      <div style="font-size:0.75rem;padding:0.5rem;background:#F8FAFF;grid-column:1/-1"><span style="color:var(--gray)">About: </span>${desc}</div>
     </div>`;
 }
 
@@ -1416,14 +1416,14 @@ function buildAITools() {
     html += `<div style="background:var(--white);border:1px solid ${has?"var(--lgray)":"var(--lgray)"};padding:1.1rem;margin-bottom:0.75rem;position:relative;${!has?"opacity:0.4":""}">
       ${!has?`<div style="position:absolute;inset:0;background:rgba(248,249,252,0.85);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--gray);z-index:5">🔒 Not included in ${selectedPlan.name} Plan — Upgrade to unlock</div>`:""}
       <div style="display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:${has?"0.75rem":"0"}">
-        <div style="width:36px;height:36px;background:var(--offwhite);border:1px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">${t.icon}</div>
+        <div style="width:36px;height:36px;background:#F8FAFF;border:1px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">${t.icon}</div>
         <div style="flex:1">
           <div style="font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${t.name}</div>
           <div style="font-size:0.75rem;color:var(--gray);line-height:1.5">${t.desc}</div>
         </div>
         <span style="font-size:0.62rem;font-weight:700;padding:0.15rem 0.5rem;flex-shrink:0;${has?"background:#D1FAE5;color:#065F46":"background:var(--lgray);color:var(--gray)"}">${has?"✓ Included":"Locked"}</span>
       </div>
-      ${has?`<div style="background:var(--offwhite);border:1px solid var(--lgray);padding:0.6rem 0.85rem;font-size:0.75rem;color:var(--gray);border-left:3px solid var(--navy);font-style:italic">💬 "${t.sample}"</div>`:""}
+      ${has?`<div style="background:#F8FAFF;border:1px solid var(--lgray);padding:0.6rem 0.85rem;font-size:0.75rem;color:var(--gray);border-left:3px solid var(--navy);font-style:italic">💬 "${t.sample}"</div>`:""}
     </div>`;
   });
 
@@ -1440,7 +1440,7 @@ function buildStoresGrid() {
     const reg  = document.getElementById("sReg"+i)?.value || "—";
     const init = name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
     html += `<div style="background:var(--white);border:2px solid ${pColor[selectedPlan.key]};overflow:hidden">
-      <div style="height:65px;background:linear-gradient(135deg,#0D1B3E,#1B3A6B);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:var(--gold)">${init}</div>
+      <div style="height:65px;background:linear-gradient(135deg,#050B2E,#0A1858);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:var(--gold)">${init}</div>
       <div style="padding:0.75rem">
         <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem">${name}</div>
         <div style="font-size:0.68rem;color:var(--gray);margin-bottom:0.5rem">${cat} · ${reg}</div>
@@ -1474,7 +1474,7 @@ function switchStoreCardTab(num, btn) {
     let rows = "";
     for (let i = 1; i <= n; i++) {
       const sn = document.getElementById("sName"+i)?.value || "Store "+i;
-      rows += `<div style="display:flex;justify-content:space-between;padding:0.5rem;background:var(--offwhite);border:1px solid var(--lgray);margin-bottom:0.4rem;font-size:0.78rem"><span style="font-weight:700;color:var(--navy)">${sn}</span><span style="color:var(--gray)">0 products · 0 orders · TZS 0</span></div>`;
+      rows += `<div style="display:flex;justify-content:space-between;padding:0.5rem;background:#F8FAFF;border:1px solid var(--lgray);margin-bottom:0.4rem;font-size:0.78rem"><span style="font-weight:700;color:var(--navy)">${sn}</span><span style="color:var(--gray)">0 products · 0 orders · TZS 0</span></div>`;
     }
     document.getElementById("dashStoreInfo").innerHTML = rows;
   } else {
@@ -1544,7 +1544,7 @@ async function submitReceipt() {
 }
 </script>
 <!-- COMING SOON BANNER -->
-<div id="coming-soon-banner" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#0D1B3E 0%,#1B3A6B 100%);border-top:3px solid #C9A84C;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 -4px 24px rgba(0,0,0,0.3)">
+<div id="coming-soon-banner" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#050B2E 0%,#0A1858 100%);border-top:3px solid #C9A84C;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 -4px 24px rgba(0,0,0,0.3)">
   <div style="display:flex;align-items:center;gap:1rem">
     <div style="width:42px;height:42px;background:#C9A84C;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🚀</div>
     <div>
@@ -1568,19 +1568,19 @@ async function submitReceipt() {
 <style id="travex-polish-v2">
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#EEF1F8!important}
+body{background:#F8FAFF!important}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
   linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
   background-size:56px 56px}
-.page-hero,.hero{background:linear-gradient(150deg,#07102A 0%,#0D1B3E 48%,#16306B 100%)!important;position:relative;overflow:hidden}
+.page-hero,.hero{background:linear-gradient(150deg,#020714 0%,#050B2E 48%,#16306B 100%)!important;position:relative;overflow:hidden}
 .page-hero::after,.hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
-  background:linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.32) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
+  background:linear-gradient(112deg,transparent 30%,rgba(56,120,255,0.38) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
   filter:blur(42px)}
 .page-hero>*,.hero>*{position:relative;z-index:1}
 .nav{background:rgba(8,15,36,0.92)!important;backdrop-filter:blur(14px)}
-.form-card{border-radius:18px!important;border-color:#E8ECF4!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
-.form-input,.form-select,.form-textarea{border-radius:12px!important;background:#EEF1F8!important}
+.form-card{border-radius:18px!important;border-color:#E2E8F0!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
+.form-input,.form-select,.form-textarea{border-radius:12px!important;background:#F8FAFF!important}
 .form-input:focus,.form-select:focus,.form-textarea:focus{background:#fff!important;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
 .btn{border-radius:999px!important;transition:all 0.2s}
 .btn:hover{transform:translateY(-1px)}
@@ -1597,7 +1597,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
 .file-drop{border-radius:16px!important}
 .color-grid .color-swatch{border-radius:12px!important}
 .font-opt{border-radius:12px!important}
-.card-head{background:linear-gradient(135deg,#0D1B3E,#1B3A6B)!important}
+.card-head{background:linear-gradient(135deg,#050B2E,#0A1858)!important}
 .alert{border-radius:12px!important}
 .badge,.step-badge{border-radius:999px!important}
 .modal{border-radius:20px!important;box-shadow:0 30px 80px rgba(4,10,30,0.40)!important}
