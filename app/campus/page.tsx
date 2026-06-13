@@ -25,6 +25,11 @@ const steps = [
 export default function CampusPage() {
   return (
     <main style={{ background: '#EEF1F8', overflowX: 'hidden' }}>
+      
+      <style>{`
+        .uni-card-hover { transition: all 0.25s ease; }
+        .uni-card-hover:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(13,27,62,0.10) !important; }
+      `}</style>
       <SiteNav />
 
       {/* ══ HERO ══ */}
@@ -91,8 +96,7 @@ export default function CampusPage() {
             const pct = (uni.activeShops / uni.totalSlots) * 100
             return (
               <div key={uni.slug} style={{ background: '#fff', border: '1px solid #E9ECF3', borderRadius: '20px', padding: '1.5rem', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 18px rgba(13,27,62,0.05)', transition: 'all 0.25s' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 14px 36px rgba(13,27,62,0.10)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = ''; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 18px rgba(13,27,62,0.05)' }}
+                className="uni-card-hover" 
               >
                 {/* Abbr badge */}
                 <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg, #0D1B3E, #1B3A6B)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 900, color: '#C9A84C', marginBottom: '1rem' }}>
