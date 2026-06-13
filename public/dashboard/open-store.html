@@ -177,8 +177,8 @@ textarea.form-input{resize:vertical;min-height:90px}
     <div class="prog-label active" id="lbl1">Account</div>
     <div class="prog-label" id="lbl2">Plan</div>
     <div class="prog-label" id="lbl3">Shop</div>
-    <div class="prog-label" id="lbl4">Payment</div>
-    <div class="prog-label" id="lbl5">Review</div>
+    <div class="prog-label" id="lbl4">Review</div>
+    <div class="prog-label" id="lbl5">Submit</div>
   </div>
 </div>
 
@@ -347,58 +347,52 @@ textarea.form-input{resize:vertical;min-height:90px}
     </div>
   </div>
 
-  <!-- STEP 4: Payment -->
+  <!-- STEP 4: Almost done — no payment needed -->
   <div class="step" id="step4">
-    <div class="step-title">Make Payment</div>
-    <div class="step-sub">Send your subscription payment via CRDB or M-Pesa, then upload your receipt.</div>
+    <div class="step-title">Almost Done! 🎉</div>
+    <div class="step-sub">Taarifa zako zimejazwa. Hakuna malipo yanayohitajika sasa hivi — registration ni bure!</div>
     <div class="alert alert-error" id="err4"></div>
 
-    <div class="payment-box">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-        <div>
-          <div style="font-size:0.72rem;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem">Amount Due</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#059669" id="amountDue">FREE</div>
-          <div style="font-size:0.72rem;color:var(--gray)" id="planLabel">No payment required this month</div>
-        </div>
-        <div style="text-align:right">
-          <div id="planBadgePay" style="font-size:0.72rem;font-weight:700;background:rgba(13,27,62,0.08);color:var(--navy);padding:0.3rem 0.75rem;border-radius:20px">🥈 Silver Basic</div>
-        </div>
+    <div style="background:linear-gradient(135deg,#040C32,#071545);border-radius:20px;padding:2rem;margin-bottom:1.5rem;text-align:center">
+      <div style="font-size:3rem;margin-bottom:1rem">🎁</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:0.5rem">Free Registration</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);margin-bottom:1.25rem;line-height:1.7">
+        Kwa mwezi huu, ufunguzi wa duka ni <strong style="color:#C9A84C">BURE kabisa</strong>.<br>
+        Baada ya kuapprove, utapata password yako kwa WhatsApp.
       </div>
-
-      
-      </div>
-
-      
+      <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.30);color:#C9A84C;padding:0.5rem 1.25rem;border-radius:999px;font-size:0.78rem;font-weight:700">
+        ✅ Hakuna receipt · Hakuna malipo
       </div>
     </div>
 
     <div class="form-card">
-      <div class="card-head"><div class="card-head-title">Upload Payment Receipt</div></div>
+      <div class="card-head"><div class="card-head-title">📋 Muhtasari wa Plan Yako</div></div>
       <div class="card-body">
-        <label style="display:block;border:2px dashed var(--lgray);border-radius:10px;padding:1.75rem;text-align:center;cursor:pointer;transition:all 0.2s" id="receiptLabel"
-          onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='var(--lgray)'">
-          <div style="font-size:2rem;margin-bottom:0.5rem">📎</div>
-          <div style="font-size:0.85rem;font-weight:600;color:var(--navy);margin-bottom:0.25rem">Upload Receipt Screenshot</div>
-          <div style="font-size:0.72rem;color:var(--gray)">JPG, PNG — max 5MB</div>
-          <input type="file" id="receiptFile" accept="image/*" style="display:none" onchange="previewReceipt(this)" />
-        </label>
-        <div id="receiptPreview" style="display:none;margin-top:0.75rem;text-align:center">
-          <img id="receiptImg" style="max-height:160px;border-radius:8px;border:1px solid var(--lgray)" />
-          <div style="font-size:0.75rem;color:var(--green);margin-top:0.4rem;font-weight:600">✅ Receipt uploaded</div>
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
+          <span style="color:var(--gray)">Plan Uliyochagua</span>
+          <span style="font-weight:700;color:var(--navy)" id="step4PlanLabel">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
+          <span style="color:var(--gray)">Bei ya Kawaida</span>
+          <span style="font-weight:700;color:var(--navy)" id="step4PriceLabel">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;font-size:0.85rem">
+          <span style="color:var(--gray)">Sasa Hivi</span>
+          <span style="font-weight:700;color:#059669">🎁 FREE — Mwezi huu</span>
         </div>
       </div>
     </div>
 
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(5)">Continue →</button>
+      <button class="btn btn-primary" onclick="goStep(5)">Kagua Maombi →</button>
     </div>
   </div>
 
   <!-- STEP 5: Review + Submit -->
   <div class="step" id="step5">
-    <div class="step-title">Review & Submit</div>
-    <div class="step-sub">Check your details carefully before submitting.</div>
+    <div class="step-title">Kagua na Wasilisha</div>
+    <div class="step-sub">Angalia taarifa zako kwa makini kabla ya kutuma maombi yako.</div>
     <div class="alert alert-error" id="err5"></div>
 
     <div class="review-section">
@@ -418,26 +412,50 @@ textarea.form-input{resize:vertical;min-height:90px}
       <div class="review-row"><span class="review-label">Category</span><span class="review-val" id="rv-cat">—</span></div>
       <div class="review-row"><span class="review-label">Region</span><span class="review-val" id="rv-region">—</span></div>
     </div>
-    <div class="review-section">
-      <div class="review-head">Payment</div>
-      <div class="review-row"><span class="review-label">Method</span><span class="review-val" id="rv-pay">—</span></div>
-      <div class="review-row"><span class="review-label">Receipt</span><span class="review-val" id="rv-receipt">—</span></div>
+    <div style="background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.20);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem">
+      <span style="font-size:1.5rem">🎁</span>
+      <div>
+        <div style="font-size:0.82rem;font-weight:700;color:#059669">Free Registration — Hakuna Malipo</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">Utapata password yako kwa WhatsApp baada ya kuidhinishwa.</div>
+      </div>
     </div>
 
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
-      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">🚀 Submit Application</button>
+      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">🚀 Wasilisha Maombi</button>
     </div>
   </div>
 
   <!-- SUCCESS -->
   <div class="success-page" id="successPage">
-    <div class="success-icon">🎉</div>
-    <h2>Application Submitted!</h2>
-    <p>Your shop application has been received. Our team will review and activate your shop within <strong>24 hours</strong>.</p>
+    <div class="success-icon">✅</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem">Maombi Yamefika!</h2>
+    <p style="font-size:0.92rem;color:var(--gray);line-height:1.75;margin-bottom:1rem">
+      Maombi yako ya kufungua duka yamepokewa na mfumo wetu.<br>
+      Yatakuwa <strong style="color:var(--navy)">approved ndani ya dakika 30</strong> — utapata ujumbe kwa WhatsApp ukiwa na password yako ya dashboard.
+    </p>
+    <div style="background:#F8FAFF;border:1px solid var(--lgray);border-radius:14px;padding:1.25rem;margin-bottom:1.5rem;text-align:left">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Hatua Zifuatazo</div>
+      <div style="display:flex;flex-direction:column;gap:0.6rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
+          <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">1</span>
+          Admin atakagua maombi yako (ndani ya dakika 30)
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
+          <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">2</span>
+          Utapata WhatsApp na password yako ya dashboard
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
+          <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">3</span>
+          Ingia dashboard — duka lako litaonekana kwenye marketplace
+        </div>
+      </div>
+    </div>
     <div class="detail-box" id="successDetail"></div>
-    <a href="/market" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--navy);color:#fff;padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:0.88rem;text-decoration:none;margin-right:0.75rem">← Back to Market</a>
-    <a href="/campus-dashboard" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--gold);color:var(--navy);padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:0.88rem;text-decoration:none">Open Dashboard →</a>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center">
+      <a href="/market" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--navy);color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none">← Rudi Market</a>
+      <a href="https://wa.me/255651919915" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:#25D366;color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none">💬 WhatsApp Support</a>
+    </div>
   </div>
 
 </div><!-- /form-wrap -->
@@ -472,8 +490,13 @@ function goStep(n) {
   document.getElementById(`prog${currentStep}`).classList.add('active')
   document.getElementById(`lbl${currentStep}`).classList.add('active')
 
-  // Update payment amount display
-  if (n === 4) updatePaymentDisplay()
+  // Build step 4 summary
+  if (n === 4) {
+    const planLabel = selectedPlan === 'premium' ? '🥇 Premium Plan' : '🥈 Basic Plan'
+    const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
+    try { document.getElementById('step4PlanLabel').textContent = planLabel } catch(e){}
+    try { document.getElementById('step4PriceLabel').textContent = priceLabel } catch(e){}
+  }
   // Build review
   if (n === 5) buildReview()
 
@@ -511,8 +534,7 @@ function validateStep(n) {
     if (desc.length < 30) return showErr(document.getElementById('err3'), 'Description must be at least 30 characters')
   }
   if (n === 4) {
-    const file = document.getElementById('receiptFile').files[0]
-    if (!file) return showErr(document.getElementById('err4'), 'Please upload your payment receipt')
+    // No payment required — free registration
   }
   return true
 }
@@ -576,8 +598,12 @@ function buildReview() {
   document.getElementById('rv-shop').textContent    = document.getElementById('shopName').value
   document.getElementById('rv-cat').textContent     = document.getElementById('shopCategory').value
   document.getElementById('rv-region').textContent  = document.getElementById('shopRegion').value
-  document.getElementById('rv-pay').textContent     = selectedPayMethod === 'crdb' ? 'CRDB Bank' : 'M-Pesa / Tigopesa'
-  document.getElementById('rv-receipt').textContent = document.getElementById('receiptFile').files[0]?.name || '—'
+  // No payment review — free registration
+  // Update step4 plan summary too
+  const planLabel = selectedPlan === 'premium' ? '🥇 Premium Plan' : '🥈 Basic Plan'
+  const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
+  try { document.getElementById('step4PlanLabel').textContent = planLabel } catch(e){}
+  try { document.getElementById('step4PriceLabel').textContent = priceLabel } catch(e){}
 }
 
 // ── SUBMIT ──
@@ -648,7 +674,7 @@ async function submitApplication() {
       <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)">✅ Under Review</span></div>
     `
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    toast('Application submitted! We\'ll review within 24 hours.', 'success')
+    toast('✅ Maombi yako yamefika! Utapata WhatsApp ndani ya dakika 30.', 'success')
 
   } catch (e) {
     console.error(e)
