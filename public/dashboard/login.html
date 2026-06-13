@@ -10,9 +10,9 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 :root{
-  --navy:#0D1B3E;--navy-deep:#07102A;--blue:#1B3A6B;--blue-soft:#2B4F8E;
+  --navy:#050B2E;--navy-deep:#020714;--blue:#0A1858;--blue-soft:#2B4F8E;
   --gold:#C9A84C;--gold2:#F0C96B;
-  --white:#fff;--offwhite:#EEF1F8;--gray:#64748B;--lgray:#E8ECF4;--dark:#1A1D2E;
+  --white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--dark:#0F172A;
   --green:#059669;--red:#DC2626;
   --radius-card:24px;--radius-input:12px;--radius-pill:999px;
 }
@@ -28,7 +28,7 @@ body{
 .bg-beam{
   position:fixed;inset:-20%;pointer-events:none;z-index:0;
   background:
-    linear-gradient(112deg,transparent 32%,rgba(66,99,235,0.28) 46%,rgba(201,168,76,0.14) 56%,transparent 72%);
+    linear-gradient(112deg,transparent 32%,rgba(56,120,255,0.32) 46%,rgba(201,168,76,0.14) 56%,transparent 72%);
   filter:blur(48px);
   transform:translateZ(0);
 }
@@ -63,9 +63,9 @@ body{
 /* ── Card ── */
 .card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem;position:relative;z-index:2}
 .card{
-  background:var(--white);width:100%;max-width:430px;padding:2.6rem 2.4rem;
+  background:#FFFFFF;width:100%;max-width:430px;padding:2.6rem 2.4rem;
   border-radius:var(--radius-card);
-  box-shadow:0 24px 70px rgba(4,10,30,0.45),0 2px 8px rgba(4,10,30,0.25);
+  box-shadow:0 24px 70px rgba(1,5,20,0.55),0 2px 8px rgba(1,5,20,0.30),0 2px 8px rgba(4,10,30,0.25);
   animation:cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
 }
 @keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -74,7 +74,7 @@ body{
 .card-badge{
   display:inline-flex;align-items:center;gap:0.45rem;
   font-size:0.7rem;font-weight:600;color:var(--blue);
-  background:var(--offwhite);border:1px solid var(--lgray);
+  background:#F8FAFF;border:1px solid var(--lgray);
   padding:0.38rem 0.9rem;border-radius:var(--radius-pill);margin-bottom:1.1rem;
 }
 .card-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex:0 0 auto}
@@ -86,7 +86,7 @@ body{
 .form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
 .form-input{
   width:100%;padding:0.8rem 1.05rem;
-  background:var(--offwhite);border:1.5px solid var(--lgray);border-radius:var(--radius-input);
+  background:#F8FAFF;border:1.5px solid var(--lgray);border-radius:var(--radius-input);
   font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);
   outline:none;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;
 }
