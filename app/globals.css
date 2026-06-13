@@ -36,7 +36,7 @@
   --color-blue: #1B3A6B;
   --color-gold: #C9A84C;
   --color-gold-light: #F0C96B;
-  --color-offwhite: #F8F9FC;
+  --color-offwhite: #EEF1F8;
   --color-green: #059669;
 
   /* ── Fonts ── */
@@ -45,12 +45,21 @@
 }
 
 :root {
+  /* ── FinTrack-exact cool blue system ── */
+  --ft-bg: #EEF1F8;
+  --ft-card: #FFFFFF;
+  --ft-border: #E8ECF4;
+  --ft-text: #1A1D2E;
+  --ft-muted: #64748B;
+  --ft-beam: #4263EB;
+  --ft-sidebar: #0A1128;
+
   /* Brand */
   --navy: #0D1B3E;
   --blue: #1B3A6B;
   --gold: #C9A84C;
   --gold-light: #F0C96B;
-  --offwhite: #F8F9FC;
+  --offwhite: #EEF1F8;
   --green: #059669;
 
   /* Shadcn */
@@ -100,8 +109,8 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #111827;
-  background: #F3F5FA;
+  color: #1A1D2E;
+  background: #EEF1F8;
   position: relative;
 }
 body::before {
@@ -111,8 +120,8 @@ body::before {
   pointer-events: none;
   z-index: -1;
   background-image:
-    linear-gradient(rgba(13,27,62,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(13,27,62,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(55,83,160,0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(55,83,160,0.055) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
@@ -130,7 +139,7 @@ h1, h2, h3, h4, h5, h6 {
 .bg-navy     { background-color: #0D1B3E; }
 .text-gold   { color: #C9A84C; }
 .bg-gold     { background-color: #C9A84C; }
-.bg-offwhite { background-color: #F8F9FC; }
+.bg-offwhite { background-color: #EEF1F8; }
 .border-gold { border-color: #C9A84C; }
 .bg-secondary{ background-color: #1B3A6B; }
 .hover\:bg-gold-light:hover { background-color: #F0C96B; }
@@ -154,16 +163,16 @@ section[style*="background: '#0D1B3E'"],
 section[style*='background: "#0D1B3E"'],
 section[style*="background:#0D1B3E"],
 section[style*='background: #0D1B3E'],
-section[style*="background:'#080A0F'"],
-section[style*='background:"#080A0F"'],
-section[style*="background:#080A0F"] {
+section[style*="background:'#070D22'"],
+section[style*='background:"#070D22"'],
+section[style*="background:#070D22"] {
   position: relative;
   overflow: hidden;
 }
 section[style*="background:#0D1B3E"]::after,
-section[style*="background:#080A0F"]::after,
+section[style*="background:#070D22"]::after,
 section[style*="background:'#0D1B3E'"]::after,
-section[style*="background:'#080A0F'"]::after {
+section[style*="background:'#070D22'"]::after {
   content: "";
   position: absolute;
   inset: -30%;
@@ -268,7 +277,7 @@ input[type="search"],
 select,
 textarea {
   border-radius: 12px !important;
-  background: #F8F9FC !important;
+  background: #FFFFFF !important;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s !important;
 }
 input:focus,
