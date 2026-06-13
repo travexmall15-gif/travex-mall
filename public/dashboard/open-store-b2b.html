@@ -58,7 +58,7 @@ if (typeof e === 'undefined') { var e = sanitize; }
 </script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--dark:#111827;--green:#059669;--red:#DC2626}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#EEF1F8;--gray:#64748B;--lgray:#E8ECF4;--dark:#1A1D2E;--green:#059669;--red:#DC2626}
 body{font-family:"Inter",sans-serif;background:var(--offwhite);color:var(--dark)}
 
 nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
@@ -98,7 +98,7 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .form-label span{color:var(--red)}
 .form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s;background:var(--white)}
 .form-input:focus{border-color:var(--navy)}
-.form-input::placeholder{color:#9CA3AF}
+.form-input::placeholder{color:#94A3B8}
 .form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
 .form-select:focus{border-color:var(--navy)}
 .form-textarea{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;resize:vertical;min-height:90px}
@@ -1000,7 +1000,7 @@ function generateStoreForms() {
               <div onclick="pickColor('#F97316',this)" style="width:36px;height:36px;background:#F97316;cursor:pointer;border:3px solid #F97316" title="Orange"></div>
               <div onclick="pickColor('#0891B2',this)" style="width:36px;height:36px;background:#0891B2;cursor:pointer;border:3px solid #0891B2" title="Cyan"></div>
               <div onclick="pickColor('#BE185D',this)" style="width:36px;height:36px;background:#BE185D;cursor:pointer;border:3px solid #BE185D" title="Pink"></div>
-              <div onclick="pickColor('#111827',this)" style="width:36px;height:36px;background:#111827;cursor:pointer;border:3px solid #111827" title="Black"></div>
+              <div onclick="pickColor('#1A1D2E',this)" style="width:36px;height:36px;background:#1A1D2E;cursor:pointer;border:3px solid #1A1D2E" title="Black"></div>
               <input type="color" id="customColor" value="#0D1B3E" onchange="pickColorCustom(this.value)" style="width:36px;height:36px;cursor:pointer;border:none;padding:0" title="Custom color">
             </div>
             <input type="hidden" id="selectedColor" value="#0D1B3E">
@@ -1033,11 +1033,11 @@ function generateStoreForms() {
               <div style="padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem;margin-top:-18px;position:relative">
                 <div class="tprev-badge" style="width:36px;height:36px;background:#0D1B3E;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0" id="tprev-initials">TX</div>
                 <div>
-                  <div class="tprev-name" style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:#111827" id="tprev-storename">Store Name</div>
-                  <div class="tprev-cat" style="font-size:0.65rem;color:#6B7280">Category · Region</div>
+                  <div class="tprev-name" style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:#1A1D2E" id="tprev-storename">Store Name</div>
+                  <div class="tprev-cat" style="font-size:0.65rem;color:#64748B">Category · Region</div>
                 </div>
               </div>
-              <div style="padding:0 1rem 0.75rem;font-size:0.75rem;color:#6B7280" id="tprev-desc">Your store description will appear here...</div>
+              <div style="padding:0 1rem 0.75rem;font-size:0.75rem;color:#64748B" id="tprev-desc">Your store description will appear here...</div>
             </div>
           </div>
         </div>
@@ -1568,19 +1568,19 @@ async function submitReceipt() {
 <style id="travex-polish-v2">
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#F3F5FA!important}
+body{background:#EEF1F8!important}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
   linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
   background-size:56px 56px}
-.page-hero,.hero{background:linear-gradient(150deg,#080F24 0%,#0D1B3E 48%,#16306B 100%)!important;position:relative;overflow:hidden}
+.page-hero,.hero{background:linear-gradient(150deg,#07102A 0%,#0D1B3E 48%,#16306B 100%)!important;position:relative;overflow:hidden}
 .page-hero::after,.hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
-  background:linear-gradient(112deg,transparent 30%,rgba(110,150,235,0.24) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
+  background:linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.32) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
   filter:blur(42px)}
 .page-hero>*,.hero>*{position:relative;z-index:1}
 .nav{background:rgba(8,15,36,0.92)!important;backdrop-filter:blur(14px)}
-.form-card{border-radius:18px!important;border-color:#E9ECF3!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
-.form-input,.form-select,.form-textarea{border-radius:12px!important;background:#F8F9FC!important}
+.form-card{border-radius:18px!important;border-color:#E8ECF4!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
+.form-input,.form-select,.form-textarea{border-radius:12px!important;background:#EEF1F8!important}
 .form-input:focus,.form-select:focus,.form-textarea:focus{background:#fff!important;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
 .btn{border-radius:999px!important;transition:all 0.2s}
 .btn:hover{transform:translateY(-1px)}
