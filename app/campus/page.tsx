@@ -22,7 +22,7 @@ const steps = [
 
 export default function CampusPage() {
   return (
-    <main style={{ background: '#F3F5FA', overflowX: 'hidden' }}>
+    <main style={{ background: '#EEF1F8', overflowX: 'hidden' }}>
       <SiteNav />
 
       {/* ══ HERO ══ */}
@@ -33,7 +33,7 @@ export default function CampusPage() {
         {/* Beam */}
         <div style={{
           position: 'absolute', inset: '-30%', pointerEvents: 'none', zIndex: 0,
-          background: 'linear-gradient(112deg, transparent 30%, rgba(110,150,235,0.22) 46%, rgba(201,168,76,0.14) 56%, transparent 72%)',
+          background: 'linear-gradient(112deg, transparent 30%, rgba(66,99,235,0.28) 46%, rgba(201,168,76,0.14) 56%, transparent 72%)',
           filter: 'blur(48px)',
         }} />
         {/* Grid */}
@@ -81,7 +81,7 @@ export default function CampusPage() {
       <section id="universities" style={{ maxWidth: '1200px', margin: '0 auto', padding: '5rem 5%' }}>
         <div style={{ marginBottom: '0.4rem', fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em' }}>// Select Campus</div>
         <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem,3vw,2.2rem)', fontWeight: 800, color: '#0D1B3E', marginBottom: '0.5rem' }}>Choose Your University</h2>
-        <p style={{ color: '#6B7280', fontSize: '0.9rem', marginBottom: '2.5rem' }}>Browse shops from your campus community.</p>
+        <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '2.5rem' }}>Browse shops from your campus community.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}>
           {universities.map((uni) => {
@@ -97,7 +97,7 @@ export default function CampusPage() {
                   {uni.abbr}
                 </div>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.2rem', lineHeight: 1.3 }}>{uni.name}</h3>
-                <p style={{ fontSize: '0.78rem', color: '#9CA3AF', marginBottom: '1rem' }}>{uni.city}</p>
+                <p style={{ fontSize: '0.78rem', color: '#94A3B8', marginBottom: '1rem' }}>{uni.city}</p>
                 {/* Slots */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: '0.5rem' }}>
                   <span style={{ fontWeight: 600, color: '#374151' }}>{uni.activeShops} shops</span>
@@ -125,12 +125,12 @@ export default function CampusPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
             {studentBenefits.map((b) => (
-              <div key={b.title} style={{ background: '#F8F9FC', border: '1px solid #E9ECF3', borderRadius: '20px', padding: '1.8rem', boxShadow: '0 2px 12px rgba(13,27,62,0.04)' }}>
+              <div key={b.title} style={{ background: '#EEF1F8', border: '1px solid #E9ECF3', borderRadius: '20px', padding: '1.8rem', boxShadow: '0 2px 12px rgba(55,83,160,0.055)' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(201,168,76,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                   <b.icon style={{ width: '22px', height: '22px', color: '#C9A84C' }} />
                 </div>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.5rem' }}>{b.title}</h3>
-                <p style={{ fontSize: '0.84rem', color: '#6B7280', lineHeight: 1.7 }}>{b.desc}</p>
+                <p style={{ fontSize: '0.84rem', color: '#64748B', lineHeight: 1.7 }}>{b.desc}</p>
               </div>
             ))}
           </div>
@@ -149,7 +149,7 @@ export default function CampusPage() {
               <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: 'rgba(201,168,76,0.20)', lineHeight: 1, marginBottom: '0.75rem' }}>0{i + 1}</div>
               <step.icon style={{ width: '26px', height: '26px', color: '#0D1B3E', marginBottom: '0.75rem' }} />
               <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.05rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.4rem' }}>{step.title}</h3>
-              <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.65 }}>{step.desc}</p>
+              <p style={{ fontSize: '0.82rem', color: '#64748B', lineHeight: 1.65 }}>{step.desc}</p>
             </div>
           ))}
         </div>
