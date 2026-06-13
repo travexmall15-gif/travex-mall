@@ -519,6 +519,7 @@ textarea.form-input{resize:vertical;min-height:80px}
       <div class="sidebar-av" id="sidebarAv">?</div>
       <div>
         <div class="sidebar-name" id="sidebarName">Loading...</div>
+              <div id="planBadge" style="margin-top:0.3rem"></div>
         <div class="sidebar-uni" id="sidebarUni">—</div>
       </div>
     </div>
@@ -1105,13 +1106,97 @@ async function init(){
   currentUser=session.user;
   document.getElementById('authOverlay').style.display='none';
   document.getElementById('mainApp').classList.add('visible');
-  const name=currentUser.user_metadata?.name||currentUser.email.split('@')[0];
+
+  // ── Read plan & shop info (from localStorage set by login.html) ──
+  const plan = localStorage.getItem('travex_plan') || 'basic';
+  const shopName = localStorage.getItem('travex_shop_name') || '';
+  const ownerName = localStorage.getItem('travex_owner_name') || '';
+
+  // If not in localStorage, fetch from pending_payments
+  if (!localStorage.getItem('travex_plan')) {
+    const { data: pp } = await sb.from('pending_payments')
+      .select('plan, shop_name, owner_name, shop_category, shop_region')
+      .eq('auth_email', currentUser.email)
+      .eq('status', 'approved')
+      .single();
+    if (pp) {
+      localStorage.setItem('travex_plan', pp.plan || 'basic');
+      localStorage.setItem('travex_shop_name', pp.shop_name || '');
+      localStorage.setItem('travex_owner_name', pp.owner_name || '');
+      localStorage.setItem('travex_category', pp.shop_category || '');
+      localStorage.setItem('travex_region', pp.shop_region || '');
+    }
+  }
+
+  // ── Apply plan to dashboard ──
+  applyPlan(localStorage.getItem('travex_plan') || 'basic');
+
+  const name = ownerName || currentUser.user_metadata?.name || currentUser.email.split('@')[0];
   const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-  s('sidebarName',name); s('topbarAvatar',initials); s('sidebarAv',initials);
+  s('sidebarName', name); s('topbarAvatar',initials); s('sidebarAv',initials);
+
+  // Show shop name in sidebar if available
+  if (shopName) { try { s('sidebarShopName', shopName); } catch(e){} }
+
   await loadShop();
   await loadStats();
   await loadRecentOrders();
   await loadOverviewProducts();
+}
+
+// ── APPLY PLAN: show/hide features based on plan ──
+function applyPlan(plan) {
+  const isPremium = plan === 'premium';
+
+  // Plan badge in sidebar/topbar
+  const badge = isPremium
+    ? '<span style="background:rgba(201,168,76,0.18);color:#C9A84C;font-size:0.6rem;font-weight:800;padding:0.15rem 0.55rem;border-radius:999px;letter-spacing:0.06em">🥇 PREMIUM</span>'
+    : '<span style="background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.55);font-size:0.6rem;font-weight:700;padding:0.15rem 0.55rem;border-radius:999px">🥈 BASIC</span>';
+  try { document.getElementById('planBadge').innerHTML = badge; } catch(e){}
+
+  // Premium-only sections: AI tabs 2-4, Leaderboard, advanced Marketing
+  const premiumOnlyIds = ['aiTabMarketing','aiTabAccounting','aiTabAdvisor','navLeaderboard','leaderboardPanel'];
+  premiumOnlyIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      if (!isPremium) {
+        el.style.opacity = '0.35';
+        el.style.pointerEvents = 'none';
+        el.title = '🥇 Upgrade to Premium to unlock this feature';
+        // Add lock overlay
+        if (!el.querySelector('.plan-lock')) {
+          const lock = document.createElement('div');
+          lock.className = 'plan-lock';
+          lock.innerHTML = '🔒 Premium Only';
+          lock.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);color:#C9A84C;padding:0.3rem 0.75rem;border-radius:999px;font-size:0.65rem;font-weight:700;pointer-events:none;z-index:10;white-space:nowrap';
+          el.style.position = 'relative';
+          el.appendChild(lock);
+        }
+      } else {
+        el.style.opacity = '';
+        el.style.pointerEvents = '';
+        el.title = '';
+        const lock = el.querySelector('.plan-lock');
+        if (lock) lock.remove();
+      }
+    }
+  });
+
+  // Top listing indicator
+  try {
+    const topBadge = document.getElementById('topListingBadge');
+    if (topBadge) topBadge.style.display = isPremium ? 'flex' : 'none';
+  } catch(e){}
+
+  // Update subscription panel to show current plan
+  try {
+    document.querySelectorAll('.sub-plan').forEach(el => {
+      const planName = el.querySelector('.sub-plan-name')?.textContent || '';
+      const isCurrent = (isPremium && planName.includes('Premium')) ||
+                        (!isPremium && planName.includes('Basic') && !planName.includes('Campus'));
+      el.classList.toggle('current', isCurrent);
+    });
+  } catch(e){}
 }
 
 // ── LOAD SHOP ──
@@ -1477,7 +1562,9 @@ function toggleMobileSidebar(){ document.getElementById('sidebar').classList.tog
 function closeMobileSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobOverlay').classList.remove('show'); }
 
 // ── LOGOUT ──
-async function handleLogout(){ await sb.auth.signOut(); document.getElementById('mainApp').classList.remove('visible'); document.getElementById('authOverlay').style.display='flex'; currentUser=null; currentShop=null; }
+async function handleLogout(){ await sb.auth.signOut();
+  // Clear plan data on logout
+  ['travex_plan','travex_shop_name','travex_owner_name','travex_category','travex_region','travex_user_id'].forEach(k => localStorage.removeItem(k)); document.getElementById('mainApp').classList.remove('visible'); document.getElementById('authOverlay').style.display='flex'; currentUser=null; currentShop=null; }
 
 // ── COLOR/FONT PICKERS ──
 function pickColor(el,val){ selectedColor=val||el.dataset.color; document.querySelectorAll('.c-swatch').forEach(s=>s.classList.remove('active')); if(el.dataset) el.classList.add('active'); }
