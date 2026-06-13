@@ -14,7 +14,7 @@ const UNIS = [
 
 export default function HomePage() {
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8F9FC', overflowX: 'hidden' }}>
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F3F5FA', overflowX: 'hidden' }}>
       {/* Google Fonts */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -22,7 +22,7 @@ export default function HomePage() {
         *{box-sizing:border-box}
         .hover-lift{transition:all 0.25s ease}
         .hover-lift:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.12)}
-        .shop-card-home{background:#fff;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;transition:all 0.2s}
+        .shop-card-home{background:#fff;border:1px solid #E5E7EB;border-radius:18px;overflow:hidden;transition:all 0.2s}
         .shop-card-home:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.1)}
         @media(max-width:768px){
           .hero-h1{font-size:clamp(2rem,8vw,3rem)!important}
@@ -41,10 +41,14 @@ export default function HomePage() {
       <section style={{position:'relative',minHeight:'100vh',display:'flex',alignItems:'center',overflow:'hidden',background:'#0D1B3E',paddingTop:'64px',color:'#fff'}}>
         <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero-marketplace.png)',backgroundSize:'cover',backgroundPosition:'center',opacity:0.2}} />
         <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(13,27,62,0.96) 0%,rgba(13,27,62,0.88) 60%,rgba(27,58,107,0.75) 100%)'}} />
+        {/* Beam */}
+        <div style={{position:'absolute',inset:'-30%',pointerEvents:'none',zIndex:0,background:'linear-gradient(112deg,transparent 30%,rgba(110,150,235,0.22) 46%,rgba(201,168,76,0.14) 56%,transparent 72%)',filter:'blur(48px)'}} />
+        {/* Grid */}
+        <div style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:0,opacity:0.05,backgroundImage:'linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.8) 1px,transparent 1px)',backgroundSize:'56px 56px'}} />
         <Particles />
         <div style={{position:'relative',width:'100%',maxWidth:'1200px',margin:'0 auto',padding:'5rem 5% 4rem'}}>
           <div style={{maxWidth:'680px'}}>
-            <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.35)',color:'#C9A84C',padding:'0.35rem 1rem',borderRadius:'20px',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.05em',marginBottom:'1.5rem'}}>
+            <div style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.35)',color:'#C9A84C',padding:'0.35rem 1rem',borderRadius:'999px',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.05em',marginBottom:'1.5rem'}}>
               ◆ Africa's #1 AI-Powered Marketplace — Tanzania 2026
             </div>
             <h1 className="hero-h1" style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(2.4rem,6vw,4.8rem)',fontWeight:900,lineHeight:1.06,color:'#fff',marginBottom:'1.2rem',letterSpacing:'-0.01em'}}>
@@ -54,10 +58,10 @@ export default function HomePage() {
               Create your online store in minutes. Sell across Tanzania. Grow your business with AI-powered intelligence — designed for every African entrepreneur.
             </p>
             <div style={{display:'flex',gap:'0.85rem',flexWrap:'wrap',marginBottom:'2.5rem'}}>
-              <Link href="/campus-dashboard" style={{background:'#C9A84C',color:'#0D1B3E',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:700,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+              <Link href="/campus-dashboard" style={{background:'#C9A84C',color:'#0D1B3E',padding:'0.9rem 2.2rem',borderRadius:'999px',fontWeight:700,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
                 Login to Your Shop →
               </Link>
-              <Link href="/market" style={{background:'rgba(255,255,255,0.08)',color:'#fff',border:'1px solid rgba(255,255,255,0.25)',padding:'0.9rem 2.2rem',borderRadius:'10px',fontWeight:600,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+              <Link href="/market" style={{background:'rgba(255,255,255,0.08)',color:'#fff',border:'1px solid rgba(255,255,255,0.25)',padding:'0.9rem 2.2rem',borderRadius:'999px',fontWeight:600,fontSize:'0.9rem',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
                 Open New Store
               </Link>
             </div>
@@ -74,7 +78,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ B2C SECTION ══════════ */}
-      <section style={{position:'relative',overflow:'hidden',background:'#F8F9FC',padding:'6rem 5%',textAlign:'center'}}>
+      <section style={{position:'relative',overflow:'hidden',background:'#F3F5FA',padding:'6rem 5%',textAlign:'center'}}>
         <div style={{position:'absolute',top:'-150px',left:'-100px',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(13,27,62,0.06),transparent 65%)',pointerEvents:'none'}} />
         <div style={{position:'absolute',bottom:'-100px',right:'-100px',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,168,76,0.05),transparent 65%)',pointerEvents:'none'}} />
         <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(rgba(13,27,62,0.03) 1px,transparent 1px)',backgroundSize:'28px 28px',pointerEvents:'none'}} />
@@ -91,10 +95,10 @@ export default function HomePage() {
           <div style={{fontFamily:"'Inter',sans-serif",fontSize:'clamp(0.82rem,1.8vw,1rem)',fontWeight:600,color:'#9CA3AF',letterSpacing:'0.25em',textTransform:'uppercase',marginBottom:'1.2rem'}}>Find · Buy · Trust · 🥈 Silver Verified</div>
           <p style={{fontSize:'clamp(0.82rem,1.5vw,0.95rem)',color:'#6B7280',lineHeight:1.85,marginBottom:'2.5rem',fontWeight:300,maxWidth:'560px',marginLeft:'auto',marginRight:'auto'}}>Discover verified local sellers across Tanzania. Fashion, electronics, food and more — all in one place.</p>
           <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
-            <Link href="/market" style={{background:'#0D1B3E',color:'#fff',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+            <Link href="/market" style={{background:'#0D1B3E',color:'#fff',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'999px',boxShadow:'0 8px 20px rgba(13,27,62,0.22)'}}>
               🛍️ Browse Market
             </Link>
-            <Link href="/campus-dashboard" style={{background:'transparent',color:'#0D1B3E',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid #0D1B3E',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+            <Link href="/campus-dashboard" style={{background:'transparent',color:'#0D1B3E',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid #0D1B3E',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'999px'}}>
               Login to Your Shop →
             </Link>
           </div>
@@ -123,7 +127,7 @@ export default function HomePage() {
             <Link href="/market" style={{background:'#C9A84C',color:'#111',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:700,textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
               🏭 Browse All Shops
             </Link>
-            <Link href="/campus-dashboard" style={{background:'transparent',color:'rgba(255,255,255,0.6)',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid rgba(255,255,255,0.15)',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'8px'}}>
+            <Link href="/campus-dashboard" style={{background:'transparent',color:'rgba(255,255,255,0.6)',padding:'0.95rem 2.4rem',fontSize:'0.9rem',fontWeight:600,textDecoration:'none',border:'2px solid rgba(255,255,255,0.15)',display:'inline-flex',alignItems:'center',gap:'0.5rem',borderRadius:'999px'}}>
               Login to Your Shop →
             </Link>
           </div>
@@ -131,7 +135,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ TOP RATED CAROUSEL ══════════ */}
-      <section id="top-rated" style={{background:'#F8F9FC',padding:'5rem 5%'}}>
+      <section id="top-rated" style={{background:'#F3F5FA',padding:'5rem 5%'}}>
         <div style={{maxWidth:'1200px',margin:'0 auto'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:'2rem',flexWrap:'wrap',gap:'1rem',paddingRight:'0'}}>
             <div>
@@ -216,7 +220,7 @@ export default function HomePage() {
         <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(13,27,62,0.96),rgba(27,58,107,0.9))'}} />
         <div style={{position:'relative',zIndex:2,maxWidth:'1100px',margin:'0 auto'}}>
           <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
-            <div style={{display:'inline-block',background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.3)',color:'#C9A84C',padding:'0.35rem 1rem',borderRadius:'20px',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.06em',marginBottom:'1rem'}}>
+            <div style={{display:'inline-block',background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.3)',color:'#C9A84C',padding:'0.35rem 1rem',borderRadius:'999px',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.06em',marginBottom:'1rem'}}>
               🎓 Exclusively For University Students
             </div>
             <h2 className="section-headline" style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:'clamp(1.6rem,4vw,2.6rem)',fontWeight:800,color:'#fff',marginBottom:'0.75rem'}}>
