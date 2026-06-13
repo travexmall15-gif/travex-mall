@@ -28,8 +28,8 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
           : 'border-border text-navy',
       )}
       style={dark
-        ? { background: 'rgba(6,12,26,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }
-        : { background: 'rgba(255,255,255,0.90)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }
+        ? { background: 'rgba(6,12,26,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' as any }
+        : { background: 'rgba(255,255,255,0.90)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' as any }
       }
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
