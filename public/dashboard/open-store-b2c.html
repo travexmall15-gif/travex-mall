@@ -259,7 +259,6 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 .ai-chat-preview{background:#F8FAFF;border:1px solid var(--lgray);padding:0.75rem;font-size:0.78rem;color:var(--gray);border-left:3px solid var(--navy)}
 .locked-overlay{position:absolute;inset:0;background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:var(--gray);z-index:10}
 
-
 /* ── DASHBOARD PREVIEW STYLES ── */
 .dash-preview{background:#F1F3F8;min-height:600px;border:1px solid var(--lgray)}
 .dash-sidebar{width:200px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;min-height:600px}
@@ -324,7 +323,6 @@ main{max-width:700px;margin:0 auto;padding:2.5rem 1.5rem}
 
 .locked-overlay{position:relative}
 .locked-overlay::after{content:"🔒 Activate to unlock";position:absolute;inset:0;background:rgba(248,249,252,0.85);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--gray);pointer-events:none}
-
 
 /* ── Polish: soft corners + font smoothing + mobile ── */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -1685,10 +1683,7 @@ async function submitReceipt() {
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{background:#F8FAFF!important}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
-  background-size:56px 56px}
+
 .page-hero,.hero{background:linear-gradient(150deg,#020714 0%,#050B2E 48%,#16306B 100%)!important;position:relative;overflow:hidden}
 .page-hero::after,.hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
   background:linear-gradient(112deg,transparent 30%,rgba(56,120,255,0.38) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
