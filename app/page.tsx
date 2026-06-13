@@ -43,8 +43,6 @@ export default function HomePage() {
         <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(13,27,62,0.96) 0%,rgba(13,27,62,0.88) 60%,rgba(27,58,107,0.75) 100%)'}} />
         {/* Beam */}
         <div style={{position:'absolute',inset:'-30%',pointerEvents:'none',zIndex:0,background:'linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.28) 46%,rgba(201,168,76,0.14) 56%,transparent 72%)',filter:'blur(48px)'}} />
-        {/* Grid */}
-        <div style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:0,opacity:0.05,backgroundImage:'linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.8) 1px,transparent 1px)',backgroundSize:'56px 56px'}} />
         <Particles />
         <div style={{position:'relative',width:'100%',maxWidth:'1200px',margin:'0 auto',padding:'5rem 5% 4rem'}}>
           <div style={{maxWidth:'680px'}}>
