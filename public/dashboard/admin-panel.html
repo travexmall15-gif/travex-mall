@@ -776,7 +776,7 @@ async function loadMarketApps() {
             <td>${sanitize(app.shop_name||'')}</td>
             <td><span class="badge">${sanitize(app.shop_category||'')}</span></td>
             <td>${sanitize(app.shop_region||'')}</td>
-            <td><span class="badge ${app.plan==='premium'?'badge-gold':'badge-gray'}">${app.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
+            <td><span class="badge ${app.plan==='premium'?'badge-gold':'badge-gray'}">${app.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span> <span class="badge" style="background:rgba(5,150,105,0.12);color:#059669">FREE</span></td>
             <td><strong>TZS ${Number(app.amount||0).toLocaleString()}</strong></td>
             <td><span class="status-badge status-${app.status||'pending'}">${app.status||'pending'}</span></td>
             <td>
@@ -791,7 +791,7 @@ async function loadMarketApps() {
 
 async function approveMarketApp(id) {
   const { data: app } = await sb.from('pending_payments').select('*').eq('id', id).single();
-  if (!app || !confirm(`Approve ${app.shop_name}?`)) return;
+  if (!app || !confirm(`Approve "${app.shop_name}" by ${app.owner_name}?\n\nThis will make their shop live on Travex Market immediately.`)) return;
   
   // Update status
   await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
@@ -800,8 +800,9 @@ async function approveMarketApp(id) {
   const phone = (app.owner_phone || '').replace(/\D/g, '');
   if (phone) {
     const msg = encodeURIComponent(
-      `✅ Congratulations ${app.owner_name}!\n\n` +
-      `Your ${app.plan === 'premium' ? '🥇 Premium' : '🥈 Basic'} shop "${app.shop_name}" on Travex Mall has been APPROVED!\n\n` +
+      `✅ Hongera ${app.owner_name}!\n\n` +
+      `Duka lako "${app.shop_name}" kwenye Travex Mall limepitishwa na liko LIVE sasa!\n\n` +
+      `📦 Plan: ${app.plan === 'premium' ? '🥇 Premium' : '🥈 Basic'} (FREE this month)\n\n` +
       `Login to your dashboard:\nhttps://travex-mall.vercel.app/campus-dashboard\n\n` +
       `Welcome to Travex Mall! 🏪`
     );
