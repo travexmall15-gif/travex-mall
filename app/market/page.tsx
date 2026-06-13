@@ -323,7 +323,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
           {shop.shop_region && <span style={{ fontSize: '0.62rem', background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.12rem 0.5rem', borderRadius: '999px' }}>📍 {shop.shop_region}</span>}
         </div>
         {shop.shop_desc && (
-          <p style={{ fontSize: '0.76rem', color: '#64748B', lineHeight: 1.55, marginBottom: '0.8rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{shop.shop_desc}</p>
+          <p style={{ fontSize: '0.76rem', color: '#64748B', lineHeight: 1.55, marginBottom: '0.8rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
         )}
         <div style={{ display: 'flex', gap: '0.4rem' }}>
           {wa && (
