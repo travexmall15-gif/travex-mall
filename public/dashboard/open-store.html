@@ -356,33 +356,19 @@ textarea.form-input{resize:vertical;min-height:90px}
     <div class="payment-box">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
         <div>
-          <div style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem">Amount Due</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:var(--navy)" id="amountDue">TZS 25,000</div>
-          <div style="font-size:0.72rem;color:var(--gray)" id="planLabel">Basic Plan · per month</div>
+          <div style="font-size:0.72rem;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem">Amount Due</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#059669" id="amountDue">FREE</div>
+          <div style="font-size:0.72rem;color:var(--gray)" id="planLabel">No payment required this month</div>
         </div>
         <div style="text-align:right">
           <div id="planBadgePay" style="font-size:0.72rem;font-weight:700;background:rgba(13,27,62,0.08);color:var(--navy);padding:0.3rem 0.75rem;border-radius:20px">🥈 Silver Basic</div>
         </div>
       </div>
 
-      <div class="pay-method selected" id="payCredit" onclick="selectPayMethod('crdb')">
-        <div class="pay-method-icon">🏦</div>
-        <div class="pay-method-info">
-          <div class="pay-method-name">CRDB Bank Transfer</div>
-          <div class="pay-method-detail">Account: <strong>0152774556100</strong> &nbsp;
-            <button class="copy-btn" onclick="copyText('0152774556100')">Copy</button>
-          </div>
-        </div>
+      
       </div>
 
-      <div class="pay-method" id="payMpesa" onclick="selectPayMethod('mpesa')">
-        <div class="pay-method-icon">📱</div>
-        <div class="pay-method-info">
-          <div class="pay-method-name">M-Pesa / Tigopesa</div>
-          <div class="pay-method-detail">Number: <strong>+255 651 919 915</strong> &nbsp;
-            <button class="copy-btn" onclick="copyText('255651919915')">Copy</button>
-          </div>
-        </div>
+      
       </div>
     </div>
 
@@ -612,18 +598,8 @@ async function submitApplication() {
     const desc     = document.getElementById('shopDesc').value.trim()
     const price    = PRICES[selectedPlan]
 
-    // Upload receipt
+    // Free registration — no receipt needed
     let receiptUrl = null
-    const receiptFile = document.getElementById('receiptFile').files[0]
-    if (receiptFile) {
-      const ext = receiptFile.name.split('.').pop()
-      const path = `receipts/${Date.now()}.${ext}`
-      const { data: up } = await sb.storage.from('campus-assets').upload(path, receiptFile)
-      if (up) {
-        const { data: pu } = sb.storage.from('campus-assets').getPublicUrl(up.path)
-        receiptUrl = pu.publicUrl
-      }
-    }
 
     // Create auth account
     const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pass })
@@ -644,9 +620,9 @@ async function submitApplication() {
       shop_desc:     desc,
       shop_color:    selectedColor,
       plan:          selectedPlan,
-      amount:        price,
-      pay_method:    selectedPayMethod,
-      receipt_url:   receiptUrl,
+      amount:        0,
+      pay_method:    'free',
+      receipt_url:   null,
       status:        'pending',
       slug:          slug,
     })
@@ -654,7 +630,7 @@ async function submitApplication() {
 
     // Notify admin
     await sb.from('admin_notifications').insert({
-      type:     'new_shop_application',
+      type:     'new_market_application',
       title:    `🏪 New Shop Application — ${shopName}`,
       body:     `${name} applied for a ${selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,
       is_read:  false,
