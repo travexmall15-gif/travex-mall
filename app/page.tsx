@@ -275,7 +275,7 @@ export default function HomePage() {
                   </div>
                   <div style={{ padding: '0.85rem' }}>
                     <div style={{ display: 'inline-block', fontSize: '0.58rem', fontWeight: 700, background: 'rgba(59,130,246,0.10)', color: '#3B82F6', padding: '0.1rem 0.5rem', borderRadius: '999px', marginBottom: '0.5rem' }}>{p.tag}</div>
-                    <p style={{ fontSize: '0.74rem', color: '#334155', lineHeight: 1.55, margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{p.post}</p>
+                    <p style={{ fontSize: '0.74rem', color: '#334155', lineHeight: 1.55, margin: 0, display: '-webkit-box', WebkitLineClamp: 3 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{p.post}</p>
                     <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.75rem' }}>
                       <span style={{ fontSize: '0.65rem', color: '#94A3B8' }}>❤️ {12 + i * 7}</span>
                       <span style={{ fontSize: '0.65rem', color: '#94A3B8' }}>💬 {3 + i * 2}</span>
