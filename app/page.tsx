@@ -43,11 +43,8 @@ export default function HomePage() {
             Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence — built for every African entrepreneur.
           </p>
           <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.2rem' }}>
-            <Link href="/login" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
-              Login →
-            </Link>
-            <Link href="/open-store" style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-              Open Your Store
+            <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
+              🎁 Open Free →
             </Link>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
@@ -96,11 +93,11 @@ export default function HomePage() {
                 ))}
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#0F172A', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none' }}>
+                <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#0F172A', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', boxShadow: '0 6px 16px rgba(15,23,42,0.22)' }}>
                   <Store size={14} /> Browse Market
                 </Link>
-                <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none' }}>
-                  Open Free <ArrowRight size={13} />
+                <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', boxShadow: '0 6px 16px rgba(201,168,76,0.28)' }}>
+                  Login <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
@@ -132,8 +129,8 @@ export default function HomePage() {
                 <Link href="/campus" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.10)', color: '#fff', border: '1px solid rgba(255,255,255,0.18)', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.82rem', textDecoration: 'none' }}>
                   <GraduationCap size={14} /> Browse Campus
                 </Link>
-                <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none' }}>
-                  Apply Now <ArrowRight size={13} />
+                <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', boxShadow: '0 6px 16px rgba(201,168,76,0.28)' }}>
+                  Login <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
