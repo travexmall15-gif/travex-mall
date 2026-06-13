@@ -8,8 +8,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#0D1B3E;--navy2:#080F1E;--gold:#C9A84C;--gold2:#F0C96B;--green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#D97706;--lgray:#E8ECF4;--gray:#64748B;--offwhite:#EEF1F8}
-body{font-family:'DM Sans',sans-serif;background:#EEF1F8;color:#111;height:100vh;overflow:hidden}
+:root{--navy:#050B2E;--navy2:#080F1E;--gold:#C9A84C;--gold2:#F0C96B;--green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#D97706;--lgray:#E2E8F0;--gray:#64748B;--offwhite:#F8FAFF}
+body{font-family:'DM Sans',sans-serif;background:#F8FAFF;color:#111;height:100vh;overflow:hidden}
 
 /* LOGIN */
 #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy2),var(--navy));display:flex;align-items:center;justify-content:center;z-index:9999}
@@ -50,7 +50,7 @@ body{font-family:'DM Sans',sans-serif;background:#EEF1F8;color:#111;height:100vh
 .ts-v{font-size:1rem;font-weight:800;color:var(--navy)}
 .ts-l{font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em}
 .notif-wrap{position:relative}
-.notif-btn{background:#EEF1F8;border:1.5px solid var(--lgray);color:var(--navy);padding:0.4rem 0.8rem;cursor:pointer;border-radius:7px;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.8rem}
+.notif-btn{background:#F8FAFF;border:1.5px solid var(--lgray);color:var(--navy);padding:0.4rem 0.8rem;cursor:pointer;border-radius:7px;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.8rem}
 .notif-badge{background:var(--red);color:#fff;font-size:0.58rem;font-weight:800;padding:0.1rem 0.4rem;border-radius:20px;display:none}
 .notif-panel{display:none;position:absolute;right:0;top:calc(100%+8px);width:340px;background:#fff;border:1px solid var(--lgray);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.1);z-index:500;max-height:400px;overflow-y:auto}
 .notif-panel.open{display:block}
@@ -91,7 +91,7 @@ body{font-family:'DM Sans',sans-serif;background:#EEF1F8;color:#111;height:100vh
 .search:focus{border-color:var(--navy)}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{padding:0.6rem 1rem;text-align:left;font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--lgray);background:#EEF1F8;white-space:nowrap}
+th{padding:0.6rem 1rem;text-align:left;font-size:0.65rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--lgray);background:#F8FAFF;white-space:nowrap}
 td{padding:0.7rem 1rem;font-size:0.81rem;border-bottom:1px solid var(--lgray);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(13,27,62,0.015)}
@@ -104,7 +104,7 @@ tr:hover td{background:rgba(13,27,62,0.015)}
 .b-ok:hover{background:var(--green);color:#fff}
 .b-no{background:rgba(220,38,38,0.1);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
 .b-no:hover{background:var(--red);color:#fff}
-.b-view{background:#EEF1F8;color:var(--navy);border:1px solid var(--lgray)}
+.b-view{background:#F8FAFF;color:var(--navy);border:1px solid var(--lgray)}
 .b-view:hover{background:var(--navy);color:#fff}
 .b-wa{background:rgba(37,211,102,0.1);color:#15803d;border:1px solid rgba(37,211,102,0.2)}
 .b-wa:hover{background:#25D366;color:#fff}
@@ -139,7 +139,7 @@ tr:hover td{background:rgba(13,27,62,0.015)}
 
 /* NOTIF PAGE */
 .npage-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);cursor:pointer;transition:background 0.15s}
-.npage-item:hover{background:#EEF1F8}
+.npage-item:hover{background:#F8FAFF}
 .npage-item.unread{background:#FFFBEB;border-left:3px solid var(--gold)}
 .npage-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 </style>
@@ -823,28 +823,28 @@ async function rejectMarketApp(id) {
 <style id="travex-polish-v2">
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#EEF1F8!important}
+body{background:#F8FAFF!important}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
   linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
   background-size:56px 56px}
 
-.sidebar{background:linear-gradient(180deg,#07102A 0%,#0D1B3E 65%,#11254F 100%)!important}
-#loginScreen{background:linear-gradient(150deg,#07102A 0%,#0D1B3E 48%,#16306B 100%)!important;overflow:hidden}
+.sidebar{background:linear-gradient(180deg,#020714 0%,#050B2E 65%,#11254F 100%)!important}
+#loginScreen{background:linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)!important;overflow:hidden}
 #loginScreen::after{content:"";position:absolute;inset:-30%;pointer-events:none;
-  background:linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.32) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
+  background:linear-gradient(112deg,transparent 30%,rgba(56,120,255,0.38) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
   filter:blur(42px)}
 #loginScreen>*{position:relative;z-index:1}
 .login-box{border-radius:22px!important;background:rgba(255,255,255,0.06)!important;
   backdrop-filter:blur(20px);box-shadow:0 30px 80px rgba(0,0,0,0.45)}
 .login-input{border-radius:12px!important}
 .login-btn{border-radius:999px!important;box-shadow:0 8px 22px rgba(201,168,76,0.28)}
-.card{border-radius:16px!important;border-color:#E8ECF4!important;box-shadow:0 4px 18px rgba(13,27,62,0.05)}
+.card{border-radius:16px!important;border-color:#E2E8F0!important;box-shadow:0 4px 18px rgba(13,27,62,0.05)}
 .sc{border-radius:16px!important;box-shadow:0 4px 18px rgba(13,27,62,0.05);transition:all 0.2s}
 .sc:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(13,27,62,0.10)}
-.topbar{box-shadow:0 1px 0 #E8ECF4}
+.topbar{box-shadow:0 1px 0 #E2E8F0}
 .btn{border-radius:999px!important}
-.search{border-radius:999px!important;background:#EEF1F8}
+.search{border-radius:999px!important;background:#F8FAFF}
 .badge,.bp,.ba,.sb-count,.notif-badge{border-radius:999px!important}
 .ftab{border-radius:999px!important}
 .modal{border-radius:18px!important;box-shadow:0 30px 80px rgba(4,10,30,0.35)!important}
