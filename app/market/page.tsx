@@ -29,13 +29,13 @@ export default function MarketPage() {
   const slotsLeft = MARKET_TOTAL_SLOTS - marketStats.activeShops
 
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F3F5FA', minHeight: '100vh' }}>
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#EEF1F8', minHeight: '100vh' }}>
       <SiteNav />
 
       {/* ══ HERO ══ */}
       <section style={{ position: 'relative', overflow: 'hidden', paddingTop: '64px', color: '#fff', background: 'linear-gradient(150deg, #080F24 0%, #0D1B3E 50%, #16306B 100%)' }}>
         {/* Beam */}
-        <div style={{ position: 'absolute', inset: '-30%', pointerEvents: 'none', zIndex: 0, background: 'linear-gradient(112deg, transparent 30%, rgba(110,150,235,0.22) 46%, rgba(201,168,76,0.14) 56%, transparent 72%)', filter: 'blur(48px)' }} />
+        <div style={{ position: 'absolute', inset: '-30%', pointerEvents: 'none', zIndex: 0, background: 'linear-gradient(112deg, transparent 30%, rgba(66,99,235,0.28) 46%, rgba(201,168,76,0.14) 56%, transparent 72%)', filter: 'blur(48px)' }} />
         {/* Grid */}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.05, backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '56px 56px' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/business-market-hero.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.10, zIndex: 0 }} />
@@ -104,12 +104,12 @@ export default function MarketPage() {
       </section>
 
       {/* ══ CATEGORY TABS ══ */}
-      <section style={{ background: '#fff', borderBottom: '1px solid #E9ECF3', boxShadow: '0 2px 8px rgba(13,27,62,0.04)' }}>
+      <section style={{ background: '#fff', borderBottom: '1px solid #E9ECF3', boxShadow: '0 2px 8px rgba(55,83,160,0.055)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.1rem 5%', overflowX: 'auto' }}>
           <div style={{ display: 'flex', gap: '0.5rem', minWidth: 'max-content' }}>
             {ALL_CATEGORIES.map(cat => (
               <button key={cat} onClick={() => setCategory(cat)}
-                style={{ padding: '0.42rem 1.1rem', borderRadius: '999px', border: '1.5px solid', borderColor: category === cat ? '#0D1B3E' : '#E9ECF3', background: category === cat ? '#0D1B3E' : '#F8F9FC', color: category === cat ? '#fff' : '#6B7280', fontSize: '0.76rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+                style={{ padding: '0.42rem 1.1rem', borderRadius: '999px', border: '1.5px solid', borderColor: category === cat ? '#0D1B3E' : '#E8ECF4', background: category === cat ? '#0D1B3E' : '#EEF1F8', color: category === cat ? '#fff' : '#64748B', fontSize: '0.76rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
                 {cat}
               </button>
             ))}
@@ -122,22 +122,22 @@ export default function MarketPage() {
         <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap', alignItems: 'center' }}>
           {/* Search */}
           <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-            <Search size={15} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+            <Search size={15} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search shops, products, categories..."
-              style={{ width: '100%', paddingLeft: '2.6rem', paddingRight: '1rem', paddingTop: '0.7rem', paddingBottom: '0.7rem', border: '1.5px solid #E9ECF3', borderRadius: '999px', fontSize: '0.85rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#F8F9FC' }}
+              style={{ width: '100%', paddingLeft: '2.6rem', paddingRight: '1rem', paddingTop: '0.7rem', paddingBottom: '0.7rem', border: '1.5px solid #E9ECF3', borderRadius: '999px', fontSize: '0.85rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#EEF1F8' }}
             />
           </div>
           {/* Plan filter */}
-          <div style={{ display: 'flex', gap: '0.4rem', background: '#F3F5FA', borderRadius: '999px', padding: '0.25rem' }}>
+          <div style={{ display: 'flex', gap: '0.4rem', background: '#EEF1F8', borderRadius: '999px', padding: '0.25rem' }}>
             {ALL_PLANS.map(p => (
               <button key={p} onClick={() => setPlan(p)}
-                style={{ padding: '0.42rem 1rem', borderRadius: '999px', border: 'none', background: plan === p ? '#0D1B3E' : 'transparent', color: plan === p ? '#fff' : '#6B7280', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+                style={{ padding: '0.42rem 1rem', borderRadius: '999px', border: 'none', background: plan === p ? '#0D1B3E' : 'transparent', color: plan === p ? '#fff' : '#64748B', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
                 {p}
               </button>
             ))}
           </div>
-          <div style={{ fontSize: '0.76rem', color: '#9CA3AF' }}>{filtered.length} shops</div>
+          <div style={{ fontSize: '0.76rem', color: '#94A3B8' }}>{filtered.length} shops</div>
         </div>
 
         {/* Premium first */}
@@ -146,7 +146,7 @@ export default function MarketPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
               <span>🥇</span>
               <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0D1B3E' }}>Premium Shops</span>
-              <span style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>Top listing · Gold verified</span>
+              <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Top listing · Gold verified</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem', marginBottom: '2.5rem' }}>
               {filtered.filter(s => s.plan === 'premium').map(shop => <ShopCard key={shop.id} shop={shop} />)}
@@ -155,7 +155,7 @@ export default function MarketPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
               <span>🥈</span>
               <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0D1B3E' }}>Basic Shops</span>
-              <span style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>Silver verified</span>
+              <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Silver verified</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem' }}>
               {filtered.filter(s => s.plan === 'basic').map(shop => <ShopCard key={shop.id} shop={shop} />)}
@@ -169,7 +169,7 @@ export default function MarketPage() {
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏪</div>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0D1B3E', marginBottom: '0.5rem' }}>No shops found</div>
-                <p style={{ fontSize: '0.85rem', color: '#9CA3AF' }}>Try changing filters or search term</p>
+                <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try changing filters or search term</p>
               </div>
             ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}
           </div>
@@ -209,9 +209,9 @@ function ShopCard({ shop }: { shop: MarketShop }) {
 
   return (
     <div
-      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.30)' : '#E9ECF3'}`, borderRadius: '20px', overflow: 'hidden', transition: 'all 0.25s', cursor: 'pointer', boxShadow: '0 2px 12px rgba(13,27,62,0.04)' }}
+      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.30)' : '#E8ECF4'}`, borderRadius: '20px', overflow: 'hidden', transition: 'all 0.25s', cursor: 'pointer', boxShadow: '0 2px 12px rgba(55,83,160,0.055)' }}
       onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 14px 36px rgba(13,27,62,0.10)' }}
-      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(13,27,62,0.04)' }}
+      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(55,83,160,0.055)' }}
     >
       {/* Banner */}
       <div style={{ height: '60px', background: `linear-gradient(135deg, ${shop.logoColor}, #0D1B3E)`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -228,9 +228,9 @@ function ShopCard({ shop }: { shop: MarketShop }) {
         </div>
         <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
           <span style={{ fontSize: '0.62rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{shop.category}</span>
-          <span style={{ fontSize: '0.62rem', background: 'rgba(13,27,62,0.06)', color: '#6B7280', padding: '0.12rem 0.5rem', borderRadius: '999px' }}>{shop.region}</span>
+          <span style={{ fontSize: '0.62rem', background: 'rgba(13,27,62,0.06)', color: '#64748B', padding: '0.12rem 0.5rem', borderRadius: '999px' }}>{shop.region}</span>
         </div>
-        <p style={{ fontSize: '0.76rem', color: '#6B7280', lineHeight: 1.55, marginBottom: '0.8rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{shop.description}</p>
+        <p style={{ fontSize: '0.76rem', color: '#64748B', lineHeight: 1.55, marginBottom: '0.8rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{shop.description}</p>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.8rem' }}>
           <Star size={11} fill="#C9A84C" color="#C9A84C" />
           <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0D1B3E', marginLeft: '0.25rem' }}>{shop.rating}</span>
