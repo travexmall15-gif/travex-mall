@@ -167,8 +167,8 @@ body{
 <div class="bg-glow"></div>
 
 <div class="topbar">
-  <a href="index.html" class="logo"><span class="logo-mark">T</span>TRAVEX <span>MALL</span></a>
-  <a href="index.html" class="back-link">← Back Marketplace</a>
+  <a href="/" class="logo"><span class="logo-mark">T</span>TRAVEX <span>MALL</span></a>
+  <a href="/" class="back-link">← Back Marketplace</a>
 </div>
 
 <div class="card-wrap">
@@ -178,7 +178,7 @@ body{
     <div id="loginPanel">
       <div class="card-badge"><span class="dot"></span>Travex Seller Portal</div>
       <div class="card-title">Sign In Account Yako</div>
-      <div class="card-sub">Enter your phone number and the password you set when opening your shop.</div>
+      <div class="card-sub">Ingia kwa namba yako ya simu na password uliyopewa baada ya duka lako kuidhinishwa.</div>
 
       <div class="alert alert-error" id="loginError"></div>
       <div class="alert alert-warn"  id="loginWarn"></div>
@@ -239,9 +239,34 @@ const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Already logged in → redirect to dashboard
-sb.auth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.replace("campus-dashboard.html");
+// ── Auto-login: check existing session ──
+sb.auth.getSession().then(async ({ data: { session } }) => {
+  if (session) {
+    await redirectToDashboard(session.user);
+  }
 });
+
+async function redirectToDashboard(user) {
+  // Fetch seller's plan and shop info from pending_payments
+  const { data: shop } = await sb
+    .from('pending_payments')
+    .select('plan, shop_name, shop_category, shop_region, owner_name')
+    .eq('auth_email', user.email)
+    .eq('status', 'approved')
+    .single();
+
+  if (shop) {
+    // Save to localStorage for dashboard to read
+    localStorage.setItem('travex_plan', shop.plan || 'basic');
+    localStorage.setItem('travex_shop_name', shop.shop_name || '');
+    localStorage.setItem('travex_owner_name', shop.owner_name || '');
+    localStorage.setItem('travex_category', shop.shop_category || '');
+    localStorage.setItem('travex_region', shop.shop_region || '');
+    localStorage.setItem('travex_user_id', user.id);
+  }
+
+  window.location.replace("campus-dashboard.html");
+}
 
 // ── HELPERS ────────────────────────────────────────────────────
 function showPanel(id) {
@@ -340,12 +365,14 @@ async function doLogin() {
       );
     }
     btn.textContent = "Loading...";
-    setTimeout(() => window.location.replace("campus-dashboard.html"), 3000);
+    setTimeout(async () => {
+      await redirectToDashboard(data.user);
+    }, 3000);
     return;
   }
 
   btn.textContent = "✅ Welcome! Loading...";
-  window.location.replace("campus-dashboard.html");
+  await redirectToDashboard(data.user);
 }
 
 // ── RESET PASSWORD ──────────────────────────────────────────────
