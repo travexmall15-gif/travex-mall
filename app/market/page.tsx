@@ -37,7 +37,6 @@ export default function MarketPage() {
         {/* Beam */}
         <div style={{ position: 'absolute', inset: '-30%', pointerEvents: 'none', zIndex: 0, background: 'linear-gradient(112deg, transparent 30%, rgba(66,99,235,0.28) 46%, rgba(201,168,76,0.14) 56%, transparent 72%)', filter: 'blur(48px)' }} />
         {/* Grid */}
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.05, backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '56px 56px' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/business-market-hero.png)', backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.10, zIndex: 0 }} />
 
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '4rem 5% 3rem' }}>
