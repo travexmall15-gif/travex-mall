@@ -9,8 +9,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#EEF1F8;--gray:#64748B;--lgray:#E8ECF4;--green:#059669;--red:#DC2626}
-body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--navy);-webkit-font-smoothing:antialiased}
+:root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--green:#059669;--red:#DC2626}
+body{font-family:'Inter',sans-serif;background:#F8FAFF;color:var(--navy);-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{font-family:'Playfair Display',serif}
 
 /* NAV */
@@ -48,7 +48,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 
 /* FORM ELEMENTS */
 .form-card{background:#fff;border:1px solid var(--lgray);border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
-.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);background:var(--offwhite)}
+.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);background:#F8FAFF}
 .card-head-title{font-size:0.82rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.06em}
 .card-body{padding:1.25rem}
 .form-group{margin-bottom:1.1rem}
@@ -94,7 +94,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 
 /* REVIEW */
 .review-section{background:#fff;border:1px solid var(--lgray);border-radius:12px;overflow:hidden;margin-bottom:1rem}
-.review-head{padding:0.75rem 1rem;background:var(--offwhite);border-bottom:1px solid var(--lgray);font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em}
+.review-head{padding:0.75rem 1rem;background:#F8FAFF;border-bottom:1px solid var(--lgray);font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em}
 .review-row{display:flex;justify-content:space-between;padding:0.65rem 1rem;border-bottom:1px solid #f3f4f6;font-size:0.82rem}
 .review-row:last-child{border-bottom:none}
 .review-label{color:var(--gray)}
@@ -108,7 +108,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 .pay-method-info{flex:1}
 .pay-method-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
 .pay-method-detail{font-size:0.75rem;color:var(--gray)}
-.copy-btn{font-size:0.68rem;background:var(--offwhite);border:1px solid var(--lgray);border-radius:6px;padding:0.25rem 0.6rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--navy);transition:all 0.15s}
+.copy-btn{font-size:0.68rem;background:#F8FAFF;border:1px solid var(--lgray);border-radius:6px;padding:0.25rem 0.6rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--navy);transition:all 0.15s}
 .copy-btn:hover{background:var(--lgray)}
 
 /* BUTTONS */
@@ -139,7 +139,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 .success-icon{width:80px;height:80px;border-radius:50%;background:rgba(5,150,105,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem}
 .success-page h2{font-size:1.75rem;font-weight:800;color:var(--navy);margin-bottom:0.75rem}
 .success-page p{font-size:0.9rem;color:var(--gray);line-height:1.75;max-width:420px;margin:0 auto 2rem}
-.detail-box{background:var(--offwhite);border:1px solid var(--lgray);border-radius:12px;padding:1.25rem;text-align:left;max-width:380px;margin:0 auto 1.75rem}
+.detail-box{background:#F8FAFF;border:1px solid var(--lgray);border-radius:12px;padding:1.25rem;text-align:left;max-width:380px;margin:0 auto 1.75rem}
 .detail-row{display:flex;justify-content:space-between;font-size:0.82rem;padding:0.4rem 0;border-bottom:1px solid var(--lgray)}
 .detail-row:last-child{border-bottom:none}
 .detail-key{color:var(--gray)}
@@ -328,14 +328,14 @@ textarea.form-input{resize:vertical;min-height:90px}
       <div class="card-body">
         <div class="form-hint" style="margin-bottom:0.75rem">Choose the primary color for your shop banner and theme.</div>
         <div class="color-grid" id="colorGrid">
-          <div class="color-swatch selected" style="background:#0D1B3E" data-color="#0D1B3E" onclick="pickColor(this)"></div>
+          <div class="color-swatch selected" style="background:#050B2E" data-color="#050B2E" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#C9A84C" data-color="#C9A84C" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#059669" data-color="#059669" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#DC2626" data-color="#DC2626" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#7C3AED" data-color="#7C3AED" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#1B3A6B" data-color="#1B3A6B" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#0A1858" data-color="#0A1858" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#1A1D2E" data-color="#1A1D2E" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#0F172A" data-color="#0F172A" onclick="pickColor(this)"></div>
         </div>
         <input type="color" id="customColor" style="margin-top:0.75rem;width:100%;height:36px;border:1.5px solid var(--lgray);border-radius:8px;cursor:pointer;padding:2px" onchange="pickCustomColor(this.value)" />
       </div>
@@ -464,7 +464,7 @@ const sb = supabase.createClient(
 
 // State
 let selectedPlan = 'basic'
-let selectedColor = '#0D1B3E'
+let selectedColor = '#050B2E'
 let selectedPayMethod = 'crdb'
 let currentStep = 1
 const PRICES = { basic: 25000, premium: 45000 }
@@ -698,21 +698,21 @@ function toast(msg, type = 'success') {
 <style id="travex-polish-v2">
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#EEF1F8!important}
+body{background:#F8FAFF!important}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
   linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
   background-size:56px 56px}
 
-.page-hero{background:linear-gradient(150deg,#07102A 0%,#0D1B3E 48%,#16306B 100%)!important}
+.page-hero{background:linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)!important}
 .page-hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
-  background:linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.32) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
+  background:linear-gradient(112deg,transparent 30%,rgba(56,120,255,0.38) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
   filter:blur(42px)}
 .page-hero>*{position:relative;z-index:1}
 
-.nav{background:rgba(8,15,36,0.92)!important;backdrop-filter:blur(14px)}
-.form-card{border-radius:18px!important;border-color:#E8ECF4!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
-.form-input{border-radius:12px!important;background:#EEF1F8!important}
+.nav{background:rgba(2,5,16,0.92)!important;backdrop-filter:blur(14px)}
+.form-card{border-radius:18px!important;border-color:#E2E8F0!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
+.form-input{border-radius:12px!important;background:#F8FAFF!important}
 .form-input:focus{background:#fff!important;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
 .btn{border-radius:999px!important;transition:all 0.2s}
 .btn:hover{transform:translateY(-1px)}
