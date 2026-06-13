@@ -13,11 +13,11 @@
    ═══════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0D1B3E;--navy2:#0A1628;--navy3:#061020;
+  --navy:#0D1B3E;--navy2:#0A1628;--navy3:#070E25;
   --blue:#1B3A6B;--blue2:#1e4080;
   --gold:#C9A84C;--gold2:#F0C96B;
-  --white:#fff;--offwhite:#F8F9FC;
-  --gray:#6B7280;--lgray:#E5E7EB;--dgray:#374151;
+  --white:#fff;--offwhite:#EEF1F8;
+  --gray:#64748B;--lgray:#E8ECF4;--dgray:#2D3561;
   --green:#059669;--red:#DC2626;--orange:#D97706;
   --purple:#7C3AED;
   --card-bg:rgba(255,255,255,0.04);
@@ -129,7 +129,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 
 /* ── SIDEBAR ── */
 .sidebar{
-  background:rgba(6,16,32,0.95);
+  background:linear-gradient(180deg,#0A1128 0%,#0C1535 60%,#0D1B3E 100%);
   border-right:1px solid rgba(255,255,255,0.06);
   display:flex;flex-direction:column;overflow-y:auto;
   overflow-x:hidden;padding:1.25rem 0.75rem
@@ -399,7 +399,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 .lb-row:hover{background:rgba(255,255,255,0.03)}
 .lb-rank{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;width:28px;text-align:center;flex-shrink:0}
 .lb-rank.gold-rank{color:var(--gold)}
-.lb-rank.silver-rank{color:#9CA3AF}
+.lb-rank.silver-rank{color:#94A3B8}
 .lb-rank.bronze-rank{color:#92400E}
 .lb-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--navy3);flex-shrink:0}
 .lb-info{flex:1}
@@ -670,7 +670,7 @@ textarea.form-input{resize:vertical;min-height:80px}
               <div class="c-swatch" style="background:#7C3AED" data-color="#7C3AED" onclick="pickColor(this)"></div>
               <div class="c-swatch" style="background:#1B3A6B" data-color="#1B3A6B" onclick="pickColor(this)"></div>
               <div class="c-swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
-              <div class="c-swatch" style="background:#111827" data-color="#111827" onclick="pickColor(this)"></div>
+              <div class="c-swatch" style="background:#1A1D2E" data-color="#1A1D2E" onclick="pickColor(this)"></div>
               <input type="color" id="customColorPick" style="width:28px;height:28px;border:none;border-radius:6px;cursor:pointer;padding:0" onchange="pickColor(this,this.value)" />
             </div>
           </div>
@@ -1497,23 +1497,23 @@ function previewProductImage(input){ const f=input.files[0]; if(!f) return; cons
 <style id="travex-polish-v2">
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:linear-gradient(160deg,#050B1A 0%,#061020 50%,#0A1B3C 100%)!important}
+body{background:linear-gradient(160deg,#060C20 0%,#070E25 50%,#0A1B3C 100%)!important}
 body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:-1;
-  background:linear-gradient(112deg,transparent 32%,rgba(110,150,235,0.14) 46%,rgba(201,168,76,0.09) 56%,transparent 72%);
+  background:linear-gradient(112deg,transparent 32%,rgba(66,99,235,0.18) 46%,rgba(201,168,76,0.09) 56%,transparent 72%);
   filter:blur(48px)}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:0.04;
   background-image:linear-gradient(rgba(255,255,255,0.7) 1px,transparent 1px),
   linear-gradient(90deg,rgba(255,255,255,0.7) 1px,transparent 1px);
   background-size:56px 56px}
-.topbar{background:rgba(7,14,28,0.85)!important;backdrop-filter:blur(22px)}
-.sidebar{background:rgba(5,12,26,0.92)!important}
+.topbar{background:rgba(8,14,34,0.90)!important;backdrop-filter:blur(24px)}
+.sidebar{background:linear-gradient(180deg,#0A1128 0%,#0C1535 60%,#0D1B3E 100%)!important}
 .stat-card{border-radius:16px!important;
-  background:linear-gradient(160deg,rgba(255,255,255,0.055),rgba(255,255,255,0.022))!important;
+  background:linear-gradient(160deg,rgba(66,99,235,0.08),rgba(255,255,255,0.025))!important;
   transition:all 0.25s}
 .stat-card:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.30)!important;
   box-shadow:0 12px 32px rgba(0,0,0,0.35)}
 .content-card{border-radius:16px!important;
-  background:linear-gradient(160deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))!important}
+  background:linear-gradient(160deg,rgba(66,99,235,0.06),rgba(255,255,255,0.02))!important}
 .auth-card{border-radius:24px!important;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
 .auth-input{border-radius:12px!important}
 .auth-input:focus{box-shadow:0 0 0 3px rgba(201,168,76,0.18)}
