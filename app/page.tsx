@@ -245,7 +245,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.60rem', fontWeight: 700, color: 'rgba(255,0,128,0.85)', letterSpacing: '0.18em', textTransform: 'uppercase' }}>New Feature</span>
               </div>
               <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.4rem,3vw,2rem)', fontWeight: 800, color: '#fff', marginBottom: '0.4rem' }}>
-                Travex <span style={{ background: 'linear-gradient(135deg,#FF0080,#7800FF,#00C8FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Social Vybe</span>
+                Travex <span style={{ background: 'linear-gradient(135deg,#FF0080,#7800FF,#00C8FF)', WebkitBackgroundClip: 'text' as any, WebkitTextFillColor: 'transparent' as any, backgroundClip: 'text' }}>Social Vybe</span>
               </h2>
               <p style={{ fontSize: '0.84rem', color: 'rgba(255,255,255,0.40)', maxWidth: '380px', lineHeight: 1.65 }}>
                 Tanzania's business social network. Post products, grow your brand, connect directly with buyers.
