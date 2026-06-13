@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
@@ -256,7 +257,7 @@ export default function HomePage() {
           </div>
 
           {/* Mock vybe posts horizontal */}
-          <div className="scroll-wrap" style={{ '--fade-color': '#07010E' } as React.CSSProperties}>
+          <div className="scroll-wrap" style={{ '--fade-color': '#07010E' }>
             <div className="cards-scroll">
               {[
                 { shop: 'Amani Electronics', tag: 'Electronics', color: '#1E3A8A', post: '📱 iPhone 15 Pro Max — TZS 2.8M. New sealed box, warranty included. DM for deals!' },
