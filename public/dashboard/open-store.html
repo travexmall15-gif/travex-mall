@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8F9FC;--gray:#6B7280;--lgray:#E5E7EB;--green:#059669;--red:#DC2626}
+:root{--navy:#0D1B3E;--blue:#1B3A6B;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#EEF1F8;--gray:#64748B;--lgray:#E8ECF4;--green:#059669;--red:#DC2626}
 body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--navy);-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{font-family:'Playfair Display',serif}
 
@@ -229,7 +229,7 @@ textarea.form-input{resize:vertical;min-height:90px}
       <!-- BASIC -->
       <div class="plan-card" id="cardBasic" onclick="selectPlan('basic')">
         <div class="plan-check" id="checkBasic"></div>
-        <div class="plan-badge" style="color:#6B7280">🥈 Silver · Basic</div>
+        <div class="plan-badge" style="color:#64748B">🥈 Silver · Basic</div>
         <div class="plan-name">Basic</div>
         <div class="plan-price">TZS 25,000</div>
         <div class="plan-period">per month</div>
@@ -335,7 +335,7 @@ textarea.form-input{resize:vertical;min-height:90px}
           <div class="color-swatch" style="background:#7C3AED" data-color="#7C3AED" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#1B3A6B" data-color="#1B3A6B" onclick="pickColor(this)"></div>
           <div class="color-swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#111827" data-color="#111827" onclick="pickColor(this)"></div>
+          <div class="color-swatch" style="background:#1A1D2E" data-color="#1A1D2E" onclick="pickColor(this)"></div>
         </div>
         <input type="color" id="customColor" style="margin-top:0.75rem;width:100%;height:36px;border:1.5px solid var(--lgray);border-radius:8px;cursor:pointer;padding:2px" onchange="pickCustomColor(this.value)" />
       </div>
@@ -698,21 +698,21 @@ function toast(msg, type = 'success') {
 <style id="travex-polish-v2">
 /* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#F3F5FA!important}
+body{background:#EEF1F8!important}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background-image:linear-gradient(rgba(13,27,62,0.045) 1px,transparent 1px),
   linear-gradient(90deg,rgba(13,27,62,0.045) 1px,transparent 1px);
   background-size:56px 56px}
 
-.page-hero{background:linear-gradient(150deg,#080F24 0%,#0D1B3E 48%,#16306B 100%)!important}
+.page-hero{background:linear-gradient(150deg,#07102A 0%,#0D1B3E 48%,#16306B 100%)!important}
 .page-hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
-  background:linear-gradient(112deg,transparent 30%,rgba(110,150,235,0.24) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
+  background:linear-gradient(112deg,transparent 30%,rgba(66,99,235,0.32) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
   filter:blur(42px)}
 .page-hero>*{position:relative;z-index:1}
 
 .nav{background:rgba(8,15,36,0.92)!important;backdrop-filter:blur(14px)}
-.form-card{border-radius:18px!important;border-color:#E9ECF3!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
-.form-input{border-radius:12px!important;background:#F8F9FC!important}
+.form-card{border-radius:18px!important;border-color:#E8ECF4!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
+.form-input{border-radius:12px!important;background:#EEF1F8!important}
 .form-input:focus{background:#fff!important;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
 .btn{border-radius:999px!important;transition:all 0.2s}
 .btn:hover{transform:translateY(-1px)}
