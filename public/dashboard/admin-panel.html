@@ -289,8 +289,21 @@ async function doLogin(){
   const pass=document.getElementById('adminPass').value;
   if(!email||!pass){showLoginErr('Jaza email na password.');return}
   if(!ADMINS.includes(email.toLowerCase())){showLoginErr('Email hii si ya admin.');return}
+
+  // Try sign in first
   const{error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){showLoginErr('Password si sahihi: '+error.message);return}
+  if(error){
+    // If user doesn't exist yet, create account automatically (bootstrap)
+    if(error.message.includes('Invalid') || error.message.includes('invalid')){
+      const{error:signUpErr}=await sb.auth.signUp({email,password:pass,options:{data:{role:'admin'}}});
+      if(signUpErr){showLoginErr('Error: '+signUpErr.message);return}
+      // Try signing in again after creating
+      const{error:err2}=await sb.auth.signInWithPassword({email,password:pass});
+      if(err2){showLoginErr('Account created but login failed. Try again.');return}
+    } else {
+      showLoginErr('Error: '+error.message);return;
+    }
+  }
   initApp();
 }
 function showLoginErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
