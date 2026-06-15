@@ -1,583 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Choose Your Plan — Travex Mall</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const sb = supabase.createClient("https://bscecjbgnjitlfmgwcic.supabase.co", "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos");
-</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subscription Plans — Travex Mall</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#050B2E;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--dark:#0F172A;--green:#059669;--red:#DC2626}
-body{font-family:"Inter",sans-serif;background:#F8FAFF;color:var(--dark)}
-nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-size:1.2rem;font-weight:800;color:var(--white)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--bg:#F8FAFF;--white:#FFFFFF;
+  --border:#E2E8F0;--text:#0F172A;--muted:#64748B;--green:#10B981;--r:12px;--pill:999px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;height:64px;background:rgba(5,11,46,0.92);backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:space-between;padding:0 5%;z-index:100;border-bottom:1px solid rgba(255,255,255,0.06)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff;text-decoration:none}
 .nav-logo span{color:var(--gold)}
-.nav-back{font-size:0.8rem;color:rgba(255,255,255,0.6);text-decoration:none}
+.nav-back{font-size:.8rem;color:rgba(255,255,255,0.5);text-decoration:none;display:flex;align-items:center;gap:.35rem}
 .nav-back:hover{color:var(--gold)}
 
-/* HERO */
-.hero{background:var(--navy);padding:4rem 5% 3rem;text-align:center;position:relative;overflow:hidden}
-.hero-dots{position:absolute;inset:0;}
-.hero-content{position:relative;z-index:2}
-.hero-tag{display:inline-block;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);color:var(--gold);padding:0.35rem 0.9rem;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.2rem}
-.hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:var(--white);margin-bottom:0.75rem}
-.hero h1 span{color:var(--gold)}
-.hero p{font-size:0.95rem;color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto;line-height:1.7}
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:7rem 5% 4rem;text-align:center;color:#fff;
+  background:linear-gradient(160deg,#010510 0%,#030920 30%,#050E2E 60%,#071540 100%)}
+.hero::before{content:'';position:absolute;top:-25%;right:-8%;width:60%;height:115%;pointer-events:none;
+  background:radial-gradient(ellipse 55% 55% at 62% 28%,rgba(56,120,255,0.55),rgba(35,80,220,0.28) 30%,transparent 70%);filter:blur(22px)}
+.hero>*{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.30);
+  color:#6EE7B7;padding:.35rem 1rem;border-radius:var(--pill);font-size:.72rem;font-weight:700;margin-bottom:1.25rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin-bottom:.75rem}
+.hero p{font-size:clamp(.85rem,1.5vw,1rem);color:rgba(255,255,255,.50);max-width:500px;margin:0 auto;line-height:1.75}
 
-/* TOGGLE */
-.toggle-wrap{display:flex;justify-content:center;margin:3rem auto 0;gap:0;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);width:fit-content;position:relative;z-index:2}
-.toggle-btn{padding:0.6rem 1.8rem;font-size:0.875rem;font-weight:600;color:rgba(255,255,255,0.6);background:transparent;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s}
-.toggle-btn.active{background:var(--gold);color:var(--navy)}
-.save-badge{display:inline-block;background:var(--green);color:var(--white);font-size:0.62rem;font-weight:700;padding:0.1rem 0.4rem;margin-left:0.4rem;vertical-align:middle}
+/* Plans */
+.plans{max-width:1000px;margin:-3rem auto 4rem;padding:0 5%;position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+.plan{background:var(--white);border:2px solid var(--border);border-radius:24px;padding:2.25rem 1.75rem;position:relative;transition:all .28s}
+.plan:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,23,42,.08)}
+.plan.pop{background:linear-gradient(160deg,#040C32,#071545 50%,#0A1858);border-color:rgba(201,168,76,.45);color:#fff;
+  box-shadow:0 12px 36px rgba(5,11,46,.25)}
+.plan.pop:hover{box-shadow:0 20px 50px rgba(201,168,76,.18)}
+.plan-pop-tag{position:absolute;top:-1px;right:1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);
+  font-size:.6rem;font-weight:800;padding:.22rem .85rem;border-radius:0 0 10px 10px;letter-spacing:.04em}
+.plan-tier{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:.75rem}
+.plan.pop .plan-tier{color:rgba(255,255,255,.42)}
+.plan-icon{font-size:1.5rem;margin-bottom:.5rem}
+.plan-price{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--text);margin-bottom:.15rem}
+.plan.pop .plan-price{color:#fff}
+.plan-now{display:inline-block;font-size:.72rem;font-weight:700;color:var(--green);background:rgba(16,185,129,.10);
+  padding:.2rem .65rem;border-radius:var(--pill);margin-bottom:.35rem}
+.plan.pop .plan-now{background:rgba(16,185,129,.15)}
+.plan-period{font-size:.75rem;color:var(--muted);margin-bottom:1.25rem}
+.plan.pop .plan-period{color:rgba(255,255,255,.35)}
+.plan-div{height:1px;background:var(--border);margin-bottom:1.25rem}
+.plan.pop .plan-div{background:rgba(255,255,255,.08)}
+.plan-feat{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:var(--muted);margin-bottom:.55rem;line-height:1.5}
+.plan.pop .plan-feat{color:rgba(255,255,255,.60)}
+.plan-feat::before{content:"✓";color:var(--gold);font-weight:800;flex-shrink:0;margin-top:1px}
+.plan-btn{display:block;width:100%;margin-top:1.75rem;padding:.9rem;border-radius:var(--pill);font-weight:700;font-size:.85rem;
+  text-align:center;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none}
+.plan-btn-dark{background:var(--navy);color:#fff}.plan-btn-dark:hover{background:#071545}
+.plan-btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);box-shadow:0 6px 20px rgba(201,168,76,.30)}.plan-btn-gold:hover{box-shadow:0 10px 28px rgba(201,168,76,.45)}
 
-/* PLANS */
-.plans-section{padding:4rem 5%;max-width:1100px;margin:0 auto}
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+/* Info */
+.info{max-width:700px;margin:0 auto 4rem;padding:0 5%;text-align:center}
+.info h2{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800;color:var(--text);margin-bottom:1rem}
+.info p{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:1rem}
 
-.plan-card{background:var(--white);border:2px solid var(--lgray);padding:2.5rem;position:relative;transition:all 0.3s;cursor:pointer}
-.plan-card:hover{border-color:var(--navy);transform:translateY(-4px);box-shadow:0 20px 50px rgba(13,27,62,0.1)}
-.plan-card.popular{background:var(--navy);border-color:var(--navy)}
-.plan-card.selected{transform:translateY(-6px);box-shadow:0 20px 60px rgba(13,27,62,0.2)}
-.plan-card.selected.popular{box-shadow:0 20px 60px rgba(201,168,76,0.3)}
-.plan-card:not(.popular).selected{border-color:var(--gold);background:linear-gradient(135deg,#FFFBEB,#FEF9E7)}
-
-.popular-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:0.65rem;font-weight:800;padding:0.25rem 0.9rem;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap}
-.plan-tier{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.75rem}
-.plan-card.popular .plan-tier{color:var(--gold2)}
-.plan-price{font-size:2.2rem;font-weight:900;color:var(--navy);line-height:1;margin-bottom:0.3rem}
-.plan-card.popular .plan-price{color:var(--white)}
-.plan-period{font-size:0.8rem;color:var(--gray);margin-bottom:0.5rem}
-.plan-card.popular .plan-period{color:rgba(255,255,255,0.5)}
-.plan-original{font-size:0.78rem;color:var(--gray);text-decoration:line-through;margin-bottom:1.2rem;display:none}
-.plan-divider{height:1px;background:var(--lgray);margin-bottom:1.2rem}
-.plan-card.popular .plan-divider{background:rgba(255,255,255,0.12)}
-.plan-features{list-style:none;margin-bottom:2rem;display:flex;flex-direction:column;gap:0.65rem}
-.plan-features li{font-size:0.875rem;color:var(--dark);display:flex;gap:0.6rem;align-items:flex-start}
-.plan-card.popular .plan-features li{color:rgba(255,255,255,0.85)}
-.plan-features li .check{flex-shrink:0;font-size:0.8rem}
-.plan-card:not(.popular) .plan-features li .check{color:var(--green)}
-.plan-card.popular .plan-features li .check{color:var(--gold)}
-
-.plan-select-btn{width:100%;padding:0.85rem;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
-.plan-card:not(.popular) .plan-select-btn{background:var(--navy);color:var(--white)}
-.plan-card:not(.popular) .plan-select-btn:hover{background:#0A1858}
-.plan-card.popular .plan-select-btn{background:var(--gold);color:var(--navy)}
-.plan-card.popular .plan-select-btn:hover{background:var(--gold2)}
-.plan-card.selected:not(.popular) .plan-select-btn{background:var(--gold);color:var(--navy)}
-
-/* PAYMENT MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
-.modal-overlay.open{display:flex}
-.modal{background:var(--white);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
-.modal-header{background:var(--navy);padding:1.5rem;display:flex;align-items:center;justify-content:space-between}
-.modal-header-title{font-size:1rem;font-weight:800;color:var(--white)}
-.modal-header-plan{font-size:0.75rem;color:var(--gold);margin-top:0.2rem}
-.modal-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.4rem;cursor:pointer}
-.modal-close:hover{color:var(--white)}
-.modal-body{padding:2rem}
-
-/* PAYMENT STEPS */
-.pay-steps{display:flex;flex-direction:column;gap:1.2rem;margin-bottom:2rem}
-.pay-step{display:flex;gap:1rem;align-items:flex-start}
-.pay-step-num{width:32px;height:32px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;flex-shrink:0}
-.pay-step-content{}
-.pay-step-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
-.pay-step-desc{font-size:0.82rem;color:var(--gray);line-height:1.55}
-.pay-step-highlight{background:#F8FAFF;border:1px solid var(--lgray);padding:0.6rem 0.9rem;margin-top:0.5rem;font-size:0.875rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.copy-btn{background:var(--navy);color:var(--white);border:none;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;white-space:nowrap}
-.copy-btn:hover{background:var(--gold);color:var(--navy)}
-
-/* CONFIRM FORM */
-.confirm-form{border:1px solid var(--lgray);padding:1.5rem;margin-bottom:1.5rem}
-.confirm-title{font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:1rem}
-.form-group{margin-bottom:1rem}
-.form-group:last-child{margin-bottom:0}
-.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem}
-.form-label span{color:var(--red)}
-.form-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;transition:border-color 0.2s}
-.form-input:focus{border-color:var(--navy)}
-.form-input::placeholder{color:#94A3B8}
-.form-select{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--lgray);font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);outline:none;background:var(--white);cursor:pointer}
-
-/* SUBMIT */
-.btn-submit-pay{width:100%;padding:0.9rem;background:var(--gold);color:var(--navy);font-size:0.95rem;font-weight:800;border:none;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
-.btn-submit-pay:hover{background:var(--gold2)}
-.btn-submit-pay:disabled{background:var(--lgray);cursor:not-allowed;color:var(--gray)}
-
-/* ALERT */
-.alert{padding:0.75rem 1rem;font-size:0.85rem;margin-bottom:1rem;display:none}
-.alert-error{background:#FEE2E2;border:1px solid #FECACA;color:var(--red)}
-.alert-success{background:#D1FAE5;border:1px solid #A7F3D0;color:var(--green)}
-
-/* SUCCESS SCREEN */
-.success-screen{display:none;text-align:center;padding:1rem}
-.success-icon{font-size:4rem;margin-bottom:1rem}
-.success-title{font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:0.5rem}
-.success-desc{font-size:0.875rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem}
-.success-steps{text-align:left;background:#F8FAFF;border:1px solid var(--lgray);padding:1.2rem;margin-bottom:1.5rem}
-.success-steps-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem}
-.success-step-item{font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;display:flex;gap:0.5rem}
-.success-step-item strong{color:var(--dark)}
-.btn-go-dash{display:block;padding:0.85rem;background:var(--navy);color:var(--white);font-weight:700;font-size:0.9rem;text-decoration:none;text-align:center;transition:all 0.2s}
-.btn-go-dash:hover{background:#0A1858}
-
-/* FAQ */
-.faq-section{padding:4rem 5%;max-width:700px;margin:0 auto}
-.faq-title{font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:2rem;text-align:center}
-.faq-item{border:1px solid var(--lgray);margin-bottom:0.75rem;overflow:hidden}
-.faq-q{padding:1rem 1.2rem;font-size:0.875rem;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--white);transition:all 0.2s}
-.faq-q:hover{background:#F8FAFF}
-.faq-q.open{background:var(--navy);color:var(--white)}
-.faq-a{padding:0 1.2rem;max-height:0;overflow:hidden;transition:all 0.3s;font-size:0.85rem;color:var(--gray);line-height:1.65}
-.faq-a.open{padding:1rem 1.2rem;max-height:200px}
-
-/* FOOTER */
-.footer-simple{background:var(--navy);padding:2rem 5%;text-align:center}
-.footer-simple p{font-size:0.8rem;color:rgba(255,255,255,0.4)}
-.footer-simple a{color:var(--gold);text-decoration:none}
-
-@media(max-width:900px){.plans-grid{grid-template-columns:1fr}}
-@media(max-width:600px){.toggle-wrap{flex-direction:column}}
+/* Footer */
+footer{background:linear-gradient(180deg,#010510,#020816);border-top:1px solid rgba(255,255,255,.05);padding:2rem 5%;text-align:center}
+footer p{font-size:.72rem;color:rgba(255,255,255,.22)}
+footer a{color:var(--gold);text-decoration:none;font-weight:700}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">TRAVEX <span>MALL</span></div>
-  <a href="dashboard.html" class="nav-back">← Back to Dashboard</a>
+  <a href="/" class="nav-logo">TRAVEX <span>MALL</span></a>
+  <a href="/" class="nav-back">← Back Home</a>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-dots"></div>
-  <div class="hero-content">
-    <div class="hero-tag">Simple & Transparent Pricing</div>
-    <h1>Choose Your <span>Plan</span></h1>
-    <p>No hidden fees. No long contracts. Start selling online in minutes.</p>
-    <div class="toggle-wrap">
-      <button class="toggle-btn active" onclick="setBilling('monthly',this)">Monthly</button>
-      <button class="toggle-btn" onclick="setBilling('yearly',this)">Yearly <span class="save-badge">Save 20%</span></button>
-    </div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">🎁 Free Registration — This Month Only</div>
+  <h1>Subscription <span style="color:var(--gold)">Plans</span></h1>
+  <p>Choose the plan that fits your business. All plans are free for the first month — no payment required.</p>
+</section>
+
+<!-- Plans -->
+<div class="plans">
+
+  <!-- Campus -->
+  <div class="plan">
+    <div class="plan-tier">Campus Plan</div>
+    <div class="plan-icon">🎓</div>
+    <div class="plan-price">TZS 15K</div>
+    <div class="plan-now">🎁 FREE this month</div>
+    <div class="plan-period">per month · for students only</div>
+    <div class="plan-div"></div>
+    <div class="plan-feat">Student-verified badge</div>
+    <div class="plan-feat">Campus-only marketplace</div>
+    <div class="plan-feat">Product listings unlimited</div>
+    <div class="plan-feat">WhatsApp order system</div>
+    <div class="plan-feat">Basic seller dashboard</div>
+    <div class="plan-feat">5 universities: ARU, UDSM, UDOM, TIA, NIT</div>
+    <a href="/campus-apply" class="plan-btn plan-btn-dark">Apply for Campus →</a>
+  </div>
+
+  <!-- Premium -->
+  <div class="plan pop">
+    <div class="plan-pop-tag">Most Popular</div>
+    <div class="plan-tier">Premium Plan 🥇</div>
+    <div class="plan-icon">👑</div>
+    <div class="plan-price">TZS 45K</div>
+    <div class="plan-now">🎁 FREE this month</div>
+    <div class="plan-period">per month · nationwide reach</div>
+    <div class="plan-div"></div>
+    <div class="plan-feat">Gold verified badge 🥇</div>
+    <div class="plan-feat">Top listing priority</div>
+    <div class="plan-feat">AI seller tools (4 modules)</div>
+    <div class="plan-feat">Advanced analytics dashboard</div>
+    <div class="plan-feat">Marketing & accounting tools</div>
+    <div class="plan-feat">Leaderboard visibility</div>
+    <div class="plan-feat">All 5 regions nationwide</div>
+    <a href="/open-store" class="plan-btn plan-btn-gold">Open Premium Shop →</a>
+  </div>
+
+  <!-- Basic -->
+  <div class="plan">
+    <div class="plan-tier">Basic Plan 🥈</div>
+    <div class="plan-icon">🏪</div>
+    <div class="plan-price">TZS 25K</div>
+    <div class="plan-now">🎁 FREE this month</div>
+    <div class="plan-period">per month · nationwide reach</div>
+    <div class="plan-div"></div>
+    <div class="plan-feat">Silver verified badge 🥈</div>
+    <div class="plan-feat">Product listings unlimited</div>
+    <div class="plan-feat">WhatsApp order system</div>
+    <div class="plan-feat">Basic analytics dashboard</div>
+    <div class="plan-feat">1 AI tool (product descriptions)</div>
+    <div class="plan-feat">All 5 regions nationwide</div>
+    <a href="/open-store" class="plan-btn plan-btn-dark">Open Basic Shop →</a>
   </div>
 </div>
 
-<!-- PLANS -->
-<div class="plans-section">
-  <div class="plans-grid">
+<!-- Info -->
+<div class="info">
+  <h2>Why Free This Month?</h2>
+  <p>Travex Mall is launching! We want to fill all 500 business market slots and 300 campus slots with quality sellers. Register now for free — starting next month, regular pricing applies.</p>
+  <p style="font-size:.82rem;color:var(--gold);font-weight:600">Questions? WhatsApp: <a href="https://wa.me/255651919915" style="color:var(--gold);text-decoration:underline">+255 651 919 915</a></p>
+</div>
 
-    <!-- BASIC -->
-    <div class="plan-card" <div class="plan-card" id="card-campus" onclick="selectPlan('campus')">
-        <div class="plan-tier">🎓 Campus Plan</div>
-        <div class="plan-price" id="price-campus">TZS 15,000</div>
-        <div class="plan-period">per month</div>
-        <div class="plan-original" id="original-campus">For University Students</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Campus marketplace listing</li>
-          <li><span class="check">✓</span> WhatsApp order system</li>
-          <li><span class="check">✓</span> AI Customer Care</li>
-          <li><span class="check">✓</span> Social Vybe posting</li>
-          <li><span class="check">✓</span> 60 slots per university</li>
-        </ul>
-        <button class="plan-btn" id="btn-campus" onclick="selectPlan('campus')">Get Campus Plan</button>
+<!-- Payment Info (for next month) -->
+<div style="max-width:700px;margin:0 auto 4rem;padding:0 5%">
+  <div style="background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:2rem;text-align:center">
+    <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;color:var(--text);margin-bottom:1rem">💳 Payment Info (Starting Next Month)</div>
+    <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem">
+      <div style="padding:1rem 1.5rem;background:var(--bg);border-radius:14px;border:1px solid var(--border)">
+        <div style="font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:.4rem">CRDB Bank</div>
+        <div style="font-size:.88rem;font-weight:700;color:var(--text)">0152774556100</div>
       </div>
-
-      <div class="plan-card" id="card-basic" onclick="selectPlan('basic')">
-      <div class="plan-tier">🥈 Basic Plan</div>
-      <div class="plan-price" id="price-basic">TZS 25,000</div>
-      <div class="plan-period">per month</div>
-      <div class="plan-original" id="original-basic">For Individual Sellers</div>
-      <div class="plan-divider"></div>
-      <ul class="plan-features">
-        <li><span class="check">✓</span> 1 digital store</li>
-        <li><span class="check">✓</span> Up to 50 products</li>
-        <li><span class="check">✓</span> WhatsApp order system</li>
-        <li><span class="check">✓</span> Basic analytics</li>
-        <li><span class="check">✓</span> Email support</li>
-      </ul>
-      <button class="plan-select-btn" id="btn-basic">Select Basic →</button>
-    </div>
-
-    <!-- STANDARD -->
-    <div class="plan-card popular" id="card-basic" onclick="selectPlan('standard')">
-      <div class="popular-badge">Most Popular</div>
-      <div class="plan-tier">🥈 Basic Plan</div>
-      <div class="plan-price" id="price-standard">TZS 50,000</div>
-      <div class="plan-period">per month</div>
-      <div class="plan-original" id="original-standard">TZS 50,000/mo</div>
-      <div class="plan-divider"></div>
-      <ul class="plan-features">
-        <li><span class="check">✓</span> 1 digital store</li>
-        <li><span class="check">✓</span> Unlimited products</li>
-        <li><span class="check">✓</span> WhatsApp order system</li>
-        <li><span class="check">✓</span> Full analytics dashboard</li>
-        <li><span class="check">✓</span> AI Business Advisor</li>
-        <li><span class="check">✓</span> Marketing AI</li>
-        <li><span class="check">✓</span> Priority support</li>
-      </ul>
-      <button class="plan-select-btn" id="btn-standard">Select Standard →</button>
-    </div>
-
-    <!-- PREMIUM -->
-    <div class="plan-card" id="card-premium" onclick="selectPlan('premium')">
-      <div class="plan-tier">🥇 Premium Plan</div>
-      <div class="plan-price" id="price-premium">TZS 45,000</div>
-      <div class="plan-period">per month</div>
-      <div class="plan-original" id="original-premium">TZS 45,000/mo</div>
-      <div class="plan-divider"></div>
-      <ul class="plan-features">
-        <li><span class="check">✓</span> Up to 3 stores</li>
-        <li><span class="check">✓</span> Unlimited products</li>
-        <li><span class="check">✓</span> Everything in Standard</li>
-        <li><span class="check">✓</span> Advanced AI features</li>
-        <li><span class="check">✓</span> Customer Care AI</li>
-        <li><span class="check">✓</span> Dedicated support</li>
-        <li><span class="check">✓</span> Custom domain help</li>
-      </ul>
-      <button class="plan-select-btn" id="btn-premium">Select Premium →</button>
-    </div>
-
-  </div>
-
-  <p style="text-align:center;margin-top:2rem;font-size:0.85rem;color:var(--gray)">
-    ✦ Zero commission for first 6 months — our lornch offer for early sellers ✦
-  </p>
-</div>
-
-<!-- FAQ -->
-<div class="faq-section">
-  <div class="faq-title">Frequently Asked Questions</div>
-
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">How long does activation take? <span>+</span></div>
-    <div class="faq-a">Your store will be activated within 2 hours after we confirm your payment. You will receive an email notification as soon as your store is live.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted? <span>+</span></div>
-    <div class="faq-a">We accept CRDB Bank transfers and M-Pesa. After payment, send your screenshot to our WhatsApp: +255 651 919 915.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">Can I upgrade my plan later? <span>+</span></div>
-    <div class="faq-a">Yes! You can upgrade from Basic to Standard or Premium at any time. Contact us on WhatsApp and we will upgrade your account within 2 hours.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">Is there a free trial? <span>+</span></div>
-    <div class="faq-a">We offer zero commission for your first 6 months as an early seller. This means all revenue from your sales goes directly to you during this period.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">What if I want to cancel? <span>+</span></div>
-    <div class="faq-a">You can cancel anytime by contacting us on WhatsApp. Your store will remain active until the end of your current billing period.</div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<div class="footer-simple">
-  <p>Questions? <a href="https://wa.me/255651919915">WhatsApp: +255 651 919 915</a> · <a href="mailto:travexmall15@gmail.com">travexmall15@gmail.com</a></p>
-  <p style="margin-top:0.5rem">© 2026 Travex Digital Group</p>
-</div>
-
-<!-- PAYMENT MODAL -->
-<div class="modal-overlay" id="paymentModal">
-  <div class="modal">
-
-    <!-- PAYMENT FORM -->
-    <div id="paymentForm">
-      <div class="modal-header">
-        <div>
-          <div class="modal-header-title">Complete Your Subscription</div>
-          <div class="modal-header-plan" id="modalPlanLabel">Standard Plan — TZS 50,000/month</div>
-        </div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-error" id="payError"></div>
-
-        <div class="pay-steps">
-          <div class="pay-step">
-            <div class="pay-step-num">1</div>
-            <div class="pay-step-content">
-              <div class="pay-step-title">Transfer Payment to CRDB Bank</div>
-              <div class="pay-step-desc">Send the exact amount for your selected plan:</div>
-              <div class="pay-step-highlight">
-                <span>CRDB BANK — <strong>0152774556100</strong></span>
-                <button class="copy-btn" onclick="copyText('0152774556100',this)">Copy</button>
-              </div>
-              <div class="pay-step-highlight" style="margin-top:0.5rem">
-                <span>Amount: <strong id="modalAmount">TZS 50,000</strong></span>
-                <button class="copy-btn" onclick="copyText(document.getElementById('modalAmountRaw').value,this)">Copy</button>
-              </div>
-              <input type="hidden" id="modalAmountRaw" value="50000">
-            </div>
-          </div>
-
-          <div class="pay-step">
-            <div class="pay-step-num">2</div>
-            <div class="pay-step-content">
-              <div class="pay-step-title">Send Screenshot to WhatsApp</div>
-              <div class="pay-step-desc">After payment, send your receipt screenshot to:</div>
-              <div class="pay-step-highlight">
-                <span><strong>+255 651 919 915</strong></span>
-                <a href="https://wa.me/255651919915" target="_blank" class="copy-btn" style="text-decoration:none">Open WhatsApp</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="pay-step">
-            <div class="pay-step-num">3</div>
-            <div class="pay-step-content">
-              <div class="pay-step-title">Confirm Your Payment Below</div>
-              <div class="pay-step-desc">Fill in your payment details so we can activate your store faster.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="confirm-form">
-          <div class="confirm-title">Payment Confirmation Details</div>
-          <div class="form-group">
-            <label class="form-label">Your Full Name <span>*</span></label>
-            <input type="text" class="form-input" id="payerName" placeholder="As registered on Travex Mall">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Your Email Address <span>*</span></label>
-            <input type="email" class="form-input" id="payerEmail" placeholder="your@email.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Payment Method <span>*</span></label>
-            <select class="form-select" id="paymentMethod">
-              <option value="">Select payment method</option>
-              <option value="CRDB Bank Transfer">CRDB Bank Transfer</option>
-              <option value="M-Pesa">M-Pesa</option>
-              <option value="Airtel Money">Airtel Money</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Transaction Reference / Receipt Number <span>*</span></label>
-            <input type="text" class="form-input" id="transactionRef" placeholder="e.g. TRF20261234567 or M-Pesa receipt number">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phone Number Used for Payment</label>
-            <input type="tel" class="form-input" id="payerPhone" placeholder="+255 712 000 000">
-          </div>
-        </div>
-
-        <button class="btn-submit-pay" id="submitPayBtn" onclick="submitPayment()">
-          ✅ Submit Payment Confirmation
-        </button>
-
-        <p style="font-size:0.75rem;color:var(--gray);text-align:center;margin-top:1rem;line-height:1.6">
-          Your store will be activated within <strong>2 hours</strong> after we verify your payment.<br>
-          You will receive a confirmation email at your registered address.
-        </p>
+      <div style="padding:1rem 1.5rem;background:var(--bg);border-radius:14px;border:1px solid var(--border)">
+        <div style="font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:.4rem">M-Pesa</div>
+        <div style="font-size:.88rem;font-weight:700;color:var(--text)">+255 651 919 915</div>
       </div>
     </div>
-
-    <!-- SUCCESS SCREEN -->
-    <div id="successScreen" class="success-screen">
-      <div class="success-icon">🎉</div>
-      <div class="success-title">Payment Submitted!</div>
-      <div class="success-desc">We have received your payment confirmation. Our team will verify and activate your store shortly.</div>
-      <div class="success-steps">
-        <div class="success-steps-title">What happens next:</div>
-        <div class="success-step-item">📧 <span>Check your email — you will receive a <strong>confirmation message</strong></span></div>
-        <div class="success-step-item">⏱️ <span>Your store will be activated within <strong>2 hours</strong></span></div>
-        <div class="success-step-item">🏪 <span>Once active, you can <strong>add products and start selling</strong></span></div>
-        <div class="success-step-item">💬 <span>Questions? WhatsApp us: <strong>+255 651 919 915</strong></span></div>
-      </div>
-      <a href="dashboard.html" class="btn-go-dash">Go to My Dashboard →</a>
-    </div>
-
+    <p style="font-size:.78rem;color:var(--muted);line-height:1.65">Malipo yataanza mwezi ujao. Utapata notification kabla ya muda wako kuisha.</p>
   </div>
 </div>
 
-<script>
-const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SUPABASE_ANON = "WEKA_ANON_KEY_YAKO_HAPA";
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-// Plan data
-const plans = {
-  campus:  { name:"Campus Plan",   label:"🎓 Campus Plan",   monthly:15000,  yearly:150000,  badge:"🎓" },
-  basic:   { name:"Basic Plan",    label:"🥈 Basic Plan",    monthly:25000,  yearly:250000,  badge:"🥈" },
-  premium: { name:"Premium Plan",  label:"🥇 Premium Plan",  monthly:45000,  yearly:450000,  badge:"🥇" },
-};
-
-let billing     = "monthly";
-let selectedPlan = null;
-
-// Set billing toggle
-function setBilling(type, btn) {
-  billing = type;
-  document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-
-  Object.keys(plans).forEach(key => {
-    const plan = plans[key];
-    const price = billing === "monthly" ? plan.monthly : plan.yearly;
-    document.getElementById("price-" + key).textContent = "TZS " + price.toLocaleString();
-    const origEl = document.getElementById("original-" + key);
-    if (billing === "yearly") {
-      origEl.textContent = "TZS " + plan.monthly.toLocaleString() + "/mo";
-      origEl.style.display = "block";
-    } else {
-      origEl.style.display = "none";
-    }
-  });
-}
-
-// Select plan
-function selectPlan(key) {
-  selectedPlan = key;
-  document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
-  document.getElementById("card-" + key).classList.add("selected");
-
-  const plan   = plans[key];
-  const amount = billing === "monthly" ? plan.monthly : plan.yearly;
-  const period = billing === "monthly" ? "month" : "year (billed annually)";
-
-  document.getElementById("modalPlanLabel").textContent = plan.label + " — TZS " + amount.toLocaleString() + "/" + period;
-  document.getElementById("modalAmount").textContent    = "TZS " + amount.toLocaleString();
-  document.getElementById("modalAmountRaw").value       = amount;
-
-  // Pre-fill email if logged in
-  sb.auth.getSession().then(({ data: { session } }) => {
-    if (session) {
-      document.getElementById("payerEmail").value = session.user.email;
-      const name = session.user.user_metadata?.name || "";
-      document.getElementById("payerName").value  = name;
-    }
-  });
-
-  document.getElementById("paymentModal").classList.add("open");
-  document.getElementById("paymentForm").style.display  = "block";
-  document.getElementById("successScreen").style.display = "none";
-}
-
-// Submit payment
-async function submitPayment() {
-  const name   = document.getElementById("payerName").value.trim();
-  const email  = document.getElementById("payerEmail").value.trim();
-  const method = document.getElementById("paymentMethod").value;
-  const ref    = document.getElementById("transactionRef").value.trim();
-  const phone  = document.getElementById("payerPhone").value.trim();
-  const btn    = document.getElementById("submitPayBtn");
-  const errEl  = document.getElementById("payError");
-
-  errEl.style.display = "none";
-
-  if (!name || !email || !method || !ref) {
-    errEl.textContent = "Please fill in all required fields.";
-    errEl.style.display = "block";
-    return;
-  }
-
-  btn.textContent = "Submitting...";
-  btn.disabled    = true;
-
-  try {
-    const { data: { session } } = await sb.auth.getSession();
-    const amount = billing === "monthly" ? plans[selectedPlan].monthly : plans[selectedPlan].yearly;
-
-    // Save subscription to Supabase
-    const { error } = await sb.from("subscriptions").insert({
-      user_id:        session?.user?.id || null,
-      plan_type:      selectedPlan,
-      status:         "pending",
-      amount:         amount,
-      payment_method: method,
-      payment_reference: ref,
-    });
-
-    if (error) throw error;
-
-    // Notify admin via WhatsApp
-    const adminWA = '255651919915';
-    const adminMsg = encodeURIComponent(
-      `💳 *New Subscription Payment*\n\n` +
-      `*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}\n` +
-      `*Plan:* ${plans[selectedPlan].label}\n*Amount:* TZS ${amount.toLocaleString()}\n` +
-      `*Method:* ${method}\n*Reference:* ${ref}\n\n` +
-      `_Please verify and activate the account._`
-    );
-    // Open WhatsApp to admin (non-blocking)
-    setTimeout(() => window.open(`https://wa.me/${adminWA}?text=${adminMsg}`, '_blank'), 500);
-
-    // Show success
-    document.getElementById("paymentForm").style.display   = "none";
-    document.getElementById("successScreen").style.display = "block";
-
-  } catch (err) {
-    errEl.textContent = "Submission failed: " + err.message + ". Please try again or contact us on WhatsApp.";
-    errEl.style.display = "block";
-    btn.textContent = "✅ Submit Payment Confirmation";
-    btn.disabled    = false;
-  }
-}
-
-// Copy text
-function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.textContent;
-    btn.textContent = "Copied!";
-    btn.style.background = "var(--green)";
-    setTimeout(() => { btn.textContent = orig; btn.style.background = ""; }, 2000);
-  });
-}
-
-// Close modal
-function closeModal() {
-  document.getElementById("paymentModal").classList.remove("open");
-  document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
-  selectedPlan = null;
-}
-document.getElementById("paymentModal").addEventListener("click", e => {
-  if (e.target === document.getElementById("paymentModal")) closeModal();
-});
-
-// FAQ
-function toggleFaq(el) {
-  const answer = el.nextElementSibling;
-  const icon   = el.querySelector("span");
-  const isOpen = el.classList.contains("open");
-  document.querySelectorAll(".faq-q").forEach(q => { q.classList.remove("open"); q.querySelector("span").textContent = "+"; });
-  document.querySelectorAll(".faq-a").forEach(a => a.classList.remove("open"));
-  if (!isOpen) { el.classList.add("open"); answer.classList.add("open"); icon.textContent = "−"; }
-}
-</script>
-<style id="travex-polish-v2">
-/* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#F8FAFF!important}
-
-.hero{background:linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)!important}
-.hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
-  background:linear-gradient(112deg,transparent 30%,rgba(56,120,255,0.38) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
-  filter:blur(42px)}
-.hero>*{position:relative;z-index:1}
-
-.hero-tag{border-radius:999px!important;border:1px solid rgba(255,255,255,0.18)}
-.toggle-wrap{border-radius:999px!important;overflow:hidden}
-.toggle-btn{border-radius:999px!important}
-.save-badge,.popular-badge,.copy-btn{border-radius:999px!important}
-.plan-card{border-radius:20px!important;box-shadow:0 6px 24px rgba(13,27,62,0.06);transition:all 0.3s}
-.plan-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(13,27,62,0.13)}
-.plan-card.popular{background:linear-gradient(160deg,#0A1733 0%,#050B2E 55%,#15295C 100%)!important;
-  box-shadow:0 18px 50px rgba(8,15,36,0.35)}
-.plan-card.selected{box-shadow:0 22px 60px rgba(13,27,62,0.18)}
-.plan-card.selected.popular{box-shadow:0 22px 60px rgba(201,168,76,0.28)}
-.plan-select-btn,.btn-submit-pay,.btn-go-dash{border-radius:999px!important;transition:all 0.2s}
-.plan-select-btn:hover,.btn-submit-pay:hover,.btn-go-dash:hover{transform:translateY(-1px)}
-.btn-submit-pay{box-shadow:0 8px 22px rgba(201,168,76,0.30)}
-.form-input,.form-select{border-radius:12px!important;background:#F8FAFF}
-.form-input:focus,.form-select:focus{background:#fff;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
-.modal{border-radius:20px!important;box-shadow:0 30px 80px rgba(4,10,30,0.40)}
-.alert{border-radius:12px!important}
-.pay-step-highlight{border-radius:12px!important}
-.success-screen .success-icon{filter:drop-shadow(0 6px 18px rgba(5,150,105,0.3))}
-</style>
+<footer>
+  <p>© 2026 <a href="https://travex-digital-group.vercel.app" target="_blank">Travex Digital Group</a>. All rights reserved.</p>
+</footer>
 </body>
 </html>
