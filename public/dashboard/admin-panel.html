@@ -8,545 +8,534 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-:root{
-  --bg:#060C22;--sidebar:#030818;--card:rgba(255,255,255,0.05);--card-b:rgba(56,120,255,0.12);
+:root{--bg:#060C22;--sidebar:#030818;--card:rgba(255,255,255,0.05);--card-b:rgba(56,120,255,0.12);
   --text:#E2E8F0;--muted:#64748B;--light:#94A3B8;--border:rgba(255,255,255,0.08);
-  --gold:#C9A84C;--gold2:#F0C96B;--blue:#3B82F6;--green:#10B981;--red:#EF4444;
-  --navy:#050B2E;--r:12px;--pill:999px;
-}
+  --gold:#C9A84C;--gold2:#F0C96B;--blue:#3B82F6;--green:#10B981;--red:#EF4444;--r:12px;--pill:999px}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:9px}
 
-/* ── LOGIN ── */
+/* LOGIN */
 #loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(160deg,#010510,#030920 30%,#050E2E 60%,#071540 100%)}
 #loginScreen::before{content:'';position:absolute;top:-25%;right:-8%;width:60%;height:115%;pointer-events:none;
   background:radial-gradient(ellipse 55% 55% at 62% 28%,rgba(56,120,255,0.55),rgba(35,80,220,0.28) 30%,transparent 70%);filter:blur(22px)}
-.login-card{position:relative;z-index:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);
+.lc{position:relative;z-index:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);
   border-radius:24px;padding:2.5rem 2rem;width:380px;max-width:90vw;backdrop-filter:blur(20px);
   box-shadow:0 30px 80px rgba(1,4,14,0.55),inset 0 1px 0 rgba(255,255,255,0.06)}
-.login-badge{display:inline-flex;align-items:center;gap:0.45rem;background:rgba(201,168,76,0.10);border:1px solid rgba(201,168,76,0.25);
-  color:var(--gold);padding:0.3rem 0.85rem;border-radius:var(--pill);font-size:0.65rem;font-weight:700;margin-bottom:1.25rem}
-.login-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:0.4rem}
-.login-sub{font-size:0.82rem;color:rgba(255,255,255,0.40);margin-bottom:1.75rem;line-height:1.6}
-.login-input{width:100%;padding:0.8rem 1rem;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.10);
-  color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;border-radius:var(--r);margin-bottom:0.85rem}
-.login-input:focus{border-color:var(--blue);background:rgba(255,255,255,0.08);box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
-.login-input::placeholder{color:rgba(255,255,255,0.25)}
-.login-btn{width:100%;padding:0.9rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0F172A;
-  font-weight:700;font-size:0.88rem;border:none;border-radius:var(--pill);cursor:pointer;font-family:'Inter',sans-serif;
-  box-shadow:0 6px 20px rgba(201,168,76,0.35);transition:all 0.2s}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(201,168,76,0.45)}
-.login-err{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.30);color:#FCA5A5;
-  padding:0.65rem 0.85rem;border-radius:var(--r);font-size:0.78rem;margin-bottom:1rem;display:none}
+.lc-badge{display:inline-flex;align-items:center;gap:.45rem;background:rgba(201,168,76,0.10);border:1px solid rgba(201,168,76,0.25);
+  color:var(--gold);padding:.3rem .85rem;border-radius:var(--pill);font-size:.65rem;font-weight:700;margin-bottom:1.25rem}
+.lc h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:.4rem}
+.lc p{font-size:.82rem;color:rgba(255,255,255,0.40);margin-bottom:1.75rem;line-height:1.6}
+.lc input{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.10);
+  color:#fff;font-family:'Inter',sans-serif;font-size:.88rem;outline:none;border-radius:var(--r);margin-bottom:.85rem}
+.lc input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
+.lc input::placeholder{color:rgba(255,255,255,0.25)}
+.lc button{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0F172A;
+  font-weight:700;font-size:.88rem;border:none;border-radius:var(--pill);cursor:pointer;font-family:'Inter',sans-serif;
+  box-shadow:0 6px 20px rgba(201,168,76,0.35)}
+.lc-err{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.30);color:#FCA5A5;
+  padding:.65rem .85rem;border-radius:var(--r);font-size:.78rem;margin-bottom:1rem;display:none}
 
-/* ── LAYOUT ── */
-.app{display:none;height:100vh;grid-template-columns:240px 1fr;grid-template-rows:60px 1fr}
-.app.visible{display:grid}
+/* LAYOUT */
+.app{display:none;height:100vh;grid-template-columns:250px 1fr;grid-template-rows:60px 1fr}
+.app.v{display:grid}
 
 /* Sidebar */
-.sidebar{grid-row:1/3;background:linear-gradient(180deg,#020510,#030920 50%,#050E2E 100%);
+.sb{grid-row:1/3;background:linear-gradient(180deg,#020510,#030920 50%,#050E2E 100%);
   border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
-.sb-brand{padding:1.25rem 1.25rem 1rem;display:flex;align-items:center;gap:0.6rem}
+.sb-brand{padding:1.25rem 1.25rem 1rem;display:flex;align-items:center;gap:.6rem}
 .sb-logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
-  display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:900;color:#0F172A;box-shadow:0 4px 14px rgba(201,168,76,0.30)}
-.sb-title{font-family:'Playfair Display',serif;font-size:0.92rem;font-weight:800;color:#fff}
-.sb-title span{color:var(--gold)}
-.sb-section{padding:0 0.75rem;margin-top:1.25rem}
-.sb-label{font-size:0.58rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.16em;padding:0 0.5rem;margin-bottom:0.5rem}
-.sb-item{display:flex;align-items:center;gap:0.6rem;padding:0.65rem 0.75rem;border-radius:10px;font-size:0.8rem;
-  font-weight:500;color:var(--light);cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
-.sb-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
-.sb-item.active{color:#fff;background:rgba(59,130,246,0.12);font-weight:600}
-.sb-item.active::before{content:'';width:3px;height:18px;background:var(--blue);border-radius:2px;margin-right:-0.2rem;flex-shrink:0}
-.sb-count{margin-left:auto;background:var(--blue);color:#fff;font-size:0.58rem;font-weight:800;padding:0.1rem 0.45rem;border-radius:var(--pill);min-width:18px;text-align:center}
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;color:#0F172A}
+.sb-t{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:800;color:#fff}
+.sb-t span{color:var(--gold)}
+.sb-sec{padding:0 .75rem;margin-top:1.25rem}
+.sb-lbl{font-size:.58rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.16em;padding:0 .5rem;margin-bottom:.5rem}
+.sb-i{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;border-radius:10px;font-size:.8rem;
+  font-weight:500;color:var(--light);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+.sb-i:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.sb-i.on{color:#fff;background:rgba(59,130,246,0.12);font-weight:600}
+.sb-i.on::before{content:'';width:3px;height:18px;background:var(--blue);border-radius:2px;margin-right:-.2rem;flex-shrink:0}
+.sb-c{margin-left:auto;background:var(--blue);color:#fff;font-size:.58rem;font-weight:800;padding:.1rem .45rem;border-radius:var(--pill);min-width:18px;text-align:center;display:none}
 
 /* Topbar */
-.topbar{background:rgba(3,8,24,0.90);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+.tb{background:rgba(3,8,24,0.90);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
   padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between}
-.page-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;color:#fff}
-.topbar-right{display:flex;align-items:center;gap:0.75rem}
-.notif-btn{position:relative;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.05);
-  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--light);font-size:0.9rem}
-.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red);display:none}
-.logout-btn{padding:0.45rem 1rem;border-radius:var(--pill);background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);
-  color:#FCA5A5;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.tb h1{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;color:#fff}
+.tb-r{display:flex;align-items:center;gap:.75rem}
+.lo-btn{padding:.45rem 1rem;border-radius:var(--pill);background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);
+  color:#FCA5A5;font-size:.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
 
 /* Content */
-.content{overflow-y:auto;padding:1.5rem}
-.page{display:none}.page.active{display:block}
+.ct{overflow-y:auto;padding:1.5rem}
+.pg{display:none}.pg.on{display:block}
 
-/* Stats grid */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.75rem}
-.stat{background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:1.25rem;transition:all 0.25s}
-.stat:hover{border-color:rgba(56,120,255,0.25);box-shadow:0 8px 24px rgba(56,120,255,0.08)}
-.stat-label{font-size:0.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem}
-.stat-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#fff}
-.stat-val.gold{color:var(--gold)}
-.stat-sub{font-size:0.68rem;color:var(--muted);margin-top:0.25rem}
+/* Stats */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.75rem}
+.st{background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:1.25rem}
+.st-l{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.st-v{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff}
+.st-v.go{color:var(--gold)}.st-v.gr{color:var(--green)}.st-v.ye{color:#FACC15}.st-v.bl{color:var(--blue)}
+.st-s{font-size:.65rem;color:var(--muted);margin-top:.25rem}
 
 /* Table */
-.tbl-wrap{background:var(--card);border:1px solid var(--card-b);border-radius:16px;overflow:hidden}
-.tbl-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem}
-.tbl-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;color:#fff}
-.search{padding:0.5rem 1rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--pill);
-  color:#fff;font-size:0.78rem;outline:none;width:220px;font-family:'Inter',sans-serif}
-.search:focus{border-color:var(--blue);background:rgba(255,255,255,0.08)}
-.search::placeholder{color:var(--muted)}
-.ftabs{display:flex;gap:0.35rem}
-.ftab{padding:0.35rem 0.85rem;border-radius:var(--pill);font-size:0.68rem;font-weight:600;background:transparent;
+.tw{background:var(--card);border:1px solid var(--card-b);border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
+.th{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.th h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;color:#fff}
+.sr{padding:.5rem 1rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--pill);
+  color:#fff;font-size:.78rem;outline:none;width:220px;font-family:'Inter',sans-serif}
+.sr:focus{border-color:var(--blue)}.sr::placeholder{color:var(--muted)}
+.ft{display:flex;gap:.35rem}
+.fb{padding:.35rem .85rem;border-radius:var(--pill);font-size:.68rem;font-weight:600;background:transparent;
   border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif}
-.ftab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.fb.on{background:var(--blue);border-color:var(--blue);color:#fff}
 table{width:100%;border-collapse:collapse}
-th{padding:0.65rem 1rem;text-align:left;font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;
-  letter-spacing:0.06em;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)}
-td{padding:0.75rem 1rem;font-size:0.8rem;border-bottom:1px solid var(--border);vertical-align:middle}
+th{padding:.65rem 1rem;text-align:left;font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.06em;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)}
+td{padding:.75rem 1rem;font-size:.78rem;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 
 /* Badges */
-.badge{display:inline-block;padding:0.15rem 0.55rem;border-radius:var(--pill);font-size:0.62rem;font-weight:700}
-.b-pending{background:rgba(234,179,8,0.12);color:#FACC15}.b-approved{background:rgba(16,185,129,0.12);color:#34D399}
-.b-rejected{background:rgba(239,68,68,0.12);color:#FCA5A5}.b-premium{background:rgba(201,168,76,0.15);color:var(--gold)}
-.b-basic{background:rgba(255,255,255,0.08);color:var(--light)}.b-free{background:rgba(16,185,129,0.12);color:#34D399}
+.bd{display:inline-block;padding:.15rem .55rem;border-radius:var(--pill);font-size:.6rem;font-weight:700}
+.bd-p{background:rgba(234,179,8,0.12);color:#FACC15}.bd-a{background:rgba(16,185,129,0.12);color:#34D399}
+.bd-r{background:rgba(239,68,68,0.12);color:#FCA5A5}.bd-pr{background:rgba(201,168,76,0.15);color:var(--gold)}
+.bd-ba{background:rgba(255,255,255,0.08);color:var(--light)}.bd-fr{background:rgba(16,185,129,0.12);color:#34D399}
 
-/* Action buttons */
-.act{padding:0.3rem 0.65rem;border-radius:var(--pill);font-size:0.68rem;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all 0.15s}
-.act-ok{background:rgba(16,185,129,0.15);color:#34D399}.act-ok:hover{background:rgba(16,185,129,0.25)}
-.act-no{background:rgba(239,68,68,0.12);color:#FCA5A5}.act-no:hover{background:rgba(239,68,68,0.22)}
-.act-view{background:rgba(59,130,246,0.12);color:#93C5FD}.act-view:hover{background:rgba(59,130,246,0.22)}
-.act-wa{background:rgba(37,211,102,0.12);color:#25D366}.act-wa:hover{background:rgba(37,211,102,0.22)}
+/* Actions */
+.ab{padding:.3rem .65rem;border-radius:var(--pill);font-size:.66rem;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s}
+.ab-ok{background:rgba(16,185,129,0.15);color:#34D399}.ab-ok:hover{background:rgba(16,185,129,0.25)}
+.ab-no{background:rgba(239,68,68,0.12);color:#FCA5A5}.ab-no:hover{background:rgba(239,68,68,0.22)}
+.ab-pe{background:rgba(234,179,8,0.12);color:#FACC15}.ab-pe:hover{background:rgba(234,179,8,0.22)}
+.ab-del{background:rgba(239,68,68,0.20);color:#FCA5A5}.ab-del:hover{background:rgba(239,68,68,0.35)}
+.ab-wa{background:rgba(37,211,102,0.12);color:#25D366}.ab-wa:hover{background:rgba(37,211,102,0.22)}
+.ab-vw{background:rgba(59,130,246,0.12);color:#93C5FD}.ab-vw:hover{background:rgba(59,130,246,0.22)}
 
 /* Toast */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.5rem;border-radius:14px;font-size:0.82rem;font-weight:600;
-  z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;max-width:400px}
-.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
-.toast.ok{background:#064E3B;color:#6EE7B7;border:1px solid rgba(16,185,129,0.30)}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:.85rem 1.5rem;border-radius:14px;font-size:.82rem;font-weight:600;
+  z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;max-width:400px}
+.toast.show{opacity:1;transform:translateY(0)}.toast.ok{background:#064E3B;color:#6EE7B7;border:1px solid rgba(16,185,129,0.30)}
 .toast.err{background:#7F1D1D;color:#FCA5A5;border:1px solid rgba(239,68,68,0.30)}
 
+/* Detail modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.modal-bg.show{display:flex}
+.modal{background:#0C1535;border:1px solid var(--card-b);border-radius:20px;padding:2rem;width:520px;max-width:92vw;max-height:85vh;overflow-y:auto;position:relative}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:1rem}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);border:none;color:var(--light);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.dr{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.dr-l{color:var(--muted)}.dr-v{color:#fff;font-weight:600;text-align:right;max-width:60%}
+
 .empty{padding:3rem;text-align:center;color:var(--muted)}
-.empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
+.empty-i{font-size:2.5rem;margin-bottom:.75rem}
+
+/* Value card */
+.vc{background:linear-gradient(135deg,#0C1535,#0A1858);border:1px solid rgba(201,168,76,0.20);border-radius:20px;padding:2rem;margin-bottom:1.5rem}
+.vc h4{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:1rem}
+.vc-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:.82rem}
+.vc-row:last-child{border:none;padding-top:.75rem}
+.vc-total{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--gold)}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="loginScreen">
-  <div class="login-card">
-    <div class="login-badge">🔐 Admin Only</div>
-    <div class="login-title">Travex Admin</div>
-    <div class="login-sub">Weka password yako ya admin kuendelea.</div>
-    <div class="login-err" id="loginErr"></div>
-    
-    <input class="login-input" id="adminPass" placeholder="Admin password" type="password" onkeypress="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+  <div class="lc">
+    <div class="lc-badge">🔐 Admin Only</div>
+    <h2>Travex Admin</h2>
+    <p>Weka password yako ya admin kuendelea.</p>
+    <div class="lc-err" id="loginErr"></div>
+    <input id="adminPass" placeholder="Admin password" type="password" onkeypress="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Sign In →</button>
   </div>
 </div>
 
 <!-- APP -->
 <div class="app" id="app">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sb-brand">
-      <div class="sb-logo">T</div>
-      <div class="sb-title">TRAVEX <span>ADMIN</span></div>
-    </div>
+  <div class="sb">
+    <div class="sb-brand"><div class="sb-logo">T</div><div class="sb-t">TRAVEX <span>ADMIN</span></div></div>
 
-    <div class="sb-section">
-      <div class="sb-label">Overview</div>
-      <button class="sb-item active" onclick="go('overview',this)">📊 Dashboard</button>
-      <button class="sb-item" onclick="go('notifications',this)">🔔 Notifications <span class="sb-count" id="notifCount" style="display:none">0</span></button>
+    <div class="sb-sec">
+      <div class="sb-lbl">Overview</div>
+      <button class="sb-i on" onclick="go('overview',this)">📊 Dashboard</button>
+      <button class="sb-i" onclick="go('analytics',this)">📈 Analytics & Value</button>
     </div>
-
-    <div class="sb-section">
-      <div class="sb-label">Campus Market</div>
-      <button class="sb-item" onclick="go('campus-apps',this)">📋 Applications <span class="sb-count" id="campusAppCount" style="display:none">0</span></button>
-      <button class="sb-item" onclick="go('campus-stores',this)">🎓 Active Stores</button>
+    <div class="sb-sec">
+      <div class="sb-lbl">Campus Market</div>
+      <button class="sb-i" onclick="go('c-apps',this)">📋 Applications <span class="sb-c" id="cAppC">0</span></button>
+      <button class="sb-i" onclick="go('c-stores',this)">🎓 Active Stores</button>
     </div>
-
-    <div class="sb-section">
-      <div class="sb-label">Business Market</div>
-      <button class="sb-item" onclick="go('market-apps',this)">📋 Applications <span class="sb-count" id="marketAppCount" style="display:none">0</span></button>
+    <div class="sb-sec">
+      <div class="sb-lbl">Business Market</div>
+      <button class="sb-i" onclick="go('m-apps',this)">📋 Applications <span class="sb-c" id="mAppC">0</span></button>
+      <button class="sb-i" onclick="go('m-stores',this)">🏪 Approved Stores</button>
     </div>
-
-    <div class="sb-section" style="margin-top:auto;padding-bottom:1.25rem">
-      <div class="sb-label">Quick Links</div>
-      <a href="/" class="sb-item" style="text-decoration:none">🌐 Homepage</a>
-      <a href="/market" class="sb-item" style="text-decoration:none">🏪 Marketplace</a>
-      <a href="/campus" class="sb-item" style="text-decoration:none">🎓 Campus</a>
+    <div class="sb-sec" style="margin-top:auto;padding-bottom:1.25rem">
+      <div class="sb-lbl">Quick Links</div>
+      <a href="/" class="sb-i" style="text-decoration:none">🌐 Homepage</a>
+      <a href="/market" class="sb-i" style="text-decoration:none">🏪 Marketplace</a>
+      <a href="/campus" class="sb-i" style="text-decoration:none">🎓 Campus</a>
     </div>
   </div>
 
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="page-title" id="pageTitle">📊 Dashboard</div>
-    <div class="topbar-right">
-      <div class="notif-btn" onclick="go('notifications',null)">🔔<span class="notif-dot" id="notifDot"></span></div>
-      <button class="logout-btn" onclick="doLogout()">Logout ↗</button>
-    </div>
-  </div>
+  <div class="tb"><h1 id="pTitle">📊 Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout ↗</button></div></div>
 
-  <!-- Content -->
-  <div class="content">
-
+  <div class="ct">
     <!-- OVERVIEW -->
-    <div class="page active" id="page-overview">
-      <div class="stats">
-        <div class="stat"><div class="stat-label">Campus Applications</div><div class="stat-val" id="sCampusApps">—</div><div class="stat-sub">pending + approved + rejected</div></div>
-        <div class="stat"><div class="stat-label">Campus Stores</div><div class="stat-val gold" id="sCampusStores">—</div><div class="stat-sub">active on marketplace</div></div>
-        <div class="stat"><div class="stat-label">Market Applications</div><div class="stat-val" id="sMarketApps">—</div><div class="stat-sub">pending + approved</div></div>
-        <div class="stat"><div class="stat-label">Market Pending</div><div class="stat-val" style="color:#FACC15" id="sMarketPending">—</div><div class="stat-sub">awaiting approval</div></div>
-        <div class="stat"><div class="stat-label">Market Approved</div><div class="stat-val" style="color:#34D399" id="sMarketApproved">—</div><div class="stat-sub">shops live</div></div>
-        <div class="stat"><div class="stat-label">Notifications</div><div class="stat-val" id="sNotifs">—</div><div class="stat-sub">unread alerts</div></div>
+    <div class="pg on" id="pg-overview">
+      <div class="sg">
+        <div class="st"><div class="st-l">Total Applications</div><div class="st-v bl" id="s-total">—</div><div class="st-s">campus + business</div></div>
+        <div class="st"><div class="st-l">Active Stores</div><div class="st-v gr" id="s-active">—</div><div class="st-s">live on marketplace</div></div>
+        <div class="st"><div class="st-l">Pending Approval</div><div class="st-v ye" id="s-pending">—</div><div class="st-s">awaiting review</div></div>
+        <div class="st"><div class="st-l">Campus Stores</div><div class="st-v" id="s-campus">—</div><div class="st-s">active campus shops</div></div>
+        <div class="st"><div class="st-l">Market Stores</div><div class="st-v go" id="s-market">—</div><div class="st-s">business market shops</div></div>
+        <div class="st"><div class="st-l">Monthly Value</div><div class="st-v go" id="s-value">—</div><div class="st-s">subscription revenue</div></div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS & VALUE -->
+    <div class="pg" id="pg-analytics">
+      <div class="vc">
+        <h4>💰 Travex Mall Revenue Potential</h4>
+        <div class="vc-row"><span style="color:var(--muted)">Campus Stores × TZS 15,000/mo</span><span id="v-campus" style="color:#fff;font-weight:700">—</span></div>
+        <div class="vc-row"><span style="color:var(--muted)">Basic Stores × TZS 25,000/mo</span><span id="v-basic" style="color:#fff;font-weight:700">—</span></div>
+        <div class="vc-row"><span style="color:var(--muted)">Premium Stores × TZS 45,000/mo</span><span id="v-premium" style="color:#fff;font-weight:700">—</span></div>
+        <div class="vc-row"><span style="color:var(--gold);font-weight:700">Monthly Revenue</span><span class="vc-total" id="v-monthly">—</span></div>
+        <div class="vc-row"><span style="color:var(--muted)">Annual Projection</span><span id="v-annual" style="color:var(--gold);font-weight:800;font-size:1.1rem">—</span></div>
+      </div>
+
+      <div class="sg">
+        <div class="st"><div class="st-l">Today's Visitors</div><div class="st-v bl" id="a-today">—</div><div class="st-s">page views</div></div>
+        <div class="st"><div class="st-l">This Week</div><div class="st-v" id="a-week">—</div><div class="st-s">page views</div></div>
+        <div class="st"><div class="st-l">This Month</div><div class="st-v" id="a-month">—</div><div class="st-s">page views</div></div>
+        <div class="st"><div class="st-l">All Time</div><div class="st-v go" id="a-all">—</div><div class="st-s">total views</div></div>
+      </div>
+
+      <div class="tw"><div class="th"><h3>📊 Subscription Breakdown</h3></div>
+        <div style="overflow-x:auto"><table><thead><tr>
+          <th>Market</th><th>Plan</th><th>Stores</th><th>Price/mo</th><th>Revenue/mo</th>
+        </tr></thead><tbody id="subTbl"></tbody></table></div>
       </div>
     </div>
 
     <!-- CAMPUS APPLICATIONS -->
-    <div class="page" id="page-campus-apps">
-      <div class="tbl-wrap">
-        <div class="tbl-head">
-          <div class="tbl-title">🎓 Campus Applications</div>
-          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
-            <input class="search" placeholder="Search..." oninput="campusSearch=this.value;renderCampusApps()">
-            <div class="ftabs">
-              <button class="ftab active" onclick="campusFilter='all';renderCampusApps();setActive(this)">All</button>
-              <button class="ftab" onclick="campusFilter='pending';renderCampusApps();setActive(this)">Pending</button>
-              <button class="ftab" onclick="campusFilter='approved';renderCampusApps();setActive(this)">Approved</button>
-              <button class="ftab" onclick="campusFilter='rejected';renderCampusApps();setActive(this)">Rejected</button>
-            </div>
-          </div>
-        </div>
+    <div class="pg" id="pg-c-apps">
+      <div class="tw"><div class="th"><h3>🎓 Campus Applications</h3>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <input class="sr" placeholder="Search..." oninput="cSrch=this.value;rCA()">
+          <div class="ft"><button class="fb on" onclick="cFlt='all';rCA();sA(this)">All</button>
+            <button class="fb" onclick="cFlt='pending';rCA();sA(this)">Pending</button>
+            <button class="fb" onclick="cFlt='approved';rCA();sA(this)">Approved</button>
+            <button class="fb" onclick="cFlt='rejected';rCA();sA(this)">Rejected</button></div>
+        </div></div>
         <div style="overflow-x:auto"><table><thead><tr>
-          <th>Applicant</th><th>University</th><th>Shop Name</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Date</th><th>Actions</th>
-        </tr></thead><tbody id="campusAppsTbl"></tbody></table></div>
+          <th>Applicant</th><th>University</th><th>Shop</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr></thead><tbody id="caTbl"></tbody></table></div>
       </div>
     </div>
 
     <!-- CAMPUS STORES -->
-    <div class="page" id="page-campus-stores">
-      <div class="tbl-wrap">
-        <div class="tbl-head">
-          <div class="tbl-title">🎓 Active Campus Stores</div>
-          <input class="search" placeholder="Search stores..." oninput="storeSearch=this.value;renderCampusStores()">
-        </div>
+    <div class="pg" id="pg-c-stores">
+      <div class="tw"><div class="th"><h3>🎓 Campus Stores</h3>
+        <input class="sr" placeholder="Search..." oninput="csSrch=this.value;rCS()"></div>
         <div style="overflow-x:auto"><table><thead><tr>
-          <th>Store Name</th><th>Owner</th><th>University</th><th>Category</th><th>Status</th><th>Created</th>
-        </tr></thead><tbody id="campusStoresTbl"></tbody></table></div>
+          <th>Store</th><th>Owner</th><th>University</th><th>Category</th><th>Active</th><th>Date</th><th>Actions</th>
+        </tr></thead><tbody id="csTbl"></tbody></table></div>
       </div>
     </div>
 
     <!-- MARKET APPLICATIONS -->
-    <div class="page" id="page-market-apps">
-      <div class="tbl-wrap">
-        <div class="tbl-head">
-          <div class="tbl-title">🏪 Business Market Applications <span class="badge b-free" style="margin-left:0.5rem">Free Month</span></div>
-          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
-            <input class="search" placeholder="Search..." oninput="marketSearch=this.value;renderMarketApps()">
-            <div class="ftabs">
-              <button class="ftab active" onclick="marketFilter='all';renderMarketApps();setActive(this)">All</button>
-              <button class="ftab" onclick="marketFilter='pending';renderMarketApps();setActive(this)">Pending</button>
-              <button class="ftab" onclick="marketFilter='approved';renderMarketApps();setActive(this)">Approved</button>
-            </div>
-          </div>
-        </div>
+    <div class="pg" id="pg-m-apps">
+      <div class="tw"><div class="th"><h3>🏪 Business Market Applications <span class="bd bd-fr" style="margin-left:.5rem">Free Month</span></h3>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <input class="sr" placeholder="Search..." oninput="mSrch=this.value;rMA()">
+          <div class="ft"><button class="fb on" onclick="mFlt='all';rMA();sA(this)">All</button>
+            <button class="fb" onclick="mFlt='pending';rMA();sA(this)">Pending</button>
+            <button class="fb" onclick="mFlt='approved';rMA();sA(this)">Approved</button></div>
+        </div></div>
         <div style="overflow-x:auto"><table><thead><tr>
-          <th>Shop Name</th><th>Owner</th><th>Plan</th><th>Category</th><th>Region</th><th>WhatsApp</th><th>Status</th><th>Date</th><th>Actions</th>
-        </tr></thead><tbody id="marketAppsTbl"></tbody></table></div>
+          <th>Shop</th><th>Owner</th><th>Plan</th><th>Category</th><th>Region</th><th>WhatsApp</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr></thead><tbody id="maTbl"></tbody></table></div>
       </div>
     </div>
 
-    <!-- NOTIFICATIONS -->
-    <div class="page" id="page-notifications">
-      <div class="tbl-wrap">
-        <div class="tbl-head">
-          <div class="tbl-title">🔔 Notifications</div>
-          <button class="act act-view" onclick="markAllRead()">Mark All Read</button>
-        </div>
-        <div id="notifList" style="padding:1rem 1.25rem"></div>
+    <!-- MARKET APPROVED STORES -->
+    <div class="pg" id="pg-m-stores">
+      <div class="tw"><div class="th"><h3>🏪 Approved Business Stores</h3>
+        <input class="sr" placeholder="Search..." oninput="msSrch=this.value;rMS()"></div>
+        <div style="overflow-x:auto"><table><thead><tr>
+          <th>Shop</th><th>Owner</th><th>Plan</th><th>Category</th><th>Region</th><th>Subscription</th><th>Login</th><th>Actions</th>
+        </tr></thead><tbody id="msTbl"></tbody></table></div>
       </div>
     </div>
-
   </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBody"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SB_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SB_KEY  = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
-const ADMINS  = ['admin@travexdigital.com','jumanne@travexdigital.com'];
-const sb = supabase.createClient(SB_URL, SB_KEY);
+const SB_URL='https://bscecjbgnjitlfmgwcic.supabase.co';
+const SB_KEY='sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
+const ADMIN_EMAIL='admin@travexdigital.com';
+const sb=supabase.createClient(SB_URL,SB_KEY);
 
-let campusApps=[],campusStores=[],marketApps=[],notifs=[];
-let campusFilter='all',campusSearch='',marketFilter='all',marketSearch='',storeSearch='';
+let cApps=[],cStores=[],mApps=[],pageViews=[];
+let cFlt='all',cSrch='',csSrch='',mFlt='all',mSrch='',msSrch='';
 
-function esc(s){return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3500)}
-function setActive(btn){btn.parentElement.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+const E=s=>String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const F=n=>n?'TZS '+Number(n).toLocaleString():'—';
+function toast(m,t){const el=document.getElementById('toast');el.textContent=m;el.className='toast show '+t;setTimeout(()=>el.className='toast',3500)}
+function sA(b){b.parentElement.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
 
-// ── AUTH ──
+// ── SECURE AUTH — signIn only, NO signUp ──
 async function doLogin(){
-  const email='admin@travexdigital.com';
   const pass=document.getElementById('adminPass').value;
-  if(!pass){showLoginErr('Weka password.');return}
-
-  const{error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){
-    if(error.message.includes('Invalid') || error.message.includes('invalid')){
-      const{error:signUpErr}=await sb.auth.signUp({email,password:pass,options:{data:{role:'admin'}}});
-      if(signUpErr){showLoginErr('Error: '+signUpErr.message);return}
-      const{error:err2}=await sb.auth.signInWithPassword({email,password:pass});
-      if(err2){showLoginErr('Jaribu tena.');return}
-    } else {
-      showLoginErr('Password si sahihi.');return;
-    }
-  }
+  if(!pass){showErr('Weka password.');return}
+  const{error}=await sb.auth.signInWithPassword({email:ADMIN_EMAIL,password:pass});
+  if(error){showErr('❌ Password si sahihi.');return}
   initApp();
 }
-function showLoginErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
-async function doLogout(){
-  await sb.auth.signOut();
-  location.reload();
-}
+function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
+async function doLogout(){await sb.auth.signOut();location.reload()}
 async function checkSession(){
   const{data:{session}}=await sb.auth.getSession();
-  if(session && ADMINS.includes(session.user.email.toLowerCase())) initApp();
+  if(session&&session.user.email===ADMIN_EMAIL)initApp();
 }
 checkSession();
 
 // ── INIT ──
 async function initApp(){
   document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').classList.add('visible');
+  document.getElementById('app').classList.add('v');
   await loadAll();
 }
 
 async function loadAll(){
-  const [r1,r2,r3,r4]=await Promise.all([
+  const[r1,r2,r3,r4]=await Promise.all([
     sb.from('campus_applications').select('*').order('created_at',{ascending:false}),
     sb.from('campus_stores').select('*').order('created_at',{ascending:false}),
     sb.from('pending_payments').select('*').order('created_at',{ascending:false}),
-    sb.from('admin_notifications').select('*').order('created_at',{ascending:false}).limit(50),
+    sb.from('page_views').select('*').order('created_at',{ascending:false}).limit(1000).then(r=>r).catch(()=>({data:[]})),
   ]);
-  campusApps=r1.data||[];campusStores=r2.data||[];marketApps=r3.data||[];notifs=r4.data||[];
-  updateStats();updateCounts();renderAll();
+  cApps=r1.data||[];cStores=r2.data||[];mApps=r3.data||[];pageViews=r4.data||[];
+  updateAll();
 }
 
-function updateStats(){
-  document.getElementById('sCampusApps').textContent=campusApps.length;
-  document.getElementById('sCampusStores').textContent=campusStores.filter(s=>s.is_active).length;
-  document.getElementById('sMarketApps').textContent=marketApps.length;
-  document.getElementById('sMarketPending').textContent=marketApps.filter(a=>a.status==='pending').length;
-  document.getElementById('sMarketApproved').textContent=marketApps.filter(a=>a.status==='approved').length;
-  document.getElementById('sNotifs').textContent=notifs.filter(n=>!n.is_read).length;
-}
-function updateCounts(){
-  const cp=campusApps.filter(a=>a.status==='pending').length;
-  const mp=marketApps.filter(a=>a.status==='pending').length;
-  const nu=notifs.filter(n=>!n.is_read).length;
-  setCount('campusAppCount',cp);setCount('marketAppCount',mp);setCount('notifCount',nu);
-  document.getElementById('notifDot').style.display=nu>0?'block':'none';
-}
-function setCount(id,n){const el=document.getElementById(id);el.textContent=n;el.style.display=n>0?'inline':'none'}
-function renderAll(){renderCampusApps();renderCampusStores();renderMarketApps();renderNotifs()}
+function updateAll(){
+  const campActive=cStores.filter(s=>s.is_active).length;
+  const mktApproved=mApps.filter(a=>a.status==='approved').length;
+  const mktPending=mApps.filter(a=>a.status==='pending').length;
+  const campPending=cApps.filter(a=>a.status==='pending').length;
+  const totalActive=campActive+mktApproved;
+  const totalPending=campPending+mktPending;
 
-// ── NAVIGATION ──
+  // Overview stats
+  document.getElementById('s-total').textContent=cApps.length+mApps.length;
+  document.getElementById('s-active').textContent=totalActive;
+  document.getElementById('s-pending').textContent=totalPending;
+  document.getElementById('s-campus').textContent=campActive;
+  document.getElementById('s-market').textContent=mktApproved;
+
+  // Value calculation
+  const basicCount=mApps.filter(a=>a.status==='approved'&&a.plan==='basic').length;
+  const premiumCount=mApps.filter(a=>a.status==='approved'&&a.plan==='premium').length;
+  const campusRev=campActive*15000;
+  const basicRev=basicCount*25000;
+  const premiumRev=premiumCount*45000;
+  const monthlyRev=campusRev+basicRev+premiumRev;
+  document.getElementById('s-value').textContent=F(monthlyRev);
+  document.getElementById('v-campus').textContent=`${campActive} × TZS 15,000 = ${F(campusRev)}`;
+  document.getElementById('v-basic').textContent=`${basicCount} × TZS 25,000 = ${F(basicRev)}`;
+  document.getElementById('v-premium').textContent=`${premiumCount} × TZS 45,000 = ${F(premiumRev)}`;
+  document.getElementById('v-monthly').textContent=F(monthlyRev);
+  document.getElementById('v-annual').textContent=F(monthlyRev*12);
+
+  // Subscription table
+  document.getElementById('subTbl').innerHTML=[
+    ['Campus','🎓 Campus',campActive,'15,000',F(campusRev)],
+    ['Business','🥈 Basic',basicCount,'25,000',F(basicRev)],
+    ['Business','🥇 Premium',premiumCount,'45,000',F(premiumRev)],
+  ].map(([m,p,c,pr,r])=>`<tr><td>${m}</td><td><span class="bd ${p.includes('Premium')?'bd-pr':'bd-ba'}">${p}</span></td><td style="font-weight:700">${c}</td><td>TZS ${pr}</td><td style="font-weight:700;color:var(--gold)">${r}</td></tr>`).join('');
+
+  // Analytics (page views)
+  const now=new Date();
+  const today=now.toISOString().split('T')[0];
+  const weekAgo=new Date(now-7*86400000).toISOString();
+  const monthAgo=new Date(now-30*86400000).toISOString();
+  document.getElementById('a-today').textContent=pageViews.filter(v=>(v.created_at||'').startsWith(today)).length||'0';
+  document.getElementById('a-week').textContent=pageViews.filter(v=>(v.created_at||'')>=weekAgo).length||'0';
+  document.getElementById('a-month').textContent=pageViews.filter(v=>(v.created_at||'')>=monthAgo).length||'0';
+  document.getElementById('a-all').textContent=pageViews.length||'0';
+
+  // Counts
+  setC('cAppC',campPending);setC('mAppC',mktPending);
+  rCA();rCS();rMA();rMS();
+}
+function setC(id,n){const el=document.getElementById(id);el.textContent=n;el.style.display=n>0?'inline':'none'}
+
+// ── NAV ──
 function go(name,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
-  const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');
-  if(btn)btn.classList.add('active');
-  const titles={'overview':'📊 Dashboard','campus-apps':'🎓 Campus Applications','campus-stores':'🎓 Campus Stores',
-    'market-apps':'🏪 Market Applications','notifications':'🔔 Notifications'};
-  document.getElementById('pageTitle').textContent=titles[name]||name;
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.sb-i').forEach(i=>i.classList.remove('on'));
+  const pg=document.getElementById('pg-'+name);if(pg)pg.classList.add('on');
+  if(btn)btn.classList.add('on');
+  const t={'overview':'📊 Dashboard','analytics':'📈 Analytics & Value','c-apps':'🎓 Campus Applications',
+    'c-stores':'🎓 Campus Stores','m-apps':'🏪 Market Applications','m-stores':'🏪 Approved Stores'};
+  document.getElementById('pTitle').textContent=t[name]||name;
 }
 
-// ══════════════════════════════════════
-// CAMPUS APPLICATIONS
-// ══════════════════════════════════════
-function renderCampusApps(){
-  let list=campusApps;
-  if(campusFilter!=='all')list=list.filter(a=>a.status===campusFilter);
-  if(campusSearch){const q=campusSearch.toLowerCase();list=list.filter(a=>`${a.full_name} ${a.university_abbr} ${a.business_description||''}`.toLowerCase().includes(q))}
-  const tb=document.getElementById('campusAppsTbl');
-  if(!list.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-icon">📋</div>No applications found</div></td></tr>';return}
-  tb.innerHTML=list.map(a=>{
+// ══ CAMPUS APPS ══
+function rCA(){
+  let l=cApps;
+  if(cFlt!=='all')l=l.filter(a=>a.status===cFlt);
+  if(cSrch){const q=cSrch.toLowerCase();l=l.filter(a=>`${a.full_name} ${a.university_abbr} ${a.business_description||''}`.toLowerCase().includes(q))}
+  const tb=document.getElementById('caTbl');
+  if(!l.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-i">📋</div>No applications</div></td></tr>';return}
+  tb.innerHTML=l.map(a=>{
     const wa=(a.whatsapp_number||a.phone||'').replace(/\D/g,'');
-    const shopName=a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():(a.shop_name||'—');
+    const sn=a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():(a.shop_name||'—');
     const dt=a.submitted_at||a.created_at;
     return `<tr>
-      <td><b>${esc(a.full_name||'—')}</b><div style="font-size:.66rem;color:var(--muted)">Year ${esc(a.year_of_study||'—')}</div></td>
-      <td><span class="badge b-basic">${esc(a.university_abbr||'—')}</span></td>
-      <td style="font-weight:600">${esc(shopName)}</td>
-      <td style="font-size:.76rem;color:var(--muted)">${esc(a.business_category||'—')}</td>
-      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.76rem;text-decoration:none">${esc(a.whatsapp_number||'')}</a>`:'—'}</td>
-      <td><span class="badge ${a.status==='approved'?'b-approved':a.status==='rejected'?'b-rejected':'b-pending'}">${a.status||'pending'}</span></td>
-      <td style="font-size:.7rem;color:var(--muted)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
-      <td><div style="display:flex;gap:.3rem;flex-wrap:wrap">
-        ${a.status==='pending'?`<button class="act act-ok" onclick="approveCampus('${a.id}')">✓</button><button class="act act-no" onclick="rejectCampus('${a.id}')">✗</button>`:''}
-        ${wa?`<button class="act act-wa" onclick="window.open('https://wa.me/${wa}','_blank')">💬</button>`:''}
-      </div></td>
-    </tr>`}).join('');
+      <td><b>${E(a.full_name||'—')}</b><div style="font-size:.64rem;color:var(--muted)">Year ${E(a.year_of_study||'—')}</div></td>
+      <td><span class="bd bd-ba">${E(a.university_abbr||'—')}</span></td>
+      <td style="font-weight:600">${E(sn)}</td>
+      <td style="color:var(--muted)">${E(a.business_category||'—')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.74rem;text-decoration:none">${E(a.whatsapp_number||'')}</a>`:'—'}</td>
+      <td><span class="bd ${a.status==='approved'?'bd-a':a.status==='rejected'?'bd-r':'bd-p'}">${a.status||'pending'}</span></td>
+      <td style="font-size:.68rem;color:var(--muted)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
+      <td><div style="display:flex;gap:.25rem;flex-wrap:wrap">
+        ${a.status==='pending'?`<button class="ab ab-ok" onclick="acCA('${a.id}')">✓</button><button class="ab ab-no" onclick="rejCA('${a.id}')">✗</button>`:''}
+        ${a.status==='approved'?`<button class="ab ab-pe" onclick="pendCA('${a.id}')">⏸</button><button class="ab ab-del" onclick="delCA('${a.id}')">🗑</button>`:''}
+        <button class="ab ab-vw" onclick="viewCA('${a.id}')">👁</button>
+        ${wa?`<button class="ab ab-wa" onclick="window.open('https://wa.me/${wa}','_blank')">💬</button>`:''}
+      </div></td></tr>`}).join('');
 }
 
-async function approveCampus(id){
-  const app=campusApps.find(a=>a.id===id);
-  if(!app||!confirm(`Approve "${app.full_name}" from ${app.university_abbr}?`))return;
-  const shopName=app.business_description?.startsWith('SHOP:')?app.business_description.split('\n')[0].replace('SHOP:','').trim():(app.full_name+"'s Shop");
-  const slug=crypto.randomUUID();
-
-  // Create campus store
-  await sb.from('campus_stores').insert({
-    slug, store_name:shopName, owner_name:app.full_name, phone:app.phone||app.whatsapp_number,
-    whatsapp:app.whatsapp_number||app.phone, university_abbr:app.university_abbr, category:app.business_category,
-    description:app.business_description, is_active:true, user_id:app.user_id||null, application_id:app.id
-  });
+async function acCA(id){
+  const a=cApps.find(x=>x.id===id);if(!a||!confirm('Approve '+a.full_name+'?'))return;
+  const sn=a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():(a.full_name+"'s Shop");
+  await sb.from('campus_stores').insert({slug:crypto.randomUUID(),store_name:sn,owner_name:a.full_name,phone:a.phone||a.whatsapp_number,whatsapp:a.whatsapp_number||a.phone,university_abbr:a.university_abbr,category:a.business_category,description:a.business_description,is_active:true,application_id:a.id});
   await sb.from('campus_applications').update({status:'approved'}).eq('id',id);
-  await sb.from('admin_notifications').insert({type:'campus_approved',title:'✅ '+shopName+' Approved',
-    body:app.full_name+' ('+app.university_abbr+') — store is now live.'});
-
-  // WhatsApp
-  const wa=(app.whatsapp_number||app.phone||'').replace(/\D/g,'');
-  if(wa){
-    const msg=encodeURIComponent(`✅ *Hongera ${app.full_name}!*\n\nDuka lako "${shopName}" kwenye Travex Campus Market limeidhinishwa!\n\n🎓 University: ${app.university_abbr}\n📦 Category: ${app.business_category||'General'}\n\n🔗 Angalia duka lako:\nhttps://travex-mall.vercel.app/campus/${app.university_abbr?.toLowerCase()}\n\nKaribu Travex Mall! 🏪`);
-    window.open(`https://wa.me/${wa}?text=${msg}`,'_blank');
-  }
-  toast('✅ Campus store approved!','ok');
-  await loadAll();
+  const wa=(a.whatsapp_number||a.phone||'').replace(/\D/g,'');
+  if(wa){window.open(`https://wa.me/${wa}?text=${encodeURIComponent(`✅ Hongera ${a.full_name}! Duka lako "${sn}" limeidhinishwa kwenye Travex Campus! 🎓`)}`,'_blank')}
+  toast('✅ Approved!','ok');await loadAll();
+}
+async function rejCA(id){const a=cApps.find(x=>x.id===id);if(!a||!confirm('Reject?'))return;await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
+async function pendCA(id){if(!confirm('Set to pending? Store will be hidden.'))return;
+  const a=cApps.find(x=>x.id===id);if(a)await sb.from('campus_applications').update({status:'pending'}).eq('id',id);
+  const store=cStores.find(s=>s.application_id===id);if(store)await sb.from('campus_stores').update({is_active:false}).eq('id',store.id);
+  toast('Set to pending','ok');await loadAll()}
+async function delCA(id){if(!confirm('DELETE this application and store? Cannot be undone!'))return;
+  const store=cStores.find(s=>s.application_id===id);if(store)await sb.from('campus_stores').delete().eq('id',store.id);
+  await sb.from('campus_applications').delete().eq('id',id);toast('Deleted','err');await loadAll()}
+function viewCA(id){
+  const a=cApps.find(x=>x.id===id);if(!a)return;
+  const rows=[['Full Name',a.full_name],['University',a.university_abbr],['Year',a.year_of_study],['Category',a.business_category],['Phone',a.phone],['WhatsApp',a.whatsapp_number],['Shop Name',a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'—'],['Description',a.business_description],['Status',a.status],['Date',a.created_at?new Date(a.created_at).toLocaleString():'—']];
+  document.getElementById('modalBody').innerHTML=`<button class="modal-close" onclick="closeModal()">✕</button><h3>🎓 Application Details</h3>${rows.map(([l,v])=>`<div class="dr"><span class="dr-l">${l}</span><span class="dr-v">${E(v)}</span></div>`).join('')}`;
+  document.getElementById('modalBg').classList.add('show');
 }
 
-async function rejectCampus(id){
-  const app=campusApps.find(a=>a.id===id);
-  if(!app||!confirm(`Reject "${app.full_name}"?`))return;
-  await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);
-  toast('Application rejected','err');
-  await loadAll();
+// ══ CAMPUS STORES ══
+function rCS(){
+  let l=cStores;
+  if(csSrch){const q=csSrch.toLowerCase();l=l.filter(s=>`${s.store_name} ${s.owner_name} ${s.university_abbr}`.toLowerCase().includes(q))}
+  const tb=document.getElementById('csTbl');
+  if(!l.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-i">🎓</div>No stores</div></td></tr>';return}
+  tb.innerHTML=l.map(s=>`<tr>
+    <td style="font-weight:700">${E(s.store_name||'—')}</td><td>${E(s.owner_name||'—')}</td>
+    <td><span class="bd bd-ba">${E(s.university_abbr||'—')}</span></td><td style="color:var(--muted)">${E(s.category||'—')}</td>
+    <td><span class="bd ${s.is_active?'bd-a':'bd-r'}">${s.is_active?'Active':'Hidden'}</span></td>
+    <td style="font-size:.68rem;color:var(--muted)">${s.created_at?new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
+    <td><div style="display:flex;gap:.25rem">
+      ${s.is_active?`<button class="ab ab-pe" onclick="toggleStore('${s.id}',false)">⏸ Hide</button>`:`<button class="ab ab-ok" onclick="toggleStore('${s.id}',true)">▶ Show</button>`}
+      <button class="ab ab-del" onclick="delStore('${s.id}')">🗑</button>
+    </div></td></tr>`).join('');
 }
+async function toggleStore(id,active){await sb.from('campus_stores').update({is_active:active}).eq('id',id);toast(active?'Store visible':'Store hidden','ok');await loadAll()}
+async function delStore(id){if(!confirm('DELETE store permanently?'))return;await sb.from('campus_stores').delete().eq('id',id);toast('Store deleted','err');await loadAll()}
 
-// ══════════════════════════════════════
-// CAMPUS STORES
-// ══════════════════════════════════════
-function renderCampusStores(){
-  let list=campusStores;
-  if(storeSearch){const q=storeSearch.toLowerCase();list=list.filter(s=>`${s.store_name} ${s.owner_name} ${s.university_abbr}`.toLowerCase().includes(q))}
-  const tb=document.getElementById('campusStoresTbl');
-  if(!list.length){tb.innerHTML='<tr><td colspan="6"><div class="empty"><div class="empty-icon">🏪</div>No stores yet</div></td></tr>';return}
-  tb.innerHTML=list.map(s=>`<tr>
-    <td style="font-weight:700">${esc(s.store_name||'—')}</td>
-    <td>${esc(s.owner_name||'—')}</td>
-    <td><span class="badge b-basic">${esc(s.university_abbr||'—')}</span></td>
-    <td style="font-size:.76rem;color:var(--muted)">${esc(s.category||'—')}</td>
-    <td><span class="badge ${s.is_active?'b-approved':'b-rejected'}">${s.is_active?'Active':'Inactive'}</span></td>
-    <td style="font-size:.7rem;color:var(--muted)">${s.created_at?new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
-  </tr>`).join('');
-}
-
-// ══════════════════════════════════════
-// BUSINESS MARKET APPLICATIONS
-// ══════════════════════════════════════
-function renderMarketApps(){
-  let list=marketApps;
-  if(marketFilter!=='all')list=list.filter(a=>a.status===marketFilter);
-  if(marketSearch){const q=marketSearch.toLowerCase();list=list.filter(a=>`${a.shop_name} ${a.owner_name} ${a.shop_region} ${a.shop_category}`.toLowerCase().includes(q))}
-  const tb=document.getElementById('marketAppsTbl');
-  if(!list.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><div class="empty-icon">🏪</div>No applications found</div></td></tr>';return}
-  tb.innerHTML=list.map(a=>{
+// ══ MARKET APPS ══
+function rMA(){
+  let l=mApps;
+  if(mFlt!=='all')l=l.filter(a=>a.status===mFlt);
+  if(mSrch){const q=mSrch.toLowerCase();l=l.filter(a=>`${a.shop_name} ${a.owner_name} ${a.shop_region} ${a.shop_category}`.toLowerCase().includes(q))}
+  const tb=document.getElementById('maTbl');
+  if(!l.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><div class="empty-i">🏪</div>No applications</div></td></tr>';return}
+  tb.innerHTML=l.map(a=>{
     const wa=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
-    const dt=a.created_at;
     return `<tr>
-      <td style="font-weight:700">${esc(a.shop_name||'—')}</td>
-      <td>${esc(a.owner_name||'—')}<div style="font-size:.66rem;color:var(--muted)">${esc(a.owner_phone||'')}</div></td>
-      <td><span class="badge ${a.plan==='premium'?'b-premium':'b-basic'}">${a.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
-      <td style="font-size:.76rem">${esc(a.shop_category||'—')}</td>
-      <td style="font-size:.76rem">${esc(a.shop_region||'—')}</td>
-      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.76rem;text-decoration:none">${esc(a.owner_phone||'')}</a>`:'—'}</td>
-      <td><span class="badge ${a.status==='approved'?'b-approved':'b-pending'}">${a.status||'pending'}</span> <span class="badge b-free">FREE</span></td>
-      <td style="font-size:.7rem;color:var(--muted)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
-      <td><div style="display:flex;gap:.3rem;flex-wrap:wrap">
-        ${a.status==='pending'?`<button class="act act-ok" onclick="approveMarket('${a.id}')">✓ Approve</button><button class="act act-no" onclick="rejectMarket('${a.id}')">✗</button>`:''}
-        ${wa?`<button class="act act-wa" onclick="window.open('https://wa.me/${wa}','_blank')">💬</button>`:''}
-      </div></td>
-    </tr>`}).join('');
+      <td style="font-weight:700">${E(a.shop_name||'—')}</td>
+      <td>${E(a.owner_name||'—')}<div style="font-size:.64rem;color:var(--muted)">${E(a.owner_phone||'')}</div></td>
+      <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
+      <td style="color:var(--muted)">${E(a.shop_category||'—')}</td>
+      <td style="color:var(--muted)">${E(a.shop_region||'—')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.74rem;text-decoration:none">${E(a.owner_phone||'')}</a>`:'—'}</td>
+      <td><span class="bd ${a.status==='approved'?'bd-a':'bd-p'}">${a.status||'pending'}</span> <span class="bd bd-fr">FREE</span></td>
+      <td style="font-size:.68rem;color:var(--muted)">${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
+      <td><div style="display:flex;gap:.25rem;flex-wrap:wrap">
+        ${a.status==='pending'?`<button class="ab ab-ok" onclick="acMA('${a.id}')">✓ Approve</button><button class="ab ab-no" onclick="rejMA('${a.id}')">✗</button>`:''}
+        ${a.status==='approved'?`<button class="ab ab-pe" onclick="pendMA('${a.id}')">⏸ Pending</button><button class="ab ab-del" onclick="delMA('${a.id}')">🗑 Delete</button>`:''}
+        <button class="ab ab-vw" onclick="viewMA('${a.id}')">👁</button>
+        ${wa?`<button class="ab ab-wa" onclick="window.open('https://wa.me/${wa}','_blank')">💬</button>`:''}
+      </div></td></tr>`}).join('');
 }
 
-async function approveMarket(id){
-  const app=marketApps.find(a=>a.id===id);
-  if(!app||!confirm(`Approve "${app.shop_name}" by ${app.owner_name}?\n\nThis will:\n1. Create login account\n2. Send WhatsApp with password\n3. Make shop LIVE`))return;
-
-  // Generate password
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
-  const rawPass=`TRX-${r4()}-${r4()}`;
-  const authPass=rawPass+'TRX!';
-
-  // Build email from phone
-  const phone=(app.owner_phone||app.whatsapp_number||'').replace(/\D/g,'');
-  if(!phone){toast('❌ No phone number found','err');return}
+async function acMA(id){
+  const a=mApps.find(x=>x.id===id);if(!a||!confirm(`Approve "${a.shop_name}"?\n\n1. Create login account\n2. Send WhatsApp with password\n3. Shop goes LIVE`))return;
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  const rawPass=`TRX-${r4()}-${r4()}`;const authPass=rawPass+'TRX!';
+  const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
+  if(!phone){toast('❌ No phone','err');return}
   const email=phone+'@travexmall.app';
-
-  // Create Supabase Auth account
-  const{data:signUpData,error:signUpErr}=await sb.auth.signUp({email,password:authPass,
-    options:{data:{shop_name:app.shop_name,plan:app.plan,phone,owner_name:app.owner_name}}});
-  if(signUpErr&&!signUpErr.message.includes('already registered')){toast('❌ '+signUpErr.message,'err');return}
-
-  // Update pending_payments
-  await sb.from('pending_payments').update({
-    status:'approved',auth_email:email,login_password:rawPass,
-    user_id:signUpData?.user?.id||null,approved_at:new Date().toISOString()
-  }).eq('id',id);
-
-  await sb.from('admin_notifications').insert({type:'market_approved',title:'✅ '+app.shop_name+' Approved',
-    body:app.owner_name+' ('+app.plan+') — shop is now live. Login sent via WhatsApp.'});
-
-  // WhatsApp
-  const planLabel=app.plan==='premium'?'🥇 Premium':'🥈 Basic';
-  const loginUrl='https://travex-mall.vercel.app/dashboard/login.html';
-  const msg=encodeURIComponent(
-    `✅ *Hongera ${app.owner_name}!*\n\nDuka lako *"${app.shop_name}"* limeidhinishwa na liko *LIVE* sasa!\n\n━━━━━━━━━━━━━━━━━━\n🔐 *TAARIFA ZA KUINGIA*\n━━━━━━━━━━━━━━━━━━\n📱 Namba: *+${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${planLabel}*\n\n🔗 Ingia Dashboard:\n${loginUrl}\n\n💡 Baada ya kuingia mara ya kwanza, dashboard itafunguka automatically!\n\n━━━━━━━━━━━━━━━━━━\nKaribu Travex Mall! 🏪`
-  );
-  window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
-
-  toast(`✅ ${app.shop_name} approved! Account created.`,'ok');
-  await loadAll();
+  const{data:su,error:se}=await sb.auth.signUp({email,password:authPass,options:{data:{shop_name:a.shop_name,plan:a.plan,phone,owner_name:a.owner_name}}});
+  if(se&&!se.message.includes('already registered')){toast('❌ '+se.message,'err');return}
+  await sb.from('pending_payments').update({status:'approved',auth_email:email,login_password:rawPass,user_id:su?.user?.id||null,approved_at:new Date().toISOString()}).eq('id',id);
+  const pl=a.plan==='premium'?'🥇 Premium':'🥈 Basic';
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`✅ *Hongera ${a.owner_name}!*\n\nDuka lako *"${a.shop_name}"* liko LIVE!\n\n━━━━━━━━━━━━\n🔐 *LOGIN*\n📱 Namba: *+${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${pl}*\n\n🔗 ${location.origin}/dashboard/login.html\n━━━━━━━━━━━━\nKaribu Travex Mall! 🏪`)}`,'_blank');
+  toast('✅ Approved + account created!','ok');await loadAll();
+}
+async function rejMA(id){if(!confirm('Reject?'))return;await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
+async function pendMA(id){if(!confirm('Set to pending? Shop will be hidden from marketplace.'))return;await sb.from('pending_payments').update({status:'pending'}).eq('id',id);toast('Set to pending','ok');await loadAll()}
+async function delMA(id){if(!confirm('DELETE this shop permanently? Seller will lose dashboard access!'))return;
+  const a=mApps.find(x=>x.id===id);
+  if(a?.user_id){try{await sb.auth.admin.deleteUser(a.user_id)}catch(e){}}
+  await sb.from('pending_payments').delete().eq('id',id);toast('Deleted permanently','err');await loadAll()}
+function viewMA(id){
+  const a=mApps.find(x=>x.id===id);if(!a)return;
+  const plan=a.plan==='premium'?'🥇 Premium (TZS 45,000/mo)':'🥈 Basic (TZS 25,000/mo)';
+  const sub=a.approved_at?`Approved: ${new Date(a.approved_at).toLocaleDateString()}`:'Not yet approved';
+  const rows=[['Shop Name',a.shop_name],['Owner',a.owner_name],['Phone',a.owner_phone],['Email',a.owner_email],['Plan',plan],['Category',a.shop_category],['Region',a.shop_region],['Description',a.shop_desc],['Status',a.status],['Subscription',sub],['Login Email',a.auth_email||'Not created'],['Login Password',a.login_password||'—'],['Applied',a.created_at?new Date(a.created_at).toLocaleString():'—']];
+  document.getElementById('modalBody').innerHTML=`<button class="modal-close" onclick="closeModal()">✕</button><h3>🏪 Shop Details</h3>${rows.map(([l,v])=>`<div class="dr"><span class="dr-l">${l}</span><span class="dr-v">${E(v)}</span></div>`).join('')}`;
+  document.getElementById('modalBg').classList.add('show');
 }
 
-async function rejectMarket(id){
-  const app=marketApps.find(a=>a.id===id);
-  if(!app||!confirm(`Reject "${app.shop_name}"?`))return;
-  await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);
-  toast('Application rejected','err');
-  await loadAll();
+// ══ MARKET STORES (approved) ══
+function rMS(){
+  let l=mApps.filter(a=>a.status==='approved');
+  if(msSrch){const q=msSrch.toLowerCase();l=l.filter(a=>`${a.shop_name} ${a.owner_name} ${a.shop_region}`.toLowerCase().includes(q))}
+  const tb=document.getElementById('msTbl');
+  if(!l.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-i">🏪</div>No approved stores</div></td></tr>';return}
+  tb.innerHTML=l.map(a=>{
+    const days=a.approved_at?Math.floor((Date.now()-new Date(a.approved_at).getTime())/86400000):0;
+    const subLabel=`${days} days active`;
+    return `<tr>
+      <td style="font-weight:700">${E(a.shop_name||'—')}</td><td>${E(a.owner_name||'—')}</td>
+      <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
+      <td style="color:var(--muted)">${E(a.shop_category||'—')}</td><td style="color:var(--muted)">${E(a.shop_region||'—')}</td>
+      <td><span class="bd bd-a">${subLabel}</span></td>
+      <td style="font-size:.68rem;color:var(--muted)">${E(a.auth_email||'—')}</td>
+      <td><div style="display:flex;gap:.25rem">
+        <button class="ab ab-pe" onclick="pendMA('${a.id}')">⏸</button>
+        <button class="ab ab-del" onclick="delMA('${a.id}')">🗑</button>
+        <button class="ab ab-vw" onclick="viewMA('${a.id}')">👁</button>
+      </div></td></tr>`}).join('');
 }
 
-// ══════════════════════════════════════
-// NOTIFICATIONS
-// ══════════════════════════════════════
-function renderNotifs(){
-  const el=document.getElementById('notifList');
-  if(!notifs.length){el.innerHTML='<div class="empty"><div class="empty-icon">🔔</div>No notifications yet</div>';return}
-  el.innerHTML=notifs.map(n=>`
-    <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 0;border-bottom:1px solid var(--border);opacity:${n.is_read?0.5:1}">
-      <div style="font-size:1.2rem;flex-shrink:0">${n.type?.includes('approved')?'✅':n.type?.includes('reject')?'❌':'📋'}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:0.82rem;font-weight:700;color:#fff">${esc(n.title||'Notification')}</div>
-        <div style="font-size:0.76rem;color:var(--muted);margin-top:2px">${esc(n.body||'')}</div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:4px">${n.created_at?new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</div>
-      </div>
-      ${!n.is_read?`<button class="act act-view" onclick="markRead('${n.id}')" style="flex-shrink:0">Read</button>`:''}
-    </div>
-  `).join('');
-}
-
-async function markRead(id){
-  await sb.from('admin_notifications').update({is_read:true}).eq('id',id);
-  notifs=notifs.map(n=>n.id===id?{...n,is_read:true}:n);
-  updateCounts();renderNotifs();
-}
-async function markAllRead(){
-  await sb.from('admin_notifications').update({is_read:true}).eq('is_read',false);
-  notifs=notifs.map(n=>({...n,is_read:true}));
-  updateCounts();renderNotifs();
-  toast('All marked as read','ok');
-}
+function closeModal(){document.getElementById('modalBg').classList.remove('show')}
 </script>
 </body>
 </html>
