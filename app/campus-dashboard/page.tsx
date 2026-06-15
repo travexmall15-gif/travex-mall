@@ -1,6 +1,6 @@
-export default function CampusDashboardPage() {
-  if (typeof window !== 'undefined') {
-    window.location.replace('/dashboard/campus-dashboard.html')
-  }
+'use client'
+import { useEffect } from 'react'
+export default function DashboardRedirect() {
+  useEffect(() => { window.location.replace('/dashboard/campus-dashboard.html') }, [])
   return null
 }
