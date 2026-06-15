@@ -474,75 +474,104 @@ let currentStep = 1
 const PRICES = { basic: 25000, premium: 45000 }
 const fmt = n => 'TZS ' + Number(n).toLocaleString('en-US')
 
-// ── NAVIGATION ──
-function goStep(n) {
-  if (n > currentStep && !validateStep(currentStep)) return
-  document.getElementById(`step${currentStep}`).classList.remove('active')
-  document.getElementById(`prog${currentStep}`).classList.remove('active')
-  document.getElementById(`prog${currentStep}`).classList.add('done')
-  document.getElementById(`prog${currentStep}`).innerHTML = '✓'
-  document.getElementById(`lbl${currentStep}`).classList.remove('active')
-  document.getElementById(`lbl${currentStep}`).classList.add('done')
-  document.getElementById(`line${currentStep}`) && document.getElementById(`line${currentStep}`).classList.add('done')
+// ── HELPER: safe get element ──
+function $id(id) { return document.getElementById(id) }
 
-  currentStep = n
-  document.getElementById(`step${currentStep}`).classList.add('active')
-  document.getElementById(`prog${currentStep}`).classList.add('active')
-  document.getElementById(`lbl${currentStep}`).classList.add('active')
-
-  // Build step 4 summary
-  if (n === 4) {
-    const planLabel = selectedPlan === 'premium' ? '🥇 Premium Plan' : '🥈 Basic Plan'
-    const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
-    try { document.getElementById('step4PlanLabel').textContent = planLabel } catch(e){}
-    try { document.getElementById('step4PriceLabel').textContent = priceLabel } catch(e){}
-  }
-  // Build review
-  if (n === 5) buildReview()
-
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+// ── SHOW ERROR ──
+function showErr(el, msg) {
+  if (!el) return false
+  el.textContent = msg
+  el.classList.add('show')
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  return false
 }
 
 // ── VALIDATION ──
 function validateStep(n) {
-  const err = document.getElementById(`err${n}`)
-  err.classList.remove('show')
+  // Clear all errors for this step
+  const err = $id('err' + n)
+  if (err) { err.textContent = ''; err.classList.remove('show') }
 
   if (n === 1) {
-    const name  = document.getElementById('ownerName').value.trim()
-    const phone = document.getElementById('ownerPhone').value.trim()
-    const email = document.getElementById('ownerEmail').value.trim()
-    const pass  = document.getElementById('ownerPass').value
-    if (!name)  return showErr(err, 'Enter your full name')
-    if (!phone) return showErr(err, 'Enter your WhatsApp number')
-    if (!email || !email.includes('@')) return showErr(err, 'Enter a valid email address')
-    if (pass.length < 8) return showErr(err, 'Password must be at least 8 characters')
+    const name  = ($id('ownerName')?.value || '').trim()
+    const phone = ($id('ownerPhone')?.value || '').trim()
+    const email = ($id('ownerEmail')?.value || '').trim()
+    const pass  = ($id('ownerPass')?.value || '')
+    if (!name)  return showErr(err, '⚠️ Weka jina lako kamili')
+    if (!phone) return showErr(err, '⚠️ Weka namba yako ya WhatsApp')
+    if (!email || !email.includes('@')) return showErr(err, '⚠️ Weka email halisi')
+    if (pass.length < 8) return showErr(err, '⚠️ Password lazima iwe na herufi 8 au zaidi')
+    return true
   }
+
   if (n === 2) {
-    if (!selectedPlan) return showErr(document.getElementById('err2'), 'Please select a plan')
+    if (!selectedPlan) return showErr($id('err2'), '⚠️ Chagua plan yako')
+    return true
   }
+
   if (n === 3) {
-    const shop = document.getElementById('shopName').value.trim()
-    const cat  = document.getElementById('shopCategory').value
-    const reg  = document.getElementById('shopRegion').value
-    const wa   = document.getElementById('shopWhatsapp').value.trim()
-    const desc = document.getElementById('shopDesc').value.trim()
-    if (!shop) return showErr(document.getElementById('err3'), 'Enter your shop name')
-    if (!cat)  return showErr(document.getElementById('err3'), 'Select a category')
-    if (!reg)  return showErr(document.getElementById('err3'), 'Select your region')
-    if (!wa)   return showErr(document.getElementById('err3'), 'Enter your shop WhatsApp number')
-    if (desc.length < 30) return showErr(document.getElementById('err3'), 'Description must be at least 30 characters')
+    const shop = ($id('shopName')?.value || '').trim()
+    const cat  = $id('shopCategory')?.value || ''
+    const reg  = $id('shopRegion')?.value || ''
+    const wa   = ($id('shopWhatsapp')?.value || '').trim()
+    const desc = ($id('shopDesc')?.value || '').trim()
+    const e3   = $id('err3')
+    if (!shop) return showErr(e3, '⚠️ Weka jina la duka lako')
+    if (!cat)  return showErr(e3, '⚠️ Chagua category')
+    if (!reg)  return showErr(e3, '⚠️ Chagua mkoa wako')
+    if (!wa)   return showErr(e3, '⚠️ Weka namba ya WhatsApp ya duka')
+    if (desc.length < 20) return showErr(e3, '⚠️ Maelezo ya duka lazima yawe na maneno 20 au zaidi')
+    return true
   }
+
   if (n === 4) {
-    // No payment required — free registration
+    // Free registration — no validation needed
+    return true
   }
+
   return true
 }
 
-function showErr(el, msg) {
-  el.textContent = msg
-  el.classList.add('show')
-  return false
+// ── NAVIGATION ──
+function goStep(n) {
+  // Validate before moving forward
+  if (n > currentStep) {
+    if (!validateStep(currentStep)) return
+  }
+
+  // Hide current step
+  const curStep = $id('step' + currentStep)
+  const curProg = $id('prog' + currentStep)
+  const curLbl  = $id('lbl'  + currentStep)
+  const curLine = $id('line' + currentStep)
+
+  if (curStep) curStep.classList.remove('active')
+  if (curProg) { curProg.classList.remove('active'); curProg.classList.add('done'); curProg.innerHTML = '✓' }
+  if (curLbl)  { curLbl.classList.remove('active');  curLbl.classList.add('done') }
+  if (curLine && n > currentStep) curLine.classList.add('done')
+
+  // Update current step
+  currentStep = n
+
+  // Show new step
+  const newStep = $id('step' + currentStep)
+  const newProg = $id('prog' + currentStep)
+  const newLbl  = $id('lbl'  + currentStep)
+
+  if (newStep) newStep.classList.add('active')
+  if (newProg) { newProg.classList.remove('done'); newProg.classList.add('active') }
+  if (newLbl)  { newLbl.classList.remove('done');  newLbl.classList.add('active') }
+
+  // Step-specific actions
+  if (n === 4) {
+    const planLabel  = selectedPlan === 'premium' ? '🥇 Premium Plan' : '🥈 Basic Plan'
+    const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
+    const pl = $id('step4PlanLabel');  if (pl)  pl.textContent  = planLabel
+    const pr = $id('step4PriceLabel'); if (pr)  pr.textContent  = priceLabel
+  }
+  if (n === 5) buildReview()
+
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 // ── PLAN SELECTION ──
