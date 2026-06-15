@@ -14,6 +14,7 @@ export default function VybePage() {
   const [posts, setPosts] = useState<FeedPost[]>([])
   const [filter, setFilter] = useState('All')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [liked, setLiked] = useState<Set<string>>(new Set())
 
   useEffect(() => { loadPosts() }, [filter])
@@ -22,7 +23,8 @@ export default function VybePage() {
     setLoading(true)
     let q = sb.from('feed_posts').select('*').order('created_at', { ascending: false }).limit(24)
     if (filter !== 'All') q = q.eq('university_abbr', filter)
-    const { data } = await q
+    const { data, error: fetchErr } = await q
+    if (fetchErr) { setError('Imeshindwa kupakia posts. Jaribu tena.'); setLoading(false); return }
     setPosts(data || [])
     setLoading(false)
   }
@@ -33,6 +35,16 @@ export default function VybePage() {
     await sb.from('feed_posts').update({ likes_count: post.likes_count + (isLiked ? -1 : 1) }).eq('id', post.id)
     setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes_count: p.likes_count + (isLiked ? -1 : 1) } : p))
   }
+
+    if (error) return (
+    <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#07010E' }}>
+      <div style={{ textAlign: 'center', color: '#fff' }}>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+        <p style={{ color: 'rgba(255,255,255,0.55)', marginBottom: '1rem' }}>{error}</p>
+        <button onClick={() => { setError(null); loadPosts() }} style={{ padding: '0.75rem 1.5rem', background: '#C9A84C', color: '#0F172A', border: 'none', borderRadius: '999px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>Retry</button>
+      </div>
+    </main>
+  )
 
   return (
     <main className="min-h-screen" style={{ background: '#07010E' }}>
