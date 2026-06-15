@@ -134,10 +134,10 @@ tr:last-child td{border-bottom:none}
   <div class="login-card">
     <div class="login-badge">🔐 Admin Only</div>
     <div class="login-title">Travex Admin</div>
-    <div class="login-sub">Ingia kwa email yako ya admin kuthibitisha haki zako.</div>
+    <div class="login-sub">Weka password yako ya admin kuendelea.</div>
     <div class="login-err" id="loginErr"></div>
-    <input class="login-input" id="adminEmail" placeholder="admin@travexdigital.com" type="email" onkeypress="if(event.key==='Enter')doLogin()">
-    <input class="login-input" id="adminPass" placeholder="Password" type="password" onkeypress="if(event.key==='Enter')doLogin()">
+    
+    <input class="login-input" id="adminPass" placeholder="Admin password" type="password" onkeypress="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Sign In →</button>
   </div>
 </div>
@@ -285,23 +285,19 @@ function setActive(btn){btn.parentElement.querySelectorAll('.ftab').forEach(b=>b
 
 // ── AUTH ──
 async function doLogin(){
-  const email=document.getElementById('adminEmail').value.trim();
+  const email='admin@travexdigital.com';
   const pass=document.getElementById('adminPass').value;
-  if(!email||!pass){showLoginErr('Jaza email na password.');return}
-  if(!ADMINS.includes(email.toLowerCase())){showLoginErr('Email hii si ya admin.');return}
+  if(!pass){showLoginErr('Weka password.');return}
 
-  // Try sign in first
   const{error}=await sb.auth.signInWithPassword({email,password:pass});
   if(error){
-    // If user doesn't exist yet, create account automatically (bootstrap)
     if(error.message.includes('Invalid') || error.message.includes('invalid')){
       const{error:signUpErr}=await sb.auth.signUp({email,password:pass,options:{data:{role:'admin'}}});
       if(signUpErr){showLoginErr('Error: '+signUpErr.message);return}
-      // Try signing in again after creating
       const{error:err2}=await sb.auth.signInWithPassword({email,password:pass});
-      if(err2){showLoginErr('Account created but login failed. Try again.');return}
+      if(err2){showLoginErr('Jaribu tena.');return}
     } else {
-      showLoginErr('Error: '+error.message);return;
+      showLoginErr('Password si sahihi.');return;
     }
   }
   initApp();
