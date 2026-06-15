@@ -1,6 +1,6 @@
-export default function AdminPage() {
-  if (typeof window !== 'undefined') {
-    window.location.replace('/dashboard/admin-panel.html')
-  }
+'use client'
+import { useEffect } from 'react'
+export default function AdminRedirect() {
+  useEffect(() => { window.location.replace('/dashboard/admin-panel.html') }, [])
   return null
 }
