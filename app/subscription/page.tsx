@@ -1,6 +1,6 @@
-export default function SubscriptionPage() {
-  if (typeof window !== 'undefined') {
-    window.location.replace('/dashboard/subscription.html')
-  }
+'use client'
+import { useEffect } from 'react'
+export default function SubscriptionRedirect() {
+  useEffect(() => { window.location.replace('/dashboard/subscription.html') }, [])
   return null
 }
