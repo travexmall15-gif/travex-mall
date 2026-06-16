@@ -1,5 +1,6 @@
 // ══════════════════════════════════════
 // TRAVEX MALL — Shared Dashboard JS
+// Modelled after Travex Finance pattern
 // ══════════════════════════════════════
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co';
@@ -7,15 +8,16 @@ const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
 const { createClient } = supabase;
 const sb = createClient(SB_URL, SB_KEY);
 
-// ── Auth ──────────────────────────────
+// ── AUTH ──────────────────────────────
 const Auth = {
   async getSession() {
     const { data: { session } } = await sb.auth.getSession();
     return session;
   },
-  async getUser() {
-    const { data: { user } } = await sb.auth.getUser();
-    return user;
+  async requireAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return null; }
+    return session;
   },
   async signOut() {
     ['travex_plan','travex_shop_name','travex_owner_name',
@@ -23,175 +25,114 @@ const Auth = {
     await sb.auth.signOut();
     window.location.href = 'login.html';
   },
-  async requireAuth() {
-    const session = await this.getSession();
-    if (!session) { window.location.href = 'login.html'; return null; }
-    return session;
-  },
 };
 
-// ── Shop Profile ──────────────────────
+// ── SHOP ─────────────────────────────
 const Shop = {
+  _cache: null,
   async get(email) {
-    // Try pending_payments (business market)
-    const { data } = await sb
-      .from('pending_payments')
-      .select('*')
-      .eq('auth_email', email)
-      .eq('status', 'approved')
-      .single();
-    return data;
-  },
-  async getCampus(userId) {
-    const { data } = await sb
-      .from('campus_stores')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('is_active', true)
-      .single();
+    if (this._cache) return this._cache;
+    const { data } = await sb.from('pending_payments')
+      .select('*').eq('auth_email', email).eq('status','approved').single();
+    this._cache = data;
     return data;
   },
 };
 
-// ── Database helpers ──────────────────
+// ── DATABASE ─────────────────────────
 const DB = {
   products: {
     async getAll(shopId) {
       const { data } = await sb.from('campus_products')
-        .select('*').eq('store_id', shopId)
-        .order('created_at', { ascending: false });
+        .select('*').eq('store_id', shopId).order('created_at',{ascending:false});
       return data || [];
     },
     async save(item) {
-      if (item.id) {
-        const { id, ...rest } = item;
-        return sb.from('campus_products').update(rest).eq('id', id);
-      }
+      if (item.id) { const {id,...r}=item; return sb.from('campus_products').update(r).eq('id',id); }
       return sb.from('campus_products').insert(item);
     },
-    async delete(id) {
-      return sb.from('campus_products').delete().eq('id', id);
-    },
+    async delete(id) { return sb.from('campus_products').delete().eq('id',id); },
   },
   orders: {
     async getAll(shopId) {
       const { data } = await sb.from('campus_orders')
-        .select('*').eq('store_id', shopId)
-        .order('created_at', { ascending: false });
+        .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
       return data || [];
     },
-    async updateStatus(id, status) {
-      return sb.from('campus_orders').update({ status }).eq('id', id);
-    },
-    async getToday(shopId) {
-      const today = new Date().toISOString().split('T')[0];
-      const { data } = await sb.from('campus_orders')
-        .select('*').eq('store_id', shopId)
-        .gte('created_at', today);
-      return data || [];
-    },
+    async updateStatus(id,status) { return sb.from('campus_orders').update({status}).eq('id',id); },
   },
   sales: {
     async getAll(shopId) {
       const { data } = await sb.from('seller_sales')
-        .select('*').eq('store_id', shopId)
-        .order('date', { ascending: false });
-      return data || [];
-    },
-    async getByDate(shopId, date) {
-      const { data } = await sb.from('seller_sales')
-        .select('*').eq('store_id', shopId).eq('date', date);
+        .select('*').eq('store_id',shopId).order('date',{ascending:false});
       return data || [];
     },
     async save(item) {
-      if (item.id) {
-        const { id, ...rest } = item;
-        return sb.from('seller_sales').update(rest).eq('id', id);
-      }
+      if (item.id) { const {id,...r}=item; return sb.from('seller_sales').update(r).eq('id',id); }
       return sb.from('seller_sales').insert(item);
     },
-    async delete(id) {
-      return sb.from('seller_sales').delete().eq('id', id);
-    },
+    async delete(id) { return sb.from('seller_sales').delete().eq('id',id); },
   },
   debts: {
     async getAll(shopId) {
       const { data } = await sb.from('seller_debts')
-        .select('*').eq('store_id', shopId)
-        .order('created_at', { ascending: false });
+        .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
       return data || [];
     },
     async save(item) {
-      if (item.id) {
-        const { id, ...rest } = item;
-        return sb.from('seller_debts').update(rest).eq('id', id);
-      }
+      if (item.id) { const {id,...r}=item; return sb.from('seller_debts').update(r).eq('id',id); }
       return sb.from('seller_debts').insert(item);
     },
-    async delete(id) {
-      return sb.from('seller_debts').delete().eq('id', id);
-    },
+    async delete(id) { return sb.from('seller_debts').delete().eq('id',id); },
   },
   vybe: {
-    async getPosts(shopId) {
+    async getAll(shopId) {
       const { data } = await sb.from('feed_posts')
-        .select('*').eq('store_id', shopId)
-        .order('created_at', { ascending: false });
+        .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
       return data || [];
     },
-    async post(item) {
-      return sb.from('feed_posts').insert(item);
-    },
-    async delete(id) {
-      return sb.from('feed_posts').delete().eq('id', id);
-    },
+    async post(item)  { return sb.from('feed_posts').insert(item); },
+    async delete(id)  { return sb.from('feed_posts').delete().eq('id',id); },
   },
 };
 
-// ── Helpers ───────────────────────────
+// ── HELPERS ───────────────────────────
 function formatTZS(n) {
   if (!n && n !== 0) return '—';
   return 'TZS ' + Number(n).toLocaleString('en-US');
 }
-function today() {
-  return new Date().toISOString().split('T')[0];
+function today() { return new Date().toISOString().split('T')[0]; }
+function timeAgo(d) {
+  if (!d) return '—';
+  const diff = Date.now() - new Date(d).getTime();
+  const m = Math.floor(diff/60000);
+  if (m < 1)  return 'just now';
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m/60);
+  if (h < 24) return h + 'h ago';
+  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 }
-function timeAgo(dateStr) {
-  if (!dateStr) return '—';
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-}
-function truncate(str, n = 40) {
-  if (!str) return '—';
-  return str.length > n ? str.slice(0, n) + '…' : str;
+function truncate(s, n=40) {
+  if (!s) return '—';
+  return s.length > n ? s.slice(0,n) + '…' : s;
 }
 
-// ── Toast ─────────────────────────────
-function showToast(msg, type = 'default', duration = 3000) {
+// ── TOAST ─────────────────────────────
+function showToast(msg, type='default') {
   const t = document.getElementById('toast');
   if (!t) return;
   t.textContent = msg;
-  t.className = `toast show${type !== 'default' ? ' ' + type : ''}`;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), duration);
+  t.className = 'toast' + (type !== 'default' ? ' ' + type : '');
+  t.style.display = 'flex';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.style.display = 'none'; }, 3200);
 }
 
-// ── Modal ─────────────────────────────
-function openModal(id) {
-  const m = document.getElementById(id);
-  if (m) m.classList.add('show');
-}
-function closeModal(id) {
-  const m = document.getElementById(id);
-  if (m) m.classList.remove('show');
-}
+// ── MODAL ─────────────────────────────
+function openModal(id)  { const m=document.getElementById(id); if(m) m.classList.add('show'); }
+function closeModal(id) { const m=document.getElementById(id); if(m) m.classList.remove('show'); }
 
-// ── Sidebar ───────────────────────────
+// ── SIDEBAR ───────────────────────────
 async function loadSidebar(activePage, shopData) {
   const el = document.getElementById('sidebar');
   if (!el) return;
@@ -199,102 +140,90 @@ async function loadSidebar(activePage, shopData) {
   const plan = shopData?.plan || localStorage.getItem('travex_plan') || 'basic';
   const shopName = shopData?.shop_name || localStorage.getItem('travex_shop_name') || 'My Shop';
   const ownerName = shopData?.owner_name || localStorage.getItem('travex_owner_name') || '';
-  const initials = ownerName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'S';
+  const initials = ownerName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'TX';
   const isPremium = plan === 'premium';
+  const planLabel = plan === 'premium' ? '🥇 Premium' : '🥈 Basic';
 
-  const navItems = [
-    { id: 'dashboard', href: 'dashboard.html',   icon: 'ti-home',          label: 'Overview' },
-    { id: 'products',  href: 'products.html',     icon: 'ti-package',       label: 'Products' },
-    { id: 'orders',    href: 'orders.html',        icon: 'ti-shopping-cart', label: 'Orders' },
-    { id: 'accounting',href: 'accounting.html',   icon: 'ti-cash',          label: 'Accounting' },
-    { id: 'debts',     href: 'debts.html',         icon: 'ti-credit-card',   label: 'Debts' },
-    { id: 'invoice',   href: 'invoice.html',       icon: 'ti-file-invoice',  label: 'Invoice' },
-    { id: 'reports',   href: 'reports.html',       icon: 'ti-chart-bar',     label: 'Reports' },
-    { id: 'vybe',      href: 'vybe.html',          icon: 'ti-bolt',          label: 'Social Vybe' },
-    { id: 'ai-tools',  href: 'ai-tools.html',      icon: 'ti-robot',         label: 'AI Tools', premium: true },
-    { id: 'marketing', href: 'marketing.html',     icon: 'ti-speakerphone',  label: 'Marketing', premium: true },
-    { id: 'settings',  href: 'settings.html',      icon: 'ti-settings',      label: 'Settings' },
-  ];
+  const navItem = (id, href, icon, label, isPro=false) => {
+    const locked = isPro && !isPremium;
+    return `<a href="${locked?'#':href}" class="nav-item ${activePage===id?'active':''}"
+      ${locked?`onclick="showToast('🔒 Premium Only — Upgrade to access','warning');return false"`:''}>
+      <i class="ti ${icon}"></i> ${label}
+      ${locked ? '<span style="margin-left:auto;background:rgba(255,215,0,0.2);color:var(--gold);font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px">PRO</span>' : ''}
+    </a>`;
+  };
 
   el.innerHTML = `
-    <div class="sb-brand">
-      <div class="sb-logo">T</div>
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-brand">TRAVEX MALL</div>
+      <div class="sidebar-logo-tag">Seller Dashboard</div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">${initials}</div>
       <div>
-        <div class="sb-brand-text">TRAVEX MALL</div>
-        <div class="sb-brand-sub">Seller Dashboard</div>
+        <div class="sidebar-user-name">${truncate(shopName,20)}</div>
+        <div class="sidebar-user-plan">${planLabel}</div>
       </div>
     </div>
 
-    <div class="sb-user">
-      <div class="sb-avatar">${initials}</div>
-      <div>
-        <div class="sb-user-name">${truncate(shopName, 22)}</div>
-        <div class="sb-user-plan">${isPremium ? '🥇 Premium' : '🥈 Basic'}</div>
-      </div>
-    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      ${navItem('dashboard', 'dashboard.html', 'ti-home',          'Overview')}
+      ${navItem('products',  'products.html',  'ti-package',       'Products')}
+      ${navItem('orders',    'orders.html',    'ti-shopping-cart', 'Orders')}
 
-    <div class="sb-section">
-      <div class="sb-section-label">Main</div>
-      ${navItems.slice(0, 3).map(i => navLink(i, activePage, isPremium)).join('')}
-    </div>
+      <div class="nav-label">Finance</div>
+      ${navItem('accounting','accounting.html','ti-cash',          'Accounting')}
+      ${navItem('debts',     'debts.html',     'ti-credit-card',   'Debts')}
+      ${navItem('invoice',   'invoice.html',   'ti-file-invoice',  'Invoice')}
+      ${navItem('reports',   'reports.html',   'ti-chart-bar',     'Reports')}
 
-    <div class="sb-section">
-      <div class="sb-section-label">Finance</div>
-      ${navItems.slice(3, 7).map(i => navLink(i, activePage, isPremium)).join('')}
-    </div>
+      <div class="nav-label">Growth</div>
+      ${navItem('vybe',      'vybe.html',      'ti-bolt',          'Social Vybe')}
+      ${navItem('ai-tools',  'ai-tools.html',  'ti-robot',         'AI Tools',      true)}
+      ${navItem('marketing', 'marketing.html', 'ti-speakerphone',  'Marketing',     true)}
 
-    <div class="sb-section">
-      <div class="sb-section-label">Growth</div>
-      ${navItems.slice(7, 10).map(i => navLink(i, activePage, isPremium)).join('')}
-    </div>
+      <div class="nav-label">Account</div>
+      ${navItem('settings',  'settings.html',  'ti-settings',      'Settings')}
+    </nav>
 
-    <div class="sb-section">
-      ${navItems.slice(10).map(i => navLink(i, activePage, isPremium)).join('')}
-    </div>
-
-    <div class="sb-footer">
-      <button class="sb-item" onclick="Auth.signOut()" style="color:rgba(255,100,100,0.7)">
+    <div class="sidebar-footer">
+      <a href="/subscription" class="nav-item"><i class="ti ti-crown"></i> Subscription</a>
+      <button class="nav-item logout-btn" onclick="Auth.signOut()" style="color:rgba(255,100,100,0.75);border:none;background:none;cursor:pointer;font-family:inherit;width:100%">
         <i class="ti ti-logout"></i> Sign Out
       </button>
     </div>
   `;
 }
 
-function navLink(item, activePage, isPremium) {
-  const isActive = item.id === activePage;
-  const isLocked = item.premium && !isPremium;
-  return `
-    <a href="${isLocked ? '#' : item.href}" class="sb-item ${isActive ? 'active' : ''}"
-       ${isLocked ? `onclick="showToast('🔒 Upgrade to Premium to unlock this feature','warning');return false"` : ''}>
-      <i class="ti ${item.icon}"></i>
-      ${item.label}
-      ${isLocked ? '<span class="sb-badge" style="background:var(--gold);color:var(--navy)">PRO</span>' : ''}
-    </a>`;
-}
-
-// ── Mobile menu toggle ─────────────────
+// ── MOBILE MENU ───────────────────────
 function toggleSidebar() {
   document.getElementById('sidebar')?.classList.toggle('open');
 }
 
-// ── Loading overlay ────────────────────
-function showLoading(show = true) {
+// ── LOADING ───────────────────────────
+function showLoading(show=true) {
   const el = document.getElementById('loadingOverlay');
   if (el) el.style.display = show ? 'flex' : 'none';
 }
 
-// ── AI Helper ─────────────────────────
-async function askAI(systemPrompt, userMessage) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5',
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }],
-    }),
-  });
-  const data = await res.json();
-  return data.content?.[0]?.text || 'Sorry, could not get a response.';
+// ── AI CALL ───────────────────────────
+async function askAI(system, userMsg) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 800,
+        system,
+        messages: [{ role:'user', content:userMsg }],
+      }),
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text || 'Could not get response.';
+  } catch(e) {
+    return 'Error connecting to AI. Please try again.';
+  }
 }
