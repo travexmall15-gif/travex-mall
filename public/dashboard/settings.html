@@ -92,18 +92,16 @@ let shopData = null;
   shopData = await Shop.get(session.user.email);
   await loadSidebar('settings', shopData);
 
-  if (shopData) {
-    document.getElementById('sShopName').value  = shopData.shop_name||'';
-    document.getElementById('sCategory').value  = shopData.shop_category||'';
-    document.getElementById('sRegion').value    = shopData.shop_region||'';
-    document.getElementById('sWhatsapp').value  = shopData.shop_whatsapp||shopData.owner_phone||'';
-    document.getElementById('sDesc').value      = shopData.shop_desc||'';
-    document.getElementById('sOwnerName').value = shopData.owner_name||'';
-    document.getElementById('sEmail').value     = shopData.auth_email||session.user.email;
-    const plan = shopData.plan||'basic';
-    document.getElementById('currentPlan').textContent =
-      plan==='premium' ? '🥇 Premium' : plan==='campus' ? '🎓 Campus' : '🥈 Basic';
-  }
+  const plan = shopData?.plan || localStorage.getItem('travex_plan') || 'basic';
+  document.getElementById('sShopName').value  = shopData?.shop_name||'';
+  document.getElementById('sCategory').value  = shopData?.shop_category||'';
+  document.getElementById('sRegion').value    = shopData?.shop_region||'';
+  document.getElementById('sWhatsapp').value  = shopData?.shop_whatsapp||shopData?.owner_phone||'';
+  document.getElementById('sDesc').value      = shopData?.shop_desc||'';
+  document.getElementById('sOwnerName').value = shopData?.owner_name||'';
+  document.getElementById('sEmail').value     = shopData?.auth_email||session.user.email;
+  document.getElementById('currentPlan').textContent =
+    plan==='premium' ? '🥇 Premium' : plan==='campus' ? '🎓 Campus' : '🥈 Basic';
   showLoading(false);
 })();
 
@@ -115,14 +113,14 @@ async function saveShop() {
     shop_whatsapp: document.getElementById('sWhatsapp').value,
     shop_desc: document.getElementById('sDesc').value,
   };
-  const { error } = await sb.from('pending_payments').update(updates).eq('id', shopData.id);
+  const { error } = await sb.from('pending_payments').update(updates).eq('id', shopData?.id);
   if (error) { showToast('Error: '+error.message,'error'); return; }
   showToast('✅ Shop info saved!','success');
 }
 
 async function saveAccount() {
   const name = document.getElementById('sOwnerName').value;
-  const { error } = await sb.from('pending_payments').update({ owner_name: name }).eq('id', shopData.id);
+  const { error } = await sb.from('pending_payments').update({ owner_name: name }).eq('id', shopData?.id);
   if (error) { showToast('Error: '+error.message,'error'); return; }
   localStorage.setItem('travex_owner_name', name);
   showToast('✅ Account updated!','success');
