@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Social Vybe — Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="shared.css">
+<style>
+.post-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.post-avatar{width:38px;height:38px;border-radius:50%;background:var(--navy);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.post-content{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:10px}
+.post-tag{display:inline-block;background:var(--bg2);color:var(--navy);font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;margin-right:6px}
+.post-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading Vybe...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">Social Vybe ✦</div><div class="header-sub">Post products, grow your brand</div></div>
+    <div class="header-right">
+      <button class="btn btn-gold" onclick="openModal('postModal')"><i class="ti ti-plus"></i> New Post</button>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-bolt"></i> My Posts</div><div class="stat-value" id="vPosts">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-heart"></i> Total Likes</div><div class="stat-value" id="vLikes">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-eye"></i> This Month</div><div class="stat-value" id="vMonth">—</div></div>
+    </div>
+
+    <div id="postsContainer">
+      <div class="empty-state"><i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i><p>Loading posts...</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="postModal" onclick="if(event.target===this)closeModal('postModal')">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">✦ New Vybe Post</div><button class="modal-close" onclick="closeModal('postModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Post Content *</label>
+        <textarea class="form-textarea" id="pContent" placeholder="Tell your customers about a product, offer or update..." style="min-height:100px"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Category Tag</label>
+          <select class="form-select" id="pTag">
+            <option value="Products">Products</option>
+            <option value="Offer">Offer</option>
+            <option value="Announcement">Announcement</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Food">Food</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Services">Services</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Price (optional)</label>
+          <input class="form-input" id="pPrice" type="number" placeholder="e.g. 15000">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('postModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="submitPost()"><i class="ti ti-send"></i> Post to Vybe</button>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
+  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
+  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
+  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script>
+let posts = [], shopData = null;
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  shopData = await Shop.get(session.user.email);
+  await loadSidebar('vybe', shopData);
+  posts = await DB.vybe.getPosts(shopData?.id);
+  renderPosts();
+  showLoading(false);
+})();
+
+function renderPosts() {
+  const initials = (shopData?.shop_name||'S').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const total_likes = posts.reduce((a,p)=>a+Number(p.likes||0),0);
+  const month_posts = posts.filter(p=>{
+    const d=new Date(p.created_at); const n=new Date();
+    return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
+  });
+  document.getElementById('vPosts').textContent = posts.length;
+  document.getElementById('vLikes').textContent = total_likes;
+  document.getElementById('vMonth').textContent = month_posts.length;
+
+  const el = document.getElementById('postsContainer');
+  if (!posts.length) {
+    el.innerHTML = `<div class="empty-state"><i class="ti ti-bolt"></i><h4>No posts yet</h4><p>Post your first product or update to reach customers.</p><button class="btn btn-gold" onclick="openModal('postModal')"><i class="ti ti-plus"></i> Create Post</button></div>`;
+    return;
+  }
+  el.innerHTML = posts.map(p=>`
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar">${initials}</div>
+        <div>
+          <div class="fw-700 fs-13">${shopData?.shop_name||'My Shop'}</div>
+          <div class="text-muted fs-12">${timeAgo(p.created_at)}</div>
+        </div>
+        <button class="btn-icon ml-auto" onclick="deletePost('${p.id}')" style="color:var(--red)" title="Delete"><i class="ti ti-trash"></i></button>
+      </div>
+      <div class="post-content">${p.content||p.post_text||''}</div>
+      <div style="margin-bottom:10px">
+        ${p.tag||p.category?`<span class="post-tag">${p.tag||p.category}</span>`:''}
+        ${p.price?`<span class="post-tag" style="background:rgba(201,168,76,0.15);color:var(--gold)">${formatTZS(p.price)}</span>`:''}
+      </div>
+      <div class="post-meta">
+        <span><i class="ti ti-heart"></i> ${p.likes||0} likes</span>
+        <span><i class="ti ti-message"></i> ${p.comments||0} comments</span>
+      </div>
+    </div>`).join('');
+}
+
+async function submitPost() {
+  const content = document.getElementById('pContent').value.trim();
+  if (!content) { showToast('Write something first!','error'); return; }
+  const item = {
+    store_id: shopData?.id,
+    shop_name: shopData?.shop_name,
+    content, post_text: content,
+    tag: document.getElementById('pTag').value,
+    category: document.getElementById('pTag').value,
+    price: Number(document.getElementById('pPrice').value)||null,
+    likes: 0, comments: 0,
+    university_abbr: shopData?.university_abbr||null,
+  };
+  const { error } = await DB.vybe.post(item);
+  if (error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✅ Posted to Vybe!','success');
+  closeModal('postModal');
+  document.getElementById('pContent').value='';
+  posts = await DB.vybe.getPosts(shopData?.id);
+  renderPosts();
+}
+
+async function deletePost(id) {
+  if (!confirm('Delete this post?')) return;
+  await DB.vybe.delete(id);
+  posts = posts.filter(p=>p.id!==id);
+  renderPosts();
+  showToast('Post deleted','error');
+}
+</script>
+</body>
+</html>
