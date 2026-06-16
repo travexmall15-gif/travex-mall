@@ -48,10 +48,15 @@ const DB = {
       return data || [];
     },
     async save(item) {
-      if (item.id) { const {id,...r}=item; return sb.from('campus_products').update(r).eq('id',id); }
+      if (item.id) {
+        const {id,...rest}=item;
+        return sb.from('campus_products').update(rest).eq('id',id);
+      }
       return sb.from('campus_products').insert(item);
     },
-    async delete(id) { return sb.from('campus_products').delete().eq('id',id); },
+    async delete(id) {
+      return sb.from('campus_products').delete().eq('id',id);
+    },
   },
   orders: {
     async getAll(shopId) {
@@ -59,7 +64,9 @@ const DB = {
         .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
       return data || [];
     },
-    async updateStatus(id,status) { return sb.from('campus_orders').update({status}).eq('id',id); },
+    async updateStatus(id, status) {
+      return sb.from('campus_orders').update({status}).eq('id',id);
+    },
   },
   sales: {
     async getAll(shopId) {
@@ -68,10 +75,15 @@ const DB = {
       return data || [];
     },
     async save(item) {
-      if (item.id) { const {id,...r}=item; return sb.from('seller_sales').update(r).eq('id',id); }
+      if (item.id) {
+        const {id,...rest}=item;
+        return sb.from('seller_sales').update(rest).eq('id',id);
+      }
       return sb.from('seller_sales').insert(item);
     },
-    async delete(id) { return sb.from('seller_sales').delete().eq('id',id); },
+    async delete(id) {
+      return sb.from('seller_sales').delete().eq('id',id);
+    },
   },
   debts: {
     async getAll(shopId) {
@@ -80,19 +92,32 @@ const DB = {
       return data || [];
     },
     async save(item) {
-      if (item.id) { const {id,...r}=item; return sb.from('seller_debts').update(r).eq('id',id); }
+      if (item.id) {
+        const {id,...rest}=item;
+        return sb.from('seller_debts').update(rest).eq('id',id);
+      }
       return sb.from('seller_debts').insert(item);
     },
-    async delete(id) { return sb.from('seller_debts').delete().eq('id',id); },
+    async delete(id) {
+      return sb.from('seller_debts').delete().eq('id',id);
+    },
+    async markPaid(id) {
+      return sb.from('seller_debts').update({paid:true}).eq('id',id);
+    },
   },
   vybe: {
-    async getAll(shopId) {
+    async getPosts(shopId) {
       const { data } = await sb.from('feed_posts')
         .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
       return data || [];
     },
-    async post(item)  { return sb.from('feed_posts').insert(item); },
-    async delete(id)  { return sb.from('feed_posts').delete().eq('id',id); },
+    async getAll(shopId) { return this.getPosts(shopId); },
+    async post(item) {
+      return sb.from('feed_posts').insert(item);
+    },
+    async delete(id) {
+      return sb.from('feed_posts').delete().eq('id',id);
+    },
   },
 };
 
