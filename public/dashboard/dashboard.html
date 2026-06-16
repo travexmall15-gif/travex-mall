@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Overview — Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="shared.css">
+<style>
+.activity-row{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.chart-area{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;margin-top:16px;box-shadow:var(--shadow)}
+.alert-item{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border)}
+.alert-item:last-child{border-bottom:none}
+.alert-name{font-size:13px;font-weight:600;color:var(--text)}
+.alert-qty{font-size:11px;color:var(--muted);margin-top:2px}
+@media(max-width:768px){.activity-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading your dashboard...</div>
+</div>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="main-wrapper">
+  <div class="main-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-icon" onclick="toggleSidebar()" style="display:none" id="menuBtn">
+        <i class="ti ti-menu-2"></i>
+      </button>
+      <div>
+        <div class="header-title">Overview</div>
+        <div class="header-sub" id="headerSub">Welcome back</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-date" id="headerDate"></div>
+      <a href="orders.html" class="header-btn" title="Orders">
+        <i class="ti ti-shopping-cart"></i>
+      </a>
+      <a href="settings.html" class="header-btn" title="Settings">
+        <i class="ti ti-settings"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- Welcome bar -->
+    <div class="welcome-bar">
+      <div>
+        <h2 id="welcomeMsg">Welcome!</h2>
+        <p id="welcomeSub">Here's how your shop is doing today.</p>
+      </div>
+      <div class="plan-badge">
+        <div class="plan-name" id="planName">—</div>
+        <div class="plan-label">Current Plan</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-cash"></i>Today's Revenue</div><div class="stat-value">—</div><div class="stat-sub">Loading...</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-trending-up"></i>Today's Profit</div><div class="stat-value">—</div><div class="stat-sub">Loading...</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-shopping-cart"></i>Orders Today</div><div class="stat-value">—</div><div class="stat-sub">Loading...</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-package"></i>Total Products</div><div class="stat-value">—</div><div class="stat-sub">Loading...</div></div>
+    </div>
+
+    <!-- Activity row -->
+    <div class="activity-row">
+      <div>
+        <!-- Recent orders -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div>
+              <div class="table-card-title">Recent Orders</div>
+              <div class="table-card-sub">Latest customer orders</div>
+            </div>
+            <a href="orders.html" class="btn btn-outline btn-sm">View All</a>
+          </div>
+          <div id="recentOrders">
+            <div class="empty-state">
+              <i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i>
+              <p>Loading orders...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly chart -->
+        <div class="chart-area">
+          <div style="font-size:14px;font-weight:700;color:var(--navy)">
+            Revenue This Week
+          </div>
+          <div class="bar-chart" id="weekChart"></div>
+        </div>
+      </div>
+
+      <div>
+        <!-- Quick actions -->
+        <div class="table-card" style="margin-bottom:16px">
+          <div class="table-card-header">
+            <div class="table-card-title">Quick Actions</div>
+          </div>
+          <div style="padding:16px">
+            <div class="quick-actions">
+              <a href="products.html" class="qa-btn">
+                <i class="ti ti-plus"></i><span>Add Product</span>
+              </a>
+              <a href="invoice.html" class="qa-btn">
+                <i class="ti ti-file-invoice"></i><span>New Invoice</span>
+              </a>
+              <a href="accounting.html" class="qa-btn">
+                <i class="ti ti-cash"></i><span>Add Sale</span>
+              </a>
+              <a href="vybe.html" class="qa-btn">
+                <i class="ti ti-bolt"></i><span>Post to Vybe</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low stock alerts -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-card-title">Stock Alerts</div>
+          </div>
+          <div style="padding:0 16px" id="stockAlerts">
+            <div class="empty-state" style="padding:24px">
+              <i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i>
+              <p>Loading...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html" class="active"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
+  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
+  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
+  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script>
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+
+  // Header
+  document.getElementById('headerDate').textContent =
+    new Date().toLocaleDateString('en-GB', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+  const hr = new Date().getHours();
+  const greet = hr < 12 ? 'Good Morning' : hr < 17 ? 'Good Afternoon' : 'Good Evening';
+
+  // Get shop data
+  const shopData = await Shop.get(session.user.email);
+  const plan = shopData?.plan || localStorage.getItem('travex_plan') || 'basic';
+  const shopName = shopData?.shop_name || localStorage.getItem('travex_shop_name') || 'My Shop';
+  const ownerName = shopData?.owner_name || localStorage.getItem('travex_owner_name') || '';
+  const shopId = shopData?.id || shopData?.shop_id;
+
+  // Cache
+  if (shopData) {
+    localStorage.setItem('travex_plan', plan);
+    localStorage.setItem('travex_shop_name', shopName);
+    localStorage.setItem('travex_owner_name', ownerName);
+  }
+
+  // Update UI
+  document.getElementById('welcomeMsg').textContent =
+    `${greet}, ${ownerName.split(' ')[0] || 'Seller'}!`;
+  document.getElementById('welcomeSub').textContent =
+    `Here's how ${shopName} is performing today.`;
+  document.getElementById('planName').textContent =
+    plan === 'premium' ? '🥇 Premium' : '🥈 Basic';
+  document.getElementById('headerSub').textContent = shopName;
+
+  // Load sidebar
+  await loadSidebar('dashboard', shopData);
+
+  // Load data in parallel
+  const [orders, products, sales] = await Promise.all([
+    DB.orders.getAll(shopId),
+    DB.products.getAll(shopId),
+    DB.sales.getAll(shopId),
+  ]);
+
+  // Stats
+  const todaySales = sales.filter(s => s.date === today());
+  const revenue = todaySales.filter(s => s.type === 'income').reduce((a, s) => a + Number(s.amount), 0);
+  const expenses = todaySales.filter(s => s.type === 'expense').reduce((a, s) => a + Number(s.amount), 0);
+  const ordersToday = orders.filter(o => (o.created_at||'').startsWith(today()));
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label"><i class="ti ti-cash"></i> Today's Revenue</div>
+      <div class="stat-value">${formatTZS(revenue)}</div>
+      <div class="stat-sub">${todaySales.filter(s=>s.type==='income').length} sales recorded</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><i class="ti ti-trending-up"></i> Today's Profit</div>
+      <div class="stat-value" style="color:${revenue-expenses>=0?'var(--green)':'var(--red)'}">
+        ${formatTZS(revenue - expenses)}
+      </div>
+      <div class="stat-sub">Revenue minus expenses</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><i class="ti ti-shopping-cart"></i> Orders Today</div>
+      <div class="stat-value">${ordersToday.length}</div>
+      <div class="stat-sub">${orders.filter(o=>o.status==='pending').length} pending</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><i class="ti ti-package"></i> Total Products</div>
+      <div class="stat-value">${products.length}</div>
+      <div class="stat-sub">${products.filter(p=>Number(p.stock)<=Number(p.stock_alert||5)).length} low stock</div>
+    </div>
+  `;
+
+  // Recent orders
+  const recentOrders = orders.slice(0, 6);
+  document.getElementById('recentOrders').innerHTML = recentOrders.length
+    ? `<table><thead><tr>
+        <th>Customer</th><th>Product</th>
+        <th>Amount</th><th>Status</th><th>Time</th>
+      </tr></thead><tbody>
+      ${recentOrders.map(o => `<tr>
+        <td class="text-navy">${o.customer_name || '—'}</td>
+        <td>${truncate(o.product_name || o.items || '—', 25)}</td>
+        <td class="font-bold">${formatTZS(o.total_amount || o.amount)}</td>
+        <td><span class="badge badge-${o.status==='delivered'?'success':o.status==='pending'?'warning':'info'}">
+          ${o.status || 'pending'}</span></td>
+        <td class="text-muted fs-12">${timeAgo(o.created_at)}</td>
+      </tr>`).join('')}
+      </tbody></table>`
+    : `<div class="empty-state">
+        <i class="ti ti-shopping-cart"></i>
+        <h4>No orders yet</h4>
+        <p>When customers place orders, they'll appear here.</p>
+      </div>`;
+
+  // Weekly chart
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const todayDay = new Date().getDay();
+  const weekData = days.map((label, i) => ({
+    label,
+    val: sales.filter(s =>
+      new Date(s.date).getDay() === i && s.type === 'income'
+    ).reduce((a, s) => a + Number(s.amount), 0),
+    isToday: i === todayDay,
+  }));
+  const maxVal = Math.max(...weekData.map(d => d.val), 1);
+  document.getElementById('weekChart').innerHTML = weekData.map(d => `
+    <div class="bar-wrap">
+      <div class="bar-fill" style="height:${Math.max((d.val/maxVal)*70,4)}px;
+        background:${d.isToday ? 'var(--gold)' : 'var(--navy)'}"></div>
+      <div class="bar-label">${d.label}</div>
+    </div>`).join('');
+
+  // Low stock
+  const lowStock = products.filter(p => Number(p.stock) <= Number(p.stock_alert || 5));
+  document.getElementById('stockAlerts').innerHTML = lowStock.length
+    ? lowStock.map(p => `
+        <div class="alert-item">
+          <div>
+            <div class="alert-name">${p.name}</div>
+            <div class="alert-qty">Stock: ${p.stock} remaining</div>
+          </div>
+          <span class="badge ${p.stock==0?'badge-danger':'badge-warning'}">
+            ${p.stock==0 ? 'Out of Stock' : 'Low'}
+          </span>
+        </div>`).join('')
+    : `<div class="empty-state" style="padding:24px">
+        <i class="ti ti-circle-check" style="color:var(--green)"></i>
+        <p style="color:var(--green);font-weight:600">All products in stock!</p>
+      </div>`;
+
+  showLoading(false);
+})();
+</script>
+</body>
+</html>
