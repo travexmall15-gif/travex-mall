@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Debts — Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading debts...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">Debts</div><div class="header-sub">Track who owes you and who you owe</div></div>
+    <div class="header-right">
+      <button class="btn btn-gold" onclick="openAdd('owed_to_me')"><i class="ti ti-plus"></i> They Owe Me</button>
+      <button class="btn btn-outline" onclick="openAdd('i_owe')"><i class="ti ti-minus"></i> I Owe Them</button>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-arrow-up-right" style="color:var(--green)"></i> Owed To Me</div><div class="stat-value" id="dOwedToMe" style="color:var(--green)">—</div><div class="stat-sub" id="dOwedToMeCount">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-arrow-down-left" style="color:var(--red)"></i> I Owe</div><div class="stat-value" id="dIOwe" style="color:var(--red)">—</div><div class="stat-sub" id="dIOweCount">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-calculator"></i> Net Balance</div><div class="stat-value" id="dNet">—</div><div class="stat-sub">Owed to me minus I owe</div></div>
+    </div>
+
+    <!-- Owed to me -->
+    <div class="table-card" style="margin-bottom:20px">
+      <div class="table-card-header"><div><div class="table-card-title" style="color:var(--green)">💚 People Who Owe Me</div><div class="table-card-sub">They borrowed from you</div></div></div>
+      <div id="owedToMeTable"></div>
+    </div>
+
+    <!-- I owe -->
+    <div class="table-card">
+      <div class="table-card-header"><div><div class="table-card-title" style="color:var(--red)">❤️ People I Owe</div><div class="table-card-sub">You borrowed from them</div></div></div>
+      <div id="iOweTable"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="debtModal" onclick="if(event.target===this)closeModal('debtModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="debtModalTitle">Add Debt</div>
+      <button class="modal-close" onclick="closeModal('debtModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="dType"><input type="hidden" id="dId">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Person Name *</label><input class="form-input" id="dName" placeholder="e.g. John Doe"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="dPhone" placeholder="+255..."></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Amount (TZS) *</label><input class="form-input" id="dAmount" type="number" placeholder="50000"></div>
+        <div class="form-group"><label class="form-label">Due Date</label><input class="form-input" id="dDue" type="date"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="dDesc" placeholder="What is this debt for?" style="min-height:70px"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('debtModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveDebt()"><i class="ti ti-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
+  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
+  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
+  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script>
+let debts = [], shopId = null;
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  const shopData = await Shop.get(session.user.email);
+  shopId = shopData?.id;
+  await loadSidebar('debts', shopData);
+  debts = await DB.debts.getAll(shopId);
+  render();
+  showLoading(false);
+})();
+
+function render() {
+  const owedToMe = debts.filter(d=>d.type==='owed_to_me'&&!d.paid);
+  const iOwe     = debts.filter(d=>d.type==='i_owe'&&!d.paid);
+  const owedSum  = owedToMe.reduce((a,d)=>a+Number(d.amount),0);
+  const iOweSum  = iOwe.reduce((a,d)=>a+Number(d.amount),0);
+  const net      = owedSum - iOweSum;
+
+  document.getElementById('dOwedToMe').textContent = formatTZS(owedSum);
+  document.getElementById('dOwedToMeCount').textContent = owedToMe.length + ' people';
+  document.getElementById('dIOwe').textContent = formatTZS(iOweSum);
+  document.getElementById('dIOweCount').textContent = iOwe.length + ' people';
+  document.getElementById('dNet').textContent = formatTZS(Math.abs(net));
+  document.getElementById('dNet').style.color = net>=0?'var(--green)':'var(--red)';
+
+  renderTable('owedToMeTable', owedToMe);
+  renderTable('iOweTable', iOwe);
+}
+
+function renderTable(elId, list) {
+  const el = document.getElementById(elId);
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state" style="padding:24px"><i class="ti ti-circle-check" style="color:var(--green)"></i><p style="color:var(--green);font-weight:600">No active debts here!</p></div>`;
+    return;
+  }
+  el.innerHTML = `<table><thead><tr><th>Person</th><th>Amount</th><th>Due Date</th><th>Description</th><th>Actions</th></tr></thead><tbody>
+    ${list.map(d => {
+      const isOverdue = d.due_date && new Date(d.due_date) < new Date();
+      return `<tr>
+        <td><div class="fw-700">${d.person_name||'—'}</div>${d.phone?`<div class="text-muted fs-12">${d.phone}</div>`:''}</td>
+        <td class="fw-700">${formatTZS(d.amount)}</td>
+        <td class="${isOverdue?'text-danger':'text-muted'} fs-12">${d.due_date||'No due date'}${isOverdue?' ⚠️':''}</td>
+        <td class="text-muted fs-12">${truncate(d.description||'—',30)}</td>
+        <td><div style="display:flex;gap:6px">
+          <button class="btn btn-success btn-xs" onclick="markPaid('${d.id}')">✓ Paid</button>
+          ${d.phone?`<a class="btn-icon" href="https://wa.me/${d.phone.replace(/\D/g,'')}" target="_blank" style="color:#25D366"><i class="ti ti-brand-whatsapp"></i></a>`:''}
+          <button class="btn-icon" onclick="deleteDebt('${d.id}')" style="color:var(--red)"><i class="ti ti-trash"></i></button>
+        </div></td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function openAdd(type) {
+  document.getElementById('dId').value='';document.getElementById('dType').value=type;
+  document.getElementById('dName').value='';document.getElementById('dPhone').value='';
+  document.getElementById('dAmount').value='';document.getElementById('dDue').value='';
+  document.getElementById('dDesc').value='';
+  document.getElementById('debtModalTitle').textContent = type==='owed_to_me'?'💚 They Owe Me':'❤️ I Owe Them';
+  openModal('debtModal');
+}
+
+async function saveDebt() {
+  const name=document.getElementById('dName').value.trim();
+  const amount=document.getElementById('dAmount').value;
+  if(!name||!amount){showToast('Fill name and amount','error');return;}
+  const item={
+    store_id:shopId, type:document.getElementById('dType').value,
+    person_name:name, phone:document.getElementById('dPhone').value,
+    amount:Number(amount), due_date:document.getElementById('dDue').value||null,
+    description:document.getElementById('dDesc').value, paid:false,
+  };
+  await DB.debts.save(item);
+  showToast('✅ Debt recorded!','success');
+  closeModal('debtModal');
+  debts = await DB.debts.getAll(shopId);
+  render();
+}
+
+async function markPaid(id) {
+  await sb.from('seller_debts').update({paid:true}).eq('id',id);
+  debts = debts.map(d=>d.id===id?{...d,paid:true}:d);
+  showToast('✅ Marked as paid!','success');
+  render();
+}
+
+async function deleteDebt(id) {
+  if(!confirm('Delete this debt record?'))return;
+  await DB.debts.delete(id);
+  debts = debts.filter(d=>d.id!==id);
+  showToast('Deleted','error');
+  render();
+}
+</script>
+</body>
+</html>
