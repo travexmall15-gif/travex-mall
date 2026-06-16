@@ -156,7 +156,7 @@ async function saveDebt() {
 }
 
 async function markPaid(id) {
-  await sb.from('seller_debts').update({paid:true}).eq('id',id);
+  await DB.debts.markPaid(id);
   debts = debts.map(d=>d.id===id?{...d,paid:true}:d);
   showToast('✅ Marked as paid!','success');
   render();
