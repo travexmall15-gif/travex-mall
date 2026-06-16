@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Orders — Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading orders...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">Orders</div><div class="header-sub">Manage customer orders</div></div>
+  </div>
+  <div class="main-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-list"></i> Total</div><div class="stat-value" id="oTotal">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-clock"></i> Pending</div><div class="stat-value" id="oPending" style="color:var(--yellow)">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-truck"></i> Processing</div><div class="stat-value" id="oProcess" style="color:var(--blue)">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-check"></i> Delivered</div><div class="stat-value" id="oDone" style="color:var(--green)">—</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <div class="table-card-title">All Orders</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input class="form-input" id="searchInput" placeholder="Search..." style="width:180px" oninput="renderOrders()">
+          <select class="form-select" id="statusFilter" style="width:140px" onchange="renderOrders()">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div id="ordersTable"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-bg" id="orderModal" onclick="if(event.target===this)closeModal('orderModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Order Details</div>
+      <button class="modal-close" onclick="closeModal('orderModal')">✕</button>
+    </div>
+    <div class="modal-body" id="orderDetail"></div>
+    <div class="modal-footer" id="orderActions"></div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
+  <a href="orders.html" class="active"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
+  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
+  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script>
+let orders = [], shopId = null;
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  const shopData = await Shop.get(session.user.email);
+  shopId = shopData?.id;
+  await loadSidebar('orders', shopData);
+  orders = await DB.orders.getAll(shopId);
+  renderOrders(); updateStats();
+  showLoading(false);
+})();
+
+function updateStats() {
+  document.getElementById('oTotal').textContent = orders.length;
+  document.getElementById('oPending').textContent = orders.filter(o=>o.status==='pending').length;
+  document.getElementById('oProcess').textContent = orders.filter(o=>o.status==='processing').length;
+  document.getElementById('oDone').textContent = orders.filter(o=>o.status==='delivered').length;
+}
+
+function renderOrders() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const sf = document.getElementById('statusFilter').value;
+  let list = orders.filter(o =>
+    (sf==='all'||o.status===sf) &&
+    (!q||(o.customer_name||'').toLowerCase().includes(q)||(o.product_name||'').toLowerCase().includes(q))
+  );
+
+  const el = document.getElementById('ordersTable');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><i class="ti ti-shopping-cart"></i><h4>No orders found</h4><p>Orders from customers will appear here.</p></div>`;
+    return;
+  }
+
+  const badgeMap = { pending:'badge-warning', processing:'badge-info', delivered:'badge-success', cancelled:'badge-danger' };
+  el.innerHTML = `<table><thead><tr>
+    <th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th>
+  </tr></thead><tbody>${list.map(o => `<tr>
+    <td>
+      <div class="text-navy fw-700">${o.customer_name||'Unknown'}</div>
+      ${o.customer_phone ? `<div class="text-muted fs-12">${o.customer_phone}</div>` : ''}
+    </td>
+    <td>${truncate(o.product_name||o.items||'—',28)}</td>
+    <td class="fw-700">${formatTZS(o.total_amount||o.amount)}</td>
+    <td><span class="badge ${badgeMap[o.status]||'badge-navy'}">${o.status||'pending'}</span></td>
+    <td class="text-muted fs-12">${timeAgo(o.created_at)}</td>
+    <td><div style="display:flex;gap:6px">
+      <button class="btn-icon" onclick="viewOrder('${o.id}')" title="View"><i class="ti ti-eye"></i></button>
+      ${o.customer_phone ? `<a class="btn-icon" href="https://wa.me/${o.customer_phone.replace(/\D/g,'')}" target="_blank" title="WhatsApp" style="color:#25D366"><i class="ti ti-brand-whatsapp"></i></a>` : ''}
+    </div></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function viewOrder(id) {
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  const badgeMap = { pending:'badge-warning', processing:'badge-info', delivered:'badge-success', cancelled:'badge-danger' };
+  document.getElementById('orderDetail').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="fw-700" style="font-size:15px">Order #${id.slice(0,8).toUpperCase()}</div>
+        <span class="badge ${badgeMap[o.status]||'badge-navy'}">${o.status||'pending'}</span>
+      </div>
+      ${[
+        ['Customer', o.customer_name||'—'],
+        ['Phone', o.customer_phone||'—'],
+        ['Product', o.product_name||o.items||'—'],
+        ['Quantity', o.quantity||'—'],
+        ['Amount', formatTZS(o.total_amount||o.amount)],
+        ['Date', new Date(o.created_at).toLocaleString('en-GB')],
+        ['Notes', o.notes||'—'],
+      ].map(([l,v]) => `
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span class="text-muted fs-12 fw-700">${l}</span>
+          <span class="fw-700 fs-13">${v}</span>
+        </div>`).join('')}
+    </div>`;
+
+  const statuses = ['pending','processing','delivered','cancelled'];
+  document.getElementById('orderActions').innerHTML = `
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${statuses.filter(s=>s!==o.status).map(s => `
+        <button class="btn btn-sm ${s==='delivered'?'btn-success':s==='cancelled'?'btn-danger':'btn-outline'}"
+          onclick="updateStatus('${o.id}','${s}')">
+          Mark ${s.charAt(0).toUpperCase()+s.slice(1)}
+        </button>`).join('')}
+      ${o.customer_phone ? `<a href="https://wa.me/${o.customer_phone.replace(/\D/g,'')}" target="_blank" class="btn btn-success btn-sm ml-auto"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>` : ''}
+    </div>`;
+  openModal('orderModal');
+}
+
+async function updateStatus(id, status) {
+  await DB.orders.updateStatus(id, status);
+  orders = orders.map(o => o.id===id ? {...o, status} : o);
+  showToast(`✅ Order marked as ${status}`, 'success');
+  closeModal('orderModal');
+  renderOrders(); updateStats();
+}
+</script>
+</body>
+</html>
