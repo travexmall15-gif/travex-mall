@@ -331,9 +331,9 @@ function ShopCard({ shop }: { shop: MarketShop }) {
               <MessageCircle size={12} /> WhatsApp
             </a>
           )}
-          <div style={{ flex: 1, padding: '0.5rem', background: '#050B2E', color: '#fff', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+          <a href={`/store/${shop.id}`} style={{ flex: 1, padding: '0.5rem', background: '#050B2E', color: '#fff', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', textDecoration: 'none' }}>
             <Store size={12} /> View Shop
-          </div>
+          </a>
         </div>
       </div>
     </div>
