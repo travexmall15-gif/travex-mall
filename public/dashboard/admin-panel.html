@@ -258,6 +258,17 @@ tr:last-child td{border-bottom:none}
       </div>
     </div>
 
+    <!-- NOTIFICATIONS -->
+    <div class="pg" id="pg-notifications">
+      <div class="tw">
+        <div class="th">
+          <h3>🔔 Notifications</h3>
+          <button class="ab ab-vw" onclick="markAllRead()">Mark All Read</button>
+        </div>
+        <div id="notifList" style="padding:0 1rem 1rem"></div>
+      </div>
+    </div>
+
     <!-- MARKET APPROVED STORES -->
     <div class="pg" id="pg-m-stores">
       <div class="tw"><div class="th"><h3>🏪 Approved Business Stores</h3>
@@ -283,7 +294,7 @@ const SB_KEY='sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
 const ADMIN_EMAIL='admin@travexdigital.com';
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
-let cApps=[],cStores=[],mApps=[],pageViews=[];
+let cApps=[],cStores=[],mApps=[],pageViews=[],notifs=[];
 let cFlt='all',cSrch='',csSrch='',mFlt='all',mSrch='',msSrch='';
 
 const E=s=>String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -315,13 +326,14 @@ async function initApp(){
 }
 
 async function loadAll(){
-  const[r1,r2,r3,r4]=await Promise.all([
+  const[r1,r2,r3,r4,r5]=await Promise.all([
     sb.from('campus_applications').select('*').order('created_at',{ascending:false}),
     sb.from('campus_stores').select('*').order('created_at',{ascending:false}),
     sb.from('pending_payments').select('*').order('created_at',{ascending:false}),
     sb.from('page_views').select('*').order('created_at',{ascending:false}).limit(1000).then(r=>r).catch(()=>({data:[]})),
+    sb.from('admin_notifications').select('*').order('created_at',{ascending:false}).limit(30).then(r=>r).catch(()=>({data:[]})),
   ]);
-  cApps=r1.data||[];cStores=r2.data||[];mApps=r3.data||[];pageViews=r4.data||[];
+  cApps=r1.data||[];cStores=r2.data||[];mApps=r3.data||[];pageViews=r4.data||[];notifs=r5.data||[];
   updateAll();
 }
 
@@ -373,7 +385,7 @@ function updateAll(){
 
   // Counts
   setC('cAppC',campPending);setC('mAppC',mktPending);
-  rCA();rCS();rMA();rMS();
+  rCA();rCS();rMA();rMS();renderNotifs();
 }
 function setC(id,n){const el=document.getElementById(id);el.textContent=n;el.style.display=n>0?'inline':'none'}
 
@@ -384,7 +396,7 @@ function go(name,btn){
   const pg=document.getElementById('pg-'+name);if(pg)pg.classList.add('on');
   if(btn)btn.classList.add('on');
   const t={'overview':'📊 Dashboard','analytics':'📈 Analytics & Value','c-apps':'🎓 Campus Applications',
-    'c-stores':'🎓 Campus Stores','m-apps':'🏪 Market Applications','m-stores':'🏪 Approved Stores'};
+    'c-stores':'🎓 Campus Stores','m-apps':'🏪 Market Applications','m-stores':'🏪 Approved Stores','notifications':'🔔 Notifications'};
   document.getElementById('pTitle').textContent=t[name]||name;
 }
 
@@ -536,6 +548,36 @@ function rMS(){
 }
 
 function closeModal(){document.getElementById('modalBg').classList.remove('show')}
+
+// ── NOTIFICATIONS ──
+function renderNotifs(){
+  const el=document.getElementById('notifList');
+  if(!el)return;
+  const unread=notifs.filter(n=>!n.is_read);
+  setC('notifC',unread.length);
+  if(!notifs.length){el.innerHTML='<div class="empty" style="padding:2rem;text-align:center;color:var(--muted)"><div style="font-size:2rem;margin-bottom:.5rem">🔔</div>No notifications yet</div>';return;}
+  el.innerHTML=notifs.map(n=>`
+    <div style="display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 0;border-bottom:1px solid var(--border);opacity:${n.is_read?0.5:1}">
+      <div style="font-size:1.2rem;flex-shrink:0">${n.type?.includes('approved')?'✅':n.type?.includes('reject')?'❌':'📋'}</div>
+      <div style="flex:1">
+        <div style="font-size:.82rem;font-weight:700;color:#fff">${n.title||'Notification'}</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:2px">${n.body||''}</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:3px">${n.created_at?new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</div>
+      </div>
+      ${!n.is_read?`<button class="ab ab-vw" onclick="markRead('${n.id}')" style="flex-shrink:0">Read</button>`:''}
+    </div>`).join('');
+}
+async function markRead(id){
+  await sb.from('admin_notifications').update({is_read:true}).eq('id',id);
+  notifs=notifs.map(n=>n.id===id?{...n,is_read:true}:n);
+  renderNotifs();
+}
+async function markAllRead(){
+  await sb.from('admin_notifications').update({is_read:true}).eq('is_read',false);
+  notifs=notifs.map(n=>({...n,is_read:true}));
+  renderNotifs();
+  toast('All marked as read','ok');
+}
 </script>
 </body>
 </html>
