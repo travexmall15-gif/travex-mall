@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accounting — Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="shared.css">
+<style>
+.type-tabs{display:flex;gap:8px;margin-bottom:16px}
+.type-tab{padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);transition:all 0.15s}
+.type-tab.active{border-color:var(--navy);background:var(--navy);color:var(--white)}
+.type-tab.income.active{background:var(--green);border-color:var(--green)}
+.type-tab.expense.active{background:var(--red);border-color:var(--red)}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading finances...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">Accounting</div><div class="header-sub">Track revenue, expenses and profit</div></div>
+    <div class="header-right">
+      <button class="btn btn-gold" onclick="openAddModal('income')"><i class="ti ti-plus"></i> Record Sale</button>
+      <button class="btn btn-outline" onclick="openAddModal('expense')"><i class="ti ti-minus"></i> Add Expense</button>
+    </div>
+  </div>
+  <div class="main-content">
+    <!-- Period selector -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+      <button class="type-tab active" onclick="setPeriod('today',this)">Today</button>
+      <button class="type-tab" onclick="setPeriod('week',this)">This Week</button>
+      <button class="type-tab" onclick="setPeriod('month',this)">This Month</button>
+      <button class="type-tab" onclick="setPeriod('all',this)">All Time</button>
+      <input type="date" class="form-input" id="dateFilter" style="width:160px" onchange="setPeriod('custom',null)">
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-arrow-up-circle" style="color:var(--green)"></i> Total Revenue</div>
+        <div class="stat-value" id="sRevenue" style="color:var(--green)">—</div>
+        <div class="stat-sub" id="sRevenueCount">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-arrow-down-circle" style="color:var(--red)"></i> Total Expenses</div>
+        <div class="stat-value" id="sExpenses" style="color:var(--red)">—</div>
+        <div class="stat-sub" id="sExpensesCount">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-trending-up"></i> Net Profit</div>
+        <div class="stat-value" id="sProfit">—</div>
+        <div class="stat-sub" id="sProfitSub">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-receipt"></i> Transactions</div>
+        <div class="stat-value" id="sTxCount">—</div>
+        <div class="stat-sub">in selected period</div>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <div class="table-card-title">Transactions</div>
+        <div class="type-tabs">
+          <button class="type-tab active" onclick="setTypeFilter('all',this)">All</button>
+          <button class="type-tab income" onclick="setTypeFilter('income',this)">Income</button>
+          <button class="type-tab expense" onclick="setTypeFilter('expense',this)">Expenses</button>
+        </div>
+      </div>
+      <div id="salesTable"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Transaction Modal -->
+<div class="modal-bg" id="saleModal" onclick="if(event.target===this)closeModal('saleModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="saleModalTitle">Record Sale</div>
+      <button class="modal-close" onclick="closeModal('saleModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="sType">
+      <input type="hidden" id="sId">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Description *</label>
+          <input class="form-input" id="sDesc" placeholder="e.g. Sold 2 dresses">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount (TZS) *</label>
+          <input class="form-input" id="sAmount" type="number" placeholder="15000">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <input class="form-input" id="sCategory" placeholder="e.g. Fashion, Food">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="form-input" id="sDate" type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="sNotes" placeholder="Optional notes..." style="min-height:70px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('saleModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveSale()"><i class="ti ti-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
+  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
+  <a href="accounting.html" class="active"><i class="ti ti-cash"></i><span>Finance</span></a>
+  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script>
+let allSales = [], shopId = null, currentPeriod = 'today', typeFilter = 'all';
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  const shopData = await Shop.get(session.user.email);
+  shopId = shopData?.id;
+  await loadSidebar('accounting', shopData);
+  allSales = await DB.sales.getAll(shopId);
+  document.getElementById('dateFilter').value = today();
+  renderAll();
+  showLoading(false);
+})();
+
+function setPeriod(period, btn) {
+  currentPeriod = period;
+  document.querySelectorAll('.type-tabs:first-child .type-tab, [onclick*="setPeriod"] ~ * .type-tab').forEach(b => b.classList.remove('active'));
+  // fix: update period buttons
+  document.querySelectorAll('[onclick*="setPeriod"]').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderAll();
+}
+
+function setTypeFilter(type, btn) {
+  typeFilter = type;
+  btn.closest('.type-tabs').querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function filterByPeriod(sales) {
+  const now = new Date();
+  const t = today();
+  const custom = document.getElementById('dateFilter').value;
+  switch(currentPeriod) {
+    case 'today': return sales.filter(s => s.date === t);
+    case 'week': {
+      const w = new Date(now); w.setDate(w.getDate()-7);
+      return sales.filter(s => new Date(s.date) >= w);
+    }
+    case 'month': {
+      const m = now.getMonth(), y = now.getFullYear();
+      return sales.filter(s => {
+        const d = new Date(s.date);
+        return d.getMonth()===m && d.getFullYear()===y;
+      });
+    }
+    case 'custom': return sales.filter(s => s.date === custom);
+    default: return sales;
+  }
+}
+
+function renderAll() {
+  const periodSales = filterByPeriod(allSales);
+  const income = periodSales.filter(s => s.type==='income').reduce((a,s)=>a+Number(s.amount),0);
+  const expense = periodSales.filter(s => s.type==='expense').reduce((a,s)=>a+Number(s.amount),0);
+  const profit = income - expense;
+
+  document.getElementById('sRevenue').textContent = formatTZS(income);
+  document.getElementById('sRevenueCount').textContent = periodSales.filter(s=>s.type==='income').length + ' sales';
+  document.getElementById('sExpenses').textContent = formatTZS(expense);
+  document.getElementById('sExpensesCount').textContent = periodSales.filter(s=>s.type==='expense').length + ' expenses';
+  document.getElementById('sProfit').textContent = formatTZS(profit);
+  document.getElementById('sProfit').style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('sProfitSub').textContent = profit >= 0 ? 'Positive cash flow' : 'Negative cash flow';
+  document.getElementById('sTxCount').textContent = periodSales.length;
+
+  let list = typeFilter==='all' ? periodSales : periodSales.filter(s=>s.type===typeFilter);
+  list = [...list].sort((a,b) => new Date(b.date)-new Date(a.date));
+
+  const el = document.getElementById('salesTable');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><i class="ti ti-receipt"></i><h4>No transactions</h4><p>Record your first sale or expense.</p></div>`;
+    return;
+  }
+  el.innerHTML = `<table><thead><tr>
+    <th>Description</th><th>Category</th><th>Type</th><th>Amount</th><th>Date</th><th>Actions</th>
+  </tr></thead><tbody>${list.map(s=>`<tr>
+    <td><div class="fw-700">${s.description||'—'}</div><div class="text-muted fs-12">${s.notes||''}</div></td>
+    <td><span class="badge badge-navy">${s.category||'General'}</span></td>
+    <td><span class="badge ${s.type==='income'?'badge-success':'badge-danger'}">${s.type==='income'?'Income':'Expense'}</span></td>
+    <td class="fw-700" style="color:${s.type==='income'?'var(--green)':'var(--red)'}">${formatTZS(s.amount)}</td>
+    <td class="text-muted fs-12">${s.date||'—'}</td>
+    <td><button class="btn-icon" onclick="deleteSale('${s.id}')" style="color:var(--red)" title="Delete"><i class="ti ti-trash"></i></button></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function openAddModal(type) {
+  document.getElementById('sId').value='';
+  document.getElementById('sType').value=type;
+  document.getElementById('sDesc').value='';
+  document.getElementById('sAmount').value='';
+  document.getElementById('sCategory').value='';
+  document.getElementById('sDate').value=today();
+  document.getElementById('sNotes').value='';
+  document.getElementById('saleModalTitle').textContent = type==='income' ? '💰 Record Sale' : '💸 Add Expense';
+  openModal('saleModal');
+}
+
+async function saveSale() {
+  const desc = document.getElementById('sDesc').value.trim();
+  const amount = document.getElementById('sAmount').value;
+  if (!desc || !amount) { showToast('Fill in description and amount', 'error'); return; }
+  const item = {
+    store_id: shopId, type: document.getElementById('sType').value,
+    description: desc, amount: Number(amount),
+    category: document.getElementById('sCategory').value||'General',
+    date: document.getElementById('sDate').value || today(),
+    notes: document.getElementById('sNotes').value,
+  };
+  const { error } = await DB.sales.save(item);
+  if (error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✅ Transaction saved!','success');
+  closeModal('saleModal');
+  allSales = await DB.sales.getAll(shopId);
+  renderAll();
+}
+
+async function deleteSale(id) {
+  if (!confirm('Delete this transaction?')) return;
+  await DB.sales.delete(id);
+  allSales = allSales.filter(s=>s.id!==id);
+  renderAll();
+  showToast('Deleted','error');
+}
+</script>
+</body>
+</html>
