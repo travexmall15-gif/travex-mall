@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings — Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading settings...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">Settings</div><div class="header-sub">Manage your shop and account</div></div>
+  </div>
+  <div class="main-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <!-- Shop Info -->
+      <div class="table-card">
+        <div class="table-card-header"><div class="table-card-title"><i class="ti ti-store"></i> Shop Information</div></div>
+        <div class="table-card-body">
+          <div class="form-group"><label class="form-label">Shop Name</label><input class="form-input" id="sShopName"></div>
+          <div class="form-group"><label class="form-label">Category</label><input class="form-input" id="sCategory"></div>
+          <div class="form-group"><label class="form-label">Region</label><input class="form-input" id="sRegion"></div>
+          <div class="form-group"><label class="form-label">WhatsApp Number</label><input class="form-input" id="sWhatsapp" placeholder="+255..."></div>
+          <div class="form-group"><label class="form-label">Shop Description</label><textarea class="form-textarea" id="sDesc" style="min-height:80px"></textarea></div>
+          <button class="btn btn-gold" onclick="saveShop()" style="width:100%"><i class="ti ti-check"></i> Save Shop Info</button>
+        </div>
+      </div>
+
+      <div>
+        <!-- Account Info -->
+        <div class="table-card" style="margin-bottom:20px">
+          <div class="table-card-header"><div class="table-card-title"><i class="ti ti-user"></i> Account</div></div>
+          <div class="table-card-body">
+            <div class="form-group"><label class="form-label">Owner Name</label><input class="form-input" id="sOwnerName"></div>
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="sEmail" disabled style="opacity:0.6"></div>
+            <button class="btn btn-outline" onclick="saveAccount()" style="width:100%"><i class="ti ti-check"></i> Save Account</button>
+          </div>
+        </div>
+
+        <!-- Subscription -->
+        <div class="table-card" style="margin-bottom:20px">
+          <div class="table-card-header"><div class="table-card-title"><i class="ti ti-crown"></i> Subscription</div></div>
+          <div class="table-card-body">
+            <div style="text-align:center;padding:12px 0">
+              <div style="font-size:28px;font-weight:800;color:var(--gold)" id="currentPlan">—</div>
+              <div class="text-muted fs-12" style="margin-top:4px">Current Plan</div>
+              <div style="margin:16px 0;padding:12px;background:var(--bg);border-radius:var(--radius)">
+                <div class="fs-12 text-muted">Plans</div>
+                <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
+                  <div class="flex flex-center gap-8"><i class="ti ti-circle-check text-success"></i><span class="fs-13">Campus — TZS 10,000/mo</span></div>
+                  <div class="flex flex-center gap-8"><i class="ti ti-circle-check text-success"></i><span class="fs-13">Basic — TZS 25,000/mo</span></div>
+                  <div class="flex flex-center gap-8"><i class="ti ti-circle-check" style="color:var(--gold)"></i><span class="fs-13">Premium — TZS 45,000/mo</span></div>
+                </div>
+              </div>
+              <a href="/subscription" class="btn btn-gold" style="width:100%"><i class="ti ti-arrow-up-circle"></i> View Plans</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="table-card" style="border-color:var(--red-bg)">
+          <div class="table-card-header"><div class="table-card-title" style="color:var(--red)"><i class="ti ti-alert-triangle"></i> Account Actions</div></div>
+          <div class="table-card-body">
+            <button class="btn btn-danger" onclick="Auth.signOut()" style="width:100%;margin-bottom:10px">
+              <i class="ti ti-logout"></i> Sign Out
+            </button>
+            <p class="text-muted fs-12">Need help? WhatsApp: <a href="https://wa.me/255651919915" target="_blank" style="color:var(--navy);font-weight:600">+255 651 919 915</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav class="bottom-nav">
+  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
+  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
+  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
+  <a href="settings.html" class="active"><i class="ti ti-settings"></i><span>More</span></a>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script>
+let shopData = null;
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  shopData = await Shop.get(session.user.email);
+  await loadSidebar('settings', shopData);
+
+  if (shopData) {
+    document.getElementById('sShopName').value  = shopData.shop_name||'';
+    document.getElementById('sCategory').value  = shopData.shop_category||'';
+    document.getElementById('sRegion').value    = shopData.shop_region||'';
+    document.getElementById('sWhatsapp').value  = shopData.shop_whatsapp||shopData.owner_phone||'';
+    document.getElementById('sDesc').value      = shopData.shop_desc||'';
+    document.getElementById('sOwnerName').value = shopData.owner_name||'';
+    document.getElementById('sEmail').value     = shopData.auth_email||session.user.email;
+    const plan = shopData.plan||'basic';
+    document.getElementById('currentPlan').textContent =
+      plan==='premium' ? '🥇 Premium' : plan==='campus' ? '🎓 Campus' : '🥈 Basic';
+  }
+  showLoading(false);
+})();
+
+async function saveShop() {
+  const updates = {
+    shop_name: document.getElementById('sShopName').value,
+    shop_category: document.getElementById('sCategory').value,
+    shop_region: document.getElementById('sRegion').value,
+    shop_whatsapp: document.getElementById('sWhatsapp').value,
+    shop_desc: document.getElementById('sDesc').value,
+  };
+  const { error } = await sb.from('pending_payments').update(updates).eq('id', shopData.id);
+  if (error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✅ Shop info saved!','success');
+}
+
+async function saveAccount() {
+  const name = document.getElementById('sOwnerName').value;
+  const { error } = await sb.from('pending_payments').update({ owner_name: name }).eq('id', shopData.id);
+  if (error) { showToast('Error: '+error.message,'error'); return; }
+  localStorage.setItem('travex_owner_name', name);
+  showToast('✅ Account updated!','success');
+}
+</script>
+</body>
+</html>
