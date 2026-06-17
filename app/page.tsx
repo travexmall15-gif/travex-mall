@@ -225,6 +225,126 @@ export default function HomePage() {
           <p style={{ fontSize: '0.68rem', color: 'rgba(201,168,76,0.3)', fontStyle: 'italic' }}>Africa&apos;s Intelligent Business Ecosystem</p>
         </div>
       </footer>
+
+      {/* ── APP DOWNLOAD ── */}
+      <section style={{
+        background: 'linear-gradient(160deg,#010510 0%,#030920 50%,#050E2E 100%)',
+        padding: '4rem 5%', position: 'relative', overflow: 'hidden',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <div style={{
+          position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)',
+          width: '70%', height: '180%',
+          background: 'radial-gradient(ellipse at center,rgba(201,168,76,0.12) 0%,transparent 65%)',
+          filter: 'blur(50px)', pointerEvents: 'none',
+        }} />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', margin: '0 auto',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: '2rem' }}>
+
+          <div style={{ maxWidth: '420px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)',
+              color: '#C9A84C', padding: '4px 12px', borderRadius: '999px',
+              fontSize: '11px', fontWeight: 700, marginBottom: '1rem' }}>
+              📱 Available on Android & iOS
+            </div>
+            <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif",
+              fontSize: 'clamp(1.5rem,3.5vw,2.2rem)', fontWeight: 900,
+              color: '#fff', marginBottom: '0.75rem', lineHeight: 1.15 }}>
+              Shop Smarter on the{' '}
+              <span style={{ color: '#C9A84C' }}>Travex Mall App</span>
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px',
+              lineHeight: 1.75, marginBottom: '2rem' }}>
+              Install Travex Mall directly on your phone — no app store needed.
+              Browse shops, place orders and sell your products from anywhere.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).installTravexApp) {
+                    (window as any).installTravexApp()
+                  } else {
+                    alert('To install on Android:
+
+1. Tap the browser menu (⋮) at top right
+2. Tap "Add to Home Screen" or "Install App"
+3. Tap Install — Done! ✅
+
+Tip: Use Chrome browser for best experience.')
+                  }
+                }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '10px',
+                  background: '#000', color: '#fff',
+                  border: '1.5px solid rgba(255,255,255,0.25)',
+                  borderRadius: '14px', padding: '12px 20px',
+                  cursor: 'pointer', fontFamily: 'inherit',
+                  transition: 'all 0.2s', minWidth: '165px' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff">
+                  <path d="M3.18 23.82a2 2 0 0 1-.95-1.74V1.92A2 2 0 0 1 3.18.18l11.9 11.82L3.18 23.82zm14.45-8.05L5.01 22.15l10.3-10.22 2.32 3.84zM20.5 11.3l-2.72-1.57-2.6 2.27 2.6 2.28 2.74-1.58a1.05 1.05 0 0 0 0-1.4zM5.01 1.85l12.62 6.38-2.32 3.84L5.01 1.85z"/>
+                </svg>
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', lineHeight: 1, marginBottom: '2px' }}>GET IT ON</div>
+                  <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1 }}>Android</div>
+                </div>
+              </button>
+              <button
+                onClick={() => alert('To install on iPhone / iOS:
+
+1. Open travex-mall.vercel.app in Safari
+2. Tap the Share button (□↑) at the bottom
+3. Scroll and tap "Add to Home Screen"
+4. Tap "Add" — Done! ✅')}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '10px',
+                  background: '#000', color: '#fff',
+                  border: '1.5px solid rgba(255,255,255,0.25)',
+                  borderRadius: '14px', padding: '12px 20px',
+                  cursor: 'pointer', fontFamily: 'inherit',
+                  transition: 'all 0.2s', minWidth: '165px' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', lineHeight: 1, marginBottom: '2px' }}>INSTALL ON</div>
+                  <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1 }}>iPhone / iOS</div>
+                </div>
+              </button>
+            </div>
+            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.28)', marginTop: '1rem' }}>
+              Free • No app store required • Works on all devices
+            </p>
+          </div>
+
+          {/* Phone mockup */}
+          <div style={{ width: '190px', height: '340px', flexShrink: 0,
+            background: 'linear-gradient(160deg,#0A1858,#050B2E)',
+            borderRadius: '30px', border: '2px solid rgba(255,255,255,0.12)',
+            boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'center', gap: '8px', position: 'relative',
+            overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: '12px', left: '50%',
+              transform: 'translateX(-50%)', width: '55px', height: '5px',
+              background: 'rgba(255,255,255,0.15)', borderRadius: '3px' }} />
+            <div style={{ fontSize: '26px', marginBottom: '4px' }}>🛍️</div>
+            <div style={{ fontFamily: "'Playfair Display',serif",
+              fontSize: '13px', fontWeight: 900, color: '#fff' }}>TRAVEX</div>
+            <div style={{ fontSize: '9px', color: '#C9A84C', fontWeight: 700, letterSpacing: '0.15em' }}>MALL</div>
+            <div style={{ width: '80%', height: '1px', background: 'rgba(255,255,255,0.1)', margin: '6px 0' }} />
+            {['🏪 Market','🎓 Campus','✦ Vybe'].map((item,i) => (
+              <div key={i} style={{ background: 'rgba(255,255,255,0.06)',
+                borderRadius: '7px', padding: '5px 16px', fontSize: '10px',
+                color: 'rgba(255,255,255,0.7)', width: '78%', textAlign: 'center' }}>
+                {item}
+              </div>
+            ))}
+            <div style={{ position: 'absolute', bottom: '8px', left: '50%',
+              transform: 'translateX(-50%)', width: '36px', height: '3px',
+              background: 'rgba(255,255,255,0.25)', borderRadius: '2px' }} />
+          </div>
+        </div>
+      </section>
     </main>
   )
 }
