@@ -350,7 +350,7 @@ textarea.form-input{resize:vertical;min-height:90px}
   <!-- STEP 4: Almost done — no payment needed -->
   <div class="step" id="step4">
     <div class="step-title">Almost Done! 🎉</div>
-    <div class="step-sub">Taarifa zako zimejazwa. Hakuna malipo yanayohitajika sasa hivi — registration ni bure!</div>
+    <div class="step-sub">Taarifa zako zimejazwa. No payment required yanayohitajika sasa hivi — registration ni bure!</div>
     <div class="alert alert-error" id="err4"></div>
 
     <div style="background:linear-gradient(135deg,#040C32,#071545);border-radius:20px;padding:2rem;margin-bottom:1.5rem;text-align:center">
@@ -361,12 +361,12 @@ textarea.form-input{resize:vertical;min-height:90px}
         Baada ya kuapprove, utapata password yako kwa WhatsApp.
       </div>
       <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.30);color:#C9A84C;padding:0.5rem 1.25rem;border-radius:999px;font-size:0.78rem;font-weight:700">
-        ✅ Hakuna receipt · Hakuna malipo
+        ✅ Hakuna receipt · No payment required
       </div>
     </div>
 
     <div class="form-card">
-      <div class="card-head"><div class="card-head-title">📋 Muhtasari wa Plan Yako</div></div>
+      <div class="card-head"><div class="card-head-title">📋 Summary wa Plan Yako</div></div>
       <div class="card-body">
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
           <span style="color:var(--gray)">Plan Uliyochagua</span>
@@ -497,15 +497,15 @@ function validateStep(n) {
     const phone = ($id('ownerPhone')?.value || '').trim()
     const email = ($id('ownerEmail')?.value || '').trim()
     const pass  = ($id('ownerPass')?.value || '')
-    if (!name)  return showErr(err, '⚠️ Weka jina lako kamili')
-    if (!phone) return showErr(err, '⚠️ Weka namba yako ya WhatsApp')
-    if (!email || !email.includes('@')) return showErr(err, '⚠️ Weka email halisi')
-    if (pass.length < 8) return showErr(err, '⚠️ Password lazima iwe na herufi 8 au zaidi')
+    if (!name)  return showErr(err, '⚠️ Enter your full name')
+    if (!phone) return showErr(err, '⚠️ Enter your WhatsApp number')
+    if (!email || !email.includes('@')) return showErr(err, '⚠️ Enter a valid email')
+    if (pass.length < 8) return showErr(err, '⚠️ Password must be at least 8 characters')
     return true
   }
 
   if (n === 2) {
-    if (!selectedPlan) return showErr($id('err2'), '⚠️ Chagua plan yako')
+    if (!selectedPlan) return showErr($id('err2'), '⚠️ Please select a plan')
     return true
   }
 
@@ -516,11 +516,11 @@ function validateStep(n) {
     const wa   = ($id('shopWhatsapp')?.value || '').trim()
     const desc = ($id('shopDesc')?.value || '').trim()
     const e3   = $id('err3')
-    if (!shop) return showErr(e3, '⚠️ Weka jina la duka lako')
-    if (!cat)  return showErr(e3, '⚠️ Chagua category')
-    if (!reg)  return showErr(e3, '⚠️ Chagua mkoa wako')
-    if (!wa)   return showErr(e3, '⚠️ Weka namba ya WhatsApp ya duka')
-    if (desc.length < 20) return showErr(e3, '⚠️ Maelezo ya duka lazima yawe na maneno 20 au zaidi')
+    if (!shop) return showErr(e3, '⚠️ Enter your shop name')
+    if (!cat)  return showErr(e3, '⚠️ Select a category')
+    if (!reg)  return showErr(e3, '⚠️ Select your region')
+    if (!wa)   return showErr(e3, '⚠️ Enter your shop WhatsApp number')
+    if (desc.length < 20) return showErr(e3, '⚠️ Description must be at least 20 characters')
     return true
   }
 
@@ -597,14 +597,14 @@ function pickCustomColor(val) {
 // ── PAYMENT ──
 function selectPayMethod(m) {
   selectedPayMethod = m
-  document.getElementById('payCredit').classList.toggle('selected', m === 'crdb')
-  document.getElementById('payMpesa').classList.toggle('selected', m === 'mpesa')
+  document.getElementById('payCredit')?..classList.toggle('selected', m === 'crdb')
+  document.getElementById('payMpesa')?..classList.toggle('selected', m === 'mpesa')
 }
 function updatePaymentDisplay() {
   const price = PRICES[selectedPlan]
-  document.getElementById('amountDue').textContent = fmt(price)
-  document.getElementById('planLabel').textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan · per month'
-  document.getElementById('planBadgePay').textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
+  document.getElementById('amountDue')?..textContent = fmt(price)
+  document.getElementById('planLabel')?..textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan · per month'
+  document.getElementById('planBadgePay')?..textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
 }
   reader.readAsDataURL(file)
 }
@@ -683,7 +683,7 @@ async function submitApplication() {
 
     // Show success
     document.getElementById(`step${currentStep}`).classList.remove('active')
-    document.getElementById('progressWrap') && (document.getElementById('progressWrap').style.display = 'none')
+    document.getElementById('progressWrap')?. && (document.getElementById('progressWrap')?..style.display = 'none')
     const successPage = document.getElementById('successPage')
     successPage.classList.add('show')
     document.getElementById('successDetail').innerHTML = `
