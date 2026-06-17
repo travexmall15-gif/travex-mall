@@ -1,0 +1,72 @@
+{
+  "name": "Travex Mall",
+  "short_name": "Travex",
+  "description": "Tanzania's premier digital marketplace — Campus & Business Market",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060C1A",
+  "theme_color": "#0D1B3E",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["shopping", "business"],
+  "icons": [
+    {
+      "src": "/icon-dark-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/hero-marketplace.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Travex Mall Homepage"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Business Market",
+      "short_name": "Market",
+      "description": "Browse business shops",
+      "url": "/market",
+      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Campus Market",
+      "short_name": "Campus",
+      "description": "Browse campus shops",
+      "url": "/campus",
+      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Open a Shop",
+      "short_name": "Open Shop",
+      "description": "Register your store",
+      "url": "/open-store",
+      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+    }
+  ],
+  "prefer_related_applications": false
+}
