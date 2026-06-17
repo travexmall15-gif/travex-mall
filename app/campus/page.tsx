@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 
 const studentBenefits = [
-  { icon: Wallet, title: 'Low Cost', desc: 'Just TZS 15,000/month to run a fully featured shop on campus.' },
+  { icon: Wallet, title: 'Low Cost', desc: 'Just TZS 10,000/month to run a fully featured shop on campus.' },
   { icon: Users, title: 'Campus Reach', desc: 'Sell directly to thousands of students at your university.' },
   { icon: Store, title: 'Your Own Storefront', desc: 'Customizable shop page with products, branding and orders.' },
 ]
@@ -135,8 +135,20 @@ export default function CampusPage() {
             const pct = (uni.activeShops / uni.totalSlots) * 100
             return (
               <div key={uni.slug} className="uni-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.5rem', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 18px rgba(15,23,42,0.05)' }}>
-                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg, #050B2E, #0A1858)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 900, color: '#C9A84C', marginBottom: '1rem' }}>
-                  {uni.abbr}
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', marginBottom: '1rem', flexShrink: 0, background: 'linear-gradient(135deg, #050B2E 0%, #0A1858 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(5,11,46,0.25)' }}>
+                  <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                    <rect width="36" height="36" rx="10" fill="url(#uniGrad)"/>
+                    <defs>
+                      <linearGradient id="uniGrad" x1="0" y1="0" x2="36" y2="36">
+                        <stop offset="0%" stopColor="#0A1858"/>
+                        <stop offset="100%" stopColor="#050B2E"/>
+                      </linearGradient>
+                    </defs>
+                    <text x="18" y="23" textAnchor="middle" fontSize="11" fontWeight="900"
+                      fontFamily="'Playfair Display', serif" fill="#C9A84C" letterSpacing="-0.5">
+                      {uni.abbr}
+                    </text>
+                  </svg>
                 </div>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.2rem', lineHeight: 1.3 }}>{uni.name}</h3>
                 <p style={{ fontSize: '0.78rem', color: '#94A3B8', marginBottom: '1rem' }}>{uni.city}</p>
