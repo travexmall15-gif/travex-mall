@@ -388,7 +388,7 @@ async function doReset() {
 
   const email = phoneToEmail(phone);
   await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + "/campus-dashboard.html"
+    redirectTo: window.location.origin + "/dashboard"
   });
 
   // Always show success (security: don't reveal if account exists)
