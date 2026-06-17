@@ -10,11 +10,11 @@ export type University = {
 }
 
 export const universities: University[] = [
-  { slug: 'aru',  name: 'Ardhi University',                          abbr: 'ARU',  city: 'Dar es Salaam', activeShops: 42, totalSlots: 60 },
-  { slug: 'udsm', name: 'University of Dar es Salaam',               abbr: 'UDSM', city: 'Dar es Salaam', activeShops: 58, totalSlots: 60 },
-  { slug: 'udom', name: 'University of Dodoma',                      abbr: 'UDOM', city: 'Dodoma',         activeShops: 31, totalSlots: 60 },
-  { slug: 'tia',  name: 'Tanzania Institute of Accountancy',         abbr: 'TIA',  city: 'Dar es Salaam', activeShops: 24, totalSlots: 60 },
-  { slug: 'nit',  name: 'Nelson Mandela African Inst. of Science',   abbr: 'NIT',  city: 'Arusha',         activeShops: 12, totalSlots: 60 },
+  { slug: 'aru',  name: 'Ardhi University',                          abbr: 'ARU',  city: 'Dar es Salaam', activeShops: 0, totalSlots: 60 },
+  { slug: 'udsm', name: 'University of Dar es Salaam',               abbr: 'UDSM', city: 'Dar es Salaam', activeShops: 0, totalSlots: 60 },
+  { slug: 'udom', name: 'University of Dodoma',                      abbr: 'UDOM', city: 'Dodoma',         activeShops: 0, totalSlots: 60 },
+  { slug: 'tia',  name: 'Tanzania Institute of Accountancy',         abbr: 'TIA',  city: 'Dar es Salaam', activeShops: 0, totalSlots: 60 },
+  { slug: 'nit',  name: 'Nelson Mandela African Inst. of Science',   abbr: 'NIT',  city: 'Arusha',         activeShops: 0, totalSlots: 60 },
 ]
 
 export const shopCategories = [
