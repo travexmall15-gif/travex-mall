@@ -353,3 +353,89 @@ div[style*='minWidth:"280px"'] {
 
 /* ════ SELECTION ════ */
 ::selection { background: rgba(201,168,76,0.25); color: #0D1B3E; }
+
+
+/* ══ PWA / NATIVE APP FEEL ══ */
+
+/* Remove tap highlight on all elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Smooth page transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent text selection on UI elements */
+button, a, nav, header, footer {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection on content */
+p, h1, h2, h3, h4, span, div.content, td, li {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Native-like momentum scrolling on iOS */
+.scroll-container, main, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide browser scrollbar on mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar { display: none; }
+  * { scrollbar-width: none; }
+}
+
+/* Status bar safe area for PWA standalone mode */
+@media (display-mode: standalone) {
+  html {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Hide browser UI elements in standalone mode */
+  .browser-only { display: none !important; }
+
+  /* Bottom nav safe area */
+  .bottom-nav-wrapper {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* PWA Splash / Loading feel */
+@keyframes appFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+main {
+  animation: appFadeIn 0.3s ease-out;
+}
+
+/* Native button press feel */
+button:active, a:active {
+  transform: scale(0.97);
+  transition: transform 0.08s ease;
+}
+
+/* Input native feel */
+input, textarea, select {
+  font-size: 16px !important; /* Prevents iOS zoom on focus */
+}
+
+/* Bottom nav — fixed at bottom with safe area */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+  background: var(--white, #fff);
+  border-top: 1px solid var(--border, #E2E8F0);
+  z-index: 300;
+}
