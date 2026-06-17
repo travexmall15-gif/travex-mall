@@ -135,13 +135,13 @@ async function submitPost() {
   if (!content) { showToast('Write something first!','error'); return; }
   const item = {
     store_id: shopData?.id,
-    shop_name: shopData?.shop_name,
-    content, post_text: content,
+    shop_name: shopData?.shop_name || shopData?.store_name,
+    content, post_text: content, caption: content,
     tag: document.getElementById('pTag').value,
     category: document.getElementById('pTag').value,
     price: Number(document.getElementById('pPrice').value)||null,
-    likes: 0, comments: 0,
-    university_abbr: shopData?.university_abbr||null,
+    likes: 0, likes_count: 0, comments: 0,
+    university_abbr: shopData?.university_abbr || shopData?.shop_region || null,
   };
   const { error } = await DB.vybe.post(item);
   if (error) { showToast('Error: '+error.message,'error'); return; }
