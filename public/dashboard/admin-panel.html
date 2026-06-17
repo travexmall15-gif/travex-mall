@@ -428,13 +428,61 @@ function rCA(){
 }
 
 async function acCA(id){
-  const a=cApps.find(x=>x.id===id);if(!a||!confirm('Approve '+a.full_name+'?'))return;
-  const sn=a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():(a.full_name+"'s Shop");
-  await sb.from('campus_stores').insert({slug:crypto.randomUUID(),store_name:sn,owner_name:a.full_name,phone:a.phone||a.whatsapp_number,whatsapp:a.whatsapp_number||a.phone,university_abbr:a.university_abbr,category:a.business_category,description:a.business_description,is_active:true,application_id:a.id});
+  const a=cApps.find(x=>x.id===id);
+  if(!a||!confirm(`Approve "${a.full_name}"?\n\n1. Create login account\n2. Send WhatsApp with password\n3. Campus shop goes LIVE`))return;
+
+  // Generate password
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  const rawPass=`TRX-${r4()}-${r4()}`;
+  const authPass=rawPass+'TRX!';
+
+  // Get shop name
+  const sn = a.store_name || a.business_description?.startsWith('SHOP:')
+    ? (a.store_name || a.business_description.split('\n')[0].replace('SHOP:','').trim())
+    : (a.full_name+"'s Shop");
+
+  const phone=(a.phone||a.whatsapp_number||'').replace(/\D/g,'');
+  if(!phone){toast('❌ No phone number found','err');return;}
+  const email=phone+'@travexmall.app';
+
+  // Create Supabase auth account
+  const{data:su,error:se}=await sb.auth.signUp({
+    email, password:authPass,
+    options:{data:{shop_name:sn,plan:'campus',phone,owner_name:a.full_name,university:a.university_abbr}}
+  });
+  if(se&&!se.message.includes('already registered')){toast('❌ Auth error: '+se.message,'err');return;}
+
+  // Create campus_store
+  const storeId=crypto.randomUUID();
+  await sb.from('campus_stores').insert({
+    id:storeId,slug:storeId,store_name:sn,owner_name:a.full_name,
+    phone:a.phone||a.whatsapp_number,whatsapp:a.whatsapp_number||a.phone,
+    university_abbr:a.university_abbr,category:a.business_category||a.category,
+    description:a.business_description||a.description,
+    is_active:true,application_id:a.id,
+    user_id:su?.user?.id||null,auth_email:email,login_password:rawPass,
+  });
+
   await sb.from('campus_applications').update({status:'approved'}).eq('id',id);
-  const wa=(a.whatsapp_number||a.phone||'').replace(/\D/g,'');
-  if(wa){window.open(`https://wa.me/${wa}?text=${encodeURIComponent(`✅ Hongera ${a.full_name}! Duka lako "${sn}" limeidhinishwa kwenye Travex Campus! 🎓`)}`,'_blank')}
-  toast('✅ Approved!','ok');await loadAll();
+
+  // WhatsApp with login credentials
+  const waMsg=encodeURIComponent(
+    `✅ *Hongera ${a.full_name}!*\n\n`+
+    `Duka lako *"${sn}"* liko LIVE kwenye Travex Campus Market! 🎓\n\n`+
+    `━━━━━━━━━━━━\n`+
+    `🔐 *Login Details:*\n`+
+    `🌐 Website: travex-mall.vercel.app\n`+
+    `📧 Email: ${email}\n`+
+    `🔑 Password: ${rawPass}\n\n`+
+    `📱 Open: travex-mall.vercel.app/login\n`+
+    `━━━━━━━━━━━━\n`+
+    `_Karibu kwenye Travex Campus! 🚀_`
+  );
+  window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
+
+  toast('✅ Campus seller approved + account created!','ok');
+  await loadAll();
 }
 async function rejCA(id){const a=cApps.find(x=>x.id===id);if(!a||!confirm('Reject?'))return;await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
 async function pendCA(id){if(!confirm('Set to pending? Store will be hidden.'))return;
