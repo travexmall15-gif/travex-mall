@@ -4,6 +4,15 @@ import type { Metadata } from 'next'
 import { ToastProvider } from '@/components/toast'
 import './globals.css'
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#0D1B3E',
+}
+
+
 export const metadata: Metadata = {
   title: 'Travex Mall — Tanzania\'s Digital Marketplace',
   description: 'Travex Mall — Tanzania\'s premier digital marketplace for campus students and businesses. Shop, sell and grow.',
@@ -15,6 +24,13 @@ export const metadata: Metadata = {
     title: 'Travex Mall',
   },
   applicationName: 'Travex Mall',
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'apple-mobile-web-app-title': 'Travex Mall',
+    'msapplication-TileColor': '#0D1B3E',
+  },
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -37,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased" style={{ WebkitTapHighlightColor: 'transparent' }}>
         <ToastProvider>{children}</ToastProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <script dangerouslySetInnerHTML={{ __html: `
