@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
@@ -140,13 +141,13 @@ export default function CampusApplyPage() {
     </main>
   )
 
-  const inputStyle: React.CSSProperties = {
+  const inputStyle: import("react").CSSProperties = {
     width: '100%', padding: '11px 14px',
     background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.12)',
     borderRadius: 10, color: '#fff', fontSize: 14, outline: 'none',
     fontFamily: "'Inter',sans-serif", transition: 'all 0.15s',
   }
-  const labelStyle: React.CSSProperties = {
+  const labelStyle: import("react").CSSProperties = {
     display: 'block', fontSize: 12, fontWeight: 600,
     color: 'rgba(255,255,255,0.55)', marginBottom: 6,
     textTransform: 'uppercase', letterSpacing: '0.06em',
