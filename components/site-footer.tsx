@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { Globe, Share2, Send, AtSign } from 'lucide-react'
 import { Logo } from '@/components/logo'
