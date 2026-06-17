@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: 'Travex Mall — Tanzania\'s Digital Marketplace',
   description: 'Travex Mall — Tanzania\'s premier digital marketplace for campus students and businesses. Shop, sell and grow.',
   keywords: 'Tanzania marketplace, campus market, student shop, Travex Mall, online store Tanzania',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Travex Mall',
+  },
+  applicationName: 'Travex Mall',
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -33,6 +40,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         <ToastProvider>{children}</ToastProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
+        <script dangerouslySetInnerHTML={{ __html: `
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+              navigator.serviceWorker.register('/sw.js')
+                .catch(function(e) { console.log('SW error:', e); });
+            });
+          }
+          var _deferredPrompt = null;
+          window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            _deferredPrompt = e;
+            window.dispatchEvent(new CustomEvent('pwaReady'));
+          });
+          window.installTravexApp = function() {
+            if (_deferredPrompt) {
+              _deferredPrompt.prompt();
+              _deferredPrompt.userChoice.then(function(r) {
+                _deferredPrompt = null;
+              });
+            } else {
+              alert('To install: tap the browser menu (⋮) then "Add to Home Screen"');
+            }
+          };
+        `}} />
       </body>
     </html>
   )
