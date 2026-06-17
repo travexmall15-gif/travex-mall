@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased" style={{ WebkitTapHighlightColor: 'transparent' }}>
+      <body className="antialiased" style={{ WebkitTapHighlightColor: 'transparent' as any }}>
         <ToastProvider>{children}</ToastProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <script src="/pwa-init.js" defer />
