@@ -1,6 +1,6 @@
 import React from 'react'
 import { Analytics } from '@vercel/analytics/next'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
 import './globals.css'
 
@@ -56,30 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased" style={{ WebkitTapHighlightColor: 'transparent' }}>
         <ToastProvider>{children}</ToastProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
-        <script dangerouslySetInnerHTML={{ __html: `
-          if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-              navigator.serviceWorker.register('/sw.js')
-                .catch(function(e) { console.log('SW error:', e); });
-            });
-          }
-          var _deferredPrompt = null;
-          window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault();
-            _deferredPrompt = e;
-            window.dispatchEvent(new CustomEvent('pwaReady'));
-          });
-          window.installTravexApp = function() {
-            if (_deferredPrompt) {
-              _deferredPrompt.prompt();
-              _deferredPrompt.userChoice.then(function(r) {
-                _deferredPrompt = null;
-              });
-            } else {
-              alert('To install: tap the browser menu (⋮) then "Add to Home Screen"');
-            }
-          };
-        `}} />
+        <script src="/pwa-init.js" defer />
       </body>
     </html>
   )
