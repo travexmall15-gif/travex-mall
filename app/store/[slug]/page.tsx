@@ -150,14 +150,14 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
     if (wa) {
       const msg = encodeURIComponent(
         `🛍️ *Order Mpya!*\n\n` +
-        `📦 Bidhaa: *${cartItem.name}*\n` +
+        `📦 Products: *${cartItem.name}*\n` +
         `🔢 Quantity: *${qty}*\n` +
         `💰 Total: *${fmt(total)}*\n\n` +
         `👤 Mteja: *${orderName}*\n` +
         `📱 Simu: *${orderPhone}*\n` +
         (orderLocation ? `📍 Location: *${orderLocation}*\n` : '') +
         (orderNotes ? `📝 Notes: ${orderNotes}\n` : '') +
-        `\n_Kutoka Travex Mall_`
+        `\n_From Travex Mall_`
       )
       window.open(`https://wa.me/${wa}?text=${msg}`, '_blank')
     }
