@@ -101,75 +101,73 @@ export function SiteFooter() {
 
           {/* Right buttons */}
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {/* Google Play */}
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              title="Coming soon on Google Play"
+            {/* Android — triggers PWA install */}
+            <button
+              onClick={() => {
+                if (typeof window !== 'undefined' && (window as any).installTravexApp) {
+                  (window as any).installTravexApp()
+                }
+              }}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '10px',
                 background: '#000', color: '#fff',
                 border: '1.5px solid rgba(255,255,255,0.20)',
                 borderRadius: '12px', padding: '10px 18px',
-                textDecoration: 'none', minWidth: '160px',
-                transition: 'all 0.2s', cursor: 'pointer',
+                minWidth: '160px', cursor: 'pointer',
+                transition: 'all 0.2s', fontFamily: 'inherit',
                 position: 'relative',
               }}
             >
               <GooglePlayIcon />
-              <div>
+              <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.55)', lineHeight: 1, marginBottom: '2px' }}>
                   GET IT ON
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 700, lineHeight: 1 }}>
-                  Google Play
+                  Android
                 </div>
               </div>
-              {/* Coming soon badge */}
               <span style={{
                 position: 'absolute', top: '-8px', right: '-8px',
-                background: '#C9A84C', color: '#0D1B3E',
+                background: '#22C55E', color: '#fff',
                 fontSize: '8px', fontWeight: 800, padding: '2px 6px',
-                borderRadius: '999px', textTransform: 'uppercase', letterSpacing: '0.05em',
+                borderRadius: '999px', textTransform: 'uppercase',
               }}>
-                Soon
+                Free
               </span>
-            </a>
+            </button>
 
-            {/* App Store */}
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              title="Coming soon on App Store"
+            {/* iOS — show instructions */}
+            <button
+              onClick={() => alert('To install on iPhone:\n\n1. Open travex-mall.vercel.app in Safari\n2. Tap the Share button (□↑)\n3. Tap "Add to Home Screen"\n4. Tap "Add" — Done! ✅')}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '10px',
                 background: '#000', color: '#fff',
                 border: '1.5px solid rgba(255,255,255,0.20)',
                 borderRadius: '12px', padding: '10px 18px',
-                textDecoration: 'none', minWidth: '160px',
-                transition: 'all 0.2s', cursor: 'pointer',
+                minWidth: '160px', cursor: 'pointer',
+                transition: 'all 0.2s', fontFamily: 'inherit',
                 position: 'relative',
               }}
             >
               <AppStoreIcon />
-              <div>
+              <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.55)', lineHeight: 1, marginBottom: '2px' }}>
-                  DOWNLOAD ON THE
+                  INSTALL ON
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 700, lineHeight: 1 }}>
-                  App Store
+                  iPhone / iOS
                 </div>
               </div>
-              {/* Coming soon badge */}
               <span style={{
                 position: 'absolute', top: '-8px', right: '-8px',
-                background: '#C9A84C', color: '#0D1B3E',
+                background: '#22C55E', color: '#fff',
                 fontSize: '8px', fontWeight: 800, padding: '2px 6px',
-                borderRadius: '999px', textTransform: 'uppercase', letterSpacing: '0.05em',
+                borderRadius: '999px', textTransform: 'uppercase',
               }}>
-                Soon
+                Free
               </span>
-            </a>
+            </button>
           </div>
         </div>
 
