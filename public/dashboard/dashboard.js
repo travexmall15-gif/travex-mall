@@ -30,13 +30,47 @@ const Auth = {
 // ── SHOP ─────────────────────────────
 const Shop = {
   _cache: null,
+  _type: null, // 'business' | 'campus'
+
   async get(email) {
     if (this._cache) return this._cache;
-    const { data } = await sb.from('pending_payments')
-      .select('*').eq('auth_email', email).eq('status','approved').single();
-    this._cache = data;
-    return data;
+
+    // 1. Try business market (pending_payments)
+    const { data: biz } = await sb.from('pending_payments')
+      .select('*').eq('auth_email', email).eq('status','approved').maybeSingle();
+
+    if (biz) {
+      this._cache = { ...biz, _market: 'business' };
+      this._type = 'business';
+      return this._cache;
+    }
+
+    // 2. Try campus market (campus_stores)
+    const { data: campus } = await sb.from('campus_stores')
+      .select('*').eq('auth_email', email).eq('is_active', true).maybeSingle();
+
+    if (campus) {
+      // Normalize campus store to same shape as pending_payments
+      this._cache = {
+        ...campus,
+        shop_name:      campus.store_name,
+        owner_name:     campus.owner_name,
+        shop_whatsapp:  campus.whatsapp,
+        shop_category:  campus.category,
+        shop_region:    campus.university_abbr,
+        shop_desc:      campus.description,
+        plan:           'campus',
+        _market:        'campus',
+      };
+      this._type = 'campus';
+      return this._cache;
+    }
+
+    return null;
   },
+
+  isCampus() { return this._type === 'campus'; },
+  isBusiness() { return this._type === 'business'; },
 };
 
 // ── DATABASE ─────────────────────────
@@ -167,7 +201,8 @@ async function loadSidebar(activePage, shopData) {
   const ownerName = shopData?.owner_name || localStorage.getItem('travex_owner_name') || '';
   const initials = ownerName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'TX';
   const isPremium = plan === 'premium';
-  const planLabel = plan === 'premium' ? '🥇 Premium' : '🥈 Basic';
+  const isCampus  = plan === 'campus';
+  const planLabel = plan === 'premium' ? '🥇 Premium' : plan === 'campus' ? '🎓 Campus' : '🥈 Basic';
 
   const navItem = (id, href, icon, label, isPro=false) => {
     const locked = isPro && !isPremium;
