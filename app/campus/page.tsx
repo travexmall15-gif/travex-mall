@@ -134,11 +134,15 @@ export default function CampusPage() {
           {uniData.map((uni) => {
             const pct = (uni.activeShops / uni.totalSlots) * 100
             return (
-              <div key={uni.slug} className="uni-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.5rem', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 18px rgba(15,23,42,0.05)' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '16px', marginBottom: '1rem', flexShrink: 0, background: 'linear-gradient(135deg, #050B2E 0%, #0A1858 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(5,11,46,0.25)', fontFamily: "'Playfair Display', Georgia, serif", fontSize: '0.9rem', fontWeight: 900, color: '#C9A84C', letterSpacing: '0.02em' }}>
-                  {uni.abbr}
+              <div key={uni.slug} className="uni-card" style={{ background: '#FFFFFF', border: `2px solid ${uni.color}22`, borderRadius: '20px', padding: '1.5rem', display: 'flex', flexDirection: 'column', boxShadow: `0 4px 18px ${uni.color}15` }}>
+                {/* Colored header strip */}
+                <div style={{ background: uni.bgGradient, borderRadius: '14px', padding: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.1rem', fontWeight: 900, color: uni.color, letterSpacing: '0.05em' }}>
+                    {uni.abbr}
+                  </div>
+                  <div style={{ fontSize: '1.5rem' }}>{uni.emoji}</div>
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.2rem', lineHeight: 1.3 }}>{uni.name}</h3>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.95rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.2rem', lineHeight: 1.3 }}>{uni.name}</h3>
                 <p style={{ fontSize: '0.78rem', color: '#94A3B8', marginBottom: '1rem' }}>{uni.city}</p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: '0.5rem' }}>
                   <span style={{ fontWeight: 600, color: '#374151' }}>{loading ? '...' : uni.activeShops} shops</span>
@@ -147,9 +151,9 @@ export default function CampusPage() {
                   </span>
                 </div>
                 <div style={{ height: '6px', background: '#F1F5F9', borderRadius: '999px', overflow: 'hidden', marginBottom: '1.25rem' }}>
-                  <div style={{ height: '100%', width: loading ? '0%' : `${pct}%`, background: 'linear-gradient(90deg, #C9A84C, #F0C96B)', borderRadius: '999px', transition: 'width 0.6s ease' }} />
+                  <div style={{ height: '100%', width: loading ? '0%' : `${pct}%`, background: `linear-gradient(90deg, ${uni.color}, ${uni.color}aa)`, borderRadius: '999px', transition: 'width 0.6s ease' }} />
                 </div>
-                <Link href={`/campus/${uni.slug}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', background: '#050B2E', color: '#fff', borderRadius: '999px', padding: '0.7rem 1rem', fontSize: '0.84rem', fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 16px rgba(5,11,46,0.22)', marginTop: 'auto' }}>
+                <Link href={`/campus/${uni.slug}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', background: uni.bgGradient, color: uni.color, borderRadius: '999px', padding: '0.7rem 1rem', fontSize: '0.84rem', fontWeight: 700, textDecoration: 'none', boxShadow: `0 6px 16px ${uni.color}30`, marginTop: 'auto', border: `1px solid ${uni.color}40` }}>
                   Browse Shops <ArrowRight style={{ width: '14px', height: '14px' }} />
                 </Link>
               </div>
