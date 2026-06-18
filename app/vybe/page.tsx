@@ -236,11 +236,10 @@ export default function VybePage() {
                   <div key={post.id} className="post-card">
                     {/* Media */}
                     {post.media_url && (
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <div className="relative w-full" style={{maxHeight:220,overflow:'hidden'}}>
-                      <Image src={post.media_url!} alt="Post media" width={600} height={220}
-                        className="w-full object-cover" style={{maxHeight:220}} />
-                    </div>
+                      <div className="relative w-full" style={{maxHeight:220,overflow:'hidden'}}>
+                        <Image src={post.media_url!} alt="Post media" width={600} height={220}
+                          className="w-full object-cover" style={{maxHeight:220}} />
+                      </div>
                     )}
 
                     <div style={{ padding: '1rem' }}>
