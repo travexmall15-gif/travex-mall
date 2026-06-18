@@ -2,6 +2,7 @@ import React from 'react'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
+import Script from 'next/script'
 import './globals.css'
 
 export const viewport = {
@@ -56,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased" style={{ WebkitTapHighlightColor: 'transparent' as any }}>
         <ToastProvider>{children}</ToastProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
-        <script src="/pwa-init.js" defer />
+        <Script src="/pwa-init.js" strategy="afterInteractive" />
       </body>
     </html>
   )
