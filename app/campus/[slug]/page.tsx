@@ -138,7 +138,7 @@ const CAT_COLORS: Record<string, { bg: string; accent: string }> = {
 
 function StoreCard({ store }: { store: CampusStore }) {
   const initials = store.store_name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase()
-  const catStyle = CAT_COLORS[store.business_category || store.category || 'Other'] || CAT_COLORS['Other']
+  const catStyle = CAT_COLORS[store.category || 'Other'] || CAT_COLORS['Other']
   const color    = store.primary_color || catStyle.accent
   const bannerBg = store.banner ? undefined : catStyle.bg
   const wa = (store.whatsapp_number || '').replace(/\D/g, '')
