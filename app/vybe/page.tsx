@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
@@ -236,8 +237,10 @@ export default function VybePage() {
                     {/* Media */}
                     {post.media_url && (
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={post.media_url} alt="Post media"
-                        style={{ width: '100%', objectFit: 'cover', maxHeight: 220, display: 'block' }} />
+                    <div className="relative w-full" style={{maxHeight:220,overflow:'hidden'}}>
+                      <Image src={post.media_url!} alt="Post media" width={600} height={220}
+                        className="w-full object-cover" style={{maxHeight:220}} />
+                    </div>
                     )}
 
                     <div style={{ padding: '1rem' }}>
