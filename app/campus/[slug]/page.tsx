@@ -126,15 +126,27 @@ export default function UniversityPage({ params }: { params: Promise<{ slug: str
   )
 }
 
+const CAT_COLORS: Record<string, { bg: string; accent: string }> = {
+  'Fashion':     { bg: 'linear-gradient(135deg,#7C3009,#B8540A)', accent: '#FB923C' },
+  'Food':        { bg: 'linear-gradient(135deg,#14532D,#166534)', accent: '#4ADE80' },
+  'Electronics': { bg: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', accent: '#60A5FA' },
+  'Beauty':      { bg: 'linear-gradient(135deg,#831843,#9D174D)', accent: '#F472B6' },
+  'Books':       { bg: 'linear-gradient(135deg,#1C1917,#292524)', accent: '#A8A29E' },
+  'Services':    { bg: 'linear-gradient(135deg,#4C1D95,#7C3AED)', accent: '#C084FC' },
+  'Other':       { bg: 'linear-gradient(135deg,#1E293B,#334155)', accent: '#94A3B8' },
+}
+
 function StoreCard({ store }: { store: CampusStore }) {
   const initials = store.store_name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase()
-  const color = store.primary_color || '#0D1B3E'
+  const catStyle = CAT_COLORS[store.business_category || store.category || 'Other'] || CAT_COLORS['Other']
+  const color    = store.primary_color || catStyle.accent
+  const bannerBg = store.banner ? undefined : catStyle.bg
   const wa = (store.whatsapp_number || '').replace(/\D/g, '')
 
   return (
     <div className="bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all hover:-translate-y-1 group">
       {/* Banner */}
-      <div className="h-24 relative" style={{ background: `linear-gradient(135deg, ${color}, #1B3A6B)` }}>
+      <div className="h-24 relative" style={{ background: bannerBg || `linear-gradient(135deg, ${color}, ${color}88)` }}>
         {store.banner && <img src={store.banner} alt="" className="w-full h-full object-cover absolute inset-0" />}
         {store.is_verified && (
           <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
