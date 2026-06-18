@@ -2,6 +2,7 @@
 
 import { use, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb, type CampusStore, fmtTZS } from '@/lib/supabase'
@@ -147,7 +148,7 @@ function StoreCard({ store }: { store: CampusStore }) {
     <div className="bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all hover:-translate-y-1 group">
       {/* Banner */}
       <div className="h-24 relative" style={{ background: bannerBg || `linear-gradient(135deg, ${color}, ${color}88)` }}>
-        {store.banner && <img src={store.banner} alt="" className="w-full h-full object-cover absolute inset-0" />}
+        {store.banner && <Image src={store.banner} alt={store.store_name} fill className="object-cover" />}
         {store.is_verified && (
           <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
             <ShieldCheck className="h-3 w-3" /> Verified
@@ -158,7 +159,7 @@ function StoreCard({ store }: { store: CampusStore }) {
       <div className="px-4 pb-4">
         <div className="w-14 h-14 rounded-xl border-4 border-white -mt-7 mb-3 flex items-center justify-center font-bold text-white text-lg relative z-10"
           style={{ background: color }}>
-          {store.logo ? <img src={store.logo} alt="" className="w-full h-full object-cover rounded-lg" /> : initials}
+          {store.logo ? <Image src={store.logo} alt="" fill className="w-full h-full object-cover rounded-lg" /> : initials}
         </div>
         <h3 className="font-bold text-navy text-sm mb-1">{store.store_name}</h3>
         {store.category && (
