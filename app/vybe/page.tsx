@@ -235,7 +235,8 @@ export default function VybePage() {
                   <div key={post.id} className="post-card">
                     {/* Media */}
                     {post.media_url && (
-                      <img src={post.media_url} alt="Post media"
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={post.media_url} alt="Post media"
                         style={{ width: '100%', objectFit: 'cover', maxHeight: 220, display: 'block' }} />
                     )}
 
