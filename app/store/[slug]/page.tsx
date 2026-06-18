@@ -1,3 +1,4 @@
+import Image from 'next/image'
 'use client'
 
 import { use, useState, useEffect } from 'react'
@@ -381,8 +382,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                 <div style={{ height: 140, background: `linear-gradient(135deg, ${accentColor}22, #0D1B3E)`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                   {p.image_url ? (
-                    <img src={p.image_url} alt={p.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <Image src={p.image_url} alt={p.name} fill className="object-cover" />
                   ) : (
                     <span style={{ fontSize: 36 }}>🛍️</span>
                   )}
