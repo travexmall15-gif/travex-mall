@@ -7,14 +7,17 @@ export type University = {
   city: string
   activeShops: number
   totalSlots: number
+  color: string
+  bgGradient: string
+  emoji: string
 }
 
 export const universities: University[] = [
-  { slug: 'aru',  name: 'Ardhi University',                          abbr: 'ARU',  city: 'Dar es Salaam', activeShops: 0, totalSlots: 60 },
-  { slug: 'udsm', name: 'University of Dar es Salaam',               abbr: 'UDSM', city: 'Dar es Salaam', activeShops: 0, totalSlots: 60 },
-  { slug: 'udom', name: 'University of Dodoma',                      abbr: 'UDOM', city: 'Dodoma',         activeShops: 0, totalSlots: 60 },
-  { slug: 'tia',  name: 'Tanzania Institute of Accountancy',         abbr: 'TIA',  city: 'Dar es Salaam', activeShops: 0, totalSlots: 60 },
-  { slug: 'nit',  name: 'Nelson Mandela African Inst. of Science',   abbr: 'NIT',  city: 'Arusha',         activeShops: 0, totalSlots: 60 },
+  { slug: 'aru',  name: 'Ardhi University',                        abbr: 'ARU',  city: 'Dar es Salaam', activeShops: 0, totalSlots: 60, color: '#C9A84C', bgGradient: 'linear-gradient(135deg,#7C3009,#B8540A)', emoji: '🏛️' },
+  { slug: 'udsm', name: 'University of Dar es Salaam',             abbr: 'UDSM', city: 'Dar es Salaam', activeShops: 0, totalSlots: 60, color: '#60A5FA', bgGradient: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', emoji: '🎓' },
+  { slug: 'udom', name: 'University of Dodoma',                    abbr: 'UDOM', city: 'Dodoma',         activeShops: 0, totalSlots: 60, color: '#4ADE80', bgGradient: 'linear-gradient(135deg,#14532D,#166534)', emoji: '🌿' },
+  { slug: 'tia',  name: 'Tanzania Institute of Accountancy',       abbr: 'TIA',  city: 'Dar es Salaam', activeShops: 0, totalSlots: 60, color: '#FB923C', bgGradient: 'linear-gradient(135deg,#7C2D12,#C2410C)', emoji: '💼' },
+  { slug: 'nit',  name: 'Nelson Mandela African Inst. of Science', abbr: 'NIT',  city: 'Arusha',         activeShops: 0, totalSlots: 60, color: '#C084FC', bgGradient: 'linear-gradient(135deg,#4C1D95,#7C3AED)', emoji: '🔬' },
 ]
 
 export const shopCategories = [
