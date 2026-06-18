@@ -266,13 +266,7 @@ export default function HomePage() {
                   if (typeof window !== 'undefined' && (window as any).installTravexApp) {
                     (window as any).installTravexApp()
                   } else {
-                    alert('To install on Android:
-
-1. Tap the browser menu (⋮) at top right
-2. Tap "Add to Home Screen" or "Install App"
-3. Tap Install — Done! ✅
-
-Tip: Use Chrome browser for best experience.')
+                    alert('To install Travex Mall on Android:\n\n1. Open Chrome browser\n2. Tap menu (⋮) at top right\n3. Tap \'Add to Home Screen\'\n4. Tap Install — Done! ✅')
                   }
                 }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '10px',
@@ -290,12 +284,7 @@ Tip: Use Chrome browser for best experience.')
                 </div>
               </button>
               <button
-                onClick={() => alert('To install on iPhone / iOS:
-
-1. Open travex-mall.vercel.app in Safari
-2. Tap the Share button (□↑) at the bottom
-3. Scroll and tap "Add to Home Screen"
-4. Tap "Add" — Done! ✅')}
+                onClick={() => alert('To install on iPhone/iOS:\n\n1. Open travex-mall.vercel.app in Safari\n2. Tap Share (□↑) at the bottom\n3. Tap \'Add to Home Screen\'\n4. Tap Add — Done! ✅')}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '10px',
                   background: '#000', color: '#fff',
                   border: '1.5px solid rgba(255,255,255,0.25)',
