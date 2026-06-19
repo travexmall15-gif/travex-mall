@@ -133,6 +133,21 @@ tr:last-child td{border-bottom:none}
 .vc-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:.82rem}
 .vc-row:last-child{border:none;padding-top:.75rem}
 .vc-total{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--gold)}
+
+/* Seller management */
+.sel-filter-btn{padding:5px 12px;border:1px solid var(--border);border-radius:var(--pill);font-size:11px;font-weight:700;cursor:pointer;background:transparent;color:var(--muted);transition:.15s;font-family:inherit}
+.sel-filter-btn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.sel-filter-btn:hover{opacity:.8}
+.plan-badge{display:inline-block;padding:2px 8px;border-radius:var(--pill);font-size:10px;font-weight:700}
+.plan-basic{background:rgba(15,23,42,0.08);color:var(--navy)}
+.plan-premium{background:rgba(201,168,76,0.15);color:#A0721F}
+.plan-campus{background:rgba(99,102,241,0.15);color:#4338CA}
+.days-ok{color:#22C55E;font-weight:700}
+.days-warn{color:#EAB308;font-weight:700}
+.days-critical{color:#EF4444;font-weight:700}
+.days-expired{color:#64748B;font-weight:700}
+.action-btn{padding:4px 10px;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.action-btn:hover{opacity:.8}
 </style>
 </head>
 <body>
@@ -163,6 +178,10 @@ tr:last-child td{border-bottom:none}
       <div class="sb-lbl">Campus Market</div>
       <button class="sb-i" onclick="go('c-apps',this)">📋 Applications <span class="sb-c" id="cAppC">0</span></button>
       <button class="sb-i" onclick="go('c-stores',this)">🎓 Active Stores</button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Business Market</div>
+      <button class="sb-i" onclick="go('sellers',this)">👥 All Sellers <span class="sb-c" id="sellerCount">0</span></button>
     </div>
     <div class="sb-sec">
       <div class="sb-lbl">Business Market</div>
@@ -280,6 +299,67 @@ tr:last-child td{border-bottom:none}
     </div>
   </div>
 </div>
+
+    <!-- SELLERS MANAGEMENT PAGE -->
+    <div class="pg" id="pg-sellers">
+      <!-- Filter bar -->
+      <div class="tw" style="margin-bottom:12px">
+        <div class="th" style="flex-wrap:wrap;gap:8px">
+          <h3>👥 Seller Management</h3>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="sel-filter-btn on" onclick="setSellFilter('all',this)">All</button>
+            <button class="sel-filter-btn" onclick="setSellFilter('approved',this)" style="background:rgba(34,197,94,0.15);color:#22C55E">Active</button>
+            <button class="sel-filter-btn" onclick="setSellFilter('pending',this)" style="background:rgba(234,179,8,0.15);color:#EAB308">Pending</button>
+            <button class="sel-filter-btn" onclick="setSellFilter('suspended',this)" style="background:rgba(239,68,68,0.15);color:#EF4444">Suspended</button>
+            <button class="sel-filter-btn" onclick="setSellFilter('expired',this)" style="background:rgba(100,116,139,0.15);color:#64748B">Expired</button>
+          </div>
+          <input class="sr" placeholder="Search name / shop / email..." oninput="sellSearch=this.value;rSellers()" style="min-width:200px">
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px">
+        <div class="tw" style="padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--gold)" id="sc-total">0</div>
+          <div style="font-size:11px;color:var(--muted)">Total Sellers</div>
+        </div>
+        <div class="tw" style="padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:#22C55E" id="sc-active">0</div>
+          <div style="font-size:11px;color:var(--muted)">Active</div>
+        </div>
+        <div class="tw" style="padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:#EAB308" id="sc-pending">0</div>
+          <div style="font-size:11px;color:var(--muted)">Pending</div>
+        </div>
+        <div class="tw" style="padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:#EF4444" id="sc-suspended">0</div>
+          <div style="font-size:11px;color:var(--muted)">Suspended</div>
+        </div>
+        <div class="tw" style="padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:#64748B" id="sc-expired">0</div>
+          <div style="font-size:11px;color:var(--muted)">Expired</div>
+        </div>
+      </div>
+
+      <!-- Sellers table -->
+      <div class="tw">
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th>Seller</th>
+              <th>Market</th>
+              <th>Plan</th>
+              <th>Subscription</th>
+              <th>Days Left</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr></thead>
+            <tbody id="sellersTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
 
 <!-- DETAIL MODAL -->
 <div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
@@ -625,6 +705,349 @@ async function markAllRead(){
   notifs=notifs.map(n=>({...n,is_read:true}));
   renderNotifs();
   toast('All marked as read','ok');
+}
+
+
+// ═══════════════════════════════════════════════
+// SELLER MANAGEMENT
+// ═══════════════════════════════════════════════
+let allSellers = [], sellFilter = 'all', sellSearch = '';
+
+function buildSellersList() {
+  // Combine market sellers (pending_payments) + campus sellers (campus_stores)
+  const market = mApps.map(s => ({
+    id:         s.id,
+    type:       'business',
+    shop_name:  s.shop_name || '—',
+    owner_name: s.owner_name || s.full_name || '—',
+    email:      s.auth_email || s.owner_email || '—',
+    phone:      s.owner_phone || s.whatsapp_number || '—',
+    plan:       s.plan || 'basic',
+    status:     s.status || 'pending',
+    created_at: s.created_at,
+    approved_at:s.approved_at || s.created_at,
+    sub_end:    s.subscription_end || calcSubEnd(s.approved_at || s.created_at, s.plan || 'basic'),
+    region:     s.shop_region || s.region || '—',
+    category:   s.shop_category || s.category || '—',
+    password:   s.login_password || '—',
+    raw:        s,
+  }));
+
+  const campus = cStores.map(s => ({
+    id:         s.id,
+    type:       'campus',
+    shop_name:  s.store_name || s.shop_name || '—',
+    owner_name: s.owner_name || '—',
+    email:      s.auth_email || '—',
+    phone:      s.whatsapp || s.phone || '—',
+    plan:       'campus',
+    status:     s.is_active ? 'approved' : 'suspended',
+    created_at: s.created_at,
+    approved_at:s.created_at,
+    sub_end:    calcSubEnd(s.created_at, 'campus'),
+    region:     s.university_abbr || '—',
+    category:   s.category || '—',
+    password:   s.login_password || '—',
+    raw:        s,
+  }));
+
+  allSellers = [...market, ...campus].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+  updateSellerStats();
+  rSellers();
+  document.getElementById('sellerCount').textContent = allSellers.length;
+}
+
+function calcSubEnd(dateStr, plan) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  const days = plan === 'campus' ? 30 : plan === 'premium' ? 30 : 30;
+  d.setDate(d.getDate() + days);
+  return d.toISOString();
+}
+
+function daysLeft(subEnd) {
+  if (!subEnd) return null;
+  const diff = new Date(subEnd) - new Date();
+  return Math.ceil(diff / (1000*60*60*24));
+}
+
+function daysClass(days) {
+  if (days === null) return '';
+  if (days < 0)  return 'days-expired';
+  if (days <= 5) return 'days-critical';
+  if (days <= 14) return 'days-warn';
+  return 'days-ok';
+}
+
+function updateSellerStats() {
+  const active    = allSellers.filter(s => s.status==='approved' && daysLeft(s.sub_end) > 0).length;
+  const pending   = allSellers.filter(s => s.status==='pending').length;
+  const suspended = allSellers.filter(s => s.status==='suspended').length;
+  const expired   = allSellers.filter(s => s.status==='approved' && daysLeft(s.sub_end) <= 0).length;
+  document.getElementById('sc-total').textContent     = allSellers.length;
+  document.getElementById('sc-active').textContent    = active;
+  document.getElementById('sc-pending').textContent   = pending;
+  document.getElementById('sc-suspended').textContent = suspended;
+  document.getElementById('sc-expired').textContent   = expired;
+}
+
+function setSellFilter(f, el) {
+  sellFilter = f;
+  document.querySelectorAll('.sel-filter-btn').forEach(b => b.classList.remove('on'));
+  if (el) el.classList.add('on');
+  rSellers();
+}
+
+function rSellers() {
+  let list = allSellers;
+  const q = (sellSearch||'').toLowerCase();
+
+  if (q) list = list.filter(s =>
+    s.shop_name.toLowerCase().includes(q) ||
+    s.owner_name.toLowerCase().includes(q) ||
+    s.email.toLowerCase().includes(q) ||
+    s.phone.includes(q)
+  );
+
+  if (sellFilter !== 'all') {
+    if (sellFilter === 'approved') list = list.filter(s => s.status==='approved' && daysLeft(s.sub_end) > 0);
+    else if (sellFilter === 'expired') list = list.filter(s => s.status==='approved' && daysLeft(s.sub_end) <= 0);
+    else list = list.filter(s => s.status === sellFilter);
+  }
+
+  const tbody = document.getElementById('sellersTbl');
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">No sellers found</td></tr>`;
+    return;
+  }
+
+  const F = n => 'TZS ' + Number(n).toLocaleString();
+  const planBadge = p => {
+    const cls = p === 'premium' ? 'plan-premium' : p === 'campus' ? 'plan-campus' : 'plan-basic';
+    const label = p === 'premium' ? '🥇 Premium' : p === 'campus' ? '🎓 Campus' : '🥈 Basic';
+    return `<span class="plan-badge ${cls}">${label}</span>`;
+  };
+  const statusBadge = (s, days) => {
+    if (s === 'pending')   return `<span class="bd bd-y">⏳ Pending</span>`;
+    if (s === 'suspended') return `<span class="bd bd-r">🚫 Suspended</span>`;
+    if (s === 'deleted')   return `<span class="bd" style="background:rgba(100,116,139,0.15);color:#64748B">🗑️ Deleted</span>`;
+    if (days !== null && days <= 0) return `<span class="bd bd-r">⚠️ Expired</span>`;
+    return `<span class="bd bd-g">✅ Active</span>`;
+  };
+
+  tbody.innerHTML = list.map(s => {
+    const days = daysLeft(s.sub_end);
+    const dClass = daysClass(days);
+    const dLabel = days === null ? '—' : days < 0 ? `${Math.abs(days)}d ago` : `${days}d`;
+    const subEndLabel = s.sub_end ? new Date(s.sub_end).toLocaleDateString('en-GB') : '—';
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700;font-size:12px">${E(s.shop_name)}</div>
+          <div style="color:var(--muted);font-size:11px">${E(s.owner_name)}</div>
+          <div style="color:var(--muted);font-size:10px">${E(s.email)}</div>
+        </td>
+        <td><span class="bd" style="background:rgba(99,102,241,0.1);color:#4338CA;font-size:9px">${s.type==='campus'?'🎓 Campus':'🏪 Business'}</span></td>
+        <td>${planBadge(s.plan)}</td>
+        <td style="font-size:11px">${subEndLabel}</td>
+        <td><span class="${dClass}">${dLabel}</span></td>
+        <td>${statusBadge(s.status, days)}</td>
+        <td>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">
+            <button class="action-btn" style="background:rgba(15,23,42,0.08);color:var(--navy)" onclick="viewSeller('${s.id}','${s.type}')">👁 View</button>
+            ${s.status==='pending' ? `<button class="action-btn" style="background:rgba(34,197,94,0.15);color:#166534" onclick="approveSeller('${s.id}','${s.type}')">✅ Approve</button>` : ''}
+            ${s.status==='approved' ? `<button class="action-btn" style="background:rgba(234,179,8,0.12);color:#A16207" onclick="suspendSeller('${s.id}','${s.type}')">🚫 Suspend</button>` : ''}
+            ${s.status==='suspended' ? `<button class="action-btn" style="background:rgba(34,197,94,0.12);color:#166534" onclick="reinstSeller('${s.id}','${s.type}')">♻️ Reinstate</button>` : ''}
+            <button class="action-btn" style="background:rgba(99,102,241,0.12);color:#4338CA" onclick="upgradeSeller('${s.id}','${s.type}')">⬆️ Plan</button>
+            <button class="action-btn" style="background:rgba(201,168,76,0.12);color:#A0721F" onclick="renewSeller('${s.id}','${s.type}')">🔄 Renew</button>
+            <button class="action-btn" style="background:rgba(239,68,68,0.12);color:#991B1B" onclick="deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')">🗑️ Delete</button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ── VIEW SELLER DETAILS ──
+function viewSeller(id, type) {
+  const s = allSellers.find(x => x.id===id && x.type===type);
+  if (!s) return;
+  const days = daysLeft(s.sub_end);
+  const subEndLabel = s.sub_end ? new Date(s.sub_end).toLocaleDateString('en-GB') : '—';
+  showModal(`
+    <h3 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:16px">
+      ${E(s.shop_name)} <span style="font-size:13px;font-weight:400;color:var(--muted)">(${s.type})</span>
+    </h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
+      ${[
+        ['Owner', s.owner_name],
+        ['Email', s.email],
+        ['Phone', s.phone],
+        ['Plan', s.plan.toUpperCase()],
+        ['Status', s.status],
+        ['Region/Uni', s.region],
+        ['Category', s.category],
+        ['Sub End', subEndLabel],
+        ['Days Left', days !== null ? days + 'd' : '—'],
+        ['Login Password', s.password],
+        ['Created', new Date(s.created_at).toLocaleDateString('en-GB')],
+      ].map(([k,v]) => `
+        <div style="background:var(--bg);border-radius:8px;padding:8px">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:3px">${k}</div>
+          <div style="font-weight:700;color:var(--text);word-break:break-all">${E(String(v||'—'))}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      <a href="https://wa.me/${s.phone.replace(/\D/g,'')}" target="_blank"
+        class="action-btn" style="background:#25D366;color:#fff;padding:8px 16px;text-decoration:none">
+        💬 WhatsApp
+      </a>
+      ${s.status==='pending' ? `<button class="action-btn" style="background:rgba(34,197,94,0.2);color:#166534;padding:8px 16px" onclick="closeModal();approveSeller('${s.id}','${s.type}')">✅ Approve</button>` : ''}
+      <button class="action-btn" style="background:rgba(239,68,68,0.15);color:#991B1B;padding:8px 16px" onclick="closeModal();deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')">🗑️ Delete</button>
+    </div>
+  `);
+}
+
+// ── APPROVE ──
+function approveSeller(id, type) {
+  if (type === 'business') { acMA(id); buildSellersList(); }
+  else { acCA(id); buildSellersList(); }
+}
+
+// ── SUSPEND ──
+async function suspendSeller(id, type) {
+  if (!confirm('Suspend this seller? Their shop will be hidden from marketplace.')) return;
+  if (type === 'business') {
+    await sb.from('pending_payments').update({ status: 'suspended' }).eq('id', id);
+  } else {
+    await sb.from('campus_stores').update({ is_active: false }).eq('id', id);
+  }
+  const idx = allSellers.findIndex(s => s.id===id && s.type===type);
+  if (idx > -1) allSellers[idx].status = 'suspended';
+  toast('🚫 Seller suspended', 'ok');
+  updateSellerStats();
+  rSellers();
+}
+
+// ── REINSTATE ──
+async function reinstSeller(id, type) {
+  if (!confirm('Reinstate this seller?')) return;
+  if (type === 'business') {
+    await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
+  } else {
+    await sb.from('campus_stores').update({ is_active: true }).eq('id', id);
+  }
+  const idx = allSellers.findIndex(s => s.id===id && s.type===type);
+  if (idx > -1) allSellers[idx].status = 'approved';
+  toast('✅ Seller reinstated', 'ok');
+  updateSellerStats();
+  rSellers();
+}
+
+// ── UPGRADE PLAN ──
+async function upgradeSeller(id, type) {
+  const s = allSellers.find(x => x.id===id && x.type===type);
+  if (!s) return;
+  showModal(`
+    <h3 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:16px">
+      ⬆️ Upgrade Plan — ${E(s.shop_name)}
+    </h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+      ${['basic','premium','campus'].map(p => `
+        <button onclick="confirmUpgrade('${id}','${type}','${p}')"
+          class="action-btn" style="padding:12px;font-size:13px;text-align:left;
+          background:${p===s.plan?'rgba(201,168,76,0.15)':'var(--bg)'};
+          border:${p===s.plan?'2px solid var(--gold)':'1px solid var(--border)'};
+          border-radius:10px;color:var(--text)">
+          ${p==='premium'?'🥇 Premium — TZS 45,000/mo':p==='campus'?'🎓 Campus — TZS 10,000/mo':'🥈 Basic — TZS 25,000/mo'}
+          ${p===s.plan?' <span style="color:var(--gold);font-size:10px">(current)</span>':''}
+        </button>
+      `).join('')}
+    </div>
+  `);
+}
+
+async function confirmUpgrade(id, type, newPlan) {
+  const s = allSellers.find(x => x.id===id && x.type===type);
+  if (!s || !confirm(`Upgrade ${s.shop_name} to ${newPlan.toUpperCase()}?`)) return;
+  if (type === 'business') {
+    await sb.from('pending_payments').update({ plan: newPlan }).eq('id', id);
+  } else {
+    await sb.from('campus_stores').update({ plan: newPlan }).eq('id', id);
+  }
+  const idx = allSellers.findIndex(x => x.id===id && x.type===type);
+  if (idx > -1) allSellers[idx].plan = newPlan;
+  closeModal();
+  toast(`✅ Plan upgraded to ${newPlan.toUpperCase()}`, 'ok');
+  updateSellerStats(); rSellers();
+}
+
+// ── RENEW SUBSCRIPTION ──
+async function renewSeller(id, type) {
+  const s = allSellers.find(x => x.id===id && x.type===type);
+  if (!s || !confirm(`Renew subscription for ${s.shop_name}? (+ 30 days)`)) return;
+  const newEnd = new Date();
+  newEnd.setDate(newEnd.getDate() + 30);
+  const newEndStr = newEnd.toISOString();
+  if (type === 'business') {
+    await sb.from('pending_payments').update({ subscription_end: newEndStr }).eq('id', id);
+  } else {
+    await sb.from('campus_stores').update({ subscription_end: newEndStr }).eq('id', id);
+  }
+  const idx = allSellers.findIndex(x => x.id===id && x.type===type);
+  if (idx > -1) allSellers[idx].sub_end = newEndStr;
+  toast('🔄 Subscription renewed (+30 days)', 'ok');
+  updateSellerStats(); rSellers();
+}
+
+// ── DELETE SELLER (COMPLETE REMOVAL) ──
+async function deleteSeller(id, type, shopName) {
+  if (!confirm(`⚠️ DELETE "${shopName}"?\n\nThis will:\n• Remove from marketplace\n• Remove their dashboard access\n• Delete all their products & posts\n\nThis CANNOT be undone!`)) return;
+
+  toast('🗑️ Deleting...', 'ok');
+
+  try {
+    if (type === 'business') {
+      // 1. Delete products
+      await sb.from('campus_products').delete().eq('store_id', id);
+      // 2. Delete orders
+      await sb.from('campus_orders').delete().eq('store_id', id);
+      // 3. Delete sales
+      await sb.from('seller_sales').delete().eq('store_id', id);
+      // 4. Delete debts
+      await sb.from('seller_debts').delete().eq('store_id', id);
+      // 5. Delete feed posts
+      await sb.from('feed_posts').delete().eq('store_id', id);
+      // 6. Mark as deleted (can't delete auth user from client)
+      await sb.from('pending_payments').update({ status: 'deleted' }).eq('id', id);
+    } else {
+      // Campus
+      await sb.from('campus_products').delete().eq('store_id', id);
+      await sb.from('campus_orders').delete().eq('store_id', id);
+      await sb.from('feed_posts').delete().eq('store_id', id);
+      await sb.from('campus_stores').update({ is_active: false, status: 'deleted' }).eq('id', id);
+    }
+
+    // Remove from local list
+    allSellers = allSellers.filter(s => !(s.id===id && s.type===type));
+    // Also remove from mApps/cStores
+    mApps = mApps.filter(s => s.id !== id);
+    cStores = cStores.filter(s => s.id !== id);
+
+    closeModal();
+    toast(`✅ ${shopName} deleted completely`, 'ok');
+    updateSellerStats();
+    rSellers();
+    // Update counts
+    document.getElementById('sellerCount').textContent = allSellers.length;
+  } catch(e) {
+    toast('❌ Error: ' + e.message, 'err');
+  }
+}
+
+function showModal(html) {
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalBg').style.display = 'flex';
 }
 </script>
 </body>
