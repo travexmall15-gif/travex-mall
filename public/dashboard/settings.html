@@ -207,6 +207,80 @@ async function saveAccount() {
   localStorage.setItem('travex_owner_name', name);
   showToast('✅ Account updated!','success');
 }
+
+// ── SUBSCRIPTION UPGRADE FUNCTIONS ──
+let selectedPlan   = 'basic';
+let selectedPeriod = 'monthly';
+
+const PRICES = {
+  basic:   { monthly: 25000, '3months': 67500,  yearly: 240000 },
+  premium: { monthly: 45000, '3months': 121500, yearly: 432000 },
+  campus:  { monthly: 10000, '3months': 27000,  yearly: 96000  },
+};
+const PERIOD_LABELS = { monthly:'/month', '3months':'/3 months', yearly:'/year' };
+
+function selectPeriod(period) {
+  selectedPeriod = period;
+  document.querySelectorAll('.sub-period-tab').forEach(t => {
+    t.style.background = 'transparent';
+    t.style.color      = 'var(--text-muted)';
+  });
+  const tab = document.getElementById('tab-' + period);
+  if (tab) { tab.style.background = 'var(--navy)'; tab.style.color = '#fff'; }
+  updatePrices();
+}
+
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.querySelectorAll('.sub-plan-card').forEach(c => {
+    c.style.borderColor = 'var(--border)';
+    c.style.transform   = '';
+    c.style.background  = 'var(--bg)';
+  });
+  const card = document.getElementById('plan-' + plan);
+  if (card) {
+    card.style.borderColor = 'var(--gold)';
+    card.style.transform   = 'scale(1.01)';
+    card.style.background  = 'rgba(201,168,76,0.07)';
+  }
+  updatePrices();
+}
+
+function updatePrices() {
+  ['basic','premium','campus'].forEach(p => {
+    const price = PRICES[p] ? PRICES[p][selectedPeriod] : 0;
+    const pEl   = document.getElementById('price-' + p);
+    const lEl   = document.getElementById('period-' + p);
+    if (pEl) pEl.textContent = 'TZS ' + Number(price).toLocaleString();
+    if (lEl) lEl.textContent = PERIOD_LABELS[selectedPeriod];
+  });
+  const total   = PRICES[selectedPlan] ? PRICES[selectedPlan][selectedPeriod] : 0;
+  const tEl     = document.getElementById('upgradeTotal');
+  const btn     = document.getElementById('upgradeBtn');
+  const payDiv  = document.getElementById('paymentInfo');
+  const waLink  = document.getElementById('whatsappUpgrade');
+  if (tEl) tEl.textContent = 'TZS ' + Number(total).toLocaleString();
+  const isCurrent = selectedPlan === (shopData?.plan || 'basic') && selectedPeriod === 'monthly';
+  if (btn)   btn.style.display    = isCurrent ? 'none' : 'block';
+  if (payDiv) payDiv.style.display = isCurrent ? 'none' : 'block';
+  if (waLink) {
+    const msg = encodeURIComponent(
+      'Travex Mall Upgrade\nPlan: ' + selectedPlan + '\nPeriod: ' + selectedPeriod +
+      '\nAmount: TZS ' + Number(total).toLocaleString() +
+      '\nShop: ' + (shopData?.shop_name||'') +
+      '\nEmail: ' + (shopData?.auth_email||'')
+    );
+    waLink.href = 'https://wa.me/255651919915?text=' + msg;
+  }
+}
+
+function upgradeNow() {
+  const payDiv = document.getElementById('paymentInfo');
+  if (payDiv) {
+    payDiv.style.display = 'block';
+    payDiv.scrollIntoView({ behavior: 'smooth' });
+  }
+}
 </script>
 </body>
 </html>
