@@ -43,18 +43,100 @@
         <div class="table-card" style="margin-bottom:20px">
           <div class="table-card-header"><div class="table-card-title"><i class="ti ti-crown"></i> Subscription</div></div>
           <div class="table-card-body">
-            <div style="text-align:center;padding:12px 0">
-              <div style="font-size:28px;font-weight:800;color:var(--gold)" id="currentPlan">—</div>
+
+            <!-- Current plan badge -->
+            <div style="text-align:center;margin-bottom:20px">
+              <div style="font-size:26px;font-weight:800;color:var(--gold)" id="currentPlan">—</div>
               <div class="text-muted fs-12" style="margin-top:4px">Current Plan</div>
-              <div style="margin:16px 0;padding:12px;background:var(--bg);border-radius:var(--radius)">
-                <div class="fs-12 text-muted">Plans</div>
-                <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
-                  <div class="flex flex-center gap-8"><i class="ti ti-circle-check text-success"></i><span class="fs-13">Campus — TZS 10,000/mo</span></div>
-                  <div class="flex flex-center gap-8"><i class="ti ti-circle-check text-success"></i><span class="fs-13">Basic — TZS 25,000/mo</span></div>
-                  <div class="flex flex-center gap-8"><i class="ti ti-circle-check" style="color:var(--gold)"></i><span class="fs-13">Premium — TZS 45,000/mo</span></div>
+            </div>
+
+            <!-- Period selector -->
+            <div style="margin-bottom:16px">
+              <div class="fs-12 fw-600 text-muted" style="margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Billing Period</div>
+              <div style="display:flex;gap:6px;background:var(--bg);border-radius:10px;padding:4px" id="periodTabs">
+                <button onclick="selectPeriod('monthly')" id="tab-monthly" class="sub-period-tab active"
+                  style="flex:1;padding:8px 4px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:var(--navy);color:#fff;transition:all .2s">
+                  Monthly
+                </button>
+                <button onclick="selectPeriod('3months')" id="tab-3months" class="sub-period-tab"
+                  style="flex:1;padding:8px 4px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-muted);transition:all .2s">
+                  3 Months<br><span style="font-size:10px;color:#22C55E">Save 10%</span>
+                </button>
+                <button onclick="selectPeriod('yearly')" id="tab-yearly" class="sub-period-tab"
+                  style="flex:1;padding:8px 4px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-muted);transition:all .2s">
+                  Yearly<br><span style="font-size:10px;color:#22C55E">Save 20%</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan cards -->
+            <div style="display:flex;flex-direction:column;gap:10px" id="planCards">
+
+              <!-- Basic -->
+              <div class="sub-plan-card" id="plan-basic" onclick="selectPlan('basic')"
+                style="border:2px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;background:var(--bg)">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div>
+                    <div style="font-weight:800;font-size:14px;color:var(--text)">🥈 Basic Plan</div>
+                    <div class="fs-12 text-muted">All core features</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-weight:900;font-size:18px;color:var(--navy)" id="price-basic">TZS 25,000</div>
+                    <div class="fs-11 text-muted" id="period-basic">/month</div>
+                  </div>
                 </div>
               </div>
-              <a href="/subscription" class="btn btn-gold" style="width:100%"><i class="ti ti-arrow-up-circle"></i> View Plans</a>
+
+              <!-- Premium -->
+              <div class="sub-plan-card" id="plan-premium" onclick="selectPlan('premium')"
+                style="border:2px solid var(--gold);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;background:rgba(201,168,76,0.07);position:relative">
+                <div style="position:absolute;top:-10px;right:12px;background:var(--gold);color:#0F172A;font-size:10px;font-weight:800;padding:2px 10px;border-radius:999px">BEST VALUE</div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div>
+                    <div style="font-weight:800;font-size:14px;color:var(--gold)">🥇 Premium Plan</div>
+                    <div class="fs-12 text-muted">All features + AI Tools</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-weight:900;font-size:18px;color:var(--gold)" id="price-premium">TZS 45,000</div>
+                    <div class="fs-11 text-muted" id="period-premium">/month</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campus -->
+              <div class="sub-plan-card" id="plan-campus" onclick="selectPlan('campus')"
+                style="border:2px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;background:var(--bg)">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div>
+                    <div style="font-weight:800;font-size:14px;color:var(--text)">🎓 Campus Plan</div>
+                    <div class="fs-12 text-muted">Students only</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-weight:900;font-size:18px;color:var(--navy)" id="price-campus">TZS 10,000</div>
+                    <div class="fs-11 text-muted" id="period-campus">/month</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upgrade button -->
+            <button onclick="upgradeNow()" id="upgradeBtn"
+              style="width:100%;margin-top:16px;padding:14px;background:var(--gold);color:#0F172A;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;display:none">
+              <i class="ti ti-arrow-up-circle"></i> Upgrade Now — <span id="upgradeTotal">TZS 45,000</span>
+            </button>
+
+            <!-- Payment info -->
+            <div id="paymentInfo" style="display:none;margin-top:12px;padding:12px;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+              <div class="fs-12 fw-700" style="margin-bottom:8px;color:var(--text)"><i class="ti ti-credit-card"></i> Payment Options</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div class="fs-13"><i class="ti ti-brand-whatsapp text-success"></i> M-Pesa: <strong>+255 651 919 915</strong></div>
+                <div class="fs-13"><i class="ti ti-building-bank"></i> CRDB: <strong>0152774556100</strong></div>
+              </div>
+              <div class="fs-11 text-muted" style="margin-top:8px">Send payment then WhatsApp us your receipt to activate.</div>
+              <a id="whatsappUpgrade" href="#" target="_blank"
+                style="display:block;margin-top:10px;padding:10px;background:#25D366;color:#fff;border-radius:8px;text-align:center;font-weight:700;font-size:13px;text-decoration:none">
+                <i class="ti ti-brand-whatsapp"></i> Send Payment Confirmation
+              </a>
             </div>
           </div>
         </div>
