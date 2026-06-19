@@ -152,12 +152,12 @@ async function submitPost() {
   renderPosts();
 }
 
-async function deletePost(id) {
+async async function deletePost(id) {
   if (!confirm('Delete this post?')) return;
   await DB.vybe.delete(id);
   posts = posts.filter(p=>p.id!==id);
   renderPosts();
-  showToast('Post deleted','error');
+  showToast('🗑️ Post deleted','success');
 }
 </script>
 </body>
