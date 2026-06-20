@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Group Buying — Travex Mall</title>
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="dashboard.js"></script>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading...</div>
+</div>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">👥 Group Buying</div>
+    <div class="header-sub">Create group deals — customers buy together to get discounts</div></div>
+    <div class="header-right">
+      <button class="btn btn-gold" onclick="openModal('addGroupModal')">
+        <i class="ti ti-plus"></i> New Group Deal
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="stat-label">Open Groups</div>
+        <div class="stat-value" id="openGroups">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completed Groups</div>
+        <div class="stat-value" id="completedGroups">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Members</div>
+        <div class="stat-value" id="totalMembers">0</div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <div class="table-card-title">All Group Deals</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>Product</th><th>Price</th><th>Discount</th>
+            <th>Members</th><th>Target</th><th>Expires</th><th>Status</th><th>Share</th>
+          </tr></thead>
+          <tbody id="groupsTbl">
+            <tr><td colspan="8" class="empty-state">Loading groups...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Group Modal -->
+<div class="modal" id="addGroupModal">
+  <div class="modal-header">
+    <div class="modal-title">👥 New Group Deal</div>
+    <button class="modal-close" onclick="closeModal('addGroupModal')"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Product Name *</label>
+      <input class="form-input" id="gpProduct" placeholder="e.g. Running Shoes Size 40-45">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Unit Price (TZS) *</label>
+        <input class="form-input" id="gpPrice" type="number" placeholder="80000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Discount % *</label>
+        <select class="form-select" id="gpDiscount">
+          <option value="10">10%</option>
+          <option value="15">15%</option>
+          <option value="20" selected>20%</option>
+          <option value="25">25%</option>
+          <option value="30">30%</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Min Members Needed *</label>
+        <input class="form-input" id="gpMin" type="number" value="5" min="2">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Duration</label>
+        <select class="form-select" id="gpDuration">
+          <option value="24">24 Hours</option>
+          <option value="48" selected>48 Hours</option>
+          <option value="72">72 Hours</option>
+          <option value="168">1 Week</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline" onclick="closeModal('addGroupModal')">Cancel</button>
+    <button class="btn btn-gold" onclick="createGroup()"><i class="ti ti-users"></i> Launch Group</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let shopData = null, groups = [];
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  shopData = await Shop.get(session.user.email);
+  await loadSidebar('group-buy', shopData);
+  await loadGroups();
+  showLoading(false);
+})();
+
+async function loadGroups() {
+  groups = await GroupBuys.getAll(shopData?.id);
+  renderGroups();
+  document.getElementById('openGroups').textContent      = groups.filter(g=>g.status==='open').length;
+  document.getElementById('completedGroups').textContent = groups.filter(g=>g.status==='completed').length;
+  document.getElementById('totalMembers').textContent    = groups.reduce((s,g)=>s+(g.current_members||0),0);
+}
+
+function renderGroups() {
+  const tbody = document.getElementById('groupsTbl');
+  if (!groups.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><i class="ti ti-users"></i><h4>No Group Deals</h4><p>Create your first group deal!</p></td></tr>';
+    return;
+  }
+  const fmt = n => 'TZS ' + Number(n).toLocaleString();
+  const base = location.origin;
+  tbody.innerHTML = groups.map(g => {
+    const pct  = Math.min(100, Math.round((g.current_members/g.min_members)*100));
+    const disc = g.unit_price * (1 - g.discount_pct/100);
+    return `
+      <tr>
+        <td><strong>${g.product_name}</strong></td>
+        <td>${fmt(g.unit_price)}<br><small style="color:#22C55E">${fmt(disc)} after discount</small></td>
+        <td><span class="badge badge-success">-${g.discount_pct}%</span></td>
+        <td>
+          <div style="font-weight:700">${g.current_members}</div>
+          <div style="height:4px;background:#E2E8F0;border-radius:4px;width:80px;margin-top:4px">
+            <div style="height:100%;width:${pct}%;background:var(--gold);border-radius:4px"></div>
+          </div>
+        </td>
+        <td>${g.min_members} people</td>
+        <td style="font-size:12px">${new Date(g.expires_at).toLocaleDateString('en-GB')}</td>
+        <td><span class="badge ${g.status==='open'?'badge-success':g.status==='completed'?'badge-info':'badge-warning'}">${g.status}</span></td>
+        <td>
+          <a href="https://wa.me/?text=${encodeURIComponent('👥 Join my group deal on Travex Mall!\n\n'+g.product_name+' at -'+g.discount_pct+'% off!\n\nJoin here: '+base+'/group-buy/'+g.id)}"
+            target="_blank" class="btn btn-success btn-sm">
+            <i class="ti ti-brand-whatsapp"></i> Share
+          </a>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+async function createGroup() {
+  const product  = document.getElementById('gpProduct').value.trim();
+  const price    = parseFloat(document.getElementById('gpPrice').value);
+  const discount = parseInt(document.getElementById('gpDiscount').value);
+  const minM     = parseInt(document.getElementById('gpMin').value)||5;
+  const hours    = parseInt(document.getElementById('gpDuration').value);
+
+  if (!product || !price) { showToast('Fill all required fields','error'); return; }
+  const expiresAt = new Date(); expiresAt.setHours(expiresAt.getHours() + hours);
+
+  const { error } = await GroupBuys.create({
+    store_id: shopData?.id, shop_name: shopData?.shop_name || shopData?.store_name,
+    product_name: product, unit_price: price,
+    discount_pct: discount, min_members: minM, current_members: 0,
+    expires_at: expiresAt.toISOString(), status: 'open'
+  });
+
+  if (error) { showToast('Error: '+error.message,'error'); return; }
+  closeModal('addGroupModal');
+  showToast('👥 Group deal launched!','success');
+  await loadGroups();
+}
+</script>
+</body>
+</html>

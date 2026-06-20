@@ -86,12 +86,24 @@ export default function CampusApplyPage() {
         status:          'pending',
       })
 
+      const { data: newApp } = await sb.from('campus_applications')
+        .select('id').order('created_at', { ascending: false }).limit(1).single()
+
       await sb.from('admin_notifications').insert({
         title: `New Campus Application — ${form.storeName}`,
         body:  `${form.ownerName} from ${form.university} wants to open a campus shop.`,
         type:  'campus_application',
         is_read: false,
       })
+
+      // Trigger auto-approval AI
+      if (newApp?.id) {
+        fetch('/api/auto-approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ app_id: newApp.id, app_type: 'campus' })
+        }).catch(() => {}) // Non-blocking
+      }
 
       setSuccess(true)
     } catch (e: any) {

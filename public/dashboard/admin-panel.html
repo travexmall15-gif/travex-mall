@@ -157,7 +157,7 @@ tr:last-child td{border-bottom:none}
   <div class="lc">
     <div class="lc-badge">🔐 Admin Only</div>
     <h2>Travex Admin</h2>
-    <p>Weka password yako ya admin kuendelea.</p>
+    <p>Enter your admin password to continue.</p>
     <div class="lc-err" id="loginErr"></div>
     <input id="adminPass" placeholder="Admin password" type="password" onkeypress="if(event.key==='Enter')doLogin()">
     <button onclick="doLogin()">Sign In →</button>
@@ -385,7 +385,7 @@ function sA(b){b.parentElement.querySelectorAll('.fb').forEach(x=>x.classList.re
 // ── SECURE AUTH — signIn only, NO signUp ──
 async function doLogin(){
   const pass=document.getElementById('adminPass').value;
-  if(!pass){showErr('Weka password.');return}
+  if(!pass){showErr('Please enter the admin password.');return}
   const{error}=await sb.auth.signInWithPassword({email:ADMIN_EMAIL,password:pass});
   if(error){showErr('❌ Password si sahihi.');return}
   initApp();
@@ -549,7 +549,7 @@ async function acCA(id){
   // WhatsApp with login credentials
   const waMsg=encodeURIComponent(
     `✅ *Hongera ${a.full_name}!*\n\n`+
-    `Duka lako *"${sn}"* liko LIVE kwenye Travex Campus Market! 🎓\n\n`+
+    `Your shop *"${sn}"* is now LIVE on Travex Campus Market! 🎓\n\n`+
     `━━━━━━━━━━━━\n`+
     `🔐 *Login Details:*\n`+
     `🌐 Website: travex-mall.vercel.app\n`+
@@ -557,7 +557,7 @@ async function acCA(id){
     `🔑 Password: ${rawPass}\n\n`+
     `📱 Open: travex-mall.vercel.app/login\n`+
     `━━━━━━━━━━━━\n`+
-    `_Karibu kwenye Travex Campus! 🚀_`
+    `_Welcome to Travex Campus! 🚀_`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
 

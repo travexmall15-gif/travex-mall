@@ -178,7 +178,7 @@ body{
     <div id="loginPanel">
       <div class="card-badge"><span class="dot"></span>Travex Seller Portal</div>
       <div class="card-title">Sign In Account Yako</div>
-      <div class="card-sub">Ingia kwa namba yako ya simu na password uliyopewa baada ya duka lako kuidhinishwa.</div>
+      <div class="card-sub">Enter your phone number and password received after your shop was approved.</div>
 
       <div class="alert alert-error" id="loginError"></div>
       <div class="alert alert-warn"  id="loginWarn"></div>
@@ -331,9 +331,9 @@ async function doLogin() {
 
     const msg = error.message.toLowerCase();
     if (msg.includes("invalid") || msg.includes("credentials")) {
-      showErr("loginError", "❌ Namba ya phone au password si sahihi. Tafadhali angalia na ujaribu tena.");
+      showErr("loginError", "❌ Incorrect phone or password. Please check and try again.");
     } else if (msg.includes("email not confirmed")) {
-      showWarn("loginWarn", "📧 Tafadhali confirm email yako kwanza. Angalia inbox na ubonyeze link ya uthibitisho.");
+      showWarn("loginWarn", "📧 Please confirm your email first. Checkalia inbox na ubonyeze link ya uthibitisho.");
     } else if (msg.includes("too many")) {
       showErr("loginError", "⏳ Umejaribu mara nyingi. Subiri dakika 5 kisha ujaribu tena.");
     } else {

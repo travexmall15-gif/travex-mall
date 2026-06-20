@@ -57,6 +57,12 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
   useEffect(() => {
     async function load() {
+      // Track store view
+      fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store_id: slug, event: 'view', source: document.referrer ? 'referral' : 'direct' })
+      }).catch(() => {})
       // Try pending_payments (business market)
       const { data: shopData } = await sb
         .from('pending_payments')

@@ -166,6 +166,33 @@ export default function MarketPage() {
         </div>
       </section>
 
+      {/* ── QUICK ACCESS: Flash Deals + Group Buy ── */}
+      <div style={{ background:'#fff', borderBottom:'1px solid #E2E8F0', padding:'0 5%' }}>
+        <div style={{ maxWidth:1200, margin:'0 auto', display:'flex', gap:8, overflowX:'auto',
+          padding:'10px 0', scrollbarWidth:'none' }}>
+          <a href="/flash-deals" style={{ display:'inline-flex', alignItems:'center', gap:6,
+            background:'linear-gradient(135deg,#FEF3C7,#FDE68A)', color:'#92400E',
+            padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
+            textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #FCD34D',
+            boxShadow:'0 2px 8px rgba(245,158,11,0.2)' }}>
+            ⚡ Flash Deals — Limited Time
+          </a>
+          <a href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
+            background:'linear-gradient(135deg,#DBEAFE,#BFDBFE)', color:'#1E40AF',
+            padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
+            textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #93C5FD',
+            boxShadow:'0 2px 8px rgba(29,78,216,0.15)' }}>
+            👥 Group Buying — Save Together
+          </a>
+          <a href="/vybe" style={{ display:'inline-flex', alignItems:'center', gap:6,
+            background:'linear-gradient(135deg,#EDE9FE,#DDD6FE)', color:'#5B21B6',
+            padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
+            textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #C4B5FD' }}>
+            ✦ Social Vybe
+          </a>
+        </div>
+      </div>
+
       {/* ══ CATEGORY TABS ══ */}
       <section style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', boxShadow: '0 2px 8px rgba(15,23,42,0.04)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.1rem 5%', overflowX: 'auto' }}>

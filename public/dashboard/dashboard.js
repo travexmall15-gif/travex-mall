@@ -240,7 +240,9 @@ async function loadSidebar(activePage, shopData) {
       ${navItem('reports',   'reports.html',   'ti-chart-bar',     'Reports')}
 
       <div class="nav-label">Growth</div>
-      ${navItem('vybe',      'vybe.html',      'ti-bolt',          'Social Vybe')}
+      ${navItem('vybe',       'vybe.html',       'ti-bolt',          'Social Vybe')}
+      ${navItem('flash-deals','flash-deals.html','ti-flame',         '⚡ Flash Deals')}
+      ${navItem('group-buy',  'group-buy.html',  'ti-users-group',   '👥 Group Buying')}
       ${navItem('ai-tools',  'ai-tools.html',  'ti-robot',         'AI Tools',      true)}
       ${navItem('marketing', 'marketing.html', 'ti-speakerphone',  'Marketing',     true)}
 

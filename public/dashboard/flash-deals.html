@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flash Deals — Travex Mall</title>
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="dashboard.js"></script>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading...</div>
+</div>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">⚡ Flash Deals</div>
+    <div class="header-sub">Create limited-time offers to boost sales</div></div>
+    <div class="header-right">
+      <button class="btn btn-gold" onclick="openModal('addDealModal')">
+        <i class="ti ti-plus"></i> New Flash Deal
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Stats -->
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="stat-label">Active Deals</div>
+        <div class="stat-value" id="activeDeals">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Orders from Deals</div>
+        <div class="stat-value" id="dealOrders">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Expired Deals</div>
+        <div class="stat-value" id="expiredDeals">0</div>
+      </div>
+    </div>
+
+    <!-- Deals list -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <div class="table-card-title">All Flash Deals</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>Product</th><th>Original Price</th><th>Deal Price</th>
+            <th>Discount</th><th>Ends At</th><th>Orders</th><th>Status</th><th>Action</th>
+          </tr></thead>
+          <tbody id="dealsTbl">
+            <tr><td colspan="8" class="empty-state">Loading deals...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Deal Modal -->
+<div class="modal" id="addDealModal">
+  <div class="modal-header">
+    <div class="modal-title">⚡ New Flash Deal</div>
+    <button class="modal-close" onclick="closeModal('addDealModal')"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Product Name *</label>
+      <input class="form-input" id="dealProduct" placeholder="e.g. Black Sneakers Size 42">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Original Price (TZS) *</label>
+        <input class="form-input" id="dealOrigPrice" type="number" placeholder="50000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deal Price (TZS) *</label>
+        <input class="form-input" id="dealPrice" type="number" placeholder="35000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Max Orders</label>
+        <input class="form-input" id="dealMax" type="number" value="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deal Duration *</label>
+        <select class="form-select" id="dealDuration">
+          <option value="2">2 Hours</option>
+          <option value="6">6 Hours</option>
+          <option value="12">12 Hours</option>
+          <option value="24" selected>24 Hours</option>
+          <option value="48">48 Hours</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline" onclick="closeModal('addDealModal')">Cancel</button>
+    <button class="btn btn-gold" onclick="createDeal()"><i class="ti ti-bolt"></i> Launch Deal</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let shopData = null, deals = [];
+
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  shopData = await Shop.get(session.user.email);
+  await loadSidebar('flash-deals', shopData);
+  await loadDeals();
+  showLoading(false);
+})();
+
+async function loadDeals() {
+  deals = await FlashDeals.getAll(shopData?.id);
+  renderDeals();
+  document.getElementById('activeDeals').textContent  = deals.filter(d=>d.status==='active').length;
+  document.getElementById('expiredDeals').textContent = deals.filter(d=>d.status==='expired').length;
+  document.getElementById('dealOrders').textContent   = deals.reduce((s,d)=>s+(d.current_orders||0),0);
+}
+
+function renderDeals() {
+  const tbody = document.getElementById('dealsTbl');
+  if (!deals.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><i class="ti ti-bolt"></i><h4>No Flash Deals</h4><p>Create your first flash deal to boost sales!</p></td></tr>';
+    return;
+  }
+  const fmt = n => 'TZS ' + Number(n).toLocaleString();
+  tbody.innerHTML = deals.map(d => `
+    <tr>
+      <td><strong>${d.product_name}</strong></td>
+      <td>${fmt(d.original_price)}</td>
+      <td style="color:#EF4444;font-weight:700">${fmt(d.deal_price)}</td>
+      <td><span class="badge badge-danger">-${d.discount_pct}%</span></td>
+      <td style="font-size:12px">${new Date(d.ends_at).toLocaleString('en-GB')}</td>
+      <td>${d.current_orders||0}/${d.max_orders}</td>
+      <td><span class="badge ${d.status==='active'?'badge-success':'badge-info'}">${d.status}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteDeal('${d.id}')"><i class="ti ti-trash"></i></button></td>
+    </tr>
+  `).join('');
+}
+
+async function createDeal() {
+  const product   = document.getElementById('dealProduct').value.trim();
+  const origPrice = parseFloat(document.getElementById('dealOrigPrice').value);
+  const dealPrice = parseFloat(document.getElementById('dealPrice').value);
+  const maxOrders = parseInt(document.getElementById('dealMax').value)||50;
+  const hours     = parseInt(document.getElementById('dealDuration').value);
+
+  if (!product || !origPrice || !dealPrice) { showToast('Fill all required fields','error'); return; }
+  if (dealPrice >= origPrice) { showToast('Deal price must be lower than original price','error'); return; }
+
+  const endsAt = new Date(); endsAt.setHours(endsAt.getHours() + hours);
+  const disc   = Math.round(((origPrice - dealPrice) / origPrice) * 100);
+
+  const { error } = await FlashDeals.create({
+    store_id: shopData?.id, shop_name: shopData?.shop_name || shopData?.store_name,
+    product_name: product, original_price: origPrice, deal_price: dealPrice,
+    discount_pct: disc, ends_at: endsAt.toISOString(), max_orders: maxOrders,
+    status: 'active', store_type: shopData?._market || 'business'
+  });
+
+  if (error) { showToast('Error: '+error.message,'error'); return; }
+  closeModal('addDealModal');
+  showToast('⚡ Flash deal launched!','success');
+  await loadDeals();
+}
+
+async function deleteDeal(id) {
+  if (!confirm('Delete this flash deal?')) return;
+  await FlashDeals.delete(id);
+  showToast('Deal deleted','success');
+  await loadDeals();
+}
+</script>
+</body>
+</html>
