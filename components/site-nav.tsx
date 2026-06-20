@@ -11,6 +11,8 @@ const navLinks = [
   { href: '/campus', label: 'Campus Market' },
   { href: '/market', label: 'Business Market' },
   { href: '/vybe', label: 'Social Vybe' },
+  { href: '/flash-deals', label: '⚡ Flash Deals' },
+  { href: '/group-buy', label: '👥 Group Buy' },
   { href: '/campus-apply', label: 'Open Shop' },
 ]
 

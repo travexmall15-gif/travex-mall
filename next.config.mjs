@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {
+    // Fix workspace detection
+  },
   images: {
     remotePatterns: [
       {

@@ -287,3 +287,53 @@ async function askAI(system, userMsg) {
     return 'Error connecting to AI. Please try again.';
   }
 }
+
+// ═══════════════════════════════════════════════
+// FLASH DEALS — Seller can create/manage
+// ═══════════════════════════════════════════════
+const FlashDeals = {
+  async getAll(shopId) {
+    const { data } = await sb.from('flash_deals')
+      .select('*').eq('store_id', shopId)
+      .order('created_at', { ascending: false });
+    return data || [];
+  },
+  async create(item) {
+    return sb.from('flash_deals').insert(item);
+  },
+  async delete(id) {
+    return sb.from('flash_deals').delete().eq('id', id);
+  },
+};
+
+// ═══════════════════════════════════════════════
+// GROUP BUYING — Seller can create groups
+// ═══════════════════════════════════════════════
+const GroupBuys = {
+  async getAll(shopId) {
+    const { data } = await sb.from('group_orders')
+      .select('*, group_order_members(count)')
+      .eq('store_id', shopId)
+      .order('created_at', { ascending: false });
+    return data || [];
+  },
+  async create(item) {
+    return sb.from('group_orders').insert(item);
+  },
+  async delete(id) {
+    return sb.from('group_orders').delete().eq('id', id);
+  },
+};
+
+// ═══════════════════════════════════════════════
+// ANALYTICS — Track views
+// ═══════════════════════════════════════════════
+async function trackEvent(storeId, event, productId, source) {
+  try {
+    await fetch('/api/analytics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ store_id: storeId, event, product_id: productId, source })
+    });
+  } catch(e) { /* silent */ }
+}

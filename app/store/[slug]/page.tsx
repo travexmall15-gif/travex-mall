@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
 import { ArrowLeft, MessageCircle, Package, ShoppingCart, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2 } from 'lucide-react'
+import { AIChatWidget } from '@/components/ai-chat-widget'
 
 type Store = {
   id: string
@@ -586,6 +587,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
           </div>
         </div>
       )}
+      {store && <AIChatWidget storeId={store.id} shopName={store.shop_name} />}
     </main>
   )
 }

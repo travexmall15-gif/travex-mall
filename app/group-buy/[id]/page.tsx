@@ -1,0 +1,180 @@
+'use client'
+import { use, useState, useEffect } from 'react'
+import Link from 'next/link'
+import { sb } from '@/lib/supabase'
+import { SiteNav } from '@/components/site-nav'
+import { Users, CheckCircle, Loader2, ArrowLeft, MessageCircle } from 'lucide-react'
+
+type Group = {
+  id: string; store_id: string; shop_name: string
+  product_name: string; unit_price: number; discount_pct: number
+  min_members: number; current_members: number; expires_at: string; status: string
+  creator_name: string; creator_phone: string
+}
+
+const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString()
+
+export default function GroupDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id }       = use(params)
+  const [group, setGroup]   = useState<Group | null>(null)
+  const [members, setMembers] = useState<any[]>([])
+  const [name, setName]     = useState('')
+  const [phone, setPhone]   = useState('')
+  const [joining, setJoining] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError]   = useState('')
+
+  useEffect(() => {
+    sb.from('group_orders').select('*').eq('id', id).single()
+      .then(({ data }) => setGroup(data))
+    sb.from('group_order_members').select('name,joined_at')
+      .eq('group_id', id).order('joined_at')
+      .then(({ data }) => setMembers(data || []))
+  }, [id])
+
+  async function joinGroup() {
+    if (!name.trim() || !phone.trim()) { setError('Enter your name and phone'); return }
+    setJoining(true); setError('')
+    const already = members.find(m => m.phone === phone.trim())
+    if (already) { setError('You already joined this group!'); setJoining(false); return }
+    await sb.from('group_order_members').insert({ group_id: id, name: name.trim(), phone: phone.trim() })
+    const newCount = (group?.current_members || 0) + 1
+    await sb.from('group_orders').update({ current_members: newCount }).eq('id', id)
+    if (group && newCount >= group.min_members) {
+      await sb.from('group_orders').update({ status: 'completed' }).eq('id', id)
+    }
+    setJoining(false); setSuccess(true)
+    setGroup(g => g ? { ...g, current_members: newCount } : g)
+  }
+
+  if (!group) return (
+    <main style={{ minHeight:'100vh', background:'#EFF6FF', display:'flex', alignItems:'center', justifyContent:'center' }}>
+      <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'#1D4ED8' }} />
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </main>
+  )
+
+  const pct      = Math.round((group.current_members / group.min_members) * 100)
+  const discount = group.unit_price * (1 - group.discount_pct / 100)
+  const remaining = group.min_members - group.current_members
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const shareMsg = encodeURIComponent(`👥 Jiunge nami kwenye group buy!\n\nBidhaa: ${group.product_name}\nBei ya kawaida: ${fmt(group.unit_price)}\nBei ya group: ${fmt(discount)} (-${group.discount_pct}%)\n\nTunahitaji watu ${remaining} zaidi!\n\nJiunge hapa: ${shareUrl}`)
+
+  return (
+    <main style={{ minHeight:'100vh', background:'#EFF6FF', fontFamily:"'Inter',sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');*{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:'Inter',sans-serif}`}</style>
+      <SiteNav />
+      <div style={{ paddingTop:80, maxWidth:560, margin:'0 auto', padding:'80px 5% 4rem' }}>
+        <Link href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
+          color:'#64748B', textDecoration:'none', fontSize:13, marginBottom:20 }}>
+          <ArrowLeft size={14} /> All Groups
+        </Link>
+
+        <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem',
+          boxShadow:'0 8px 30px rgba(29,78,216,0.1)', marginBottom:20 }}>
+          <div style={{ fontSize:11, color:'#1E40AF', fontWeight:700, textTransform:'uppercase',
+            letterSpacing:'.06em', marginBottom:4 }}>{group.shop_name}</div>
+          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.4rem',
+            fontWeight:900, color:'#0F172A', marginBottom:12 }}>{group.product_name}</h1>
+
+          <div style={{ display:'flex', alignItems:'baseline', gap:8, marginBottom:16 }}>
+            <span style={{ fontSize:24, fontWeight:900, color:'#1D4ED8' }}>{fmt(discount)}</span>
+            <span style={{ fontSize:14, color:'#94A3B8', textDecoration:'line-through' }}>{fmt(group.unit_price)}</span>
+            <span style={{ fontSize:12, background:'#DBEAFE', color:'#1D4ED8',
+              padding:'2px 8px', borderRadius:999, fontWeight:700 }}>-{group.discount_pct}%</span>
+          </div>
+
+          {/* Progress */}
+          <div style={{ marginBottom:16 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', fontSize:12,
+              color:'#64748B', marginBottom:6 }}>
+              <span><Users size={12} style={{marginRight:4}} />{group.current_members} joined</span>
+              <span style={{ color: remaining <= 2 ? '#EF4444' : '#64748B', fontWeight:700 }}>
+                Need {remaining} more
+              </span>
+            </div>
+            <div style={{ height:10, background:'#EFF6FF', borderRadius:999 }}>
+              <div style={{ height:'100%', width:`${Math.min(100,pct)}%`,
+                background:'linear-gradient(90deg,#60A5FA,#1D4ED8)',
+                borderRadius:999, transition:'width .5s' }} />
+            </div>
+            <div style={{ fontSize:11, color:'#64748B', marginTop:4, textAlign:'center' }}>
+              {group.min_members} members needed for {group.discount_pct}% discount to activate
+            </div>
+          </div>
+
+          {/* Members */}
+          {members.length > 0 && (
+            <div style={{ display:'flex', gap:4, flexWrap:'wrap', marginBottom:16 }}>
+              {members.map((m,i) => (
+                <div key={i} style={{ width:32, height:32, borderRadius:'50%',
+                  background:'linear-gradient(135deg,#1D4ED8,#60A5FA)',
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                  fontSize:11, fontWeight:800, color:'#fff' }}>
+                  {m.name[0].toUpperCase()}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Share button */}
+          <a href={`https://wa.me/?text=${shareMsg}`} target="_blank"
+            style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              background:'#25D366', color:'#fff', borderRadius:999, padding:'11px',
+              fontWeight:700, fontSize:13, textDecoration:'none', marginBottom:8 }}>
+            <MessageCircle size={15} /> Share on WhatsApp — Invite Friends
+          </a>
+        </div>
+
+        {success ? (
+          <div style={{ background:'#fff', borderRadius:20, padding:'2rem', textAlign:'center',
+            boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
+            <CheckCircle size={48} style={{ color:'#22C55E', margin:'0 auto 12px' }} />
+            <h2 style={{ fontFamily:"'Playfair Display',serif", color:'#0F172A', marginBottom:8 }}>
+              You&apos;re In! 🎉
+            </h2>
+            <p style={{ color:'#64748B', fontSize:13, marginBottom:16 }}>
+              You joined the group. Share the link to invite more friends and activate the discount!
+            </p>
+            <a href={`https://wa.me/?text=${shareMsg}`} target="_blank"
+              style={{ display:'inline-flex', alignItems:'center', gap:6,
+                background:'#25D366', color:'#fff', borderRadius:999, padding:'11px 24px',
+                fontWeight:700, fontSize:13, textDecoration:'none' }}>
+              <MessageCircle size={14} /> Share Now
+            </a>
+          </div>
+        ) : (
+          <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem',
+            boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
+            <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.1rem',
+              color:'#0F172A', fontWeight:800, marginBottom:16 }}>Join This Group</h3>
+            <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:16 }}>
+              <input value={name} onChange={e=>setName(e.target.value)}
+                placeholder="Your Full Name *"
+                style={{ padding:'11px 14px', border:'1.5px solid #E2E8F0',
+                  borderRadius:10, fontSize:14, outline:'none' }} />
+              <input value={phone} onChange={e=>setPhone(e.target.value)}
+                placeholder="Phone Number (+255...)" type="tel"
+                style={{ padding:'11px 14px', border:'1.5px solid #E2E8F0',
+                  borderRadius:10, fontSize:14, outline:'none' }} />
+            </div>
+            {error && <div style={{ background:'#FEF2F2', color:'#DC2626',
+              padding:'10px', borderRadius:8, fontSize:13, marginBottom:12 }}>
+              ⚠️ {error}
+            </div>}
+            <button onClick={joinGroup} disabled={joining}
+              style={{ width:'100%', padding:'13px', background:'#1D4ED8',
+                color:'#fff', border:'none', borderRadius:999,
+                fontWeight:800, fontSize:14, cursor:'pointer',
+                display:'flex', alignItems:'center', justifyContent:'center', gap:6,
+                fontFamily:'inherit' }}>
+              {joining ? <><Loader2 size={15} style={{animation:'spin 1s linear infinite'}} /> Joining...</>
+                : <><Users size={15} /> Join Group</>}
+            </button>
+          </div>
+        )}
+      </div>
+      <SiteFooter />
+    </main>
+  )
+}
