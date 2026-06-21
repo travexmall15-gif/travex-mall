@@ -488,11 +488,17 @@ function rCA(){
   const tb=document.getElementById('caTbl');
   if(!l.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-i">📋</div>No applications</div></td></tr>';return}
   tb.innerHTML=l.map(a=>{
-    const wa=(a.whatsapp_number||a.phone||'').replace(/\D/g,'');
-    const sn=a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():(a.shop_name||'—');
-    const dt=a.submitted_at||a.created_at;
+    // Support both old and new field names
+    const name = a.full_name || a.owner_name || '—';
+    const wa   = (a.whatsapp_number||a.phone||'').replace(/\D/g,'');
+    const sn   = a.shop_name || a.store_name || (a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'—');
+    const desc = a.business_description || a.description || '—';
+    const cat  = a.business_category || a.category || '—';
+    const uni  = a.university_abbr || a.university || '—';
+    const yr   = a.year_of_study || '—';
+    const dt   = a.submitted_at || a.created_at;
     return `<tr>
-      <td><b>${E(a.full_name||'—')}</b><div style="font-size:.64rem;color:var(--muted)">Year ${E(a.year_of_study||'—')}</div></td>
+      <td><b>${E(name)}</b><div style="font-size:.64rem;color:var(--muted)">Year ${E(a.year_of_study||'—')}</div></td>
       <td><span class="bd bd-ba">${E(a.university_abbr||'—')}</span></td>
       <td style="font-weight:600">${E(sn)}</td>
       <td style="color:var(--muted)">${E(a.business_category||'—')}</td>
@@ -518,11 +524,11 @@ async function acCA(id){
   const authPass=rawPass+'TRX!';
 
   // Get shop name
-  const sn = a.store_name || a.business_description?.startsWith('SHOP:')
-    ? (a.store_name || a.business_description.split('\n')[0].replace('SHOP:','').trim())
-    : (a.full_name+"'s Shop");
+  const sn = a.shop_name || a.store_name || 
+    (a.business_description?.startsWith('SHOP:') ? a.business_description.split('\n')[0].replace('SHOP:','').trim() : null) ||
+    ((a.full_name || a.owner_name || 'Seller') + "'s Shop");
 
-  const phone=(a.phone||a.whatsapp_number||'').replace(/\D/g,'');
+  const phone=(a.whatsapp_number||a.phone||'').replace(/\D/g,'');
   if(!phone){toast('❌ No phone number found','err');return;}
   const email=phone+'@travexmall.app';
 
