@@ -75,6 +75,7 @@ export default function CampusApplyPage() {
       }
 
       await sb.from('campus_applications').insert({
+        // New field names
         owner_name:      form.ownerName.trim(),
         phone:           form.phone.trim(),
         email:           form.email.trim(),
@@ -84,6 +85,14 @@ export default function CampusApplyPage() {
         description:     form.description.trim(),
         id_card_url:     idCardUrl,
         status:          'pending',
+        // Legacy field names for admin panel compatibility
+        full_name:          form.ownerName.trim(),
+        whatsapp_number:    form.phone.trim(),
+        shop_name:          form.storeName.trim(),
+        business_description: form.description.trim(),
+        business_category:  form.category,
+        university:         form.university,
+        submitted_at:       new Date().toISOString(),
       })
 
       const { data: newApp } = await sb.from('campus_applications')
