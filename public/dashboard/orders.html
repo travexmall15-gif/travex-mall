@@ -111,8 +111,26 @@ function renderOrders() {
     <td><div style="display:flex;gap:6px">
       <button class="btn-icon" onclick="viewOrder('${o.id}')" title="View"><i class="ti ti-eye"></i></button>
       ${o.customer_phone ? `<a class="btn-icon" href="https://wa.me/${o.customer_phone.replace(/\D/g,'')}" target="_blank" title="WhatsApp" style="color:#25D366"><i class="ti ti-brand-whatsapp"></i></a>` : ''}
+      <a class="btn btn-sm" href="${buildMoveUrl(o)}" target="_blank"
+        style="background:#F97316;color:#fff;font-size:10px;padding:3px 8px;border-radius:6px;text-decoration:none;display:inline-flex;align-items:center;gap:3px" title="Arrange Delivery via Travex Move">
+        🚚 Deliver
+      </a>
     </div></td>
   </tr>`).join('')}</tbody></table>`;
+}
+
+function buildMoveUrl(o) {
+  const MOVE = 'https://travex-move.vercel.app';
+  const p = new URLSearchParams({
+    shop:          shopData?.shop_name || shopData?.store_name || '',
+    pickup:        shopData?.shop_region || shopData?.university_abbr || 'Dar es Salaam',
+    customer:      o.customer_name || '',
+    phone:         o.customer_phone || '',
+    notes:         (o.product_name || '') + (o.quantity > 1 ? ' x'+o.quantity : ''),
+    amount:        o.total_amount || o.total_price || '',
+    mall_order_id: o.id,
+  });
+  return MOVE + '/book.html?' + p.toString();
 }
 
 function viewOrder(id) {
