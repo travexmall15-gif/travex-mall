@@ -387,7 +387,7 @@ async function doLogin(){
   const pass=document.getElementById('adminPass').value;
   if(!pass){showErr('Please enter the admin password.');return}
   const{error}=await sb.auth.signInWithPassword({email:ADMIN_EMAIL,password:pass});
-  if(error){showErr('❌ Password si sahihi.');return}
+  if(error){showErr('❌ Incorrect password. Please try again.');return}
   initApp();
 }
 function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
@@ -402,18 +402,42 @@ checkSession();
 async function initApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').classList.add('v');
+  // Verify auth session
+  const { data: { session } } = await sb.auth.getSession();
+  console.log('[Admin] Session:', session?.user?.email);
+  if (!session) { toast('Session expired — please login again','err'); doLogout(); return; }
   await loadAll();
 }
 
 async function loadAll(){
-  const[r1,r2,r3,r4,r5]=await Promise.all([
-    sb.from('campus_applications').select('*').order('created_at',{ascending:false}),
-    sb.from('campus_stores').select('*').order('created_at',{ascending:false}),
-    sb.from('pending_payments').select('*').order('created_at',{ascending:false}),
-    sb.from('page_views').select('*').order('created_at',{ascending:false}).limit(1000).then(r=>r).catch(()=>({data:[]})),
-    sb.from('admin_notifications').select('*').order('created_at',{ascending:false}).limit(30).then(r=>r).catch(()=>({data:[]})),
-  ]);
-  cApps=r1.data||[];cStores=r2.data||[];mApps=r3.data||[];pageViews=r4.data||[];notifs=r5.data||[];
+  // Load each table separately with full error logging
+  const safe = async (fn, label) => {
+    try {
+      const r = await fn();
+      if (r.error) {
+        console.error('[Admin] '+label+' error:', r.error.message, r.error.code);
+        toast('[Admin] '+label+': '+r.error.message,'err');
+      }
+      return r.data || [];
+    } catch(e) {
+      console.error('[Admin] '+label+' exception:', e);
+      return [];
+    }
+  };
+
+  cApps   = await safe(() => sb.from('campus_applications').select('*').order('created_at',{ascending:false}), 'campus_applications');
+  cStores = await safe(() => sb.from('campus_stores').select('*').order('created_at',{ascending:false}), 'campus_stores');
+  mApps   = await safe(() => sb.from('pending_payments').select('*').order('created_at',{ascending:false}), 'pending_payments');
+  notifs  = await safe(() => sb.from('admin_notifications').select('*').order('created_at',{ascending:false}).limit(30), 'admin_notifications');
+  pageViews = [];
+
+  console.log('[Admin] Loaded:', {cApps:cApps.length, cStores:cStores.length, mApps:mApps.length, notifs:notifs.length});
+
+  // Show debug info if nothing loaded
+  if (cApps.length === 0 && cStores.length === 0 && mApps.length === 0) {
+    console.warn('[Admin] All tables returned 0 records. Possible causes:\n1. RLS blocking reads\n2. Tables do not exist\n3. Auth issue');
+  }
+
   updateAll();
 }
 
@@ -486,7 +510,17 @@ function rCA(){
   if(cFlt!=='all')l=l.filter(a=>a.status===cFlt);
   if(cSrch){const q=cSrch.toLowerCase();l=l.filter(a=>`${a.full_name} ${a.university_abbr} ${a.business_description||''}`.toLowerCase().includes(q))}
   const tb=document.getElementById('caTbl');
-  if(!l.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-i">📋</div>No applications</div></td></tr>';return}
+  if(!l.length){
+    const total = cApps.length;
+    tb.innerHTML=`<tr><td colspan="8"><div class="empty">
+      <div class="empty-i">📋</div>
+      <div style="font-weight:700">No Campus Applications</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">
+        ${total === 0 ? 'Table is empty or RLS is blocking access. Check Supabase dashboard.' : 'No applications match current filter.'}
+      </div>
+    </div></td></tr>`;
+    return;
+  }
   tb.innerHTML=l.map(a=>{
     // Support both old and new field names
     const name = a.full_name || a.owner_name || '—';
