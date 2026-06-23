@@ -159,7 +159,7 @@ export default function MarketPage() {
                 </div>
               </div>
             </div>
-            <Link href="/open-store-b2c" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.65rem 1.75rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, boxShadow: '0 6px 18px rgba(201,168,76,0.30)' }}>
+            <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.65rem 1.75rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, boxShadow: '0 6px 18px rgba(201,168,76,0.30)' }}>
               <Store size={14} /> Open Free Shop <ArrowRight size={13} />
             </Link>
           </div>
@@ -245,7 +245,7 @@ export default function MarketPage() {
             <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🏪</div>
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
             <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Be the first to open a shop on Travex Business Market!</p>
-            <Link href="/open-store-b2c" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
+            <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
               🎁 Open Free Shop →
             </Link>
           </div>
@@ -305,10 +305,10 @@ export default function MarketPage() {
                 Open your shop today — no payment required. Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo · Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo starting next month.
               </p>
               <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link href="/open-store-b2c" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
+                <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
                   🥇 Open Premium Shop — Free
                 </Link>
-                <Link href="/open-store-b2c" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.18)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Link href="/open-store" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.18)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
                   🥈 Open Basic Shop — Free
                 </Link>
               </div>
