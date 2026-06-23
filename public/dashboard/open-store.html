@@ -144,6 +144,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 .detail-row:last-child{border-bottom:none}
 .detail-key{color:var(--gray)}
 .detail-val{font-weight:700;color:var(--navy)}
+.lbl{font-size:0.65rem;font-weight:600;color:var(--gray);text-align:center;flex:1;padding-top:6px}.lbl.active{color:var(--navy);font-weight:700}.lbl.done{color:var(--navy)}
 </style>
 </head>
 <body>
@@ -659,6 +660,7 @@ async function submitApplication() {
       owner_name:    name,
       owner_phone:   phone,
       owner_email:   email,
+      auth_email:    email,
       shop_name:     shopName,
       shop_category: category,
       shop_region:   region,
@@ -683,7 +685,8 @@ async function submitApplication() {
 
     // Show success
     document.getElementById(`step${currentStep}`).classList.remove('active')
-    document.getElementById('progressWrap')?. && (document.getElementById('progressWrap')?..style.display = 'none')
+    const pw = document.getElementById('progressWrap')
+    if (pw) pw.style.display = 'none'
     const successPage = document.getElementById('successPage')
     successPage.classList.add('show')
     document.getElementById('successDetail').innerHTML = `
@@ -693,7 +696,7 @@ async function submitApplication() {
       <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)">✅ Under Review</span></div>
     `
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    toast('✅ Maombi yako yamefika! Utapata WhatsApp ndani ya dakika 30.', 'success')
+    toast('✅ Application submitted! You will receive a WhatsApp confirmation within 30 minutes.', 'success')
 
   } catch (e) {
     console.error(e)
@@ -743,6 +746,7 @@ body{background:#F8FAFF!important}
 .payment-box{border-radius:16px!important}
 .toast{border-radius:14px!important;box-shadow:0 16px 40px rgba(4,10,30,0.30)}
 .prog-step{box-shadow:0 4px 12px rgba(13,27,62,0.12)}
+.lbl{font-size:0.65rem;font-weight:600;color:var(--gray);text-align:center;flex:1;padding-top:6px}.lbl.active{color:var(--navy);font-weight:700}.lbl.done{color:var(--navy)}
 </style>
 </body>
 </html>
