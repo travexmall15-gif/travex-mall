@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invoices — Travex Mall</title>
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="dashboard.js"></script>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">🧾 Invoices</div><div class="header-sub">Generate and send invoices to your customers</div></div>
+    <button class="btn btn-gold" onclick="openModal('invoiceModal')"><i class="ti ti-plus"></i> New Invoice</button>
+  </div>
+  <div class="main-content">
+    <div class="table-card">
+      <div class="table-card-header"><div class="table-card-title">Recent Invoices</div></div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Invoice #</th><th>Customer</th><th>Items</th><th>Amount</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody id="invoicesTbl"><tr><td colspan="6" class="empty-state"><i class="ti ti-receipt"></i><h4>No Invoices Yet</h4><p>Create your first invoice to get started.</p></td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="invoiceModal">
+  <div class="modal-header"><div class="modal-title">🧾 New Invoice</div><button class="modal-close" onclick="closeModal('invoiceModal')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-body">
+    <div class="form-group"><label class="form-label">Customer Name *</label><input class="form-input" id="invCustomer" placeholder="Customer name"></div>
+    <div class="form-group"><label class="form-label">Customer Phone</label><input class="form-input" id="invPhone" placeholder="+255 7XX XXX XXX"></div>
+    <div class="form-group"><label class="form-label">Items / Description *</label><textarea class="form-textarea" id="invItems" placeholder="1x T-Shirt - TZS 25,000&#10;2x Jeans - TZS 60,000"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Total Amount (TZS) *</label><input class="form-input" id="invAmount" type="number" placeholder="85000"></div>
+      <div class="form-group"><label class="form-label">Due Date</label><input class="form-input" id="invDue" type="date"></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline" onclick="closeModal('invoiceModal')">Cancel</button>
+    <button class="btn btn-gold" onclick="createInvoice()"><i class="ti ti-send"></i> Send via WhatsApp</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let shopData = null, invoices = [];
+(async () => {
+  const session = await Auth.requireAuth();
+  if (!session) return;
+  shopData = await Shop.get(session.user.email);
+  await loadSidebar('invoice', shopData);
+  await loadInvoices();
+  showLoading(false);
+})();
+
+async function loadInvoices() {
+  const { data } = await sb.from('seller_sales')
+    .select('*').eq('store_id', shopData?.id)
+    .eq('category','invoice').order('created_at',{ascending:false});
+  invoices = data || [];
+  renderInvoices();
+}
+
+function renderInvoices() {
+  const tbody = document.getElementById('invoicesTbl');
+  if (!invoices.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="ti ti-receipt"></i><h4>No Invoices Yet</h4><p>Create your first invoice!</p></td></tr>';
+    return;
+  }
+  tbody.innerHTML = invoices.map((inv,i) => `
+    <tr>
+      <td><strong>#INV-${String(i+1).padStart(3,'0')}</strong></td>
+      <td>${inv.description?.split('|')[0]||'—'}</td>
+      <td><small>${inv.notes||'—'}</small></td>
+      <td style="font-weight:700;color:var(--navy)">TZS ${Number(inv.amount).toLocaleString()}</td>
+      <td><small>${new Date(inv.created_at).toLocaleDateString('en-GB')}</small></td>
+      <td>
+        <a href="https://wa.me/${(inv.description?.split('|')[1]||'').replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-success">
+          <i class="ti ti-brand-whatsapp"></i> Send
+        </a>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function createInvoice() {
+  const customer = document.getElementById('invCustomer').value.trim();
+  const phone    = document.getElementById('invPhone').value.trim();
+  const items    = document.getElementById('invItems').value.trim();
+  const amount   = parseFloat(document.getElementById('invAmount').value)||0;
+  const due      = document.getElementById('invDue').value;
+  if (!customer || !items || !amount) { showToast('Fill all required fields','error'); return; }
+  const invNum = 'INV-' + Date.now();
+  await sb.from('seller_sales').insert({
+    store_id: shopData?.id, category: 'invoice',
+    description: customer + '|' + phone,
+    amount, notes: items,
+    sale_date: new Date().toISOString().split('T')[0]
+  });
+  const msg = encodeURIComponent(
+    '🧾 *Invoice from ' + (shopData?.shop_name||'Travex Mall') + '*\n\n' +
+    'Invoice #: ' + invNum + '\n' +
+    'Items:\n' + items + '\n\n' +
+    'Total: *TZS ' + Number(amount).toLocaleString() + '*\n' +
+    (due ? 'Due: ' + due + '\n' : '') +
+    '\nPay via M-Pesa: +255 651 919 915'
+  );
+  if (phone) window.open('https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + msg, '_blank');
+  closeModal('invoiceModal');
+  showToast('✅ Invoice created!','success');
+  await loadInvoices();
+}
+</script>
+</body>
+</html>
