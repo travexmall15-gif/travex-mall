@@ -162,7 +162,7 @@ export default function HomePage() {
             <Link href="/vybe" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', padding: '0.9rem 2.2rem', fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none', borderRadius: '6px' }}>
               ✦ Explore Social Vybe
             </Link>
-            <Link href="/campus-dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'rgba(255,255,255,0.6)', padding: '0.9rem 2.2rem', fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px' }}>
+            <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'rgba(255,255,255,0.6)', padding: '0.9rem 2.2rem', fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px' }}>
               Post Your Business →
             </Link>
           </div>
