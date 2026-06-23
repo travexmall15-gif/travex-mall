@@ -71,7 +71,7 @@ export default function OpenStorePage() {
         <div className="cards-wrap" style={{ display: 'flex', gap: '1.5rem', alignItems: 'stretch' }}>
 
           {/* ── BUSINESS MARKET ── */}
-          <Link href="/open-store" className="choice-card business" style={{ flex: 1, color: 'inherit' }}>
+          <Link href="/open-store-b2b" className="choice-card business" style={{ flex: 1, color: 'inherit' }}>
             {/* Top glow accent */}
             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #C9A84C, #F0C96B)', borderRadius: '24px 24px 0 0' }} />
 
