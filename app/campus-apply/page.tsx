@@ -84,6 +84,7 @@ export default function CampusApplyPage() {
         category:        form.category,
         description:     form.description.trim(),
         id_card_url:     idCardUrl,
+        year_of_study:   form.yearOfStudy,
         status:          'pending',
         // Legacy field names for admin panel compatibility
         full_name:          form.ownerName.trim(),
