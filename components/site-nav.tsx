@@ -54,7 +54,7 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
 
         <div className="hidden items-center gap-2 md:flex">
           <Link
-            href="/campus-dashboard"
+            href="/login"
             className={cn(
               'rounded-full px-4 py-2 text-sm font-semibold transition-all',
               dark
@@ -65,7 +65,7 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
             Login
           </Link>
           <Link
-            href="/campus-apply"
+            href="/open-store"
             className="rounded-full bg-gold px-5 py-2 text-sm font-bold text-navy shadow-[0_6px_18px_rgba(201,168,76,0.30)] transition-all hover:-translate-y-0.5 hover:bg-gold-light hover:shadow-[0_10px_24px_rgba(201,168,76,0.40)]"
           >
             Sign Up
@@ -103,14 +103,14 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
             ))}
             <div className="mt-3 flex gap-2">
               <Link
-                href="/campus-dashboard"
+                href="/login"
                 onClick={() => setOpen(false)}
                 className="flex-1 rounded-full border border-current px-4 py-2.5 text-center text-sm font-semibold"
               >
                 Login
               </Link>
               <Link
-                href="/campus-apply"
+                href="/open-store"
                 onClick={() => setOpen(false)}
                 className="flex-1 rounded-full bg-gold px-4 py-2.5 text-center text-sm font-bold text-navy"
               >
