@@ -19,7 +19,7 @@ const footerCols = [
       { href: '/campus-apply',     label: 'Open a Campus Shop' },
       { href: '/open-store-b2c',   label: 'Open a B2C Store' },
       { href: '/open-store-b2b',   label: 'Open a B2B Store' },
-      { href: '/campus-dashboard', label: 'Seller Dashboard' },
+      { href: '/login', label: 'Seller Dashboard' },
     ],
   },
   {
@@ -27,7 +27,7 @@ const footerCols = [
     links: [
       { href: '/', label: 'About Us' },
       { href: '/', label: 'Contact' },
-      { href: '/admin-panel', label: 'Admin' },
+      { href: '/admin', label: 'Admin' },
     ],
   },
 ]
