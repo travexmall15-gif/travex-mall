@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reports — Travex Mall</title>
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="dashboard.js"></script>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div>
+<div class="sidebar" id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">📊 Reports</div><div class="header-sub">Business performance overview</div></div>
+    <select class="form-select" id="periodSelect" onchange="loadReports()" style="width:auto;padding:8px 12px">
+      <option value="7">Last 7 days</option>
+      <option value="30" selected>Last 30 days</option>
+      <option value="90">Last 90 days</option>
+    </select>
+  </div>
+  <div class="main-content">
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="rRevenue">TZS 0</div><div class="stat-sub" id="rRevSub">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="rOrders">0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Expenses</div><div class="stat-value" id="rExpense">TZS 0</div></div>
+      <div class="stat-card"><div class="stat-label">Net Profit</div><div class="stat-value" id="rProfit">TZS 0</div></div>
+    </div>
+    <div class="activity-row">
+      <div class="table-card">
+        <div class="table-card-header"><div class="table-card-title">Top Products by Orders</div></div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th>Product</th><th>Orders</th><th>Revenue</th></tr></thead>
+          <tbody id="topProductsTbl"></tbody>
+        </table></div>
+      </div>
+      <div class="table-card">
+        <div class="table-card-header"><div class="table-card-title">Recent Sales</div></div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
+          <tbody id="recentSalesTbl"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let shopData=null;
+(async()=>{
+  const session=await Auth.requireAuth();
+  if(!session)return;
+  shopData=await Shop.get(session.user.email);
+  await loadSidebar('reports',shopData);
+  await loadReports();
+  showLoading(false);
+})();
+
+async function loadReports(){
+  const days  = parseInt(document.getElementById('periodSelect').value)||30;
+  const since = new Date(); since.setDate(since.getDate()-days);
+  const fmt   = n=>'TZS '+Number(n).toLocaleString();
+
+  const[{data:sales},{data:orders}]=await Promise.all([
+    sb.from('seller_sales').select('*').eq('store_id',shopData?.id).gte('created_at',since.toISOString()),
+    sb.from('campus_orders').select('*').eq('store_id',shopData?.id).gte('created_at',since.toISOString()),
+  ]);
+
+  const revenue  =(sales||[]).filter(s=>s.category!=='expense'&&s.category!=='invoice').reduce((a,s)=>a+Number(s.amount),0);
+  const expense  =(sales||[]).filter(s=>s.category==='expense').reduce((a,s)=>a+Number(s.amount),0);
+  const profit   =revenue-expense;
+  const orderCnt =(orders||[]).length;
+
+  document.getElementById('rRevenue').textContent=fmt(revenue);
+  document.getElementById('rExpense').textContent=fmt(expense);
+  document.getElementById('rProfit').textContent=fmt(profit);
+  document.getElementById('rOrders').textContent=orderCnt;
+  document.getElementById('rProfit').style.color=profit>=0?'var(--success)':'var(--danger)';
+
+  // Top products
+  const prodMap={};
+  (orders||[]).forEach(o=>{
+    prodMap[o.product_name]=(prodMap[o.product_name]||{name:o.product_name,orders:0,revenue:0});
+    prodMap[o.product_name].orders++;
+    prodMap[o.product_name].revenue+=Number(o.total_amount||0);
+  });
+  const top=Object.values(prodMap).sort((a,b)=>b.orders-a.orders).slice(0,5);
+  document.getElementById('topProductsTbl').innerHTML=top.length
+    ?top.map(p=>`<tr><td>${p.name}</td><td>${p.orders}</td><td>${fmt(p.revenue)}</td></tr>`).join('')
+    :'<tr><td colspan="3" class="empty-state"><h4>No orders yet</h4></td></tr>';
+
+  // Recent sales
+  const recent=(sales||[]).slice(0,8);
+  document.getElementById('recentSalesTbl').innerHTML=recent.length
+    ?recent.map(s=>`<tr><td><small>${new Date(s.created_at).toLocaleDateString('en-GB')}</small></td><td>${s.description||'—'}</td><td class="${s.category==='expense'?'expense':'income'}">${s.category==='expense'?'-':'+'} ${fmt(s.amount)}</td></tr>`).join('')
+    :'<tr><td colspan="3" class="empty-state"><h4>No sales yet</h4></td></tr>';
+}
+</script>
+</body>
+</html>
