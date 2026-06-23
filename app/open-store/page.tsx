@@ -147,7 +147,7 @@ export default function OpenStorePage() {
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.75rem', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
               {[
                 'UDSM, UDOM, ARU, TIA, NIT',
-                'TZS 15,000/month only',
+                'TZS 10,000/month only',
                 'Student-verified badge',
                 'Campus-targeted audience',
                 '60 slots per university',
@@ -162,7 +162,7 @@ export default function OpenStorePage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg, #040C32, #0A1858)', borderRadius: '14px', padding: '1rem 1.25rem' }}>
               <div>
                 <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Per month</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', fontWeight: 900, color: '#93C5FD', lineHeight: 1 }}>TZS 15K</div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', fontWeight: 900, color: '#93C5FD', lineHeight: 1 }}>TZS 10K</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#3B82F6', color: '#fff', padding: '0.6rem 1.2rem', borderRadius: '999px', fontSize: '0.80rem', fontWeight: 700 }}>
                 Apply Now <ArrowRight style={{ width: '14px', height: '14px' }} />
