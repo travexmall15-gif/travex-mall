@@ -597,7 +597,7 @@ async function acCA(id){
     `🔑 Password: ${rawPass}\n\n`+
     `📱 Open: travex-mall.vercel.app/login\n`+
     `━━━━━━━━━━━━\n`+
-    `_Welcome to Travex Campus! 🚀_`
+    `_Welcome to Travex Mall Campus! 🚀_`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
 
@@ -675,7 +675,7 @@ async function acMA(id){
   if(se&&!se.message.includes('already registered')){toast('❌ '+se.message,'err');return}
   await sb.from('pending_payments').update({status:'approved',auth_email:email,login_password:rawPass,user_id:su?.user?.id||null,approved_at:new Date().toISOString()}).eq('id',id);
   const pl=a.plan==='premium'?'🥇 Premium':'🥈 Basic';
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`✅ *Hongera ${a.owner_name}!*\n\nDuka lako *"${a.shop_name}"* liko LIVE!\n\n━━━━━━━━━━━━\n🔐 *LOGIN*\n📱 Namba: *+${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${pl}*\n\n🔗 ${location.origin}/dashboard/login.html\n━━━━━━━━━━━━\nKaribu Travex Mall! 🏪`)}`,'_blank');
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`✅ *Hongera ${a.owner_name}!*\n\nDuka lako *"${a.shop_name}"* liko LIVE!\n\n━━━━━━━━━━━━\n🔐 *LOGIN*\n📱 Namba: *+${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${pl}*\n\n🔗 ${location.origin}/dashboard/login.html\n━━━━━━━━━━━━\nWelcome to Travex Mall! 🏪`)}`,'_blank');
   toast('✅ Approved + account created!','ok');await loadAll();
 }
 async function rejMA(id){if(!confirm('Reject?'))return;await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
