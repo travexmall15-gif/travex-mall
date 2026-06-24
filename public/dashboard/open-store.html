@@ -351,15 +351,15 @@ textarea.form-input{resize:vertical;min-height:90px}
   <!-- STEP 4: Almost done — no payment needed -->
   <div class="step" id="step4">
     <div class="step-title">Almost Done! 🎉</div>
-    <div class="step-sub">Taarifa zako zimejazwa. No payment required yanayohitajika sasa hivi — registration ni bure!</div>
+    <div class="step-sub">Your details are complete. No payment required — registration is free this month!</div>
     <div class="alert alert-error" id="err4"></div>
 
     <div style="background:linear-gradient(135deg,#040C32,#071545);border-radius:20px;padding:2rem;margin-bottom:1.5rem;text-align:center">
       <div style="font-size:3rem;margin-bottom:1rem">🎁</div>
       <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:0.5rem">Free Registration</div>
       <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);margin-bottom:1.25rem;line-height:1.7">
-        Kwa mwezi huu, ufunguzi wa duka ni <strong style="color:#C9A84C">BURE kabisa</strong>.<br>
-        Baada ya kuapprove, utapata password yako kwa WhatsApp.
+        This month, opening your shop is <strong style="color:#C9A84C">completely FREE</strong>.<br>
+        After approval, you will receive your login password via WhatsApp.
       </div>
       <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.30);color:#C9A84C;padding:0.5rem 1.25rem;border-radius:999px;font-size:0.78rem;font-weight:700">
         ✅ Hakuna receipt · No payment required
@@ -367,19 +367,19 @@ textarea.form-input{resize:vertical;min-height:90px}
     </div>
 
     <div class="form-card">
-      <div class="card-head"><div class="card-head-title">📋 Summary wa Plan Yako</div></div>
+      <div class="card-head"><div class="card-head-title">📋 Your Plan Summary</div></div>
       <div class="card-body">
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
           <span style="color:var(--gray)">Selected Plan</span>
           <span style="font-weight:700;color:var(--navy)" id="step4PlanLabel">—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
-          <span style="color:var(--gray)">Bei ya Kawaida</span>
+          <span style="color:var(--gray)">Regular Price</span>
           <span style="font-weight:700;color:var(--navy)" id="step4PriceLabel">—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;font-size:0.85rem">
-          <span style="color:var(--gray)">Sasa Hivi</span>
-          <span style="font-weight:700;color:#059669">🎁 FREE — Mwezi huu</span>
+          <span style="color:var(--gray)">This Month</span>
+          <span style="font-weight:700;color:#059669">🎁 FREE — This Month</span>
         </div>
       </div>
     </div>
@@ -417,13 +417,13 @@ textarea.form-input{resize:vertical;min-height:90px}
       <span style="font-size:1.5rem">🎁</span>
       <div>
         <div style="font-size:0.82rem;font-weight:700;color:#059669">Free Registration — Hakuna Malipo</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">Utapata password yako kwa WhatsApp baada ya kuidhinishwa.</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">You will receive your password yako kwa WhatsApp baada ya kuidhinishwa.</div>
       </div>
     </div>
 
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
-      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">🚀 Wasilisha Maombi</button>
+      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">🚀 Submit Application</button>
     </div>
   </div>
 
@@ -610,8 +610,14 @@ function selectPayMethod(m) {
 }
 function updatePaymentDisplay() {
   const price = PRICES[selectedPlan]
+  // Update step4 summary labels (step 4 uses step4PlanLabel / step4PriceLabel)
+  const pl4 = document.getElementById('step4PlanLabel')
+  const pr4 = document.getElementById('step4PriceLabel')
+  if (pl4) pl4.textContent = (selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic') + ' Plan'
+  if (pr4) pr4.textContent = 'TZS ' + Number(price).toLocaleString() + '/mo (Free this month)'
+  // Legacy elements — safe no-ops if not present
   const ad=document.getElementById('amountDue'); if(ad) ad.textContent = fmt(price)
-  const pl=document.getElementById('planLabel'); if(pl) pl.textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan · per month'
+  const pl=document.getElementById('planLabel'); if(pl) pl.textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan'
   const pb=document.getElementById('planBadgePay'); if(pb) pb.textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
 }
   reader.readAsDataURL(file)
