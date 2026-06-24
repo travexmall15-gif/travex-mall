@@ -185,7 +185,7 @@ export function SiteFooter() {
               {[Globe, Share2, AtSign, Send].map((Icon, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href="/"
                   aria-label="Social media"
                   className="flex h-9 w-9 items-center justify-center text-white transition-all hover:-translate-y-0.5 hover:bg-gold hover:text-navy"
                   style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '10px' }}
