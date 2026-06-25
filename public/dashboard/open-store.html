@@ -620,8 +620,6 @@ function updatePaymentDisplay() {
   const pl=document.getElementById('planLabel'); if(pl) pl.textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan'
   const pb=document.getElementById('planBadgePay'); if(pb) pb.textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
 }
-  reader.readAsDataURL(file)
-}
 
 // ── REVIEW ──
 function buildReview() {
