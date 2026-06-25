@@ -390,7 +390,7 @@ async function doLogin(){
   if(error){showErr('❌ Incorrect password. Please try again.');return}
   initApp();
 }
-function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
+async function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
 async function doLogout(){await sb.auth.signOut();location.reload()}
 async function checkSession(){
   const{data:{session}}=await sb.auth.getSession();
