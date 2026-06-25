@@ -673,7 +673,8 @@ async function acMA(id){
   const email=phone+'@travexmall.app';
   const{data:su,error:se}=await sb.auth.signUp({email,password:authPass,options:{data:{shop_name:a.shop_name,plan:a.plan,phone,owner_name:a.owner_name}}});
   if(se&&!se.message.includes('already registered')){toast('❌ '+se.message,'err');return}
-  await sb.from('pending_payments').update({status:'approved',auth_email:email,login_password:rawPass,user_id:su?.user?.id||null,approved_at:new Date().toISOString()}).eq('id',id);
+  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',auth_email:email,login_password:rawPass,user_id:su?.user?.id||null,approved_at:new Date().toISOString()}).eq('id',id);
+  if(upErr){alert('❌ Failed to approve: '+upErr.message);toast('❌ '+upErr.message,'err');return}
   const pl=a.plan==='premium'?'🥇 Premium':'🥈 Basic';
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`✅ *Congratulations ${a.owner_name}!*\n\nYour shop *"${a.shop_name}"* is now LIVE on Travex Mall!\n\n━━━━━━━━━━━━\n🔐 *LOGIN DETAILS*\n📱 Phone: *+${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${pl}*\n\n🔗 ${location.origin}/dashboard/login.html\n━━━━━━━━━━━━\nWelcome to Travex Mall! 🏪`)}`,'_blank');
   toast('✅ Approved + account created!','ok');await loadAll();
@@ -958,7 +959,8 @@ function approveSeller(id, type) {
 async function suspendSeller(id, type) {
   if (!confirm('Suspend this seller? Their shop will be hidden from marketplace.')) return;
   if (type === 'business') {
-    await sb.from('pending_payments').update({ status: 'suspended' }).eq('id', id);
+    const {error:sErr} = await sb.from('pending_payments').update({ status: 'suspended' }).eq('id', id);
+    if(sErr){alert('❌ Failed to suspend: '+sErr.message);return}
   } else {
     await sb.from('campus_stores').update({ is_active: false }).eq('id', id);
   }
@@ -973,7 +975,8 @@ async function suspendSeller(id, type) {
 async function reinstSeller(id, type) {
   if (!confirm('Reinstate this seller?')) return;
   if (type === 'business') {
-    await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
+    const {error:rErr} = await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
+    if(rErr){alert('❌ Failed: '+rErr.message);return}
   } else {
     await sb.from('campus_stores').update({ is_active: true }).eq('id', id);
   }
@@ -1059,7 +1062,8 @@ async function deleteSeller(id, type, shopName) {
       // 5. Delete feed posts
       await sb.from('feed_posts').delete().eq('store_id', id);
       // 6. Mark as deleted (can't delete auth user from client)
-      await sb.from('pending_payments').update({ status: 'deleted' }).eq('id', id);
+      const {error:dErr} = await sb.from('pending_payments').update({ status: 'deleted' }).eq('id', id);
+      if(dErr){alert('❌ Failed to delete: '+dErr.message);return}
     } else {
       // Campus
       await sb.from('campus_products').delete().eq('store_id', id);
