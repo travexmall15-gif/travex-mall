@@ -392,8 +392,8 @@ textarea.form-input{resize:vertical;min-height:90px}
 
   <!-- STEP 5: Review + Submit -->
   <div class="step" id="step5">
-    <div class="step-title">Review na Wasilisha</div>
-    <div class="step-sub">Angalia taarifa zako kwa makini kabla ya kutuma maombi yako.</div>
+    <div class="step-title">Review & Submit</div>
+    <div class="step-sub">Review your information carefully before submitting your application.</div>
     <div class="alert alert-error" id="err5"></div>
 
     <div class="review-section">
@@ -676,7 +676,6 @@ async function submitApplication() {
       shop_category: category,
       shop_region:   region,
       shop_whatsapp:   waNum,
-      whatsapp_number: waNum,
       shop_desc:       desc,
       plan:          selectedPlan,
       status:        'pending',
@@ -707,9 +706,14 @@ async function submitApplication() {
     toast('✅ Application submitted! You will receive a WhatsApp confirmation within 30 minutes.', 'success')
 
   } catch (e) {
-    console.error(e)
-    document.getElementById(`err5`).textContent = e.message || 'Submission failed. Try again.'
-    document.getElementById(`err5`).classList.add('show')
+    console.error('Submit error:', e)
+    const errEl = document.getElementById('err5')
+    if (errEl) {
+      errEl.textContent = '❌ ' + (e.message || 'Submission failed. Please try again.')
+      errEl.classList.add('show')
+      errEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+    alert('Error: ' + (e.message || 'Submission failed'))
     btn.textContent = '🚀 Submit Application'
     btn.disabled = false
   }
