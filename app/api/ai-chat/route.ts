@@ -6,7 +6,7 @@ const sb = createClient(
   'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 )
 
-const GEMINI_KEY = process.env.GEMINI_API_KEY || ''
+const CLAUDE_KEY = process.env.ANTHROPIC_API_KEY || ''
 
 export async function POST(req: Request) {
   const { store_id, message, session_id, history } = await req.json()
@@ -35,76 +35,91 @@ export async function POST(req: Request) {
     `- ${p.name}: TZS ${Number(p.price).toLocaleString()} (${p.stock} in stock)${p.description ? ' — ' + p.description : ''}`
   ).join('\n')
 
-  const systemPrompt = `You are an AI sales assistant for "${shop.shop_name}" on Travex Mall Tanzania.
+  const systemPrompt = `You are an intelligent AI assistant for "${shop?.shop_name || 'a shop'}" on Travex Mall, Tanzania's digital marketplace.
 
 SHOP INFO:
-${shop.shop_desc || 'A great shop on Travex Mall'}
+${shop?.shop_desc || 'A shop on Travex Mall'}
 
 AVAILABLE PRODUCTS:
 ${productList || 'No products listed yet'}
 
-PAYMENT & CONTACT:
-WhatsApp: ${(shop.shop_whatsapp || shop.owner_phone || '').replace(/\D/g,'')}
+CONTACT:
+WhatsApp: ${(shop?.shop_whatsapp || shop?.owner_phone || '').replace(/\D/g, '')}
 
-YOUR RULES:
-1. Answer ONLY about this shop's products
-2. Help customers with prices, availability, sizes, colors
-3. Guide customers to place an order or contact via WhatsApp
-4. Be friendly, helpful and speak naturally (can mix English/Swahili like Tanzanians do)
-5. When customer wants to buy, say "Place an order using the Order button on this page or WhatsApp us!"
-6. Keep responses SHORT (2-3 sentences max)
-7. If you don't know something, say "Please WhatsApp us for more details"`
+YOUR CAPABILITIES:
+1. Write product descriptions (English + Swahili)
+2. Give pricing advice for Tanzania market
+3. Generate social media posts (Instagram, WhatsApp, Facebook)
+4. Analyze business data and give reports
+5. Categorize expenses
+6. Write WhatsApp customer messages
+7. Give business coaching advice specific to Tanzania
+8. Help with marketing strategies
 
-  if (!GEMINI_KEY) {
-    // Fallback without AI key
+RULES:
+- Be helpful, practical and specific to Tanzania market
+- Can naturally mix English and Swahili (Tanzanian style)
+- Keep responses concise but thorough
+- Use emojis moderately
+- When asked about products, use the actual product data above
+- Give actionable advice, not generic tips`
+
+  if (!CLAUDE_KEY) {
+    // Fallback without API key
     const lmsg = message.toLowerCase()
     let reply = ''
-    if (lmsg.includes('bei') || lmsg.includes('price') || lmsg.includes('ngapi')) {
+    if (lmsg.includes('description') || lmsg.includes('maelezo')) {
+      reply = 'To generate AI descriptions, please set up your ANTHROPIC_API_KEY in Vercel environment variables. Go to vercel.com → Settings → Environment Variables.'
+    } else if (lmsg.includes('price') || lmsg.includes('bei')) {
       const prods = (products || []).slice(0, 3).map(p => `${p.name}: TZS ${Number(p.price).toLocaleString()}`).join(', ')
-      reply = prods ? `Our prices: ${prods}. Use the Order button to buy! 🛍️` : "Please WhatsApp us for prices!"
-    } else if (lmsg.includes('stock') || lmsg.includes('available') || lmsg.includes('ipo')) {
-      const inStock = (products||[]).filter(p => p.stock > 0)
-      reply = inStock.length > 0 ? `Yes, we have ${inStock.length} products in stock! Check them above.` : "Contact us on WhatsApp for availability."
-    } else if (lmsg.includes('order') || lmsg.includes('buy') || lmsg.includes('nunua')) {
-      reply = `To order, click the "Order" button on any product above, or WhatsApp us directly! 📱`
+      reply = prods ? `Your current prices: ${prods}. For AI pricing advice, set up ANTHROPIC_API_KEY in Vercel.` : 'Add products first, then I can help with pricing!'
+    } else if (lmsg.includes('report') || lmsg.includes('ripoti')) {
+      reply = `Quick stats: ${(products||[]).length} products in stock. For full AI reports, set up ANTHROPIC_API_KEY in Vercel.`
     } else {
-      reply = `Hi! I'm the ${shop.shop_name} assistant. Ask me about our products, prices, or how to order! 😊`
+      reply = `Hi! I'm the AI assistant for ${shop?.shop_name || 'your shop'}. To unlock full AI features (descriptions, pricing, marketing, coaching), set up ANTHROPIC_API_KEY in Vercel environment variables. 🤖`
     }
     return NextResponse.json({ reply, session_id })
   }
 
-  // Build chat history for Gemini
-  const geminiHistory = (history || []).map((m: any) => ({
-    role: m.role === 'user' ? 'user' : 'model',
-    parts: [{ text: m.content }]
+  // Build Claude messages
+  const claudeMessages = (history || []).slice(-8).map((m: any) => ({
+    role: m.role === 'user' ? 'user' : 'assistant',
+    content: m.content
   }))
+  claudeMessages.push({ role: 'user', content: message })
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
-    {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': CLAUDE_KEY,
+        'anthropic-version': '2023-06-01',
+      },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
-        contents: [
-          ...geminiHistory,
-          { role: 'user', parts: [{ text: message }] }
-        ],
-        generationConfig: { maxOutputTokens: 150, temperature: 0.7 }
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: claudeMessages,
       })
-    }
-  )
+    })
 
-  const data = await res.json()
-  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Samahani, try again! 😊"
+    const data = await res.json()
+    const reply = data.content?.[0]?.text || 'Sorry, please try again! 😊'
 
-  // Save to chat session
-  await sb.from('ai_chat_sessions').upsert({
-    session_id,
-    store_id,
-    messages: [...(history || []), { role: 'user', content: message }, { role: 'bot', content: reply }],
-    updated_at: new Date().toISOString()
-  }, { onConflict: 'session_id' })
+    // Save to chat session
+    await sb.from('ai_chat_sessions').upsert({
+      session_id,
+      store_id,
+      messages: [...(history || []), { role: 'user', content: message }, { role: 'bot', content: reply }],
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'session_id' }).catch(() => {})
 
-  return NextResponse.json({ reply, session_id })
+    return NextResponse.json({ reply, session_id })
+  } catch (e: any) {
+    return NextResponse.json({
+      reply: 'AI is temporarily unavailable. Error: ' + (e.message || 'Unknown'),
+      session_id
+    })
+  }
 }
