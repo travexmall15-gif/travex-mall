@@ -1,222 +1,679 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Tools — Travex Mall</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="dashboard.js"></script>
 <style>
-.ai-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
-.ai-tab{padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);transition:all 0.15s}
-.ai-tab.active{background:var(--navy);border-color:var(--navy);color:var(--white)}
-.ai-panel{display:none}.ai-panel.active{display:block}
+.ai-tabs{display:flex;gap:4px;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:20px;overflow-x:auto}
+.ai-tab{padding:10px 16px;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-muted);transition:.2s;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.ai-tab.on{background:var(--navy);color:#fff}
+.ai-tab:hover:not(.on){background:rgba(13,27,62,0.06)}
+.ai-panel{display:none}
+.ai-panel.on{display:block}
+.ai-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:14px}
+.ai-card-title{font-weight:800;font-size:14px;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.ai-card-sub{font-size:12px;color:var(--text-muted);margin-bottom:14px}
+.ai-result{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:12px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;min-height:60px;display:none}
+.ai-result.show{display:block}
+.ai-btn{padding:10px 20px;background:linear-gradient(135deg,var(--navy),#1B3A8A);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.ai-btn:hover{opacity:.9;transform:translateY(-1px)}
+.ai-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.ai-btn-sm{padding:7px 14px;font-size:11px;border-radius:8px}
+.ai-btn-gold{background:linear-gradient(135deg,var(--gold),#D4B44E)}
+.ai-btn-green{background:linear-gradient(135deg,#059669,#10B981)}
+.ai-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.chat-container{display:flex;flex-direction:column;height:380px}
+.chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.chat-msg{max-width:80%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.6}
+.chat-msg.user{background:var(--navy);color:#fff;align-self:flex-end;border-radius:14px 14px 4px 14px}
+.chat-msg.bot{background:var(--bg);border:1px solid var(--border);align-self:flex-start;border-radius:14px 14px 14px 4px}
+.chat-input-bar{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border)}
+.chat-input-bar input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:999px;font-size:13px;outline:none;font-family:inherit}
+.chat-input-bar button{width:40px;height:40px;border-radius:50%;border:none;background:var(--navy);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.report-card{background:linear-gradient(135deg,var(--navy),#1B3A8A);border-radius:14px;padding:20px;color:#fff;margin-bottom:14px}
+.report-stat{text-align:center}
+.report-stat-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900}
+.report-stat-lbl{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.tip-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+.tip-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.tip-text{font-size:12px;color:var(--text);line-height:1.6}
+.tip-text strong{color:var(--navy)}
+@keyframes thinking{0%,100%{opacity:.4}50%{opacity:1}}
+.thinking-dots span{animation:thinking 1.4s infinite;font-size:20px}
+.thinking-dots span:nth-child(2){animation-delay:.2s}
+.thinking-dots span:nth-child(3){animation-delay:.4s}
 </style>
 </head>
 <body>
-<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Loading AI Tools...</div></div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading AI Tools...</div>
+</div>
+
 <div class="sidebar" id="sidebar"></div>
+
 <div class="main-wrapper">
   <div class="main-header">
-    <div><div class="header-title">AI Tools 🤖</div><div class="header-sub">Powered by Claude AI</div></div>
-    <div class="header-right">
-      <span class="badge badge-gold" id="planBadge">Loading...</span>
+    <div>
+      <div class="header-title">🧠 AI Business Tools</div>
+      <div class="header-sub">4 intelligent tools to grow your business</div>
     </div>
   </div>
+
   <div class="main-content">
+
+    <!-- TABS -->
     <div class="ai-tabs">
-      <button class="ai-tab active" onclick="switchTab('product',this)"><i class="ti ti-package"></i> Product Writer</button>
-      <button class="ai-tab" onclick="switchTab('customer',this)" id="tab-customer"><i class="ti ti-message"></i> Customer Care</button>
-      <button class="ai-tab" onclick="switchTab('advisor',this)" id="tab-advisor"><i class="ti ti-bulb"></i> Business Advisor</button>
-      <button class="ai-tab" onclick="switchTab('marketing',this)" id="tab-marketing"><i class="ti ti-speakerphone"></i> Marketing</button>
+      <button class="ai-tab on" onclick="switchAI('assistant')">🤖 Business Assistant</button>
+      <button class="ai-tab" onclick="switchAI('accountant')">📊 AI Accountant</button>
+      <button class="ai-tab" onclick="switchAI('marketing')">📣 Marketing Manager</button>
+      <button class="ai-tab" onclick="switchAI('coach')">🧠 Business Coach</button>
     </div>
 
-    <!-- Product Writer (all plans) -->
-    <div class="ai-panel active" id="panel-product">
-      <div class="table-card">
-        <div class="table-card-header"><div class="table-card-title">📦 AI Product Description Writer</div><div style="font-size:12px;color:var(--muted)" class="ml-auto">Available on all plans</div></div>
-        <div class="table-card-body">
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">Product Name *</label><input class="form-input" id="prod-name" placeholder="e.g. Blue Ankara Dress"></div>
-            <div class="form-group"><label class="form-label">Category</label><input class="form-input" id="prod-cat" placeholder="e.g. Fashion"></div>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 1: AI BUSINESS ASSISTANT -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="ai-panel on" id="panel-assistant">
+
+      <!-- Product Description Generator -->
+      <div class="ai-card">
+        <div class="ai-card-title">✍️ Product Description Generator</div>
+        <div class="ai-card-sub">Enter your product details — AI writes a professional description in English and Swahili</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Product Name *</label>
+            <input class="form-input" id="pdName" placeholder="e.g. Black Leather Sneakers">
           </div>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">Price (TZS)</label><input class="form-input" id="prod-price" type="number" placeholder="15000"></div>
-            <div class="form-group"><label class="form-label">Key Features</label><input class="form-input" id="prod-features" placeholder="e.g. handmade, cotton, all sizes"></div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <input class="form-input" id="pdCategory" placeholder="e.g. Fashion, Electronics">
           </div>
-          <button class="btn btn-gold" onclick="runProductAI()" id="prod-btn" style="width:100%"><i class="ti ti-sparkles"></i> Generate Description</button>
-          <div id="prod-result" style="margin-top:16px"></div>
         </div>
+        <div class="form-group">
+          <label class="form-label">Key Features (optional)</label>
+          <input class="form-input" id="pdFeatures" placeholder="e.g. Size 40-45, genuine leather, waterproof">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Price (TZS)</label>
+            <input class="form-input" id="pdPrice" type="number" placeholder="45000">
+          </div>
+          <div class="form-group" style="display:flex;align-items:flex-end">
+            <button class="ai-btn" onclick="generateDescription()" id="pdBtn">
+              <i class="ti ti-sparkles"></i> Generate Description
+            </button>
+          </div>
+        </div>
+        <div class="ai-result" id="pdResult"></div>
+        <div class="ai-actions" id="pdActions" style="display:none">
+          <button class="ai-btn-sm ai-btn" onclick="copyResult('pdResult')"><i class="ti ti-copy"></i> Copy</button>
+          <button class="ai-btn-sm ai-btn ai-btn-green" onclick="useDescription()"><i class="ti ti-check"></i> Use for Product</button>
+        </div>
+      </div>
+
+      <!-- Price Advisor -->
+      <div class="ai-card">
+        <div class="ai-card-title">💰 Smart Price Advisor</div>
+        <div class="ai-card-sub">AI suggests the best price based on category, quality, and Tanzania market data</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Product Name *</label>
+            <input class="form-input" id="prName" placeholder="e.g. Samsung Galaxy A15">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Current Price (TZS)</label>
+            <input class="form-input" id="prPrice" type="number" placeholder="350000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Condition / Quality</label>
+          <select class="form-select" id="prCondition">
+            <option value="brand new">Brand New</option>
+            <option value="slightly used">Slightly Used</option>
+            <option value="used - good">Used - Good Condition</option>
+            <option value="refurbished">Refurbished</option>
+          </select>
+        </div>
+        <button class="ai-btn" onclick="generatePriceAdvice()" id="prBtn">
+          <i class="ti ti-calculator"></i> Get Price Advice
+        </button>
+        <div class="ai-result" id="prResult"></div>
       </div>
     </div>
 
-    <!-- Customer Care (premium) -->
-    <div class="ai-panel" id="panel-customer">
-      <div class="table-card">
-        <div class="table-card-header"><div class="table-card-title">💬 AI Customer Care Assistant</div><span class="badge badge-gold ml-auto">Premium</span></div>
-        <div id="customer-chat" class="ai-chat"></div>
-        <div class="ai-input-row">
-          <input class="ai-input" id="customer-input" placeholder="e.g. Customer says product arrived damaged..." onkeypress="if(event.key==='Enter')sendChat('customer')">
-          <button class="btn btn-primary" onclick="sendChat('customer')"><i class="ti ti-send"></i></button>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 2: AI ACCOUNTANT -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="ai-panel" id="panel-accountant">
+
+      <!-- Business Report -->
+      <div class="ai-card">
+        <div class="ai-card-title">📊 AI Business Report</div>
+        <div class="ai-card-sub">AI analyzes your sales, expenses and orders — gives you a full business report</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Report Period</label>
+            <select class="form-select" id="rptPeriod">
+              <option value="7">Last 7 Days</option>
+              <option value="30" selected>Last 30 Days</option>
+              <option value="90">Last 90 Days</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:flex;align-items:flex-end">
+            <button class="ai-btn" onclick="generateReport()" id="rptBtn">
+              <i class="ti ti-chart-bar"></i> Generate Report
+            </button>
+          </div>
         </div>
+
+        <!-- Report Stats -->
+        <div class="report-card" id="rptStats" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div class="report-stat"><div class="report-stat-val" id="rptRevenue">—</div><div class="report-stat-lbl">Revenue</div></div>
+            <div class="report-stat"><div class="report-stat-val" id="rptExpense">—</div><div class="report-stat-lbl">Expenses</div></div>
+            <div class="report-stat"><div class="report-stat-val" id="rptProfit">—</div><div class="report-stat-lbl">Net Profit</div></div>
+            <div class="report-stat"><div class="report-stat-val" id="rptOrders">—</div><div class="report-stat-lbl">Orders</div></div>
+          </div>
+        </div>
+        <div class="ai-result" id="rptResult"></div>
+      </div>
+
+      <!-- Expense Categorizer -->
+      <div class="ai-card">
+        <div class="ai-card-title">🧾 Smart Expense Categorizer</div>
+        <div class="ai-card-sub">Type your expenses and AI categorizes them automatically</div>
+        <div class="form-group">
+          <label class="form-label">Paste your expenses (one per line)</label>
+          <textarea class="form-textarea" id="expInput" rows="4" placeholder="Rent 500000&#10;M-Pesa charges 15000&#10;Stock purchase 200000&#10;Airtime 10000&#10;Transport 25000"></textarea>
+        </div>
+        <button class="ai-btn" onclick="categorizeExpenses()" id="expBtn">
+          <i class="ti ti-tags"></i> Categorize Expenses
+        </button>
+        <div class="ai-result" id="expResult"></div>
       </div>
     </div>
 
-    <!-- Business Advisor (premium) -->
-    <div class="ai-panel" id="panel-advisor">
-      <div class="table-card">
-        <div class="table-card-header"><div class="table-card-title">💡 AI Business Advisor</div><span class="badge badge-gold ml-auto">Premium</span></div>
-        <div id="advisor-chat" class="ai-chat"></div>
-        <div class="ai-input-row">
-          <input class="ai-input" id="advisor-input" placeholder="Ask about pricing, growth, competition..." onkeypress="if(event.key==='Enter')sendChat('advisor')">
-          <button class="btn btn-primary" onclick="sendChat('advisor')"><i class="ti ti-send"></i></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Marketing AI (premium) -->
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 3: AI MARKETING MANAGER -->
+    <!-- ═══════════════════════════════════════ -->
     <div class="ai-panel" id="panel-marketing">
-      <div class="table-card">
-        <div class="table-card-header"><div class="table-card-title">📣 AI Marketing Plan Generator</div><span class="badge badge-gold ml-auto">Premium</span></div>
-        <div class="table-card-body">
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">Shop Name</label><input class="form-input" id="mkt-shop" placeholder="Your shop name"></div>
-            <div class="form-group"><label class="form-label">Product/Service</label><input class="form-input" id="mkt-product" placeholder="What you sell"></div>
+
+      <!-- Social Media Post Generator -->
+      <div class="ai-card">
+        <div class="ai-card-title">📱 Social Media Post Generator</div>
+        <div class="ai-card-sub">AI creates ready-to-post content for Instagram, WhatsApp Status, Facebook</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">What are you promoting? *</label>
+            <input class="form-input" id="smProduct" placeholder="e.g. New collection of sneakers">
           </div>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">Target Customers</label><input class="form-input" id="mkt-target" placeholder="e.g. University students"></div>
-            <div class="form-group"><label class="form-label">Budget (TZS)</label><input class="form-input" id="mkt-budget" type="number" placeholder="50000"></div>
+          <div class="form-group">
+            <label class="form-label">Platform</label>
+            <select class="form-select" id="smPlatform">
+              <option value="instagram">Instagram</option>
+              <option value="whatsapp">WhatsApp Status</option>
+              <option value="facebook">Facebook</option>
+              <option value="all">All Platforms</option>
+            </select>
           </div>
-          <button class="btn btn-gold" onclick="runMarketingAI()" style="width:100%"><i class="ti ti-sparkles"></i> Generate Marketing Plan</button>
-          <div id="mkt-result" style="margin-top:16px"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tone</label>
+            <select class="form-select" id="smTone">
+              <option value="casual and fun">Casual & Fun</option>
+              <option value="professional">Professional</option>
+              <option value="urgent/FOMO">Urgent (FOMO)</option>
+              <option value="friendly">Friendly</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Special Offer?</label>
+            <input class="form-input" id="smOffer" placeholder="e.g. 20% off this weekend">
+          </div>
+        </div>
+        <button class="ai-btn ai-btn-gold" onclick="generateSocialPost()" id="smBtn">
+          <i class="ti ti-wand"></i> Generate Posts
+        </button>
+        <div class="ai-result" id="smResult"></div>
+        <div class="ai-actions" id="smActions" style="display:none">
+          <button class="ai-btn-sm ai-btn" onclick="copyResult('smResult')"><i class="ti ti-copy"></i> Copy</button>
+          <button class="ai-btn-sm ai-btn ai-btn-green" onclick="shareWhatsApp('smResult')"><i class="ti ti-brand-whatsapp"></i> Share</button>
+        </div>
+      </div>
+
+      <!-- WhatsApp Broadcast Message -->
+      <div class="ai-card">
+        <div class="ai-card-title">💬 WhatsApp Customer Message</div>
+        <div class="ai-card-sub">AI writes perfect customer messages — follow-ups, thank yous, promotions</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Message Type *</label>
+            <select class="form-select" id="waMsgType">
+              <option value="new product announcement">New Product Announcement</option>
+              <option value="thank you after purchase">Thank You (After Purchase)</option>
+              <option value="follow up - haven't ordered">Follow Up (Haven't Ordered)</option>
+              <option value="flash deal promotion">Flash Deal Promotion</option>
+              <option value="restocked item">Item Restocked</option>
+              <option value="holiday/festive greeting">Holiday Greeting</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Product/Details</label>
+            <input class="form-input" id="waMsgDetail" placeholder="e.g. Nike Air Max, TZS 85,000">
+          </div>
+        </div>
+        <button class="ai-btn" onclick="generateWAMessage()" id="waBtn2">
+          <i class="ti ti-message-chatbot"></i> Generate Message
+        </button>
+        <div class="ai-result" id="waResult"></div>
+        <div class="ai-actions" id="waActions" style="display:none">
+          <button class="ai-btn-sm ai-btn" onclick="copyResult('waResult')"><i class="ti ti-copy"></i> Copy</button>
+          <button class="ai-btn-sm ai-btn ai-btn-green" onclick="shareWhatsApp('waResult')"><i class="ti ti-brand-whatsapp"></i> Share</button>
         </div>
       </div>
     </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TAB 4: AI BUSINESS COACH -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="ai-panel" id="panel-coach">
+
+      <!-- AI Chat Coach -->
+      <div class="ai-card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),#1B3A8A);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px">🧠</div>
+          <div>
+            <div style="font-weight:800;font-size:13px;color:var(--navy)">Travex AI Business Coach</div>
+            <div style="font-size:11px;color:var(--text-muted)">Ask me anything about your business</div>
+          </div>
+        </div>
+        <div class="chat-container">
+          <div class="chat-messages" id="coachMsgs">
+            <div class="chat-msg bot">
+              Hi! 👋 I'm your AI Business Coach. I can help you with:
+              <br><br>• Sales strategies for Tanzania
+              <br>• Pricing advice
+              <br>• Customer retention tips
+              <br>• Marketing ideas
+              <br>• Business growth plans
+              <br><br>Ask me anything!
+            </div>
+          </div>
+          <div class="chat-input-bar">
+            <input id="coachInput" placeholder="Ask about your business..." onkeydown="if(event.key==='Enter')sendCoach()">
+            <button onclick="sendCoach()"><i class="ti ti-send" style="font-size:16px"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Tips Based on Data -->
+      <div class="ai-card">
+        <div class="ai-card-title">💡 AI-Generated Tips for Your Shop</div>
+        <div class="ai-card-sub">Personalized tips based on your shop data</div>
+        <button class="ai-btn ai-btn-gold" onclick="generateTips()" id="tipBtn">
+          <i class="ti ti-bulb"></i> Generate Smart Tips
+        </button>
+        <div id="tipsContainer" style="margin-top:12px"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<nav class="bottom-nav">
-  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
-  <a href="products.html"><i class="ti ti-package"></i><span>Products</span></a>
-  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
-  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
-  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
-</nav>
 <div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="dashboard.js"></script>
+
 <script>
-let isPremium = false, shopName = '', chats = { customer: [], advisor: [] };
+let shopData = null, products = [], sales = [], orders = [];
 
 (async () => {
   const session = await Auth.requireAuth();
   if (!session) return;
-  const shopData = await Shop.get(session.user.email);
+  shopData = await Shop.get(session.user.email);
   await loadSidebar('ai-tools', shopData);
-  isPremium = (shopData?.plan || localStorage.getItem('travex_plan')) === 'premium';
-  shopName = shopData?.shop_name || localStorage.getItem('travex_shop_name') || 'My Shop';
-  document.getElementById('planBadge').textContent = isPremium ? '🥇 Premium' : '🥈 Basic';
-  if (!isPremium) {
-    ['customer','advisor','marketing'].forEach(id => {
-      document.getElementById('tab-'+id)?.classList.add('plan-lock-overlay');
-    });
-  }
-  // Pre-fill marketing
-  document.getElementById('mkt-shop').value = shopName;
+
+  // Preload shop data for AI context
+  const [p, s, o] = await Promise.all([
+    sb.from('campus_products').select('*').eq('store_id', shopData?.id),
+    sb.from('seller_sales').select('*').eq('store_id', shopData?.id).order('created_at',{ascending:false}).limit(100),
+    sb.from('campus_orders').select('*').eq('store_id', shopData?.id).order('created_at',{ascending:false}).limit(50),
+  ]);
+  products = p.data || [];
+  sales    = s.data || [];
+  orders   = o.data || [];
+
   showLoading(false);
 })();
 
-function switchTab(id, btn) {
-  if (!isPremium && ['customer','advisor','marketing'].includes(id)) {
-    showToast('🔒 Upgrade to Premium to unlock this feature','warning');
-    return;
+function switchAI(tab) {
+  document.querySelectorAll('.ai-tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.ai-panel').forEach(p => p.classList.remove('on'));
+  event.target.closest('.ai-tab').classList.add('on');
+  document.getElementById('panel-' + tab).classList.add('on');
+}
+
+async function aiCall(prompt, btnId) {
+  const btn = document.getElementById(btnId);
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span> Thinking...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/ai-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        store_id: shopData?.id || 'general',
+        message: prompt,
+        session_id: 'ai-tools-' + Date.now(),
+        history: []
+      })
+    });
+    const data = await res.json();
+    return data.reply || 'Sorry, please try again.';
+  } catch(e) {
+    return 'Error: ' + e.message;
+  } finally {
+    btn.innerHTML = origText;
+    btn.disabled = false;
   }
-  document.querySelectorAll('.ai-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.ai-panel').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('panel-'+id)?.classList.add('active');
 }
 
-async function runProductAI() {
-  const name = document.getElementById('prod-name').value.trim();
-  if (!name) { showToast('Enter a product name','error'); return; }
-  const btn = document.getElementById('prod-btn');
-  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2"></i> Generating...';
-  document.getElementById('prod-result').innerHTML = `<div class="empty-state"><i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i><p>Writing your description...</p></div>`;
+function showResult(id, text, actionsId) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.classList.add('show');
+  if (actionsId) document.getElementById(actionsId).style.display = 'flex';
+}
 
-  const prompt = `Write a compelling product description for a Tanzanian online marketplace seller.
+function copyResult(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('✅ Copied!','success'));
+}
+
+function shareWhatsApp(id) {
+  const text = document.getElementById(id).textContent;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+// ── TAB 1: BUSINESS ASSISTANT ──
+
+async function generateDescription() {
+  const name     = document.getElementById('pdName').value.trim();
+  const category = document.getElementById('pdCategory').value.trim();
+  const features = document.getElementById('pdFeatures').value.trim();
+  const price    = document.getElementById('pdPrice').value;
+  if (!name) { showToast('Enter product name','error'); return; }
+
+  const prompt = `Write a professional product description for a Tanzanian marketplace listing.
 Product: ${name}
-Category: ${document.getElementById('prod-cat').value}
-Price: TZS ${document.getElementById('prod-price').value}
-Key features: ${document.getElementById('prod-features').value}
+Category: ${category || 'General'}
+Features: ${features || 'Not specified'}
+Price: ${price ? 'TZS ' + Number(price).toLocaleString() : 'Not set'}
 
-Write 2-3 sentences that are engaging, clear, and suitable for a Tanzanian customer. Keep it friendly and professional.`;
+Write TWO versions:
+1. ENGLISH VERSION (3-4 sentences, professional, highlights key features)
+2. SWAHILI VERSION (same content translated to natural Kiswahili)
 
-  const text = await askAI('You are a professional copywriter for Tanzanian e-commerce sellers. Write compelling, concise product descriptions.', prompt);
-  document.getElementById('prod-result').innerHTML = `
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
-      <div class="fw-700 fs-12 text-muted" style="margin-bottom:8px">GENERATED DESCRIPTION</div>
-      <div style="font-size:14px;line-height:1.7;color:var(--text)">${text}</div>
-      <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);showToast('Copied!','success')">
-        <i class="ti ti-copy"></i> Copy
-      </button>
-    </div>`;
-  btn.disabled = false; btn.innerHTML = '<i class="ti ti-sparkles"></i> Generate Description';
+Also suggest 3-5 hashtags for social media.`;
+
+  const result = await aiCall(prompt, 'pdBtn');
+  showResult('pdResult', result, 'pdActions');
 }
 
-const SYSTEMS = {
-  customer: `You are a helpful customer care assistant for "${shopName}", a Tanzanian online shop. Help resolve customer issues professionally, politely and empathetically. Responses should be concise (2-4 sentences).`,
-  advisor: `You are a business advisor for "${shopName}", a Tanzanian small business. Give practical, actionable advice based on local market realities. Be direct and helpful.`,
-};
+async function generatePriceAdvice() {
+  const name  = document.getElementById('prName').value.trim();
+  const price = document.getElementById('prPrice').value;
+  const cond  = document.getElementById('prCondition').value;
+  if (!name) { showToast('Enter product name','error'); return; }
 
-async function sendChat(type) {
-  const input = document.getElementById(type+'-input');
+  const prompt = `You are a pricing expert for the Tanzanian market.
+Product: ${name}
+Current Price: ${price ? 'TZS ' + Number(price).toLocaleString() : 'Not set yet'}
+Condition: ${cond}
+
+Give pricing advice:
+1. Recommended price range (TZS) based on Tanzania market
+2. Is the current price competitive? (if provided)
+3. Pricing strategy suggestion (premium, competitive, or budget positioning)
+4. Best time to offer discounts
+Keep it practical for a small Tanzanian business seller.`;
+
+  const result = await aiCall(prompt, 'prBtn');
+  showResult('prResult', result);
+}
+
+function useDescription() {
+  showToast('💡 Go to Products page and paste the description!', 'success');
+  setTimeout(() => window.location.href = 'products.html', 1500);
+}
+
+// ── TAB 2: AI ACCOUNTANT ──
+
+async function generateReport() {
+  const days = parseInt(document.getElementById('rptPeriod').value);
+  const since = new Date(); since.setDate(since.getDate() - days);
+  const fmt = n => 'TZS ' + Number(n).toLocaleString();
+
+  const periodSales = sales.filter(s => new Date(s.created_at) >= since);
+  const periodOrders = orders.filter(o => new Date(o.created_at) >= since);
+  const revenue  = periodSales.filter(s => s.category !== 'expense' && s.category !== 'invoice').reduce((a,s) => a + Number(s.amount || 0), 0);
+  const expense  = periodSales.filter(s => s.category === 'expense').reduce((a,s) => a + Number(s.amount || 0), 0);
+  const profit   = revenue - expense;
+  const orderCnt = periodOrders.length;
+
+  // Show stats
+  document.getElementById('rptStats').style.display = 'block';
+  document.getElementById('rptRevenue').textContent = fmt(revenue);
+  document.getElementById('rptExpense').textContent = fmt(expense);
+  document.getElementById('rptProfit').textContent  = fmt(profit);
+  document.getElementById('rptOrders').textContent  = orderCnt;
+
+  const prompt = `You are a business accountant analyzing a small Tanzanian seller's finances.
+
+DATA for last ${days} days:
+- Total Revenue: TZS ${revenue.toLocaleString()}
+- Total Expenses: TZS ${expense.toLocaleString()}
+- Net Profit: TZS ${profit.toLocaleString()}
+- Total Orders: ${orderCnt}
+- Products in stock: ${products.length}
+- Average order value: TZS ${orderCnt > 0 ? Math.round(revenue/orderCnt).toLocaleString() : '0'}
+- Shop: ${shopData?.shop_name || 'My Shop'}
+
+Write a brief business report with:
+1. Performance Summary (2 sentences)
+2. Key Insights (3 bullet points)
+3. Recommendations (3 action items to improve)
+4. Health Score (rate the business 1-10 with brief reason)
+
+Keep it simple and practical for a Tanzanian small business owner.`;
+
+  const result = await aiCall(prompt, 'rptBtn');
+  showResult('rptResult', result);
+}
+
+async function categorizeExpenses() {
+  const input = document.getElementById('expInput').value.trim();
+  if (!input) { showToast('Enter your expenses','error'); return; }
+
+  const prompt = `Categorize these business expenses for a Tanzanian seller:
+
+${input}
+
+For each expense:
+1. Category (Rent, Utilities, Stock/Inventory, Transport, Communication, Marketing, Bank/Mobile Money Fees, Food, Other)
+2. Amount (extract from text)
+3. Is it tax-deductible? (Yes/No)
+
+Then give:
+- Total by category
+- Total overall
+- Tips to reduce expenses`;
+
+  const result = await aiCall(prompt, 'expBtn');
+  showResult('expResult', result);
+}
+
+// ── TAB 3: MARKETING MANAGER ──
+
+async function generateSocialPost() {
+  const product  = document.getElementById('smProduct').value.trim();
+  const platform = document.getElementById('smPlatform').value;
+  const tone     = document.getElementById('smTone').value;
+  const offer    = document.getElementById('smOffer').value.trim();
+  if (!product) { showToast('Enter what you are promoting','error'); return; }
+
+  const prompt = `Create social media marketing content for a Tanzanian business:
+
+Product/Promotion: ${product}
+Platform: ${platform === 'all' ? 'Instagram, WhatsApp Status, and Facebook' : platform}
+Tone: ${tone}
+Special Offer: ${offer || 'None'}
+Shop: ${shopData?.shop_name || 'My Shop'}
+Shop Link: https://travex-mall.vercel.app/store/${shopData?.id || ''}
+
+Create:
+${platform === 'all' ? '1. Instagram post (with emojis, hashtags)
+2. WhatsApp Status (short, catchy)
+3. Facebook post (slightly longer, engaging)' :
+  platform === 'instagram' ? 'Instagram post with emojis, call to action, and 10 relevant hashtags' :
+  platform === 'whatsapp' ? 'WhatsApp Status message — short, catchy, with emojis. Max 2 lines.' :
+  'Facebook post — engaging, with call to action and emojis'}
+
+Include the shop link. Make it natural for Tanzanian audience (can mix English and Swahili naturally).`;
+
+  const result = await aiCall(prompt, 'smBtn');
+  showResult('smResult', result, 'smActions');
+}
+
+async function generateWAMessage() {
+  const type   = document.getElementById('waMsgType').value;
+  const detail = document.getElementById('waMsgDetail').value.trim();
+
+  const prompt = `Write a WhatsApp business message for a Tanzanian seller:
+
+Message Type: ${type}
+Product/Details: ${detail || 'General'}
+Shop: ${shopData?.shop_name || 'My Shop'}
+
+Write the message ready to send — with emojis, professional but friendly.
+Can naturally mix English and Swahili (Tanzanian style).
+Keep it short (max 5 lines). Include a call to action.`;
+
+  const result = await aiCall(prompt, 'waBtn2');
+  showResult('waResult', result, 'waActions');
+}
+
+// ── TAB 4: BUSINESS COACH ──
+
+let coachHistory = [];
+
+async function sendCoach() {
+  const input = document.getElementById('coachInput');
   const msg = input.value.trim();
   if (!msg) return;
   input.value = '';
 
-  chats[type].push({ role:'user', content:msg });
-  renderChat(type);
+  const msgsEl = document.getElementById('coachMsgs');
+  msgsEl.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+  msgsEl.innerHTML += `<div class="chat-msg bot" id="coachTyping"><span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span></div>`;
+  msgsEl.scrollTop = msgsEl.scrollHeight;
 
-  const messages = chats[type].map(m=>({role:m.role, content:m.content}));
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ model:'claude-haiku-4-5', max_tokens:500,
-      system: SYSTEMS[type], messages }),
-  });
-  const data = await res.json();
-  const reply = data.content?.[0]?.text || 'Unable to get response.';
-  chats[type].push({ role:'assistant', content:reply });
-  renderChat(type);
+  const context = `You are an AI Business Coach for a Tanzanian small business seller on Travex Mall.
+
+SELLER CONTEXT:
+- Shop: ${shopData?.shop_name || 'Unknown'}
+- Plan: ${shopData?.plan || 'basic'}
+- Products: ${products.length} items in stock
+- Recent orders: ${orders.length}
+- Total sales records: ${sales.length}
+- Top products: ${products.slice(0,3).map(p => p.name).join(', ') || 'None yet'}
+
+Give practical, actionable advice specific to Tanzania market. Be encouraging but honest.
+Keep responses concise (3-5 sentences max). Can mix English and Swahili naturally.`;
+
+  coachHistory.push({ role: 'user', content: msg });
+
+  try {
+    const res = await fetch('/api/ai-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        store_id: shopData?.id || 'coach',
+        message: context + '\n\nUser asks: ' + msg,
+        session_id: 'coach-' + (shopData?.id || 'x'),
+        history: coachHistory.slice(-6)
+      })
+    });
+    const data = await res.json();
+    const reply = data.reply || 'Sorry, try again!';
+    coachHistory.push({ role: 'bot', content: reply });
+
+    document.getElementById('coachTyping').outerHTML = `<div class="chat-msg bot">${reply}</div>`;
+  } catch(e) {
+    document.getElementById('coachTyping').outerHTML = `<div class="chat-msg bot">Sorry, something went wrong. Try again! 😊</div>`;
+  }
+  msgsEl.scrollTop = msgsEl.scrollHeight;
 }
 
-function renderChat(type) {
-  const el = document.getElementById(type+'-chat');
-  el.innerHTML = chats[type].map(m=>`
-    <div class="ai-msg ${m.role==='user'?'user':'bot'}">${m.content}</div>`).join('');
-  el.scrollTop = el.scrollHeight;
-}
+async function generateTips() {
+  const btn = document.getElementById('tipBtn');
+  btn.innerHTML = '<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span> Analyzing...';
+  btn.disabled = true;
 
-async function runMarketingAI() {
-  const shop = document.getElementById('mkt-shop').value.trim();
-  const product = document.getElementById('mkt-product').value.trim();
-  if (!shop||!product) { showToast('Fill in shop name and product','error'); return; }
+  const fmt = n => 'TZS ' + Number(n).toLocaleString();
+  const totalRev = sales.filter(s => s.category !== 'expense').reduce((a,s) => a + Number(s.amount||0), 0);
+  const totalOrd = orders.length;
 
-  const prompt = `Create a practical 30-day marketing plan for:
-Shop: ${shop}
-Product/Service: ${product}
-Target customers: ${document.getElementById('mkt-target').value}
-Marketing budget: TZS ${document.getElementById('mkt-budget').value}
+  const prompt = `Analyze this Tanzanian seller's shop and give 5 specific, actionable tips:
 
-Include: Week 1-4 activities, WhatsApp marketing tips, social media strategy, and low-cost promotion ideas for Tanzania. Keep it practical and actionable.`;
+Shop: ${shopData?.shop_name || 'My Shop'}
+Products: ${products.length} items
+Orders: ${totalOrd}
+Revenue: TZS ${totalRev.toLocaleString()}
+Product names: ${products.map(p => p.name + ' (TZS ' + Number(p.price).toLocaleString() + ')').slice(0,5).join(', ')}
 
-  document.getElementById('mkt-result').innerHTML = `<div class="empty-state"><i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i><p>Generating your plan...</p></div>`;
+Give exactly 5 tips. Each tip should have:
+- A specific action (not generic advice)
+- Expected impact
+- How to implement it on Travex Mall
 
-  const text = await askAI('You are a marketing expert specializing in Tanzanian SME businesses. Create practical, affordable marketing plans.', prompt);
-  document.getElementById('mkt-result').innerHTML = `
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
-      <div class="fw-700 fs-12 text-muted" style="margin-bottom:8px">YOUR 30-DAY MARKETING PLAN</div>
-      <div style="font-size:13px;line-height:1.75;color:var(--text);white-space:pre-wrap">${text}</div>
-    </div>`;
+Format each tip as: [EMOJI] [Title]: [1-2 sentence advice]`;
+
+  try {
+    const res = await fetch('/api/ai-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        store_id: shopData?.id || 'tips',
+        message: prompt,
+        session_id: 'tips-' + Date.now(),
+        history: []
+      })
+    });
+    const data = await res.json();
+    const tips = (data.reply || '').split('\n').filter(l => l.trim().length > 10);
+
+    const container = document.getElementById('tipsContainer');
+    container.innerHTML = tips.map(tip => `
+      <div class="tip-card">
+        <div class="tip-icon">${tip.match(/[\p{Emoji}]/u)?.[0] || '💡'}</div>
+        <div class="tip-text">${tip.replace(/^[\p{Emoji}\s]+/u, '')}</div>
+      </div>
+    `).join('') || '<div class="tip-card"><div class="tip-icon">💡</div><div class="tip-text">Add more products, post on Vybe, and create Flash Deals to attract customers!</div></div>';
+  } catch(e) {
+    document.getElementById('tipsContainer').innerHTML = '<div class="tip-card"><div class="tip-icon">⚠️</div><div class="tip-text">Could not generate tips. Try again later.</div></div>';
+  }
+
+  btn.innerHTML = '<i class="ti ti-bulb"></i> Generate Smart Tips';
+  btn.disabled = false;
 }
 </script>
 </body>
