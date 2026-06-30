@@ -664,20 +664,46 @@ function rMA(){
       </div></td></tr>`}).join('');
 }
 
-async function acMA(id){
-  const a=mApps.find(x=>x.id===id);if(!a||!confirm(`Approve "${a.shop_name}"?\n\n1. Create login account\n2. Send WhatsApp with password\n3. Shop goes LIVE`))return;
+async async function acMA(id){
+  const a=mApps.find(x=>x.id===id);
+  if(!a){alert('❌ Application not found in local list. Try refreshing the page.');return}
+  if(!confirm(`Approve "${a.shop_name}"?\n\n1. Set shop LIVE on marketplace\n2. Create login account\n3. Send WhatsApp with password`))return;
+
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
   const rawPass=`TRX-${r4()}-${r4()}`;const authPass=rawPass+'TRX!';
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
-  if(!phone){toast('❌ No phone','err');return}
+
+  // STEP 1 — Approve status FIRST so shop appears on marketplace regardless of phone/signup issues
+  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',approved_at:new Date().toISOString()}).eq('id',id);
+  if(upErr){
+    alert('❌ FAILED TO APPROVE — shop will NOT appear in market.\n\nError: '+upErr.message+'\n\nCode: '+(upErr.code||'unknown'));
+    toast('❌ Approve failed: '+upErr.message,'err');
+    return;
+  }
+  toast('✅ Shop approved — now live on marketplace!','ok');
+
+  // STEP 2 — Create login account (non-blocking if it fails — shop is already live)
+  if(!phone){
+    alert('⚠️ Shop is now LIVE, but no phone number on file.\n\nYou must manually create login credentials and send them to the seller.');
+    await loadAll();
+    return;
+  }
+
   const email=phone+'@travexmall.app';
   const{data:su,error:se}=await sb.auth.signUp({email,password:authPass,options:{data:{shop_name:a.shop_name,plan:a.plan,phone,owner_name:a.owner_name}}});
-  if(se&&!se.message.includes('already registered')){toast('❌ '+se.message,'err');return}
-  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',auth_email:email,login_password:rawPass,user_id:su?.user?.id||null,approved_at:new Date().toISOString()}).eq('id',id);
-  if(upErr){alert('❌ Failed to approve: '+upErr.message);toast('❌ '+upErr.message,'err');return}
+  if(se&&!se.message.includes('already registered')){
+    alert('⚠️ Shop is LIVE, but account creation failed:\n\n'+se.message+'\n\nSeller cannot login yet — create account manually.');
+    await loadAll();
+    return;
+  }
+
+  await sb.from('pending_payments').update({auth_email:email,login_password:rawPass,user_id:su?.user?.id||null}).eq('id',id);
+
+  // STEP 3 — WhatsApp credentials
   const pl=a.plan==='premium'?'🥇 Premium':'🥈 Basic';
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`✅ *Congratulations ${a.owner_name}!*\n\nYour shop *"${a.shop_name}"* is now LIVE on Travex Mall!\n\n━━━━━━━━━━━━\n🔐 *LOGIN DETAILS*\n📱 Phone: *+${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${pl}*\n\n🔗 ${location.origin}/dashboard/login.html\n━━━━━━━━━━━━\nWelcome to Travex Mall! 🏪`)}`,'_blank');
-  toast('✅ Approved + account created!','ok');await loadAll();
+  toast('✅ Approved + account created!','ok');
+  await loadAll();
 }
 async function rejMA(id){if(!confirm('Reject?'))return;await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
 async function pendMA(id){if(!confirm('Set to pending? Shop will be hidden from marketplace.'))return;await sb.from('pending_payments').update({status:'pending'}).eq('id',id);toast('Set to pending','ok');await loadAll()}
