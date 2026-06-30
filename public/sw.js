@@ -1,10 +1,45 @@
-// Travex Mall — Service Worker (Online Only)
-// Purpose: Enable PWA installation only — no offline caching
+// Travex Mall — Service Worker
+// Strategy: Network-first with cache fallback for reliability + faster repeat loads
 
-self.addEventListener('install', () => self.skipWaiting())
-self.addEventListener('activate', () => self.clients.claim())
+const CACHE_NAME = 'travex-mall-v1';
+const PRECACHE_URLS = [
+  '/',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png',
+];
 
-// Pass all requests straight to network — online only
-self.addEventListener('fetch', e => {
-  e.respondWith(fetch(e.request))
-})
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)).catch(() => {})
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Cache successful same-origin responses for offline fallback
+        if (response.ok && event.request.url.startsWith(self.location.origin)) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request).then((cached) => cached || caches.match('/'))
+      )
+  );
+});
