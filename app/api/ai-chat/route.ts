@@ -107,13 +107,17 @@ RULES:
     const data = await res.json()
     const reply = data.content?.[0]?.text || 'Sorry, please try again! 😊'
 
-    // Save to chat session
-    await sb.from('ai_chat_sessions').upsert({
-      session_id,
-      store_id,
-      messages: [...(history || []), { role: 'user', content: message }, { role: 'bot', content: reply }],
-      updated_at: new Date().toISOString()
-    }, { onConflict: 'session_id' }).catch(() => {})
+    // Save to chat session (non-blocking, errors ignored)
+    try {
+      await sb.from('ai_chat_sessions').upsert({
+        session_id,
+        store_id,
+        messages: [...(history || []), { role: 'user', content: message }, { role: 'bot', content: reply }],
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'session_id' })
+    } catch (saveErr) {
+      console.error('Chat save error (non-fatal):', saveErr)
+    }
 
     return NextResponse.json({ reply, session_id })
   } catch (e: any) {
