@@ -340,7 +340,7 @@ async function doLogin() {
 
     const msg = error.message.toLowerCase();
     if (msg.includes("invalid") || msg.includes("credentials")) {
-      showErr("loginError", "❌ Incorrect phone or password. Please check and try again.");
+      showErr("loginError", "❌ Incorrect phone or password. Please check and try again.<br><small style=\'opacity:.6;font-size:10px\'>Debug: tried email " + email + "</small>");
     } else if (msg.includes("email not confirmed")) {
       showWarn("loginWarn", "📧 Please confirm your email first. Checkalia inbox na ubonyeze link ya uthibitisho.");
     } else if (msg.includes("too many")) {
