@@ -956,7 +956,7 @@ function approveSeller(id, type) {
 }
 
 // ── SUSPEND ──
-async function suspendSeller(id, type) {
+async async function suspendSeller(id, type) {
   if (!confirm('Suspend this seller? Their shop will be hidden from marketplace.')) return;
   if (type === 'business') {
     const {error:sErr} = await sb.from('pending_payments').update({ status: 'suspended' }).eq('id', id);
@@ -972,7 +972,7 @@ async function suspendSeller(id, type) {
 }
 
 // ── REINSTATE ──
-async function reinstSeller(id, type) {
+async async function reinstSeller(id, type) {
   if (!confirm('Reinstate this seller?')) return;
   if (type === 'business') {
     const {error:rErr} = await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
@@ -1044,7 +1044,7 @@ async function renewSeller(id, type) {
 }
 
 // ── DELETE SELLER (COMPLETE REMOVAL) ──
-async function deleteSeller(id, type, shopName) {
+async async function deleteSeller(id, type, shopName) {
   if (!confirm(`⚠️ DELETE "${shopName}"?\n\nThis will:\n• Remove from marketplace\n• Remove their dashboard access\n• Delete all their products & posts\n\nThis CANNOT be undone!`)) return;
 
   toast('🗑️ Deleting...', 'ok');
