@@ -664,7 +664,7 @@ function rMA(){
       </div></td></tr>`}).join('');
 }
 
-async async function acMA(id){
+async function acMA(id){
   const a=mApps.find(x=>x.id===id);
   if(!a){alert('❌ Application not found in local list. Try refreshing the page.');return}
   if(!confirm(`Approve "${a.shop_name}"?\n\n1. Set shop LIVE on marketplace\n2. Create login account\n3. Send WhatsApp with password`))return;
