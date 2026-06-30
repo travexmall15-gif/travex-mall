@@ -10,19 +10,34 @@ const sb = createClient(SB_URL, SB_KEY);
 
 // ── AUTH ──────────────────────────────
 const Auth = {
+  // No Supabase Auth used — pure phone+password against pending_payments/campus_stores.
+  // Session stored in localStorage as {id, market}.
   async getSession() {
-    const { data: { session } } = await sb.auth.getSession();
-    return session;
+    const raw = localStorage.getItem('travex_session');
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
   },
   async requireAuth() {
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return null; }
-    return session;
+    const raw = localStorage.getItem('travex_session');
+    if (!raw) { window.location.href = 'login.html'; return null; }
+    let session;
+    try { session = JSON.parse(raw); } catch { window.location.href = 'login.html'; return null; }
+
+    // Re-validate against DB so suspended/deleted sellers are kicked out immediately
+    const table  = session.market === 'campus' ? 'campus_stores' : 'pending_payments';
+    const { data } = await sb.from(table).select('id,status,is_active').eq('id', session.id).maybeSingle();
+    const stillValid = data && (session.market === 'campus' ? data.is_active === true : data.status === 'approved');
+    if (!stillValid) {
+      localStorage.removeItem('travex_session');
+      window.location.href = 'login.html';
+      return null;
+    }
+    // Fake session.user shape so existing dashboard pages calling session.user.email keep working
+    return { user: { id: session.id, email: session.id } };
   },
   async signOut() {
-    ['travex_plan','travex_shop_name','travex_owner_name',
+    ['travex_session','travex_plan','travex_shop_name','travex_owner_name',
      'travex_category','travex_region','travex_user_id'].forEach(k => localStorage.removeItem(k));
-    await sb.auth.signOut();
     window.location.href = 'login.html';
   },
 };
@@ -32,40 +47,43 @@ const Shop = {
   _cache: null,
   _type: null, // 'business' | 'campus'
 
-  async get(email) {
+  async get() {
     if (this._cache) return this._cache;
 
-    // 1. Try business market (pending_payments)
-    const { data: biz } = await sb.from('pending_payments')
-      .select('*').eq('auth_email', email).eq('status','approved').maybeSingle();
+    const raw = localStorage.getItem('travex_session');
+    if (!raw) return null;
+    let session;
+    try { session = JSON.parse(raw); } catch { return null; }
 
+    if (session.market === 'campus') {
+      const { data: campus } = await sb.from('campus_stores')
+        .select('*').eq('id', session.id).eq('is_active', true).maybeSingle();
+      if (campus) {
+        this._cache = {
+          ...campus,
+          shop_name:      campus.store_name,
+          owner_name:     campus.owner_name,
+          shop_whatsapp:  campus.whatsapp,
+          shop_category:  campus.category,
+          shop_region:    campus.university_abbr,
+          shop_desc:      campus.description,
+          plan:           'campus',
+          _market:        'campus',
+        };
+        this._type = 'campus';
+        return this._cache;
+      }
+      return null;
+    }
+
+    // business market
+    const { data: biz } = await sb.from('pending_payments')
+      .select('*').eq('id', session.id).eq('status','approved').maybeSingle();
     if (biz) {
       this._cache = { ...biz, _market: 'business' };
       this._type = 'business';
       return this._cache;
     }
-
-    // 2. Try campus market (campus_stores)
-    const { data: campus } = await sb.from('campus_stores')
-      .select('*').eq('auth_email', email).eq('is_active', true).maybeSingle();
-
-    if (campus) {
-      // Normalize campus store to same shape as pending_payments
-      this._cache = {
-        ...campus,
-        shop_name:      campus.store_name,
-        owner_name:     campus.owner_name,
-        shop_whatsapp:  campus.whatsapp,
-        shop_category:  campus.category,
-        shop_region:    campus.university_abbr,
-        shop_desc:      campus.description,
-        plan:           'campus',
-        _market:        'campus',
-      };
-      this._type = 'campus';
-      return this._cache;
-    }
-
     return null;
   },
 
