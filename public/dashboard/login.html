@@ -246,27 +246,7 @@ sb.auth.getSession().then(async ({ data: { session } }) => {
   }
 });
 
-async function redirectToDashboard(user) {
-  // Fetch seller's plan and shop info from pending_payments
-  const { data: shop } = await sb
-    .from('pending_payments')
-    .select('plan, shop_name, shop_category, shop_region, owner_name')
-    .eq('auth_email', user.email)
-    .eq('status', 'approved')
-    .single();
 
-  if (shop) {
-    // Save to localStorage for dashboard to read
-    localStorage.setItem('travex_plan', shop.plan || 'basic');
-    localStorage.setItem('travex_shop_name', shop.shop_name || '');
-    localStorage.setItem('travex_owner_name', shop.owner_name || '');
-    localStorage.setItem('travex_category', shop.shop_category || '');
-    localStorage.setItem('travex_region', shop.shop_region || '');
-    localStorage.setItem('travex_user_id', user.id);
-  }
-
-  window.location.replace("dashboard.html");
-}
 
 // ── HELPERS ────────────────────────────────────────────────────
 function showPanel(id) {
@@ -318,70 +298,65 @@ function phoneToEmail(phone) {
 // ── LOGIN ───────────────────────────────────────────────────────
 async function doLogin() {
   clearAlerts();
-  const phone = document.getElementById("phone").value.trim();
+  const phoneInput = document.getElementById("phone").value.trim();
   const pass  = document.getElementById("password").value;
   const btn   = document.getElementById("loginBtn");
 
-  if (!phone) { showErr("loginError", "⚠️ Please enter your phone number."); return; }
+  if (!phoneInput) { showErr("loginError", "⚠️ Please enter your phone number."); return; }
   if (!pass)  { showErr("loginError", "⚠️ Please enter your password."); return; }
 
   btn.textContent = "Signing in...";
   btn.disabled = true;
 
-  const email = phoneToEmail(phone);
-  const { data, error } = await sb.auth.signInWithPassword({
-    email,
-    password: pass + "Trx!9"
-  });
+  const normalized = normalizePhone(phoneInput);
 
-  if (error) {
-    btn.textContent = "Sign In Dashboard →";
-    btn.disabled = false;
+  // ── Try Business Market (pending_payments) ──
+  const { data: bizList } = await sb.from("pending_payments")
+    .select("id, owner_phone, whatsapp_number, shop_whatsapp, login_password, plan, shop_name, shop_category, shop_region, owner_name, status")
+    .eq("status", "approved");
 
-    const msg = error.message.toLowerCase();
-    if (msg.includes("invalid") || msg.includes("credentials")) {
-      showErr("loginError", "❌ Incorrect phone or password. Please check and try again.<br><small style=\'opacity:.6;font-size:10px\'>Debug: tried email " + email + "</small>");
-    } else if (msg.includes("email not confirmed")) {
-      showWarn("loginWarn", "📧 Please confirm your email first. Checkalia inbox na ubonyeze link ya uthibitisho.");
-    } else if (msg.includes("too many")) {
-      showErr("loginError", "⏳ Umejaribu mara nyingi. Subiri dakika 5 kisha ujaribu tena.");
-    } else {
-      showErr("loginError", "❌ " + error.message);
-    }
+  const bizMatch = (bizList || []).find(s =>
+    [s.owner_phone, s.whatsapp_number, s.shop_whatsapp].some(p => p && normalizePhone(p) === normalized)
+    && s.login_password === pass
+  );
+
+  if (bizMatch) {
+    localStorage.setItem("travex_session", JSON.stringify({ id: bizMatch.id, market: "business" }));
+    localStorage.setItem("travex_plan", bizMatch.plan || "basic");
+    localStorage.setItem("travex_shop_name", bizMatch.shop_name || "");
+    localStorage.setItem("travex_owner_name", bizMatch.owner_name || "");
+    localStorage.setItem("travex_category", bizMatch.shop_category || "");
+    localStorage.setItem("travex_region", bizMatch.shop_region || "");
+    btn.textContent = "✅ Welcome! Loading...";
+    window.location.replace("dashboard.html");
     return;
   }
 
-  // ── Check store status ──
-  const userId = data.user.id;
-  const { data: stores } = await sb.from("campus_stores")
-    .select("store_name, is_active, payment_status, store_type")
-    .eq("user_id", userId)
-    .limit(1);
+  // ── Try Campus Market (campus_stores) ──
+  const { data: campusList } = await sb.from("campus_stores")
+    .select("id, phone, whatsapp, login_password, store_name, owner_name, university_abbr, is_active")
+    .eq("is_active", true);
 
-  if (stores && stores.length > 0 && !stores[0].is_active) {
-    const status = stores[0].payment_status || "pending";
-    const storeName = stores[0].store_name || "Shop lako";
+  const campusMatch = (campusList || []).find(s =>
+    [s.phone, s.whatsapp].some(p => p && normalizePhone(p) === normalized)
+    && s.login_password === pass
+  );
 
-    if (status === "receipt_uploaded" || status === "pending_verification") {
-      showWarn("loginWarn",
-        `🔍 <strong>Receipt yako inafanyiwa verification!</strong><br>
-        Shop "<strong>${storeName}</strong>" is not yet activated. Wait up to 2 hours — you will be notified via email and phone. Utapelekwa dashibodi kwa sekunde 3...`
-      );
-    } else {
-      showWarn("loginWarn",
-        `⏳ <strong>Shop bado halijawashwa.</strong><br>
-        Payment ya "${storeName}" payment not yet completed. Redirecting to dashboard in 3 seconds...`
-      );
-    }
-    btn.textContent = "Loading...";
-    setTimeout(async () => {
-      await redirectToDashboard(data.user);
-    }, 3000);
+  if (campusMatch) {
+    localStorage.setItem("travex_session", JSON.stringify({ id: campusMatch.id, market: "campus" }));
+    localStorage.setItem("travex_plan", "campus");
+    localStorage.setItem("travex_shop_name", campusMatch.store_name || "");
+    localStorage.setItem("travex_owner_name", campusMatch.owner_name || "");
+    localStorage.setItem("travex_region", campusMatch.university_abbr || "");
+    btn.textContent = "✅ Welcome! Loading...";
+    window.location.replace("dashboard.html");
     return;
   }
 
-  btn.textContent = "✅ Welcome! Loading...";
-  await redirectToDashboard(data.user);
+  // ── No match found ──
+  btn.textContent = "Sign In Dashboard →";
+  btn.disabled = false;
+  showErr("loginError", "❌ Incorrect phone or password. Please check and try again.");
 }
 
 // ── RESET PASSWORD ──────────────────────────────────────────────
