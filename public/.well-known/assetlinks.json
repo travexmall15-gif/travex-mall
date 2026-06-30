@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.travexdigital.travexmall",
+    "sha256_cert_fingerprints": ["7C:86:00:09:B2:D7:CD:4A:35:A4:F2:52:2F:4C:65:10:70:59:66:4F:E7:78:14:27:02:6C:4A:03:74:BC:48:38"]
+  }
+}]
