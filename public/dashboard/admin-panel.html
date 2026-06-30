@@ -674,7 +674,7 @@ async function acMA(id){
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
 
   // STEP 1 — Approve status FIRST so shop appears on marketplace regardless of phone/signup issues
-  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',approved_at:new Date().toISOString()}).eq('id',id);
+  const {error:upErr} = await sb.from('pending_payments').update({status:'approved'}).eq('id',id);
   if(upErr){
     alert('❌ FAILED TO APPROVE — shop will NOT appear in market.\n\nError: '+upErr.message+'\n\nCode: '+(upErr.code||'unknown'));
     toast('❌ Approve failed: '+upErr.message,'err');
