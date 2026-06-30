@@ -106,7 +106,16 @@ RULES:
     })
 
     const data = await res.json()
-    const reply = data.content?.[0]?.text || 'Sorry, please try again! 😊'
+
+    if (!res.ok) {
+      console.error('Claude API error:', JSON.stringify(data))
+      return NextResponse.json({
+        reply: '⚠️ Claude API error: ' + (data?.error?.message || res.status + ' ' + res.statusText),
+        session_id
+      })
+    }
+
+    const reply = data.content?.[0]?.text || ('Sorry, unexpected response: ' + JSON.stringify(data).slice(0,150))
 
     // Save to chat session (non-blocking, errors ignored)
     try {
