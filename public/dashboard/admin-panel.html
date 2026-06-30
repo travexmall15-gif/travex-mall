@@ -555,7 +555,7 @@ async function acCA(id){
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
   const rawPass=`TRX-${r4()}-${r4()}`;
-  const authPass=rawPass+'TRX!';
+  const authPass=rawPass+'Trx!9';
 
   // Get shop name
   const sn = a.shop_name || a.store_name || 
@@ -670,7 +670,7 @@ async function acMA(id){
   if(!confirm(`Approve "${a.shop_name}"?\n\n1. Set shop LIVE on marketplace\n2. Create login account\n3. Send WhatsApp with password`))return;
 
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
-  const rawPass=`TRX-${r4()}-${r4()}`;const authPass=rawPass+'TRX!';
+  const rawPass=`TRX-${r4()}-${r4()}`;const authPass=rawPass+'Trx!9';
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
 
   // STEP 1 — Approve status FIRST so shop appears on marketplace regardless of phone/signup issues
