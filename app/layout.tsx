@@ -16,7 +16,7 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: 'Travex Mall — Tanzania\'s Digital Marketplace',
-  description: 'Travex Mall — Tanzania\'s premier digital marketplace for campus students and businesses. Shop, sell and grow.',
+  description: 'Travex Mall — Tanzania\'s intelligent digital marketplace. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying and more. Start free today!',
   keywords: 'Tanzania marketplace, campus market, student shop, Travex Mall, online store Tanzania',
   manifest: '/manifest.json',
   appleWebApp: {
