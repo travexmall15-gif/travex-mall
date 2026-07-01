@@ -114,10 +114,10 @@ export default function HomePage() {
               </div>
               <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>Campus Market</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.50)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
-                Tanzania&apos;s first student-only marketplace. Sell directly to your fellow students — 5 campuses, 60 slots each.
+                Tanzania&apos;s dedicated campus marketplace. Sell directly to fellow students — verified sellers, 5 campuses, 60 slots each.
               </p>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                {[['5', 'Universities'], ['300', 'Total Slots'], ['TZS 15K', 'Per Month']].map(([v, l]) => (
+                {[['5', 'Universities'], ['300', 'Total Slots'], ['TZS 10K', 'Per Month']].map(([v, l]) => (
                   <div key={l}>
                     <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{v}</div>
                     <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{l}</div>
