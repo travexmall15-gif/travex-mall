@@ -351,10 +351,22 @@ async function doLogin() {
     return;
   }
 
-  // ── No match found ──
+  // ── No match found — show debug info ──
   btn.textContent = "Sign In Dashboard →";
   btn.disabled = false;
-  showErr("loginError", "❌ Incorrect phone or password. Please check and try again.");
+
+  // DEBUG: show exactly what we got from DB
+  const debugInfo = [
+    "Phone typed: " + phoneInput,
+    "Normalized: " + normalized,
+    "Records from DB: " + (bizList ? bizList.length : "null/error"),
+  ];
+  if (bizList && bizList.length > 0) {
+    bizList.forEach((r, i) => {
+      debugInfo.push("Record " + (i+1) + ": phone=" + r.owner_phone + " | wa=" + r.shop_whatsapp + " | pass_stored=" + (r.login_password ? "YES (" + r.login_password + ")" : "NULL") + " | status=" + r.status);
+    });
+  }
+  showErr("loginError", "❌ Incorrect phone or password.<br><small style='font-size:10px;opacity:.7;line-height:1.6;display:block;margin-top:6px'>" + debugInfo.join("<br>") + "</small>");
 }
 
 // ── RESET PASSWORD ──────────────────────────────────────────────
