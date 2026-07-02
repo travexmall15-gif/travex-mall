@@ -291,9 +291,7 @@ function normalizePhone(phone) {
   }
   return digits;
 }
-function phoneToEmail(phone) {
-  return normalizePhone(phone) + "@travexmall.app";
-}
+// phoneToEmail removed — no longer using email-based auth
 
 // ── LOGIN ───────────────────────────────────────────────────────
 async function doLogin() {
@@ -312,11 +310,11 @@ async function doLogin() {
 
   // ── Try Business Market (pending_payments) ──
   const { data: bizList } = await sb.from("pending_payments")
-    .select("id, owner_phone, whatsapp_number, shop_whatsapp, login_password, plan, shop_name, shop_category, shop_region, owner_name, status")
+    .select("id, owner_phone, shop_whatsapp, login_password, plan, shop_name, shop_category, shop_region, owner_name, status")
     .eq("status", "approved");
 
   const bizMatch = (bizList || []).find(s =>
-    [s.owner_phone, s.whatsapp_number, s.shop_whatsapp].some(p => p && normalizePhone(p) === normalized)
+    [s.owner_phone, s.shop_whatsapp].some(p => p && normalizePhone(p) === normalized)
     && s.login_password === pass
   );
 
