@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Track Your Delivery — Travex Move</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#080A0F;--dark:#0D1017;--orange:#F97316;--orange2:#FB923C;--white:#fff;--muted:#9CA3AF;--green:#059669;--red:#DC2626;--text:#E8E9EB;--navy:#0D1B3E}
+body{font-family:"Inter",sans-serif;background:var(--black);color:var(--text);min-height:100vh}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,10,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(249,115,22,0.15);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:"Playfair Display",serif;font-size:1rem;font-weight:900;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--orange)}
+
+/* SEARCH */
+.search-section{max-width:500px;margin:6rem auto 2rem;padding:0 5%;text-align:center}
+.search-h1{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;color:var(--white);margin-bottom:0.4rem}
+.search-sub{font-size:0.85rem;color:var(--muted);margin-bottom:2rem;font-weight:300;line-height:1.65}
+.search-row{display:flex;gap:0}
+.search-input{flex:1;padding:0.9rem 1.2rem;background:var(--dark);border:1px solid rgba(255,255,255,0.08);border-right:none;font-family:"Inter",sans-serif;font-size:1rem;color:var(--white);outline:none;text-transform:uppercase;letter-spacing:0.1em}
+.search-input:focus{border-color:var(--orange)}
+.search-input::placeholder{color:rgba(255,255,255,0.15);letter-spacing:normal;font-size:0.85rem;text-transform:none}
+.search-btn{background:var(--orange);color:var(--white);border:none;padding:0.9rem 1.5rem;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap}
+.search-btn:hover{background:var(--orange2)}
+
+/* MAIN TRACKING */
+.track-main{max-width:900px;margin:0 auto 4rem;padding:0 5%}
+
+/* STATUS BAR */
+.status-bar{display:flex;gap:0;margin-bottom:1.5rem;overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
+.sb-step{flex:1;padding:1rem 0.5rem;text-align:center;font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.18);text-transform:uppercase;letter-spacing:0.06em;border-right:1px solid rgba(255,255,255,0.04);transition:all 0.4s}
+.sb-step:last-child{border-right:none}
+.sb-step-ico{font-size:1.3rem;display:block;margin-bottom:0.3rem}
+.sb-step.done{color:var(--green);background:rgba(5,150,105,0.06)}
+.sb-step.current{color:var(--orange);background:rgba(249,115,22,0.08)}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
+.info-card{background:var(--dark);border:1px solid rgba(255,255,255,0.06);padding:1.5rem}
+.ic-title{font-size:0.62rem;font-weight:700;color:rgba(249,115,22,0.6);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem}
+.ic-row{display:flex;justify-content:space-between;align-items:flex-start;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.8rem}
+.ic-row:last-child{border-bottom:none}
+.ic-lbl{color:var(--muted)}
+.ic-val{color:var(--white);font-weight:600;text-align:right;max-width:55%;line-height:1.4}
+
+/* MAP CARD */
+.map-card{background:var(--dark);border:1px solid rgba(255,255,255,0.06);margin-bottom:1.5rem;overflow:hidden}
+.map-header{padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between}
+.map-title{font-size:0.85rem;font-weight:700;color:var(--white);display:flex;align-items:center;gap:0.5rem}
+.live-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:livePulse 2s infinite}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.map-status{font-size:0.75rem;color:var(--orange);font-weight:600}
+.map-body{padding:1.5rem;text-align:center}
+.map-route{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:1.25rem;margin-bottom:1.25rem;text-align:left}
+.map-route-row{display:flex;align-items:flex-start;gap:0.75rem;font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem}
+.map-route-row:last-child{margin-bottom:0}
+.map-route-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dot-pickup{background:var(--orange)}
+.dot-dropoff{background:var(--green)}
+.map-open-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--orange);color:var(--white);padding:0.85rem 2rem;font-size:0.875rem;font-weight:700;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;font-family:"Inter",sans-serif;width:100%;justify-content:center;margin-top:0.5rem}
+.map-open-btn:hover{background:var(--orange2)}
+
+/* ═══ REAL-TIME CHAT ═══ */
+.chat-card{background:var(--dark);border:1px solid rgba(249,115,22,0.15);overflow:hidden;margin-bottom:1.5rem}
+.chat-header{background:rgba(249,115,22,0.08);padding:1rem 1.5rem;border-bottom:1px solid rgba(249,115,22,0.12);display:flex;align-items:center;justify-content:space-between}
+.chat-header-left{display:flex;align-items:center;gap:0.75rem}
+.chat-avatar{width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.chat-title{font-size:0.9rem;font-weight:700;color:var(--white)}
+.chat-subtitle{font-size:0.68rem;color:var(--muted);margin-top:1px}
+.chat-live{display:flex;align-items:center;gap:0.4rem;font-size:0.65rem;color:var(--green);font-weight:700}
+
+/* MESSAGES */
+.chat-msgs{height:320px;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:0.85rem;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-track{background:transparent}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(249,115,22,0.2);border-radius:2px}
+
+.msg-wrap{display:flex;gap:0.6rem;max-width:80%}
+.msg-wrap.me{align-self:flex-end;flex-direction:row-reverse}
+.msg-wrap.other{align-self:flex-start}
+.msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;margin-top:2px}
+.msg-avatar.seller-av{background:var(--navy);color:var(--orange);font-weight:800;font-size:0.6rem}
+.msg-avatar.driver-av{background:var(--orange);color:var(--white);font-size:0.7rem}
+.msg-avatar.customer-av{background:rgba(5,150,105,0.3);color:var(--green);font-size:0.7rem}
+.msg-content{}
+.msg-bubble{padding:0.65rem 1rem;font-size:0.82rem;line-height:1.55;max-width:280px}
+.seller .msg-bubble{background:rgba(13,27,62,0.8);color:var(--text);border:1px solid rgba(255,255,255,0.06)}
+.driver .msg-bubble{background:var(--orange);color:var(--white)}
+.customer .msg-bubble{background:rgba(5,150,105,0.15);color:var(--text);border:1px solid rgba(5,150,105,0.15)}
+.msg-meta{font-size:0.6rem;color:rgba(255,255,255,0.2);margin-top:0.2rem;display:flex;align-items:center;gap:0.3rem}
+.msg-wrap.me .msg-meta{justify-content:flex-end}
+.empty-chat{text-align:center;padding:3rem 1rem;color:rgba(255,255,255,0.2);font-size:0.82rem}
+.empty-chat-icon{font-size:2.5rem;margin-bottom:0.75rem}
+
+/* ROLE SELECTOR */
+.role-bar{padding:0.75rem 1.25rem;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.02)}
+.role-label{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.role-btn{padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600;cursor:pointer;transition:all 0.2s;border:1px solid rgba(255,255,255,0.1);background:transparent;font-family:"Inter",sans-serif;color:rgba(255,255,255,0.4)}
+.role-btn.active{border-color:var(--orange);color:var(--orange);background:rgba(249,115,22,0.08)}
+.role-btn:hover:not(.active){border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.6)}
+
+/* INPUT ROW */
+.chat-input-row{padding:0.9rem 1.25rem;display:flex;gap:0.5rem;background:rgba(0,0,0,0.2)}
+.chat-input{flex:1;padding:0.7rem 1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-family:"Inter",sans-serif;font-size:0.85rem;color:var(--white);outline:none;transition:border-color 0.2s}
+.chat-input:focus{border-color:var(--orange)}
+.chat-input::placeholder{color:rgba(255,255,255,0.2)}
+.chat-send-btn{background:var(--orange);color:var(--white);border:none;padding:0.7rem 1.5rem;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;white-space:nowrap}
+.chat-send-btn:hover{background:var(--orange2)}
+.chat-send-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+/* DRIVER PHONE CTA */
+.driver-cta{background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.15);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem}
+.driver-cta-text{font-size:0.82rem;color:var(--text)}
+.driver-call-btn{background:#25D366;color:var(--white);padding:0.55rem 1.25rem;font-size:0.8rem;font-weight:700;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+.driver-call-btn:hover{opacity:0.85}
+
+/* NOT FOUND */
+.not-found{text-align:center;padding:4rem 2rem;max-width:400px;margin:0 auto;display:none}
+
+@media(max-width:768px){.info-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.search-row{flex-direction:column}.search-input{border-right:1px solid rgba(255,255,255,0.08);border-bottom:none}.chat-msgs{height:260px}}
+</style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    .leaflet-container { background: #0D1017 !important; }
+    .driver-marker-icon { background:#F97316;border:3px solid #fff;border-radius:50%;width:22px;height:22px;box-shadow:0 0 0 4px rgba(249,115,22,0.3);animation:markerPulse 2s infinite }
+    @keyframes markerPulse{0%,100%{box-shadow:0 0 0 4px rgba(249,115,22,0.3)}50%{box-shadow:0 0 0 8px rgba(249,115,22,0.1)}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">TRAVEX <span>MOVE</span></a>
+  <div style="font-size:0.75rem;color:var(--muted)">Live Delivery Tracker</div>
+</nav>
+
+<!-- SEARCH -->
+<div class="search-section" id="searchSection">
+  <h1 class="search-h1">Track Your Delivery</h1>
+  <p class="search-sub">Enter the tracking code sent to you via WhatsApp by the seller to see your delivery status in real-time.</p>
+  <div class="search-row">
+    <input type="text" class="search-input" id="codeInput" placeholder="Enter tracking code e.g. TMABC123" maxlength="10" onkeypress="if(event.key==='Enter')track()">
+    <button class="search-btn" onclick="track()">Track →</button>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(255,255,255,0.12);margin-top:1rem">Your tracking code was sent via WhatsApp by the seller</p>
+</div>
+
+<!-- TRACKING INFO -->
+<div class="track-main" id="trackMain" style="display:none">
+
+  <!-- STATUS -->
+  <div class="status-bar">
+    <div class="sb-step" id="ss-searching"><span class="sb-step-ico">🔍</span>Searching</div>
+    <div class="sb-step" id="ss-accepted"><span class="sb-step-ico">✅</span>Accepted</div>
+    <div class="sb-step" id="ss-picked"><span class="sb-step-ico">📦</span>Picked Up</div>
+    <div class="sb-step" id="ss-transit"><span class="sb-step-ico">🚚</span>In Transit</div>
+    <div class="sb-step" id="ss-delivered"><span class="sb-step-ico">🎉</span>Delivered!</div>
+  </div>
+
+  <!-- INFO CARDS -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="ic-title">📦 Delivery Details</div>
+      <div class="ic-row"><span class="ic-lbl">Code</span><span class="ic-val" id="infoCode" style="color:var(--orange);font-family:'Playfair Display',serif;font-size:1rem">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Pickup</span><span class="ic-val" id="infoPickup">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Dropoff</span><span class="ic-val" id="infoDropoff">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Cargo</span><span class="ic-val" id="infoCargo">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Fare</span><span class="ic-val" id="infoFare" style="color:var(--orange)">—</span></div>
+    </div>
+    <div class="info-card">
+      <div class="ic-title">🏍️ Driver Info</div>
+      <div class="ic-row"><span class="ic-lbl">Name</span><span class="ic-val" id="dName">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Vehicle</span><span class="ic-val" id="dVehicle">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Reg No.</span><span class="ic-val" id="dReg">—</span></div>
+      <div class="ic-row"><span class="ic-lbl">Rating</span><span class="ic-val" id="dRating">—</span></div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-card">
+    <div class="map-header">
+      <div class="map-title"><div class="live-dot"></div>Live GPS Tracking</div>
+      <div class="map-status" id="mapStatusText">Connecting...</div>
+    </div>
+    <!-- Leaflet Map -->
+    <div id="liveMap" style="height:320px;width:100%;background:#0D1017;z-index:1"></div>
+    <div class="map-body" style="padding:12px 16px">
+      <div class="map-route" id="mapRoute"></div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <a id="mapsBtn" href="#" target="_blank" class="map-open-btn" style="flex:1;text-align:center;opacity:.5;pointer-events:none">
+          🗺️ Open in Google Maps
+        </a>
+        <button onclick="centerMap()" style="padding:8px 14px;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#F97316;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">
+          📍 Center Map
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRIVER CTA -->
+  <div class="driver-cta" id="driverCta" style="display:none">
+    <div class="driver-cta-text">Need to reach your driver? Call them directly.</div>
+    <a id="driverCallBtn" href="#" class="driver-call-btn" style="opacity:.5;pointer-events:none">📞 Call Driver</a>
+  </div>
+
+  <!-- ═══ REAL-TIME GROUP CHAT ═══ -->
+  <div class="chat-card">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">💬</div>
+        <div>
+          <div class="chat-title">Group Chat</div>
+          <div class="chat-subtitle">Seller · Driver · Customer — all in one chat</div>
+        </div>
+      </div>
+      <div class="chat-live"><div class="live-dot"></div>LIVE</div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="empty-chat">
+        <div class="empty-chat-icon">💬</div>
+        Loading messages...
+      </div>
+    </div>
+
+    <!-- ROLE SELECTOR -->
+    <div class="role-bar">
+      <span class="role-label">I am:</span>
+      <button class="role-btn active" onclick="setRole('customer',this)" id="rb-customer">👤 Customer</button>
+      <button class="role-btn" onclick="setRole('seller',this)" id="rb-seller">🏪 Seller</button>
+      <button class="role-btn" onclick="setRole('driver',this)" id="rb-driver">🏍️ Driver</button>
+    </div>
+
+    <!-- INPUT -->
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="msgInput" placeholder="Type a message to the group..." onkeypress="if(event.key==='Enter' && !event.shiftKey)sendMsg()">
+      <button class="chat-send-btn" id="sendBtn" onclick="sendMsg()">Send →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- NOT FOUND -->
+<div class="not-found" id="notFound">
+  <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
+  <div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--white);margin-bottom:0.5rem">Tracking code not found</div>
+  <div style="font-size:0.82rem;color:var(--muted);line-height:1.7">Please double-check your tracking code. It should look like <strong style="color:var(--orange)">TMABC123</strong> and was sent to you via WhatsApp by the seller.</div>
+</div>
+
+<script>
+const SB_URL="https://bscecjbgnjitlfmgwcic.supabase.co";
+const SB_KEY="sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
+const {createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+
+const ICO={pikipiki:"🏍️",bajaji:"🛺",gari:"🚗"};
+const STATUS_STEPS=["searching","accepted","picked","transit","delivered"];
+const STATUS_LABELS={
+  searching:"🔍 Searching for driver...",
+  accepted:"✅ Driver accepted — heading to pickup",
+  picked:"📦 Package picked up — in transit",
+  transit:"🚚 On the way to your location",
+  delivered:"🎉 Delivered successfully!"
+};
+
+let delivery=null;
+let chatChannel=null;
+let deliveryChannel=null;
+let myRole="customer";
+let myName="";
+
+// Auto-load from URL
+const params=new URLSearchParams(window.location.search);
+if(params.get("code")){
+  document.getElementById("codeInput").value=params.get("code");
+  track();
+}
+
+async function track(){
+  const code=document.getElementById("codeInput").value.trim().toUpperCase();
+  if(!code){return;}
+
+  document.getElementById("notFound").style.display="none";
+  document.getElementById("trackMain").style.display="none";
+
+  const {data}=await sb.from("move_deliveries")
+    .select("*, drivers(*)")
+    .eq("tracking_code",code)
+    .single();
+
+  if(!data){
+    document.getElementById("notFound").style.display="block";
+    return;
+  }
+
+  delivery=data;
+  const driver=data.drivers;
+
+  // Show main
+  document.getElementById("searchSection").style.marginBottom="1.5rem";
+  document.getElementById("trackMain").style.display="block";
+
+  // Fill info
+  document.getElementById("infoCode").textContent=code;
+  document.getElementById("infoPickup").textContent=data.pickup_address;
+  document.getElementById("infoDropoff").textContent=data.dropoff_address;
+  document.getElementById("infoCargo").textContent=data.cargo_desc||"—";
+  document.getElementById("infoFare").textContent="TZS "+Number(data.price).toLocaleString()+" (cash)";
+
+  if(driver){
+    document.getElementById("dName").textContent=driver.full_name;
+    document.getElementById("dVehicle").textContent=(ICO[driver.vehicle_type]||"🚗")+" "+driver.vehicle_type;
+    document.getElementById("dReg").textContent=driver.vehicle_reg;
+    document.getElementById("dRating").textContent="⭐ "+driver.rating?.toFixed(1);
+
+    // Call button
+    const ctaEl=document.getElementById("driverCta");
+    const callBtn=document.getElementById("driverCallBtn");
+    ctaEl.style.display="flex";
+    callBtn.href="tel:"+driver.phone;
+    callBtn.textContent="📞 Call "+driver.full_name.split(" ")[0];
+  }
+
+  // Map
+  const pickup=encodeURIComponent(data.pickup_address+", Tanzania");
+  const dropoff=encodeURIComponent(data.dropoff_address+", Tanzania");
+  document.getElementById("mapsBtn").href=`https://www.google.com/maps/dir/?api=1&origin=${pickup}&destination=${dropoff}&travelmode=driving`;
+  document.getElementById("mapRoute").innerHTML=`
+    <div class="map-route-row">
+      <div class="map-route-dot dot-pickup"></div>
+      <div><div style="font-size:0.7rem;color:var(--orange);font-weight:700;margin-bottom:2px">PICKUP</div><div style="color:var(--text)">${data.pickup_address}</div></div>
+    </div>
+    <div class="map-route-row">
+      <div class="map-route-dot dot-dropoff"></div>
+      <div><div style="font-size:0.7rem;color:var(--green);font-weight:700;margin-bottom:2px">DROPOFF</div><div style="color:var(--text)">${data.dropoff_address}</div></div>
+    </div>`;
+
+  // Initialize Leaflet map
+  initLiveMap(data);
+
+  // Status
+  updateStatus(data.status);
+
+  // Set customer name from delivery
+  if(data.customer_name) myName=data.customer_name;
+
+  // Start realtime
+  subscribeDelivery(data.id);
+  initChat(data.id);
+}
+
+function updateStatus(status){
+  const idx=STATUS_STEPS.indexOf(status);
+  STATUS_STEPS.forEach((s,i)=>{
+    const el=document.getElementById("ss-"+s);
+    if(!el)return;
+    el.classList.remove("done","current");
+    if(i<idx)el.classList.add("done");
+    if(i===idx)el.classList.add("current");
+  });
+  document.getElementById("mapStatusText").textContent=STATUS_LABELS[status]||status;
+}
+
+function subscribeDelivery(id){
+  if(deliveryChannel)sb.removeChannel(deliveryChannel);
+  deliveryChannel=sb.channel("delivery-"+id)
+    .on("postgres_changes",{event:"UPDATE",schema:"public",table:"move_deliveries",filter:`id=eq.${id}`},
+      payload=>{updateStatus(payload.new.status);})
+    .subscribe();
+}
+
+// ═══ CHAT FUNCTIONS ═══
+async function initChat(deliveryId){
+  // Load existing messages
+  const {data}=await sb.from("move_chats")
+    .select("*")
+    .eq("delivery_id",deliveryId)
+    .order("created_at",{ascending:true})
+    .limit(100);
+
+  renderAllMsgs(data||[]);
+
+  // Subscribe to new messages (realtime)
+  if(chatChannel)sb.removeChannel(chatChannel);
+  chatChannel=sb.channel("chat-"+deliveryId)
+    .on("postgres_changes",{
+      event:"INSERT",
+      schema:"public",
+      table:"move_chats",
+      filter:`delivery_id=eq.${deliveryId}`
+    }, payload=>{
+      appendMsg(payload.new);
+    })
+    .subscribe(status=>{
+      if(status==="SUBSCRIBED"){
+        console.log("✅ Chat connected!");
+      }
+    });
+}
+
+function setRole(role,btn){
+  myRole=role;
+  document.querySelectorAll(".role-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  const input=document.getElementById("msgInput");
+  const roleNames={customer:delivery?.customer_name||"Customer",seller:"Seller",driver:delivery?.drivers?.full_name||"Driver"};
+  input.placeholder=`Message as ${roleNames[role]}...`;
+}
+
+function renderAllMsgs(msgs){
+  const el=document.getElementById("chatMsgs");
+  if(!msgs.length){
+    el.innerHTML=`<div class="empty-chat"><div class="empty-chat-icon">💬</div>No messages yet. Say hello!</div>`;
+    return;
+  }
+  el.innerHTML=msgs.map(buildMsg).join("");
+  el.scrollTop=el.scrollHeight;
+}
+
+function appendMsg(msg){
+  const el=document.getElementById("chatMsgs");
+  const emptyEl=el.querySelector(".empty-chat");
+  if(emptyEl)emptyEl.remove();
+  el.innerHTML+=buildMsg(msg);
+  el.scrollTop=el.scrollHeight;
+}
+
+function buildMsg(msg){
+  const isMe=(msg.sender_role===myRole);
+  const time=new Date(msg.created_at).toLocaleTimeString("en",{hour:"2-digit",minute:"2-digit"});
+  const roleClass=msg.sender_role;
+  const avMap={seller:"🏪",driver:ICO[delivery?.vehicle_type]||"🏍️",customer:"👤"};
+  const avClassMap={seller:"seller-av",driver:"driver-av",customer:"customer-av"};
+
+  return `<div class="msg-wrap ${isMe?"me":"other"} ${roleClass}">
+    <div class="msg-avatar ${avClassMap[msg.sender_role]}">${avMap[msg.sender_role]}</div>
+    <div class="msg-content">
+      <div class="msg-bubble">${escapeHtml(msg.message)}</div>
+      <div class="msg-meta">${msg.sender_name} · ${time}</div>
+    </div>
+  </div>`;
+}
+
+async function sendMsg(){
+  const input=document.getElementById("msgInput");
+  const btn=document.getElementById("sendBtn");
+  const msg=input.value.trim();
+  if(!msg||!delivery)return;
+
+  btn.disabled=true;
+  input.value="";
+
+  const nameMap={
+    customer:delivery.customer_name||"Customer",
+    seller:"Seller",
+    driver:delivery.drivers?.full_name||"Driver"
+  };
+
+  const {error}=await sb.from("move_chats").insert({
+    delivery_id:delivery.id,
+    sender_role:myRole,
+    sender_name:nameMap[myRole],
+    message:msg
+  });
+
+  if(error){
+    input.value=msg;
+    console.error("Chat error:",error);
+  }
+
+  btn.disabled=false;
+  input.focus();
+}
+
+function escapeHtml(text){
+  return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function escapeHtml(text){
+  return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// ═══════════════════════════
+// LIVE GPS MAP (Leaflet)
+// ═══════════════════════════
+let liveMap = null;
+let driverMarker = null;
+let pickupMarker = null;
+let deliveryMarker = null;
+let currentDeliveryData = null;
+let mapGeoInterval = null;
+
+async function initLiveMap(data) {
+  currentDeliveryData = data;
+
+  // Wait for DOM
+  await new Promise(r => setTimeout(r, 100));
+
+  const mapEl = document.getElementById('liveMap');
+  if (!mapEl || !window.L) return;
+
+  // Default: Dar es Salaam
+  const defaultLat = -6.7924, defaultLng = 39.2083;
+
+  // Init map
+  if (!liveMap) {
+    liveMap = L.map('liveMap', {
+      center: [defaultLat, defaultLng],
+      zoom: 13,
+      zoomControl: true,
+      attributionControl: false,
+    });
+
+    // Dark tile layer (CartoDB dark)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap, © CartoDB',
+      subdomains: 'abcd', maxZoom: 19,
+    }).addTo(liveMap);
+  }
+
+  // Geocode addresses and place markers
+  await placeMarkers(data);
+
+  // Start tracking driver GPS
+  startDriverTracking(data.id, data.driver_lat, data.driver_lng);
+}
+
+async function geocodeAddress(address) {
+  try {
+    const q = encodeURIComponent(address + ', Tanzania');
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`);
+    const data = await res.json();
+    if (data[0]) return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+  } catch(e) {}
+  return null;
+}
+
+async function placeMarkers(data) {
+  if (!liveMap) return;
+
+  // Clear old markers
+  if (pickupMarker)   liveMap.removeLayer(pickupMarker);
+  if (deliveryMarker) liveMap.removeLayer(deliveryMarker);
+
+  const pickupCoords   = await geocodeAddress(data.pickup_address + ', ' + (data.pickup_area || ''));
+  const deliveryCoords = await geocodeAddress(data.dropoff_address + ', ' + (data.delivery_area || ''));
+
+  const orangeIcon = L.divIcon({
+    html: '<div style="background:#F97316;border:2px solid #fff;border-radius:50%;width:14px;height:14px;box-shadow:0 2px 8px rgba(249,115,22,0.6)"></div>',
+    iconSize: [14,14], iconAnchor: [7,7], className: ''
+  });
+  const greenIcon = L.divIcon({
+    html: '<div style="background:#059669;border:2px solid #fff;border-radius:50%;width:14px;height:14px;box-shadow:0 2px 8px rgba(5,150,105,0.6)"></div>',
+    iconSize: [14,14], iconAnchor: [7,7], className: ''
+  });
+
+  const bounds = [];
+
+  if (pickupCoords) {
+    pickupMarker = L.marker(pickupCoords, { icon: orangeIcon })
+      .addTo(liveMap)
+      .bindPopup(`<b>📦 Pickup</b><br>${data.pickup_address}`);
+    bounds.push(pickupCoords);
+  }
+  if (deliveryCoords) {
+    deliveryMarker = L.marker(deliveryCoords, { icon: greenIcon })
+      .addTo(liveMap)
+      .bindPopup(`<b>🏠 Delivery</b><br>${data.dropoff_address}`);
+    bounds.push(deliveryCoords);
+  }
+
+  if (data.driver_lat && data.driver_lng) {
+    updateDriverMarker(data.driver_lat, data.driver_lng);
+    bounds.push([data.driver_lat, data.driver_lng]);
+  }
+
+  if (bounds.length > 0) {
+    liveMap.fitBounds(bounds, { padding: [40, 40] });
+  }
+}
+
+function updateDriverMarker(lat, lng) {
+  if (!liveMap || !lat || !lng) return;
+
+  const driverIcon = L.divIcon({
+    html: `<div class="driver-marker-icon"></div>`,
+    iconSize: [22,22], iconAnchor: [11,11], className: ''
+  });
+
+  if (driverMarker) {
+    driverMarker.setLatLng([lat, lng]);
+  } else {
+    driverMarker = L.marker([lat, lng], { icon: driverIcon, zIndexOffset: 1000 })
+      .addTo(liveMap)
+      .bindPopup('🏍️ <b>Driver Location</b><br>Updated live');
+  }
+}
+
+function centerMap() {
+  if (!liveMap) return;
+  if (driverMarker) {
+    liveMap.setView(driverMarker.getLatLng(), 15);
+  }
+}
+
+async function startDriverTracking(deliveryId, initLat, initLng) {
+  if (initLat && initLng) updateDriverMarker(initLat, initLng);
+
+  // Poll Supabase for driver location every 10 seconds
+  if (mapGeoInterval) clearInterval(mapGeoInterval);
+  mapGeoInterval = setInterval(async () => {
+    const { data } = await sb.from('move_deliveries')
+      .select('driver_lat,driver_lng,status')
+      .eq('id', deliveryId)
+      .single();
+    if (data?.driver_lat && data?.driver_lng) {
+      updateDriverMarker(data.driver_lat, data.driver_lng);
+      document.getElementById('mapStatusText').textContent =
+        data.status === 'in_transit' ? '🟢 Driver Moving' :
+        data.status === 'delivered'  ? '✅ Delivered' : '🟡 Driver Ready';
+    }
+  }, 10000);
+}
+
+</script>
+</body>
+</html>

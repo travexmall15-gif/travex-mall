@@ -2,11 +2,6 @@
 
 import Link from 'next/link'
 
-export const metadata = {
-  title: 'Jiunge na Travex Mall — Fungua Duka Lako Tanzania',
-  description: 'Travex Mall ni soko la kidijitali la Tanzania. Fungua duka lako leo kwa TZS 10,000 - 25,000 kwa mwezi. Campus na Business Market. AI tools. Flash Deals na zaidi.',
-}
-
 export default function JoinPage() {
   return (
     <main style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", background: '#f8f9fc', minHeight: '100vh', color: '#0D1B3E' }}>

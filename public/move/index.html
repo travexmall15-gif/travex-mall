@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Travex Move — Fast Delivery Across Tanzania</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#080A0F;--dark:#0D1017;--navy:#0D1B3E;
+  --gold:#C9A84C;--orange:#F97316;--orange2:#FB923C;
+  --white:#fff;--gray:#6B7280;--muted:#9CA3AF;
+  --green:#059669;--red:#DC2626;--border:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",sans-serif;background:var(--black);color:#E8E9EB;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(8,10,15,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 5%}
+.nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:8px}
+.nav-logo{font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:900;color:var(--white)}
+.nav-logo span{color:var(--orange)}
+.nav-tag{font-size:9px;background:rgba(249,115,22,0.15);color:var(--orange);padding:2px 7px;border-radius:999px;font-weight:700;letter-spacing:.06em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);transition:.15s}
+.nav-link:hover{color:var(--orange)}
+.nav-actions{display:flex;gap:8px}
+.btn-sm{padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .2s}
+.btn-orange{background:var(--orange);color:#fff}
+.btn-orange:hover{background:var(--orange2);transform:translateY(-1px)}
+.btn-outline-sm{background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15)}
+.btn-outline-sm:hover{border-color:var(--orange);color:var(--orange)}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* HERO */
+.hero{min-height:100vh;background:var(--black);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:60px}
+.hero-orb1{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,0.12),transparent 70%);top:-15%;right:-10%;pointer-events:none}
+.hero-orb2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(13,27,62,0.6),transparent 70%);bottom:-10%;left:-5%;pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:4rem 5%;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+@media(max-width:900px){.hero-content{grid-template-columns:1fr}}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);color:var(--orange);padding:5px 14px;border-radius:999px;font-size:11px;font-weight:700;margin-bottom:20px;letter-spacing:.06em}
+.hero-h1{font-family:"Playfair Display",serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:900;line-height:1.1;margin-bottom:18px;color:#fff}
+.hero-h1 .hl{color:var(--orange)}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:32px;max-width:480px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
+.btn-big{padding:14px 28px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;border:none;font-family:inherit;transition:all .25s;display:inline-flex;align-items:center;gap:8px}
+.btn-big-orange{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;box-shadow:0 8px 24px rgba(249,115,22,0.35)}
+.btn-big-orange:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(249,115,22,0.45)}
+.btn-big-ghost{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8)}
+.btn-big-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.hs{text-align:left}
+.hs-num{font-family:"Playfair Display",serif;font-size:2rem;font-weight:900;color:#fff}
+.hs-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+/* LIVE STATS WIDGET */
+.hero-widget{background:rgba(13,16,23,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;backdrop-filter:blur(20px)}
+.hw-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.hw-title{font-size:13px;font-weight:700;color:#fff}
+.hw-live{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--green)}
+.hw-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.hw-metric{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
+.hw-m-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.hw-m-value{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;color:#fff}
+.hw-m-sub{font-size:11px;color:var(--green);margin-top:3px;font-weight:600}
+.hw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.hw-metric-sm{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px}
+.hw-m-sm-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.hw-m-sm-val{font-size:1.1rem;font-weight:800;color:#fff}
+.hw-delivery{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.hw-delivery:last-child{border-bottom:none}
+.hw-d-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hw-d-info{flex:1;font-size:11px;color:var(--muted);line-height:1.4}
+.hw-d-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px}
+
+/* VEHICLES SECTION */
+.section{padding:80px 5%}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-tag{display:inline-block;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);color:var(--orange);font-size:10px;font-weight:700;padding:4px 12px;border-radius:999px;letter-spacing:.08em;margin-bottom:12px}
+.section-h2{font-family:"Playfair Display",serif;font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:900;color:#fff;margin-bottom:8px}
+.section-sub{font-size:14px;color:var(--muted);max-width:500px;line-height:1.7}
+.vehicles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.1);border-radius:16px;overflow:hidden;margin-top:40px}
+.vc{background:var(--dark);padding:28px 20px;text-align:center;transition:background .25s;cursor:pointer}
+.vc:hover{background:rgba(249,115,22,0.06)}
+.vc-icon{font-size:2.5rem;margin-bottom:12px;display:block}
+.vc-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.vc-rate{font-size:11px;color:var(--orange);font-weight:600;margin-bottom:6px}
+.vc-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* HOW IT WORKS */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;margin-top:48px}
+.how-step{position:relative}
+.how-num{width:36px;height:36px;border-radius:50%;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--orange);margin-bottom:16px}
+.how-icon{font-size:28px;margin-bottom:10px}
+.how-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px}
+.how-desc{font-size:12px;color:var(--muted);line-height:1.65}
+
+/* INTEGRATION SECTION */
+.integration-card{background:var(--dark);border:1px solid var(--border);border-radius:20px;padding:40px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-top:48px}
+@media(max-width:700px){.integration-card{grid-template-columns:1fr}}
+.int-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);color:var(--gold);font-size:10px;font-weight:700;padding:4px 12px;border-radius:999px;margin-bottom:12px}
+.int-title{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:8px}
+.int-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.int-features{display:flex;flex-direction:column;gap:8px}
+.int-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.int-feat::before{content:"✓";color:var(--green);font-weight:900;flex-shrink:0}
+.int-cta{display:flex;flex-direction:column;gap:8px;min-width:180px}
+.btn-int{padding:12px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;width:100%;transition:all .2s;text-align:center;display:block}
+.btn-int-mall{background:linear-gradient(135deg,#0D1B3E,#1B3A8A);color:#fff}
+.btn-int-mall:hover{opacity:.9}
+.btn-int-move{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff}
+.btn-int-move:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(249,115,22,.3)}
+
+/* FOOTER */
+footer{padding:48px 5% 32px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center}
+.footer-brand{font-family:"Playfair Display",serif;font-size:1rem;font-weight:900;color:#fff}
+.footer-brand span{color:var(--orange)}
+.footer-links{display:flex;gap:20px}
+.footer-link{font-size:12px;color:var(--muted);transition:.15s}
+.footer-link:hover{color:var(--orange)}
+.footer-bottom{text-align:center;font-size:11px;color:rgba(255,255,255,0.25);margin-top:24px;padding-top:24px;border-top:1px solid var(--border);max-width:1200px;margin-left:auto;margin-right:auto}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">Travex <span>Move</span></div>
+      <div class="nav-tag">BETA</div>
+    </a>
+    <div class="nav-links">
+      <a href="#how" class="nav-link">How It Works</a>
+      <a href="#vehicles" class="nav-link">Vehicles</a>
+      <a href="#integration" class="nav-link">Travex Mall</a>
+    </div>
+    <div class="nav-actions">
+      <a href="driver.html" class="btn-sm btn-outline-sm">Become a Driver</a>
+      <a href="book.html" class="btn-sm btn-orange">Book Delivery</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-tag">🚚 TRAVEX MOVE — TANZANIA DELIVERY</div>
+      <h1 class="hero-h1">Deliver Anything<br>Across <span class="hl">Tanzania</span></h1>
+      <p class="hero-sub">Fast, reliable and affordable delivery for Travex Mall sellers and all businesses. Bodaboda, Bajaj, Pickup or Van — we move it.</p>
+      <div class="hero-btns">
+        <a href="book.html" class="btn-big btn-big-orange">📦 Book a Delivery</a>
+        <a href="driver.html" class="btn-big btn-big-ghost">🏍️ Become a Driver</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-num" id="statDrivers">—</div><div class="hs-lbl">Active Drivers</div></div>
+        <div class="hs"><div class="hs-num" id="statDeliveries">—</div><div class="hs-lbl">Deliveries Done</div></div>
+        <div class="hs"><div class="hs-num">4.9★</div><div class="hs-lbl">Avg Rating</div></div>
+      </div>
+    </div>
+
+    <!-- Live Widget -->
+    <div class="hero-widget">
+      <div class="hw-header">
+        <div class="hw-title">Live Activity</div>
+        <div class="hw-live"><div class="hw-dot"></div> LIVE</div>
+      </div>
+      <div class="hw-metric">
+        <div class="hw-m-label">Active Deliveries Right Now</div>
+        <div class="hw-m-value" id="liveActive">—</div>
+        <div class="hw-m-sub">▲ Updating live</div>
+      </div>
+      <div class="hw-grid">
+        <div class="hw-metric-sm">
+          <div class="hw-m-sm-lbl">Pending</div>
+          <div class="hw-m-sm-val" id="livePending">—</div>
+        </div>
+        <div class="hw-metric-sm">
+          <div class="hw-m-sm-lbl">Completed Today</div>
+          <div class="hw-m-sm-val" id="liveToday">—</div>
+        </div>
+      </div>
+      <div id="recentDeliveries"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how" style="background:var(--dark);border-top:1px solid var(--border)">
+  <div class="section-inner">
+    <div class="section-tag">HOW IT WORKS</div>
+    <h2 class="section-h2">Delivery in 4 Simple Steps</h2>
+    <p class="section-sub">From booking to delivery — fast, tracked and reliable every time.</p>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <div class="how-icon">📦</div>
+        <div class="how-title">Book Online</div>
+        <div class="how-desc">Enter pickup location, delivery address, and choose your vehicle type. Get instant fare estimate.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <div class="how-icon">🏍️</div>
+        <div class="how-title">Driver Assigned</div>
+        <div class="how-desc">A nearby verified driver accepts your delivery within minutes. You get their details via WhatsApp.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <div class="how-icon">📍</div>
+        <div class="how-title">Track Live</div>
+        <div class="how-desc">Use your tracking code to follow the delivery in real-time. Chat directly with the driver.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">4</div>
+        <div class="how-icon">✅</div>
+        <div class="how-title">Delivered</div>
+        <div class="how-desc">Package delivered safely. Pay driver on delivery (cash or mobile money). Rate the service.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VEHICLES -->
+<section class="section" id="vehicles">
+  <div class="section-inner">
+    <div class="section-tag">FLEET</div>
+    <h2 class="section-h2">Choose Your Vehicle</h2>
+    <p class="section-sub">From small packages to large cargo — we have the right vehicle for every delivery.</p>
+    <div class="vehicles-grid">
+      <div class="vc" onclick="location.href='book.html'">
+        <span class="vc-icon">🏍️</span>
+        <div class="vc-name">Bodaboda</div>
+        <div class="vc-rate">From TZS 3,000</div>
+        <div class="vc-desc">Small packages, documents, food. Fastest in traffic.</div>
+      </div>
+      <div class="vc" onclick="location.href='book.html'">
+        <span class="vc-icon">🛵</span>
+        <div class="vc-name">Bajaj / Tuk-Tuk</div>
+        <div class="vc-rate">From TZS 5,000</div>
+        <div class="vc-desc">Medium packages. Great for city deliveries.</div>
+      </div>
+      <div class="vc" onclick="location.href='book.html'">
+        <span class="vc-icon">🚗</span>
+        <div class="vc-name">Car / Sedan</div>
+        <div class="vc-rate">From TZS 8,000</div>
+        <div class="vc-desc">Fragile items, clothes, electronics. Secure delivery.</div>
+      </div>
+      <div class="vc" onclick="location.href='book.html'">
+        <span class="vc-icon">🛻</span>
+        <div class="vc-name">Pickup Truck</div>
+        <div class="vc-rate">From TZS 15,000</div>
+        <div class="vc-desc">Large orders, furniture, market goods. Up to 1 tonne.</div>
+      </div>
+      <div class="vc" onclick="location.href='book.html'">
+        <span class="vc-icon">🚐</span>
+        <div class="vc-name">Van / Minibus</div>
+        <div class="vc-rate">From TZS 20,000</div>
+        <div class="vc-desc">Bulk goods, wholesale orders. Air-conditioned available.</div>
+      </div>
+      <div class="vc" onclick="location.href='book.html'">
+        <span class="vc-icon">🚛</span>
+        <div class="vc-name">Lorry / Truck</div>
+        <div class="vc-rate">From TZS 50,000</div>
+        <div class="vc-desc">Construction, heavy goods, intercity. Max capacity.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAVEX MALL INTEGRATION -->
+<section class="section" id="integration" style="background:var(--dark);border-top:1px solid var(--border)">
+  <div class="section-inner">
+    <div class="section-tag">TRAVEX ECOSYSTEM</div>
+    <h2 class="section-h2">Powering Travex Mall Deliveries</h2>
+    <p class="section-sub">Every order on Travex Mall can be delivered by Travex Move — seamlessly connected.</p>
+    <div class="integration-card">
+      <div>
+        <div class="int-badge">🛍️ TRAVEX MALL → 🚚 TRAVEX MOVE</div>
+        <div class="int-title">One Click — Order to Doorstep</div>
+        <div class="int-desc">When a customer places an order on Travex Mall, the seller can instantly book a Travex Move delivery. All order details auto-fill. Driver is assigned. Customer tracked.</div>
+        <div class="int-features">
+          <div class="int-feat">Order details auto-fill from Travex Mall</div>
+          <div class="int-feat">Driver assigned within minutes</div>
+          <div class="int-feat">Customer gets tracking link via WhatsApp</div>
+          <div class="int-feat">Delivery status syncs back to Travex Mall</div>
+          <div class="int-feat">Works for Business Market & Campus Market</div>
+        </div>
+      </div>
+      <div class="int-cta">
+        <a href="https://travex-mall.vercel.app" class="btn-int btn-int-mall">🛍️ Go to Travex Mall</a>
+        <a href="book.html" class="btn-int btn-int-move">🚚 Book a Delivery</a>
+        <a href="track.html" class="btn-int" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);border:1px solid var(--border)">📍 Track Delivery</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Travex <span>Move</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">by Travex Digital Group (TDG)</div>
+    </div>
+    <div class="footer-links">
+      <a href="book.html" class="footer-link">Book Delivery</a>
+      <a href="driver.html" class="footer-link">Become Driver</a>
+      <a href="track.html" class="footer-link">Track Order</a>
+      <a href="https://travex-mall.vercel.app" class="footer-link">Travex Mall</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Travex Digital Group · Dar es Salaam, Tanzania · travexdigital15@gmail.com</div>
+</footer>
+
+<script>
+const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co';
+const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+async function loadLiveStats() {
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const [{ count: activeCount }, { count: totalCount }, { count: todayCount }, { count: driverCount }] = await Promise.all([
+    sb.from('move_deliveries').select('*',{count:'exact',head:true}).in('status',['accepted','in_transit']),
+    sb.from('move_deliveries').select('*',{count:'exact',head:true}),
+    sb.from('move_deliveries').select('*',{count:'exact',head:true}).gte('created_at',today.toISOString()),
+    sb.from('drivers').select('*',{count:'exact',head:true}).eq('status','active'),
+  ]);
+
+  document.getElementById('liveActive').textContent  = activeCount || 0;
+  document.getElementById('livePending').textContent = await getPending();
+  document.getElementById('liveToday').textContent   = todayCount || 0;
+  document.getElementById('statDrivers').textContent = driverCount || 0;
+  document.getElementById('statDeliveries').textContent = totalCount || 0;
+
+  // Recent deliveries
+  const { data: recent } = await sb.from('move_deliveries')
+    .select('pickup_area,delivery_area,status,vehicle').order('created_at',{ascending:false}).limit(3);
+
+  const colors = { accepted:'rgba(249,115,22,0.15)', in_transit:'rgba(5,150,105,0.15)', delivered:'rgba(5,150,105,0.15)', pending:'rgba(255,255,255,0.06)' };
+  const textColors = { accepted:'#FB923C', in_transit:'#10B981', delivered:'#10B981', pending:'#9CA3AF' };
+  const icons = { 'Bodaboda':'🏍️', 'Bajaj':'🛵', 'Car':'🚗', 'Pickup':'🛻', 'Van':'🚐', 'Lorry':'🚛' };
+
+  document.getElementById('recentDeliveries').innerHTML = (recent||[]).map(d => `
+    <div class="hw-delivery">
+      <div class="hw-d-dot" style="background:${textColors[d.status]||'#9CA3AF'}"></div>
+      <div class="hw-d-info">
+        ${icons[d.vehicle]||'🚚'} ${d.pickup_area||'—'} → ${d.delivery_area||'—'}
+      </div>
+      <div class="hw-d-status" style="background:${colors[d.status]||colors.pending};color:${textColors[d.status]||'#9CA3AF'}">
+        ${d.status||'pending'}
+      </div>
+    </div>
+  `).join('') || '<div style="font-size:12px;color:var(--muted);text-align:center;padding:12px">No deliveries yet today</div>';
+}
+
+async function getPending() {
+  const { count } = await sb.from('move_deliveries').select('*',{count:'exact',head:true}).eq('status','pending');
+  return count || 0;
+}
+
+loadLiveStats();
+setInterval(loadLiveStats, 10000);
+
+// Subscribe to real-time updates
+sb.channel('move_live').on('postgres_changes',{event:'*',schema:'public',table:'move_deliveries'},() => {
+  loadLiveStats();
+}).subscribe();
+</script>
+</body>
+</html>
