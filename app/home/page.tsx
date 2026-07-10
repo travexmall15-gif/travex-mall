@@ -163,50 +163,11 @@ export default function HomePage() {
                 <Link href="/vybe" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none' }}>
                   ✦ Explore Vybe
                 </Link>
-                <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.12)', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.82rem', textDecoration: 'none' }}>
-                  Post Now <ArrowRight size={13} />
+                <Link href="/vybe" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.12)', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.82rem', textDecoration: 'none' }}>
+                  Post in Social Vybe <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ SOCIAL VYBE (original style) ══ */}
-      <section style={{ position: 'relative', overflow: 'hidden', background: '#0A0A0F', padding: '5rem 5%' }}>
-        <div style={{ position: 'absolute', top: '-120px', left: '-100px', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,0,128,0.2),transparent 65%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-80px', right: '-80px', width: '450px', height: '450px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(120,0,255,0.18),transparent 65%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1.5px', background: 'linear-gradient(90deg,transparent,#FF0080,#7800FF,#00C8FF,transparent)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1.5px', background: 'linear-gradient(90deg,transparent,#00C8FF,#7800FF,#FF0080,transparent)' }} />
-
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', padding: '0.35rem 1.1rem', border: '1px solid rgba(255,0,128,0.35)', background: 'rgba(255,0,128,0.07)' }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#FF0080', flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.62rem', fontWeight: 700, color: 'rgba(255,0,128,0.85)', letterSpacing: '0.2em', textTransform: 'uppercase' as const }}>NEW INSIDE TRAVEX MALL</span>
-          </div>
-          <div style={{ marginBottom: '0.75rem', lineHeight: 0.88 }}>
-            <div className="bebas-big" style={{ fontFamily: "'Bebas Neue',cursive", fontSize: 'clamp(3.5rem,9vw,7.5rem)', color: '#fff', letterSpacing: '0.03em', display: 'block' }}>TRAVEX</div>
-            <div className="bebas-big" style={{ fontFamily: "'Bebas Neue',cursive", fontSize: 'clamp(3.5rem,9vw,7.5rem)', letterSpacing: '0.03em', color: '#C87BFF', display: 'block' }}>SOCIAL VYBE</div>
-          </div>
-          <div style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 'clamp(0.82rem,2vw,1.1rem)', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.25em', textTransform: 'uppercase' as const, marginBottom: '1.5rem' }}>Be Seen &nbsp;·&nbsp; Be Sold &nbsp;·&nbsp; Be Vybe</div>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(0.85rem,1.5vw,1rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.85, marginBottom: '2.5rem', maxWidth: '640px', marginLeft: 'auto', marginRight: 'auto', fontWeight: 300 }}>
-            Tanzania&apos;s first <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>Business Social Network</strong> — powered by Travex Mall. Post your products, grow your brand and connect directly with buyers across Tanzania.
-          </p>
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '3rem' }}>
-            <Link href="/vybe" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', padding: '0.9rem 2.2rem', fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none', borderRadius: '6px' }}>
-              ✦ Explore Social Vybe
-            </Link>
-            <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'rgba(255,255,255,0.6)', padding: '0.9rem 2.2rem', fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px' }}>
-              Post Your Business →
-            </Link>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', border: '1px solid rgba(255,255,255,0.06)' }}>
-            {[['POST', '#FF0080', 'Daily Content'], ['LIKE', '#7800FF', 'Real Engagement'], ['SELL', '#00C8FF', 'Direct to Buyers']].map(([word, color, sub], i, arr) => (
-              <div key={word} style={{ padding: '1rem 2.5rem', borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none', flex: 1, minWidth: '100px', textAlign: 'center' }}>
-                <div style={{ fontFamily: "'Bebas Neue',cursive", fontSize: '1.5rem', color, letterSpacing: '0.05em' }}>{word}</div>
-                <div style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: '0.58rem', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase' as const, letterSpacing: '0.12em', marginTop: '2px' }}>{sub}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
