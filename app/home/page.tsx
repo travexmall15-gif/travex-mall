@@ -17,11 +17,11 @@ export default function HomePage() {
           .hero-stats { gap: 1.5rem !important; }
           .hero-btns a { padding: 0.75rem 1.4rem !important; font-size: 0.82rem !important; }
           .market-cards { flex-direction: column !important; }
-          .market-card  { aspect-ratio: 1 / 1 !important; }
+          .market-card  { min-height: 320px !important; }
           .bebas-big { font-size: clamp(2.8rem, 12vw, 6rem) !important; }
           .footer-grid { grid-template-columns: 1fr 1fr !important; }
         }
-        .market-card { transition: all 0.28s ease; aspect-ratio: 1 / 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .market-card { transition: all 0.28s ease; display: flex; flex-direction: column; }
         .market-card:hover { transform: translateY(-6px); }
         .market-card.business:hover { box-shadow: 0 20px 50px rgba(201,168,76,0.18) !important; border-color: rgba(201,168,76,0.45) !important; }
         .market-card.campus:hover  { box-shadow: 0 20px 50px rgba(56,120,255,0.15) !important; border-color: rgba(96,165,250,0.40) !important; }
@@ -69,7 +69,7 @@ export default function HomePage() {
               Three Markets, <span style={{ color: '#C9A84C' }}>One Platform</span>
             </h2>
           </div>
-          <div className="market-cards" style={{ display: 'flex', gap: '1.5rem', alignItems: 'stretch' }}>
+          <div className="market-cards" style={{ display: 'flex', gap: '1.5rem', alignItems: 'stretch', minHeight: '420px' }}>
 
             {/* Business Market */}
             <div className="market-card business" style={{ flex: 1, background: '#FFFFFF', border: '2px solid rgba(201,168,76,0.20)', borderRadius: '24px', padding: '2.5rem 2rem', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 20px rgba(15,23,42,0.06)' }}>
@@ -176,42 +176,70 @@ export default function HomePage() {
 
 
       {/* ══ TOP RATED SHOPS ══ */}
-      <section style={{ background: '#F8FAFF', padding: '4rem 5%', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Featured</div>
+      <section style={{ background: '#F8FAFF', padding: '3.5rem 0', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0', overflow: 'hidden' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', paddingLeft: '5%', paddingRight: '5%' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Featured</div>
             <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 800, color: '#0F172A' }}>
               Top Rated <span style={{ color: '#C9A84C' }}>Shops</span>
             </h2>
-            <p style={{ color: '#64748B', fontSize: '0.88rem', marginTop: '0.5rem' }}>Discover the highest rated sellers on Travex Mall</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+        </div>
+        <style>{`
+          @keyframes shopScroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .shop-track { display: flex; gap: 1rem; animation: shopScroll 28s linear infinite; width: max-content; }
+          .shop-track:hover { animation-play-state: paused; }
+          .shop-item { width: 200px; flex-shrink: 0; background: #fff; border-radius: 16px; padding: 1.25rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.05); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; display: block; }
+          .shop-item:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(15,23,42,0.12); }
+          .shop-premium { border: 1.5px solid rgba(201,168,76,0.30); }
+          .shop-basic   { border: 1.5px solid #E2E8F0; }
+        `}</style>
+        <div style={{ overflow: 'hidden', padding: '0.5rem 0' }}>
+          <div className="shop-track">
             {[
-              { name: 'Fashion Hub DSM', cat: 'Fashion', region: 'Dar es Salaam', rating: '4.9', plan: 'premium' },
-              { name: 'Tech World', cat: 'Electronics', region: 'Mwanza', rating: '4.8', plan: 'premium' },
-              { name: 'Fresh Groceries', cat: 'Food', region: 'Arusha', rating: '4.8', plan: 'basic' },
-              { name: 'Beauty Palace', cat: 'Beauty', region: 'Dar es Salaam', rating: '4.7', plan: 'premium' },
-              { name: 'HomeStyle TZ', cat: 'Home & Living', region: 'Dodoma', rating: '4.7', plan: 'basic' },
-              { name: 'Sports Zone', cat: 'Sports', region: 'Dar es Salaam', rating: '4.6', plan: 'premium' },
+              { name: 'Fashion Hub DSM',   cat: 'Fashion',      region: 'Dar es Salaam', rating: '4.9', plan: 'premium' },
+              { name: 'Tech World TZ',     cat: 'Electronics',  region: 'Mwanza',        rating: '4.8', plan: 'premium' },
+              { name: 'Fresh Groceries',   cat: 'Food & Drink', region: 'Arusha',        rating: '4.8', plan: 'basic'   },
+              { name: 'Beauty Palace',     cat: 'Beauty',       region: 'Dar es Salaam', rating: '4.7', plan: 'premium' },
+              { name: 'HomeStyle TZ',      cat: 'Home & Living',region: 'Dodoma',        rating: '4.7', plan: 'basic'   },
+              { name: 'Sports Zone',       cat: 'Sports',       region: 'Dar es Salaam', rating: '4.6', plan: 'premium' },
+              { name: 'Book Corner',       cat: 'Education',    region: 'Morogoro',      rating: '4.6', plan: 'basic'   },
+              { name: 'Mama Lishe Pro',    cat: 'Food & Drink', region: 'Dar es Salaam', rating: '4.5', plan: 'premium' },
+              { name: 'Auto Parts DSM',    cat: 'Automotive',   region: 'Dar es Salaam', rating: '4.5', plan: 'basic'   },
+              { name: 'Kids Zone TZ',      cat: 'Kids & Toys',  region: 'Arusha',        rating: '4.5', plan: 'premium' },
+              // Duplicate for seamless loop
+              { name: 'Fashion Hub DSM',   cat: 'Fashion',      region: 'Dar es Salaam', rating: '4.9', plan: 'premium' },
+              { name: 'Tech World TZ',     cat: 'Electronics',  region: 'Mwanza',        rating: '4.8', plan: 'premium' },
+              { name: 'Fresh Groceries',   cat: 'Food & Drink', region: 'Arusha',        rating: '4.8', plan: 'basic'   },
+              { name: 'Beauty Palace',     cat: 'Beauty',       region: 'Dar es Salaam', rating: '4.7', plan: 'premium' },
+              { name: 'HomeStyle TZ',      cat: 'Home & Living',region: 'Dodoma',        rating: '4.7', plan: 'basic'   },
+              { name: 'Sports Zone',       cat: 'Sports',       region: 'Dar es Salaam', rating: '4.6', plan: 'premium' },
+              { name: 'Book Corner',       cat: 'Education',    region: 'Morogoro',      rating: '4.6', plan: 'basic'   },
+              { name: 'Mama Lishe Pro',    cat: 'Food & Drink', region: 'Dar es Salaam', rating: '4.5', plan: 'premium' },
+              { name: 'Auto Parts DSM',    cat: 'Automotive',   region: 'Dar es Salaam', rating: '4.5', plan: 'basic'   },
+              { name: 'Kids Zone TZ',      cat: 'Kids & Toys',  region: 'Arusha',        rating: '4.5', plan: 'premium' },
             ].map((shop, i) => (
-              <a key={i} href="/market" style={{ textDecoration: 'none', display: 'block', background: '#fff', border: `1.5px solid ${shop.plan === 'premium' ? 'rgba(201,168,76,0.25)' : '#E2E8F0'}`, borderRadius: '16px', padding: '1.25rem', transition: 'all 0.25s', cursor: 'pointer', boxShadow: '0 2px 8px rgba(15,23,42,0.04)' }}>
+              <a key={i} href="/market" className={`shop-item ${shop.plan === 'premium' ? 'shop-premium' : 'shop-basic'}`}>
                 <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg,#040C32,#071545)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.85rem' }}>
                   <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1rem', fontWeight: 900, color: '#C9A84C' }}>{shop.name.charAt(0)}</span>
                 </div>
-                <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0F172A', marginBottom: '0.3rem', lineHeight: 1.3 }}>{shop.name}</div>
-                <div style={{ fontSize: '0.7rem', color: '#94A3B8', marginBottom: '0.5rem' }}>📍 {shop.region}</div>
+                <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0F172A', marginBottom: '0.25rem', lineHeight: 1.3 }}>{shop.name}</div>
+                <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginBottom: '0.6rem' }}>📍 {shop.region}</div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.68rem', background: 'rgba(201,168,76,0.10)', color: '#A07830', padding: '0.15rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{shop.cat}</span>
+                  <span style={{ fontSize: '0.65rem', background: 'rgba(201,168,76,0.10)', color: '#A07830', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{shop.cat}</span>
                   <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#C9A84C' }}>⭐ {shop.rating}</span>
                 </div>
               </a>
             ))}
           </div>
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <a href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#0F172A', color: '#fff', padding: '0.8rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
-              View All Shops →
-            </a>
-          </div>
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '1.75rem' }}>
+          <a href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#0F172A', color: '#fff', padding: '0.75rem 1.75rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.83rem', textDecoration: 'none' }}>
+            View All Shops →
+          </a>
         </div>
       </section>
 
