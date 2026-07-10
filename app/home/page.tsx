@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { InstallButtons } from '@/components/install-buttons'
@@ -16,7 +17,7 @@ export default function HomePage() {
           .hero-stats { gap: 1.5rem !important; }
           .hero-btns a { padding: 0.75rem 1.4rem !important; font-size: 0.82rem !important; }
           .market-cards { flex-direction: column !important; }
-          .market-card  { aspect-ratio: auto !important; }
+          .market-card  { aspect-ratio: 1 / 1 !important; }
           .bebas-big { font-size: clamp(2.8rem, 12vw, 6rem) !important; }
           .footer-grid { grid-template-columns: 1fr 1fr !important; }
         }
@@ -172,6 +173,67 @@ export default function HomePage() {
         </div>
       </section>
 
+
+
+      {/* ══ TOP RATED SHOPS ══ */}
+      <section style={{ background: '#F8FAFF', padding: '4rem 5%', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Featured</div>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 800, color: '#0F172A' }}>
+              Top Rated <span style={{ color: '#C9A84C' }}>Shops</span>
+            </h2>
+            <p style={{ color: '#64748B', fontSize: '0.88rem', marginTop: '0.5rem' }}>Discover the highest rated sellers on Travex Mall</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+            {[
+              { name: 'Fashion Hub DSM', cat: 'Fashion', region: 'Dar es Salaam', rating: '4.9', plan: 'premium' },
+              { name: 'Tech World', cat: 'Electronics', region: 'Mwanza', rating: '4.8', plan: 'premium' },
+              { name: 'Fresh Groceries', cat: 'Food', region: 'Arusha', rating: '4.8', plan: 'basic' },
+              { name: 'Beauty Palace', cat: 'Beauty', region: 'Dar es Salaam', rating: '4.7', plan: 'premium' },
+              { name: 'HomeStyle TZ', cat: 'Home & Living', region: 'Dodoma', rating: '4.7', plan: 'basic' },
+              { name: 'Sports Zone', cat: 'Sports', region: 'Dar es Salaam', rating: '4.6', plan: 'premium' },
+            ].map((shop, i) => (
+              <a key={i} href="/market" style={{ textDecoration: 'none', display: 'block', background: '#fff', border: `1.5px solid ${shop.plan === 'premium' ? 'rgba(201,168,76,0.25)' : '#E2E8F0'}`, borderRadius: '16px', padding: '1.25rem', transition: 'all 0.25s', cursor: 'pointer', boxShadow: '0 2px 8px rgba(15,23,42,0.04)' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg,#040C32,#071545)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.85rem' }}>
+                  <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1rem', fontWeight: 900, color: '#C9A84C' }}>{shop.name.charAt(0)}</span>
+                </div>
+                <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0F172A', marginBottom: '0.3rem', lineHeight: 1.3 }}>{shop.name}</div>
+                <div style={{ fontSize: '0.7rem', color: '#94A3B8', marginBottom: '0.5rem' }}>📍 {shop.region}</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '0.68rem', background: 'rgba(201,168,76,0.10)', color: '#A07830', padding: '0.15rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{shop.cat}</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#C9A84C' }}>⭐ {shop.rating}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <a href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#0F172A', color: '#fff', padding: '0.8rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+              View All Shops →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── APP DOWNLOAD ── */}
+      <section style={{ background: '#F8F9FC', padding: '3.5rem 5%', borderTop: '1px solid #E8ECF4', borderBottom: '1px solid #E8ECF4' }}>
+        <div style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(201,168,76,0.10)', border: '1px solid rgba(201,168,76,0.35)', color: '#8a6a00', padding: '4px 14px', borderRadius: '999px', fontSize: '11px', fontWeight: 700, marginBottom: '1rem' }}>
+            📱 Available on Android & iOS
+          </div>
+          <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(1.4rem,3vw,2rem)', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.65rem', lineHeight: 1.2 }}>
+            Shop Smarter on the <span style={{ color: '#C9A84C' }}>Travex Mall App</span>
+          </h2>
+          <p style={{ color: '#64748B', fontSize: '14px', lineHeight: 1.75, marginBottom: '2rem' }}>
+            Install Travex Mall directly on your phone — no app store needed. Browse shops, place orders and sell from anywhere.
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <InstallButtons />
+          </div>
+          <p style={{ fontSize: '11px', color: '#94A3B8', marginTop: '1rem' }}>Free • No app store required • Works on all devices</p>
+        </div>
+      </section>
+
       {/* ══ FOOTER (original) ══ */}
       <footer style={{ background: '#060B18', color: 'rgba(255,255,255,0.55)', fontFamily: "'Inter',sans-serif" }}>
         <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem 5%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
@@ -220,76 +282,6 @@ export default function HomePage() {
           <p style={{ fontSize: '0.68rem', color: 'rgba(201,168,76,0.3)', fontStyle: 'italic' }}>Africa&apos;s Intelligent Business Ecosystem</p>
         </div>
       </footer>
-
-      {/* ── APP DOWNLOAD ── */}
-      <section style={{
-        background: 'linear-gradient(160deg,#010510 0%,#030920 50%,#050E2E 100%)',
-        padding: '4rem 5%', position: 'relative', overflow: 'hidden',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-      }}>
-        <div style={{
-          position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)',
-          width: '70%', height: '180%',
-          background: 'radial-gradient(ellipse at center,rgba(201,168,76,0.12) 0%,transparent 65%)',
-          filter: 'blur(50px)', pointerEvents: 'none',
-        }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', margin: '0 auto',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: '2rem' }}>
-
-          <div style={{ maxWidth: '420px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px',
-              background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)',
-              color: '#C9A84C', padding: '4px 12px', borderRadius: '999px',
-              fontSize: '11px', fontWeight: 700, marginBottom: '1rem' }}>
-              📱 Available on Android & iOS
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif",
-              fontSize: 'clamp(1.5rem,3.5vw,2.2rem)', fontWeight: 900,
-              color: '#fff', marginBottom: '0.75rem', lineHeight: 1.15 }}>
-              Shop Smarter on the{' '}
-              <span style={{ color: '#C9A84C' }}>Travex Mall App</span>
-            </h2>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px',
-              lineHeight: 1.75, marginBottom: '2rem' }}>
-              Install Travex Mall directly on your phone — no app store needed.
-              Browse shops, place orders and sell your products from anywhere.
-            </p>
-            <InstallButtons />
-            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.28)', marginTop: '1rem' }}>
-              Free • No app store required • Works on all devices
-            </p>
-          </div>
-
-          {/* Phone mockup */}
-          <div style={{ width: '190px', height: '340px', flexShrink: 0,
-            background: 'linear-gradient(160deg,#0A1858,#050B2E)',
-            borderRadius: '30px', border: '2px solid rgba(255,255,255,0.12)',
-            boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            justifyContent: 'center', gap: '8px', position: 'relative',
-            overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '12px', left: '50%',
-              transform: 'translateX(-50%)', width: '55px', height: '5px',
-              background: 'rgba(255,255,255,0.15)', borderRadius: '3px' }} />
-            <div style={{ fontSize: '26px', marginBottom: '4px' }}>🛍️</div>
-            <div style={{ fontFamily: "'Playfair Display',serif",
-              fontSize: '13px', fontWeight: 900, color: '#fff' }}>TRAVEX</div>
-            <div style={{ fontSize: '9px', color: '#C9A84C', fontWeight: 700, letterSpacing: '0.15em' }}>MALL</div>
-            <div style={{ width: '80%', height: '1px', background: 'rgba(255,255,255,0.1)', margin: '6px 0' }} />
-            {['🏪 Market','🎓 Campus','✦ Vybe'].map((item,i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,0.06)',
-                borderRadius: '7px', padding: '5px 16px', fontSize: '10px',
-                color: 'rgba(255,255,255,0.7)', width: '78%', textAlign: 'center' }}>
-                {item}
-              </div>
-            ))}
-            <div style={{ position: 'absolute', bottom: '8px', left: '50%',
-              transform: 'translateX(-50%)', width: '36px', height: '3px',
-              background: 'rgba(255,255,255,0.25)', borderRadius: '2px' }} />
-          </div>
-        </div>
-      </section>
     </main>
   )
 }
