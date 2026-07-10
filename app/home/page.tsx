@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { InstallButtons } from '@/components/install-buttons'
-import { ArrowRight, GraduationCap, Store } from 'lucide-react'
+import { ArrowRight, GraduationCap, Store, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
   return (
@@ -16,13 +16,15 @@ export default function HomePage() {
           .hero-stats { gap: 1.5rem !important; }
           .hero-btns a { padding: 0.75rem 1.4rem !important; font-size: 0.82rem !important; }
           .market-cards { flex-direction: column !important; }
+          .market-card  { aspect-ratio: auto !important; }
           .bebas-big { font-size: clamp(2.8rem, 12vw, 6rem) !important; }
           .footer-grid { grid-template-columns: 1fr 1fr !important; }
         }
-        .market-card { transition: all 0.28s ease; }
+        .market-card { transition: all 0.28s ease; aspect-ratio: 1 / 1; display: flex; flex-direction: column; justify-content: space-between; }
         .market-card:hover { transform: translateY(-6px); }
         .market-card.business:hover { box-shadow: 0 20px 50px rgba(201,168,76,0.18) !important; border-color: rgba(201,168,76,0.45) !important; }
         .market-card.campus:hover  { box-shadow: 0 20px 50px rgba(56,120,255,0.15) !important; border-color: rgba(96,165,250,0.40) !important; }
+        .market-card.vybe:hover    { box-shadow: 0 20px 50px rgba(120,0,255,0.20) !important; border-color: rgba(200,123,255,0.45) !important; }
       `}</style>
 
       <SiteNav />
@@ -63,7 +65,7 @@ export default function HomePage() {
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Our Markets</div>
             <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A' }}>
-              Two Markets, <span style={{ color: '#C9A84C' }}>One Platform</span>
+              Three Markets, <span style={{ color: '#C9A84C' }}>One Platform</span>
             </h2>
           </div>
           <div className="market-cards" style={{ display: 'flex', gap: '1.5rem', alignItems: 'stretch' }}>
@@ -130,6 +132,39 @@ export default function HomePage() {
                 </Link>
                 <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', boxShadow: '0 6px 16px rgba(201,168,76,0.28)' }}>
                   Login <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Social Vybe */}
+            <div className="market-card vybe" style={{ flex: 1, background: 'linear-gradient(160deg, #0D0015 0%, #1A0030 50%, #12001F 100%)', border: '2px solid rgba(200,123,255,0.20)', borderRadius: '24px', padding: '2.5rem 2rem', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 20px rgba(120,0,255,0.15)' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #FF0080, #7800FF, #00C8FF)' }} />
+              <div style={{ position: 'absolute', top: '-30%', right: '-20%', width: '70%', height: '100%', background: 'radial-gradient(ellipse at center, rgba(120,0,255,0.18) 0%, transparent 65%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
+              <div style={{ position: 'relative', zIndex: 1, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(200,123,255,0.12)', border: '1px solid rgba(200,123,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.4rem' }}>
+                <Sparkles style={{ width: '26px', height: '26px', color: '#C87BFF' }} />
+              </div>
+              <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(255,0,128,0.12)', color: '#FF80B5', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>✦ Social</span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(120,0,255,0.12)', color: '#C87BFF', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>🔥 Live</span>
+              </div>
+              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>Social Vybe</h3>
+              <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
+                Tanzania&apos;s first business social network. Post products, grow your brand and connect with buyers across Tanzania.
+              </p>
+              <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                {[['POST', 'Daily Content'], ['LIKE', 'Real Engagement'], ['SELL', 'Direct to Buyers']].map(([v, l]) => (
+                  <div key={l}>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 900, color: '#C87BFF', lineHeight: 1 }}>{v}</div>
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.30)', marginTop: '2px' }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <Link href="/vybe" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none' }}>
+                  ✦ Explore Vybe
+                </Link>
+                <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.12)', padding: '0.75rem 1.5rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.82rem', textDecoration: 'none' }}>
+                  Post Now <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
