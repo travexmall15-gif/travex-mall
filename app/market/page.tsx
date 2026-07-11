@@ -108,7 +108,7 @@ export default function MarketPage() {
                 One Market.<br /><span style={{ color: '#C9A84C' }}>{MARKET_TOTAL_SLOTS} Seller Slots.</span>
               </h1>
               <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.95rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.75, maxWidth: '480px' }}>
-                Tanzania's unified business marketplace — verified sellers, all categories, five regions.
+                Tanzania's unified business marketplace, verified sellers, all categories, five regions.
               </p>
             </div>
 
@@ -175,14 +175,14 @@ export default function MarketPage() {
             padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
             textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #FCD34D',
             boxShadow:'0 2px 8px rgba(245,158,11,0.2)' }}>
-            ⚡ Flash Deals — Limited Time
+            ⚡ Flash Deals, Limited Time
           </a>
           <a href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
             background:'linear-gradient(135deg,#DBEAFE,#BFDBFE)', color:'#1E40AF',
             padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
             textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #93C5FD',
             boxShadow:'0 2px 8px rgba(29,78,216,0.15)' }}>
-            👥 Group Buying — Save Together
+            👥 Group Buying, Save Together
           </a>
           <a href="/vybe" style={{ display:'inline-flex', alignItems:'center', gap:6,
             background:'linear-gradient(135deg,#EDE9FE,#DDD6FE)', color:'#5B21B6',
@@ -246,7 +246,7 @@ export default function MarketPage() {
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
             <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Be the first to open a shop on Travex Business Market!</p>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-              🎁 Open Shop →
+              Open Shop →
             </Link>
           </div>
         )}
@@ -302,7 +302,7 @@ export default function MarketPage() {
                 {slotsLeft} Slots Remaining
               </div>
               <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.75rem' }}>
-                Open your shop today — no payment required. Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo · Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo starting next month.
+                Open your shop today, no payment required. Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo · Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo starting next month.
               </p>
               <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
@@ -347,7 +347,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
         <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#0F172A', marginBottom: '0.35rem', lineHeight: 1.3 }}>{shop.shop_name}</div>
         <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
           {shop.shop_category && <span style={{ fontSize: '0.62rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>}
-          {shop.shop_region && <span style={{ fontSize: '0.62rem', background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.12rem 0.5rem', borderRadius: '999px' }}>📍 {shop.shop_region}</span>}
+          {shop.shop_region && <span style={{ fontSize: '0.62rem', background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.12rem 0.5rem', borderRadius: '999px' }}>{shop.shop_region}</span>}
         </div>
         {shop.shop_desc && (
           <p style={{ fontSize: '0.76rem', color: '#64748B', lineHeight: 1.55, marginBottom: '0.8rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>

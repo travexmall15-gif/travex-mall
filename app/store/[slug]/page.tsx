@@ -165,7 +165,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
         `💰 Total: *${fmt(total)}*\n\n` +
         `👤 Mteja: *${orderName}*\n` +
         `📱 Simu: *${orderPhone}*\n` +
-        (orderLocation ? `📍 Location: *${orderLocation}*\n` : '') +
+        (orderLocation ? `Location: *${orderLocation}*\n` : '') +
         (orderNotes ? `📝 Notes: ${orderNotes}\n` : '') +
         `\n_From Travex Mall_`
       )
@@ -338,7 +338,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
             border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, overflow: 'hidden', flexWrap: 'wrap' }}>
             {[
               ['🛍️', String(products.length), 'Products'],
-              ['⭐', '5.0', 'Rating'],
+              ['★', '5.0', 'Rating'],
               ['✅', 'Verified', 'Status'],
               ['⚡', 'Fast', 'Response'],
             ].map(([icon, val, label], i, arr) => (

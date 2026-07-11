@@ -15,8 +15,8 @@ export const viewport = {
 
 
 export const metadata: Metadata = {
-  title: 'Travex Mall — Tanzania\'s Digital Marketplace',
-  description: 'Travex Mall — Tanzania\'s intelligent digital marketplace. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying and more. Join Tanzania\'s digital marketplace.',
+  title: 'Travex Mall, Tanzania\'s Digital Marketplace',
+  description: 'Travex Mall, Tanzania\'s intelligent digital marketplace. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying and more. Join Tanzania\'s digital marketplace.',
   keywords: 'Tanzania marketplace, campus market, student shop, Travex Mall, online store Tanzania',
   manifest: '/manifest.json',
   appleWebApp: {
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Playfair Display (headings) + Inter (body) — consistent across ALL pages */}
+        {/* Playfair Display (headings) + Inter (body), consistent across ALL pages */}
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"

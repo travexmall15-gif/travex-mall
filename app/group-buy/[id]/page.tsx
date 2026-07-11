@@ -122,7 +122,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
             style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8,
               background:'#25D366', color:'#fff', borderRadius:999, padding:'11px',
               fontWeight:700, fontSize:13, textDecoration:'none', marginBottom:8 }}>
-            <MessageCircle size={15} /> Share on WhatsApp — Invite Friends
+            <MessageCircle size={15} /> Share on WhatsApp, Invite Friends
           </a>
         </div>
 

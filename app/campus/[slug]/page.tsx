@@ -10,7 +10,7 @@ import { sb, type CampusStore, fmtTZS } from '@/lib/supabase'
 import { getUniversity } from '@/lib/data'
 import { MapPin, ArrowLeft, Search, MessageCircle, ExternalLink, ShieldCheck, Store } from 'lucide-react'
 
-// Distinct color palettes — index-based so every card looks different
+// Distinct color palettes, index-based so every card looks different
 const CARD_PALETTES = [
   { bg: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', accent: '#60A5FA', text: '#fff' },
   { bg: 'linear-gradient(135deg,#7C2D12,#C2410C)', accent: '#FB923C', text: '#fff' },

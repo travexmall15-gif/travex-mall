@@ -28,7 +28,7 @@ export default function JoinPage() {
           <span style={{ color: '#C9A84C' }}>Travex Mall</span>
         </h1>
         <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', color: 'rgba(255,255,255,0.7)', maxWidth: 520, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
-          Soko la kwanza la kidijitali Tanzania lenye AI — kwa wanafunzi na wafanyabiashara. Wauza bidhaa zako mtandaoni leo hii, ufikia wateja zaidi.
+          Soko la kwanza la kidijitali Tanzania lenye AI, kwa wanafunzi na wafanyabiashara. Wauza bidhaa zako mtandaoni leo hii, ufikia wateja zaidi.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/open-store" style={{ background: '#C9A84C', color: '#0D1B3E', fontWeight: 800, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -58,12 +58,12 @@ export default function JoinPage() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
           {[
-            { n: '1', icon: '📝', t: 'Omba Duka', d: 'Jaza fomu rahisi ya online — jina, bidhaa, mkoa wako. Inachukua dakika 3 tu.' },
+            { n: '1', icon: '📝', t: 'Omba Duka', d: 'Jaza fomu rahisi ya online, jina, bidhaa, mkoa wako. Inachukua dakika 3 tu.' },
             { n: '2', icon: '✅', t: 'Tathmini na Admin', d: 'Timu yetu inakipitia ombi lako. Jibu ndani ya saa 24. Utapata ujumbe wa WhatsApp.' },
             { n: '3', icon: '🔑', t: 'Pata Login', d: 'Ukiapprove, utapata namba ya simu yako na password kupitia WhatsApp. Ingia dashboard yako.' },
             { n: '4', icon: '📦', t: 'Weka Bidhaa', d: 'Pakia bidhaa zako na picha. Duka lako linaonekana kwenye soko mara moja.' },
             { n: '5', icon: '💰', t: 'Pokea Maagizo', d: 'Wateja wanaagiza bidhaa, unapata arifa papo hapo. Wasiliana nao kupitia WhatsApp.' },
-            { n: '6', icon: '📈', t: 'Kukua na AI', d: 'Tumia AI tools — maelezo ya bidhaa, ushauri wa bei, machapisho ya mitandao ya kijamii.' },
+            { n: '6', icon: '📈', t: 'Kukua na AI', d: 'Tumia AI tools, maelezo ya bidhaa, ushauri wa bei, machapisho ya mitandao ya kijamii.' },
           ].map(s => (
             <div key={s.n} style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', border: '1px solid #E8ECF4', boxShadow: '0 2px 12px rgba(13,27,62,0.04)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem' }}>
@@ -109,7 +109,7 @@ export default function JoinPage() {
                   <div style={{ fontWeight: 800, color: '#C9A84C', marginBottom: 4 }}>🥇 Mpango wa Premium</div>
                   <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', fontWeight: 900, color: '#C9A84C', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.4)' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    {['Kila kitu cha Basic', 'Duka linaonekana kwanza', 'Flash Deals & Group Buy', 'AI Marketing Manager', 'Ripoti za biashara'].map(f => (
+                    {['Kila kitu cha Basic', 'Duka linaonekana kwanza', 'Flash Deals &Group Buy', 'AI Marketing Manager', 'Ripoti za biashara'].map(f => (
                       <li key={f} style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', display: 'flex', gap: 6 }}>
                         <span style={{ color: '#C9A84C' }}>✓</span> {f}
                       </li>
@@ -160,7 +160,7 @@ export default function JoinPage() {
       <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', maxWidth: 900, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: '#C9A84C', marginBottom: 8 }}>TEKNOLOJIA YA AI</div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 900, color: '#0D1B3E' }}>Vifaa vya AI — Bila Malipo</h2>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 900, color: '#0D1B3E' }}>Vifaa vya AI, Bila Malipo</h2>
           <p style={{ fontSize: '0.9rem', color: '#64748B', maxWidth: 500, margin: '0.75rem auto 0' }}>Kila duka linapatia vifaa vya AI bila gharama ya ziada</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>

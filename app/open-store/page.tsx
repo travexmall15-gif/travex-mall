@@ -97,7 +97,7 @@ export default function OpenStorePage() {
             {/* Features */}
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.75rem', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
               {[
-                'Nationwide reach — 5 regions',
+                'Nationwide reach, 5 regions',
                 'Basic TZS 25K/mo · Premium TZS 45K/mo',
                 'AI seller tools (Premium)',
                 'WhatsApp order system',
@@ -141,7 +141,7 @@ export default function OpenStorePage() {
               Campus Market
             </h2>
             <p style={{ fontSize: '0.86rem', color: '#64748B', lineHeight: 1.70, marginBottom: '1.5rem', flexGrow: 1 }}>
-              Exclusively for university students. Sell directly to your fellow students on campus. 60 slots per university — limited availability.
+              Exclusively for university students. Sell directly to your fellow students on campus. 60 slots per university, limited availability.
             </p>
 
             {/* Features */}

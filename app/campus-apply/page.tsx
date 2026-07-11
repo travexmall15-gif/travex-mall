@@ -101,7 +101,7 @@ export default function CampusApplyPage() {
         .select('id').order('created_at', { ascending: false }).limit(1).single()
 
       await sb.from('admin_notifications').insert({
-        title: `New Campus Application — ${form.storeName}`,
+        title: `New Campus Application, ${form.storeName}`,
         body:  `${form.ownerName} from ${form.university} wants to open a campus shop.`,
         type:  'campus_application',
         is_read: false,
@@ -304,7 +304,7 @@ export default function CampusApplyPage() {
             </>
           )}
 
-          {/* ── STEP 3 — Review ── */}
+          {/* ── STEP 3, Review ── */}
           {step === 3 && (
             <>
               <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem',

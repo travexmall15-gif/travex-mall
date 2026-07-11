@@ -103,7 +103,7 @@ export default function GroupBuyPage() {
           <div style={{ display:'inline-flex', alignItems:'center', gap:6, marginBottom:8,
             background:'rgba(255,255,255,0.15)', padding:'4px 12px', borderRadius:999,
             fontSize:11, fontWeight:700 }}>
-            <Users size={12} /> NUNUA PAMOJA — GROUP BUYING
+            <Users size={12} /> NUNUA PAMOJA, GROUP BUYING
           </div>
           <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:'clamp(1.8rem,4vw,2.8rem)', fontWeight:900, marginBottom:8 }}>
             👥 Buy Together, Save More
