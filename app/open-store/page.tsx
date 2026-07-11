@@ -54,13 +54,13 @@ export default function OpenStorePage() {
 
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '600px', margin: '0 auto' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)', color: '#C9A84C', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.70rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.4rem' }}>
-            🎁 Free Registration — This Month
+            Open Your Store Today
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2rem,5vw,3.2rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
             Open Your <span style={{ color: '#C9A84C' }}>Store</span>
           </h1>
           <p style={{ fontSize: 'clamp(0.88rem,1.6vw,1rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.78, maxWidth: '420px', margin: '0 auto' }}>
-            Choose the market that fits you best. Both are free this month — no payment required.
+            Choose the market that fits your business. Select your plan and get started.
           </p>
         </div>
       </section>
@@ -111,8 +111,8 @@ export default function OpenStorePage() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg, #040C32, #071545)', borderRadius: '14px', padding: '1rem 1.25rem' }}>
               <div>
-                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>This month</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>FREE</div>
+                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monthly</div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>JOIN</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.2rem', borderRadius: '999px', fontSize: '0.80rem', fontWeight: 700 }}>
                 Apply Now <ArrowRight style={{ width: '14px', height: '14px' }} />

@@ -108,7 +108,7 @@ export default function MarketPage() {
                 One Market.<br /><span style={{ color: '#C9A84C' }}>{MARKET_TOTAL_SLOTS} Seller Slots.</span>
               </h1>
               <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.95rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.75, maxWidth: '480px' }}>
-                Tanzania's unified business marketplace — verified sellers, all categories, five regions. <span style={{ color: '#86EFAC', fontWeight: 600 }}>Free registration this month.</span>
+                Tanzania's unified business marketplace — verified sellers, all categories, five regions.
               </p>
             </div>
 
@@ -128,7 +128,7 @@ export default function MarketPage() {
             {[
               ['🥇', String(shops.filter(s => s.plan === 'premium').length), 'Premium Shops', '#C9A84C'],
               ['🥈', String(shops.filter(s => s.plan === 'basic').length), 'Basic Shops', 'rgba(255,255,255,0.55)'],
-              ['🎁', 'FREE', 'Registration', '#86EFAC'],
+              ['✅', 'OPEN', 'Registration', '#86EFAC'],
               ['📍', '5', 'Regions', 'rgba(255,255,255,0.55)'],
             ].map(([icon, val, label, color]) => (
               <div key={label} style={{ flex: 1, minWidth: '120px', paddingRight: '1.5rem' }}>
@@ -148,19 +148,19 @@ export default function MarketPage() {
                 <span>🥈</span>
                 <div>
                   <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>Basic Plan</div>
-                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Silver badge · {formatTZS(MARKET_BASIC_PRICE)}/mo (free now)</div>
+                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Silver badge · {formatTZS(MARKET_BASIC_PRICE)}/mo </div>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <span>🥇</span>
                 <div>
                   <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C9A84C' }}>Premium Plan</div>
-                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Gold badge · Top listing · {formatTZS(MARKET_PREMIUM_PRICE)}/mo (free now)</div>
+                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Gold badge · Top listing · {formatTZS(MARKET_PREMIUM_PRICE)}/mo </div>
                 </div>
               </div>
             </div>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.65rem 1.75rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, boxShadow: '0 6px 18px rgba(201,168,76,0.30)' }}>
-              <Store size={14} /> Open Free Shop <ArrowRight size={13} />
+              <Store size={14} /> Open Shop <ArrowRight size={13} />
             </Link>
           </div>
         </div>
@@ -246,7 +246,7 @@ export default function MarketPage() {
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
             <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Be the first to open a shop on Travex Business Market!</p>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-              🎁 Open Free Shop →
+              🎁 Open Shop →
             </Link>
           </div>
         )}
@@ -297,7 +297,7 @@ export default function MarketPage() {
           <div style={{ marginTop: '4rem', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)', borderRadius: '24px', padding: '3rem 2.5rem', textAlign: 'center' }}>
             <div style={{ position: 'absolute', top: '-25%', right: '-5%', width: '55%', height: '120%', background: 'radial-gradient(ellipse 60% 60% at 65% 30%, rgba(56,120,255,0.40) 0%, transparent 65%)', filter: 'blur(30px)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#C9A84C,#F0C96B)', color: '#0F172A', padding: '0.35rem 1.2rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 800, marginBottom: '1rem' }}>🎁 Free Registration — This Month Only</div>
+              <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#C9A84C,#F0C96B)', color: '#0F172A', padding: '0.35rem 1.2rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 800, marginBottom: '1rem' }}>✅ Open Your Shop Today</div>
               <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.3rem, 3vw, 2rem)', fontWeight: 800, color: '#fff', marginBottom: '0.75rem' }}>
                 {slotsLeft} Slots Remaining
               </div>
@@ -306,10 +306,10 @@ export default function MarketPage() {
               </p>
               <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-                  🥇 Open Premium Shop — Free
+                  🥇 Open Premium Shop
                 </Link>
                 <Link href="/open-store" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.18)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-                  🥈 Open Basic Shop — Free
+                  🥈 Open Basic Shop
                 </Link>
               </div>
             </div>

@@ -210,7 +210,7 @@ export default function CampusApplyPage() {
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.7rem',
             fontWeight: 900, color: '#fff', marginBottom: 8 }}>Open Your Campus Shop</h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
-            Free this month — TZS 10,000/month after
+            TZS 10,000/month
           </p>
         </div>
 
@@ -331,7 +331,7 @@ export default function CampusApplyPage() {
                 borderRadius: 10, padding: '12px 14px', marginBottom: '1.25rem',
               }}>
                 <div style={{ fontSize: 13, color: '#C9A84C', fontWeight: 700, marginBottom: 4 }}>
-                  🎁 Free This Month!
+                  ✅ Register Now
                 </div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)', lineHeight: 1.6 }}>
                   Your shop will go live within 24 hours after approval.

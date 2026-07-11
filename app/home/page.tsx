@@ -45,7 +45,7 @@ export default function HomePage() {
           </p>
           <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.2rem' }}>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
-              🎁 Open Free →
+              🛒 Enter Travex Mall
             </Link>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
@@ -79,7 +79,7 @@ export default function HomePage() {
               <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(201,168,76,0.10)', color: '#A07830', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>🥇 Premium</span>
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>🥈 Basic</span>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.10)', color: '#065F46', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>🎁 Free Now</span>
+                
               </div>
               <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>Business Market</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.72, marginBottom: '1.5rem' }}>
