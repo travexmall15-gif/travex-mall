@@ -1,4 +1,5 @@
 'use client'
+import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { ArrowRight, GraduationCap, Store, Sparkles } from 'lucide-react'
@@ -241,55 +242,7 @@ export default function HomePage() {
           </a>
         </div>
       </section>
-
-      {/* ══ FOOTER (original) ══ */}
-      <footer style={{ background: '#060B18', color: 'rgba(255,255,255,0.55)', fontFamily: "'Inter',sans-serif" }}>
-        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem 5%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '0.3rem' }}>Parent Company</div>
-            <div style={{ fontFamily: "'Playfair Display',serif", fontWeight: 800, fontSize: '1.1rem', color: '#fff' }}>TRAVEX <span style={{ color: '#C9A84C' }}>DIGITAL GROUP</span></div>
-            <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', marginTop: '0.15rem' }}>Innovate · Connect · Grow</div>
-          </div>
-          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-            {[['🏪 Travex Mall', '/'], ['🎓 Travex Campus', '/campus'], ['🏨 Travex Stay', '#'], ['🚚 Travex Move', '#']].map(([label, href]) => (
-              <Link key={label} href={href} style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', padding: '0.35rem 0.85rem', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', textDecoration: 'none' }}>
-                {label}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div className="footer-grid" style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 5%', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '2.5rem' }}>
-          <div>
-            <div style={{ fontFamily: "'Playfair Display',serif", fontWeight: 800, fontSize: '1rem', color: '#fff', marginBottom: '0.75rem' }}>TRAVEX <span style={{ color: '#C9A84C' }}>MALL</span></div>
-            <p style={{ fontSize: '0.8rem', lineHeight: 1.7, color: 'rgba(255,255,255,0.4)', marginBottom: '1.25rem', maxWidth: '300px' }}>Africa&apos;s intelligent digital marketplace — empowering businesses and students across Tanzania and beyond.</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <a href="mailto:travexmall15@gmail.com" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>📧 travexmall15@gmail.com</a>
-              <a href="https://wa.me/255651919915" target="_blank" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>💬 +255 651 919 915</a>
-              <a href="https://wa.me/255657575950" target="_blank" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>💬 +255 657 575 950</a>
-            </div>
-          </div>
-          {[
-            ['Products', [['Travex Mall', '/'], ['Travex Campus', '/campus'], ['Social Vybe', '/vybe'], ['Business Market', '/market']]],
-            ['Company', [['Travex Digital Group', 'https://travex-digital-group.vercel.app'], ['Our Story', '#'], ['Our Team', '#'], ['Contact TDG', '#']]],
-            ['Support', [['Email Support', 'mailto:travexmall15@gmail.com'], ['WhatsApp 1', 'https://wa.me/255651919915'], ['WhatsApp 2', 'https://wa.me/255657575950'], ['Open Shop', '/campus-apply']]],
-          ].map(([title, links]) => (
-            <div key={title as string}>
-              <h4 style={{ fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '1rem' }}>{title as string}</h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {(links as [string, string][]).map(([l, h]) => (
-                  <li key={l}><a href={h} style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>{l}</a></li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '1.25rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.25)' }}>
-            © 2026 <a href="https://travex-digital-group.vercel.app" target="_blank" style={{ color: '#C9A84C', textDecoration: 'none', fontWeight: 700 }}>Travex Digital Group</a>. All rights reserved.
-          </p>
-          <p style={{ fontSize: '0.68rem', color: 'rgba(201,168,76,0.3)', fontStyle: 'italic' }}>Africa&apos;s Intelligent Business Ecosystem</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   )
 }

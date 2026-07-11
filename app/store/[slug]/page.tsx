@@ -1,4 +1,5 @@
 'use client'
+import { SiteFooter } from '@/components/site-footer'
 
 import Image from 'next/image'
 
@@ -594,6 +595,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
         </div>
       )}
       {store && <AIChatWidget storeId={store.id} shopName={store.shop_name} />}
+      <SiteFooter />
     </main>
   )
 }

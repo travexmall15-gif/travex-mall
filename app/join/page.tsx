@@ -1,4 +1,5 @@
 'use client'
+import { SiteFooter } from '@/components/site-footer'
 
 import Link from 'next/link'
 
@@ -187,14 +188,7 @@ export default function JoinPage() {
           </Link>
         </div>
       </section>
-
-      {/* ── FOOTER ── */}
-      <footer style={{ background: '#0D1B3E', padding: '2rem 1.5rem', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <img src="/icon-192.png" alt="Travex" width={40} height={40} style={{ borderRadius: 10, marginBottom: 12 }} />
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', margin: 0 }}>
-          © 2026 Travex Digital Group · <a href="mailto:travexdigital15@gmail.com" style={{ color: '#C9A84C', textDecoration: 'none' }}>travexdigital15@gmail.com</a> · +255 651 919 915
-        </p>
-      </footer>
+      <SiteFooter />
 
     </main>
   )

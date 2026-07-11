@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { ArrowRight, GraduationCap, Store, CheckCircle } from 'lucide-react'
@@ -176,6 +177,7 @@ export default function OpenStorePage() {
           Not sure which to choose? <Link href="/market" style={{ color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>Browse Business Market</Link> or <Link href="/campus" style={{ color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>Browse Campus Market</Link> first.
         </p>
       </section>
+      <SiteFooter />
     </main>
   )
 }

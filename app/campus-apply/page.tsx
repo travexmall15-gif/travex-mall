@@ -1,4 +1,5 @@
 'use client'
+import { SiteFooter } from '@/components/site-footer'
 
 import React from 'react'
 import { useState } from 'react'
@@ -390,6 +391,7 @@ export default function CampusApplyPage() {
           Questions? <a href="https://wa.me/255651919915" target="_blank" style={{ color: '#C9A84C' }}>Contact us on WhatsApp</a>
         </p>
       </div>
+      <SiteFooter />
     </main>
   )
 }
