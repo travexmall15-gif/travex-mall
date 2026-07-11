@@ -1,7 +1,27 @@
+import type { Metadata } from 'next'
 import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { ArrowRight, GraduationCap, Store, CheckCircle } from 'lucide-react'
+
+export const metadata = {
+  title: "Open Your Store — Sell Online in Tanzania | Travex Mall",
+  description: "Open your online store on Travex Mall. Reach customers across Tanzania with Business Market or Campus Market. Start selling today.",
+  openGraph: {
+    title: "Open Your Store — Sell Online in Tanzania | Travex Mall",
+    description: "Open your online store on Travex Mall. Reach customers across Tanzania with Business Market or Campus Market. Start selling today.",
+    url: "https://travex-mall.vercel.app/open-store",
+    siteName: "Travex Mall",
+    locale: "en_TZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Open Your Store — Sell Online in Tanzania | Travex Mall",
+    description: "Open your online store on Travex Mall. Reach customers across Tanzania with Business Market or Campus Market. Start selling today.",
+  },
+  alternates: { canonical: "https://travex-mall.vercel.app/open-store" },
+}
 
 export default function OpenStorePage() {
   return (
