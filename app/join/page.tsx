@@ -177,39 +177,6 @@ export default function JoinPage() {
           ))}
         </div>
       </section>
-
-      {/* ── DOWNLOAD APP ── */}
-      <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', background: '#0D1B3E', textAlign: 'center' }}>
-        <div style={{ maxWidth: 600, margin: '0 auto' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: '#C9A84C', marginBottom: 8 }}>PROGRAMU YA SIMU</div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 900, color: '#fff', marginBottom: '0.75rem' }}>
-            Pakua App ya Travex Mall
-          </h2>
-          <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: '2rem' }}>
-            App ya kweli ya Android — inafunguka kama programu ya kawaida, bila URL bar. Share kupitia Xender, WhatsApp au Google Drive.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/Travex_Mall.apk" download style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: '#000', color: '#fff', padding: '0.875rem 1.5rem', borderRadius: 14, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', minWidth: 180 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.341l-.002-.001-.003-.002L12 7.5l-5.518 7.838-.002.001a5.5 5.5 0 1 0 11.043 0zM12 3L2 19h20L12 3z"/></svg>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1, marginBottom: 2 }}>PAKUA KWA</div>
-                <div style={{ fontSize: '1rem', fontWeight: 700, lineHeight: 1 }}>Android APK</div>
-              </div>
-            </a>
-            <button onClick={() => alert('Kwa iPhone/iOS:\n\n1. Fungua travex-mall.vercel.app kwenye Safari\n2. Gonga Share (□↑) chini\n3. Gonga "Add to Home Screen"\n4. Gonga Add — Imemaliza! ✅')} style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: '#000', color: '#fff', padding: '0.875rem 1.5rem', borderRadius: 14, cursor: 'pointer', border: '1px solid rgba(255,255,255,0.2)', minWidth: 180, fontFamily: 'inherit' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1, marginBottom: 2 }}>WEKA KWENYE</div>
-                <div style={{ fontSize: '1rem', fontWeight: 700, lineHeight: 1 }}>iPhone / iOS</div>
-              </div>
-            </button>
-          </div>
-          <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', marginTop: '1.5rem' }}>
-            Au tembelea moja kwa moja: <a href="https://travex-mall.vercel.app" style={{ color: '#C9A84C', textDecoration: 'none' }}>travex-mall.vercel.app</a>
-          </p>
-        </div>
-      </section>
-
       {/* ── LOGIN ── */}
       <section style={{ padding: 'clamp(2rem,5vw,3rem) 1.5rem', textAlign: 'center', background: '#F0F4FF' }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>

@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
-import { InstallButtons } from '@/components/install-buttons'
 import { ArrowRight, GraduationCap, Store, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
@@ -240,25 +239,6 @@ export default function HomePage() {
           <a href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#0F172A', color: '#fff', padding: '0.75rem 1.75rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.83rem', textDecoration: 'none' }}>
             View All Shops →
           </a>
-        </div>
-      </section>
-
-      {/* ── APP DOWNLOAD ── */}
-      <section style={{ background: '#F8F9FC', padding: '3.5rem 5%', borderTop: '1px solid #E8ECF4', borderBottom: '1px solid #E8ECF4' }}>
-        <div style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(201,168,76,0.10)', border: '1px solid rgba(201,168,76,0.35)', color: '#8a6a00', padding: '4px 14px', borderRadius: '999px', fontSize: '11px', fontWeight: 700, marginBottom: '1rem' }}>
-            📱 Available on Android & iOS
-          </div>
-          <h2 style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 'clamp(1.4rem,3vw,2rem)', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.65rem', lineHeight: 1.2 }}>
-            Shop Smarter on the <span style={{ color: '#C9A84C' }}>Travex Mall App</span>
-          </h2>
-          <p style={{ color: '#64748B', fontSize: '14px', lineHeight: 1.75, marginBottom: '2rem' }}>
-            Install Travex Mall directly on your phone — no app store needed. Browse shops, place orders and sell from anywhere.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <InstallButtons />
-          </div>
-          <p style={{ fontSize: '11px', color: '#94A3B8', marginTop: '1rem' }}>Free • No app store required • Works on all devices</p>
         </div>
       </section>
 
