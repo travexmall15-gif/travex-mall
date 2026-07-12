@@ -1,4 +1,3 @@
-// trigger-redeploy
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
@@ -12,81 +11,169 @@ const CLAUDE_KEY = process.env.ANTHROPIC_API_KEY || ''
 export async function POST(req: Request) {
   const { store_id, message, session_id, history } = await req.json()
 
-  // Get store info + products
-  const { data: products } = await sb.from('campus_products')
-    .select('name,price,stock,description,category')
-    .eq('store_id', store_id).gt('stock', 0).limit(20)
+  // ── Fetch ALL store data in parallel ─────────────────────────────
+  const [
+    { data: storeData },
+    { data: campusData },
+    { data: products },
+    { data: campusProducts },
+    { data: orders },
+    { data: vybePostsData },
+  ] = await Promise.all([
+    sb.from('pending_payments')
+      .select('shop_name,shop_desc,shop_category,shop_region,owner_name,owner_phone,shop_whatsapp,plan,shop_color,created_at')
+      .eq('id', store_id).maybeSingle(),
 
-  const { data: storeData } = await sb.from('pending_payments')
-    .select('shop_name,shop_desc,shop_category,owner_phone,shop_whatsapp')
-    .eq('id', store_id).maybeSingle()
+    sb.from('campus_stores')
+      .select('store_name,description,category,university_abbr,whatsapp,phone,created_at')
+      .eq('id', store_id).maybeSingle(),
 
-  const { data: campusStore } = !storeData ? await sb.from('campus_stores')
-    .select('store_name,description,category,whatsapp,phone')
-    .eq('id', store_id).maybeSingle() : { data: null }
+    sb.from('campus_products')
+      .select('name,price,stock,description,category,image_url')
+      .eq('store_id', store_id)
+      .gt('stock', 0)
+      .order('created_at', { ascending: false })
+      .limit(50),
 
-  const shop = storeData || {
-    shop_name: campusStore?.store_name,
-    shop_desc: campusStore?.description,
-    owner_phone: campusStore?.phone,
-    shop_whatsapp: campusStore?.whatsapp,
-  }
+    sb.from('products')
+      .select('name,price,stock,description,category,image_url')
+      .eq('store_id', store_id)
+      .gt('stock', 0)
+      .order('created_at', { ascending: false })
+      .limit(50)
+      .then(r => r).catch(() => ({ data: null })),
 
-  const productList = (products || []).map(p =>
-    `- ${p.name}: TZS ${Number(p.price).toLocaleString()} (${p.stock} in stock)${p.description ? ', ' + p.description : ''}`
+    sb.from('orders')
+      .select('id')
+      .eq('store_id', store_id)
+      .limit(1)
+      .then(r => ({ data: r.data?.length || 0 }))
+      .catch(() => ({ data: 0 })),
+
+    sb.from('feed_posts')
+      .select('content,post_text,caption,price,tag')
+      .eq('store_id', store_id)
+      .order('created_at', { ascending: false })
+      .limit(5)
+      .then(r => r).catch(() => ({ data: null })),
+  ])
+
+  // ── Merge store info ───────────────────────────────────────────────
+  const shop = storeData ? {
+    name: storeData.shop_name,
+    desc: storeData.shop_desc,
+    category: storeData.shop_category,
+    region: storeData.shop_region,
+    owner: storeData.owner_name,
+    phone: storeData.owner_phone,
+    whatsapp: storeData.shop_whatsapp,
+    plan: storeData.plan,
+    since: storeData.created_at?.split('T')[0],
+    type: 'business',
+  } : campusData ? {
+    name: campusData.store_name,
+    desc: campusData.description,
+    category: campusData.category,
+    region: campusData.university_abbr,
+    phone: campusData.phone,
+    whatsapp: campusData.whatsapp,
+    since: campusData.created_at?.split('T')[0],
+    type: 'campus',
+  } : null
+
+  // ── Merge products ─────────────────────────────────────────────────
+  const allProducts = [...(products || []), ...(campusProducts || [])]
+    .filter((p, i, arr) => arr.findIndex(x => x.name === p.name) === i)
+
+  const productList = allProducts.length > 0
+    ? allProducts.map(p =>
+        `• ${p.name} — TZS ${Number(p.price).toLocaleString('en-US')} (${p.stock} in stock)${p.category ? ` [${p.category}]` : ''}${p.description ? `\n  ${p.description}` : ''}`
+      ).join('\n')
+    : 'No products listed yet — the seller is still setting up.'
+
+  // ── Recent posts context ─────────────────────────────────────────
+  const recentPosts = (vybePostsData || []).map(p =>
+    `• ${p.content || p.post_text || p.caption || ''}${p.price ? ` (TZS ${Number(p.price).toLocaleString()})` : ''}${p.tag ? ` #${p.tag}` : ''}`
   ).join('\n')
 
-  const systemPrompt = `You are an intelligent AI assistant for "${shop?.shop_name || 'a shop'}" on Travex Mall, Tanzania's digital marketplace.
+  // ── ARIA system prompt ─────────────────────────────────────────────
+  const systemPrompt = `You are Aria, an intelligent and friendly AI shopping assistant for "${shop?.name || 'this shop'}" on Travex Mall, Tanzania's leading digital marketplace.
 
-SHOP INFO:
-${shop?.shop_desc || 'A shop on Travex Mall'}
+You have COMPLETE knowledge of this store. Your job is to help customers find products, answer questions, compare options, and guide them through placing an order — all within Travex Mall.
 
-AVAILABLE PRODUCTS:
-${productList || 'No products listed yet'}
+═══ STORE INFORMATION ═══
+Name: ${shop?.name || 'Unknown'}
+Description: ${shop?.desc || 'A shop on Travex Mall'}
+Category: ${shop?.category || 'General'}
+Region: ${shop?.region || 'Tanzania'}
+Plan: ${shop?.plan === 'premium' ? 'Premium (Top-tier seller)' : shop?.plan === 'campus' ? 'Campus Seller' : 'Basic Seller'}
+Active Since: ${shop?.since || 'Recently'}
+Contact: ${(shop?.whatsapp || shop?.phone || '').replace(/\D/g, '') || 'Via Travex Mall'}
 
-CONTACT:
-WhatsApp: ${(shop?.shop_whatsapp || shop?.owner_phone || '').replace(/\D/g, '')}
+═══ AVAILABLE PRODUCTS (${allProducts.length} items) ═══
+${productList}
 
-YOUR CAPABILITIES:
-1. Write product descriptions (English + Swahili)
-2. Give pricing advice for Tanzania market
-3. Generate social media posts (Instagram, WhatsApp, Facebook)
-4. Analyze business data and give reports
-5. Categorize expenses
-6. Write WhatsApp customer messages
-7. Give business coaching advice specific to Tanzania
-8. Help with marketing strategies
+${recentPosts ? `═══ RECENT PROMOTIONS ═══\n${recentPosts}` : ''}
 
-RULES:
-- Be helpful, practical and specific to Tanzania market
-- Can naturally mix English and Swahili (Tanzanian style)
-- Keep responses concise but thorough
-- Use emojis moderately
-- When asked about products, use the actual product data above
-- Give actionable advice, not generic tips`
+═══ YOUR ROLE AS ARIA ═══
+1. GREET customers warmly and make them feel welcome
+2. ANSWER any question about this store and its products with confidence
+3. RECOMMEND products based on what the customer needs
+4. HELP customers compare products by price, features, availability
+5. GUIDE customers through the ordering process step by step
+6. INFORM customers about stock levels and pricing accurately
+7. HANDLE complaints and questions professionally
+8. COMMUNICATE naturally in both English and Kiswahili
 
+═══ ORDER PROCESS YOU GUIDE ═══
+When a customer wants to order:
+- Ask them which product and how many
+- Confirm the total price (price × quantity)
+- Ask for their name and phone number
+- Tell them the seller will confirm via WhatsApp or call
+- Encourage them to click the product card to complete the order form
+
+═══ TONE & STYLE ═══
+- Warm, helpful and professional
+- Mix English and Kiswahili naturally (e.g. "Sawa!" "Asante!" "Karibu!")
+- Be concise but complete — no unnecessary filler
+- Use product data accurately — never guess or make up prices
+- If a product is not listed, say it honestly and suggest alternatives
+- Keep responses short for simple questions, detailed for complex ones
+
+IMPORTANT: You represent ${shop?.name || 'this shop'} professionally. Every response should make the customer feel confident and welcome.`
+
+  // ── No API key fallback ────────────────────────────────────────────
   if (!CLAUDE_KEY) {
-    // Fallback without API key
-    const lmsg = message.toLowerCase()
+    const q = message.toLowerCase()
     let reply = ''
-    if (lmsg.includes('description') || lmsg.includes('maelezo')) {
-      reply = 'To generate AI descriptions, please set up your ANTHROPIC_API_KEY in Vercel environment variables. Go to vercel.com → Settings → Environment Variables.'
-    } else if (lmsg.includes('price') || lmsg.includes('bei')) {
-      const prods = (products || []).slice(0, 3).map(p => `${p.name}: TZS ${Number(p.price).toLocaleString()}`).join(', ')
-      reply = prods ? `Your current prices: ${prods}. For AI pricing advice, set up ANTHROPIC_API_KEY in Vercel.` : 'Add products first, then I can help with pricing!'
-    } else if (lmsg.includes('report') || lmsg.includes('ripoti')) {
-      reply = `Quick stats: ${(products||[]).length} products in stock. For full AI reports, set up ANTHROPIC_API_KEY in Vercel.`
+
+    if (q.includes('product') || q.includes('bidhaa') || q.includes('what') || q.includes('nini')) {
+      reply = allProducts.length > 0
+        ? `We have ${allProducts.length} products available:\n\n${allProducts.slice(0, 5).map(p => `• ${p.name} — TZS ${Number(p.price).toLocaleString()}`).join('\n')}\n\nWhich one interests you?`
+        : `The seller is still adding products. Check back soon or message the seller directly.`
+    } else if (q.includes('price') || q.includes('bei') || q.includes('cost') || q.includes('ghali')) {
+      const prods = allProducts.slice(0, 3).map(p => `${p.name}: TZS ${Number(p.price).toLocaleString()}`).join(', ')
+      reply = prods ? `Current prices: ${prods}` : 'No products listed yet.'
+    } else if (q.includes('order') || q.includes('buy') || q.includes('nunua') || q.includes('pata')) {
+      reply = `To place an order, click on any product card and fill in your name and phone number. The seller will confirm shortly! Which product would you like?`
+    } else if (q.includes('hello') || q.includes('hi') || q.includes('habari') || q.includes('jambo') || q.includes('welcome')) {
+      reply = `Karibu sana to ${shop?.name || 'our store'}! I am Aria, your shopping assistant. We have ${allProducts.length} products available. What are you looking for today?`
     } else {
-      reply = `Hi! I'm the AI assistant for ${shop?.shop_name || 'your shop'}. To unlock full AI features (descriptions, pricing, marketing, coaching), set up ANTHROPIC_API_KEY in Vercel environment variables. 🤖`
+      reply = `Hello! I am Aria, your assistant at ${shop?.name || 'this store'}. We have ${allProducts.length} products. Ask me about any product, price, or how to order!`
     }
+
     return NextResponse.json({ reply, session_id })
   }
 
-  // Build Claude messages
-  const claudeMessages = (history || []).slice(-8).map((m: any) => ({
-    role: m.role === 'user' ? 'user' : 'assistant',
-    content: m.content
-  }))
+  // ── Claude API call ────────────────────────────────────────────────
+  const claudeMessages = (history || [])
+    .slice(-10)
+    .filter((m: any) => m.role === 'user' || m.role === 'bot')
+    .map((m: any) => ({
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: m.content,
+    }))
   claudeMessages.push({ role: 'user', content: message })
 
   try {
@@ -99,41 +186,37 @@ RULES:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1024,
+        max_tokens: 600,
         system: systemPrompt,
         messages: claudeMessages,
-      })
+      }),
     })
 
     const data = await res.json()
 
     if (!res.ok) {
-      console.error('Claude API error:', JSON.stringify(data))
       return NextResponse.json({
-        reply: '⚠️ Claude API error: ' + (data?.error?.message || res.status + ' ' + res.statusText),
-        session_id
+        reply: 'I am having trouble connecting right now. Please try again shortly.',
+        session_id,
       })
     }
 
-    const reply = data.content?.[0]?.text || ('Sorry, unexpected response: ' + JSON.stringify(data).slice(0,150))
+    const reply = data.content?.[0]?.text || 'Sorry, I could not process that. Please try again.'
 
-    // Save to chat session (non-blocking, errors ignored)
-    try {
-      await sb.from('ai_chat_sessions').upsert({
-        session_id,
-        store_id,
-        messages: [...(history || []), { role: 'user', content: message }, { role: 'bot', content: reply }],
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'session_id' })
-    } catch (saveErr) {
-      console.error('Chat save error (non-fatal):', saveErr)
-    }
+    // Save session (non-blocking)
+    sb.from('ai_chat_sessions').upsert({
+      session_id,
+      store_id,
+      messages: [...(history || []).slice(-20), { role: 'user', content: message }, { role: 'bot', content: reply }],
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'session_id' }).catch(() => {})
 
     return NextResponse.json({ reply, session_id })
-  } catch (e: any) {
+
+  } catch {
     return NextResponse.json({
-      reply: 'AI is temporarily unavailable. Error: ' + (e.message || 'Unknown'),
-      session_id
+      reply: 'I am temporarily unavailable. Please try again in a moment.',
+      session_id,
     })
   }
 }
