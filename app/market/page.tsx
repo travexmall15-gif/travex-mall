@@ -104,66 +104,78 @@ export default function MarketPage() {
             </Link>
           </div>
 
-          {/* Main content */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', marginBottom: '2.5rem' }}>
+          {/* Headline + description */}
+          <div style={{ maxWidth: '600px', marginBottom: '2rem' }}>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
+              <span style={{ color: '#C9A84C' }}>Business</span> Marketplace.
+            </h1>
+            <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
+              Verified sellers. All categories. Five regions. Join {loading ? '...' : totalApproved} businesses already selling on Travex Mall.
+            </p>
+          </div>
 
-            {/* Left — headline + description */}
-            <div style={{ flex: '1 1 320px', maxWidth: '560px' }}>
-              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.9rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-                Tanzania&apos;s<br />
-                <span style={{ color: '#C9A84C' }}>Business Marketplace.</span>
-              </h1>
-              <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px', marginBottom: '1.5rem' }}>
-                Verified sellers. All categories. Five regions across Tanzania. Join {loading ? '...' : totalApproved} businesses already selling on Travex Mall.
-              </p>
-
-              {/* Plan pills */}
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '8px 14px' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.4)', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>Basic Plan</div>
-                    <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{formatTZS(MARKET_BASIC_PRICE)} / month</div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: '10px', padding: '8px 14px' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#C9A84C', lineHeight: 1 }}>Premium Plan</div>
-                    <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{formatTZS(MARKET_PREMIUM_PRICE)} / month</div>
-                  </div>
-                </div>
+          {/* Plan pills — white bg, centered */}
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#94A3B8', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Basic Plan</div>
+                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{formatTZS(MARKET_BASIC_PRICE)} / month</div>
               </div>
             </div>
-
-            {/* Right — slots card */}
-            <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '18px', padding: '1.5rem', minWidth: '190px', textAlign: 'center', backdropFilter: 'blur(10px)' }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.6rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1, marginBottom: '4px' }}>
-                {loading ? '...' : slotsLeft}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Premium Plan</div>
+                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{formatTZS(MARKET_PREMIUM_PRICE)} / month</div>
               </div>
-              <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '12px' }}>Slots Available</div>
-              <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '999px', overflow: 'hidden', marginBottom: '8px' }}>
-                <div style={{ height: '100%', width: `${Math.min((totalApproved / MARKET_TOTAL_SLOTS) * 100, 100)}%`, background: 'linear-gradient(90deg, #C9A84C, #F0C96B)', borderRadius: '999px', transition: 'width 0.6s ease' }} />
-              </div>
-              <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.25)' }}>
-                {loading ? '...' : totalApproved} of {MARKET_TOTAL_SLOTS} filled
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Top Estate</div>
+                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>TZS 200,000 / month</div>
               </div>
             </div>
           </div>
 
-          {/* Stats row */}
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', paddingTop: '1.5rem', paddingBottom: '1.75rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            {[
-              [loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), 'Premium', '#C9A84C'],
-              [loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), 'Basic', 'rgba(255,255,255,0.5)'],
-              ['5', 'Regions', 'rgba(255,255,255,0.5)'],
-              ['OPEN', 'Registration', '#86EFAC'],
-            ].map(([val, label, color]) => (
-              <div key={label}>
-                <div style={{ fontSize: 'clamp(0.9rem, 2vw, 1.15rem)', fontWeight: 800, color: color as string, lineHeight: 1, marginBottom: '3px' }}>{val}</div>
-                <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
-              </div>
-            ))}
+          {/* Stats ticker — auto scroll right to left */}
+          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '0' }}>
+            <style>{`
+              @keyframes tickerRTL {
+                0%   { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+              .stats-ticker { animation: tickerRTL 14s linear infinite; }
+              .stats-ticker:hover { animation-play-state: paused; }
+            `}</style>
+            <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
+              {[
+                ...[
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
+                  { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
+                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
+                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
+                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
+                ],
+                ...[
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
+                  { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
+                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
+                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
+                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
+                ],
+              ].map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
+                  <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ fontSize: 'clamp(0.9rem,2vw,1.1rem)', fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: '3px' }}>{s.val}</div>
+                    <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>{s.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
