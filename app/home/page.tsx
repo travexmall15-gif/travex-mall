@@ -11,7 +11,7 @@ export default function HomePage() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; }
         @media (max-width: 768px) {
-          .hero-section { min-height: 75vh !important; padding: 5rem 5% 3.5rem !important; }
+          .hero-section { min-height: auto !important; padding: 3.5rem 5% 2.5rem !important; }
           .hero-h1 { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
           .hero-sub { font-size: 0.86rem !important; }
           .hero-stats { gap: 1.5rem !important; }
@@ -37,20 +37,20 @@ export default function HomePage() {
       <SiteNav />
 
       {/*  HERO  */}
-      <section className="hero-section" style={{ position: 'relative', overflow: 'hidden', color: '#fff', minHeight: '92vh', display: 'flex', alignItems: 'center', paddingTop: '64px', background: 'linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)' }}>
+      <section className="hero-section" style={{ position: 'relative', overflow: 'hidden', color: '#fff', minHeight: 'auto', display: 'flex', alignItems: 'center', paddingTop: '80px', paddingBottom: '2.5rem', background: 'linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)' }}>
         <div style={{ position: 'absolute', top: '-25%', right: '-8%', width: '65%', height: '115%', pointerEvents: 'none', zIndex: 0, background: 'radial-gradient(ellipse 55% 55% at 62% 28%, rgba(56,120,255,0.65) 0%, rgba(35,80,220,0.35) 30%, rgba(20,55,180,0.12) 55%, transparent 75%)', filter: 'blur(22px)' }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '4rem 5% 3.5rem', width: '100%' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(56,120,255,0.12)', border: '1px solid rgba(96,165,250,0.25)', color: '#93C5FD', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.70rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.4rem' }}>
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 5% 2rem', width: '100%' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(56,120,255,0.12)', border: '1px solid rgba(96,165,250,0.25)', color: '#93C5FD', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.70rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '0.85rem' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#60A5FA', boxShadow: '0 0 8px rgba(96,165,250,0.9)', flexShrink: 0 }} />
             Africa&apos;s #1 AI-Powered Marketplace, Tanzania 2026
           </div>
-          <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: 900, lineHeight: 1.06, color: '#fff', marginBottom: '1.1rem', letterSpacing: '-0.02em', maxWidth: '680px' }}>
+          <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: 900, lineHeight: 1.06, color: '#fff', marginBottom: '0.75rem', letterSpacing: '-0.02em', maxWidth: '680px' }}>
             Africa&apos;s <span style={{ color: '#C9A84C', textShadow: '0 2px 20px rgba(201,168,76,0.30)' }}>Intelligent</span><br />Digital Marketplace
           </h1>
-          <p className="hero-sub" style={{ fontSize: 'clamp(0.88rem, 1.6vw, 1rem)', lineHeight: 1.78, color: 'rgba(255,255,255,0.50)', marginBottom: '1.8rem', maxWidth: '500px' }}>
+          <p className="hero-sub" style={{ fontSize: 'clamp(0.88rem, 1.6vw, 1rem)', lineHeight: 1.78, color: 'rgba(255,255,255,0.50)', marginBottom: '1.2rem', maxWidth: '500px' }}>
             Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur.
           </p>
-          <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.2rem' }}>
+          <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
               Enter Travex Mall
             </Link>
@@ -65,7 +65,7 @@ export default function HomePage() {
           </div>
 
           {/* Feature chips — auto-scroll left to right */}
-          <div style={{ overflow: 'hidden', marginTop: '1.5rem', maxWidth: '480px' }}>
+          <div style={{ overflow: 'hidden', marginTop: '1rem', maxWidth: '480px' }}>
             <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
               {[
                 { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
@@ -137,7 +137,7 @@ export default function HomePage() {
             <div className="market-card campus" style={{ flex: 1, background: 'linear-gradient(160deg, #040C32 0%, #071545 50%, #0A1858 100%)', border: '2px solid rgba(56,120,255,0.18)', borderRadius: '24px', padding: '2.5rem 2rem', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 20px rgba(5,11,46,0.18)' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #3B82F6, #93C5FD)' }} />
               <div style={{ position: 'absolute', top: '-30%', right: '-20%', width: '70%', height: '100%', background: 'radial-gradient(ellipse at center, rgba(56,120,255,0.22) 0%, transparent 65%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
-              <div style={{ position: 'relative', zIndex: 1, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(96,165,250,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.4rem' }}>
+              <div style={{ position: 'relative', zIndex: 1, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(96,165,250,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.85rem' }}>
                 <GraduationCap style={{ width: '26px', height: '26px', color: '#93C5FD' }} />
               </div>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
@@ -170,7 +170,7 @@ export default function HomePage() {
             <div className="market-card vybe" style={{ flex: 1, background: 'linear-gradient(160deg, #0D0015 0%, #1A0030 50%, #12001F 100%)', border: '2px solid rgba(200,123,255,0.20)', borderRadius: '24px', padding: '2.5rem 2rem', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 20px rgba(120,0,255,0.15)' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #FF0080, #7800FF, #00C8FF)' }} />
               <div style={{ position: 'absolute', top: '-30%', right: '-20%', width: '70%', height: '100%', background: 'radial-gradient(ellipse at center, rgba(120,0,255,0.18) 0%, transparent 65%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
-              <div style={{ position: 'relative', zIndex: 1, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(200,123,255,0.12)', border: '1px solid rgba(200,123,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.4rem' }}>
+              <div style={{ position: 'relative', zIndex: 1, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(200,123,255,0.12)', border: '1px solid rgba(200,123,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.85rem' }}>
                 <Sparkles style={{ width: '26px', height: '26px', color: '#C87BFF' }} />
               </div>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
