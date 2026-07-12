@@ -33,6 +33,8 @@ type MarketShop = {
   shop_whatsapp: string | null
   shop_desc: string | null
   shop_color: string | null
+  shop_banner: string | null
+  shop_logo: string | null
   plan: 'premium' | 'basic'
   status: string
   slug: string | null
@@ -347,52 +349,61 @@ function ShopCard({ shop }: { shop: MarketShop }) {
 
   return (
     <div
-      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.25)' : '#E8ECF4'}`, borderRadius: '20px', overflow: 'hidden', transition: 'transform 0.25s, box-shadow 0.25s', cursor: 'pointer', boxShadow: '0 2px 12px rgba(15,23,42,0.05)' }}
-      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 40px rgba(15,23,42,0.11)' }}
-      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(15,23,42,0.05)' }}
+      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.20)' : '#EEF0F6'}`, borderRadius: '16px', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer', boxShadow: '0 1px 6px rgba(15,23,42,0.06)' }}
+      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 10px 28px rgba(15,23,42,0.10)' }}
+      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 6px rgba(15,23,42,0.06)' }}
     >
-      {/* Store-front banner with logo circle */}
-      <div style={{ height: '72px', background: `linear-gradient(135deg, ${color}22 0%, ${color}44 100%)`, borderBottom: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.15)' : '#E8ECF4'}`, position: 'relative' }}>
-        {/* Premium badge top right */}
-        {isPremium && (
-          <div style={{ position: 'absolute', top: '8px', right: '10px', background: '#C9A84C', color: '#0F172A', fontSize: '0.56rem', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.05em' }}>
-            PREMIUM
-          </div>
+      {/* Banner — user image or gradient */}
+      <div style={{ height: '56px', position: 'relative', overflow: 'hidden' }}>
+        {shop.shop_banner ? (
+          <img src={shop.shop_banner} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}99 50%, #050B2E 100%)` }} />
         )}
-        {/* Logo circle — centered, overlapping banner bottom */}
-        <div style={{ position: 'absolute', bottom: '-22px', left: '50%', transform: 'translateX(-50%)', width: '44px', height: '44px', borderRadius: '50%', background: `linear-gradient(135deg, ${color}, #050B2E)`, border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', zIndex: 1 }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.85rem', fontWeight: 900, color: '#fff', lineHeight: 1 }}>{init}</span>
+        {/* Plan badge */}
+        <div style={{ position: 'absolute', top: '6px', right: '8px', background: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.85)', color: isPremium ? '#0F172A' : '#64748B', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px', letterSpacing: '0.04em' }}>
+          {isPremium ? 'PREMIUM' : 'BASIC'}
         </div>
       </div>
 
       {/* Body */}
-      <div style={{ padding: '1.75rem 1rem 1rem', textAlign: 'center' }}>
-        {/* Shop name */}
-        <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#0F172A', marginBottom: '0.3rem', lineHeight: 1.3 }}>{shop.shop_name}</div>
-
-        {/* Tags */}
-        <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '0.55rem' }}>
-          {shop.shop_category && (
-            <span style={{ fontSize: '0.6rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '2px 8px', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>
-          )}
-          {shop.shop_region && (
-            <span style={{ fontSize: '0.6rem', background: '#F1F5F9', color: '#64748B', padding: '2px 8px', borderRadius: '999px' }}>{shop.shop_region}</span>
-          )}
+      <div style={{ padding: '0.6rem 0.8rem 0.75rem' }}>
+        {/* Logo left + shop name */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', marginBottom: '0.45rem' }}>
+          {/* Logo — left side */}
+          <div style={{ width: '34px', height: '34px', borderRadius: '9px', border: '1.5px solid #E8ECF4', overflow: 'hidden', flexShrink: 0, background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {shop.shop_logo ? (
+              <img src={shop.shop_logo} alt={init} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.72rem', fontWeight: 900, color: '#fff' }}>{init}</span>
+            )}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{shop.shop_name}</div>
+            {shop.shop_region && <div style={{ fontSize: '0.58rem', color: '#94A3B8', marginTop: '1px' }}>{shop.shop_region}</div>}
+          </div>
         </div>
+
+        {/* Category tag */}
+        {shop.shop_category && (
+          <div style={{ marginBottom: '0.4rem' }}>
+            <span style={{ fontSize: '0.58rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '2px 7px', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>
+          </div>
+        )}
 
         {/* Description */}
         {shop.shop_desc && (
-          <p style={{ fontSize: '0.74rem', color: '#94A3B8', lineHeight: 1.55, marginBottom: '0.9rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
+          <p style={{ fontSize: '0.7rem', color: '#94A3B8', lineHeight: 1.5, marginBottom: '0.55rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
         )}
 
-        {/* Visit Shop button only */}
+        {/* Visit Shop — small button */}
         <a
           href={`/store/${shop.id}`}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', width: '100%', padding: '0.55rem 0', background: isPremium ? '#C9A84C' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius: '10px', fontSize: '0.74rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity = '0.85'}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: isPremium ? '#C9A84C' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity = '0.82'}
           onMouseOut={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
         >
-          <Store size={12} /> Visit Shop
+          <Store size={10} /> Visit Shop
         </a>
       </div>
     </div>
