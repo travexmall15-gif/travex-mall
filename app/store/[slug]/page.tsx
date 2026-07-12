@@ -277,25 +277,33 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
             {/* Info */}
             <div style={{ flex: 1, minWidth: 180 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
                 <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.08)', color: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(201,168,76,0.3)' : 'rgba(255,255,255,0.1)'}` }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.06)', color: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
                   <CheckCircle size={10} /> Verified
                 </span>
               </div>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
                 {store.shop_category && <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><Tag size={10} />{store.shop_category}</span>}
                 {store.shop_region && <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><MapPin size={10} />{store.shop_region}</span>}
                 <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><Package size={10} />{products.length} products</span>
               </div>
               {store.shop_desc && (
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.38)', lineHeight: 1.6, marginTop: 4, maxWidth: 480, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{store.shop_desc}</p>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6, marginBottom: 8, maxWidth: 480, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{store.shop_desc}</p>
               )}
+              {/* Message Seller button in hero */}
+              <button
+                onClick={() => setShowMsg(true)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
+                <MessageCircle size={13} /> Message Seller
+              </button>
             </div>
           </div>
         </div>
@@ -390,14 +398,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
             <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 20 }}>
               This seller is adding products soon. Check back shortly.
             </p>
-            {wa && (
-              <a href={`https://wa.me/${wa}`} target="_blank"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#25D366',
-                  color: '#fff', padding: '12px 24px', borderRadius: 999, fontWeight: 700, fontSize: 14,
-                  textDecoration: 'none' }}>
-                <MessageCircle size={16} /> Contact on WhatsApp
-              </a>
-            )}
+
           </div>
         )}
       </div>
@@ -540,67 +541,81 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
           </div>
         </div>
       )}
-      {/* ── FLOATING MESSAGE BUTTON ── */}
-      {store && (
-        <button
-          onClick={() => setShowMsg(true)}
-          style={{ position: 'fixed', bottom: '5rem', right: '1.25rem', zIndex: 50, display: 'flex', alignItems: 'center', gap: 7, background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 999, padding: '10px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(13,27,62,0.35)', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#1a3060'}
-          onMouseOut={e => (e.currentTarget as HTMLElement).style.background = '#0D1B3E'}
-        >
-          <MessageCircle size={15} /> Message Seller
-        </button>
-      )}
-
-      {/* ── WELCOME MODAL ── */}
+      {/* ── WELCOME MODAL (AI Customer Care) ── */}
       {showWelcome && store && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', pointerEvents: 'none' }}>
-          <div style={{ pointerEvents: 'auto', background: '#fff', borderRadius: '20px 20px 0 0', padding: '1.5rem', width: '100%', maxWidth: 420, boxShadow: '0 -8px 40px rgba(0,0,0,0.18)', animation: 'slideUp 0.4s cubic-bezier(0.34,1.2,0.64,1)', marginBottom: 0 }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }}
+          onClick={e => { if(e.target === e.currentTarget) setShowWelcome(false) }}>
+          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '1.75rem 1.5rem 2rem', width: '100%', maxWidth: 440, boxShadow: '0 -12px 48px rgba(0,0,0,0.18)', animation: 'slideUp 0.4s cubic-bezier(0.34,1.2,0.64,1)' }}>
             <style>{`@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
 
-            {/* Close */}
-            <button onClick={() => setShowWelcome(false)} style={{ position: 'absolute', top: 12, right: 14, background: '#F1F5F9', border: 'none', borderRadius: '50%', width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}>
-              <X size={14} />
-            </button>
+            {/* Drag handle */}
+            <div style={{ width: 36, height: 4, borderRadius: 999, background: '#E2E8F0', margin: '0 auto 1.25rem' }} />
 
-            {/* Customer care avatar + message */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', marginBottom: '1.25rem' }}>
-              {/* Female avatar SVG */}
-              <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#E0E7FF,#C7D2FE)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #818CF8', overflow: 'hidden' }}>
-                <svg viewBox="0 0 48 48" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="24" cy="48" r="16" fill="#A5B4FC"/>
-                  <circle cx="24" cy="18" r="9" fill="#C7D2FE"/>
-                  <circle cx="24" cy="18" r="7" fill="#EEF2FF"/>
-                  <ellipse cx="21" cy="17" rx="1.2" ry="1.5" fill="#4338CA"/>
-                  <ellipse cx="27" cy="17" rx="1.2" ry="1.5" fill="#4338CA"/>
-                  <path d="M20.5 22 Q24 25 27.5 22" stroke="#818CF8" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-                  <path d="M15 14 Q17 8 24 8 Q31 8 33 14" stroke="#818CF8" strokeWidth="2" fill="#C7D2FE"/>
-                </svg>
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0F172A' }}>Travex Customer Care</span>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22C55E', display: 'inline-block' }} />
+            {/* AI avatar + bubble */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.9rem', marginBottom: '1.5rem' }}>
+              {/* AI Female avatar */}
+              <div style={{ flexShrink: 0, position: 'relative' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2.5px solid #fff', boxShadow: '0 4px 14px rgba(99,102,241,0.35)', overflow: 'hidden' }}>
+                  <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+                    {/* Body */}
+                    <circle cx="26" cy="56" r="20" fill="#A5B4FC"/>
+                    {/* Head */}
+                    <circle cx="26" cy="21" r="11" fill="#FDE8D0"/>
+                    {/* Hair */}
+                    <path d="M15 18 Q16 8 26 8 Q36 8 37 18 Q36 12 26 11 Q16 12 15 18Z" fill="#7C3AED"/>
+                    <path d="M15 21 Q13 30 16 34 Q15 26 16 22Z" fill="#7C3AED"/>
+                    <path d="M37 21 Q39 30 36 34 Q37 26 36 22Z" fill="#7C3AED"/>
+                    {/* Eyes */}
+                    <ellipse cx="22" cy="21" rx="1.4" ry="1.6" fill="#1E1B4B"/>
+                    <ellipse cx="30" cy="21" rx="1.4" ry="1.6" fill="#1E1B4B"/>
+                    {/* Smile */}
+                    <path d="M22 27 Q26 30.5 30 27" stroke="#E97070" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                    {/* Headset dot (AI indicator) */}
+                    <circle cx="40" cy="8" r="6" fill="#22C55E"/>
+                    <path d="M37.5 8 L39.5 10 L42.5 6" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  </svg>
                 </div>
-                <div style={{ background: '#F1F5F9', borderRadius: '0 12px 12px 12px', padding: '0.65rem 0.9rem' }}>
-                  <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.65, margin: 0 }}>
-                    Welcome to <strong>{store.shop_name}</strong>! I am your Travex assistant. How can I help you today? Browse products, place an order, or ask me anything!
+                <div style={{ position: 'absolute', bottom: 0, right: 0, width: 14, height: 14, borderRadius: '50%', background: '#22C55E', border: '2px solid #fff' }} />
+              </div>
+
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0F172A' }}>Aria</span>
+                  <span style={{ fontSize: 10, fontWeight: 600, color: '#6366F1', background: '#EEF2FF', padding: '1px 7px', borderRadius: 999, border: '1px solid #C7D2FE' }}>AI Assistant</span>
+                </div>
+                <div style={{ background: '#F8FAFF', border: '1px solid #E0E7FF', borderRadius: '0 14px 14px 14px', padding: '0.8rem 1rem' }}>
+                  <p style={{ fontSize: 13, color: '#1E293B', lineHeight: 1.7, margin: 0 }}>
+                    Hi there! Welcome to <strong>{store.shop_name}</strong>. I am Aria, your AI shopping assistant. I can help you find products, answer questions, and guide you through placing an order. What would you like to do?
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Action buttons */}
+            {/* Quick action chips */}
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+              {['Find a product', 'Place an order', 'Check prices'].map(t => (
+                <button key={t} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>{t}</button>
+              ))}
+            </div>
+
+            {/* CTA buttons */}
             <div style={{ display: 'flex', gap: 8 }}>
               <button
-                onClick={() => { setShowWelcome(false) }}
-                style={{ flex: 1, padding: '10px', borderRadius: 10, border: '1.5px solid #E2E8F0', background: '#fff', color: '#64748B', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
-                Browse Store
+                onClick={() => setShowWelcome(false)}
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: '1.5px solid #E2E8F0', background: '#fff', color: '#64748B', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
+                Browse on my own
               </button>
               <button
-                onClick={() => { setShowWelcome(false) }}
-                style={{ flex: 1, padding: '10px', borderRadius: 10, border: 'none', background: '#0D1B3E', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
-                Start Chatting
+                onClick={() => {
+                  setShowWelcome(false)
+                  // Trigger AI chat widget
+                  setTimeout(() => {
+                    const btn = document.querySelector('[data-ai-chat-toggle]') as HTMLElement
+                    if (btn) btn.click()
+                  }, 300)
+                }}
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                Chat with Aria
               </button>
             </div>
           </div>
