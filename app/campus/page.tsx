@@ -6,38 +6,28 @@ import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { universities } from '@/lib/data'
-import {
-  GraduationCap, Store, Wallet, Users, ArrowRight,
-  FileText, ShieldCheck, Rocket, TrendingUp,
-} from 'lucide-react'
-
-const studentBenefits = [
-  { icon: Wallet, title: 'Low Cost', desc: 'Just TZS 10,000/month to run a fully featured shop on campus.' },
-  { icon: Users, title: 'Campus Reach', desc: 'Sell directly to thousands of students at your university.' },
-  { icon: Store, title: 'Your Own Storefront', desc: 'Customizable shop page with products, branding and orders.' },
-]
-
-const steps = [
-  { icon: FileText, title: 'Apply', desc: 'Pick your university and submit your shop application.' },
-  { icon: ShieldCheck, title: 'Get Verified', desc: 'We confirm your student status and approve your slot.' },
-  { icon: Rocket, title: 'Set Up Shop', desc: 'Add products, customize your storefront and go live.' },
-  { icon: TrendingUp, title: 'Start Earning', desc: 'Receive WhatsApp orders and grow your campus business.' },
-]
+import { GraduationCap, ArrowRight, Search } from 'lucide-react'
 
 type UniStats = { abbr: string; count: number }
+
+const CAMPUS_CATEGORIES = [
+  'All', 'Fashion & Clothing', 'Food & Drinks', 'Electronics',
+  'Beauty & Health', 'Books & Stationery', 'Services', 'Arts & Crafts',
+]
 
 export default function CampusPage() {
   const [uniStats, setUniStats] = useState<UniStats[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState('All')
+  const [selectedUni, setSelectedUni] = useState('All')
 
   useEffect(() => {
     async function loadStats() {
-      // Fetch real active store counts per university from Supabase
       const { data } = await sb
         .from('campus_stores')
         .select('university_abbr')
         .eq('is_active', true)
-
       if (data) {
         const counts: Record<string, number> = {}
         data.forEach((s: { university_abbr: string }) => {
@@ -50,7 +40,6 @@ export default function CampusPage() {
     loadStats()
   }, [])
 
-  // Merge real counts with static university data
   const uniData = universities.map(uni => {
     const real = uniStats.find(s => s.abbr === uni.abbr)
     return {
@@ -62,161 +51,196 @@ export default function CampusPage() {
 
   const totalActive = uniData.reduce((sum, u) => sum + u.activeShops, 0)
   const totalSlots = uniData.reduce((sum, u) => sum + u.totalSlots, 0)
-  const totalLeft = totalSlots - totalActive
+  const totalLeft  = totalSlots - totalActive
+
+  const uniOptions = ['All', ...uniData.map(u => u.abbr)]
+  const filteredUnis = uniData.filter(u =>
+    (selectedUni === 'All' || u.abbr === selectedUni) &&
+    (!search || u.name.toLowerCase().includes(search.toLowerCase()) || u.abbr.toLowerCase().includes(search.toLowerCase()))
+  )
 
   return (
     <main style={{ background: '#F8FAFF', overflowX: 'hidden' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
         * { box-sizing: border-box; }
-        .uni-card { transition: all 0.25s ease; }
-        .uni-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(15,23,42,0.10) !important; border-color: #BFDBFE !important; }
-        .benefit-card { transition: all 0.25s; }
-        .benefit-card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(15,23,42,0.08); }
-        @media (max-width: 768px) {
-          .hero-h1 { font-size: clamp(2rem, 8vw, 3rem) !important; }
-          .uni-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; }
-        }
+        @keyframes campusTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        .campus-ticker { animation: campusTicker 16s linear infinite; }
+        .campus-ticker:hover { animation-play-state: paused; }
+        @keyframes campusStats { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        .campus-stats-ticker { animation: campusStats 14s linear infinite; }
+        .campus-stats-ticker:hover { animation-play-state: paused; }
+        .uni-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .uni-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(15,23,42,0.10) !important; }
       `}</style>
 
       <SiteNav />
 
-      {/*  HERO  */}
+      {/* ── HERO ── */}
       <section style={{
-        position: 'relative', overflow: 'hidden', color: '#fff', paddingTop: '64px',
-        background: 'linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)',
+        position: 'relative', overflow: 'hidden', paddingTop: '64px', color: '#fff',
+        background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)',
       }}>
-        <div style={{ position: 'absolute', top: '-25%', right: '-8%', width: '65%', height: '115%', pointerEvents: 'none', zIndex: 0, background: 'radial-gradient(ellipse 55% 55% at 62% 28%, rgba(56,120,255,0.65) 0%, rgba(35,80,220,0.35) 30%, rgba(20,55,180,0.12) 55%, transparent 75%)', filter: 'blur(22px)' }} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 55% 70% at 85% 20%, rgba(56,120,255,0.32) 0%, transparent 65%)', zIndex: 0 }} />
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '5rem 5% 4.5rem' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.35)', color: '#C9A84C', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.5rem' }}>
-            <GraduationCap style={{ width: '14px', height: '14px' }} /> For University Students
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '3rem 5% 0' }}>
+
+          {/* Top row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
+              <GraduationCap size={12} /> Campus Market
+            </div>
+            <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
+              <GraduationCap size={13} /> Open Your Shop
+            </Link>
           </div>
-          <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 6vw, 4rem)', fontWeight: 900, lineHeight: 1.08, color: '#fff', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
-            Campus <span style={{ color: '#C9A84C' }}>Marketplace</span>
-          </h1>
-          <p style={{ fontSize: 'clamp(0.88rem, 1.8vw, 1.05rem)', lineHeight: 1.75, color: 'rgba(255,255,255,0.55)', marginBottom: '2.2rem', maxWidth: '520px' }}>
-            Shop from verified student-run shops or open your own. Choose your university to browse.
-          </p>
 
-          {/* Live stats */}
-          <div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-            {[
-              [loading ? '...' : String(uniData.length), 'Universities'],
-              [loading ? '...' : String(totalActive), 'Active Shops'],
-              [loading ? '...' : String(totalLeft), 'Slots Left'],
-            ].map(([v, l]) => (
-              <div key={l}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 900, color: '#C9A84C' }}>{v}</div>
-                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.38)', marginTop: '2px' }}>{l}</div>
+          {/* Headline */}
+          <div style={{ maxWidth: '560px', marginBottom: '2rem' }}>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
+              <span style={{ color: '#C9A84C' }}>Campus</span> Marketplace.
+            </h1>
+            <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
+              Buy and sell within your university community. Verified student sellers. {loading ? '...' : totalActive} active shops across {uniData.length} universities.
+            </p>
+          </div>
+
+          {/* Plan pill */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 20px', boxShadow: '0 2px 12px rgba(0,0,0,0.14)' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#059669' }} />
+              <div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Student Plan</div>
+                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>TZS 10,000 / month</div>
               </div>
-            ))}
+            </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
-            <Link href="/campus-apply" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-              Open Your Shop 
-            </Link>
-            <Link href="#universities" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.22)', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none' }}>
-              Browse Universities
-            </Link>
+          {/* Stats ticker — RTL */}
+          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="campus-stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
+              {[
+                ...uniData.map(u => ({ val: loading ? '...' : String(u.slotsLeft), label: `${u.abbr} Slots Left`, color: u.slotsLeft > 10 ? '#86EFAC' : '#FCA5A5' })),
+                { val: loading ? '...' : String(totalLeft), label: 'Total Slots Left', color: '#C9A84C' },
+                { val: loading ? '...' : String(totalActive), label: 'Active Shops', color: 'rgba(255,255,255,0.6)' },
+                ...uniData.map(u => ({ val: loading ? '...' : String(u.slotsLeft), label: `${u.abbr} Slots Left`, color: u.slotsLeft > 10 ? '#86EFAC' : '#FCA5A5' })),
+                { val: loading ? '...' : String(totalLeft), label: 'Total Slots Left', color: '#C9A84C' },
+                { val: loading ? '...' : String(totalActive), label: 'Active Shops', color: 'rgba(255,255,255,0.6)' },
+              ].map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
+                  <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ fontSize: 'clamp(0.9rem,2vw,1.1rem)', fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: '3px' }}>{s.val}</div>
+                    <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const }}>{s.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/*  UNIVERSITY GRID  */}
-      <section id="universities" style={{ maxWidth: '1200px', margin: '0 auto', padding: '5rem 5%' }}>
-        <div style={{ marginBottom: '0.4rem', fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em' }}>// Select Campus</div>
-        <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>Choose Your University</h2>
-        <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '2.5rem' }}>Browse shops from your campus community. Slot counts are live from Supabase.</p>
+      {/* ── QUICK TICKER ── */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', overflow: 'hidden' }}>
+        <div style={{ padding: '10px 0' }}>
+          <div className="campus-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '5%' }}>
+            {[
+              { href: '/market', label: 'Business Market', sub: '500+ Shops', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+              { href: '/group-buy', label: 'Group Buy', sub: 'Save Together', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
+              { href: '/vybe', label: 'Social Vybe', sub: 'Community', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
+              { href: '/market', label: 'Business Market', sub: '500+ Shops', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+              { href: '/group-buy', label: 'Group Buy', sub: 'Save Together', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
+              { href: '/vybe', label: 'Social Vybe', sub: 'Community', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
+            ].map((c, i) => (
+              <a key={i} href={c.href} style={{ display: 'inline-flex', flexDirection: 'column' as const, gap: '1px', background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '6px 14px', borderRadius: '10px', textDecoration: 'none', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'opacity 0.2s' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{c.label}</span>
+                <span style={{ fontSize: '0.58rem', opacity: 0.7 }}>{c.sub}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
 
-        <div className="uni-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.25rem' }}>
-          {uniData.map((uni) => {
-            const pct = (uni.activeShops / uni.totalSlots) * 100
+      {/* ── SEARCH + FILTERS + UNIVERSITY CARDS ── */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 5% 2rem' }}>
+
+        {/* Search */}
+        <div style={{ position: 'relative', marginBottom: '1rem' }}>
+          <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search universities..."
+            style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
+            onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
+            onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
+          />
+        </div>
+
+        {/* University filter */}
+        <div style={{ marginBottom: '0.75rem', overflowX: 'auto', scrollbarWidth: 'none' as const }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>University</span>
+            {uniOptions.map(u => (
+              <button key={u} onClick={() => setSelectedUni(u)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: selectedUni === u ? '#0D1B3E' : '#E2E8F0', background: selectedUni === u ? '#0D1B3E' : '#fff', color: selectedUni === u ? '#fff' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}>
+                {u}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category filter */}
+        <div style={{ marginBottom: '1.25rem', overflowX: 'auto', scrollbarWidth: 'none' as const }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>Category</span>
+            {CAMPUS_CATEGORIES.map(cat => (
+              <button key={cat} onClick={() => setCategory(cat)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}>
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Results count */}
+        <div style={{ fontSize: '0.76rem', color: '#94A3B8', marginBottom: '1.25rem' }}>
+          {filteredUnis.length} {filteredUnis.length === 1 ? 'university' : 'universities'} found
+        </div>
+
+        {/* University cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: '1rem' }}>
+          {filteredUnis.map(uni => {
+            const pct = Math.min((uni.activeShops / uni.totalSlots) * 100, 100)
             return (
-              <div key={uni.slug} className="uni-card" style={{ background: '#FFFFFF', border: `2px solid ${uni.color}22`, borderRadius: '20px', padding: '1.5rem', display: 'flex', flexDirection: 'column', boxShadow: `0 4px 18px ${uni.color}15` }}>
-                {/* Colored header strip */}
-                <div style={{ background: uni.bgGradient, borderRadius: '14px', padding: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.1rem', fontWeight: 900, color: uni.color, letterSpacing: '0.05em' }}>
-                    {uni.abbr}
+              <div key={uni.slug} className="uni-card" style={{ background: '#fff', border: `1.5px solid ${uni.color}22`, borderRadius: '16px', overflow: 'hidden', boxShadow: `0 1px 6px ${uni.color}14`, cursor: 'pointer' }}>
+                {/* Banner */}
+                <div style={{ height: '70px', background: uni.bgGradient, position: 'relative', display: 'flex', alignItems: 'center', padding: '0 0.9rem' }}>
+                  <div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 900, color: uni.color, letterSpacing: '0.04em', lineHeight: 1 }}>{uni.abbr}</div>
+                    <div style={{ fontSize: '0.58rem', color: uni.color, opacity: 0.65, marginTop: '2px' }}>{uni.city}</div>
                   </div>
-                  <div style={{ fontSize: '1.5rem' }}>{uni.emoji}</div>
+                  <div style={{ position: 'absolute', top: '7px', right: '8px', background: uni.slotsLeft > 0 ? 'rgba(5,150,105,0.12)' : 'rgba(220,38,38,0.12)', color: uni.slotsLeft > 0 ? '#059669' : '#DC2626', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px' }}>
+                    {uni.slotsLeft > 0 ? `${loading ? '...' : uni.slotsLeft} left` : 'Full'}
+                  </div>
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.95rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.2rem', lineHeight: 1.3 }}>{uni.name}</h3>
-                <p style={{ fontSize: '0.78rem', color: '#94A3B8', marginBottom: '1rem' }}>{uni.city}</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: '0.5rem' }}>
-                  <span style={{ fontWeight: 600, color: '#374151' }}>{loading ? '...' : uni.activeShops} shops</span>
-                  <span style={{ fontWeight: 600, color: uni.slotsLeft > 10 ? '#059669' : uni.slotsLeft > 0 ? '#D97706' : '#DC2626' }}>
-                    {loading ? '...' : uni.slotsLeft > 0 ? `${uni.slotsLeft} slots left` : 'Full'}
-                  </span>
+
+                {/* Body */}
+                <div style={{ padding: '0.65rem 0.75rem 0.75rem' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#0F172A', marginBottom: '0.3rem', lineHeight: 1.2 }}>{uni.name}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#94A3B8', marginBottom: '0.5rem' }}>
+                    {loading ? '...' : uni.activeShops} shops active
+                  </div>
+                  {/* Progress bar */}
+                  <div style={{ height: '4px', background: '#F1F5F9', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.6rem' }}>
+                    <div style={{ height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${uni.color}, ${uni.color}aa)`, borderRadius: '999px', transition: 'width 0.6s ease' }} />
+                  </div>
+                  <Link href={`/campus/${uni.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: uni.bgGradient, color: uni.color, border: `1px solid ${uni.color}40`, borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}>
+                    Browse <ArrowRight size={10} />
+                  </Link>
                 </div>
-                <div style={{ height: '6px', background: '#F1F5F9', borderRadius: '999px', overflow: 'hidden', marginBottom: '1.25rem' }}>
-                  <div style={{ height: '100%', width: loading ? '0%' : `${pct}%`, background: `linear-gradient(90deg, ${uni.color}, ${uni.color}aa)`, borderRadius: '999px', transition: 'width 0.6s ease' }} />
-                </div>
-                <Link href={`/campus/${uni.slug}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', background: uni.bgGradient, color: uni.color, borderRadius: '999px', padding: '0.7rem 1rem', fontSize: '0.84rem', fontWeight: 700, textDecoration: 'none', boxShadow: `0 6px 16px ${uni.color}30`, marginTop: 'auto', border: `1px solid ${uni.color}40` }}>
-                  Browse Shops <ArrowRight style={{ width: '14px', height: '14px' }} />
-                </Link>
               </div>
             )
           })}
-        </div>
-      </section>
-
-      {/*  BENEFITS  */}
-      <section style={{ background: '#FFFFFF', padding: '5rem 5%', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Why Choose Us</div>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A' }}>Why Students Sell on Travex</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
-            {studentBenefits.map((b) => (
-              <div key={b.title} className="benefit-card" style={{ background: '#F8FAFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.8rem', boxShadow: '0 2px 12px rgba(15,23,42,0.04)' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(37,99,235,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                  <b.icon style={{ width: '22px', height: '22px', color: '#C9A84C' }} />
-                </div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.05rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.4rem' }}>{b.title}</h3>
-                <p style={{ fontSize: '0.82rem', color: '#64748B', lineHeight: 1.7 }}>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/*  HOW IT WORKS  */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '5rem 5%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Simple Process</div>
-          <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A' }}>How Campus Market Works</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-          {steps.map((step, i) => (
-            <div key={step.title} style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.8rem', boxShadow: '0 4px 18px rgba(15,23,42,0.05)' }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: 'rgba(201,168,76,0.22)', lineHeight: 1, marginBottom: '0.75rem' }}>0{i + 1}</div>
-              <step.icon style={{ width: '26px', height: '26px', color: '#050B2E', marginBottom: '0.75rem' }} />
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.05rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.4rem' }}>{step.title}</h3>
-              <p style={{ fontSize: '0.82rem', color: '#64748B', lineHeight: 1.65 }}>{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/*  CTA  */}
-      <section style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #010510 0%, #050E2E 55%, #071540 100%)', padding: '5rem 5%', textAlign: 'center' }}>
-        <div style={{ position: 'absolute', top: '-25%', right: '-8%', width: '55%', height: '120%', background: 'radial-gradient(ellipse 55% 55% at 65% 30%, rgba(56,120,255,0.40) 0%, transparent 70%)', filter: 'blur(30px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '640px', margin: '0 auto' }}>
-          <div style={{ display: 'inline-block', background: '#C9A84C', color: '#0F172A', padding: '0.35rem 1.2rem', borderRadius: '999px', fontSize: '0.78rem', fontWeight: 700, marginBottom: '1.5rem' }}>
-            Only 60 slots per university
-          </div>
-          <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: '1rem', lineHeight: 1.1 }}>
-            Claim Your Spot Before It&apos;s Gone
-          </h2>
-          <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.92rem', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '480px', margin: '0 auto 2rem' }}>
-            Slots are limited to keep the marketplace exclusive and high quality.
-          </p>
-          <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#C9A84C', color: '#0F172A', padding: '1rem 2.4rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px rgba(201,168,76,0.35)' }}>
-            Apply Now <ArrowRight style={{ width: '16px', height: '16px' }} />
-          </Link>
         </div>
       </section>
 
