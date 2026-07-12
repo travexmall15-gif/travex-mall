@@ -190,57 +190,51 @@ export default function CampusPage() {
           </div>
         </div>
 
-        {/* Category filter */}
-        <div style={{ marginBottom: '1.25rem', overflowX: 'auto', scrollbarWidth: 'none' as const }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>Category</span>
-            {CAMPUS_CATEGORIES.map(cat => (
-              <button key={cat} onClick={() => setCategory(cat)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}>
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
+
 
         {/* Results count */}
         <div style={{ fontSize: '0.76rem', color: '#94A3B8', marginBottom: '1.25rem' }}>
           {filteredUnis.length} {filteredUnis.length === 1 ? 'university' : 'universities'} found
         </div>
 
-        {/* University cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: '1rem' }}>
-          {filteredUnis.map(uni => {
-            const pct = Math.min((uni.activeShops / uni.totalSlots) * 100, 100)
-            return (
-              <div key={uni.slug} className="uni-card" style={{ background: '#fff', border: `1.5px solid ${uni.color}22`, borderRadius: '16px', overflow: 'hidden', boxShadow: `0 1px 6px ${uni.color}14`, cursor: 'pointer' }}>
-                {/* Banner */}
-                <div style={{ height: '70px', background: uni.bgGradient, position: 'relative', display: 'flex', alignItems: 'center', padding: '0 0.9rem' }}>
-                  <div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 900, color: uni.color, letterSpacing: '0.04em', lineHeight: 1 }}>{uni.abbr}</div>
-                    <div style={{ fontSize: '0.58rem', color: uni.color, opacity: 0.65, marginTop: '2px' }}>{uni.city}</div>
+        {/* University cards — horizontal auto-scroll */}
+        <style>{`
+          @keyframes uniScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+          .uni-scroll-track { animation: uniScroll 20s linear infinite; }
+          .uni-scroll-track:hover { animation-play-state: paused; }
+          .uni-card:hover { transform: translateY(-3px) !important; box-shadow: 0 12px 28px rgba(15,23,42,0.12) !important; }
+        `}</style>
+        <div style={{ overflow: 'hidden' }}>
+          <div className="uni-scroll-track" style={{ display: 'flex', gap: '12px', width: 'max-content' }}>
+            {[...filteredUnis, ...filteredUnis].map((uni, idx) => {
+              const pct = Math.min((uni.activeShops / uni.totalSlots) * 100, 100)
+              return (
+                <div key={`${uni.slug}-${idx}`} className="uni-card" style={{ background: '#fff', border: `1.5px solid ${uni.color}25`, borderRadius: '16px', overflow: 'hidden', boxShadow: `0 2px 10px ${uni.color}14`, cursor: 'pointer', flexShrink: 0, width: '170px', transition: 'all 0.2s' }}>
+                  {/* Banner */}
+                  <div style={{ height: '68px', background: uni.bgGradient, position: 'relative', display: 'flex', alignItems: 'center', padding: '0 0.85rem' }}>
+                    <div>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.05rem', fontWeight: 900, color: uni.color, letterSpacing: '0.04em', lineHeight: 1 }}>{uni.abbr}</div>
+                      <div style={{ fontSize: '0.56rem', color: uni.color, opacity: 0.6, marginTop: '2px' }}>{uni.city}</div>
+                    </div>
+                    <div style={{ position: 'absolute', top: '6px', right: '7px', background: uni.slotsLeft > 0 ? 'rgba(5,150,105,0.15)' : 'rgba(220,38,38,0.12)', color: uni.slotsLeft > 0 ? '#059669' : '#DC2626', fontSize: '0.5rem', fontWeight: 800, padding: '2px 6px', borderRadius: '999px' }}>
+                      {uni.slotsLeft > 0 ? `${loading ? '...' : uni.slotsLeft} left` : 'Full'}
+                    </div>
                   </div>
-                  <div style={{ position: 'absolute', top: '7px', right: '8px', background: uni.slotsLeft > 0 ? 'rgba(5,150,105,0.12)' : 'rgba(220,38,38,0.12)', color: uni.slotsLeft > 0 ? '#059669' : '#DC2626', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px' }}>
-                    {uni.slotsLeft > 0 ? `${loading ? '...' : uni.slotsLeft} left` : 'Full'}
+                  {/* Body */}
+                  <div style={{ padding: '0.6rem 0.7rem 0.7rem' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.72rem', color: '#0F172A', marginBottom: '0.25rem', lineHeight: 1.2 }}>{uni.name}</div>
+                    <div style={{ fontSize: '0.6rem', color: '#94A3B8', marginBottom: '0.45rem' }}>{loading ? '...' : uni.activeShops} active shops</div>
+                    <div style={{ height: '3px', background: '#F1F5F9', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.55rem' }}>
+                      <div style={{ height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${uni.color}, ${uni.color}88)`, borderRadius: '999px' }} />
+                    </div>
+                    <Link href={`/campus/${uni.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 10px', background: uni.bgGradient, color: uni.color, border: `1px solid ${uni.color}35`, borderRadius: '6px', fontSize: '0.62rem', fontWeight: 700, textDecoration: 'none' }}>
+                      Browse <ArrowRight size={9} />
+                    </Link>
                   </div>
                 </div>
-
-                {/* Body */}
-                <div style={{ padding: '0.65rem 0.75rem 0.75rem' }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#0F172A', marginBottom: '0.3rem', lineHeight: 1.2 }}>{uni.name}</div>
-                  <div style={{ fontSize: '0.62rem', color: '#94A3B8', marginBottom: '0.5rem' }}>
-                    {loading ? '...' : uni.activeShops} shops active
-                  </div>
-                  {/* Progress bar */}
-                  <div style={{ height: '4px', background: '#F1F5F9', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.6rem' }}>
-                    <div style={{ height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${uni.color}, ${uni.color}aa)`, borderRadius: '999px', transition: 'width 0.6s ease' }} />
-                  </div>
-                  <Link href={`/campus/${uni.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: uni.bgGradient, color: uni.color, border: `1px solid ${uni.color}40`, borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}>
-                    Browse <ArrowRight size={10} />
-                  </Link>
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </section>
 

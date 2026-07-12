@@ -8,7 +8,7 @@ import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb, type CampusStore, fmtTZS } from '@/lib/supabase'
 import { getUniversity } from '@/lib/data'
-import { MapPin, ArrowLeft, Search, MessageCircle, ExternalLink, ShieldCheck, Store } from 'lucide-react'
+import { MapPin, ArrowLeft, Search, ShieldCheck, Store } from 'lucide-react'
 
 // Distinct color palettes, index-based so every card looks different
 const CARD_PALETTES = [
@@ -94,21 +94,11 @@ function StoreCard({ store, index }: { store: CampusStore; index: number }) {
         {/* Accent bar */}
         <div className="h-0.5 w-full rounded mb-3" style={{ background: `linear-gradient(90deg,${accent},${accent}33)` }} />
 
-        {/* Actions */}
-        <div className="flex gap-2">
-          {wa && (
-            <a href={`https://wa.me/${wa}`} target="_blank"
-              className="flex-1 py-2 rounded-xl text-xs font-bold text-center text-white flex items-center justify-center gap-1 transition-all"
-              style={{ background: '#25D366' }}>
-              <MessageCircle className="h-3 w-3" /> Chat
-            </a>
-          )}
-          <Link href={`/store/${store.id}`}
-            className="flex-1 py-2 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-1 transition-all"
-            style={{ background: bg, color: accent }}>
-            <Store className="h-3 w-3" /> View Shop
-          </Link>
-        </div>
+        {/* Visit Shop only */}
+        <Link href={`/store/${store.id}`}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: '#0D1B3E', color: '#fff', borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none' }}>
+          <Store className="h-3 w-3" /> Visit Shop
+        </Link>
       </div>
     </div>
   )
@@ -150,80 +140,84 @@ export default function UniversityPage({ params }: { params: Promise<{ slug: str
     <main className="min-h-screen" style={{ background: '#F8FAFF' }}>
       <SiteNav />
 
-      {/* Header */}
-      <div className="pt-16" style={{ background: 'linear-gradient(135deg,#0D1B3E 0%,#1B3A8A 100%)' }}>
-        <div className="max-w-6xl mx-auto px-5 py-8">
-          <button onClick={() => router.back()}
-            className="flex items-center gap-2 text-sm mb-6 transition-all"
-            style={{ color: 'rgba(255,255,255,0.6)' }}>
-            <ArrowLeft className="h-4 w-4" /> Back to Campus Market
-          </button>
+      {/* Hero */}
+      <section style={{ paddingTop: '64px', background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 55% 70% at 85% 20%, rgba(56,120,255,0.28) 0%, transparent 65%)', zIndex: 0 }} />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '2.5rem 5% 0' }}>
 
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold mb-3"
-                style={{ background: 'rgba(201,168,76,0.2)', color: '#C9A84C', border: '1px solid rgba(201,168,76,0.3)' }}>
-                🎓 {slug.toUpperCase()}
-              </div>
-              <h1 className="text-3xl font-black text-white mb-1" style={{ fontFamily: "'Playfair Display',serif" }}>
-                {uni?.name || slug.toUpperCase()}
-              </h1>
-              <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                <MapPin className="h-4 w-4" />
-                <span>{uni?.city || 'Tanzania'}</span>
-                <span>•</span>
-                <span>{loading ? '...' : stores.length} active shops</span>
-                <span>•</span>
-                <span style={{ color: slotsLeft > 10 ? '#4ADE80' : slotsLeft > 0 ? '#FCD34D' : '#F87171' }}>
-                  {slotsLeft > 0 ? `${slotsLeft} slots left` : 'Full'}
-                </span>
-              </div>
-            </div>
-            <Link href="/campus-apply"
-              className="px-5 py-2.5 rounded-full text-sm font-bold transition-all"
-              style={{ background: '#C9A84C', color: '#0D1B3E', boxShadow: '0 4px 14px rgba(201,168,76,0.4)' }}>
-              Open Your Shop →
+          {/* Top row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+            <button onClick={() => router.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '5px 12px', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 600, cursor: 'pointer' }}>
+              <ArrowLeft size={12} /> Back
+            </button>
+            <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
+              Open Your Shop
             </Link>
           </div>
+
+          {/* University info */}
+          <div style={{ marginBottom: '1.75rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.25)', color: '#C9A84C', padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 700, marginBottom: '0.85rem' }}>
+              Campus Market · {slug.toUpperCase()}
+            </div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.5rem' }}>
+              {uni?.name || slug.toUpperCase()}
+            </h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)' }}>
+                <MapPin size={12} /> {uni?.city || 'Tanzania'}
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+              <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)' }}>{loading ? '...' : stores.length} shops</span>
+              <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: slotsLeft > 10 ? '#86EFAC' : slotsLeft > 0 ? '#FCD34D' : '#FCA5A5' }}>
+                {slotsLeft > 0 ? `${slotsLeft} slots left` : 'Full'}
+              </span>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)', marginBottom: '0' }} />
         </div>
-      </div>
+      </section>
 
       {/* Search + Filters */}
-      <div className="max-w-6xl mx-auto px-5 py-6">
-        <div className="flex flex-wrap gap-3 mb-6">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#94A3B8' }} />
-            <input
-              value={search} onChange={e => setSearch(e.target.value)}
-              placeholder={`Search shops at ${slug.toUpperCase()}...`}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none"
-              style={{ background: '#fff', border: '1.5px solid #E2E8F0', color: '#0F172A' }}
-            />
-          </div>
-          <div className="flex gap-2 flex-wrap">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 5% 0' }}>
+        {/* Search */}
+        <div style={{ position: 'relative', marginBottom: '1rem' }}>
+          <Search size={15} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+          <input
+            value={search} onChange={e => setSearch(e.target.value)}
+            placeholder={`Search shops at ${slug.toUpperCase()}...`}
+            style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.85rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', transition: 'border-color 0.2s' }}
+            onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
+            onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
+          />
+        </div>
+        {/* Category filter */}
+        <div style={{ overflowX: 'auto', scrollbarWidth: 'none' as const, marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 'max-content', paddingBottom: '2px' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>Category</span>
             {categories.map(c => (
-              <button key={c} onClick={() => setCat(c)}
-                className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                style={{
-                  background: cat === c ? '#0D1B3E' : '#fff',
-                  color: cat === c ? '#fff' : '#64748B',
-                  border: `1.5px solid ${cat === c ? '#0D1B3E' : '#E2E8F0'}`,
-                }}>
+              <button key={c} onClick={() => setCat(c)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: cat === c ? '#C9A84C' : '#E2E8F0', background: cat === c ? '#C9A84C' : '#fff', color: cat === c ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}>
                 {c}
               </button>
             ))}
           </div>
         </div>
+        {filtered.length > 0 && (
+          <div style={{ fontSize: '0.76rem', color: '#94A3B8', marginBottom: '1rem' }}>{filtered.length} shop{filtered.length !== 1 ? 's' : ''} found</div>
+        )}
 
         {/* Grid */}
         {loading ? (
           <div className="text-center py-20 text-gray-400">
-            <div className="animate-spin text-4xl mb-3">⏳</div>
+            <div style={{ width: '32px', height: '32px', border: '3px solid #E2E8F0', borderTopColor: '#0D1B3E', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem' }} />
             <p>Loading shops...</p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4">🏪</div>
+            <Store size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
             <h3 className="text-xl font-bold mb-2" style={{ color: '#0D1B3E', fontFamily: "'Playfair Display',serif" }}>
               {stores.length === 0 ? 'No Shops Yet' : 'No shops match your search'}
             </h3>
