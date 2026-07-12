@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Orders — Travex Mall</title>
+<title>Orders, Travex Mall</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="stylesheet" href="shared.css">
 </head>
@@ -15,10 +15,10 @@
   </div>
   <div class="main-content">
     <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-list"></i> Total</div><div class="stat-value" id="oTotal">—</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-clock"></i> Pending</div><div class="stat-value" id="oPending" style="color:var(--yellow)">—</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-truck"></i> Processing</div><div class="stat-value" id="oProcess" style="color:var(--blue)">—</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-check"></i> Delivered</div><div class="stat-value" id="oDone" style="color:var(--green)">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-list"></i> Total</div><div class="stat-value" id="oTotal">-</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-clock"></i> Pending</div><div class="stat-value" id="oPending" style="color:var(--yellow)">-</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-truck"></i> Processing</div><div class="stat-value" id="oProcess" style="color:var(--blue)">-</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-check"></i> Delivered</div><div class="stat-value" id="oDone" style="color:var(--green)">-</div></div>
     </div>
     <div class="table-card">
       <div class="table-card-header">
@@ -44,7 +44,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">Order Details</div>
-      <button class="modal-close" onclick="closeModal('orderModal')">✕</button>
+      <button class="modal-close" onclick="closeModal('orderModal')"></button>
     </div>
     <div class="modal-body" id="orderDetail"></div>
     <div class="modal-footer" id="orderActions"></div>
@@ -104,7 +104,7 @@ function renderOrders() {
       <div class="text-navy fw-700">${o.customer_name||'Unknown'}</div>
       ${o.customer_phone ? `<div class="text-muted fs-12">${o.customer_phone}</div>` : ''}
     </td>
-    <td>${truncate(o.product_name||o.items||'—',28)}</td>
+    <td>${truncate(o.product_name||o.items||'-',28)}</td>
     <td class="fw-700">${formatTZS(o.total_amount||o.amount)}</td>
     <td><span class="badge ${badgeMap[o.status]||'badge-navy'}">${o.status||'pending'}</span></td>
     <td class="text-muted fs-12">${timeAgo(o.created_at)}</td>
@@ -112,8 +112,8 @@ function renderOrders() {
       <button class="btn-icon" onclick="viewOrder('${o.id}')" title="View"><i class="ti ti-eye"></i></button>
       ${o.customer_phone ? `<a class="btn-icon" href="https://wa.me/${o.customer_phone.replace(/\D/g,'')}" target="_blank" title="WhatsApp" style="color:#25D366"><i class="ti ti-brand-whatsapp"></i></a>` : ''}
       <a class="btn btn-sm" href="${buildMoveUrl(o)}" target="_blank"
-        style="background:#F97316;color:#fff;font-size:10px;padding:3px 8px;border-radius:6px;text-decoration:none;display:inline-flex;align-items:center;gap:3px" title="Arrange Delivery via Travex Move">
-        🚚 Deliver
+        style="background:#F97316;color:#fff;font-size:10px;padding:3px 8px;border-radius: 10px;text-decoration:none;display:inline-flex;align-items:center;gap:3px" title="Arrange Delivery via Travex Move">
+         Deliver
       </a>
     </div></td>
   </tr>`).join('')}</tbody></table>`;
@@ -144,13 +144,13 @@ function viewOrder(id) {
         <span class="badge ${badgeMap[o.status]||'badge-navy'}">${o.status||'pending'}</span>
       </div>
       ${[
-        ['Customer', o.customer_name||'—'],
-        ['Phone', o.customer_phone||'—'],
-        ['Product', o.product_name||o.items||'—'],
-        ['Quantity', o.quantity||'—'],
+        ['Customer', o.customer_name||'-'],
+        ['Phone', o.customer_phone||'-'],
+        ['Product', o.product_name||o.items||'-'],
+        ['Quantity', o.quantity||'-'],
         ['Amount', formatTZS(o.total_amount||o.amount)],
         ['Date', new Date(o.created_at).toLocaleString('en-GB')],
-        ['Notes', o.notes||'—'],
+        ['Notes', o.notes||'-'],
       ].map(([l,v]) => `
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
           <span class="text-muted fs-12 fw-700">${l}</span>
@@ -174,7 +174,7 @@ function viewOrder(id) {
 async function updateStatus(id, status) {
   await DB.orders.updateStatus(id, status);
   orders = orders.map(o => o.id===id ? {...o, status} : o);
-  showToast(`✅ Order marked as ${status}`, 'success');
+  showToast(` Order marked as ${status}`, 'success');
   closeModal('orderModal');
   renderOrders(); updateStats();
 }

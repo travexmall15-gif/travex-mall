@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Settings — Travex Mall</title>
+<title>Settings, Travex Mall</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="stylesheet" href="shared.css">
 </head>
@@ -46,7 +46,7 @@
 
             <!-- Current plan badge -->
             <div style="text-align:center;margin-bottom:20px">
-              <div style="font-size:26px;font-weight:800;color:var(--gold)" id="currentPlan">—</div>
+              <div style="font-size:26px;font-weight:800;color:var(--gold)" id="currentPlan">-</div>
               <div class="text-muted fs-12" style="margin-top:4px">Current Plan</div>
             </div>
 
@@ -77,7 +77,7 @@
                 style="border:2px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;background:var(--bg)">
                 <div style="display:flex;justify-content:space-between;align-items:center">
                   <div>
-                    <div style="font-weight:800;font-size:14px;color:var(--text)">🥈 Basic Plan</div>
+                    <div style="font-weight:800;font-size:14px;color:var(--text)"> Basic Plan</div>
                     <div class="fs-12 text-muted">All core features</div>
                   </div>
                   <div style="text-align:right">
@@ -93,7 +93,7 @@
                 <div style="position:absolute;top:-10px;right:12px;background:var(--gold);color:#0F172A;font-size:10px;font-weight:800;padding:2px 10px;border-radius:999px">BEST VALUE</div>
                 <div style="display:flex;justify-content:space-between;align-items:center">
                   <div>
-                    <div style="font-weight:800;font-size:14px;color:var(--gold)">🥇 Premium Plan</div>
+                    <div style="font-weight:800;font-size:14px;color:var(--gold)"> Premium Plan</div>
                     <div class="fs-12 text-muted">All features + AI Tools</div>
                   </div>
                   <div style="text-align:right">
@@ -108,7 +108,7 @@
                 style="border:2px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;background:var(--bg)">
                 <div style="display:flex;justify-content:space-between;align-items:center">
                   <div>
-                    <div style="font-weight:800;font-size:14px;color:var(--text)">🎓 Campus Plan</div>
+                    <div style="font-weight:800;font-size:14px;color:var(--text)"> Campus Plan</div>
                     <div class="fs-12 text-muted">Students only</div>
                   </div>
                   <div style="text-align:right">
@@ -122,7 +122,7 @@
             <!-- Upgrade button -->
             <button onclick="upgradeNow()" id="upgradeBtn"
               style="width:100%;margin-top:16px;padding:14px;background:var(--gold);color:#0F172A;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;display:none">
-              <i class="ti ti-arrow-up-circle"></i> Upgrade Now — <span id="upgradeTotal">TZS 45,000</span>
+              <i class="ti ti-arrow-up-circle"></i> Upgrade Now, <span id="upgradeTotal">TZS 45,000</span>
             </button>
 
             <!-- Payment info -->
@@ -183,7 +183,7 @@ let shopData = null;
   document.getElementById('sOwnerName').value = shopData?.owner_name||'';
   document.getElementById('sEmail').value     = shopData?.auth_email||session.user.email;
   document.getElementById('currentPlan').textContent =
-    plan==='premium' ? '🥇 Premium' : plan==='campus' ? '🎓 Campus' : '🥈 Basic';
+    plan==='premium' ? ' Premium' : plan==='campus' ? ' Campus' : ' Basic';
   showLoading(false);
 })();
 
@@ -197,7 +197,7 @@ async function saveShop() {
   };
   const { error } = await sb.from('pending_payments').update(updates).eq('id', shopData?.id);
   if (error) { showToast('Error: '+error.message,'error'); return; }
-  showToast('✅ Shop info saved!','success');
+  showToast(' Shop info saved!','success');
 }
 
 async function saveAccount() {
@@ -205,10 +205,10 @@ async function saveAccount() {
   const { error } = await sb.from('pending_payments').update({ owner_name: name }).eq('id', shopData?.id);
   if (error) { showToast('Error: '+error.message,'error'); return; }
   localStorage.setItem('travex_owner_name', name);
-  showToast('✅ Account updated!','success');
+  showToast(' Account updated!','success');
 }
 
-// ── SUBSCRIPTION UPGRADE FUNCTIONS ──
+//  SUBSCRIPTION UPGRADE FUNCTIONS 
 let selectedPlan   = 'basic';
 let selectedPeriod = 'monthly';
 

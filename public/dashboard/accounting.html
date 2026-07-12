@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Accounting — Travex Mall</title>
+<title>Accounting, Travex Mall</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="stylesheet" href="shared.css">
 <style>
@@ -38,22 +38,22 @@
     <div class="stats-grid" style="margin-bottom:20px">
       <div class="stat-card">
         <div class="stat-label"><i class="ti ti-arrow-up-circle" style="color:var(--green)"></i> Total Revenue</div>
-        <div class="stat-value" id="sRevenue" style="color:var(--green)">—</div>
-        <div class="stat-sub" id="sRevenueCount">—</div>
+        <div class="stat-value" id="sRevenue" style="color:var(--green)">-</div>
+        <div class="stat-sub" id="sRevenueCount">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label"><i class="ti ti-arrow-down-circle" style="color:var(--red)"></i> Total Expenses</div>
-        <div class="stat-value" id="sExpenses" style="color:var(--red)">—</div>
-        <div class="stat-sub" id="sExpensesCount">—</div>
+        <div class="stat-value" id="sExpenses" style="color:var(--red)">-</div>
+        <div class="stat-sub" id="sExpensesCount">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label"><i class="ti ti-trending-up"></i> Net Profit</div>
-        <div class="stat-value" id="sProfit">—</div>
-        <div class="stat-sub" id="sProfitSub">—</div>
+        <div class="stat-value" id="sProfit">-</div>
+        <div class="stat-sub" id="sProfitSub">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label"><i class="ti ti-receipt"></i> Transactions</div>
-        <div class="stat-value" id="sTxCount">—</div>
+        <div class="stat-value" id="sTxCount">-</div>
         <div class="stat-sub">in selected period</div>
       </div>
     </div>
@@ -78,7 +78,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="saleModalTitle">Record Sale</div>
-      <button class="modal-close" onclick="closeModal('saleModal')">✕</button>
+      <button class="modal-close" onclick="closeModal('saleModal')"></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="sType">
@@ -204,11 +204,11 @@ function renderAll() {
   el.innerHTML = `<table><thead><tr>
     <th>Description</th><th>Category</th><th>Type</th><th>Amount</th><th>Date</th><th>Actions</th>
   </tr></thead><tbody>${list.map(s=>`<tr>
-    <td><div class="fw-700">${s.description||'—'}</div><div class="text-muted fs-12">${s.notes||''}</div></td>
+    <td><div class="fw-700">${s.description||'-'}</div><div class="text-muted fs-12">${s.notes||''}</div></td>
     <td><span class="badge badge-navy">${s.category||'General'}</span></td>
     <td><span class="badge ${s.type==='income'?'badge-success':'badge-danger'}">${s.type==='income'?'Income':'Expense'}</span></td>
     <td class="fw-700" style="color:${s.type==='income'?'var(--green)':'var(--red)'}">${formatTZS(s.amount)}</td>
-    <td class="text-muted fs-12">${s.date||'—'}</td>
+    <td class="text-muted fs-12">${s.date||'-'}</td>
     <td><button class="btn-icon" onclick="deleteSale('${s.id}')" style="color:var(--red)" title="Delete"><i class="ti ti-trash"></i></button></td>
   </tr>`).join('')}</tbody></table>`;
 }
@@ -221,7 +221,7 @@ function openAddModal(type) {
   document.getElementById('sCategory').value='';
   document.getElementById('sDate').value=today();
   document.getElementById('sNotes').value='';
-  document.getElementById('saleModalTitle').textContent = type==='income' ? '💰 Record Sale' : '💸 Add Expense';
+  document.getElementById('saleModalTitle').textContent = type==='income' ? ' Record Sale' : ' Add Expense';
   openModal('saleModal');
 }
 
@@ -238,7 +238,7 @@ async function saveSale() {
   };
   const { error } = await DB.sales.save(item);
   if (error) { showToast('Error: '+error.message,'error'); return; }
-  showToast('✅ Transaction saved!','success');
+  showToast(' Transaction saved!','success');
   closeModal('saleModal');
   allSales = await DB.sales.getAll(shopId);
   renderAll();

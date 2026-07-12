@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Invoices — Travex Mall</title>
+<title>Invoices, Travex Mall</title>
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <div class="sidebar" id="sidebar"></div>
 <div class="main-wrapper">
   <div class="main-header">
-    <div><div class="header-title">🧾 Invoices</div><div class="header-sub">Generate and send invoices to your customers</div></div>
+    <div><div class="header-title"> Invoices</div><div class="header-sub">Generate and send invoices to your customers</div></div>
     <button class="btn btn-gold" onclick="openModal('invoiceModal')"><i class="ti ti-plus"></i> New Invoice</button>
   </div>
   <div class="main-content">
@@ -28,7 +28,7 @@
   </div>
 </div>
 <div class="modal" id="invoiceModal">
-  <div class="modal-header"><div class="modal-title">🧾 New Invoice</div><button class="modal-close" onclick="closeModal('invoiceModal')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-header"><div class="modal-title"> New Invoice</div><button class="modal-close" onclick="closeModal('invoiceModal')"><i class="ti ti-x"></i></button></div>
   <div class="modal-body">
     <div class="form-group"><label class="form-label">Customer Name *</label><input class="form-input" id="invCustomer" placeholder="Customer name"></div>
     <div class="form-group"><label class="form-label">Customer Phone</label><input class="form-input" id="invPhone" placeholder="+255 7XX XXX XXX"></div>
@@ -72,8 +72,8 @@ function renderInvoices() {
   tbody.innerHTML = invoices.map((inv,i) => `
     <tr>
       <td><strong>#INV-${String(i+1).padStart(3,'0')}</strong></td>
-      <td>${inv.description?.split('|')[0]||'—'}</td>
-      <td><small>${inv.notes||'—'}</small></td>
+      <td>${inv.description?.split('|')[0]||'-'}</td>
+      <td><small>${inv.notes||'-'}</small></td>
       <td style="font-weight:700;color:var(--navy)">TZS ${Number(inv.amount).toLocaleString()}</td>
       <td><small>${new Date(inv.created_at).toLocaleDateString('en-GB')}</small></td>
       <td>
@@ -100,7 +100,7 @@ async function createInvoice() {
     sale_date: new Date().toISOString().split('T')[0]
   });
   const msg = encodeURIComponent(
-    '🧾 *Invoice from ' + (shopData?.shop_name||'Travex Mall') + '*\n\n' +
+    ' *Invoice from ' + (shopData?.shop_name||'Travex Mall') + '*\n\n' +
     'Invoice #: ' + invNum + '\n' +
     'Items:\n' + items + '\n\n' +
     'Total: *TZS ' + Number(amount).toLocaleString() + '*\n' +
@@ -109,7 +109,7 @@ async function createInvoice() {
   );
   if (phone) window.open('https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + msg, '_blank');
   closeModal('invoiceModal');
-  showToast('✅ Invoice created!','success');
+  showToast(' Invoice created!','success');
   await loadInvoices();
 }
 </script>

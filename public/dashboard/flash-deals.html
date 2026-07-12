@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Flash Deals — Travex Mall</title>
+<title>Flash Deals, Travex Mall</title>
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
 
 <div class="main-wrapper">
   <div class="main-header">
-    <div><div class="header-title">⚡ Flash Deals</div>
+    <div><div class="header-title"> Flash Deals</div>
     <div class="header-sub">Create limited-time offers to boost sales</div></div>
     <div class="header-right">
       <button class="btn btn-gold" onclick="openModal('addDealModal')">
@@ -71,7 +71,7 @@
 <!-- Add Deal Modal -->
 <div class="modal" id="addDealModal">
   <div class="modal-header">
-    <div class="modal-title">⚡ New Flash Deal</div>
+    <div class="modal-title"> New Flash Deal</div>
     <button class="modal-close" onclick="closeModal('addDealModal')"><i class="ti ti-x"></i></button>
   </div>
   <div class="modal-body">
@@ -177,7 +177,7 @@ async function createDeal() {
 
   if (error) { showToast('Error: '+error.message,'error'); return; }
   closeModal('addDealModal');
-  showToast('⚡ Flash deal launched!','success');
+  showToast(' Flash deal launched!','success');
   await loadDeals();
 }
 

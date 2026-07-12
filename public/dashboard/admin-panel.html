@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin — Travex Mall</title>
+<title>Admin, Travex Mall</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -146,7 +146,7 @@ tr:last-child td{border-bottom:none}
 .days-warn{color:#EAB308;font-weight:700}
 .days-critical{color:#EF4444;font-weight:700}
 .days-expired{color:#64748B;font-weight:700}
-.action-btn{padding:4px 10px;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.action-btn{padding:4px 10px;border:none;border-radius: 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
 .action-btn:hover{opacity:.8}
 </style>
 </head>
@@ -155,12 +155,12 @@ tr:last-child td{border-bottom:none}
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="lc">
-    <div class="lc-badge">🔐 Admin Only</div>
+    <div class="lc-badge"> Admin Only</div>
     <h2>Travex Admin</h2>
     <p>Enter your admin password to continue.</p>
     <div class="lc-err" id="loginErr"></div>
     <input id="adminPass" placeholder="Admin password" type="password" onkeypress="if(event.key==='Enter')doLogin()">
-    <button onclick="doLogin()">Sign In →</button>
+    <button onclick="doLogin()">Sign In </button>
   </div>
 </div>
 
@@ -171,65 +171,65 @@ tr:last-child td{border-bottom:none}
 
     <div class="sb-sec">
       <div class="sb-lbl">Overview</div>
-      <button class="sb-i on" onclick="go('overview',this)">📊 Dashboard</button>
-      <button class="sb-i" onclick="go('analytics',this)">📈 Analytics & Value</button>
+      <button class="sb-i on" onclick="go('overview',this)"> Dashboard</button>
+      <button class="sb-i" onclick="go('analytics',this)"> Analytics & Value</button>
     </div>
     <div class="sb-sec">
       <div class="sb-lbl">Campus Market</div>
-      <button class="sb-i" onclick="go('c-apps',this)">📋 Applications <span class="sb-c" id="cAppC">0</span></button>
-      <button class="sb-i" onclick="go('c-stores',this)">🎓 Active Stores</button>
+      <button class="sb-i" onclick="go('c-apps',this)"> Applications <span class="sb-c" id="cAppC">0</span></button>
+      <button class="sb-i" onclick="go('c-stores',this)"> Active Stores</button>
     </div>
     <div class="sb-sec">
       <div class="sb-lbl">Business Market</div>
-      <button class="sb-i" onclick="go('sellers',this)">👥 All Sellers <span class="sb-c" id="sellerCount">0</span></button>
+      <button class="sb-i" onclick="go('sellers',this)"> All Sellers <span class="sb-c" id="sellerCount">0</span></button>
     </div>
     <div class="sb-sec">
       <div class="sb-lbl">Business Market</div>
-      <button class="sb-i" onclick="go('m-apps',this)">📋 Applications <span class="sb-c" id="mAppC">0</span></button>
-      <button class="sb-i" onclick="go('m-stores',this)">🏪 Approved Stores</button>
+      <button class="sb-i" onclick="go('m-apps',this)"> Applications <span class="sb-c" id="mAppC">0</span></button>
+      <button class="sb-i" onclick="go('m-stores',this)"> Approved Stores</button>
     </div>
     <div class="sb-sec" style="margin-top:auto;padding-bottom:1.25rem">
       <div class="sb-lbl">Quick Links</div>
-      <a href="/" class="sb-i" style="text-decoration:none">🌐 Homepage</a>
-      <a href="/market" class="sb-i" style="text-decoration:none">🏪 Marketplace</a>
-      <a href="/campus" class="sb-i" style="text-decoration:none">🎓 Campus</a>
+      <a href="/" class="sb-i" style="text-decoration:none"> Homepage</a>
+      <a href="/market" class="sb-i" style="text-decoration:none"> Marketplace</a>
+      <a href="/campus" class="sb-i" style="text-decoration:none"> Campus</a>
     </div>
   </div>
 
-  <div class="tb"><h1 id="pTitle">📊 Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout ↗</button></div></div>
+  <div class="tb"><h1 id="pTitle"> Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout </button></div></div>
 
   <div class="ct">
     <!-- OVERVIEW -->
     <div class="pg on" id="pg-overview">
       <div class="sg">
-        <div class="st"><div class="st-l">Total Applications</div><div class="st-v bl" id="s-total">—</div><div class="st-s">campus + business</div></div>
-        <div class="st"><div class="st-l">Active Stores</div><div class="st-v gr" id="s-active">—</div><div class="st-s">live on marketplace</div></div>
-        <div class="st"><div class="st-l">Pending Approval</div><div class="st-v ye" id="s-pending">—</div><div class="st-s">awaiting review</div></div>
-        <div class="st"><div class="st-l">Campus Stores</div><div class="st-v" id="s-campus">—</div><div class="st-s">active campus shops</div></div>
-        <div class="st"><div class="st-l">Market Stores</div><div class="st-v go" id="s-market">—</div><div class="st-s">business market shops</div></div>
-        <div class="st"><div class="st-l">Monthly Value</div><div class="st-v go" id="s-value">—</div><div class="st-s">subscription revenue</div></div>
+        <div class="st"><div class="st-l">Total Applications</div><div class="st-v bl" id="s-total">-</div><div class="st-s">campus + business</div></div>
+        <div class="st"><div class="st-l">Active Stores</div><div class="st-v gr" id="s-active">-</div><div class="st-s">live on marketplace</div></div>
+        <div class="st"><div class="st-l">Pending Approval</div><div class="st-v ye" id="s-pending">-</div><div class="st-s">awaiting review</div></div>
+        <div class="st"><div class="st-l">Campus Stores</div><div class="st-v" id="s-campus">-</div><div class="st-s">active campus shops</div></div>
+        <div class="st"><div class="st-l">Market Stores</div><div class="st-v go" id="s-market">-</div><div class="st-s">business market shops</div></div>
+        <div class="st"><div class="st-l">Monthly Value</div><div class="st-v go" id="s-value">-</div><div class="st-s">subscription revenue</div></div>
       </div>
     </div>
 
     <!-- ANALYTICS & VALUE -->
     <div class="pg" id="pg-analytics">
       <div class="vc">
-        <h4>💰 Travex Mall Revenue Potential</h4>
-        <div class="vc-row"><span style="color:var(--muted)">Campus Stores × TZS 15,000/mo</span><span id="v-campus" style="color:#fff;font-weight:700">—</span></div>
-        <div class="vc-row"><span style="color:var(--muted)">Basic Stores × TZS 25,000/mo</span><span id="v-basic" style="color:#fff;font-weight:700">—</span></div>
-        <div class="vc-row"><span style="color:var(--muted)">Premium Stores × TZS 45,000/mo</span><span id="v-premium" style="color:#fff;font-weight:700">—</span></div>
-        <div class="vc-row"><span style="color:var(--gold);font-weight:700">Monthly Revenue</span><span class="vc-total" id="v-monthly">—</span></div>
-        <div class="vc-row"><span style="color:var(--muted)">Annual Projection</span><span id="v-annual" style="color:var(--gold);font-weight:800;font-size:1.1rem">—</span></div>
+        <h4> Travex Mall Revenue Potential</h4>
+        <div class="vc-row"><span style="color:var(--muted)">Campus Stores  TZS 15,000/mo</span><span id="v-campus" style="color:#fff;font-weight:700">-</span></div>
+        <div class="vc-row"><span style="color:var(--muted)">Basic Stores  TZS 25,000/mo</span><span id="v-basic" style="color:#fff;font-weight:700">-</span></div>
+        <div class="vc-row"><span style="color:var(--muted)">Premium Stores  TZS 45,000/mo</span><span id="v-premium" style="color:#fff;font-weight:700">-</span></div>
+        <div class="vc-row"><span style="color:var(--gold);font-weight:700">Monthly Revenue</span><span class="vc-total" id="v-monthly">-</span></div>
+        <div class="vc-row"><span style="color:var(--muted)">Annual Projection</span><span id="v-annual" style="color:var(--gold);font-weight:800;font-size:1.1rem">-</span></div>
       </div>
 
       <div class="sg">
-        <div class="st"><div class="st-l">Today's Visitors</div><div class="st-v bl" id="a-today">—</div><div class="st-s">page views</div></div>
-        <div class="st"><div class="st-l">This Week</div><div class="st-v" id="a-week">—</div><div class="st-s">page views</div></div>
-        <div class="st"><div class="st-l">This Month</div><div class="st-v" id="a-month">—</div><div class="st-s">page views</div></div>
-        <div class="st"><div class="st-l">All Time</div><div class="st-v go" id="a-all">—</div><div class="st-s">total views</div></div>
+        <div class="st"><div class="st-l">Today's Visitors</div><div class="st-v bl" id="a-today">-</div><div class="st-s">page views</div></div>
+        <div class="st"><div class="st-l">This Week</div><div class="st-v" id="a-week">-</div><div class="st-s">page views</div></div>
+        <div class="st"><div class="st-l">This Month</div><div class="st-v" id="a-month">-</div><div class="st-s">page views</div></div>
+        <div class="st"><div class="st-l">All Time</div><div class="st-v go" id="a-all">-</div><div class="st-s">total views</div></div>
       </div>
 
-      <div class="tw"><div class="th"><h3>📊 Subscription Breakdown</h3></div>
+      <div class="tw"><div class="th"><h3> Subscription Breakdown</h3></div>
         <div style="overflow-x:auto"><table><thead><tr>
           <th>Market</th><th>Plan</th><th>Stores</th><th>Price/mo</th><th>Revenue/mo</th>
         </tr></thead><tbody id="subTbl"></tbody></table></div>
@@ -238,7 +238,7 @@ tr:last-child td{border-bottom:none}
 
     <!-- CAMPUS APPLICATIONS -->
     <div class="pg" id="pg-c-apps">
-      <div class="tw"><div class="th"><h3>🎓 Campus Applications</h3>
+      <div class="tw"><div class="th"><h3> Campus Applications</h3>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
           <input class="sr" placeholder="Search..." oninput="cSrch=this.value;rCA()">
           <div class="ft"><button class="fb on" onclick="cFlt='all';rCA();sA(this)">All</button>
@@ -254,7 +254,7 @@ tr:last-child td{border-bottom:none}
 
     <!-- CAMPUS STORES -->
     <div class="pg" id="pg-c-stores">
-      <div class="tw"><div class="th"><h3>🎓 Campus Stores</h3>
+      <div class="tw"><div class="th"><h3> Campus Stores</h3>
         <input class="sr" placeholder="Search..." oninput="csSrch=this.value;rCS()"></div>
         <div style="overflow-x:auto"><table><thead><tr>
           <th>Store</th><th>Owner</th><th>University</th><th>Category</th><th>Active</th><th>Date</th><th>Actions</th>
@@ -264,7 +264,7 @@ tr:last-child td{border-bottom:none}
 
     <!-- MARKET APPLICATIONS -->
     <div class="pg" id="pg-m-apps">
-      <div class="tw"><div class="th"><h3>🏪 Business Market Applications <span class="bd bd-fr" style="margin-left:.5rem">Free Month</span></h3>
+      <div class="tw"><div class="th"><h3> Business Market Applications <span class="bd bd-fr" style="margin-left:.5rem">Free Month</span></h3>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
           <input class="sr" placeholder="Search..." oninput="mSrch=this.value;rMA()">
           <div class="ft"><button class="fb on" onclick="mFlt='all';rMA();sA(this)">All</button>
@@ -281,7 +281,7 @@ tr:last-child td{border-bottom:none}
     <div class="pg" id="pg-notifications">
       <div class="tw">
         <div class="th">
-          <h3>🔔 Notifications</h3>
+          <h3> Notifications</h3>
           <button class="ab ab-vw" onclick="markAllRead()">Mark All Read</button>
         </div>
         <div id="notifList" style="padding:0 1rem 1rem"></div>
@@ -290,7 +290,7 @@ tr:last-child td{border-bottom:none}
 
     <!-- MARKET APPROVED STORES -->
     <div class="pg" id="pg-m-stores">
-      <div class="tw"><div class="th"><h3>🏪 Approved Business Stores</h3>
+      <div class="tw"><div class="th"><h3> Approved Business Stores</h3>
         <input class="sr" placeholder="Search..." oninput="msSrch=this.value;rMS()"></div>
         <div style="overflow-x:auto"><table><thead><tr>
           <th>Shop</th><th>Owner</th><th>Plan</th><th>Category</th><th>Region</th><th>Subscription</th><th>Login</th><th>Actions</th>
@@ -305,7 +305,7 @@ tr:last-child td{border-bottom:none}
       <!-- Filter bar -->
       <div class="tw" style="margin-bottom:12px">
         <div class="th" style="flex-wrap:wrap;gap:8px">
-          <h3>👥 Seller Management</h3>
+          <h3> Seller Management</h3>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="sel-filter-btn on" onclick="setSellFilter('all',this)">All</button>
             <button class="sel-filter-btn" onclick="setSellFilter('approved',this)" style="background:rgba(34,197,94,0.15);color:#22C55E">Active</button>
@@ -378,16 +378,16 @@ let cApps=[],cStores=[],mApps=[],pageViews=[],notifs=[];
 let cFlt='all',cSrch='',csSrch='',mFlt='all',mSrch='',msSrch='';
 
 const E=s=>String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const F=n=>n?'TZS '+Number(n).toLocaleString():'—';
+const F=n=>n?'TZS '+Number(n).toLocaleString():'-';
 function toast(m,t){const el=document.getElementById('toast');el.textContent=m;el.className='toast show '+t;setTimeout(()=>el.className='toast',3500)}
 function sA(b){b.parentElement.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
 
-// ── SECURE AUTH — signIn only, NO signUp ──
+//  SECURE AUTH, signIn only, NO signUp 
 async function doLogin(){
   const pass=document.getElementById('adminPass').value;
   if(!pass){showErr('Please enter the admin password.');return}
   const{error}=await sb.auth.signInWithPassword({email:ADMIN_EMAIL,password:pass});
-  if(error){showErr('❌ Incorrect password. Please try again.');return}
+  if(error){showErr(' Incorrect password. Please try again.');return}
   initApp();
 }
 async function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
@@ -398,14 +398,14 @@ async function checkSession(){
 }
 checkSession();
 
-// ── INIT ──
+//  INIT 
 async function initApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').classList.add('v');
   // Verify auth session
   const { data: { session } } = await sb.auth.getSession();
   console.log('[Admin] Session:', session?.user?.email);
-  if (!session) { toast('Session expired — please login again','err'); doLogout(); return; }
+  if (!session) { toast('Session expired, please login again','err'); doLogout(); return; }
   await loadAll();
 }
 
@@ -464,17 +464,17 @@ function updateAll(){
   const premiumRev=premiumCount*45000;
   const monthlyRev=campusRev+basicRev+premiumRev;
   document.getElementById('s-value').textContent=F(monthlyRev);
-  document.getElementById('v-campus').textContent=`${campActive} × TZS 15,000 = ${F(campusRev)}`;
-  document.getElementById('v-basic').textContent=`${basicCount} × TZS 25,000 = ${F(basicRev)}`;
-  document.getElementById('v-premium').textContent=`${premiumCount} × TZS 45,000 = ${F(premiumRev)}`;
+  document.getElementById('v-campus').textContent=`${campActive}  TZS 15,000 = ${F(campusRev)}`;
+  document.getElementById('v-basic').textContent=`${basicCount}  TZS 25,000 = ${F(basicRev)}`;
+  document.getElementById('v-premium').textContent=`${premiumCount}  TZS 45,000 = ${F(premiumRev)}`;
   document.getElementById('v-monthly').textContent=F(monthlyRev);
   document.getElementById('v-annual').textContent=F(monthlyRev*12);
 
   // Subscription table
   document.getElementById('subTbl').innerHTML=[
-    ['Campus','🎓 Campus',campActive,'15,000',F(campusRev)],
-    ['Business','🥈 Basic',basicCount,'25,000',F(basicRev)],
-    ['Business','🥇 Premium',premiumCount,'45,000',F(premiumRev)],
+    ['Campus',' Campus',campActive,'15,000',F(campusRev)],
+    ['Business',' Basic',basicCount,'25,000',F(basicRev)],
+    ['Business',' Premium',premiumCount,'45,000',F(premiumRev)],
   ].map(([m,p,c,pr,r])=>`<tr><td>${m}</td><td><span class="bd ${p.includes('Premium')?'bd-pr':'bd-ba'}">${p}</span></td><td style="font-weight:700">${c}</td><td>TZS ${pr}</td><td style="font-weight:700;color:var(--gold)">${r}</td></tr>`).join('');
 
   // Analytics (page views)
@@ -493,18 +493,18 @@ function updateAll(){
 }
 function setC(id,n){const el=document.getElementById(id);el.textContent=n;el.style.display=n>0?'inline':'none'}
 
-// ── NAV ──
+//  NAV 
 function go(name,btn){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.sb-i').forEach(i=>i.classList.remove('on'));
   const pg=document.getElementById('pg-'+name);if(pg)pg.classList.add('on');
   if(btn)btn.classList.add('on');
-  const t={'overview':'📊 Dashboard','analytics':'📈 Analytics & Value','c-apps':'🎓 Campus Applications',
-    'c-stores':'🎓 Campus Stores','m-apps':'🏪 Market Applications','m-stores':'🏪 Approved Stores','notifications':'🔔 Notifications'};
+  const t={'overview':' Dashboard','analytics':' Analytics & Value','c-apps':' Campus Applications',
+    'c-stores':' Campus Stores','m-apps':' Market Applications','m-stores':' Approved Stores','notifications':' Notifications'};
   document.getElementById('pTitle').textContent=t[name]||name;
 }
 
-// ══ CAMPUS APPS ══
+//  CAMPUS APPS 
 function rCA(){
   let l=cApps;
   if(cFlt!=='all')l=l.filter(a=>a.status===cFlt);
@@ -513,7 +513,7 @@ function rCA(){
   if(!l.length){
     const total = cApps.length;
     tb.innerHTML=`<tr><td colspan="8"><div class="empty">
-      <div class="empty-i">📋</div>
+      <div class="empty-i"></div>
       <div style="font-weight:700">No Campus Applications</div>
       <div style="font-size:11px;color:var(--muted);margin-top:6px">
         ${total === 0 ? 'Table is empty or RLS is blocking access. Check Supabase dashboard.' : 'No applications match current filter.'}
@@ -523,27 +523,27 @@ function rCA(){
   }
   tb.innerHTML=l.map(a=>{
     // Support both old and new field names
-    const name = a.full_name || a.owner_name || '—';
+    const name = a.full_name || a.owner_name || '-';
     const wa   = (a.whatsapp_number||a.phone||'').replace(/\D/g,'');
-    const sn   = a.shop_name || a.store_name || (a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'—');
-    const desc = a.business_description || a.description || '—';
-    const cat  = a.business_category || a.category || '—';
-    const uni  = a.university_abbr || a.university || '—';
-    const yr   = a.year_of_study || '—';
+    const sn   = a.shop_name || a.store_name || (a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'-');
+    const desc = a.business_description || a.description || '-';
+    const cat  = a.business_category || a.category || '-';
+    const uni  = a.university_abbr || a.university || '-';
+    const yr   = a.year_of_study || '-';
     const dt   = a.submitted_at || a.created_at;
     return `<tr>
-      <td><b>${E(name)}</b><div style="font-size:.64rem;color:var(--muted)">Year ${E(a.year_of_study||'—')}</div></td>
-      <td><span class="bd bd-ba">${E(a.university_abbr||'—')}</span></td>
+      <td><b>${E(name)}</b><div style="font-size:.64rem;color:var(--muted)">Year ${E(a.year_of_study||'-')}</div></td>
+      <td><span class="bd bd-ba">${E(a.university_abbr||'-')}</span></td>
       <td style="font-weight:600">${E(sn)}</td>
-      <td style="color:var(--muted)">${E(a.business_category||'—')}</td>
-      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.74rem;text-decoration:none">${E(a.whatsapp_number||'')}</a>`:'—'}</td>
+      <td style="color:var(--muted)">${E(a.business_category||'-')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.74rem;text-decoration:none">${E(a.whatsapp_number||'')}</a>`:'-'}</td>
       <td><span class="bd ${a.status==='approved'?'bd-a':a.status==='rejected'?'bd-r':'bd-p'}">${a.status||'pending'}</span></td>
-      <td style="font-size:.68rem;color:var(--muted)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
+      <td style="font-size:.68rem;color:var(--muted)">${dt?new Date(dt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'}</td>
       <td><div style="display:flex;gap:.25rem;flex-wrap:wrap">
-        ${a.status==='pending'?`<button class="ab ab-ok" onclick="acCA('${a.id}')">✓</button><button class="ab ab-no" onclick="rejCA('${a.id}')">✗</button>`:''}
-        ${a.status==='approved'?`<button class="ab ab-pe" onclick="pendCA('${a.id}')">⏸</button><button class="ab ab-del" onclick="delCA('${a.id}')">🗑</button>`:''}
-        <button class="ab ab-vw" onclick="viewCA('${a.id}')">👁</button>
-        ${wa?`<button class="ab ab-wa" onclick="window.open('https://wa.me/${wa}','_blank')">💬</button>`:''}
+        ${a.status==='pending'?`<button class="ab ab-ok" onclick="acCA('${a.id}')"></button><button class="ab ab-no" onclick="rejCA('${a.id}')"></button>`:''}
+        ${a.status==='approved'?`<button class="ab ab-pe" onclick="pendCA('${a.id}')"></button><button class="ab ab-del" onclick="delCA('${a.id}')"></button>`:''}
+        <button class="ab ab-vw" onclick="viewCA('${a.id}')"></button>
+        ${wa?`<button class="ab ab-wa" onclick="window.open('https://wa.me/${wa}','_blank')"></button>`:''}
       </div></td></tr>`}).join('');
 }
 
@@ -561,7 +561,7 @@ async function acCA(id){
 
   const phone=(a.whatsapp_number||a.phone||'').replace(/\D/g,'');
 
-  // No Supabase Auth — create campus_stores entry directly with password
+  // No Supabase Auth, create campus_stores entry directly with password
   const storeId=crypto.randomUUID();
   const {error:insErr} = await sb.from('campus_stores').insert({
     id:storeId,slug:storeId,store_name:sn,owner_name:a.full_name||a.owner_name,
@@ -571,36 +571,36 @@ async function acCA(id){
     is_active:true,application_id:a.id,login_password:rawPass,
   });
   if(insErr){
-    alert('❌ FAILED TO CREATE SHOP\n\nError: '+insErr.message+'\n\nCode: '+(insErr.code||'unknown'));
-    toast('❌ '+insErr.message,'err');
+    alert(' FAILED TO CREATE SHOP\n\nError: '+insErr.message+'\n\nCode: '+(insErr.code||'unknown'));
+    toast(' '+insErr.message,'err');
     return;
   }
 
   const {error:updErr} = await sb.from('campus_applications').update({status:'approved'}).eq('id',id);
-  if(updErr){ alert('⚠️ Shop created but application status update failed: '+updErr.message); }
+  if(updErr){ alert(' Shop created but application status update failed: '+updErr.message); }
 
-  toast('✅ Campus shop approved — now live!','ok');
+  toast(' Campus shop approved, now live!','ok');
 
   if(!phone){
-    alert('⚠️ Shop is LIVE, but no phone number on file.\n\nManually share this password with the seller:\n\n'+rawPass);
+    alert(' Shop is LIVE, but no phone number on file.\n\nManually share this password with the seller:\n\n'+rawPass);
     await loadAll();
     return;
   }
 
   const waMsg=encodeURIComponent(
-    `✅ *Congratulations ${a.full_name||a.owner_name}!*\n\n`+
-    `Your shop *"${sn}"* is now LIVE on Travex Campus Market! 🎓\n\n`+
-    `━━━━━━━━━━━━\n`+
-    `🔐 *Login Details:*\n`+
-    `📱 Phone: ${phone}\n`+
-    `🔑 Password: ${rawPass}\n\n`+
-    `🌐 Login: ${location.origin}/dashboard/login.html\n`+
-    `━━━━━━━━━━━━\n`+
-    `_Welcome to Travex Mall Campus! 🚀_`
+    ` *Congratulations ${a.full_name||a.owner_name}!*\n\n`+
+    `Your shop *"${sn}"* is now LIVE on Travex Campus Market! \n\n`+
+    `\n`+
+    ` *Login Details:*\n`+
+    ` Phone: ${phone}\n`+
+    ` Password: ${rawPass}\n\n`+
+    ` Login: ${location.origin}/dashboard/login.html\n`+
+    `\n`+
+    `_Welcome to Travex Mall Campus! _`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
 
-  toast('✅ Campus seller approved!','ok');
+  toast(' Campus seller approved!','ok');
   await loadAll();
 }
 async function rejCA(id){const a=cApps.find(x=>x.id===id);if(!a||!confirm('Reject?'))return;await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
@@ -613,83 +613,83 @@ async function delCA(id){if(!confirm('DELETE this application and store? Cannot 
   await sb.from('campus_applications').delete().eq('id',id);toast('Deleted','err');await loadAll()}
 function viewCA(id){
   const a=cApps.find(x=>x.id===id);if(!a)return;
-  const rows=[['Full Name',a.full_name],['University',a.university_abbr],['Year',a.year_of_study],['Category',a.business_category],['Phone',a.phone],['WhatsApp',a.whatsapp_number],['Shop Name',a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'—'],['Description',a.business_description],['Status',a.status],['Date',a.created_at?new Date(a.created_at).toLocaleString():'—']];
-  document.getElementById('modalBody').innerHTML=`<button class="modal-close" onclick="closeModal()">✕</button><h3>🎓 Application Details</h3>${rows.map(([l,v])=>`<div class="dr"><span class="dr-l">${l}</span><span class="dr-v">${E(v)}</span></div>`).join('')}`;
+  const rows=[['Full Name',a.full_name],['University',a.university_abbr],['Year',a.year_of_study],['Category',a.business_category],['Phone',a.phone],['WhatsApp',a.whatsapp_number],['Shop Name',a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'-'],['Description',a.business_description],['Status',a.status],['Date',a.created_at?new Date(a.created_at).toLocaleString():'-']];
+  document.getElementById('modalBody').innerHTML=`<button class="modal-close" onclick="closeModal()"></button><h3> Application Details</h3>${rows.map(([l,v])=>`<div class="dr"><span class="dr-l">${l}</span><span class="dr-v">${E(v)}</span></div>`).join('')}`;
   document.getElementById('modalBg').classList.add('show');
 }
 
-// ══ CAMPUS STORES ══
+//  CAMPUS STORES 
 function rCS(){
   let l=cStores;
   if(csSrch){const q=csSrch.toLowerCase();l=l.filter(s=>`${s.store_name} ${s.owner_name} ${s.university_abbr}`.toLowerCase().includes(q))}
   const tb=document.getElementById('csTbl');
-  if(!l.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-i">🎓</div>No stores</div></td></tr>';return}
+  if(!l.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-i"></div>No stores</div></td></tr>';return}
   tb.innerHTML=l.map(s=>`<tr>
-    <td style="font-weight:700">${E(s.store_name||'—')}</td><td>${E(s.owner_name||'—')}</td>
-    <td><span class="bd bd-ba">${E(s.university_abbr||'—')}</span></td><td style="color:var(--muted)">${E(s.category||'—')}</td>
+    <td style="font-weight:700">${E(s.store_name||'-')}</td><td>${E(s.owner_name||'-')}</td>
+    <td><span class="bd bd-ba">${E(s.university_abbr||'-')}</span></td><td style="color:var(--muted)">${E(s.category||'-')}</td>
     <td><span class="bd ${s.is_active?'bd-a':'bd-r'}">${s.is_active?'Active':'Hidden'}</span></td>
-    <td style="font-size:.68rem;color:var(--muted)">${s.created_at?new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
+    <td style="font-size:.68rem;color:var(--muted)">${s.created_at?new Date(s.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'}</td>
     <td><div style="display:flex;gap:.25rem">
-      ${s.is_active?`<button class="ab ab-pe" onclick="toggleStore('${s.id}',false)">⏸ Hide</button>`:`<button class="ab ab-ok" onclick="toggleStore('${s.id}',true)">▶ Show</button>`}
-      <button class="ab ab-del" onclick="delStore('${s.id}')">🗑</button>
+      ${s.is_active?`<button class="ab ab-pe" onclick="toggleStore('${s.id}',false)"> Hide</button>`:`<button class="ab ab-ok" onclick="toggleStore('${s.id}',true)"> Show</button>`}
+      <button class="ab ab-del" onclick="delStore('${s.id}')"></button>
     </div></td></tr>`).join('');
 }
 async function toggleStore(id,active){await sb.from('campus_stores').update({is_active:active}).eq('id',id);toast(active?'Store visible':'Store hidden','ok');await loadAll()}
 async function delStore(id){if(!confirm('DELETE store permanently?'))return;await sb.from('campus_stores').delete().eq('id',id);toast('Store deleted','err');await loadAll()}
 
-// ══ MARKET APPS ══
+//  MARKET APPS 
 function rMA(){
   let l=mApps;
   if(mFlt!=='all')l=l.filter(a=>a.status===mFlt);
   if(mSrch){const q=mSrch.toLowerCase();l=l.filter(a=>`${a.shop_name} ${a.owner_name} ${a.shop_region} ${a.shop_category}`.toLowerCase().includes(q))}
   const tb=document.getElementById('maTbl');
-  if(!l.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><div class="empty-i">🏪</div>No applications</div></td></tr>';return}
+  if(!l.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><div class="empty-i"></div>No applications</div></td></tr>';return}
   tb.innerHTML=l.map(a=>{
     const wa=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
     return `<tr>
-      <td style="font-weight:700">${E(a.shop_name||'—')}</td>
-      <td>${E(a.owner_name||'—')}<div style="font-size:.64rem;color:var(--muted)">${E(a.owner_phone||'')}</div></td>
-      <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
-      <td style="color:var(--muted)">${E(a.shop_category||'—')}</td>
-      <td style="color:var(--muted)">${E(a.shop_region||'—')}</td>
-      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.74rem;text-decoration:none">${E(a.owner_phone||'')}</a>`:'—'}</td>
+      <td style="font-weight:700">${E(a.shop_name||'-')}</td>
+      <td>${E(a.owner_name||'-')}<div style="font-size:.64rem;color:var(--muted)">${E(a.owner_phone||'')}</div></td>
+      <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?' Premium':' Basic'}</span></td>
+      <td style="color:var(--muted)">${E(a.shop_category||'-')}</td>
+      <td style="color:var(--muted)">${E(a.shop_region||'-')}</td>
+      <td>${wa?`<a href="https://wa.me/${wa}" target="_blank" style="color:#25D366;font-weight:600;font-size:.74rem;text-decoration:none">${E(a.owner_phone||'')}</a>`:'-'}</td>
       <td><span class="bd ${a.status==='approved'?'bd-a':'bd-p'}">${a.status||'pending'}</span> <span class="bd bd-fr">FREE</span></td>
-      <td style="font-size:.68rem;color:var(--muted)">${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'}</td>
+      <td style="font-size:.68rem;color:var(--muted)">${a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'}</td>
       <td><div style="display:flex;gap:.25rem;flex-wrap:wrap">
-        ${a.status==='pending'?`<button class="ab ab-ok" onclick="acMA('${a.id}')">✓ Approve</button><button class="ab ab-no" onclick="rejMA('${a.id}')">✗</button>`:''}
-        ${a.status==='approved'?`<button class="ab ab-pe" onclick="pendMA('${a.id}')">⏸ Pending</button><button class="ab ab-del" onclick="delMA('${a.id}')">🗑 Delete</button>`:''}
-        <button class="ab ab-vw" onclick="viewMA('${a.id}')">👁</button>
-        ${wa?`<button class="ab ab-wa" onclick="window.open('https://wa.me/${wa}','_blank')">💬</button>`:''}
+        ${a.status==='pending'?`<button class="ab ab-ok" onclick="acMA('${a.id}')"> Approve</button><button class="ab ab-no" onclick="rejMA('${a.id}')"></button>`:''}
+        ${a.status==='approved'?`<button class="ab ab-pe" onclick="pendMA('${a.id}')"> Pending</button><button class="ab ab-del" onclick="delMA('${a.id}')"> Delete</button>`:''}
+        <button class="ab ab-vw" onclick="viewMA('${a.id}')"></button>
+        ${wa?`<button class="ab ab-wa" onclick="window.open('https://wa.me/${wa}','_blank')"></button>`:''}
       </div></td></tr>`}).join('');
 }
 
 async function acMA(id){
   const a=mApps.find(x=>x.id===id);
-  if(!a){alert('❌ Application not found in local list. Try refreshing the page.');return}
+  if(!a){alert(' Application not found in local list. Try refreshing the page.');return}
   if(!confirm(`Approve "${a.shop_name}"?\n\n1. Set shop LIVE on marketplace\n2. Generate login password\n3. Send WhatsApp with password`))return;
 
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
   const rawPass=`TRX-${r4()}-${r4()}`;
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
 
-  // No Supabase Auth — just store password directly, approve status
+  // No Supabase Auth, just store password directly, approve status
   const {error:upErr} = await sb.from('pending_payments').update({status:'approved',login_password:rawPass}).eq('id',id);
   if(upErr){
-    alert('❌ FAILED TO APPROVE — shop will NOT appear in market.\n\nError: '+upErr.message+'\n\nCode: '+(upErr.code||'unknown'));
-    toast('❌ Approve failed: '+upErr.message,'err');
+    alert(' FAILED TO APPROVE, shop will NOT appear in market.\n\nError: '+upErr.message+'\n\nCode: '+(upErr.code||'unknown'));
+    toast(' Approve failed: '+upErr.message,'err');
     return;
   }
-  toast('✅ Shop approved — now live on marketplace!','ok');
+  toast(' Shop approved, now live on marketplace!','ok');
 
   if(!phone){
-    alert('⚠️ Shop is now LIVE, but no phone number on file.\n\nManually share this password with the seller:\n\n'+rawPass);
+    alert(' Shop is now LIVE, but no phone number on file.\n\nManually share this password with the seller:\n\n'+rawPass);
     await loadAll();
     return;
   }
 
-  const pl=a.plan==='premium'?'🥇 Premium':'🥈 Basic';
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`✅ *Congratulations ${a.owner_name}!*\n\nYour shop *"${a.shop_name}"* is now LIVE on Travex Mall!\n\n━━━━━━━━━━━━\n🔐 *LOGIN DETAILS*\n📱 Phone: *${phone}*\n🔑 Password: *${rawPass}*\n📦 Plan: *${pl}*\n\n🔗 ${location.origin}/dashboard/login.html\n━━━━━━━━━━━━\nWelcome to Travex Mall! 🏪`)}`,'_blank');
-  toast('✅ Approved!','ok');
+  const pl=a.plan==='premium'?' Premium':' Basic';
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(` *Congratulations ${a.owner_name}!*\n\nYour shop *"${a.shop_name}"* is now LIVE on Travex Mall!\n\n\n *LOGIN DETAILS*\n Phone: *${phone}*\n Password: *${rawPass}*\n Plan: *${pl}*\n\n ${location.origin}/dashboard/login.html\n\nWelcome to Travex Mall! `)}`,'_blank');
+  toast(' Approved!','ok');
   await loadAll();
 }
 async function rejMA(id){if(!confirm('Reject?'))return;await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
@@ -700,51 +700,51 @@ async function delMA(id){if(!confirm('DELETE this shop permanently? Seller will 
   await sb.from('pending_payments').delete().eq('id',id);toast('Deleted permanently','err');await loadAll()}
 function viewMA(id){
   const a=mApps.find(x=>x.id===id);if(!a)return;
-  const plan=a.plan==='premium'?'🥇 Premium (TZS 45,000/mo)':'🥈 Basic (TZS 25,000/mo)';
+  const plan=a.plan==='premium'?' Premium (TZS 45,000/mo)':' Basic (TZS 25,000/mo)';
   const sub=a.approved_at?`Approved: ${new Date(a.approved_at).toLocaleDateString()}`:'Not yet approved';
-  const rows=[['Shop Name',a.shop_name],['Owner',a.owner_name],['Phone',a.owner_phone],['Email',a.owner_email],['Plan',plan],['Category',a.shop_category],['Region',a.shop_region],['Description',a.shop_desc],['Status',a.status],['Subscription',sub],['Login Email',a.auth_email||'Not created'],['Login Password',a.login_password||'—'],['Applied',a.created_at?new Date(a.created_at).toLocaleString():'—']];
-  document.getElementById('modalBody').innerHTML=`<button class="modal-close" onclick="closeModal()">✕</button><h3>🏪 Shop Details</h3>${rows.map(([l,v])=>`<div class="dr"><span class="dr-l">${l}</span><span class="dr-v">${E(v)}</span></div>`).join('')}`;
+  const rows=[['Shop Name',a.shop_name],['Owner',a.owner_name],['Phone',a.owner_phone],['Email',a.owner_email],['Plan',plan],['Category',a.shop_category],['Region',a.shop_region],['Description',a.shop_desc],['Status',a.status],['Subscription',sub],['Login Email',a.auth_email||'Not created'],['Login Password',a.login_password||'-'],['Applied',a.created_at?new Date(a.created_at).toLocaleString():'-']];
+  document.getElementById('modalBody').innerHTML=`<button class="modal-close" onclick="closeModal()"></button><h3> Shop Details</h3>${rows.map(([l,v])=>`<div class="dr"><span class="dr-l">${l}</span><span class="dr-v">${E(v)}</span></div>`).join('')}`;
   document.getElementById('modalBg').classList.add('show');
 }
 
-// ══ MARKET STORES (approved) ══
+//  MARKET STORES (approved) 
 function rMS(){
   let l=mApps.filter(a=>a.status==='approved');
   if(msSrch){const q=msSrch.toLowerCase();l=l.filter(a=>`${a.shop_name} ${a.owner_name} ${a.shop_region}`.toLowerCase().includes(q))}
   const tb=document.getElementById('msTbl');
-  if(!l.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-i">🏪</div>No approved stores</div></td></tr>';return}
+  if(!l.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-i"></div>No approved stores</div></td></tr>';return}
   tb.innerHTML=l.map(a=>{
     const days=a.approved_at?Math.floor((Date.now()-new Date(a.approved_at).getTime())/86400000):0;
     const subLabel=`${days} days active`;
     return `<tr>
-      <td style="font-weight:700">${E(a.shop_name||'—')}</td><td>${E(a.owner_name||'—')}</td>
-      <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?'🥇 Premium':'🥈 Basic'}</span></td>
-      <td style="color:var(--muted)">${E(a.shop_category||'—')}</td><td style="color:var(--muted)">${E(a.shop_region||'—')}</td>
+      <td style="font-weight:700">${E(a.shop_name||'-')}</td><td>${E(a.owner_name||'-')}</td>
+      <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?' Premium':' Basic'}</span></td>
+      <td style="color:var(--muted)">${E(a.shop_category||'-')}</td><td style="color:var(--muted)">${E(a.shop_region||'-')}</td>
       <td><span class="bd bd-a">${subLabel}</span></td>
-      <td style="font-size:.68rem;color:var(--muted)">${E(a.auth_email||'—')}</td>
+      <td style="font-size:.68rem;color:var(--muted)">${E(a.auth_email||'-')}</td>
       <td><div style="display:flex;gap:.25rem">
-        <button class="ab ab-pe" onclick="pendMA('${a.id}')">⏸</button>
-        <button class="ab ab-del" onclick="delMA('${a.id}')">🗑</button>
-        <button class="ab ab-vw" onclick="viewMA('${a.id}')">👁</button>
+        <button class="ab ab-pe" onclick="pendMA('${a.id}')"></button>
+        <button class="ab ab-del" onclick="delMA('${a.id}')"></button>
+        <button class="ab ab-vw" onclick="viewMA('${a.id}')"></button>
       </div></td></tr>`}).join('');
 }
 
 function closeModal(){document.getElementById('modalBg').classList.remove('show')}
 
-// ── NOTIFICATIONS ──
+//  NOTIFICATIONS 
 function renderNotifs(){
   const el=document.getElementById('notifList');
   if(!el)return;
   const unread=notifs.filter(n=>!n.is_read);
   setC('notifC',unread.length);
-  if(!notifs.length){el.innerHTML='<div class="empty" style="padding:2rem;text-align:center;color:var(--muted)"><div style="font-size:2rem;margin-bottom:.5rem">🔔</div>No notifications yet</div>';return;}
+  if(!notifs.length){el.innerHTML='<div class="empty" style="padding:2rem;text-align:center;color:var(--muted)"><div style="font-size:2rem;margin-bottom:.5rem"></div>No notifications yet</div>';return;}
   el.innerHTML=notifs.map(n=>`
     <div style="display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 0;border-bottom:1px solid var(--border);opacity:${n.is_read?0.5:1}">
-      <div style="font-size:1.2rem;flex-shrink:0">${n.type?.includes('approved')?'✅':n.type?.includes('reject')?'❌':'📋'}</div>
+      <div style="font-size:1.2rem;flex-shrink:0">${n.type?.includes('approved')?'':n.type?.includes('reject')?'':''}</div>
       <div style="flex:1">
         <div style="font-size:.82rem;font-weight:700;color:#fff">${n.title||'Notification'}</div>
         <div style="font-size:.76rem;color:var(--muted);margin-top:2px">${n.body||''}</div>
-        <div style="font-size:.65rem;color:var(--muted);margin-top:3px">${n.created_at?new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:3px">${n.created_at?new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'-'}</div>
       </div>
       ${!n.is_read?`<button class="ab ab-vw" onclick="markRead('${n.id}')" style="flex-shrink:0">Read</button>`:''}
     </div>`).join('');
@@ -762,9 +762,9 @@ async function markAllRead(){
 }
 
 
-// ═══════════════════════════════════════════════
+// 
 // SELLER MANAGEMENT
-// ═══════════════════════════════════════════════
+// 
 let allSellers = [], sellFilter = 'all', sellSearch = '';
 
 function buildSellersList() {
@@ -772,36 +772,36 @@ function buildSellersList() {
   const market = mApps.map(s => ({
     id:         s.id,
     type:       'business',
-    shop_name:  s.shop_name || '—',
-    owner_name: s.owner_name || s.full_name || '—',
-    email:      s.auth_email || s.owner_email || '—',
-    phone:      s.owner_phone || s.whatsapp_number || '—',
+    shop_name:  s.shop_name || '-',
+    owner_name: s.owner_name || s.full_name || '-',
+    email:      s.auth_email || s.owner_email || '-',
+    phone:      s.owner_phone || s.whatsapp_number || '-',
     plan:       s.plan || 'basic',
     status:     s.status || 'pending',
     created_at: s.created_at,
     approved_at:s.approved_at || s.created_at,
     sub_end:    s.subscription_end || calcSubEnd(s.approved_at || s.created_at, s.plan || 'basic'),
-    region:     s.shop_region || s.region || '—',
-    category:   s.shop_category || s.category || '—',
-    password:   s.login_password || '—',
+    region:     s.shop_region || s.region || '-',
+    category:   s.shop_category || s.category || '-',
+    password:   s.login_password || '-',
     raw:        s,
   }));
 
   const campus = cStores.map(s => ({
     id:         s.id,
     type:       'campus',
-    shop_name:  s.store_name || s.shop_name || '—',
-    owner_name: s.owner_name || '—',
-    email:      s.auth_email || '—',
-    phone:      s.whatsapp || s.phone || '—',
+    shop_name:  s.store_name || s.shop_name || '-',
+    owner_name: s.owner_name || '-',
+    email:      s.auth_email || '-',
+    phone:      s.whatsapp || s.phone || '-',
     plan:       'campus',
     status:     s.is_active ? 'approved' : 'suspended',
     created_at: s.created_at,
     approved_at:s.created_at,
     sub_end:    calcSubEnd(s.created_at, 'campus'),
-    region:     s.university_abbr || '—',
-    category:   s.category || '—',
-    password:   s.login_password || '—',
+    region:     s.university_abbr || '-',
+    category:   s.category || '-',
+    password:   s.login_password || '-',
     raw:        s,
   }));
 
@@ -878,22 +878,22 @@ function rSellers() {
   const F = n => 'TZS ' + Number(n).toLocaleString();
   const planBadge = p => {
     const cls = p === 'premium' ? 'plan-premium' : p === 'campus' ? 'plan-campus' : 'plan-basic';
-    const label = p === 'premium' ? '🥇 Premium' : p === 'campus' ? '🎓 Campus' : '🥈 Basic';
+    const label = p === 'premium' ? ' Premium' : p === 'campus' ? ' Campus' : ' Basic';
     return `<span class="plan-badge ${cls}">${label}</span>`;
   };
   const statusBadge = (s, days) => {
-    if (s === 'pending')   return `<span class="bd bd-y">⏳ Pending</span>`;
-    if (s === 'suspended') return `<span class="bd bd-r">🚫 Suspended</span>`;
-    if (s === 'deleted')   return `<span class="bd" style="background:rgba(100,116,139,0.15);color:#64748B">🗑️ Deleted</span>`;
-    if (days !== null && days <= 0) return `<span class="bd bd-r">⚠️ Expired</span>`;
-    return `<span class="bd bd-g">✅ Active</span>`;
+    if (s === 'pending')   return `<span class="bd bd-y"> Pending</span>`;
+    if (s === 'suspended') return `<span class="bd bd-r"> Suspended</span>`;
+    if (s === 'deleted')   return `<span class="bd" style="background:rgba(100,116,139,0.15);color:#64748B"> Deleted</span>`;
+    if (days !== null && days <= 0) return `<span class="bd bd-r"> Expired</span>`;
+    return `<span class="bd bd-g"> Active</span>`;
   };
 
   tbody.innerHTML = list.map(s => {
     const days = daysLeft(s.sub_end);
     const dClass = daysClass(days);
-    const dLabel = days === null ? '—' : days < 0 ? `${Math.abs(days)}d ago` : `${days}d`;
-    const subEndLabel = s.sub_end ? new Date(s.sub_end).toLocaleDateString('en-GB') : '—';
+    const dLabel = days === null ? '-' : days < 0 ? `${Math.abs(days)}d ago` : `${days}d`;
+    const subEndLabel = s.sub_end ? new Date(s.sub_end).toLocaleDateString('en-GB') : '-';
     return `
       <tr>
         <td>
@@ -901,32 +901,32 @@ function rSellers() {
           <div style="color:var(--muted);font-size:11px">${E(s.owner_name)}</div>
           <div style="color:var(--muted);font-size:10px">${E(s.email)}</div>
         </td>
-        <td><span class="bd" style="background:rgba(99,102,241,0.1);color:#4338CA;font-size:9px">${s.type==='campus'?'🎓 Campus':'🏪 Business'}</span></td>
+        <td><span class="bd" style="background:rgba(99,102,241,0.1);color:#4338CA;font-size:9px">${s.type==='campus'?' Campus':' Business'}</span></td>
         <td>${planBadge(s.plan)}</td>
         <td style="font-size:11px">${subEndLabel}</td>
         <td><span class="${dClass}">${dLabel}</span></td>
         <td>${statusBadge(s.status, days)}</td>
         <td>
           <div style="display:flex;gap:4px;flex-wrap:wrap">
-            <button class="action-btn" style="background:rgba(15,23,42,0.08);color:var(--navy)" onclick="viewSeller('${s.id}','${s.type}')">👁 View</button>
-            ${s.status==='pending' ? `<button class="action-btn" style="background:rgba(34,197,94,0.15);color:#166534" onclick="approveSeller('${s.id}','${s.type}')">✅ Approve</button>` : ''}
-            ${s.status==='approved' ? `<button class="action-btn" style="background:rgba(234,179,8,0.12);color:#A16207" onclick="suspendSeller('${s.id}','${s.type}')">🚫 Suspend</button>` : ''}
-            ${s.status==='suspended' ? `<button class="action-btn" style="background:rgba(34,197,94,0.12);color:#166534" onclick="reinstSeller('${s.id}','${s.type}')">♻️ Reinstate</button>` : ''}
-            <button class="action-btn" style="background:rgba(99,102,241,0.12);color:#4338CA" onclick="upgradeSeller('${s.id}','${s.type}')">⬆️ Plan</button>
-            <button class="action-btn" style="background:rgba(201,168,76,0.12);color:#A0721F" onclick="renewSeller('${s.id}','${s.type}')">🔄 Renew</button>
-            <button class="action-btn" style="background:rgba(239,68,68,0.12);color:#991B1B" onclick="deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')">🗑️ Delete</button>
+            <button class="action-btn" style="background:rgba(15,23,42,0.08);color:var(--navy)" onclick="viewSeller('${s.id}','${s.type}')"> View</button>
+            ${s.status==='pending' ? `<button class="action-btn" style="background:rgba(34,197,94,0.15);color:#166534" onclick="approveSeller('${s.id}','${s.type}')"> Approve</button>` : ''}
+            ${s.status==='approved' ? `<button class="action-btn" style="background:rgba(234,179,8,0.12);color:#A16207" onclick="suspendSeller('${s.id}','${s.type}')"> Suspend</button>` : ''}
+            ${s.status==='suspended' ? `<button class="action-btn" style="background:rgba(34,197,94,0.12);color:#166534" onclick="reinstSeller('${s.id}','${s.type}')"> Reinstate</button>` : ''}
+            <button class="action-btn" style="background:rgba(99,102,241,0.12);color:#4338CA" onclick="upgradeSeller('${s.id}','${s.type}')"> Plan</button>
+            <button class="action-btn" style="background:rgba(201,168,76,0.12);color:#A0721F" onclick="renewSeller('${s.id}','${s.type}')"> Renew</button>
+            <button class="action-btn" style="background:rgba(239,68,68,0.12);color:#991B1B" onclick="deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')"> Delete</button>
           </div>
         </td>
       </tr>`;
   }).join('');
 }
 
-// ── VIEW SELLER DETAILS ──
+//  VIEW SELLER DETAILS 
 function viewSeller(id, type) {
   const s = allSellers.find(x => x.id===id && x.type===type);
   if (!s) return;
   const days = daysLeft(s.sub_end);
-  const subEndLabel = s.sub_end ? new Date(s.sub_end).toLocaleDateString('en-GB') : '—';
+  const subEndLabel = s.sub_end ? new Date(s.sub_end).toLocaleDateString('en-GB') : '-';
   showModal(`
     <h3 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:16px">
       ${E(s.shop_name)} <span style="font-size:13px;font-weight:400;color:var(--muted)">(${s.type})</span>
@@ -941,72 +941,72 @@ function viewSeller(id, type) {
         ['Region/Uni', s.region],
         ['Category', s.category],
         ['Sub End', subEndLabel],
-        ['Days Left', days !== null ? days + 'd' : '—'],
+        ['Days Left', days !== null ? days + 'd' : '-'],
         ['Login Password', s.password],
         ['Created', new Date(s.created_at).toLocaleDateString('en-GB')],
       ].map(([k,v]) => `
         <div style="background:var(--bg);border-radius:8px;padding:8px">
           <div style="font-size:10px;color:var(--muted);margin-bottom:3px">${k}</div>
-          <div style="font-weight:700;color:var(--text);word-break:break-all">${E(String(v||'—'))}</div>
+          <div style="font-weight:700;color:var(--text);word-break:break-all">${E(String(v||'-'))}</div>
         </div>
       `).join('')}
     </div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
       <a href="https://wa.me/${s.phone.replace(/\D/g,'')}" target="_blank"
         class="action-btn" style="background:#25D366;color:#fff;padding:8px 16px;text-decoration:none">
-        💬 WhatsApp
+         WhatsApp
       </a>
-      ${s.status==='pending' ? `<button class="action-btn" style="background:rgba(34,197,94,0.2);color:#166534;padding:8px 16px" onclick="closeModal();approveSeller('${s.id}','${s.type}')">✅ Approve</button>` : ''}
-      <button class="action-btn" style="background:rgba(239,68,68,0.15);color:#991B1B;padding:8px 16px" onclick="closeModal();deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')">🗑️ Delete</button>
+      ${s.status==='pending' ? `<button class="action-btn" style="background:rgba(34,197,94,0.2);color:#166534;padding:8px 16px" onclick="closeModal();approveSeller('${s.id}','${s.type}')"> Approve</button>` : ''}
+      <button class="action-btn" style="background:rgba(239,68,68,0.15);color:#991B1B;padding:8px 16px" onclick="closeModal();deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')"> Delete</button>
     </div>
   `);
 }
 
-// ── APPROVE ──
+//  APPROVE 
 function approveSeller(id, type) {
   if (type === 'business') { acMA(id); buildSellersList(); }
   else { acCA(id); buildSellersList(); }
 }
 
-// ── SUSPEND ──
+//  SUSPEND 
 async function suspendSeller(id, type) {
   if (!confirm('Suspend this seller? Their shop will be hidden from marketplace.')) return;
   if (type === 'business') {
     const {error:sErr} = await sb.from('pending_payments').update({ status: 'suspended' }).eq('id', id);
-    if(sErr){alert('❌ Failed to suspend: '+sErr.message);return}
+    if(sErr){alert(' Failed to suspend: '+sErr.message);return}
   } else {
     await sb.from('campus_stores').update({ is_active: false }).eq('id', id);
   }
   const idx = allSellers.findIndex(s => s.id===id && s.type===type);
   if (idx > -1) allSellers[idx].status = 'suspended';
-  toast('🚫 Seller suspended', 'ok');
+  toast(' Seller suspended', 'ok');
   updateSellerStats();
   rSellers();
 }
 
-// ── REINSTATE ──
+//  REINSTATE 
 async function reinstSeller(id, type) {
   if (!confirm('Reinstate this seller?')) return;
   if (type === 'business') {
     const {error:rErr} = await sb.from('pending_payments').update({ status: 'approved' }).eq('id', id);
-    if(rErr){alert('❌ Failed: '+rErr.message);return}
+    if(rErr){alert(' Failed: '+rErr.message);return}
   } else {
     await sb.from('campus_stores').update({ is_active: true }).eq('id', id);
   }
   const idx = allSellers.findIndex(s => s.id===id && s.type===type);
   if (idx > -1) allSellers[idx].status = 'approved';
-  toast('✅ Seller reinstated', 'ok');
+  toast(' Seller reinstated', 'ok');
   updateSellerStats();
   rSellers();
 }
 
-// ── UPGRADE PLAN ──
+//  UPGRADE PLAN 
 async function upgradeSeller(id, type) {
   const s = allSellers.find(x => x.id===id && x.type===type);
   if (!s) return;
   showModal(`
     <h3 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:16px">
-      ⬆️ Upgrade Plan — ${E(s.shop_name)}
+       Upgrade Plan, ${E(s.shop_name)}
     </h3>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
       ${['basic','premium','campus'].map(p => `
@@ -1015,7 +1015,7 @@ async function upgradeSeller(id, type) {
           background:${p===s.plan?'rgba(201,168,76,0.15)':'var(--bg)'};
           border:${p===s.plan?'2px solid var(--gold)':'1px solid var(--border)'};
           border-radius:10px;color:var(--text)">
-          ${p==='premium'?'🥇 Premium — TZS 45,000/mo':p==='campus'?'🎓 Campus — TZS 10,000/mo':'🥈 Basic — TZS 25,000/mo'}
+          ${p==='premium'?' Premium, TZS 45,000/mo':p==='campus'?' Campus, TZS 10,000/mo':' Basic, TZS 25,000/mo'}
           ${p===s.plan?' <span style="color:var(--gold);font-size:10px">(current)</span>':''}
         </button>
       `).join('')}
@@ -1034,11 +1034,11 @@ async function confirmUpgrade(id, type, newPlan) {
   const idx = allSellers.findIndex(x => x.id===id && x.type===type);
   if (idx > -1) allSellers[idx].plan = newPlan;
   closeModal();
-  toast(`✅ Plan upgraded to ${newPlan.toUpperCase()}`, 'ok');
+  toast(` Plan upgraded to ${newPlan.toUpperCase()}`, 'ok');
   updateSellerStats(); rSellers();
 }
 
-// ── RENEW SUBSCRIPTION ──
+//  RENEW SUBSCRIPTION 
 async function renewSeller(id, type) {
   const s = allSellers.find(x => x.id===id && x.type===type);
   if (!s || !confirm(`Renew subscription for ${s.shop_name}? (+ 30 days)`)) return;
@@ -1052,15 +1052,15 @@ async function renewSeller(id, type) {
   }
   const idx = allSellers.findIndex(x => x.id===id && x.type===type);
   if (idx > -1) allSellers[idx].sub_end = newEndStr;
-  toast('🔄 Subscription renewed (+30 days)', 'ok');
+  toast(' Subscription renewed (+30 days)', 'ok');
   updateSellerStats(); rSellers();
 }
 
-// ── DELETE SELLER (COMPLETE REMOVAL) ──
+//  DELETE SELLER (COMPLETE REMOVAL) 
 async function deleteSeller(id, type, shopName) {
-  if (!confirm(`⚠️ DELETE "${shopName}"?\n\nThis will:\n• Remove from marketplace\n• Remove their dashboard access\n• Delete all their products & posts\n\nThis CANNOT be undone!`)) return;
+  if (!confirm(` DELETE "${shopName}"?\n\nThis will:\n Remove from marketplace\n Remove their dashboard access\n Delete all their products & posts\n\nThis CANNOT be undone!`)) return;
 
-  toast('🗑️ Deleting...', 'ok');
+  toast(' Deleting...', 'ok');
 
   try {
     if (type === 'business') {
@@ -1076,7 +1076,7 @@ async function deleteSeller(id, type, shopName) {
       await sb.from('feed_posts').delete().eq('store_id', id);
       // 6. Mark as deleted (can't delete auth user from client)
       const {error:dErr} = await sb.from('pending_payments').update({ status: 'deleted' }).eq('id', id);
-      if(dErr){alert('❌ Failed to delete: '+dErr.message);return}
+      if(dErr){alert(' Failed to delete: '+dErr.message);return}
     } else {
       // Campus
       await sb.from('campus_products').delete().eq('store_id', id);
@@ -1092,13 +1092,13 @@ async function deleteSeller(id, type, shopName) {
     cStores = cStores.filter(s => s.id !== id);
 
     closeModal();
-    toast(`✅ ${shopName} deleted completely`, 'ok');
+    toast(` ${shopName} deleted completely`, 'ok');
     updateSellerStats();
     rSellers();
     // Update counts
     document.getElementById('sellerCount').textContent = allSellers.length;
   } catch(e) {
-    toast('❌ Error: ' + e.message, 'err');
+    toast(' Error: ' + e.message, 'err');
   }
 }
 

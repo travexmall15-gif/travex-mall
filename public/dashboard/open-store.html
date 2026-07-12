@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Open Your Shop — Travex Mall</title>
+<title>Open Your Shop, Travex Mall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -76,7 +76,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 .plan-period{font-size:0.72rem;color:var(--gray);margin-bottom:1rem}
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:0.35rem}
 .plan-features li{font-size:0.78rem;color:var(--gray);display:flex;align-items:center;gap:0.4rem}
-.plan-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0}
+.plan-features li::before{content:'';color:var(--gold);font-weight:700;flex-shrink:0}
 .plan-check{position:absolute;top:0.75rem;right:0.75rem;width:20px;height:20px;border-radius:50%;border:2px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all 0.2s}
 .plan-card.selected .plan-check{background:var(--gold);border-color:var(--gold);color:var(--navy)}
 .plan-card.selected.premium-card .plan-check{background:var(--navy);border-color:var(--navy);color:#fff}
@@ -108,7 +108,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 .pay-method-info{flex:1}
 .pay-method-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
 .pay-method-detail{font-size:0.75rem;color:var(--gray)}
-.copy-btn{font-size:0.68rem;background:#F8FAFF;border:1px solid var(--lgray);border-radius:6px;padding:0.25rem 0.6rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--navy);transition:all 0.15s}
+.copy-btn{font-size:0.68rem;background:#F8FAFF;border:1px solid var(--lgray);border-radius: 10px;padding:0.25rem 0.6rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--navy);transition:all 0.15s}
 .copy-btn:hover{background:var(--lgray)}
 
 /* BUTTONS */
@@ -152,13 +152,13 @@ textarea.form-input{resize:vertical;min-height:90px}
 <!-- NAV -->
 <nav class="nav">
   <a href="/" class="nav-logo">TRAVEX <span>MALL</span></a>
-  <a href="/market" class="nav-back">← Back to Market</a>
+  <a href="/market" class="nav-back"> Back to Market</a>
 </nav>
 
 <!-- HERO -->
 <div class="page-hero">
   <h1>Open Your <span>Travex Shop</span></h1>
-  <p>Join Tanzania's unified business marketplace. Choose Basic or Premium — start selling in minutes.</p>
+  <p>Join Tanzania's unified business marketplace. Choose Basic or Premium, start selling in minutes.</p>
 </div>
 
 <!-- PROGRESS -->
@@ -211,13 +211,13 @@ textarea.form-input{resize:vertical;min-height:90px}
         <div class="form-group">
           <label class="form-label">Password <span>*</span></label>
           <input class="form-input" id="ownerPass" type="password" placeholder="Min. 8 characters" />
-          <div class="form-hint">Use a strong password — this protects your shop and orders.</div>
+          <div class="form-hint">Use a strong password, this protects your shop and orders.</div>
         </div>
       </div>
     </div>
     <div class="btn-row">
       <div></div>
-      <button class="btn btn-primary" onclick="goStep(2)">Continue →</button>
+      <button class="btn btn-primary" onclick="goStep(2)">Continue </button>
     </div>
   </div>
 
@@ -230,7 +230,7 @@ textarea.form-input{resize:vertical;min-height:90px}
       <!-- BASIC -->
       <div class="plan-card" id="cardBasic" onclick="selectPlan('basic')">
         <div class="plan-check" id="checkBasic"></div>
-        <div class="plan-badge" style="color:#64748B">🥈 Silver · Basic</div>
+        <div class="plan-badge" style="color:#64748B"> Silver  Basic</div>
         <div class="plan-name">Basic</div>
         <div class="plan-price">TZS 25,000</div>
         <div class="plan-period">per month</div>
@@ -245,15 +245,15 @@ textarea.form-input{resize:vertical;min-height:90px}
       </div>
       <!-- PREMIUM -->
       <div class="plan-card premium-card" id="cardPremium" onclick="selectPlan('premium')">
-        <div class="popular-tag">⭐ Most Popular</div>
+        <div class="popular-tag"> Most Popular</div>
         <div class="plan-check" id="checkPremium"></div>
-        <div class="plan-badge" style="color:#C9A84C">🥇 Gold · Premium</div>
+        <div class="plan-badge" style="color:#C9A84C"> Gold  Premium</div>
         <div class="plan-name">Premium</div>
         <div class="plan-price">TZS 45,000</div>
         <div class="plan-period">per month</div>
         <ul class="plan-features">
           <li>Everything in Basic</li>
-          <li>🥇 Gold badge + top listing</li>
+          <li> Gold badge + top listing</li>
           <li>Marketing AI tools</li>
           <li>Accounting dashboard</li>
           <li>Priority support</li>
@@ -262,15 +262,15 @@ textarea.form-input{resize:vertical;min-height:90px}
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(3)">Continue →</button>
+      <button class="btn btn-secondary" onclick="goStep(1)"> Back</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Continue </button>
     </div>
   </div>
 
   <!-- STEP 3: Shop Details -->
   <div class="step" id="step3">
     <div class="step-title">Set Up Your Shop</div>
-    <div class="step-sub">Tell customers about your shop — name, category and what you sell.</div>
+    <div class="step-sub">Tell customers about your shop, name, category and what you sell.</div>
     <div class="alert alert-error" id="err3"></div>
     <div class="form-card">
       <div class="card-head"><div class="card-head-title">Shop Identity</div></div>
@@ -319,7 +319,7 @@ textarea.form-input{resize:vertical;min-height:90px}
         <div class="form-group">
           <label class="form-label">Shop Description <span>*</span></label>
           <textarea class="form-input" id="shopDesc" placeholder="Describe what you sell, your target customers, and what makes your shop unique..."></textarea>
-          <div class="form-hint">Min. 30 characters. Be clear — this appears on your shop page.</div>
+          <div class="form-hint">Min. 30 characters. Be clear, this appears on your shop page.</div>
         </div>
       </div>
     </div>
@@ -343,50 +343,50 @@ textarea.form-input{resize:vertical;min-height:90px}
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(4)">Continue →</button>
+      <button class="btn btn-secondary" onclick="goStep(2)"> Back</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Continue </button>
     </div>
   </div>
 
-  <!-- STEP 4: Almost done — no payment needed -->
+  <!-- STEP 4: Almost done, no payment needed -->
   <div class="step" id="step4">
-    <div class="step-title">Almost Done! 🎉</div>
-    <div class="step-sub">Your details are complete. No payment required — registration is free this month!</div>
+    <div class="step-title">Almost Done! </div>
+    <div class="step-sub">Your details are complete. No payment required, registration is free this month!</div>
     <div class="alert alert-error" id="err4"></div>
 
     <div style="background:linear-gradient(135deg,#040C32,#071545);border-radius:20px;padding:2rem;margin-bottom:1.5rem;text-align:center">
-      <div style="font-size:3rem;margin-bottom:1rem">🎁</div>
+      <div style="font-size:3rem;margin-bottom:1rem"></div>
       <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:0.5rem">Free Registration</div>
       <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);margin-bottom:1.25rem;line-height:1.7">
         This month, opening your shop is <strong style="color:#C9A84C">completely FREE</strong>.<br>
         After approval, you will receive your login password via WhatsApp.
       </div>
       <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.30);color:#C9A84C;padding:0.5rem 1.25rem;border-radius:999px;font-size:0.78rem;font-weight:700">
-        ✅ Hakuna receipt · No payment required
+         Hakuna receipt  No payment required
       </div>
     </div>
 
     <div class="form-card">
-      <div class="card-head"><div class="card-head-title">📋 Your Plan Summary</div></div>
+      <div class="card-head"><div class="card-head-title"> Your Plan Summary</div></div>
       <div class="card-body">
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
           <span style="color:var(--gray)">Selected Plan</span>
-          <span style="font-weight:700;color:var(--navy)" id="step4PlanLabel">—</span>
+          <span style="font-weight:700;color:var(--navy)" id="step4PlanLabel">-</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
           <span style="color:var(--gray)">Regular Price</span>
-          <span style="font-weight:700;color:var(--navy)" id="step4PriceLabel">—</span>
+          <span style="font-weight:700;color:var(--navy)" id="step4PriceLabel">-</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:0.75rem 0;font-size:0.85rem">
           <span style="color:var(--gray)">This Month</span>
-          <span style="font-weight:700;color:#059669">🎁 FREE — This Month</span>
+          <span style="font-weight:700;color:#059669"> FREE, This Month</span>
         </div>
       </div>
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(5)">Review Application →</button>
+      <button class="btn btn-secondary" onclick="goStep(3)"> Back</button>
+      <button class="btn btn-primary" onclick="goStep(5)">Review Application </button>
     </div>
   </div>
 
@@ -398,42 +398,42 @@ textarea.form-input{resize:vertical;min-height:90px}
 
     <div class="review-section">
       <div class="review-head">Account</div>
-      <div class="review-row"><span class="review-label">Name</span><span class="review-val" id="rv-name">—</span></div>
-      <div class="review-row"><span class="review-label">WhatsApp</span><span class="review-val" id="rv-phone">—</span></div>
-      <div class="review-row"><span class="review-label">Email</span><span class="review-val" id="rv-email">—</span></div>
+      <div class="review-row"><span class="review-label">Name</span><span class="review-val" id="rv-name">-</span></div>
+      <div class="review-row"><span class="review-label">WhatsApp</span><span class="review-val" id="rv-phone">-</span></div>
+      <div class="review-row"><span class="review-label">Email</span><span class="review-val" id="rv-email">-</span></div>
     </div>
     <div class="review-section">
       <div class="review-head">Plan</div>
-      <div class="review-row"><span class="review-label">Selected Plan</span><span class="review-val" id="rv-plan">—</span></div>
-      <div class="review-row"><span class="review-label">Monthly Price</span><span class="review-val" id="rv-price">—</span></div>
+      <div class="review-row"><span class="review-label">Selected Plan</span><span class="review-val" id="rv-plan">-</span></div>
+      <div class="review-row"><span class="review-label">Monthly Price</span><span class="review-val" id="rv-price">-</span></div>
     </div>
     <div class="review-section">
       <div class="review-head">Shop</div>
-      <div class="review-row"><span class="review-label">Shop Name</span><span class="review-val" id="rv-shop">—</span></div>
-      <div class="review-row"><span class="review-label">Category</span><span class="review-val" id="rv-cat">—</span></div>
-      <div class="review-row"><span class="review-label">Region</span><span class="review-val" id="rv-region">—</span></div>
+      <div class="review-row"><span class="review-label">Shop Name</span><span class="review-val" id="rv-shop">-</span></div>
+      <div class="review-row"><span class="review-label">Category</span><span class="review-val" id="rv-cat">-</span></div>
+      <div class="review-row"><span class="review-label">Region</span><span class="review-val" id="rv-region">-</span></div>
     </div>
     <div style="background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.20);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem">
-      <span style="font-size:1.5rem">🎁</span>
+      <span style="font-size:1.5rem"></span>
       <div>
-        <div style="font-size:0.82rem;font-weight:700;color:#059669">Free Registration — Hakuna Malipo</div>
+        <div style="font-size:0.82rem;font-weight:700;color:#059669">Free Registration, Hakuna Malipo</div>
         <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">You will receive your password yako kwa WhatsApp baada ya kuidhinishwa.</div>
       </div>
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
-      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">🚀 Submit Application</button>
+      <button class="btn btn-secondary" onclick="goStep(4)"> Back</button>
+      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()"> Submit Application</button>
     </div>
   </div>
 
   <!-- SUCCESS -->
   <div class="success-page" id="successPage">
-    <div class="success-icon">✅</div>
-    <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem">Application Submitted! 🎉</h2>
+    <div class="success-icon"></div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem">Application Submitted! </h2>
     <p style="font-size:0.92rem;color:var(--gray);line-height:1.75;margin-bottom:1rem">
       Your shop application has been received successfully.<br>
-      It will be <strong style="color:var(--navy)">reviewed within 30 minutes</strong> — you will receive your dashboard login details via WhatsApp.
+      It will be <strong style="color:var(--navy)">reviewed within 30 minutes</strong>, you will receive your dashboard login details via WhatsApp.
     </p>
     <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#15803D">
       <strong>What happens next?</strong><br>
@@ -455,14 +455,14 @@ textarea.form-input{resize:vertical;min-height:90px}
         </div>
         <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
           <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">3</span>
-          Login to dashboard — your shop will appear on the marketplace
+          Login to dashboard, your shop will appear on the marketplace
         </div>
       </div>
     </div>
     <div class="detail-box" id="successDetail"></div>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center">
-      <a href="/market" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--navy);color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none">← Rudi Market</a>
-      <a href="https://wa.me/255651919915" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:#25D366;color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none">💬 WhatsApp Support</a>
+      <a href="/market" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--navy);color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none"> Rudi Market</a>
+      <a href="https://wa.me/255651919915" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:#25D366;color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none"> WhatsApp Support</a>
     </div>
   </div>
 
@@ -482,10 +482,10 @@ let currentStep = 1
 const PRICES = { basic: 25000, premium: 45000 }
 const fmt = n => 'TZS ' + Number(n).toLocaleString('en-US')
 
-// ── HELPER: safe get element ──
+//  HELPER: safe get element 
 function $id(id) { return document.getElementById(id) }
 
-// ── SHOW ERROR ──
+//  SHOW ERROR 
 function showErr(el, msg) {
   if (!el) return false
   el.textContent = msg
@@ -494,7 +494,7 @@ function showErr(el, msg) {
   return false
 }
 
-// ── VALIDATION ──
+//  VALIDATION 
 function validateStep(n) {
   // Clear all errors for this step
   const err = $id('err' + n)
@@ -505,15 +505,15 @@ function validateStep(n) {
     const phone = ($id('ownerPhone')?.value || '').trim()
     const email = ($id('ownerEmail')?.value || '').trim()
     const pass  = ($id('ownerPass')?.value || '')
-    if (!name)  return showErr(err, '⚠️ Enter your full name')
-    if (!phone) return showErr(err, '⚠️ Enter your WhatsApp number')
-    if (!email || !email.includes('@')) return showErr(err, '⚠️ Enter a valid email')
-    if (pass.length < 8) return showErr(err, '⚠️ Password must be at least 8 characters')
+    if (!name)  return showErr(err, ' Enter your full name')
+    if (!phone) return showErr(err, ' Enter your WhatsApp number')
+    if (!email || !email.includes('@')) return showErr(err, ' Enter a valid email')
+    if (pass.length < 8) return showErr(err, ' Password must be at least 8 characters')
     return true
   }
 
   if (n === 2) {
-    if (!selectedPlan) return showErr($id('err2'), '⚠️ Please select a plan')
+    if (!selectedPlan) return showErr($id('err2'), ' Please select a plan')
     return true
   }
 
@@ -524,23 +524,23 @@ function validateStep(n) {
     const wa   = ($id('shopWhatsapp')?.value || '').trim()
     const desc = ($id('shopDesc')?.value || '').trim()
     const e3   = $id('err3')
-    if (!shop) return showErr(e3, '⚠️ Enter your shop name')
-    if (!cat)  return showErr(e3, '⚠️ Select a category')
-    if (!reg)  return showErr(e3, '⚠️ Select your region')
-    if (!wa)   return showErr(e3, '⚠️ Enter your shop WhatsApp number')
-    if (desc.length < 20) return showErr(e3, '⚠️ Description must be at least 20 characters')
+    if (!shop) return showErr(e3, ' Enter your shop name')
+    if (!cat)  return showErr(e3, ' Select a category')
+    if (!reg)  return showErr(e3, ' Select your region')
+    if (!wa)   return showErr(e3, ' Enter your shop WhatsApp number')
+    if (desc.length < 20) return showErr(e3, ' Description must be at least 20 characters')
     return true
   }
 
   if (n === 4) {
-    // Free registration — no validation needed
+    // Free registration, no validation needed
     return true
   }
 
   return true
 }
 
-// ── NAVIGATION ──
+//  NAVIGATION 
 function goStep(n) {
   // Validate before moving forward
   if (n > currentStep) {
@@ -554,7 +554,7 @@ function goStep(n) {
   const curLine = $id('line' + currentStep)
 
   if (curStep) curStep.classList.remove('active')
-  if (curProg) { curProg.classList.remove('active'); curProg.classList.add('done'); curProg.innerHTML = '✓' }
+  if (curProg) { curProg.classList.remove('active'); curProg.classList.add('done'); curProg.innerHTML = '' }
   if (curLbl)  { curLbl.classList.remove('active');  curLbl.classList.add('done') }
   if (curLine && n > currentStep) curLine.classList.add('done')
 
@@ -572,7 +572,7 @@ function goStep(n) {
 
   // Step-specific actions
   if (n === 4) {
-    const planLabel  = selectedPlan === 'premium' ? '🥇 Premium Plan' : '🥈 Basic Plan'
+    const planLabel  = selectedPlan === 'premium' ? ' Premium Plan' : ' Basic Plan'
     const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
     const pl = $id('step4PlanLabel');  if (pl)  pl.textContent  = planLabel
     const pr = $id('step4PriceLabel'); if (pr)  pr.textContent  = priceLabel
@@ -582,7 +582,7 @@ function goStep(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-// ── PLAN SELECTION ──
+//  PLAN SELECTION 
 function selectPlan(plan) {
   selectedPlan = plan
   document.getElementById('cardBasic').classList.toggle('selected', plan === 'basic')
@@ -591,7 +591,7 @@ function selectPlan(plan) {
 // Default select basic on load
 selectPlan('basic')
 
-// ── COLOR PICKER ──
+//  COLOR PICKER 
 function pickColor(el) {
   document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'))
   el.classList.add('selected')
@@ -602,7 +602,7 @@ function pickCustomColor(val) {
   selectedColor = val
 }
 
-// ── PAYMENT ──
+//  PAYMENT 
 function selectPayMethod(m) {
   selectedPayMethod = m
   const pc=document.getElementById('payCredit'); if(pc) pc.classList.toggle('selected', m === 'crdb')
@@ -613,33 +613,33 @@ function updatePaymentDisplay() {
   // Update step4 summary labels (step 4 uses step4PlanLabel / step4PriceLabel)
   const pl4 = document.getElementById('step4PlanLabel')
   const pr4 = document.getElementById('step4PriceLabel')
-  if (pl4) pl4.textContent = (selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic') + ' Plan'
+  if (pl4) pl4.textContent = (selectedPlan === 'premium' ? ' Premium' : ' Basic') + ' Plan'
   if (pr4) pr4.textContent = 'TZS ' + Number(price).toLocaleString() + '/mo (Free this month)'
-  // Legacy elements — safe no-ops if not present
+  // Legacy elements, safe no-ops if not present
   const ad=document.getElementById('amountDue'); if(ad) ad.textContent = fmt(price)
   const pl=document.getElementById('planLabel'); if(pl) pl.textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan'
-  const pb=document.getElementById('planBadgePay'); if(pb) pb.textContent = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
+  const pb=document.getElementById('planBadgePay'); if(pb) pb.textContent = selectedPlan === 'premium' ? ' Gold Premium' : ' Silver Basic'
 }
 
-// ── REVIEW ──
+//  REVIEW 
 function buildReview() {
   document.getElementById('rv-name').textContent    = document.getElementById('ownerName').value
   document.getElementById('rv-phone').textContent   = document.getElementById('ownerPhone').value
   document.getElementById('rv-email').textContent   = document.getElementById('ownerEmail').value
-  document.getElementById('rv-plan').textContent    = selectedPlan === 'premium' ? '🥇 Gold Premium' : '🥈 Silver Basic'
+  document.getElementById('rv-plan').textContent    = selectedPlan === 'premium' ? ' Gold Premium' : ' Silver Basic'
   document.getElementById('rv-price').textContent   = fmt(PRICES[selectedPlan]) + '/month'
   document.getElementById('rv-shop').textContent    = document.getElementById('shopName').value
   document.getElementById('rv-cat').textContent     = document.getElementById('shopCategory').value
   document.getElementById('rv-region').textContent  = document.getElementById('shopRegion').value
-  // No payment review — free registration
+  // No payment review, free registration
   // Update step4 plan summary too
-  const planLabel = selectedPlan === 'premium' ? '🥇 Premium Plan' : '🥈 Basic Plan'
+  const planLabel = selectedPlan === 'premium' ? ' Premium Plan' : ' Basic Plan'
   const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
   try { document.getElementById('step4PlanLabel').textContent = planLabel } catch(e){}
   try { document.getElementById('step4PriceLabel').textContent = priceLabel } catch(e){}
 }
 
-// ── SUBMIT ──
+//  SUBMIT 
 async function submitApplication() {
   const btn = document.getElementById('submitBtn')
   btn.textContent = 'Submitting...'
@@ -657,7 +657,7 @@ async function submitApplication() {
     const desc     = document.getElementById('shopDesc').value.trim()
     const price    = PRICES[selectedPlan]
 
-    // Free registration — no receipt needed
+    // Free registration, no receipt needed
 
     // Create auth account
     const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pass })
@@ -685,8 +685,8 @@ async function submitApplication() {
     // Notify admin
     await sb.from('admin_notifications').insert({
       type:     'new_market_application',
-      title:    `🏪 New Shop Application — ${shopName}`,
-      body:     `${name} applied for a ${selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,
+      title:    ` New Shop Application, ${shopName}`,
+      body:     `${name} applied for a ${selectedPlan === 'premium' ? ' Premium' : ' Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,
       is_read:  false,
     })
 
@@ -698,28 +698,28 @@ async function submitApplication() {
     successPage.classList.add('show')
     document.getElementById('successDetail').innerHTML = `
       <div class="detail-row"><span class="detail-key">Shop Name</span><span class="detail-val">${shopName}</span></div>
-      <div class="detail-row"><span class="detail-key">Plan</span><span class="detail-val">${selectedPlan === 'premium' ? '🥇 Premium' : '🥈 Basic'}</span></div>
+      <div class="detail-row"><span class="detail-key">Plan</span><span class="detail-val">${selectedPlan === 'premium' ? ' Premium' : ' Basic'}</span></div>
       <div class="detail-row"><span class="detail-key">Amount Paid</span><span class="detail-val">${fmt(price)}/mo</span></div>
-      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)">✅ Under Review</span></div>
+      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)"> Under Review</span></div>
     `
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    toast('✅ Application submitted! You will receive a WhatsApp confirmation within 30 minutes.', 'success')
+    toast(' Application submitted! You will receive a WhatsApp confirmation within 30 minutes.', 'success')
 
   } catch (e) {
     console.error('Submit error:', e)
     const errEl = document.getElementById('err5')
     if (errEl) {
-      errEl.textContent = '❌ ' + (e.message || 'Submission failed. Please try again.')
+      errEl.textContent = ' ' + (e.message || 'Submission failed. Please try again.')
       errEl.classList.add('show')
       errEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
     alert('Error: ' + (e.message || 'Submission failed'))
-    btn.textContent = '🚀 Submit Application'
+    btn.textContent = ' Submit Application'
     btn.disabled = false
   }
 }
 
-// ── HELPERS ──
+//  HELPERS 
 function copyText(text) {
   navigator.clipboard.writeText(text).then(() => toast('Copied!', 'success'))
 }
@@ -732,7 +732,7 @@ function toast(msg, type = 'success') {
 }
 </script>
 <style id="travex-polish-v2">
-/* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
+/*  TRAVEX POLISH V2, FinTrack design layer (visual only, no logic)  */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{background:#F8FAFF!important}
 

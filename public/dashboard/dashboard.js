@@ -1,16 +1,16 @@
-// ══════════════════════════════════════
-// TRAVEX MALL — Shared Dashboard JS
+// 
+// TRAVEX MALL, Shared Dashboard JS
 // Modelled after Travex Finance pattern
-// ══════════════════════════════════════
+// 
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co';
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
 const { createClient } = supabase;
 const sb = createClient(SB_URL, SB_KEY);
 
-// ── AUTH ──────────────────────────────
+//  AUTH 
 const Auth = {
-  // No Supabase Auth used — pure phone+password against pending_payments/campus_stores.
+  // No Supabase Auth used, pure phone+password against pending_payments/campus_stores.
   // Session stored in localStorage as {id, market}.
   async getSession() {
     const raw = localStorage.getItem('travex_session');
@@ -42,7 +42,7 @@ const Auth = {
   },
 };
 
-// ── SHOP ─────────────────────────────
+//  SHOP 
 const Shop = {
   _cache: null,
   _type: null, // 'business' | 'campus'
@@ -91,7 +91,7 @@ const Shop = {
   isBusiness() { return this._type === 'business'; },
 };
 
-// ── DATABASE ─────────────────────────
+//  DATABASE 
 const DB = {
   products: {
     async getAll(shopId) {
@@ -173,14 +173,14 @@ const DB = {
   },
 };
 
-// ── HELPERS ───────────────────────────
+//  HELPERS 
 function formatTZS(n) {
-  if (!n && n !== 0) return '—';
+  if (!n && n !== 0) return '-';
   return 'TZS ' + Number(n).toLocaleString('en-US');
 }
 function today() { return new Date().toISOString().split('T')[0]; }
 function timeAgo(d) {
-  if (!d) return '—';
+  if (!d) return '-';
   const diff = Date.now() - new Date(d).getTime();
   const m = Math.floor(diff/60000);
   if (m < 1)  return 'just now';
@@ -190,11 +190,11 @@ function timeAgo(d) {
   return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 }
 function truncate(s, n=40) {
-  if (!s) return '—';
-  return s.length > n ? s.slice(0,n) + '…' : s;
+  if (!s) return '-';
+  return s.length > n ? s.slice(0,n) + '' : s;
 }
 
-// ── TOAST ─────────────────────────────
+//  TOAST 
 function showToast(msg, type='default') {
   const t = document.getElementById('toast');
   if (!t) return;
@@ -205,11 +205,11 @@ function showToast(msg, type='default') {
   t._t = setTimeout(() => { t.style.display = 'none'; }, 3200);
 }
 
-// ── MODAL ─────────────────────────────
+//  MODAL 
 function openModal(id)  { const m=document.getElementById(id); if(m) m.classList.add('show'); }
 function closeModal(id) { const m=document.getElementById(id); if(m) m.classList.remove('show'); }
 
-// ── SIDEBAR ───────────────────────────
+//  SIDEBAR 
 async function loadSidebar(activePage, shopData) {
   const el = document.getElementById('sidebar');
   if (!el) return;
@@ -220,12 +220,12 @@ async function loadSidebar(activePage, shopData) {
   const initials = ownerName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'TX';
   const isPremium = plan === 'premium';
   const isCampus  = plan === 'campus';
-  const planLabel = plan === 'premium' ? '🥇 Premium' : plan === 'campus' ? '🎓 Campus' : '🥈 Basic';
+  const planLabel = plan === 'premium' ? ' Premium' : plan === 'campus' ? ' Campus' : ' Basic';
 
   const navItem = (id, href, icon, label, isPro=false) => {
     const locked = isPro && !isPremium;
     return `<a href="${locked?'#':href}" class="nav-item ${activePage===id?'active':''}"
-      ${locked?`onclick="showToast('🔒 Premium Only — Upgrade to access','warning');return false"`:''}>
+      ${locked?`onclick="showToast(' Premium Only, Upgrade to access','warning');return false"`:''}>
       <i class="ti ${icon}"></i> ${label}
       ${locked ? '<span style="margin-left:auto;background:rgba(255,215,0,0.2);color:var(--gold);font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px">PRO</span>' : ''}
     </a>`;
@@ -259,8 +259,8 @@ async function loadSidebar(activePage, shopData) {
 
       <div class="nav-label">Growth</div>
       ${navItem('vybe',       'vybe.html',       'ti-bolt',          'Social Vybe')}
-      ${navItem('flash-deals','flash-deals.html','ti-flame',         '⚡ Flash Deals')}
-      ${navItem('group-buy',  'group-buy.html',  'ti-users-group',   '👥 Group Buying')}
+      ${navItem('flash-deals','flash-deals.html','ti-flame',         ' Flash Deals')}
+      ${navItem('group-buy',  'group-buy.html',  'ti-users-group',   ' Group Buying')}
       ${navItem('ai-tools',  'ai-tools.html',  'ti-robot',         'AI Tools',      true)}
       ${navItem('marketing', 'marketing.html', 'ti-speakerphone',  'Marketing',     true)}
 
@@ -277,18 +277,18 @@ async function loadSidebar(activePage, shopData) {
   `;
 }
 
-// ── MOBILE MENU ───────────────────────
+//  MOBILE MENU 
 function toggleSidebar() {
   document.getElementById('sidebar')?.classList.toggle('open');
 }
 
-// ── LOADING ───────────────────────────
+//  LOADING 
 function showLoading(show=true) {
   const el = document.getElementById('loadingOverlay');
   if (el) el.style.display = show ? 'flex' : 'none';
 }
 
-// ── AI CALL ───────────────────────────
+//  AI CALL 
 async function askAI(system, userMsg) {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -308,9 +308,9 @@ async function askAI(system, userMsg) {
   }
 }
 
-// ═══════════════════════════════════════════════
-// FLASH DEALS — Seller can create/manage
-// ═══════════════════════════════════════════════
+// 
+// FLASH DEALS, Seller can create/manage
+// 
 const FlashDeals = {
   async getAll(shopId) {
     const { data } = await sb.from('flash_deals')
@@ -326,9 +326,9 @@ const FlashDeals = {
   },
 };
 
-// ═══════════════════════════════════════════════
-// GROUP BUYING — Seller can create groups
-// ═══════════════════════════════════════════════
+// 
+// GROUP BUYING, Seller can create groups
+// 
 const GroupBuys = {
   async getAll(shopId) {
     const { data } = await sb.from('group_orders')
@@ -345,9 +345,9 @@ const GroupBuys = {
   },
 };
 
-// ═══════════════════════════════════════════════
-// ANALYTICS — Track views
-// ═══════════════════════════════════════════════
+// 
+// ANALYTICS, Track views
+// 
 async function trackEvent(storeId, event, productId, source) {
   try {
     await fetch('/api/analytics', {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Social Vybe — Travex Mall</title>
+<title>Social Vybe, Travex Mall</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="stylesheet" href="shared.css">
 <style>
@@ -19,16 +19,16 @@
 <div class="sidebar" id="sidebar"></div>
 <div class="main-wrapper">
   <div class="main-header">
-    <div><div class="header-title">Social Vybe ✦</div><div class="header-sub">Post products, grow your brand</div></div>
+    <div><div class="header-title">Social Vybe </div><div class="header-sub">Post products, grow your brand</div></div>
     <div class="header-right">
       <button class="btn btn-gold" onclick="openModal('postModal')"><i class="ti ti-plus"></i> New Post</button>
     </div>
   </div>
   <div class="main-content">
     <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-bolt"></i> My Posts</div><div class="stat-value" id="vPosts">—</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-heart"></i> Total Likes</div><div class="stat-value" id="vLikes">—</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-eye"></i> This Month</div><div class="stat-value" id="vMonth">—</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-bolt"></i> My Posts</div><div class="stat-value" id="vPosts">-</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-heart"></i> Total Likes</div><div class="stat-value" id="vLikes">-</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="ti ti-eye"></i> This Month</div><div class="stat-value" id="vMonth">-</div></div>
     </div>
 
     <div id="postsContainer">
@@ -39,7 +39,7 @@
 
 <div class="modal-bg" id="postModal" onclick="if(event.target===this)closeModal('postModal')">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">✦ New Vybe Post</div><button class="modal-close" onclick="closeModal('postModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title"> New Vybe Post</div><button class="modal-close" onclick="closeModal('postModal')"></button></div>
     <div class="modal-body">
       <div class="form-group"><label class="form-label">Post Content *</label>
         <textarea class="form-textarea" id="pContent" placeholder="Tell your customers about a product, offer or update..." style="min-height:100px"></textarea>
@@ -145,7 +145,7 @@ async function submitPost() {
   };
   const { error } = await DB.vybe.post(item);
   if (error) { showToast('Error: '+error.message,'error'); return; }
-  showToast('✅ Posted to Vybe!','success');
+  showToast(' Posted to Vybe!','success');
   closeModal('postModal');
   document.getElementById('pContent').value='';
   posts = await DB.vybe.getPosts(shopData?.id);
@@ -157,7 +157,7 @@ async async function deletePost(id) {
   await DB.vybe.delete(id);
   posts = posts.filter(p=>p.id!==id);
   renderPosts();
-  showToast('🗑️ Post deleted','success');
+  showToast(' Post deleted','success');
 }
 </script>
 </body>

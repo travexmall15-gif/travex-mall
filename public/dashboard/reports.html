@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reports — Travex Mall</title>
+<title>Reports, Travex Mall</title>
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <div class="sidebar" id="sidebar"></div>
 <div class="main-wrapper">
   <div class="main-header">
-    <div><div class="header-title">📊 Reports</div><div class="header-sub">Business performance overview</div></div>
+    <div><div class="header-title"> Reports</div><div class="header-sub">Business performance overview</div></div>
     <select class="form-select" id="periodSelect" onchange="loadReports()" style="width:auto;padding:8px 12px">
       <option value="7">Last 7 days</option>
       <option value="30" selected>Last 30 days</option>
@@ -23,7 +23,7 @@
   </div>
   <div class="main-content">
     <div class="stats-grid" style="margin-bottom:20px">
-      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="rRevenue">TZS 0</div><div class="stat-sub" id="rRevSub">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="rRevenue">TZS 0</div><div class="stat-sub" id="rRevSub">-</div></div>
       <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="rOrders">0</div></div>
       <div class="stat-card"><div class="stat-label">Total Expenses</div><div class="stat-value" id="rExpense">TZS 0</div></div>
       <div class="stat-card"><div class="stat-label">Net Profit</div><div class="stat-value" id="rProfit">TZS 0</div></div>
@@ -94,7 +94,7 @@ async function loadReports(){
   // Recent sales
   const recent=(sales||[]).slice(0,8);
   document.getElementById('recentSalesTbl').innerHTML=recent.length
-    ?recent.map(s=>`<tr><td><small>${new Date(s.created_at).toLocaleDateString('en-GB')}</small></td><td>${s.description||'—'}</td><td class="${s.category==='expense'?'expense':'income'}">${s.category==='expense'?'-':'+'} ${fmt(s.amount)}</td></tr>`).join('')
+    ?recent.map(s=>`<tr><td><small>${new Date(s.created_at).toLocaleDateString('en-GB')}</small></td><td>${s.description||'-'}</td><td class="${s.category==='expense'?'expense':'income'}">${s.category==='expense'?'-':'+'} ${fmt(s.amount)}</td></tr>`).join('')
     :'<tr><td colspan="3" class="empty-state"><h4>No sales yet</h4></td></tr>';
 }
 </script>

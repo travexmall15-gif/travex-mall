@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — Travex Mall</title>
+<title>Login, Travex Mall</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -24,7 +24,7 @@ body{
   position:relative;overflow-x:hidden;
 }
 
-/* ── Light beam (FinTrack-style diagonal glow) ── */
+/*  Light beam (FinTrack-style diagonal glow)  */
 .bg-beam{
   position:fixed;inset:-20%;pointer-events:none;z-index:0;
   background:
@@ -32,17 +32,17 @@ body{
   filter:blur(48px);
   transform:translateZ(0);
 }
-/* ── Faint grid lines ── */
+/*  Faint grid lines  */
 .bg-grid{
   position:fixed;inset:0;pointer-events:none;z-index:0;
 }
-/* ── Top glow ── */
+/*  Top glow  */
 .bg-glow{
   position:fixed;inset:0;pointer-events:none;z-index:0;
   background:radial-gradient(ellipse 70% 45% at 50% -5%,rgba(201,168,76,0.10),transparent 65%);
 }
 
-/* ── Topbar ── */
+/*  Topbar  */
 .topbar{padding:1.4rem 5%;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
 .logo{display:flex;align-items:center;gap:0.55rem;font-size:1.05rem;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.01em}
 .logo-mark{
@@ -60,7 +60,7 @@ body{
 }
 .back-link:hover{color:var(--white);border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.06)}
 
-/* ── Card ── */
+/*  Card  */
 .card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem;position:relative;z-index:2}
 .card{
   background:#FFFFFF;width:100%;max-width:430px;padding:2.6rem 2.4rem;
@@ -81,7 +81,7 @@ body{
 .card-title{font-size:1.45rem;font-weight:800;color:var(--navy);letter-spacing:-0.02em;margin-bottom:0.35rem;line-height:1.15}
 .card-sub{font-size:0.86rem;color:var(--gray);margin-bottom:1.8rem;line-height:1.65}
 
-/* ── Form ── */
+/*  Form  */
 .form-group{margin-bottom:1.15rem}
 .form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
 .form-input{
@@ -101,7 +101,7 @@ body{
 }
 .pass-toggle:hover{color:var(--navy)}
 
-/* ── Buttons (pill, FinTrack-style) ── */
+/*  Buttons (pill, FinTrack-style)  */
 .btn-primary{
   width:100%;padding:0.95rem;border-radius:var(--radius-pill);
   background:var(--navy);color:var(--white);
@@ -127,7 +127,7 @@ body{
 }
 .btn-secondary:hover{border-color:var(--navy);color:var(--navy)}
 
-/* ── Alerts ── */
+/*  Alerts  */
 .alert{padding:0.8rem 1rem;font-size:0.8rem;margin-bottom:1rem;display:none;line-height:1.6;border-radius:var(--radius-input)}
 .alert.show{display:block}
 .alert-error{background:#FEE2E2;border:1px solid #FCA5A5;color:#B91C1C}
@@ -151,7 +151,7 @@ body{
 .page-footer{padding:1.4rem 5%;text-align:center;position:relative;z-index:2}
 .page-footer p{font-size:0.72rem;color:rgba(255,255,255,0.25)}
 
-/* ── Mobile ── */
+/*  Mobile  */
 @media(max-width:640px){
   .topbar{padding:1.1rem 1.25rem}
   .card{padding:2rem 1.5rem;border-radius:20px}
@@ -168,13 +168,13 @@ body{
 
 <div class="topbar">
   <a href="/" class="logo"><span class="logo-mark">T</span>TRAVEX <span>MALL</span></a>
-  <a href="/" class="back-link">← Back Marketplace</a>
+  <a href="/" class="back-link"> Back Marketplace</a>
 </div>
 
 <div class="card-wrap">
   <div class="card">
 
-    <!-- ── LOGIN PANEL ── -->
+    <!--  LOGIN PANEL  -->
     <div id="loginPanel">
       <div class="card-badge"><span class="dot"></span>Travex Seller Portal</div>
       <div class="card-title">Sign In Account Yako</div>
@@ -198,21 +198,21 @@ body{
         <button class="forgot-link" onclick="showPanel('resetPanel')">Forgot password?</button>
       </div>
 
-      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Sign In Dashboard →</button>
+      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Sign In Dashboard </button>
 
       <div class="divider">or</div>
-      <a href="/open-store" class="btn-gold">🏪 Open Shop Jipya →</a>
+      <a href="/open-store" class="btn-gold"> Open Shop Jipya </a>
 
       <div class="card-footer">
         <p>Help? <a href="https://wa.me/255651919915">WhatsApp: +255 651 919 915</a></p>
       </div>
     </div>
 
-    <!-- ── RESET PANEL ── -->
+    <!--  RESET PANEL  -->
     <div id="resetPanel" style="display:none">
       <div class="card-badge"><span class="dot"></span>Password Reset</div>
       <div class="card-title">Edit Password</div>
-      <div class="card-sub">Enter your phone number — we will send a password reset link to your email yako.</div>
+      <div class="card-sub">Enter your phone number, we will send a password reset link to your email yako.</div>
 
       <div class="alert alert-error"   id="resetError"></div>
       <div class="alert alert-success" id="resetSuccess"></div>
@@ -223,14 +223,14 @@ body{
           onkeypress="if(event.key==='Enter')doReset()">
       </div>
 
-      <button class="btn-primary" id="resetBtn" onclick="doReset()">Submit Link ya Reset →</button>
-      <button class="btn-secondary" onclick="showPanel('loginPanel')">← Back Login</button>
+      <button class="btn-primary" id="resetBtn" onclick="doReset()">Submit Link ya Reset </button>
+      <button class="btn-secondary" onclick="showPanel('loginPanel')"> Back Login</button>
     </div>
 
   </div>
 </div>
 
-<div class="page-footer"><p>© 2026 Travex Mall · Travex Digital Group (TDG) · Tanzania</p></div>
+<div class="page-footer"><p> 2026 Travex Mall  Travex Digital Group (TDG)  Tanzania</p></div>
 
 <script>
 const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
@@ -238,8 +238,8 @@ const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// Already logged in → redirect to dashboard
-// ── Auto-login: check existing session ──
+// Already logged in  redirect to dashboard
+//  Auto-login: check existing session 
 sb.auth.getSession().then(async ({ data: { session } }) => {
   if (session) {
     await redirectToDashboard(session.user);
@@ -248,7 +248,7 @@ sb.auth.getSession().then(async ({ data: { session } }) => {
 
 
 
-// ── HELPERS ────────────────────────────────────────────────────
+//  HELPERS 
 function showPanel(id) {
   ["loginPanel","resetPanel"].forEach(p => {
     document.getElementById(p).style.display = p === id ? "block" : "none";
@@ -291,24 +291,24 @@ function normalizePhone(phone) {
   }
   return digits;
 }
-// phoneToEmail removed — no longer using email-based auth
+// phoneToEmail removed, no longer using email-based auth
 
-// ── LOGIN ───────────────────────────────────────────────────────
+//  LOGIN 
 async function doLogin() {
   clearAlerts();
   const phoneInput = document.getElementById("phone").value.trim();
   const pass  = document.getElementById("password").value;
   const btn   = document.getElementById("loginBtn");
 
-  if (!phoneInput) { showErr("loginError", "⚠️ Please enter your phone number."); return; }
-  if (!pass)  { showErr("loginError", "⚠️ Please enter your password."); return; }
+  if (!phoneInput) { showErr("loginError", " Please enter your phone number."); return; }
+  if (!pass)  { showErr("loginError", " Please enter your password."); return; }
 
   btn.textContent = "Signing in...";
   btn.disabled = true;
 
   const normalized = normalizePhone(phoneInput);
 
-  // ── Try Business Market (pending_payments) ──
+  //  Try Business Market (pending_payments) 
   const { data: bizList } = await sb.from("pending_payments")
     .select("id, owner_phone, shop_whatsapp, login_password, plan, shop_name, shop_category, shop_region, owner_name, status")
     .eq("status", "approved");
@@ -325,12 +325,12 @@ async function doLogin() {
     localStorage.setItem("travex_owner_name", bizMatch.owner_name || "");
     localStorage.setItem("travex_category", bizMatch.shop_category || "");
     localStorage.setItem("travex_region", bizMatch.shop_region || "");
-    btn.textContent = "✅ Welcome! Loading...";
+    btn.textContent = " Welcome! Loading...";
     window.location.replace("dashboard.html");
     return;
   }
 
-  // ── Try Campus Market (campus_stores) ──
+  //  Try Campus Market (campus_stores) 
   const { data: campusList } = await sb.from("campus_stores")
     .select("id, phone, whatsapp, login_password, store_name, owner_name, university_abbr, is_active")
     .eq("is_active", true);
@@ -346,13 +346,13 @@ async function doLogin() {
     localStorage.setItem("travex_shop_name", campusMatch.store_name || "");
     localStorage.setItem("travex_owner_name", campusMatch.owner_name || "");
     localStorage.setItem("travex_region", campusMatch.university_abbr || "");
-    btn.textContent = "✅ Welcome! Loading...";
+    btn.textContent = " Welcome! Loading...";
     window.location.replace("dashboard.html");
     return;
   }
 
-  // ── No match found — show debug info ──
-  btn.textContent = "Sign In Dashboard →";
+  //  No match found, show debug info 
+  btn.textContent = "Sign In Dashboard ";
   btn.disabled = false;
 
   // DEBUG: show exactly what we got from DB
@@ -366,16 +366,16 @@ async function doLogin() {
       debugInfo.push("Record " + (i+1) + ": phone=" + r.owner_phone + " | wa=" + r.shop_whatsapp + " | pass_stored=" + (r.login_password ? "YES (" + r.login_password + ")" : "NULL") + " | status=" + r.status);
     });
   }
-  showErr("loginError", "❌ Incorrect phone or password.<br><small style='font-size:10px;opacity:.7;line-height:1.6;display:block;margin-top:6px'>" + debugInfo.join("<br>") + "</small>");
+  showErr("loginError", " Incorrect phone or password.<br><small style='font-size:10px;opacity:.7;line-height:1.6;display:block;margin-top:6px'>" + debugInfo.join("<br>") + "</small>");
 }
 
-// ── RESET PASSWORD ──────────────────────────────────────────────
+//  RESET PASSWORD 
 async function doReset() {
   clearAlerts();
   const phone = document.getElementById("resetPhone").value.trim();
   const btn   = document.getElementById("resetBtn");
 
-  if (!phone) { showErr("resetError", "⚠️ Please enter your phone number."); return; }
+  if (!phone) { showErr("resetError", " Please enter your phone number."); return; }
 
   btn.textContent = "Submitting...";
   btn.disabled = true;
@@ -386,8 +386,8 @@ async function doReset() {
   });
 
   // Always show success (security: don't reveal if account exists)
-  showOk("resetSuccess", "✅ Link imetumwa! Kama namba hiyo ipo kwenye mfumo, angalia email inayohusiana na akaunti yako.");
-  btn.textContent = "Submit Link ya Reset →";
+  showOk("resetSuccess", " Link imetumwa! Kama namba hiyo ipo kwenye mfumo, angalia email inayohusiana na akaunti yako.");
+  btn.textContent = "Submit Link ya Reset ";
   btn.disabled = false;
 }
 </script>

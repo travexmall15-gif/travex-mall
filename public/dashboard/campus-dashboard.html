@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Campus Dashboard — Travex Mall</title>
+<title>Campus Dashboard, Travex Mall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-/* ═══════════════════════════════════════════
-   TRAVEX CAMPUS DASHBOARD — Premium Design
-   ═══════════════════════════════════════════ */
+/* 
+   TRAVEX CAMPUS DASHBOARD, Premium Design
+    */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#050B2E;--navy2:#040E38;--navy3:#070E25;
   --blue:#0A1858;--blue2:#0D2070;
-  --gold:#C9A84C;--gold2:#F0C96B;
+  --#C9A84C:#C9A84C;--#C9A84C2:#F0C96B;
   --white:#fff;--offwhite:#F8FAFF;
   --gray:#64748B;--lgray:#E2E8F0;--dgray:#1E3A5F;
   --green:#059669;--red:#DC2626;--orange:#D97706;
@@ -27,14 +27,14 @@
 body{font-family:'Inter',sans-serif;background:#F8FAFF;color:#0F172A;-webkit-font-smoothing:antialiased;overflow:hidden;height:100vh}
 h1,h2,h3,h4{font-family:'Playfair Display',serif}
 
-/* ── SCROLLBAR ── */
+/*  SCROLLBAR  */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius: 8px}
 
-/* ══════════════════════════════════
+/* 
    AUTH OVERLAY
-══════════════════════════════════ */
+ */
 .auth-overlay{
   position:fixed;inset:0;z-index:1000;
   background:radial-gradient(ellipse at 30% 50%, rgba(27,58,107,0.4), transparent 60%),
@@ -53,13 +53,13 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
   font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;
   color:#fff;text-align:center;margin-bottom:0.25rem
 }
-.auth-logo span{color:var(--gold)}
+.auth-logo span{color:var(--#C9A84C)}
 .auth-sub{font-size:0.78rem;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:2rem}
 .auth-tabs{display:flex;background:rgba(255,255,255,0.06);border-radius:10px;padding:3px;margin-bottom:1.75rem}
 .auth-tab{
   flex:1;padding:0.55rem;border:none;background:transparent;
   color:rgba(255,255,255,0.5);font-size:0.82rem;font-weight:600;
-  cursor:pointer;border-radius:8px;transition:all 0.2s;font-family:'Inter',sans-serif
+  cursor:pointer;border-radius: 12px;transition:all 0.2s;font-family:'Inter',sans-serif
 }
 .auth-tab.active{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
 .auth-form{display:none}.auth-form.active{display:block}
@@ -75,26 +75,26 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 .auth-input:focus{border-color:rgba(201,168,76,0.5);background:rgba(255,255,255,0.08)}
 .auth-input::placeholder{color:rgba(255,255,255,0.25)}
 .auth-btn{
-  width:100%;padding:0.85rem;background:var(--gold);color:var(--navy3);
+  width:100%;padding:0.85rem;background:var(--#C9A84C);color:var(--navy3);
   border:none;border-radius:10px;font-size:0.88rem;font-weight:700;
   cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:0.5rem
 }
-.auth-btn:hover{background:var(--gold2)}
+.auth-btn:hover{background:var(--#C9A84C2)}
 .auth-btn:disabled{opacity:0.6;cursor:not-allowed}
 .auth-err{
   font-size:0.78rem;color:#f87171;margin-bottom:0.75rem;
   display:none;padding:0.6rem 0.75rem;
-  background:rgba(220,38,38,0.1);border-radius:8px;border:1px solid rgba(220,38,38,0.2)
+  background:rgba(220,38,38,0.1);border-radius: 12px;border:1px solid rgba(220,38,38,0.2)
 }
 .auth-err.show{display:block}
 
-/* ══════════════════════════════════
+/* 
    MAIN LAYOUT
-══════════════════════════════════ */
+ */
 .app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:56px 1fr;height:100vh;display:none}
 .app.visible{display:grid}
 
-/* ── TOPBAR ── */
+/*  TOPBAR  */
 .topbar{
   grid-column:1/-1;
   background:#FFFFFF;
@@ -104,7 +104,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 }
 .topbar-left{display:flex;align-items:center;gap:1rem}
 .topbar-logo{font-family:'Playfair Display',serif;font-weight:800;font-size:0.9rem;color:#fff}
-.topbar-logo span{color:var(--gold)}
+.topbar-logo span{color:var(--#C9A84C)}
 .topbar-divider{width:1px;height:20px;background:rgba(255,255,255,0.1)}
 .topbar-page{font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:0.4rem}
 .topbar-page .page-name{color:#fff}
@@ -112,11 +112,11 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 .topbar-badge{
   font-size:0.68rem;font-weight:700;padding:0.28rem 0.75rem;
   border-radius:20px;background:rgba(201,168,76,0.15);
-  color:var(--gold);border:1px solid rgba(201,168,76,0.25)
+  color:var(--#C9A84C);border:1px solid rgba(201,168,76,0.25)
 }
 .topbar-avatar{
   width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  background:linear-gradient(135deg,var(--#C9A84C),var(--#C9A84C2));
   display:flex;align-items:center;justify-content:center;
   font-size:0.7rem;font-weight:800;color:var(--navy3);cursor:pointer;flex-shrink:0
 }
@@ -127,7 +127,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 }
 .topbar-warn.show{display:flex;align-items:center;gap:0.35rem}
 
-/* ── SIDEBAR ── */
+/*  SIDEBAR  */
 .sidebar{
   background:linear-gradient(180deg,#0A1128 0%,#0C1535 60%,#050B2E 100%);
   border-right:1px solid rgba(255,255,255,0.06);
@@ -143,7 +143,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 }
 .sidebar-av{
   width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  background:linear-gradient(135deg,var(--#C9A84C),var(--#C9A84C2));
   display:flex;align-items:center;justify-content:center;
   font-size:0.75rem;font-weight:800;color:var(--navy3);flex-shrink:0
 }
@@ -163,7 +163,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 }
 .nav-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.8)}
 .nav-item.active{
-  background:rgba(201,168,76,0.1);color:var(--gold);
+  background:rgba(201,168,76,0.1);color:var(--#C9A84C);
   border-color:rgba(201,168,76,0.2);font-weight:600
 }
 .nav-icon{font-size:0.9rem;width:18px;text-align:center;flex-shrink:0}
@@ -185,15 +185,15 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
   text-decoration:none;padding:0.4rem;margin-top:0.4rem;
   transition:color 0.15s
 }
-.sidebar-admin-link:hover{color:var(--gold)}
+.sidebar-admin-link:hover{color:var(--#C9A84C)}
 
-/* ── MAIN CONTENT ── */
+/*  MAIN CONTENT  */
 .main{overflow-y:auto;padding:1.5rem}
 .panel{display:none}.panel.active{display:block}
 
-/* ══════════════════════════════════
+/* 
    REUSABLE COMPONENTS
-══════════════════════════════════ */
+ */
 /* Page header */
 .page-header{margin-bottom:1.5rem}
 .page-title{font-size:1.3rem;font-weight:800;color:#0F172A;margin-bottom:0.2rem}
@@ -220,7 +220,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 .stat-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1;margin-bottom:0.2rem}
 .stat-lbl{font-size:0.72rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em}
 /* Accent border top */
-.stat-card.gold{border-top:2px solid var(--gold)}
+.stat-card.#C9A84C{border-top:2px solid var(--#C9A84C)}
 .stat-card.green{border-top:2px solid var(--green)}
 .stat-card.blue{border-top:2px solid #3B82F6}
 .stat-card.purple{border-top:2px solid var(--purple)}
@@ -237,7 +237,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 }
 .card-title{font-size:0.88rem;font-weight:700;color:#fff}
 .card-action{
-  font-size:0.72rem;color:var(--gold);cursor:pointer;
+  font-size:0.72rem;color:var(--#C9A84C);cursor:pointer;
   font-weight:600;background:none;border:none;font-family:'Inter',sans-serif
 }
 .card-body{padding:1.25rem}
@@ -265,13 +265,13 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
 .badge-cancelled{background:rgba(220,38,38,0.15);color:#f87171}
 .badge-active{background:rgba(5,150,105,0.15);color:#34d399}
 .badge-inactive{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4)}
-.badge-gold{background:rgba(201,168,76,0.15);color:var(--gold)}
+.badge-#C9A84C{background:rgba(201,168,76,0.15);color:var(--#C9A84C)}
 .badge-cat{background:rgba(27,58,107,0.5);color:rgba(255,255,255,0.7)}
 
 /* Buttons */
-.btn{padding:0.6rem 1.25rem;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.35rem}
-.btn-primary{background:var(--gold);color:var(--navy3)}
-.btn-primary:hover{background:var(--gold2)}
+.btn{padding:0.6rem 1.25rem;border-radius: 12px;font-size:0.8rem;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.35rem}
+.btn-primary{background:var(--#C9A84C);color:var(--navy3)}
+.btn-primary:hover{background:var(--#C9A84C2)}
 .btn-secondary{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.1)}
 .btn-secondary:hover{background:rgba(255,255,255,0.12)}
 .btn-danger{background:rgba(220,38,38,0.15);color:#f87171;border:1px solid rgba(220,38,38,0.2)}
@@ -286,7 +286,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif}
   width:100%;padding:0.65rem 0.85rem;
   background:rgba(255,255,255,0.06);
   border:1.5px solid rgba(255,255,255,0.1);
-  border-radius:8px;color:#fff;font-size:0.82rem;
+  border-radius: 12px;color:#fff;font-size:0.82rem;
   font-family:'Inter',sans-serif;outline:none;transition:all 0.2s
 }
 .form-input:focus{border-color:rgba(201,168,76,0.4);background:rgba(255,255,255,0.08)}
@@ -296,7 +296,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 .form-hint{font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:0.3rem}
 
 /* Alert */
-.alert{padding:0.65rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:500;margin-bottom:1rem;display:none}
+.alert{padding:0.65rem 0.9rem;border-radius: 12px;font-size:0.78rem;font-weight:500;margin-bottom:1rem;display:none}
 .alert.show{display:block}
 .alert-error{background:rgba(220,38,38,0.1);color:#f87171;border:1px solid rgba(220,38,38,0.2)}
 .alert-success{background:rgba(5,150,105,0.1);color:#34d399;border:1px solid rgba(5,150,105,0.2)}
@@ -326,41 +326,41 @@ textarea.form-input{resize:vertical;min-height:80px}
 
 /* Color picker */
 .color-row{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.4rem}
-.c-swatch{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all 0.15s}
+.c-swatch{width:28px;height:28px;border-radius: 10px;cursor:pointer;border:2px solid transparent;transition:all 0.15s}
 .c-swatch.active{border-color:#fff;transform:scale(1.15)}
 
 /* Font picker */
 .font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:0.4rem;margin-top:0.4rem}
 .font-opt{padding:0.5rem 0.6rem;border:1px solid rgba(255,255,255,0.1);border-radius:7px;font-size:0.75rem;cursor:pointer;transition:all 0.15s;text-align:center;color:rgba(255,255,255,0.6);background:transparent}
-.font-opt.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08)}
+.font-opt.active{border-color:var(--#C9A84C);color:var(--#C9A84C);background:rgba(201,168,76,0.08)}
 
 /* AI Chat */
 .chat-box{display:flex;flex-direction:column;height:340px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)}
 .chat-header{padding:0.75rem 1rem;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.6rem}
-.chat-avatar{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
+.chat-avatar{width:28px;height:28px;border-radius: 12px;background:linear-gradient(135deg,var(--#C9A84C),var(--#C9A84C2));display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
 .chat-title{font-size:0.8rem;font-weight:600;color:#fff}
 .chat-status{font-size:0.65rem;color:var(--green)}
 .chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;background:rgba(0,0,0,0.2)}
 .ai-msg{display:flex;align-items:flex-start;gap:0.5rem;max-width:85%}
 .ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
 .ai-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6)}
-.ai-msg.user .ai-icon{background:var(--gold);color:var(--navy3)}
+.ai-msg.user .ai-icon{background:var(--#C9A84C);color:var(--navy3)}
 .ai-bubble{padding:0.6rem 0.85rem;border-radius:10px;font-size:0.78rem;line-height:1.55;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85)}
 .ai-msg.user .ai-bubble{background:rgba(201,168,76,0.15);color:rgba(255,255,255,0.9)}
 .chat-input-row{padding:0.6rem 0.75rem;background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:0.4rem}
-.chat-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.5rem 0.75rem;color:#fff;font-size:0.78rem;font-family:'Inter',sans-serif;outline:none}
+.chat-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius: 12px;padding:0.5rem 0.75rem;color:#fff;font-size:0.78rem;font-family:'Inter',sans-serif;outline:none}
 .chat-input::placeholder{color:rgba(255,255,255,0.2)}
-.chat-send{background:var(--gold);color:var(--navy3);border:none;border-radius:8px;padding:0.5rem 0.85rem;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.chat-send{background:var(--#C9A84C);color:var(--navy3);border:none;border-radius: 12px;padding:0.5rem 0.85rem;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
 
 /* Quick chips */
 .chips{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.75rem;padding:0 1rem}
 .chip{padding:0.3rem 0.7rem;border:1px solid rgba(255,255,255,0.1);border-radius:20px;font-size:0.68rem;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.15s;background:transparent}
-.chip:hover{border-color:var(--gold);color:var(--gold)}
+.chip:hover{border-color:var(--#C9A84C);color:var(--#C9A84C)}
 
 /* AI tabs */
 .ai-tabs{display:flex;gap:0.35rem;margin-bottom:1rem;flex-wrap:wrap}
-.ai-tab{padding:0.45rem 1rem;border-radius:8px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);background:transparent;font-family:'Inter',sans-serif;transition:all 0.15s}
-.ai-tab.active{background:rgba(201,168,76,0.12);color:var(--gold);border-color:rgba(201,168,76,0.25)}
+.ai-tab{padding:0.45rem 1rem;border-radius: 12px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);background:transparent;font-family:'Inter',sans-serif;transition:all 0.15s}
+.ai-tab.active{background:rgba(201,168,76,0.12);color:var(--#C9A84C);border-color:rgba(201,168,76,0.25)}
 
 /* Products grid */
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
@@ -370,7 +370,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 .prod-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .prod-body{padding:0.85rem}
 .prod-name{font-size:0.82rem;font-weight:700;color:#fff;margin-bottom:0.25rem}
-.prod-price{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--gold);margin-bottom:0.4rem}
+.prod-price{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--#C9A84C);margin-bottom:0.4rem}
 .prod-stock{font-size:0.68rem;color:rgba(255,255,255,0.35)}
 .prod-actions{display:flex;gap:0.35rem;margin-top:0.6rem}
 
@@ -391,21 +391,21 @@ textarea.form-input{resize:vertical;min-height:80px}
 
 /* Accounting */
 .acc-tabs{display:flex;gap:0.35rem;margin-bottom:1.25rem}
-.acc-tab{padding:0.45rem 1rem;border-radius:8px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);background:transparent;font-family:'Inter',sans-serif;transition:all 0.15s}
+.acc-tab{padding:0.45rem 1rem;border-radius: 12px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);background:transparent;font-family:'Inter',sans-serif;transition:all 0.15s}
 .acc-tab.active{background:rgba(27,58,107,0.5);color:#fff;border-color:rgba(255,255,255,0.15)}
 
 /* Leaderboard */
 .lb-row{display:flex;align-items:center;gap:0.85rem;padding:0.75rem 1rem;border-radius:10px;margin-bottom:0.4rem;transition:all 0.15s}
 .lb-row:hover{background:rgba(255,255,255,0.03)}
 .lb-rank{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;width:28px;text-align:center;flex-shrink:0}
-.lb-rank.gold-rank{color:var(--gold)}
+.lb-rank.#C9A84C-rank{color:var(--#C9A84C)}
 .lb-rank.silver-rank{color:#94A3B8}
 .lb-rank.bronze-rank{color:#92400E}
 .lb-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--navy3);flex-shrink:0}
 .lb-info{flex:1}
 .lb-name{font-size:0.82rem;font-weight:700;color:#fff}
 .lb-cat{font-size:0.65rem;color:rgba(255,255,255,0.35)}
-.lb-score{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--gold)}
+.lb-score{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--#C9A84C)}
 
 /* Subscription */
 .sub-plans{display:grid;grid-template-columns:1fr;gap:1rem;max-width:400px}
@@ -416,7 +416,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 .sub-plan-period{font-size:0.72rem;color:rgba(255,255,255,0.3);margin-bottom:1.25rem}
 .sub-features{list-style:none;display:flex;flex-direction:column;gap:0.45rem;margin-bottom:1.25rem}
 .sub-features li{font-size:0.78rem;color:rgba(255,255,255,0.65);display:flex;align-items:center;gap:0.4rem}
-.sub-features li::before{content:"✓";color:var(--gold);font-weight:700;flex-shrink:0}
+.sub-features li::before{content:"";color:var(--#C9A84C);font-weight:700;flex-shrink:0}
 .pay-methods{display:flex;flex-direction:column;gap:0.4rem;margin-top:1.5rem}
 .pay-method{display:flex;align-items:center;gap:0.75rem;padding:0.8rem 1rem;border:1px solid rgba(255,255,255,0.1);border-radius:10px;cursor:pointer;transition:all 0.15s}
 .pay-method.active{border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.06)}
@@ -434,7 +434,7 @@ textarea.form-input{resize:vertical;min-height:80px}
   .sidebar.open{left:0}
   .mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;display:none}
   .mob-overlay.show{display:block}
-  .mob-menu-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;cursor:pointer;flex-direction:column;gap:4px}
+  .mob-menu-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius: 12px;cursor:pointer;flex-direction:column;gap:4px}
   .mob-menu-btn span{width:14px;height:1.5px;background:#fff;display:block;border-radius:2px}
   .input-row{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr 1fr}
@@ -444,7 +444,7 @@ textarea.form-input{resize:vertical;min-height:80px}
   .mob-menu-btn{display:none}
 }
 
-/* ══ WHITE THEME OVERRIDE ══ */
+/*  WHITE THEME OVERRIDE  */
 .content { background: #F8FAFF !important; }
 .page-title { color: #0F172A !important; }
 .page-sub { color: #64748B !important; }
@@ -467,7 +467,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 .data-table th { background: #F8FAFF !important; color: #64748B !important; border-color: #E2E8F0 !important; }
 .data-table td { color: #0F172A !important; border-color: #F1F5F9 !important; }
 .data-table tr:hover td { background: #F0F4FF !important; }
-/* Form inputs → white bg */
+/* Form inputs  white bg */
 .form-input, input[type=text], input[type=email], input[type=tel], input[type=password], textarea, select { 
   background: #F8FAFF !important; border-color: #E2E8F0 !important; color: #0F172A !important; 
 }
@@ -504,11 +504,11 @@ textarea.form-input{resize:vertical;min-height:80px}
 </head>
 <body>
 
-<!-- ══ AUTH OVERLAY ══ -->
+<!--  AUTH OVERLAY  -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card">
     <div class="auth-logo">TRAVEX <span>CAMPUS</span></div>
-    <div class="auth-sub">Seller Dashboard · Sign in to continue</div>
+    <div class="auth-sub">Seller Dashboard  Sign in to continue</div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuth('login')">Sign In</button>
       <button class="auth-tab" onclick="switchAuth('register')">Register</button>
@@ -523,9 +523,9 @@ textarea.form-input{resize:vertical;min-height:80px}
       </div>
       <div class="auth-group">
         <label class="auth-label">Password</label>
-        <input class="auth-input" id="loginPassword" type="password" placeholder="••••••••" />
+        <input class="auth-input" id="loginPassword" type="password" placeholder="" />
       </div>
-      <button class="auth-btn" id="loginBtn" onclick="doLogin()">Sign In →</button>
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()">Sign In </button>
     </div>
 
     <!-- Register form -->
@@ -547,12 +547,12 @@ textarea.form-input{resize:vertical;min-height:80px}
         <label class="auth-label">Password</label>
         <input class="auth-input" id="regPass" type="password" placeholder="Min. 8 characters" />
       </div>
-      <button class="auth-btn" id="regBtn" onclick="doRegister()">Create Account →</button>
+      <button class="auth-btn" id="regBtn" onclick="doRegister()">Create Account </button>
     </div>
   </div>
 </div>
 
-<!-- ══ MAIN APP ══ -->
+<!--  MAIN APP  -->
 <div class="app" id="mainApp">
 
   <!-- TOPBAR -->
@@ -564,8 +564,8 @@ textarea.form-input{resize:vertical;min-height:80px}
       <div class="topbar-page">Dashboard / <span class="page-name" id="topbarPage">Overview</span></div>
     </div>
     <div class="topbar-right">
-      <div class="topbar-warn" id="subWarn">⚠️ No active subscription</div>
-      <div class="topbar-badge" id="topbarUni">—</div>
+      <div class="topbar-warn" id="subWarn"> No active subscription</div>
+      <div class="topbar-badge" id="topbarUni">-</div>
       <div class="topbar-avatar" id="topbarAvatar">?</div>
     </div>
   </header>
@@ -577,29 +577,29 @@ textarea.form-input{resize:vertical;min-height:80px}
       <div>
         <div class="sidebar-name" id="sidebarName">Loading...</div>
               <div id="planBadge" style="margin-top:0.3rem"></div>
-        <div class="sidebar-uni" id="sidebarUni">—</div>
+        <div class="sidebar-uni" id="sidebarUni">-</div>
       </div>
     </div>
 
     <div class="sidebar-section">My Store</div>
-    <div class="nav-item active" onclick="showPanel('overview')" id="nav-overview"><span class="nav-icon">📊</span> Overview</div>
-    <div class="nav-item" onclick="showPanel('store')" id="nav-store"><span class="nav-icon">🏪</span> My Shop</div>
-    <div class="nav-item" onclick="showPanel('products')" id="nav-products"><span class="nav-icon">📦</span> Products</div>
-    <div class="nav-item" onclick="showPanel('orders')" id="nav-orders"><span class="nav-icon">🛍️</span> Orders <span class="nav-badge" id="newOrdersBadge" style="display:none">0</span></div>
+    <div class="nav-item active" onclick="showPanel('overview')" id="nav-overview"><span class="nav-icon"></span> Overview</div>
+    <div class="nav-item" onclick="showPanel('store')" id="nav-store"><span class="nav-icon"></span> My Shop</div>
+    <div class="nav-item" onclick="showPanel('products')" id="nav-products"><span class="nav-icon"></span> Products</div>
+    <div class="nav-item" onclick="showPanel('orders')" id="nav-orders"><span class="nav-icon"></span> Orders <span class="nav-badge" id="newOrdersBadge" style="display:none">0</span></div>
 
     <div class="sidebar-section">Grow</div>
-    <div class="nav-item" onclick="showPanel('vybe')" id="nav-vybe"><span class="nav-icon">✦</span> Social Vybe</div>
-    <div class="nav-item" onclick="showPanel('ai')" id="nav-ai"><span class="nav-icon">🤖</span> AI Assistants</div>
-    <div class="nav-item" onclick="showPanel('marketing')" id="nav-marketing"><span class="nav-icon">📣</span> Marketing Plan</div>
-    <div class="nav-item" onclick="showPanel('accounting')" id="nav-accounting"><span class="nav-icon">💰</span> Accounting</div>
+    <div class="nav-item" onclick="showPanel('vybe')" id="nav-vybe"><span class="nav-icon"></span> Social Vybe</div>
+    <div class="nav-item" onclick="showPanel('ai')" id="nav-ai"><span class="nav-icon"></span> AI Assistants</div>
+    <div class="nav-item" onclick="showPanel('marketing')" id="nav-marketing"><span class="nav-icon"></span> Marketing Plan</div>
+    <div class="nav-item" onclick="showPanel('accounting')" id="nav-accounting"><span class="nav-icon"></span> Accounting</div>
 
     <div class="sidebar-section">Other</div>
-    <div class="nav-item" onclick="showPanel('leaderboard')" id="nav-leaderboard"><span class="nav-icon">🏆</span> Leaderboard</div>
-    <div class="nav-item" onclick="showPanel('subscription')" id="nav-subscription"><span class="nav-icon">💳</span> Subscription</div>
+    <div class="nav-item" onclick="showPanel('leaderboard')" id="nav-leaderboard"><span class="nav-icon"></span> Leaderboard</div>
+    <div class="nav-item" onclick="showPanel('subscription')" id="nav-subscription"><span class="nav-icon"></span> Subscription</div>
 
     <div class="sidebar-bottom">
-      <div class="sidebar-logout" onclick="handleLogout()">🚪 Sign Out</div>
-      <a href="/admin" class="sidebar-admin-link">Admin Panel →</a>
+      <div class="sidebar-logout" onclick="handleLogout()"> Sign Out</div>
+      <a href="/admin" class="sidebar-admin-link">Admin Panel </a>
     </div>
   </aside>
 
@@ -609,32 +609,32 @@ textarea.form-input{resize:vertical;min-height:80px}
   <!-- MAIN CONTENT -->
   <main class="main" id="mainContent">
 
-    <!-- ── OVERVIEW ── -->
+    <!--  OVERVIEW  -->
     <div class="panel active" id="panel-overview">
       <div class="page-header">
         <div class="page-title">Overview</div>
         <div class="page-sub">Welcome back! Here's what's happening with your shop.</div>
       </div>
       <div class="stats-grid">
-        <div class="stat-card gold">
+        <div class="stat-card #C9A84C">
           <div class="stat-top">
-            <div class="stat-icon" style="background:rgba(201,168,76,0.15)">💰</div>
-            <div class="stat-trend trend-up" id="revTrend">↑ +12%</div>
+            <div class="stat-icon" style="background:rgba(201,168,76,0.15)"></div>
+            <div class="stat-trend trend-up" id="revTrend"> +12%</div>
           </div>
           <div class="stat-val" id="statRevenue">TZS 0</div>
           <div class="stat-lbl">Total Revenue</div>
         </div>
         <div class="stat-card green">
           <div class="stat-top">
-            <div class="stat-icon" style="background:rgba(5,150,105,0.15)">🛍️</div>
-            <div class="stat-trend trend-up" id="ordTrend">—</div>
+            <div class="stat-icon" style="background:rgba(5,150,105,0.15)"></div>
+            <div class="stat-trend trend-up" id="ordTrend">-</div>
           </div>
           <div class="stat-val" id="statOrders">0</div>
           <div class="stat-lbl">Total Orders</div>
         </div>
         <div class="stat-card blue">
           <div class="stat-top">
-            <div class="stat-icon" style="background:rgba(59,130,246,0.15)">📦</div>
+            <div class="stat-icon" style="background:rgba(59,130,246,0.15)"></div>
             <div class="stat-trend trend-neutral">Active</div>
           </div>
           <div class="stat-val" id="statProducts">0</div>
@@ -642,7 +642,7 @@ textarea.form-input{resize:vertical;min-height:80px}
         </div>
         <div class="stat-card purple">
           <div class="stat-top">
-            <div class="stat-icon" style="background:rgba(124,58,237,0.15)">🏪</div>
+            <div class="stat-icon" style="background:rgba(124,58,237,0.15)"></div>
             <div class="stat-trend" id="shopStatusBadge" style="background:rgba(5,150,105,0.15);color:#34d399">Active</div>
           </div>
           <div class="stat-val" id="statShopStatus" style="font-size:1rem;padding-top:0.25rem">Setting up</div>
@@ -655,22 +655,22 @@ textarea.form-input{resize:vertical;min-height:80px}
         <div class="content-card">
           <div class="card-header">
             <span class="card-title">Recent Orders</span>
-            <button class="card-action" onclick="showPanel('orders')">View all →</button>
+            <button class="card-action" onclick="showPanel('orders')">View all </button>
           </div>
           <div class="card-body" style="padding:0">
             <div id="recentOrdersList" style="padding:0.5rem 0">
-              <div class="empty"><div class="empty-icon">🛍️</div><div class="empty-text">No orders yet</div></div>
+              <div class="empty"><div class="empty-icon"></div><div class="empty-text">No orders yet</div></div>
             </div>
           </div>
         </div>
         <div class="content-card">
           <div class="card-header">
             <span class="card-title">My Products</span>
-            <button class="card-action" onclick="showPanel('products')">View all →</button>
+            <button class="card-action" onclick="showPanel('products')">View all </button>
           </div>
           <div class="card-body" style="padding:0">
             <div id="overviewProductsList" style="padding:0.5rem 0">
-              <div class="empty"><div class="empty-icon">📦</div><div class="empty-text">No products yet</div></div>
+              <div class="empty"><div class="empty-icon"></div><div class="empty-text">No products yet</div></div>
             </div>
           </div>
         </div>
@@ -678,7 +678,7 @@ textarea.form-input{resize:vertical;min-height:80px}
       <style>@media(max-width:600px){.overview-grid{grid-template-columns:1fr!important}}</style>
     </div>
 
-    <!-- ── MY SHOP ── -->
+    <!--  MY SHOP  -->
     <div class="panel" id="panel-store">
       <div class="page-header">
         <div class="page-title">My Shop</div>
@@ -729,7 +729,7 @@ textarea.form-input{resize:vertical;min-height:80px}
               <div class="c-swatch" style="background:#0A1858" data-color="#0A1858" onclick="pickColor(this)"></div>
               <div class="c-swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
               <div class="c-swatch" style="background:#0F172A" data-color="#0F172A" onclick="pickColor(this)"></div>
-              <input type="color" id="customColorPick" style="width:28px;height:28px;border:none;border-radius:6px;cursor:pointer;padding:0" onchange="pickColor(this,this.value)" />
+              <input type="color" id="customColorPick" style="width:28px;height:28px;border:none;border-radius: 10px;cursor:pointer;padding:0" onchange="pickColor(this,this.value)" />
             </div>
           </div>
           <div class="form-group">
@@ -745,22 +745,22 @@ textarea.form-input{resize:vertical;min-height:80px}
             <div class="form-group">
               <label class="form-label">Logo</label>
               <div class="upload-zone" onclick="document.getElementById('logoInput').click()">
-                <div class="upload-icon">🖼️</div>
+                <div class="upload-icon"></div>
                 <div class="upload-label">Upload Logo</div>
-                <div class="upload-sub">JPG, PNG — max 2MB</div>
+                <div class="upload-sub">JPG, PNG, max 2MB</div>
                 <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="previewLogo(this)" />
               </div>
-              <img id="logoPreview" style="display:none;max-height:80px;margin-top:0.5rem;border-radius:8px" />
+              <img id="logoPreview" style="display:none;max-height:80px;margin-top:0.5rem;border-radius: 12px" />
             </div>
             <div class="form-group">
               <label class="form-label">Banner</label>
               <div class="upload-zone" onclick="document.getElementById('bannerInput').click()">
-                <div class="upload-icon">🎨</div>
+                <div class="upload-icon"></div>
                 <div class="upload-label">Upload Banner</div>
-                <div class="upload-sub">JPG, PNG — max 3MB</div>
+                <div class="upload-sub">JPG, PNG, max 3MB</div>
                 <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="previewBanner(this)" />
               </div>
-              <img id="bannerPreview" style="display:none;max-height:80px;width:100%;object-fit:cover;margin-top:0.5rem;border-radius:8px" />
+              <img id="bannerPreview" style="display:none;max-height:80px;width:100%;object-fit:cover;margin-top:0.5rem;border-radius: 12px" />
             </div>
           </div>
           <button class="btn btn-primary" onclick="saveShop()" id="saveShopBtn">Save Changes</button>
@@ -768,16 +768,16 @@ textarea.form-input{resize:vertical;min-height:80px}
       </div>
     </div>
 
-    <!-- ── PRODUCTS ── -->
+    <!--  PRODUCTS  -->
     <div class="panel" id="panel-products">
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
         <div><div class="page-title">Products</div><div class="page-sub">Manage your shop products.</div></div>
         <button class="btn btn-primary" onclick="openProductModal()">+ Add Product</button>
       </div>
-      <div id="productsContainer"><div class="empty"><div class="empty-icon">📦</div><div class="empty-text">No products yet</div></div></div>
+      <div id="productsContainer"><div class="empty"><div class="empty-icon"></div><div class="empty-text">No products yet</div></div></div>
     </div>
 
-    <!-- ── ORDERS ── -->
+    <!--  ORDERS  -->
     <div class="panel" id="panel-orders">
       <div class="page-header">
         <div class="page-title">Orders</div>
@@ -785,12 +785,12 @@ textarea.form-input{resize:vertical;min-height:80px}
       </div>
       <div class="content-card">
         <div class="card-body" style="padding:0">
-          <div id="ordersContainer"><div class="empty" style="padding:2rem"><div class="empty-icon">🛍️</div><div class="empty-text">No orders yet</div></div></div>
+          <div id="ordersContainer"><div class="empty" style="padding:2rem"><div class="empty-icon"></div><div class="empty-text">No orders yet</div></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ── SOCIAL VYBE ── -->
+    <!--  SOCIAL VYBE  -->
     <div class="panel" id="panel-vybe">
       <div class="page-header">
         <div class="page-title">Social Vybe</div>
@@ -811,41 +811,41 @@ textarea.form-input{resize:vertical;min-height:80px}
             <div class="form-group">
               <label class="form-label">Media</label>
               <div class="upload-zone" onclick="document.getElementById('vybeMediaInput').click()">
-                <div class="upload-icon">📸</div>
+                <div class="upload-icon"></div>
                 <div class="upload-label">Add Photo or Video</div>
-                <div class="upload-sub">JPG, PNG, MP4 — max 10MB</div>
+                <div class="upload-sub">JPG, PNG, MP4, max 10MB</div>
                 <input type="file" id="vybeMediaInput" accept="image/*,video/*" style="display:none" onchange="previewVybeMedia(this)" />
               </div>
               <div id="vybeMediaPreview" style="margin-top:0.5rem"></div>
             </div>
             <div id="vybeMsg" style="font-size:0.78rem;margin-bottom:0.5rem"></div>
-            <button class="btn btn-primary" id="vybePostBtn" onclick="postToVybe()" style="width:100%">✦ Post to Social Vybe</button>
+            <button class="btn btn-primary" id="vybePostBtn" onclick="postToVybe()" style="width:100%"> Post to Social Vybe</button>
           </div>
         </div>
         <div class="content-card">
           <div class="card-header">
             <span class="card-title">My Posts</span>
-            <a href="/vybe" target="_blank" class="card-action">Explore Feed →</a>
+            <a href="/vybe" target="_blank" class="card-action">Explore Feed </a>
           </div>
           <div class="card-body" style="padding:0;max-height:420px;overflow-y:auto">
-            <div id="myVybePosts"><div class="empty" style="padding:2rem"><div class="empty-icon">✦</div><div class="empty-text">No posts yet</div></div></div>
+            <div id="myVybePosts"><div class="empty" style="padding:2rem"><div class="empty-icon"></div><div class="empty-text">No posts yet</div></div></div>
           </div>
         </div>
       </div>
       <style>@media(max-width:600px){.vybe-grid{grid-template-columns:1fr!important}}</style>
     </div>
 
-    <!-- ── AI ASSISTANTS ── -->
+    <!--  AI ASSISTANTS  -->
     <div class="panel" id="panel-ai">
       <div class="page-header">
         <div class="page-title">AI Assistants</div>
         <div class="page-sub">Powered by Claude AI. 30 messages per day.</div>
       </div>
       <div class="ai-tabs">
-        <button class="ai-tab active" onclick="switchAI('care')" id="ai-tab-care">💬 Customer Care</button>
-        <button class="ai-tab" onclick="switchAI('marketing')" id="ai-tab-marketing">📈 Marketing</button>
-        <button class="ai-tab" onclick="switchAI('accounting')" id="ai-tab-accounting">💰 Accounting</button>
-        <button class="ai-tab" onclick="switchAI('advisor')" id="ai-tab-advisor">🤖 Business Advisor</button>
+        <button class="ai-tab active" onclick="switchAI('care')" id="ai-tab-care"> Customer Care</button>
+        <button class="ai-tab" onclick="switchAI('marketing')" id="ai-tab-marketing"> Marketing</button>
+        <button class="ai-tab" onclick="switchAI('accounting')" id="ai-tab-accounting"> Accounting</button>
+        <button class="ai-tab" onclick="switchAI('advisor')" id="ai-tab-advisor"> Business Advisor</button>
       </div>
       <div id="ai-panel-care">
         <div class="chips">
@@ -855,8 +855,8 @@ textarea.form-input{resize:vertical;min-height:80px}
           <div class="chip" onclick="sendAI('care','How to get more orders?')">Get more orders</div>
         </div>
         <div class="chat-box">
-          <div class="chat-header"><div class="chat-avatar">💬</div><div><div class="chat-title">Customer Care AI</div><div class="chat-status">● Online</div></div></div>
-          <div class="chat-msgs" id="msgs-care"><div class="ai-msg"><div class="ai-icon">💬</div><div class="ai-bubble">👋 Hi! I'm your Customer Care AI. Ask me how to handle orders, respond to customers, or improve your service.</div></div></div>
+          <div class="chat-header"><div class="chat-avatar"></div><div><div class="chat-title">Customer Care AI</div><div class="chat-status"> Online</div></div></div>
+          <div class="chat-msgs" id="msgs-care"><div class="ai-msg"><div class="ai-icon"></div><div class="ai-bubble"> Hi! I'm your Customer Care AI. Ask me how to handle orders, respond to customers, or improve your service.</div></div></div>
           <div class="chat-input-row"><input class="chat-input" id="input-care" placeholder="Ask about customer care..." onkeydown="if(event.key==='Enter')sendAI('care')" /><button class="chat-send" onclick="sendAI('care')">Send</button></div>
         </div>
       </div>
@@ -867,8 +867,8 @@ textarea.form-input{resize:vertical;min-height:80px}
           <div class="chip" onclick="sendAI('marketing','Pricing strategy for campus students')">Pricing strategy</div>
         </div>
         <div class="chat-box">
-          <div class="chat-header"><div class="chat-avatar">📈</div><div><div class="chat-title">Marketing AI</div><div class="chat-status">● Online</div></div></div>
-          <div class="chat-msgs" id="msgs-marketing"><div class="ai-msg"><div class="ai-icon">📈</div><div class="ai-bubble">📈 I'm your Marketing AI. I help you create campaigns, grow your following, and attract more campus customers.</div></div></div>
+          <div class="chat-header"><div class="chat-avatar"></div><div><div class="chat-title">Marketing AI</div><div class="chat-status"> Online</div></div></div>
+          <div class="chat-msgs" id="msgs-marketing"><div class="ai-msg"><div class="ai-icon"></div><div class="ai-bubble"> I'm your Marketing AI. I help you create campaigns, grow your following, and attract more campus customers.</div></div></div>
           <div class="chat-input-row"><input class="chat-input" id="input-marketing" placeholder="Ask about marketing..." onkeydown="if(event.key==='Enter')sendAI('marketing')" /><button class="chat-send" onclick="sendAI('marketing')">Send</button></div>
         </div>
       </div>
@@ -879,8 +879,8 @@ textarea.form-input{resize:vertical;min-height:80px}
           <div class="chip" onclick="sendAI('accounting','Tax advice for student sellers in Tanzania')">Tax advice TZ</div>
         </div>
         <div class="chat-box">
-          <div class="chat-header"><div class="chat-avatar">💰</div><div><div class="chat-title">Accounting AI</div><div class="chat-status">● Online</div></div></div>
-          <div class="chat-msgs" id="msgs-accounting"><div class="ai-msg"><div class="ai-icon">💰</div><div class="ai-bubble">💰 I'm your Accounting AI. Ask me about pricing, profit, revenue tracking and financial planning for your shop.</div></div></div>
+          <div class="chat-header"><div class="chat-avatar"></div><div><div class="chat-title">Accounting AI</div><div class="chat-status"> Online</div></div></div>
+          <div class="chat-msgs" id="msgs-accounting"><div class="ai-msg"><div class="ai-icon"></div><div class="ai-bubble"> I'm your Accounting AI. Ask me about pricing, profit, revenue tracking and financial planning for your shop.</div></div></div>
           <div class="chat-input-row"><input class="chat-input" id="input-accounting" placeholder="Ask about accounting..." onkeydown="if(event.key==='Enter')sendAI('accounting')" /><button class="chat-send" onclick="sendAI('accounting')">Send</button></div>
         </div>
       </div>
@@ -891,14 +891,14 @@ textarea.form-input{resize:vertical;min-height:80px}
           <div class="chip" onclick="sendAI('advisor','Investment advice for students')">Investment tips</div>
         </div>
         <div class="chat-box">
-          <div class="chat-header"><div class="chat-avatar">🤖</div><div><div class="chat-title">Business Advisor AI</div><div class="chat-status">● Online</div></div></div>
-          <div class="chat-msgs" id="msgs-advisor"><div class="ai-msg"><div class="ai-icon">🤖</div><div class="ai-bubble">🤖 I'm your Business Advisor. Ask me about growth strategy, scaling, investment and long-term planning for your business.</div></div></div>
+          <div class="chat-header"><div class="chat-avatar"></div><div><div class="chat-title">Business Advisor AI</div><div class="chat-status"> Online</div></div></div>
+          <div class="chat-msgs" id="msgs-advisor"><div class="ai-msg"><div class="ai-icon"></div><div class="ai-bubble"> I'm your Business Advisor. Ask me about growth strategy, scaling, investment and long-term planning for your business.</div></div></div>
           <div class="chat-input-row"><input class="chat-input" id="input-advisor" placeholder="Ask about business strategy..." onkeydown="if(event.key==='Enter')sendAI('advisor')" /><button class="chat-send" onclick="sendAI('advisor')">Send</button></div>
         </div>
       </div>
     </div>
 
-    <!-- ── MARKETING PLAN ── -->
+    <!--  MARKETING PLAN  -->
     <div class="panel" id="panel-marketing">
       <div class="page-header">
         <div class="page-title">Marketing Plan</div>
@@ -920,7 +920,7 @@ textarea.form-input{resize:vertical;min-height:80px}
               <label class="form-label">Monthly Budget (TZS)</label>
               <input class="form-input" id="mktBudget" type="number" placeholder="e.g. 50000" />
             </div>
-            <button class="btn btn-primary" id="mktBtn" onclick="generateMarketingPlan()" style="width:100%">✨ Generate Plan</button>
+            <button class="btn btn-primary" id="mktBtn" onclick="generateMarketingPlan()" style="width:100%"> Generate Plan</button>
           </div>
         </div>
         <div class="content-card">
@@ -935,7 +935,7 @@ textarea.form-input{resize:vertical;min-height:80px}
       <style>@media(max-width:600px){.mkt-grid{grid-template-columns:1fr!important}}</style>
     </div>
 
-    <!-- ── ACCOUNTING ── -->
+    <!--  ACCOUNTING  -->
     <div class="panel" id="panel-accounting">
       <div class="page-header">
         <div class="page-title">Accounting</div>
@@ -947,18 +947,18 @@ textarea.form-input{resize:vertical;min-height:80px}
         <button class="acc-tab" onclick="switchAccPeriod('monthly',this)">Monthly</button>
       </div>
       <div class="stats-grid" style="margin-bottom:1.25rem">
-        <div class="stat-card gold">
-          <div class="stat-icon" style="background:rgba(201,168,76,0.15);margin-bottom:0.75rem">💰</div>
+        <div class="stat-card #C9A84C">
+          <div class="stat-icon" style="background:rgba(201,168,76,0.15);margin-bottom:0.75rem"></div>
           <div class="stat-val" id="acc-total-rev">TZS 0</div>
           <div class="stat-lbl">Total Revenue</div>
         </div>
         <div class="stat-card green">
-          <div class="stat-icon" style="background:rgba(5,150,105,0.15);margin-bottom:0.75rem">🛍️</div>
+          <div class="stat-icon" style="background:rgba(5,150,105,0.15);margin-bottom:0.75rem"></div>
           <div class="stat-val" id="acc-total-orders">0</div>
           <div class="stat-lbl">Orders</div>
         </div>
         <div class="stat-card blue">
-          <div class="stat-icon" style="background:rgba(59,130,246,0.15);margin-bottom:0.75rem">📊</div>
+          <div class="stat-icon" style="background:rgba(59,130,246,0.15);margin-bottom:0.75rem"></div>
           <div class="stat-val" id="acc-avg-order">TZS 0</div>
           <div class="stat-lbl">Avg. Order Value</div>
         </div>
@@ -966,12 +966,12 @@ textarea.form-input{resize:vertical;min-height:80px}
       <div class="content-card">
         <div class="card-header"><span class="card-title">Order Breakdown</span></div>
         <div class="card-body" style="padding:0">
-          <div id="acc-orders-list"><div class="empty" style="padding:2rem"><div class="empty-icon">📊</div><div class="empty-text">No orders in this period</div></div></div>
+          <div id="acc-orders-list"><div class="empty" style="padding:2rem"><div class="empty-icon"></div><div class="empty-text">No orders in this period</div></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ── LEADERBOARD ── -->
+    <!--  LEADERBOARD  -->
     <div class="panel" id="panel-leaderboard">
       <div class="page-header">
         <div class="page-title">Leaderboard</div>
@@ -979,12 +979,12 @@ textarea.form-input{resize:vertical;min-height:80px}
       </div>
       <div class="content-card">
         <div class="card-body" id="leaderboardContainer">
-          <div class="empty"><div class="empty-icon">🏆</div><div class="empty-text">Loading leaderboard...</div></div>
+          <div class="empty"><div class="empty-icon"></div><div class="empty-text">Loading leaderboard...</div></div>
         </div>
       </div>
     </div>
 
-    <!-- ── SUBSCRIPTION ── -->
+    <!--  SUBSCRIPTION  -->
     <div class="panel" id="panel-subscription">
       <div class="page-header">
         <div class="page-title">Subscription</div>
@@ -992,7 +992,7 @@ textarea.form-input{resize:vertical;min-height:80px}
       </div>
       <div class="sub-plans">
         <div class="sub-plan current">
-          <div class="sub-plan-name">🎓 Campus Plan</div>
+          <div class="sub-plan-name"> Campus Plan</div>
           <div class="sub-plan-price">TZS 15,000</div>
           <div class="sub-plan-period">per month</div>
           <ul class="sub-features">
@@ -1006,14 +1006,14 @@ textarea.form-input{resize:vertical;min-height:80px}
           <div class="sub-plan-name" style="margin-top:1rem">Payment Methods</div>
           <div class="pay-methods">
             <div class="pay-method active">
-              <div class="pay-method-icon">🏦</div>
+              <div class="pay-method-icon"></div>
               <div>
                 <div class="pay-method-name">CRDB Bank</div>
                 <div class="pay-method-detail">0152774556100 <button class="copy-btn" onclick="copyText('0152774556100')">Copy</button></div>
               </div>
             </div>
             <div class="pay-method">
-              <div class="pay-method-icon">📱</div>
+              <div class="pay-method-icon"></div>
               <div>
                 <div class="pay-method-name">M-Pesa / Tigopesa</div>
                 <div class="pay-method-detail">+255 651 919 915 <button class="copy-btn" onclick="copyText('255651919915')">Copy</button></div>
@@ -1035,7 +1035,7 @@ textarea.form-input{resize:vertical;min-height:80px}
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="productModalTitle">Add Product</div>
-      <button class="modal-close" onclick="closeProductModal()">✕</button>
+      <button class="modal-close" onclick="closeProductModal()"></button>
     </div>
     <div class="modal-body">
       <div class="alert alert-error" id="productErr"></div>
@@ -1071,12 +1071,12 @@ textarea.form-input{resize:vertical;min-height:80px}
       <div class="form-group">
         <label class="form-label">Product Image</label>
         <div class="upload-zone" onclick="document.getElementById('prodImage').click()">
-          <div class="upload-icon">📸</div>
+          <div class="upload-icon"></div>
           <div class="upload-label">Upload Image</div>
-          <div class="upload-sub">JPG, PNG — max 3MB</div>
+          <div class="upload-sub">JPG, PNG, max 3MB</div>
           <input type="file" id="prodImage" accept="image/*" style="display:none" onchange="previewProductImage(this)" />
         </div>
-        <img id="prodImagePreview" style="display:none;max-height:100px;margin-top:0.5rem;border-radius:8px" />
+        <img id="prodImagePreview" style="display:none;max-height:100px;margin-top:0.5rem;border-radius: 12px" />
       </div>
     </div>
     <div class="modal-footer">
@@ -1095,7 +1095,7 @@ const sb = supabase.createClient(
   'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 );
 
-// ── STATE ──
+//  STATE 
 let currentUser = null;
 let currentShop = null;
 let userUniAbbr = '';
@@ -1104,13 +1104,13 @@ let selectedFont  = 'Inter';
 let currentAI     = 'care';
 let accPeriod     = 'daily';
 
-// ── RATE LIMIT ──
+//  RATE LIMIT 
 const LIMIT_KEY = 'travex_ai_limit';
 function getRateLimit(){ try{ const d=JSON.parse(localStorage.getItem(LIMIT_KEY)||'{}'); const t=new Date().toDateString(); if(d.date!==t) return {date:t,count:0}; return d; }catch{ return {date:new Date().toDateString(),count:0}; } }
 function incrementRateLimit(){ const d=getRateLimit(); d.count++; localStorage.setItem(LIMIT_KEY,JSON.stringify(d)); }
 function checkRateLimit(){ const d=getRateLimit(); return d.count < 30; }
 
-// ── HELPERS ──
+//  HELPERS 
 function fmt(n){ return 'TZS ' + Number(n||0).toLocaleString('en-US'); }
 function ago(ts){ const m=Math.floor((Date.now()-new Date(ts).getTime())/60000); if(m<1) return 'just now'; if(m<60) return m+'m'; if(m<1440) return Math.floor(m/60)+'h'; return Math.floor(m/1440)+'d'; }
 function sanitize(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
@@ -1119,7 +1119,7 @@ function showAlert(id,msg){ const el=document.getElementById(id); if(el){ el.tex
 function copyText(t){ navigator.clipboard.writeText(t).then(()=>showToast('Copied!','ok')); }
 function s(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 
-// ── AUTH TOGGLE ──
+//  AUTH TOGGLE 
 function switchAuth(tab){
   document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
@@ -1127,7 +1127,7 @@ function switchAuth(tab){
   document.getElementById(`form${tab.charAt(0).toUpperCase()+tab.slice(1)}`).classList.add('active');
 }
 
-// ── LOGIN ──
+//  LOGIN 
 async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pass=document.getElementById('loginPassword').value;
@@ -1136,11 +1136,11 @@ async function doLogin(){
   if(!email||!pass){ err.textContent='Enter email and password'; err.classList.add('show'); return; }
   btn.textContent='Signing in...'; btn.disabled=true; err.classList.remove('show');
   const {error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){ err.textContent='❌ '+error.message; err.classList.add('show'); btn.textContent='Sign In →'; btn.disabled=false; return; }
+  if(error){ err.textContent=' '+error.message; err.classList.add('show'); btn.textContent='Sign In '; btn.disabled=false; return; }
   await init();
 }
 
-// ── REGISTER ──
+//  REGISTER 
 async function doRegister(){
   const name=document.getElementById('regName').value.trim();
   const phone=document.getElementById('regPhone').value.trim();
@@ -1152,11 +1152,11 @@ async function doRegister(){
   if(pass.length<8){ err.textContent='Password must be at least 8 characters'; err.classList.add('show'); return; }
   btn.textContent='Creating account...'; btn.disabled=true;
   const {error}=await sb.auth.signUp({email,password:pass,options:{data:{name,phone}}});
-  if(error){ err.textContent='❌ '+error.message; err.classList.add('show'); btn.textContent='Create Account →'; btn.disabled=false; return; }
+  if(error){ err.textContent=' '+error.message; err.classList.add('show'); btn.textContent='Create Account '; btn.disabled=false; return; }
   await init();
 }
 
-// ── INIT ──
+//  INIT 
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){ return; }
@@ -1164,7 +1164,7 @@ async function init(){
   document.getElementById('authOverlay').style.display='none';
   document.getElementById('mainApp').classList.add('visible');
 
-  // ── Read plan & shop info (from localStorage set by login.html) ──
+  //  Read plan & shop info (from localStorage set by login.html) 
   const plan = localStorage.getItem('travex_plan') || 'basic';
   const shopName = localStorage.getItem('travex_shop_name') || '';
   const ownerName = localStorage.getItem('travex_owner_name') || '';
@@ -1185,7 +1185,7 @@ async function init(){
     }
   }
 
-  // ── Apply plan to dashboard ──
+  //  Apply plan to dashboard 
   applyPlan(localStorage.getItem('travex_plan') || 'basic');
 
   const name = ownerName || currentUser.user_metadata?.name || currentUser.email.split('@')[0];
@@ -1201,14 +1201,14 @@ async function init(){
   await loadOverviewProducts();
 }
 
-// ── APPLY PLAN: show/hide features based on plan ──
+//  APPLY PLAN: show/hide features based on plan 
 function applyPlan(plan) {
   const isPremium = plan === 'premium';
 
   // Plan badge in sidebar/topbar
   const badge = isPremium
-    ? '<span style="background:rgba(201,168,76,0.18);color:#C9A84C;font-size:0.6rem;font-weight:800;padding:0.15rem 0.55rem;border-radius:999px;letter-spacing:0.06em">🥇 PREMIUM</span>'
-    : '<span style="background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.55);font-size:0.6rem;font-weight:700;padding:0.15rem 0.55rem;border-radius:999px">🥈 BASIC</span>';
+    ? '<span style="background:rgba(201,168,76,0.18);color:#C9A84C;font-size:0.6rem;font-weight:800;padding:0.15rem 0.55rem;border-radius:999px;letter-spacing:0.06em"> PREMIUM</span>'
+    : '<span style="background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.55);font-size:0.6rem;font-weight:700;padding:0.15rem 0.55rem;border-radius:999px"> BASIC</span>';
   try { document.getElementById('planBadge').innerHTML = badge; } catch(e){}
 
   // Premium-only sections: AI tabs 2-4, Leaderboard, advanced Marketing
@@ -1219,12 +1219,12 @@ function applyPlan(plan) {
       if (!isPremium) {
         el.style.opacity = '0.35';
         el.style.pointerEvents = 'none';
-        el.title = '🥇 Upgrade to Premium to unlock this feature';
+        el.title = ' Upgrade to Premium to unlock this feature';
         // Add lock overlay
         if (!el.querySelector('.plan-lock')) {
           const lock = document.createElement('div');
           lock.className = 'plan-lock';
-          lock.innerHTML = '🔒 Premium Only';
+          lock.innerHTML = ' Premium Only';
           lock.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);color:#C9A84C;padding:0.3rem 0.75rem;border-radius:999px;font-size:0.65rem;font-weight:700;pointer-events:none;z-index:10;white-space:nowrap';
           el.style.position = 'relative';
           el.appendChild(lock);
@@ -1256,7 +1256,7 @@ function applyPlan(plan) {
   } catch(e){}
 }
 
-// ── LOAD SHOP ──
+//  LOAD SHOP 
 async function loadShop(){
   const {data}=await sb.from('campus_stores').select('*').eq('user_id',currentUser.id).single();
   currentShop=data;
@@ -1274,7 +1274,7 @@ async function loadShop(){
     const active=currentShop.is_active;
     s('statShopStatus',active?'Active':'Inactive');
     document.getElementById('shopStatusBadge').className='stat-trend '+(active?'trend-up':'trend-down');
-    document.getElementById('shopStatusBadge').textContent=active?'● Active':'● Inactive';
+    document.getElementById('shopStatusBadge').textContent=active?' Active':' Inactive';
     // Subscription warning
     if(!currentShop.subscription_status||currentShop.subscription_status==='inactive'){
       document.getElementById('subWarn').classList.add('show');
@@ -1282,11 +1282,11 @@ async function loadShop(){
   } else {
     s('statShopStatus','Setup Needed');
     s('sidebarUni','No shop yet');
-    s('topbarUni','—');
+    s('topbarUni','-');
   }
 }
 
-// ── SAVE SHOP ──
+//  SAVE SHOP 
 async function saveShop(){
   const name=document.getElementById('shopName').value.trim();
   const whatsapp=document.getElementById('shopWhatsapp').value.trim();
@@ -1308,11 +1308,11 @@ async function saveShop(){
   else { const slug=name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+Date.now(); ({error}=await sb.from('campus_stores').insert({...updateData, user_id:currentUser.id, slug, university:userUniAbbr, university_abbr:userUniAbbr, is_active:false})); }
   btn.textContent='Save Changes'; btn.disabled=false;
   if(error){ showAlert('shopError',error.message); return; }
-  showAlert('shopSuccess','✅ Shop saved!');
+  showAlert('shopSuccess',' Shop saved!');
   await loadShop();
 }
 
-// ── STATS ──
+//  STATS 
 async function loadStats(){
   if(!currentShop) return;
   const {count:pc}=await sb.from('campus_products').select('*',{count:'exact',head:true}).eq('store_id',currentShop.id);
@@ -1321,51 +1321,51 @@ async function loadStats(){
   s('statProducts',pc||0); s('statOrders',orders?.length||0); s('statRevenue',fmt(rev));
 }
 
-// ── RECENT ORDERS ──
+//  RECENT ORDERS 
 async function loadRecentOrders(){
   if(!currentShop) return;
   const {data:orders}=await sb.from('campus_orders').select('*').eq('store_id',currentShop.id).order('created_at',{ascending:false}).limit(5);
   const el=document.getElementById('recentOrdersList');
-  if(!orders?.length){ el.innerHTML='<div class="empty"><div class="empty-icon">🛍️</div><div class="empty-text">No orders yet</div></div>'; return; }
+  if(!orders?.length){ el.innerHTML='<div class="empty"><div class="empty-icon"></div><div class="empty-text">No orders yet</div></div>'; return; }
   el.innerHTML=orders.map(o=>`
     <div style="display:flex;align-items:center;gap:0.5rem;padding:0.6rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04)">
-      <div style="flex:1;min-width:0"><div style="font-size:0.78rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sanitize(o.product_name||'Order')}</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.35)">${sanitize(o.customer_name)} · ${ago(o.created_at)}</div></div>
-      <div style="text-align:right"><div style="font-size:0.78rem;font-weight:700;color:var(--gold)">${fmt(o.total_price)}</div><span class="badge badge-${o.status||'pending'}" style="font-size:0.58rem">${o.status||'pending'}</span></div>
+      <div style="flex:1;min-width:0"><div style="font-size:0.78rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sanitize(o.product_name||'Order')}</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.35)">${sanitize(o.customer_name)}  ${ago(o.created_at)}</div></div>
+      <div style="text-align:right"><div style="font-size:0.78rem;font-weight:700;color:var(--#C9A84C)">${fmt(o.total_price)}</div><span class="badge badge-${o.status||'pending'}" style="font-size:0.58rem">${o.status||'pending'}</span></div>
     </div>`).join('');
 }
 
-// ── OVERVIEW PRODUCTS ──
+//  OVERVIEW PRODUCTS 
 async function loadOverviewProducts(){
   if(!currentShop) return;
   const {data:prods}=await sb.from('campus_products').select('*').eq('store_id',currentShop.id).limit(4);
   const el=document.getElementById('overviewProductsList');
-  if(!prods?.length){ el.innerHTML='<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">No products yet</div></div>'; return; }
+  if(!prods?.length){ el.innerHTML='<div class="empty"><div class="empty-icon"></div><div class="empty-text">No products yet</div></div>'; return; }
   el.innerHTML=prods.map(p=>`
     <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04)">
-      <div style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0">
-        ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:8px" />`:'📦'}
+      <div style="width:32px;height:32px;border-radius: 12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0">
+        ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius: 12px" />`:''}
       </div>
       <div style="flex:1;min-width:0">
         <div style="font-size:0.78rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sanitize(p.name)}</div>
         <div style="font-size:0.65rem;color:rgba(255,255,255,0.35)">Stock: ${p.stock||0}</div>
       </div>
-      <div style="font-size:0.78rem;font-weight:700;color:var(--gold)">${fmt(p.price)}</div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--#C9A84C)">${fmt(p.price)}</div>
     </div>`).join('');
 }
 
-// ── LOAD PRODUCTS ──
+//  LOAD PRODUCTS 
 async function loadProducts(){
   const el=document.getElementById('productsContainer');
-  if(!currentShop){ el.innerHTML='<div class="empty"><div class="empty-icon">🏪</div><div class="empty-text">Set up your shop first</div></div>'; return; }
+  if(!currentShop){ el.innerHTML='<div class="empty"><div class="empty-icon"></div><div class="empty-text">Set up your shop first</div></div>'; return; }
   const {data:prods}=await sb.from('campus_products').select('*').eq('store_id',currentShop.id).order('created_at',{ascending:false});
-  if(!prods?.length){ el.innerHTML='<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">No products yet. Click + Add Product to start.</div></div>'; return; }
+  if(!prods?.length){ el.innerHTML='<div class="empty"><div class="empty-icon"></div><div class="empty-text">No products yet. Click + Add Product to start.</div></div>'; return; }
   el.innerHTML=`<div class="products-grid">${prods.map(p=>`
     <div class="prod-card">
-      <div class="prod-img">${p.image_url?`<img src="${p.image_url}" />`:'📦'}</div>
+      <div class="prod-img">${p.image_url?`<img src="${p.image_url}" />`:''}</div>
       <div class="prod-body">
         <div class="prod-name">${sanitize(p.name)}</div>
         <div class="prod-price">${fmt(p.price)}</div>
-        <div class="prod-stock">Stock: ${p.stock||0} · ${p.category||''}</div>
+        <div class="prod-stock">Stock: ${p.stock||0}  ${p.category||''}</div>
         <div class="prod-actions">
           <button class="btn btn-secondary btn-sm" onclick="editProduct('${p.id}')">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">Delete</button>
@@ -1374,7 +1374,7 @@ async function loadProducts(){
     </div>`).join('')}</div>`;
 }
 
-// ── PRODUCT MODAL ──
+//  PRODUCT MODAL 
 function openProductModal(){ document.getElementById('productModal').classList.add('open'); document.getElementById('productModalTitle').textContent='Add Product'; document.getElementById('editProductId').value=''; ['prodName','prodDesc','prodPrice','prodStock'].forEach(id=>document.getElementById(id).value=''); document.getElementById('prodCat').value=''; document.getElementById('prodImagePreview').style.display='none'; }
 function closeProductModal(){ document.getElementById('productModal').classList.remove('open'); }
 
@@ -1408,7 +1408,7 @@ async function saveProduct(){
   else { ({error}=await sb.from('campus_products').insert(productData)); }
   btn.textContent='Save Product'; btn.disabled=false;
   if(error){ showAlert('productErr',error.message); return; }
-  showToast(editId?'✅ Product updated!':'✅ Product added!','ok');
+  showToast(editId?' Product updated!':' Product added!','ok');
   closeProductModal(); loadProducts(); loadStats(); loadOverviewProducts();
 }
 
@@ -1419,24 +1419,24 @@ async function deleteProduct(id){
   showToast('Product deleted','ok'); loadProducts(); loadStats();
 }
 
-// ── ORDERS ──
+//  ORDERS 
 async function loadOrders(){
   const el=document.getElementById('ordersContainer');
   if(!currentShop){ el.innerHTML='<div class="empty" style="padding:2rem">Set up your shop first</div>'; return; }
   const {data:orders}=await sb.from('campus_orders').select('*').eq('store_id',currentShop.id).order('created_at',{ascending:false});
-  if(!orders?.length){ el.innerHTML='<div class="empty" style="padding:2rem"><div class="empty-icon">🛍️</div><div class="empty-text">No orders yet</div></div>'; return; }
+  if(!orders?.length){ el.innerHTML='<div class="empty" style="padding:2rem"><div class="empty-icon"></div><div class="empty-text">No orders yet</div></div>'; return; }
   el.innerHTML=`<table class="data-table">
     <thead><tr><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
     <tbody>${orders.map(o=>`
       <tr>
         <td><strong>${sanitize(o.customer_name)}</strong><br><span style="font-size:0.7rem;color:rgba(255,255,255,0.35)">${sanitize(o.customer_phone)}</span></td>
-        <td>${sanitize(o.product_name||'—')}</td>
-        <td><strong style="color:var(--gold)">${fmt(o.total_price)}</strong></td>
+        <td>${sanitize(o.product_name||'-')}</td>
+        <td><strong style="color:var(--#C9A84C)">${fmt(o.total_price)}</strong></td>
         <td><select class="form-input" style="padding:0.25rem 0.5rem;font-size:0.72rem;width:auto" onchange="updateOrderStatus('${o.id}',this.value)">
           ${['pending','confirmed','delivered','cancelled'].map(st=>`<option value="${st}" ${o.status===st?'selected':''}>${st}</option>`).join('')}
         </select></td>
         <td style="font-size:0.72rem;color:rgba(255,255,255,0.4)">${ago(o.created_at)}</td>
-        <td>${o.customer_phone?`<a href="https://wa.me/${(o.customer_phone).replace(/\\D/g,'')}" target="_blank" class="btn btn-secondary btn-sm">💬 WhatsApp</a>`:''}</td>
+        <td>${o.customer_phone?`<a href="https://wa.me/${(o.customer_phone).replace(/\\D/g,'')}" target="_blank" class="btn btn-secondary btn-sm"> WhatsApp</a>`:''}</td>
       </tr>`).join('')}
     </tbody></table>`;
 }
@@ -1447,14 +1447,14 @@ async function updateOrderStatus(id,status){
   showToast('Status updated','ok');
 }
 
-// ── VYBE ──
+//  VYBE 
 let vybeMediaType='';
 function previewVybeMedia(input){
   const file=input.files[0]; if(!file) return;
   vybeMediaType=file.type.startsWith('video')?'video':'image';
   const url=URL.createObjectURL(file);
   const el=document.getElementById('vybeMediaPreview');
-  el.innerHTML=vybeMediaType==='video'?`<video src="${url}" style="max-height:140px;border-radius:8px;width:100%;object-fit:cover" controls></video>`:`<img src="${url}" style="max-height:140px;border-radius:8px;object-fit:cover" />`;
+  el.innerHTML=vybeMediaType==='video'?`<video src="${url}" style="max-height:140px;border-radius: 12px;width:100%;object-fit:cover" controls></video>`:`<img src="${url}" style="max-height:140px;border-radius: 12px;object-fit:cover" />`;
 }
 function showVybeMsg(msg,type){ const el=document.getElementById('vybeMsg'); el.textContent=msg; el.style.color=type==='error'?'#f87171':'#34d399'; }
 
@@ -1469,9 +1469,9 @@ async function postToVybe(){
   const mediaFile=document.getElementById('vybeMediaInput').files[0];
   if(mediaFile){ const ext=mediaFile.name.split('.').pop(); const path=`vybe/${currentShop.id}/${Date.now()}.${ext}`; const {data:up}=await sb.storage.from('campus-assets').upload(path,mediaFile); if(up){ const {data:pu}=sb.storage.from('campus-assets').getPublicUrl(up.path); mediaUrl=pu.publicUrl; } }
   const {error}=await sb.from('feed_posts').insert({ store_id:currentShop.id, caption, media_url:mediaUrl, media_type:vybeMediaType||'text', price:price?Number(price):null, university_abbr:currentShop.university_abbr, likes_count:0 });
-  btn.textContent='✦ Post to Social Vybe'; btn.disabled=false;
+  btn.textContent=' Post to Social Vybe'; btn.disabled=false;
   if(error){ showVybeMsg('Error: '+error.message,'error'); return; }
-  showVybeMsg('✅ Posted to Social Vybe!','ok');
+  showVybeMsg(' Posted to Social Vybe!','ok');
   document.getElementById('vybeCaption').value='';
   document.getElementById('vybePrice').value='';
   document.getElementById('vybeMediaInput').value='';
@@ -1483,18 +1483,18 @@ async function loadMyVybePosts(){
   if(!currentShop) return;
   const {data:posts}=await sb.from('feed_posts').select('*').eq('store_id',currentShop.id).order('created_at',{ascending:false}).limit(10);
   const el=document.getElementById('myVybePosts');
-  if(!posts?.length){ el.innerHTML='<div class="empty" style="padding:1.5rem"><div class="empty-icon">✦</div><div class="empty-text">No posts yet</div></div>'; return; }
+  if(!posts?.length){ el.innerHTML='<div class="empty" style="padding:1.5rem"><div class="empty-icon"></div><div class="empty-text">No posts yet</div></div>'; return; }
   el.innerHTML=posts.map(p=>`
     <div class="vybe-post">
       ${p.media_url?`<div class="vybe-post-media"><img src="${p.media_url}" /></div>`:''}
       <div class="vybe-post-body">
         <div class="vybe-post-caption">${sanitize(p.caption)}</div>
-        <div class="vybe-meta"><span>${p.price?fmt(p.price):''}</span><span>❤️ ${p.likes_count||0} · ${ago(p.created_at)}</span></div>
+        <div class="vybe-meta"><span>${p.price?fmt(p.price):''}</span><span> ${p.likes_count||0}  ${ago(p.created_at)}</span></div>
       </div>
     </div>`).join('');
 }
 
-// ── AI ──
+//  AI 
 const systemPrompts = {
   care: "You are a friendly Customer Care AI for a student seller on Travex Campus Mall, Tanzania. Help with handling orders, responding to customers, improving service, and WhatsApp communication. Be warm, practical and concise. Respond in English or Swahili based on what the seller uses.",
   marketing: "You are a Marketing AI for a student seller on Travex Campus Mall, Tanzania. Help create campaigns, Social Vybe posts, WhatsApp messages, pricing strategies and ways to attract campus customers. Be creative and practical.",
@@ -1516,7 +1516,7 @@ async function sendAI(type,text){
   const msgs=document.getElementById('msgs-'+type);
   const msg=text||input.value.trim();
   if(!msg) return;
-  const icons={advisor:'🤖',marketing:'📈',care:'💬',accounting:'💰'};
+  const icons={advisor:'',marketing:'',care:'',accounting:''};
   msgs.innerHTML+=`<div class="ai-msg user"><div class="ai-icon">ME</div><div class="ai-bubble">${sanitize(msg)}</div></div>`;
   if(input) input.value='';
   msgs.scrollTop=msgs.scrollHeight;
@@ -1537,7 +1537,7 @@ async function sendAI(type,text){
   msgs.scrollTop=msgs.scrollHeight;
 }
 
-// ── MARKETING PLAN ──
+//  MARKETING PLAN 
 async function generateMarketingPlan(){
   if(!checkRateLimit()){ showToast('Daily limit reached.','err'); return; }
   const products=document.getElementById('mktProducts').value.trim();
@@ -1547,7 +1547,7 @@ async function generateMarketingPlan(){
   const btn=document.getElementById('mktBtn');
   if(!products){ showToast('Enter your main products first.','err'); return; }
   btn.disabled=true; btn.textContent='Generating...';
-  output.innerHTML='<div style="color:rgba(255,255,255,0.4);font-style:italic">✍️ Writing your 30-day marketing plan...</div>';
+  output.innerHTML='<div style="color:rgba(255,255,255,0.4);font-style:italic"> Writing your 30-day marketing plan...</div>';
   try{
     const shopInfo=currentShop?`Shop: "${currentShop.store_name}" at ${currentShop.university_abbr}.`:'';
     const prompt=`Create a practical 30-day campus marketing plan for a Travex Mall student seller in Tanzania.\n${shopInfo}\nProducts: ${products}\nTarget: ${audience||'university students'}\nBudget: ${budget?'TZS '+budget:'Limited'}\n\nInclude: weekly action items, Social Vybe strategy, WhatsApp tips, pricing advice, quick wins. Keep it practical and specific for Tanzanian campus market.`;
@@ -1557,10 +1557,10 @@ async function generateMarketingPlan(){
     output.innerHTML=reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong style="color:#fff">$1</strong>').replace(/^## (.+)/gm,'<div style="font-family:Playfair Display,serif;font-size:0.95rem;font-weight:800;color:#fff;margin:1rem 0 0.4rem">$1</div>');
     incrementRateLimit();
   }catch(e){ output.innerHTML='<div style="color:#f87171">Error generating plan. Check connection.</div>'; }
-  btn.disabled=false; btn.textContent='✨ Generate Plan';
+  btn.disabled=false; btn.textContent=' Generate Plan';
 }
 
-// ── ACCOUNTING ──
+//  ACCOUNTING 
 async function loadAccounting(){
   if(!currentShop) return;
   const now=new Date();
@@ -1573,33 +1573,33 @@ async function loadAccounting(){
   const avg=orders?.length?Math.round(rev/orders.length):0;
   s('acc-total-rev',fmt(rev)); s('acc-total-orders',orders?.length||0); s('acc-avg-order',fmt(avg));
   const el=document.getElementById('acc-orders-list');
-  if(!orders?.length){ el.innerHTML='<div class="empty" style="padding:2rem"><div class="empty-icon">📊</div><div class="empty-text">No orders in this period</div></div>'; return; }
-  el.innerHTML=`<table class="data-table"><thead><tr><th>Product</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${sanitize(o.product_name||'—')}</td><td>${sanitize(o.customer_name)}</td><td><strong style="color:var(--gold)">${fmt(o.total_price)}</strong></td><td><span class="badge badge-${o.status||'pending'}">${o.status||'pending'}</span></td><td style="font-size:0.72rem;color:rgba(255,255,255,0.4)">${ago(o.created_at)}</td></tr>`).join('')}</tbody></table>`;
+  if(!orders?.length){ el.innerHTML='<div class="empty" style="padding:2rem"><div class="empty-icon"></div><div class="empty-text">No orders in this period</div></div>'; return; }
+  el.innerHTML=`<table class="data-table"><thead><tr><th>Product</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${sanitize(o.product_name||'-')}</td><td>${sanitize(o.customer_name)}</td><td><strong style="color:var(--#C9A84C)">${fmt(o.total_price)}</strong></td><td><span class="badge badge-${o.status||'pending'}">${o.status||'pending'}</span></td><td style="font-size:0.72rem;color:rgba(255,255,255,0.4)">${ago(o.created_at)}</td></tr>`).join('')}</tbody></table>`;
 }
 
 function switchAccPeriod(period,btn){ accPeriod=period; document.querySelectorAll('.acc-tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active'); loadAccounting(); }
 
-// ── LEADERBOARD ──
+//  LEADERBOARD 
 async function loadLeaderboard(){
   if(!userUniAbbr) return;
   const {data:stores}=await sb.from('campus_stores').select('id,store_name,category,primary_color').eq('university_abbr',userUniAbbr).eq('is_active',true);
-  if(!stores?.length){ document.getElementById('leaderboardContainer').innerHTML='<div class="empty"><div class="empty-icon">🏆</div><div class="empty-text">No other shops yet</div></div>'; return; }
+  if(!stores?.length){ document.getElementById('leaderboardContainer').innerHTML='<div class="empty"><div class="empty-icon"></div><div class="empty-text">No other shops yet</div></div>'; return; }
   const scores=await Promise.all(stores.map(async st=>{
     const {count}=await sb.from('campus_orders').select('*',{count:'exact',head:true}).eq('store_id',st.id);
     return {...st,orders:count||0};
   }));
   scores.sort((a,b)=>b.orders-a.orders);
-  const colors=['gold-rank','silver-rank','bronze-rank'];
+  const colors=['#C9A84C-rank','silver-rank','bronze-rank'];
   document.getElementById('leaderboardContainer').innerHTML=scores.map((st,i)=>`
     <div class="lb-row">
-      <div class="lb-rank ${colors[i]||''}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div class="lb-rank ${colors[i]||''}">${i<3?['','',''][i]:i+1}</div>
       <div class="lb-avatar" style="background:${st.primary_color||'#050B2E'};color:#fff">${st.store_name.substring(0,2).toUpperCase()}</div>
       <div class="lb-info"><div class="lb-name">${sanitize(st.store_name)}</div><div class="lb-cat">${sanitize(st.category||'')}</div></div>
-      <div class="lb-score">${st.orders} orders${currentShop?.id===st.id?' <span style="font-size:0.65rem;color:var(--gold)">← You</span>':''}</div>
+      <div class="lb-score">${st.orders} orders${currentShop?.id===st.id?' <span style="font-size:0.65rem;color:var(--#C9A84C)"> You</span>':''}</div>
     </div>`).join('');
 }
 
-// ── PANEL NAVIGATION ──
+//  PANEL NAVIGATION 
 function showPanel(name){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -1614,32 +1614,32 @@ function showPanel(name){
   closeMobileSidebar();
 }
 
-// ── MOBILE SIDEBAR ──
+//  MOBILE SIDEBAR 
 function toggleMobileSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobOverlay').classList.toggle('show'); }
 function closeMobileSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobOverlay').classList.remove('show'); }
 
-// ── LOGOUT ──
+//  LOGOUT 
 async function handleLogout(){ await sb.auth.signOut();
   // Clear plan data on logout
   ['travex_plan','travex_shop_name','travex_owner_name','travex_category','travex_region','travex_user_id'].forEach(k => localStorage.removeItem(k)); document.getElementById('mainApp').classList.remove('visible'); document.getElementById('authOverlay').style.display='flex'; currentUser=null; currentShop=null; }
 
-// ── COLOR/FONT PICKERS ──
+//  COLOR/FONT PICKERS 
 function pickColor(el,val){ selectedColor=val||el.dataset.color; document.querySelectorAll('.c-swatch').forEach(s=>s.classList.remove('active')); if(el.dataset) el.classList.add('active'); }
 function pickFont(el){ selectedFont=el.dataset.font; document.querySelectorAll('.font-opt').forEach(f=>f.classList.remove('active')); el.classList.add('active'); }
 
-// ── IMAGE PREVIEWS ──
+//  IMAGE PREVIEWS 
 function previewLogo(input){ const f=input.files[0]; if(!f) return; const img=document.getElementById('logoPreview'); img.src=URL.createObjectURL(f); img.style.display='block'; }
 function previewBanner(input){ const f=input.files[0]; if(!f) return; const img=document.getElementById('bannerPreview'); img.src=URL.createObjectURL(f); img.style.display='block'; }
 function previewProductImage(input){ const f=input.files[0]; if(!f) return; const img=document.getElementById('prodImagePreview'); img.src=URL.createObjectURL(f); img.style.display='block'; }
 
-// ── AUTO LOGIN CHECK ──
+//  AUTO LOGIN CHECK 
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
   if(session) await init();
 })();
 </script>
 <style id="travex-polish-v2">
-/* ═══ TRAVEX POLISH V2 — FinTrack design layer (visual only, no logic) ═══ */
+/*  TRAVEX POLISH V2, FinTrack design layer (visual only, no logic)  */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{background:linear-gradient(160deg,#060C20 0%,#070E25 50%,#0A1B3C 100%)!important}
 body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:-1;
