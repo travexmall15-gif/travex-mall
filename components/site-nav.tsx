@@ -13,6 +13,7 @@ const navLinks = [
   { href: '/campus', label: 'Campus' },
   { href: '/vybe', label: 'Social Vybe' },
   { href: '/flash-deals', label: 'Flash Deals' },
+  { href: '/group-buy', label: 'Group Buy' },
   { href: '/move/index.html', label: 'Move' },
 ]
 
