@@ -354,7 +354,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
       onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 6px rgba(15,23,42,0.06)' }}
     >
       {/* Banner — user image or gradient */}
-      <div style={{ height: '44px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ height: '100px', position: 'relative', overflow: 'hidden' }}>
         {shop.shop_banner ? (
           <img src={shop.shop_banner} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
