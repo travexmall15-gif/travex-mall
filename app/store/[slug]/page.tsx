@@ -20,6 +20,8 @@ type Store = {
   shop_region: string | null
   shop_desc: string | null
   shop_color: string | null
+  shop_banner: string | null
+  shop_logo: string | null
   plan: string
   status: string
   auth_email: string | null
@@ -202,11 +204,11 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
   // ── Not found ──
   if (notFound || !store) return (
-    <main style={{ minHeight: '100vh', background: '#060C1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ textAlign: 'center', color: '#fff', padding: '2rem' }}>
-        <div style={{ fontSize: 48, marginBottom: 16 }}>🏪</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', marginBottom: 8 }}>Store Not Found</h2>
-        <p style={{ color: 'rgba(255,255,255,0.45)', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
+    <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Store Not Found</h2>
+        <p style={{ color: '#94A3B8', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
         <Link href="/market" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
         </Link>
@@ -215,16 +217,15 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
   )
 
   return (
-    <main style={{ minHeight: '100vh', background: '#060C1A', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        .prod-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;transition:all 0.25s;cursor:pointer}
-        .prod-card:hover{transform:translateY(-4px);border-color:${accentColor}55;box-shadow:0 16px 40px rgba(0,0,0,0.4)}
-        .cat-btn{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.55);transition:all 0.15s;font-family:'Inter',sans-serif}
-        .cat-btn.active{background:${accentColor};border-color:${accentColor};color:${isPremium?'#0F172A':'#fff'}}
+
+        .cat-btn{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;transition:all 0.15s;font-family:'Inter',sans-serif}
+        .cat-btn.active{background:#0D1B3E;border-color:#0D1B3E;color:#fff}
         .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:999;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
         @media(min-width:600px){.modal-bg{align-items:center}}
         .modal{background:#0D1B3E;border:1px solid rgba(255,255,255,0.10);border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:fadeUp 0.3s ease}
@@ -234,128 +235,68 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
         .form-inp::placeholder{color:rgba(255,255,255,0.30)}
         .qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.20);background:rgba(255,255,255,0.07);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.15s}
         .qty-btn:hover{background:rgba(255,255,255,0.15)}
-        .search-inp{width:100%;padding:10px 16px 10px 40px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.10);border-radius:999px;color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif}
-        .search-inp::placeholder{color:rgba(255,255,255,0.30)}
-        .search-inp:focus{border-color:${accentColor};background:rgba(255,255,255,0.10)}
+        .search-inp{width:100%;padding:10px 16px 10px 40px;background:#fff;border:1.5px solid #E2E8F0;border-radius:12px;color:#0F172A;font-size:13px;outline:none;font-family:'Inter',sans-serif;transition:border-color 0.2s}
+        .search-inp::placeholder{color:#94A3B8}
+        .search-inp:focus{border-color:#0D1B3E}
         @media(max-width:640px){.prod-grid{grid-template-columns:repeat(2,1fr)!important}}
       `}</style>
 
-      {/* ── HERO ── */}
-      <div style={{ position: 'relative', overflow: 'hidden', paddingBottom: '2rem',
-        background: `linear-gradient(160deg, #030818 0%, #060C1A 40%, #0A1228 100%)` }}>
-        {/* Glow */}
-        <div style={{ position: 'absolute', top: '-30%', right: '-10%', width: '60%', height: '120%',
-          background: `radial-gradient(ellipse at center, ${accentColor}33 0%, transparent 65%)`,
-          filter: 'blur(40px)', pointerEvents: 'none' }} />
-
-        {/* Nav */}
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1100, margin: '0 auto',
-          padding: '1.25rem 5% 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 8,
-            color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontSize: 13, fontWeight: 600,
-            padding: '8px 16px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.10)',
-            background: 'rgba(255,255,255,0.05)', transition: 'all 0.15s' }}>
-            <ArrowLeft size={14} /> Back to Market
-          </Link>
-          {wa && (
-            <a href={`https://wa.me/${wa}`} target="_blank"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff',
-                textDecoration: 'none', fontSize: 13, fontWeight: 600, padding: '8px 16px',
-                borderRadius: 999, background: '#25D366' }}>
-              <MessageCircle size={14} /> WhatsApp
-            </a>
-          )}
-        </div>
-
-        {/* Shop info */}
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1100, margin: '0 auto',
-          padding: '2.5rem 5% 0', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-          {/* Avatar */}
-          <div style={{ width: 80, height: 80, borderRadius: 20, flexShrink: 0,
-            background: `linear-gradient(135deg, ${accentColor}, ${accentColor}88)`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 900,
-            color: isPremium ? '#0F172A' : '#fff',
-            boxShadow: `0 8px 32px ${accentColor}44` }}>
-            {initials}
+      {/* ── HERO — compact ── */}
+      <div style={{ background: '#0D1B3E', paddingTop: 64, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        {/* Banner */}
+        {store.shop_banner && (
+          <div style={{ height: 120, overflow: 'hidden', position: 'relative' }}>
+            <Image src={store.shop_banner} alt="" fill style={{ objectFit: 'cover', opacity: 0.5 }} />
           </div>
-          <div style={{ flex: 1, minWidth: 200 }}>
-            {/* Plan badge */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 8,
-              background: `${accentColor}22`, border: `1px solid ${accentColor}44`,
-              color: accentColor, padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700 }}>
-              {isPremium ? '🥇 Premium Shop' : store.plan === 'campus' ? '🎓 Campus Shop' : '🥈 Basic Shop'}
-            </div>
-            <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(1.5rem,4vw,2.2rem)',
-              fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.5rem' }}>
-              {store.shop_name}
-            </h1>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              {store.shop_category && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13,
-                  color: 'rgba(255,255,255,0.55)' }}>
-                  <Tag size={12} /> {store.shop_category}
-                </span>
-              )}
-              {store.shop_region && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13,
-                  color: 'rgba(255,255,255,0.55)' }}>
-                  <MapPin size={12} /> {store.shop_region}
-                </span>
-              )}
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13,
-                color: 'rgba(255,255,255,0.55)' }}>
-                <Package size={12} /> {products.length} products
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12,
-                color: '#22C55E', fontWeight: 600 }}>
-                <CheckCircle size={12} /> Verified Seller
-              </span>
-            </div>
-            {store.shop_desc && (
-              <p style={{ marginTop: '0.75rem', fontSize: 14, color: 'rgba(255,255,255,0.45)',
-                lineHeight: 1.7, maxWidth: 520 }}>
-                {store.shop_desc}
-              </p>
-            )}
-          </div>
-          {wa && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <a href={`https://wa.me/${wa}`} target="_blank"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#25D366',
-                  color: '#fff', padding: '12px 24px', borderRadius: 999, fontWeight: 700, fontSize: 14,
-                  textDecoration: 'none', boxShadow: '0 6px 20px rgba(37,211,102,0.35)' }}>
-                <MessageCircle size={16} /> Chat Seller
-              </a>
-            </div>
-          )}
-        </div>
+        )}
 
-        {/* Stats strip */}
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1100, margin: '1.5rem auto 0',
-          padding: '0 5%' }}>
-          <div style={{ display: 'flex', gap: 0, background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, overflow: 'hidden', flexWrap: 'wrap' }}>
-            {[
-              ['🛍️', String(products.length), 'Products'],
-              ['★', '5.0', 'Rating'],
-              ['✅', 'Verified', 'Status'],
-              ['⚡', 'Fast', 'Response'],
-            ].map(([icon, val, label], i, arr) => (
-              <div key={label} style={{ flex: 1, minWidth: 100, padding: '12px 16px', textAlign: 'center',
-                borderRight: i < arr.length-1 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
-                <div style={{ fontSize: 14, marginBottom: 2 }}>{icon}</div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>{val}</div>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase',
-                  letterSpacing: '0.08em' }}>{label}</div>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: store.shop_banner ? '0 5% 1.25rem' : '1.25rem 5%' }}>
+          {/* Back link */}
+          <div style={{ marginBottom: '1rem', marginTop: store.shop_banner ? '-18px' : 0 }}>
+            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(8px)' }}>
+              <ArrowLeft size={12} /> Market
+            </Link>
+          </div>
+
+          {/* Shop info row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            {/* Logo */}
+            <div style={{ width: 52, height: 52, borderRadius: 14, flexShrink: 0, border: '2.5px solid rgba(255,255,255,0.15)', overflow: 'hidden', background: `linear-gradient(135deg, ${accentColor}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {store.shop_logo ? (
+                <Image src={store.shop_logo} alt={initials} width={52} height={52} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+              ) : (
+                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 900, color: '#fff' }}>{initials}</span>
+              )}
+            </div>
+
+            {/* Info */}
+            <div style={{ flex: 1, minWidth: 180 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>
+                  {store.shop_name}
+                </h1>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.08)', color: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(201,168,76,0.3)' : 'rgba(255,255,255,0.1)'}` }}>
+                  {isPremium ? 'PREMIUM' : 'BASIC'}
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
+                  <CheckCircle size={10} /> Verified
+                </span>
               </div>
-            ))}
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                {store.shop_category && <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><Tag size={10} />{store.shop_category}</span>}
+                {store.shop_region && <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><MapPin size={10} />{store.shop_region}</span>}
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><Package size={10} />{products.length} products</span>
+              </div>
+              {store.shop_desc && (
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.38)', lineHeight: 1.6, marginTop: 4, maxWidth: 480, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{store.shop_desc}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* ── PRODUCTS ── */}
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '2rem 5% 4rem' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
 
         {/* Search + Filter */}
         <div style={{ marginBottom: '1.5rem' }}>
@@ -379,8 +320,8 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
         {/* Grid */}
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>📦</div>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 15 }}>No products found</p>
+            <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
+            <p style={{ color: '#94A3B8', fontSize: 14 }}>No products found</p>
           </div>
         ) : (
           <div className="prod-grid" style={{ display: 'grid',
@@ -438,11 +379,10 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
         {/* No products at all */}
         {products.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🏗️</div>
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.3rem', color: '#fff',
-              marginBottom: 8 }}>Setting Up Shop</h3>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: 20 }}>
-              This seller is adding products soon. Check back or contact them directly.
+            <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
+            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Setting Up Shop</h3>
+            <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 20 }}>
+              This seller is adding products soon. Check back shortly.
             </p>
             {wa && (
               <a href={`https://wa.me/${wa}`} target="_blank"
@@ -594,7 +534,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
           </div>
         </div>
       )}
-      {store && <AIChatWidget storeId={store.id} shopName={store.shop_name} />}
+      {store && <AIChatWidget storeId={store.id} shopName={store.shop_name} welcomeMessage={`Welcome to ${store.shop_name}! I am here to help you find products and place orders. What are you looking for today?`} />}
       <SiteFooter />
     </main>
   )
