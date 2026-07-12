@@ -342,44 +342,58 @@ export default function MarketPage() {
 
 function ShopCard({ shop }: { shop: MarketShop }) {
   const init = shop.shop_name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
-  const wa = (shop.shop_whatsapp || shop.owner_phone || '').replace(/\D/g, '')
   const isPremium = shop.plan === 'premium'
   const color = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
 
   return (
     <div
-      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.30)' : '#E2E8F0'}`, borderRadius: '20px', overflow: 'hidden', transition: 'all 0.25s', cursor: 'pointer', boxShadow: '0 2px 12px rgba(15,23,42,0.04)' }}
-      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 14px 36px rgba(15,23,42,0.10)' }}
-      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(15,23,42,0.04)' }}
+      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.25)' : '#E8ECF4'}`, borderRadius: '20px', overflow: 'hidden', transition: 'transform 0.25s, box-shadow 0.25s', cursor: 'pointer', boxShadow: '0 2px 12px rgba(15,23,42,0.05)' }}
+      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 40px rgba(15,23,42,0.11)' }}
+      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(15,23,42,0.05)' }}
     >
-      {/* Banner */}
-      <div style={{ height: '60px', background: `linear-gradient(135deg, ${color}, #050B2E)`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', fontWeight: 800, color: '#fff' }}>{init}</span>
-        <div style={{ position: 'absolute', top: '8px', right: '8px', background: isPremium ? 'rgba(201,168,76,0.90)' : 'rgba(255,255,255,0.15)', color: isPremium ? '#0F172A' : '#fff', fontSize: '0.58rem', fontWeight: 700, padding: '0.15rem 0.55rem', borderRadius: '999px' }}>
-          {isPremium ? ' Premium' : ' Basic'}
+      {/* Store-front banner with logo circle */}
+      <div style={{ height: '72px', background: `linear-gradient(135deg, ${color}22 0%, ${color}44 100%)`, borderBottom: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.15)' : '#E8ECF4'}`, position: 'relative' }}>
+        {/* Premium badge top right */}
+        {isPremium && (
+          <div style={{ position: 'absolute', top: '8px', right: '10px', background: '#C9A84C', color: '#0F172A', fontSize: '0.56rem', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.05em' }}>
+            PREMIUM
+          </div>
+        )}
+        {/* Logo circle — centered, overlapping banner bottom */}
+        <div style={{ position: 'absolute', bottom: '-22px', left: '50%', transform: 'translateX(-50%)', width: '44px', height: '44px', borderRadius: '50%', background: `linear-gradient(135deg, ${color}, #050B2E)`, border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', zIndex: 1 }}>
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.85rem', fontWeight: 900, color: '#fff', lineHeight: 1 }}>{init}</span>
         </div>
       </div>
 
       {/* Body */}
-      <div style={{ padding: '0.9rem 1.1rem' }}>
-        <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#0F172A', marginBottom: '0.35rem', lineHeight: 1.3 }}>{shop.shop_name}</div>
-        <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
-          {shop.shop_category && <span style={{ fontSize: '0.62rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>}
-          {shop.shop_region && <span style={{ fontSize: '0.62rem', background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.12rem 0.5rem', borderRadius: '999px' }}>{shop.shop_region}</span>}
-        </div>
-        {shop.shop_desc && (
-          <p style={{ fontSize: '0.76rem', color: '#64748B', lineHeight: 1.55, marginBottom: '0.8rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
-        )}
-        <div style={{ display: 'flex', gap: '0.4rem' }}>
-          {wa && (
-            <a href={`https://wa.me/${wa}`} target="_blank" style={{ flex: 1, padding: '0.5rem', background: '#25D366', color: '#fff', border: 'none', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
-              <MessageCircle size={12} /> WhatsApp
-            </a>
+      <div style={{ padding: '1.75rem 1rem 1rem', textAlign: 'center' }}>
+        {/* Shop name */}
+        <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#0F172A', marginBottom: '0.3rem', lineHeight: 1.3 }}>{shop.shop_name}</div>
+
+        {/* Tags */}
+        <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '0.55rem' }}>
+          {shop.shop_category && (
+            <span style={{ fontSize: '0.6rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '2px 8px', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>
           )}
-          <a href={`/store/${shop.id}`} style={{ flex: 1, padding: '0.5rem', background: '#050B2E', color: '#fff', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', textDecoration: 'none' }}>
-            <Store size={12} /> View Shop
-          </a>
+          {shop.shop_region && (
+            <span style={{ fontSize: '0.6rem', background: '#F1F5F9', color: '#64748B', padding: '2px 8px', borderRadius: '999px' }}>{shop.shop_region}</span>
+          )}
         </div>
+
+        {/* Description */}
+        {shop.shop_desc && (
+          <p style={{ fontSize: '0.74rem', color: '#94A3B8', lineHeight: 1.55, marginBottom: '0.9rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
+        )}
+
+        {/* Visit Shop button only */}
+        <a
+          href={`/store/${shop.id}`}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', width: '100%', padding: '0.55rem 0', background: isPremium ? '#C9A84C' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius: '10px', fontSize: '0.74rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity = '0.85'}
+          onMouseOut={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
+        >
+          <Store size={12} /> Visit Shop
+        </a>
       </div>
     </div>
   )
