@@ -26,7 +26,6 @@ type FeedPost = {
   created_at: string
 }
 
-const UNI_TABS = ['All', 'ARU', 'UDSM', 'UDOM', 'TIA', 'NIT']
 const SITE = 'https://travex-mall.vercel.app'
 
 function ago(d: string) {
@@ -55,20 +54,18 @@ function getLikes(post: FeedPost) {
 
 export default function VybePage() {
   const [posts, setPosts]   = useState<FeedPost[]>([])
-  const [filter, setFilter] = useState('All')
   const [loading, setLoading] = useState(true)
   const [error, setError]   = useState<string | null>(null)
   const [liked, setLiked]   = useState<Set<string>>(new Set())
 
-  useEffect(() => { loadPosts() }, [filter])
+  useEffect(() => { loadPosts() }, [])
 
   async function loadPosts() {
     setLoading(true)
     setError(null)
-    let q = sb.from('feed_posts').select('*')
-      .order('created_at', { ascending: false }).limit(30)
-    if (filter !== 'All') q = q.eq('university_abbr', filter)
-    const { data, error: err } = await q
+    const { data, error: err } = await sb
+      .from('feed_posts').select('*')
+      .order('created_at', { ascending: false }).limit(40)
     if (err) { setError('Failed to load posts. Please try again.'); setLoading(false); return }
     setPosts(data || [])
     setLoading(false)
@@ -127,8 +124,6 @@ export default function VybePage() {
         .like-btn.liked svg{fill:#EF4444}
         .share-btn{display:flex;align-items:center;gap:5px;background:none;border:none;color:rgba(255,255,255,0.40);cursor:pointer;font-size:13px;font-weight:600;padding:6px 10px;border-radius:999px;transition:all 0.15s;font-family:'Inter',sans-serif}
         .share-btn:hover{color:#25D366}
-        .tab-btn{padding:7px 16px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.50);transition:all 0.15s;font-family:'Inter',sans-serif}
-        .tab-btn.active{background:#C9A84C;border-color:#C9A84C;color:#0F172A}
         .view-shop-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(5,11,46,0.8);color:#C9A84C;border:1px solid rgba(201,168,76,0.25);border-radius:999px;padding:5px 12px;font-size:11px;font-weight:700;text-decoration:none;transition:all 0.2s}
         .view-shop-btn:hover{background:#C9A84C;color:#0F172A}
       `}</style>
@@ -166,15 +161,7 @@ export default function VybePage() {
             Products, offers and updates from verified Tanzania sellers
           </p>
 
-          {/* University tabs */}
-          <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            {UNI_TABS.map(u => (
-              <button key={u} className={`tab-btn ${filter === u ? 'active' : ''}`}
-                onClick={() => setFilter(u)}>
-                {u === 'All' ? 'All' : u}
-              </button>
-            ))}
-          </div>
+
         </div>
       </div>
 
