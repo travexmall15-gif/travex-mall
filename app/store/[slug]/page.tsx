@@ -306,6 +306,32 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
               </button>
             </div>
           </div>
+
+          {/* Animated chips — Flash Deals + Group Buy */}
+          <div style={{ overflow: 'hidden', marginTop: '1rem', paddingBottom: '1rem', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1rem' }}>
+            <style>{`
+              @keyframes storeChips{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+              .store-chips{animation:storeChips 12s linear infinite}
+              .store-chips:hover{animation-play-state:paused}
+            `}</style>
+            <div className="store-chips" style={{ display: 'flex', gap: 8, width: 'max-content' }}>
+              {[
+                { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
+                { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+                { href: '/market', label: 'Business Market', sub: '500+ shops', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
+                { href: '/vybe', label: 'Social Vybe', sub: 'Community', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
+                { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
+                { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+                { href: '/market', label: 'Business Market', sub: '500+ shops', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
+                { href: '/vybe', label: 'Social Vybe', sub: 'Community', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
+              ].map((c, i) => (
+                <a key={i} href={c.href} style={{ display: 'inline-flex', flexDirection: 'column' as const, gap: 1, background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '5px 12px', borderRadius: 10, textDecoration: 'none', whiteSpace: 'nowrap' as const, flexShrink: 0 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700 }}>{c.label}</span>
+                  <span style={{ fontSize: 9, opacity: 0.7 }}>{c.sub}</span>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
