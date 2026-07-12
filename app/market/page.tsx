@@ -81,87 +81,89 @@ export default function MarketPage() {
     <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', minHeight: '100vh' }}>
       <SiteNav />
 
-      {/*  HERO  */}
+      {/* ── BUSINESS MARKET HERO ── */}
       <section style={{
-        position: 'relative', overflow: 'hidden', paddingTop: '64px', color: '#fff',
-        background: `
-          radial-gradient(ellipse 70% 90% at 92% 20%,
-            rgba(56,120,255,0.68) 0%, rgba(30,80,220,0.42) 25%,
-            rgba(15,45,150,0.18) 50%, transparent 70%
-          ),
-          radial-gradient(ellipse 45% 55% at 88% 55%,
-            rgba(80,140,255,0.26) 0%, transparent 60%
-          ),
-          linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)
-        `,
+        position: 'relative',
+        overflow: 'hidden',
+        paddingTop: '64px',
+        color: '#fff',
+        background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)',
       }}>
-        {/* Ambient glow */}
-        <div style={{ position: 'absolute', top: '-25%', right: '-8%', width: '60%', height: '110%', pointerEvents: 'none', zIndex: 0, background: 'radial-gradient(ellipse 55% 55% at 62% 28%, rgba(56,120,255,0.65) 0%, rgba(35,80,220,0.38) 28%, rgba(20,55,180,0.15) 52%, transparent 70%), radial-gradient(ellipse 32% 38% at 72% 16%, rgba(140,190,255,0.45) 0%, rgba(90,155,255,0.20) 35%, transparent 65%)', filter: 'blur(22px)' }} />
+        {/* Subtle glow */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 60% 80% at 90% 20%, rgba(56,120,255,0.35) 0%, transparent 65%)', zIndex: 0 }} />
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '4rem 5% 3rem' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', marginBottom: '2rem' }}>
-            <div style={{ maxWidth: '600px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(56,120,255,0.12)', border: '1px solid rgba(96,165,250,0.25)', color: '#93C5FD', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.70rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.25rem' }}>
-                <Store size={12} /> Travex Business Market
-              </div>
-              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.85rem' }}>
-                One Market.<br /><span style={{ color: '#C9A84C' }}>{MARKET_TOTAL_SLOTS} Seller Slots.</span>
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '3rem 5% 0' }}>
+
+          {/* Top row — badge + CTA */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '0.3rem 0.9rem', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
+              <Store size={11} /> Business Market
+            </div>
+            <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.4rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 16px rgba(201,168,76,0.30)' }}>
+              <Store size={13} /> Open Shop
+            </Link>
+          </div>
+
+          {/* Main content */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', marginBottom: '2.5rem' }}>
+
+            {/* Left — headline + description */}
+            <div style={{ flex: '1 1 320px', maxWidth: '560px' }}>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.9rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
+                Tanzania&apos;s<br />
+                <span style={{ color: '#C9A84C' }}>Business Marketplace.</span>
               </h1>
-              <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.95rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.75, maxWidth: '480px' }}>
-                Tanzania's unified business marketplace, verified sellers, all categories, five regions.
+              <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px', marginBottom: '1.5rem' }}>
+                Verified sellers. All categories. Five regions across Tanzania. Join {loading ? '...' : totalApproved} businesses already selling on Travex Mall.
               </p>
+
+              {/* Plan pills */}
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '8px 14px' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.4)', flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>Basic Plan</div>
+                    <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{formatTZS(MARKET_BASIC_PRICE)} / month</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: '10px', padding: '8px 14px' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#C9A84C', lineHeight: 1 }}>Premium Plan</div>
+                    <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{formatTZS(MARKET_PREMIUM_PRICE)} / month</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Slots counter */}
-            <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '20px', padding: '1.5rem 2rem', textAlign: 'center', minWidth: '200px', backdropFilter: 'blur(12px)' }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{loading ? '...' : slotsLeft}</div>
-              <div style={{ fontSize: '0.70rem', color: 'rgba(255,255,255,0.40)', textTransform: 'uppercase', letterSpacing: '0.10em', marginTop: '0.4rem' }}>Slots Remaining</div>
-              <div style={{ height: '6px', background: 'rgba(255,255,255,0.10)', borderRadius: '999px', marginTop: '0.85rem', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${(totalApproved / MARKET_TOTAL_SLOTS) * 100}%`, background: 'linear-gradient(90deg,#C9A84C,#F0C96B)', borderRadius: '999px', transition: 'width 0.5s ease' }} />
+            {/* Right — slots card */}
+            <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '18px', padding: '1.5rem', minWidth: '190px', textAlign: 'center', backdropFilter: 'blur(10px)' }}>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.6rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1, marginBottom: '4px' }}>
+                {loading ? '...' : slotsLeft}
               </div>
-              <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.28)', marginTop: '0.4rem' }}>{loading ? '...' : totalApproved} of {MARKET_TOTAL_SLOTS} filled</div>
+              <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '12px' }}>Slots Available</div>
+              <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '999px', overflow: 'hidden', marginBottom: '8px' }}>
+                <div style={{ height: '100%', width: `${Math.min((totalApproved / MARKET_TOTAL_SLOTS) * 100, 100)}%`, background: 'linear-gradient(90deg, #C9A84C, #F0C96B)', borderRadius: '999px', transition: 'width 0.6s ease' }} />
+              </div>
+              <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.25)' }}>
+                {loading ? '...' : totalApproved} of {MARKET_TOTAL_SLOTS} filled
+              </div>
             </div>
           </div>
 
-          {/* Stats strip */}
-          <div style={{ display: 'flex', gap: '0', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.5rem', flexWrap: 'wrap' }}>
+          {/* Stats row */}
+          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', paddingTop: '1.5rem', paddingBottom: '1.75rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             {[
-              ['', String(shops.filter(s => s.plan === 'premium').length), 'Premium Shops', '#C9A84C'],
-              ['', String(shops.filter(s => s.plan === 'basic').length), 'Basic Shops', 'rgba(255,255,255,0.55)'],
-              ['', 'OPEN', 'Registration', '#86EFAC'],
-              ['', '5', 'Regions', 'rgba(255,255,255,0.55)'],
-            ].map(([icon, val, label, color]) => (
-              <div key={label} style={{ flex: 1, minWidth: '120px', paddingRight: '1.5rem' }}>
-                <div style={{ fontSize: '1rem', marginBottom: '0.2rem' }}>{icon}</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(0.95rem, 2vw, 1.35rem)', fontWeight: 800, color: color }}>{loading && val !== 'FREE' && val !== '5' ? '...' : val}</div>
-                <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.30)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</div>
+              [loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), 'Premium', '#C9A84C'],
+              [loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), 'Basic', 'rgba(255,255,255,0.5)'],
+              ['5', 'Regions', 'rgba(255,255,255,0.5)'],
+              ['OPEN', 'Registration', '#86EFAC'],
+            ].map(([val, label, color]) => (
+              <div key={label}>
+                <div style={{ fontSize: 'clamp(0.9rem, 2vw, 1.15rem)', fontWeight: 800, color: color as string, lineHeight: 1, marginBottom: '3px' }}>{val}</div>
+                <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Bottom strip */}
-        <div style={{ background: 'rgba(0,0,0,0.25)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem 5%', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span></span>
-                <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>Basic Plan</div>
-                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Silver badge  {formatTZS(MARKET_BASIC_PRICE)}/mo </div>
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span></span>
-                <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C9A84C' }}>Premium Plan</div>
-                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Gold badge  Top listing  {formatTZS(MARKET_PREMIUM_PRICE)}/mo </div>
-                </div>
-              </div>
-            </div>
-            <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.65rem 1.75rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, boxShadow: '0 6px 18px rgba(201,168,76,0.30)' }}>
-              <Store size={14} /> Open Shop <ArrowRight size={13} />
-            </Link>
           </div>
         </div>
       </section>
