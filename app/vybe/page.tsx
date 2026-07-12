@@ -26,6 +26,7 @@ type FeedPost = {
   created_at: string
 }
 
+const UNI_TABS = ['All', 'ARU', 'UDSM', 'UDOM', 'TIA', 'NIT']
 const SITE = 'https://travex-mall.vercel.app'
 
 function ago(d: string) {
@@ -54,20 +55,20 @@ function getLikes(post: FeedPost) {
 
 export default function VybePage() {
   const [posts, setPosts]   = useState<FeedPost[]>([])
-  const [catFilter, setCatFilter] = useState('All')
+  const [filter, setFilter] = useState('All')
   const [loading, setLoading] = useState(true)
   const [error, setError]   = useState<string | null>(null)
   const [liked, setLiked]   = useState<Set<string>>(new Set())
 
-  useEffect(() => { loadPosts() }, [])
+  useEffect(() => { loadPosts() }, [filter])
 
   async function loadPosts() {
     setLoading(true)
     setError(null)
-    const { data, error: err } = await sb
-      .from('feed_posts').select('*')
-      .is('university_abbr', null)
-      .order('created_at', { ascending: false }).limit(40)
+    let q = sb.from('feed_posts').select('*')
+      .order('created_at', { ascending: false }).limit(30)
+    if (filter !== 'All') q = q.eq('university_abbr', filter)
+    const { data, error: err } = await q
     if (err) { setError('Failed to load posts. Please try again.'); setLoading(false); return }
     setPosts(data || [])
     setLoading(false)
@@ -113,7 +114,7 @@ export default function VybePage() {
   )
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#07010E', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
         *{box-sizing:border-box}
@@ -134,82 +135,44 @@ export default function VybePage() {
 
       <SiteNav />
 
-      {/* ── HERO ── */}
-      <section style={{ paddingTop: '64px', position: 'relative', overflow: 'hidden', color: '#fff', background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)' }}>
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 60% 80% at 85% 20%, rgba(56,120,255,0.28) 0%, transparent 65%)', zIndex: 0 }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '3rem 5% 0' }}>
-
-          {/* Top row */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              Social Vybe
-            </div>
-            <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
-              Open Your Shop
-            </Link>
+      {/*  HERO  */}
+      <div style={{
+        paddingTop: '64px', position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(160deg, #030818 0%, #07010E 60%)',
+      }}>
+        <div style={{
+          position: 'absolute', top: '-20%', left: '50%', transform: 'translateX(-50%)',
+          width: '80%', height: '200%',
+          background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, transparent 60%)',
+          filter: 'blur(50px)', pointerEvents: 'none',
+        }} />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 800, margin: '0 auto',
+          padding: '2.5rem 5% 1rem', textAlign: 'center' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 12,
+            background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)',
+            color: '#C9A84C', padding: '4px 14px', borderRadius: 999, fontSize: 11, fontWeight: 700,
+          }}>
+            Live Feed
           </div>
+          <h1 style={{
+            fontFamily: "'Playfair Display',serif",
+            fontSize: 'clamp(2rem,5vw,3rem)', fontWeight: 900, color: '#fff',
+            lineHeight: 1.1, marginBottom: '0.5rem',
+          }}>
+            Travex Social Vybe
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: '1.5rem' }}>
+            Products, offers and updates from verified Tanzania sellers
+          </p>
 
-          {/* Headline */}
-          <div style={{ maxWidth: '560px', marginBottom: '2rem' }}>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              <span style={{ color: '#C9A84C' }}>Social</span> Vybe.
-            </h1>
-            <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
-              Products, deals and updates from verified business sellers across Tanzania. Discover, like and visit shops.
-            </p>
-          </div>
-
-          {/* Stats ticker RTL */}
-          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <style>{`
-              @keyframes vybeStats { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-              .vybe-stats { animation: vybeStats 14s linear infinite; }
-              .vybe-stats:hover { animation-play-state: paused; }
-              @keyframes vybeTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-              .vybe-ticker { animation: vybeTicker 18s linear infinite; }
-              .vybe-ticker:hover { animation-play-state: paused; }
-            `}</style>
-            <div className="vybe-stats" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
-              {[
-                { val: loading ? '...' : String(posts.length), label: 'Posts', color: '#C9A84C' },
-                { val: loading ? '...' : String(posts.reduce((s,p) => s + getLikes(p), 0)), label: 'Total Likes', color: 'rgba(255,255,255,0.6)' },
-                { val: 'LIVE', label: 'Feed Status', color: '#86EFAC' },
-                { val: 'Business', label: 'Market Only', color: 'rgba(255,255,255,0.6)' },
-                { val: loading ? '...' : String(posts.length), label: 'Posts', color: '#C9A84C' },
-                { val: loading ? '...' : String(posts.reduce((s,p) => s + getLikes(p), 0)), label: 'Total Likes', color: 'rgba(255,255,255,0.6)' },
-                { val: 'LIVE', label: 'Feed Status', color: '#86EFAC' },
-                { val: 'Business', label: 'Market Only', color: 'rgba(255,255,255,0.6)' },
-              ].map((s, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
-                  <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ fontSize: 'clamp(0.9rem,2vw,1.1rem)', fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: '3px' }}>{s.val}</div>
-                    <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const }}>{s.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── QUICK TICKER ── */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', overflow: 'hidden' }}>
-        <div style={{ padding: '10px 0' }}>
-          <div className="vybe-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '5%' }}>
-            {[
-              { href: '/market', label: 'Business Market', sub: '500+ Shops', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-              { href: '/group-buy', label: 'Group Buy', sub: 'Save Together', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
-              { href: '/campus', label: 'Campus Market', sub: 'Students', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
-              { href: '/market', label: 'Business Market', sub: '500+ Shops', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-              { href: '/group-buy', label: 'Group Buy', sub: 'Save Together', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
-              { href: '/campus', label: 'Campus Market', sub: 'Students', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
-            ].map((c, i) => (
-              <a key={i} href={c.href} style={{ display: 'inline-flex', flexDirection: 'column' as const, gap: '1px', background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '6px 14px', borderRadius: '10px', textDecoration: 'none', whiteSpace: 'nowrap' as const, flexShrink: 0 }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{c.label}</span>
-                <span style={{ fontSize: '0.58rem', opacity: 0.7 }}>{c.sub}</span>
-              </a>
+          {/* University tabs */}
+          <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
+            {UNI_TABS.map(u => (
+              <button key={u} className={`tab-btn ${filter === u ? 'active' : ''}`}
+                onClick={() => setFilter(u)}>
+                {u === 'All' ? 'All' : u}
+              </button>
             ))}
           </div>
         </div>
