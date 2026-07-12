@@ -78,6 +78,9 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     title: SITE_NAME,
   },
+  verification: {
+    google: 'googleb8594862b3bec06f',
+  },
   other: {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
