@@ -28,14 +28,12 @@ type MarketShop = {
   created_at: string
 }
 
-const ALL_PLANS = ['All', 'Premium ', 'Basic ']
 
 export default function MarketPage() {
   const [shops, setShops] = useState<MarketShop[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All')
-  const [plan, setPlan] = useState('All')
   const [categories, setCategories] = useState<string[]>([])
   const [totalApproved, setTotalApproved] = useState(0)
   const [region, setRegion] = useState('All')
@@ -66,15 +64,14 @@ export default function MarketPage() {
   const regions = ['All', ...Array.from(new Set(shops.map(s => s.shop_region).filter(Boolean))) as string[]]
 
   const filtered = shops.filter(s => {
-    const matchSearch = !search ||
-      s.shop_name.toLowerCase().includes(search.toLowerCase()) ||
-      (s.shop_desc || '').toLowerCase().includes(search.toLowerCase()) ||
-      (s.owner_name || '').toLowerCase().includes(search.toLowerCase())
-    const matchCat = category === 'All' || s.shop_category === category
-    const matchPlan = plan === 'All' ||
-      (plan.includes('Premium') ? s.plan === 'premium' : s.plan === 'basic')
-    const matchRegion = region === 'All' || s.shop_region === region
-    return matchSearch && matchCat && matchPlan && matchRegion
+    const q = search.toLowerCase()
+    const matchSearch = !q ||
+      s.shop_name.toLowerCase().includes(q) ||
+      (s.shop_desc || '').toLowerCase().includes(q) ||
+      (s.owner_name || '').toLowerCase().includes(q)
+    const matchCat    = category === 'All' || s.shop_category === category
+    const matchRegion = region  === 'All' || s.shop_region  === region
+    return matchSearch && matchCat && matchRegion
   })
 
   const slotsLeft = MARKET_TOTAL_SLOTS - totalApproved
@@ -233,40 +230,37 @@ export default function MarketPage() {
           />
         </div>
 
-        {/* 2. Region filter */}
-        <div style={{ marginBottom: '0.75rem', overflowX: 'auto', scrollbarWidth: 'none' }}>
-          <div style={{ display: 'flex', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', alignSelf: 'center', marginRight: '4px', whiteSpace: 'nowrap' }}>Region</span>
+        {/* Filters — Region + Category horizontal */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.25rem' }}>
+
+          {/* Region row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>Region</span>
             {regions.map(r => (
-              <button key={r} onClick={() => setRegion(r)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: region === r ? '#0D1B3E' : '#E2E8F0', background: region === r ? '#0D1B3E' : '#fff', color: region === r ? '#fff' : '#64748B', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
-                {r}
-              </button>
+              <button
+                key={r}
+                onClick={() => setRegion(r)}
+                style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: region === r ? '#0D1B3E' : '#E2E8F0', background: region === r ? '#0D1B3E' : '#fff', color: region === r ? '#fff' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}
+              >{r}</button>
             ))}
           </div>
-        </div>
 
-        {/* 3. Category filter */}
-        <div style={{ marginBottom: '1.5rem', overflowX: 'auto', scrollbarWidth: 'none' }}>
-          <div style={{ display: 'flex', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', alignSelf: 'center', marginRight: '4px', whiteSpace: 'nowrap' }}>Category</span>
+          {/* Category row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>Category</span>
             {['All', ...categories].map(cat => (
-              <button key={cat} onClick={() => setCategory(cat)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#64748B', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
-                {cat}
-              </button>
+              <button
+                key={cat}
+                onClick={() => setCategory(cat)}
+                style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}
+              >{cat}</button>
             ))}
           </div>
         </div>
 
-        {/* Results count + plan filter */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '8px' }}>
-          <span style={{ fontSize: '0.78rem', color: '#94A3B8', fontWeight: 500 }}>{filtered.length} shop{filtered.length !== 1 ? 's' : ''} found</span>
-          <div style={{ display: 'flex', gap: '4px', background: '#F3F4F6', borderRadius: '8px', padding: '3px' }}>
-            {ALL_PLANS.map(p => (
-              <button key={p} onClick={() => setPlan(p)} style={{ padding: '4px 12px', borderRadius: '6px', border: 'none', background: plan === p ? '#0D1B3E' : 'transparent', color: plan === p ? '#fff' : '#64748B', fontSize: '0.73rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s' }}>
-                {p}
-              </button>
-            ))}
-          </div>
+        {/* Results count */}
+        <div style={{ fontSize: '0.76rem', color: '#94A3B8', fontWeight: 500, marginBottom: '1.25rem' }}>
+          {filtered.length} shop{filtered.length !== 1 ? 's' : ''} found
         </div>
 
         {/* Loading */}
@@ -290,42 +284,13 @@ export default function MarketPage() {
           </div>
         )}
 
-        {/* Premium shops */}
-        {!loading && plan === 'All' && premiumShops.length > 0 && (
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span></span>
-              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0F172A' }}>Premium Shops</span>
-              <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Top listing  Gold verified</span>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem', marginBottom: '2.5rem' }}>
-              {premiumShops.map(shop => <ShopCard key={shop.id} shop={shop} />)}
-            </div>
-          </>
-        )}
-
-        {/* Basic shops */}
-        {!loading && plan === 'All' && basicShops.length > 0 && (
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span></span>
-              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0F172A' }}>Basic Shops</span>
-              <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Silver verified</span>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem' }}>
-              {basicShops.map(shop => <ShopCard key={shop.id} shop={shop} />)}
-            </div>
-          </>
-        )}
-
-        {/* Filtered single list */}
-        {!loading && plan !== 'All' && (
+        {/* Shops grid */}
+        {!loading && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops found</div>
-                <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try changing filters or search term</p>
+                <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try different filters or search term</p>
               </div>
             ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}
           </div>
