@@ -312,29 +312,7 @@ export default function MarketPage() {
           </div>
         )}
 
-        {/* CTA Banner */}
-        {!loading && (
-          <div style={{ marginTop: '4rem', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)', borderRadius: '24px', padding: '3rem 2.5rem', textAlign: 'center' }}>
-            <div style={{ position: 'absolute', top: '-25%', right: '-5%', width: '55%', height: '120%', background: 'radial-gradient(ellipse 60% 60% at 65% 30%, rgba(56,120,255,0.40) 0%, transparent 65%)', filter: 'blur(30px)', pointerEvents: 'none' }} />
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#C9A84C,#F0C96B)', color: '#0F172A', padding: '0.35rem 1.2rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 800, marginBottom: '1rem' }}> Open Your Shop Today</div>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.3rem, 3vw, 2rem)', fontWeight: 800, color: '#fff', marginBottom: '0.75rem' }}>
-                {slotsLeft} Slots Remaining
-              </div>
-              <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.75rem' }}>
-                Open your shop today, no payment required. Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo  Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo starting next month.
-              </p>
-              <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-                   Open Premium Shop
-                </Link>
-                <Link href="/open-store" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.18)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-                   Open Basic Shop
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
+
       </section>
 
       <SiteFooter />
