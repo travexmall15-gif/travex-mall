@@ -26,20 +26,12 @@ export default function HomePage() {
         .market-card.business:hover { box-shadow: 0 20px 50px rgba(201,168,76,0.18) !important; border-color: rgba(201,168,76,0.45) !important; }
         .market-card.campus:hover  { box-shadow: 0 20px 50px rgba(56,120,255,0.15) !important; border-color: rgba(96,165,250,0.40) !important; }
         .market-card.vybe:hover    { box-shadow: 0 20px 50px rgba(120,0,255,0.20) !important; border-color: rgba(200,123,255,0.45) !important; }
-        @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-60px); }
-          to   { opacity: 1; transform: translateX(0); }
+        @keyframes chipScroll {
+          0%   { transform: translateX(-50%); }
+          100% { transform: translateX(0%); }
         }
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(60px); }
-          to   { opacity: 1; transform: translateX(0); }
-        }
-        .deal-card-1 { animation: slideInLeft 0.65s cubic-bezier(0.34,1.2,0.64,1) 0.2s both; }
-        .deal-card-2 { animation: slideInRight 0.65s cubic-bezier(0.34,1.2,0.64,1) 0.35s both; }
-        .deal-card-1:hover, .deal-card-2:hover { transform: translateY(-4px); transition: transform 0.25s ease; }
-        @media (max-width: 640px) {
-          .hero-deal-cards { flex-direction: column !important; }
-        }
+        .chips-track { animation: chipScroll 8s linear infinite; }
+        .chips-track:hover { animation-play-state: paused; }
       `}</style>
 
       <SiteNav />
@@ -72,33 +64,27 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Flash Deals + Group Buy cards */}
-          <div className="hero-deal-cards" style={{ display: 'flex', gap: '12px', marginTop: '2rem', maxWidth: '460px' }}>
-
-            {/* Flash Deals */}
-            <a href="/flash-deals" className="deal-card-1" style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,168,76,0.20)', borderRadius: '16px', padding: '1.25rem 1rem', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '10px', backdropFilter: 'blur(8px)', minHeight: '120px', cursor: 'pointer' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              </div>
-              <div>
-                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff', marginBottom: '3px' }}>Flash Deals</div>
-                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>Limited time offers</div>
-              </div>
-              <div style={{ marginTop: 'auto', fontSize: '0.62rem', fontWeight: 700, color: '#C9A84C', letterSpacing: '0.08em', textTransform: 'uppercase' }}>View Deals</div>
-            </a>
-
-            {/* Group Buy */}
-            <a href="/group-buy" className="deal-card-2" style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(96,165,250,0.20)', borderRadius: '16px', padding: '1.25rem 1rem', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '10px', backdropFilter: 'blur(8px)', minHeight: '120px', cursor: 'pointer' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </div>
-              <div>
-                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff', marginBottom: '3px' }}>Group Buy</div>
-                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>Buy together, save more</div>
-              </div>
-              <div style={{ marginTop: 'auto', fontSize: '0.62rem', fontWeight: 700, color: '#60A5FA', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Join Group</div>
-            </a>
-
+          {/* Feature chips — auto-scroll left to right */}
+          <div style={{ overflow: 'hidden', marginTop: '1.5rem', maxWidth: '480px' }}>
+            <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
+              {[
+                { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+                { href: '/group-buy',  label: 'Group Buy',   sub: 'Save together' },
+                { href: '/market',     label: 'Business',    sub: '500+ shops'    },
+                { href: '/campus',     label: 'Campus',      sub: '5 universities'},
+                { href: '/vybe',       label: 'Social Vybe', sub: 'Community'     },
+                { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+                { href: '/group-buy',  label: 'Group Buy',   sub: 'Save together' },
+                { href: '/market',     label: 'Business',    sub: '500+ shops'    },
+                { href: '/campus',     label: 'Campus',      sub: '5 universities'},
+                { href: '/vybe',       label: 'Social Vybe', sub: 'Community'     },
+              ].map((chip, i) => (
+                <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: '#fff', borderRadius: '10px', padding: '8px 14px', textDecoration: 'none', flexShrink: 0, cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap' }}>{chip.label}</span>
+                  <span style={{ fontSize: '0.6rem', color: '#64748B', whiteSpace: 'nowrap' }}>{chip.sub}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
