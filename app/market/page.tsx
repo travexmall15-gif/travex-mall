@@ -38,6 +38,7 @@ export default function MarketPage() {
   const [plan, setPlan] = useState('All')
   const [categories, setCategories] = useState<string[]>([])
   const [totalApproved, setTotalApproved] = useState(0)
+  const [region, setRegion] = useState('All')
 
   useEffect(() => {
     async function load() {
@@ -62,6 +63,8 @@ export default function MarketPage() {
     load()
   }, [])
 
+  const regions = ['All', ...Array.from(new Set(shops.map(s => s.shop_region).filter(Boolean))) as string[]]
+
   const filtered = shops.filter(s => {
     const matchSearch = !search ||
       s.shop_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -70,7 +73,8 @@ export default function MarketPage() {
     const matchCat = category === 'All' || s.shop_category === category
     const matchPlan = plan === 'All' ||
       (plan.includes('Premium') ? s.plan === 'premium' : s.plan === 'basic')
-    return matchSearch && matchCat && matchPlan
+    const matchRegion = region === 'All' || s.shop_region === region
+    return matchSearch && matchCat && matchPlan && matchRegion
   })
 
   const slotsLeft = MARKET_TOTAL_SLOTS - totalApproved
@@ -180,68 +184,89 @@ export default function MarketPage() {
         </div>
       </section>
 
-      {/*  QUICK ACCESS: Flash Deals + Group Buy  */}
-      <div style={{ background:'#fff', borderBottom:'1px solid #E2E8F0', padding:'0 5%' }}>
-        <div style={{ maxWidth:1200, margin:'0 auto', display:'flex', gap:8, overflowX:'auto',
-          padding:'10px 0', scrollbarWidth:'none' }}>
-          <a href="/flash-deals" style={{ display:'inline-flex', alignItems:'center', gap:6,
-            background:'linear-gradient(135deg,#FEF3C7,#FDE68A)', color:'#92400E',
-            padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
-            textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #FCD34D',
-            boxShadow:'0 2px 8px rgba(245,158,11,0.2)' }}>
-             Flash Deals, Limited Time
-          </a>
-          <a href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
-            background:'linear-gradient(135deg,#DBEAFE,#BFDBFE)', color:'#1E40AF',
-            padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
-            textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #93C5FD',
-            boxShadow:'0 2px 8px rgba(29,78,216,0.15)' }}>
-             Group Buying, Save Together
-          </a>
-          <a href="/vybe" style={{ display:'inline-flex', alignItems:'center', gap:6,
-            background:'linear-gradient(135deg,#EDE9FE,#DDD6FE)', color:'#5B21B6',
-            padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
-            textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #C4B5FD' }}>
-             Social Vybe
-          </a>
+      {/* ── QUICK ACCESS TICKER ── */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', overflow: 'hidden' }}>
+        <style>{`
+          @keyframes quickScroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .quick-ticker { animation: quickScroll 18s linear infinite; }
+          .quick-ticker:hover { animation-play-state: paused; }
+          .quick-chip { transition: all 0.2s; }
+          .quick-chip:hover { opacity: 0.8; transform: scale(0.97); }
+        `}</style>
+        <div style={{ padding: '10px 0' }}>
+          <div className="quick-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '5%' }}>
+            {[
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
+              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+              { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
+              { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
+              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+              { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
+              { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
+            ].map((c, i) => (
+              <a key={i} href={c.href} className="quick-chip" style={{ display: 'inline-flex', flexDirection: 'column', gap: '1px', background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '6px 14px', borderRadius: '10px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{c.label}</span>
+                <span style={{ fontSize: '0.58rem', opacity: 0.7 }}>{c.sub}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/*  CATEGORY TABS  */}
-      <section style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', boxShadow: '0 2px 8px rgba(15,23,42,0.04)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.1rem 5%', overflowX: 'auto' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', minWidth: 'max-content' }}>
+      {/* ── SEARCH + FILTERS + SHOPS ── */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 5% 2rem' }}>
+
+        {/* 1. Search bar */}
+        <div style={{ position: 'relative', marginBottom: '1rem' }}>
+          <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search shops, products, sellers..."
+            style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
+            onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
+            onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
+          />
+        </div>
+
+        {/* 2. Region filter */}
+        <div style={{ marginBottom: '0.75rem', overflowX: 'auto', scrollbarWidth: 'none' }}>
+          <div style={{ display: 'flex', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', alignSelf: 'center', marginRight: '4px', whiteSpace: 'nowrap' }}>Region</span>
+            {regions.map(r => (
+              <button key={r} onClick={() => setRegion(r)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: region === r ? '#0D1B3E' : '#E2E8F0', background: region === r ? '#0D1B3E' : '#fff', color: region === r ? '#fff' : '#64748B', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+                {r}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Category filter */}
+        <div style={{ marginBottom: '1.5rem', overflowX: 'auto', scrollbarWidth: 'none' }}>
+          <div style={{ display: 'flex', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', alignSelf: 'center', marginRight: '4px', whiteSpace: 'nowrap' }}>Category</span>
             {['All', ...categories].map(cat => (
-              <button key={cat} onClick={() => setCategory(cat)}
-                style={{ padding: '0.42rem 1.1rem', borderRadius: '999px', border: '1.5px solid', borderColor: category === cat ? '#050B2E' : '#E2E8F0', background: category === cat ? '#050B2E' : '#F8FAFF', color: category === cat ? '#fff' : '#64748B', fontSize: '0.76rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+              <button key={cat} onClick={() => setCategory(cat)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#64748B', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
                 {cat}
               </button>
             ))}
           </div>
         </div>
-      </section>
 
-      {/*  SEARCH + RESULTS  */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 5%' }}>
-
-        {/* Search + filter */}
-        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-            <Search size={15} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-            <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search shops, products, categories..."
-              style={{ width: '100%', paddingLeft: '2.6rem', paddingRight: '1rem', paddingTop: '0.7rem', paddingBottom: '0.7rem', border: '1.5px solid #E2E8F0', borderRadius: '999px', fontSize: '0.85rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#F8FAFF' }}
-            />
-          </div>
-          <div style={{ display: 'flex', gap: '0.4rem', background: '#F3F4F6', borderRadius: '999px', padding: '0.25rem' }}>
+        {/* Results count + plan filter */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '8px' }}>
+          <span style={{ fontSize: '0.78rem', color: '#94A3B8', fontWeight: 500 }}>{filtered.length} shop{filtered.length !== 1 ? 's' : ''} found</span>
+          <div style={{ display: 'flex', gap: '4px', background: '#F3F4F6', borderRadius: '8px', padding: '3px' }}>
             {ALL_PLANS.map(p => (
-              <button key={p} onClick={() => setPlan(p)}
-                style={{ padding: '0.42rem 1rem', borderRadius: '999px', border: 'none', background: plan === p ? '#050B2E' : 'transparent', color: plan === p ? '#fff' : '#64748B', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}>
+              <button key={p} onClick={() => setPlan(p)} style={{ padding: '4px 12px', borderRadius: '6px', border: 'none', background: plan === p ? '#0D1B3E' : 'transparent', color: plan === p ? '#fff' : '#64748B', fontSize: '0.73rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.15s' }}>
                 {p}
               </button>
             ))}
           </div>
-          <div style={{ fontSize: '0.76rem', color: '#94A3B8' }}>{filtered.length} shops</div>
         </div>
 
         {/* Loading */}
