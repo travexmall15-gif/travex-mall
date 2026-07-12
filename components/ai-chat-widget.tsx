@@ -12,6 +12,7 @@ export function AIChatWidget({ storeId, shopName, welcomeMessage }: { storeId: s
   const [input, setInput]   = useState('')
   const [loading, setLoading] = useState(false)
   const [sessionId]         = useState(() => Math.random().toString(36).slice(2))
+  const [convState, setConvState] = useState<any>({})
   const bottomRef           = useRef<HTMLDivElement>(null)
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [msgs])
@@ -26,7 +27,7 @@ export function AIChatWidget({ storeId, shopName, welcomeMessage }: { storeId: s
       const res = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ store_id: storeId, message: msg, session_id: sessionId, history: msgs })
+        body: JSON.stringify({ store_id: storeId, message: msg, session_id: sessionId, history: msgs, conv_state: convState })
       })
       const { reply } = await res.json()
       setMsgs(m => [...m, { role: 'bot', content: reply }])
@@ -108,7 +109,7 @@ export function AIChatWidget({ storeId, shopName, welcomeMessage }: { storeId: s
             display:'flex', gap:6 }}>
             <input value={input} onChange={e=>setInput(e.target.value)}
               onKeyDown={e=>e.key==='Enter'&&send()}
-              placeholder="Ask about products, prices..."
+              placeholder="Uliza kuhusu bidhaa, bei, au order..."
               style={{ flex:1, padding:'9px 12px', border:'1.5px solid #E2E8F0',
                 borderRadius:999, fontSize:13, outline:'none', fontFamily:'inherit' }} />
             <button onClick={send} disabled={!input.trim()||loading}
