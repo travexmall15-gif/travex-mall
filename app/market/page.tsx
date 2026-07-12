@@ -28,7 +28,7 @@ type MarketShop = {
   created_at: string
 }
 
-const ALL_PLANS = ['All', 'Premium 🥇', 'Basic 🥈']
+const ALL_PLANS = ['All', 'Premium ', 'Basic ']
 
 export default function MarketPage() {
   const [shops, setShops] = useState<MarketShop[]>([])
@@ -81,7 +81,7 @@ export default function MarketPage() {
     <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', minHeight: '100vh' }}>
       <SiteNav />
 
-      {/* ══ HERO ══ */}
+      {/*  HERO  */}
       <section style={{
         position: 'relative', overflow: 'hidden', paddingTop: '64px', color: '#fff',
         background: `
@@ -126,10 +126,10 @@ export default function MarketPage() {
           {/* Stats strip */}
           <div style={{ display: 'flex', gap: '0', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.5rem', flexWrap: 'wrap' }}>
             {[
-              ['🥇', String(shops.filter(s => s.plan === 'premium').length), 'Premium Shops', '#C9A84C'],
-              ['🥈', String(shops.filter(s => s.plan === 'basic').length), 'Basic Shops', 'rgba(255,255,255,0.55)'],
-              ['✅', 'OPEN', 'Registration', '#86EFAC'],
-              ['📍', '5', 'Regions', 'rgba(255,255,255,0.55)'],
+              ['', String(shops.filter(s => s.plan === 'premium').length), 'Premium Shops', '#C9A84C'],
+              ['', String(shops.filter(s => s.plan === 'basic').length), 'Basic Shops', 'rgba(255,255,255,0.55)'],
+              ['', 'OPEN', 'Registration', '#86EFAC'],
+              ['', '5', 'Regions', 'rgba(255,255,255,0.55)'],
             ].map(([icon, val, label, color]) => (
               <div key={label} style={{ flex: 1, minWidth: '120px', paddingRight: '1.5rem' }}>
                 <div style={{ fontSize: '1rem', marginBottom: '0.2rem' }}>{icon}</div>
@@ -145,17 +145,17 @@ export default function MarketPage() {
           <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem 5%', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span>🥈</span>
+                <span></span>
                 <div>
                   <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>Basic Plan</div>
-                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Silver badge · {formatTZS(MARKET_BASIC_PRICE)}/mo </div>
+                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Silver badge  {formatTZS(MARKET_BASIC_PRICE)}/mo </div>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span>🥇</span>
+                <span></span>
                 <div>
                   <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#C9A84C' }}>Premium Plan</div>
-                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Gold badge · Top listing · {formatTZS(MARKET_PREMIUM_PRICE)}/mo </div>
+                  <div style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.35)' }}>Gold badge  Top listing  {formatTZS(MARKET_PREMIUM_PRICE)}/mo </div>
                 </div>
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function MarketPage() {
         </div>
       </section>
 
-      {/* ── QUICK ACCESS: Flash Deals + Group Buy ── */}
+      {/*  QUICK ACCESS: Flash Deals + Group Buy  */}
       <div style={{ background:'#fff', borderBottom:'1px solid #E2E8F0', padding:'0 5%' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', display:'flex', gap:8, overflowX:'auto',
           padding:'10px 0', scrollbarWidth:'none' }}>
@@ -175,25 +175,25 @@ export default function MarketPage() {
             padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
             textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #FCD34D',
             boxShadow:'0 2px 8px rgba(245,158,11,0.2)' }}>
-            ⚡ Flash Deals, Limited Time
+             Flash Deals, Limited Time
           </a>
           <a href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
             background:'linear-gradient(135deg,#DBEAFE,#BFDBFE)', color:'#1E40AF',
             padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
             textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #93C5FD',
             boxShadow:'0 2px 8px rgba(29,78,216,0.15)' }}>
-            👥 Group Buying, Save Together
+             Group Buying, Save Together
           </a>
           <a href="/vybe" style={{ display:'inline-flex', alignItems:'center', gap:6,
             background:'linear-gradient(135deg,#EDE9FE,#DDD6FE)', color:'#5B21B6',
             padding:'8px 16px', borderRadius:999, fontWeight:700, fontSize:13,
             textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #C4B5FD' }}>
-            ✦ Social Vybe
+             Social Vybe
           </a>
         </div>
       </div>
 
-      {/* ══ CATEGORY TABS ══ */}
+      {/*  CATEGORY TABS  */}
       <section style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', boxShadow: '0 2px 8px rgba(15,23,42,0.04)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.1rem 5%', overflowX: 'auto' }}>
           <div style={{ display: 'flex', gap: '0.5rem', minWidth: 'max-content' }}>
@@ -207,7 +207,7 @@ export default function MarketPage() {
         </div>
       </section>
 
-      {/* ══ SEARCH + RESULTS ══ */}
+      {/*  SEARCH + RESULTS  */}
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 5%' }}>
 
         {/* Search + filter */}
@@ -242,11 +242,11 @@ export default function MarketPage() {
         {/* No shops yet */}
         {!loading && shops.length === 0 && (
           <div style={{ textAlign: 'center', padding: '6rem 0' }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🏪</div>
+            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}></div>
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
             <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Be the first to open a shop on Travex Business Market!</p>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-              Open Shop →
+              Open Shop 
             </Link>
           </div>
         )}
@@ -255,9 +255,9 @@ export default function MarketPage() {
         {!loading && plan === 'All' && premiumShops.length > 0 && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span>🥇</span>
+              <span></span>
               <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0F172A' }}>Premium Shops</span>
-              <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Top listing · Gold verified</span>
+              <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Top listing  Gold verified</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem', marginBottom: '2.5rem' }}>
               {premiumShops.map(shop => <ShopCard key={shop.id} shop={shop} />)}
@@ -269,7 +269,7 @@ export default function MarketPage() {
         {!loading && plan === 'All' && basicShops.length > 0 && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span>🥈</span>
+              <span></span>
               <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 800, color: '#0F172A' }}>Basic Shops</span>
               <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Silver verified</span>
             </div>
@@ -284,7 +284,7 @@ export default function MarketPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops found</div>
                 <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try changing filters or search term</p>
               </div>
@@ -297,19 +297,19 @@ export default function MarketPage() {
           <div style={{ marginTop: '4rem', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)', borderRadius: '24px', padding: '3rem 2.5rem', textAlign: 'center' }}>
             <div style={{ position: 'absolute', top: '-25%', right: '-5%', width: '55%', height: '120%', background: 'radial-gradient(ellipse 60% 60% at 65% 30%, rgba(56,120,255,0.40) 0%, transparent 65%)', filter: 'blur(30px)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#C9A84C,#F0C96B)', color: '#0F172A', padding: '0.35rem 1.2rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 800, marginBottom: '1rem' }}>✅ Open Your Shop Today</div>
+              <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#C9A84C,#F0C96B)', color: '#0F172A', padding: '0.35rem 1.2rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 800, marginBottom: '1rem' }}> Open Your Shop Today</div>
               <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.3rem, 3vw, 2rem)', fontWeight: 800, color: '#fff', marginBottom: '0.75rem' }}>
                 {slotsLeft} Slots Remaining
               </div>
               <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.75rem' }}>
-                Open your shop today, no payment required. Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo · Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo starting next month.
+                Open your shop today, no payment required. Basic from {formatTZS(MARKET_BASIC_PRICE)}/mo  Premium from {formatTZS(MARKET_PREMIUM_PRICE)}/mo starting next month.
               </p>
               <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-                  🥇 Open Premium Shop
+                   Open Premium Shop
                 </Link>
                 <Link href="/open-store" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '0.9rem 2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.18)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-                  🥈 Open Basic Shop
+                   Open Basic Shop
                 </Link>
               </div>
             </div>
@@ -338,7 +338,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
       <div style={{ height: '60px', background: `linear-gradient(135deg, ${color}, #050B2E)`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', fontWeight: 800, color: '#fff' }}>{init}</span>
         <div style={{ position: 'absolute', top: '8px', right: '8px', background: isPremium ? 'rgba(201,168,76,0.90)' : 'rgba(255,255,255,0.15)', color: isPremium ? '#0F172A' : '#fff', fontSize: '0.58rem', fontWeight: 700, padding: '0.15rem 0.55rem', borderRadius: '999px' }}>
-          {isPremium ? '🥇 Premium' : '🥈 Basic'}
+          {isPremium ? ' Premium' : ' Basic'}
         </div>
       </div>
 

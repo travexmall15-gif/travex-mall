@@ -81,7 +81,7 @@ export default function CampusPage() {
 
       <SiteNav />
 
-      {/* ══ HERO ══ */}
+      {/*  HERO  */}
       <section style={{
         position: 'relative', overflow: 'hidden', color: '#fff', paddingTop: '64px',
         background: 'linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)',
@@ -115,7 +115,7 @@ export default function CampusPage() {
 
           <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
             <Link href="/campus-apply" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-              Open Your Shop →
+              Open Your Shop 
             </Link>
             <Link href="#universities" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.22)', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none' }}>
               Browse Universities
@@ -124,7 +124,7 @@ export default function CampusPage() {
         </div>
       </section>
 
-      {/* ══ UNIVERSITY GRID ══ */}
+      {/*  UNIVERSITY GRID  */}
       <section id="universities" style={{ maxWidth: '1200px', margin: '0 auto', padding: '5rem 5%' }}>
         <div style={{ marginBottom: '0.4rem', fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em' }}>// Select Campus</div>
         <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>Choose Your University</h2>
@@ -162,7 +162,7 @@ export default function CampusPage() {
         </div>
       </section>
 
-      {/* ══ BENEFITS ══ */}
+      {/*  BENEFITS  */}
       <section style={{ background: '#FFFFFF', padding: '5rem 5%', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -183,7 +183,7 @@ export default function CampusPage() {
         </div>
       </section>
 
-      {/* ══ HOW IT WORKS ══ */}
+      {/*  HOW IT WORKS  */}
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '5rem 5%' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Simple Process</div>
@@ -201,7 +201,7 @@ export default function CampusPage() {
         </div>
       </section>
 
-      {/* ══ CTA ══ */}
+      {/*  CTA  */}
       <section style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #010510 0%, #050E2E 55%, #071540 100%)', padding: '5rem 5%', textAlign: 'center' }}>
         <div style={{ position: 'absolute', top: '-25%', right: '-8%', width: '55%', height: '120%', background: 'radial-gradient(ellipse 55% 55% at 65% 30%, rgba(56,120,255,0.40) 0%, transparent 70%)', filter: 'blur(30px)', pointerEvents: 'none' }} />
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '640px', margin: '0 auto' }}>

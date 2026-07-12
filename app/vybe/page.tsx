@@ -89,20 +89,20 @@ export default function VybePage() {
 
   function shareOnWhatsApp(post: FeedPost) {
     const text = encodeURIComponent(
-      `✦ *${post.shop_name || 'Travex Seller'}* on Travex Mall\n\n` +
+      ` *${post.shop_name || 'Travex Seller'}* on Travex Mall\n\n` +
       `${getContent(post)}\n` +
-      (post.price ? `💰 Price: ${fmtTZS(post.price)}\n` : '') +
-      `\n🛍️ Browse: ${SITE}/vybe`
+      (post.price ? ` Price: ${fmtTZS(post.price)}\n` : '') +
+      `\n Browse: ${SITE}/vybe`
     )
     window.open(`https://wa.me/?text=${text}`, '_blank')
   }
 
-  // ── Error ──
+  //  Error 
   if (error) return (
     <main style={{ minHeight: '100vh', background: '#07010E', display: 'flex',
       alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', color: '#fff' }}>
-        <div style={{ fontSize: 40, marginBottom: 12 }}>⚠️</div>
+        <div style={{ fontSize: 40, marginBottom: 12 }}></div>
         <p style={{ color: 'rgba(255,255,255,0.50)', marginBottom: 16, fontSize: 14 }}>{error}</p>
         <button onClick={loadPosts} style={{
           padding: '10px 24px', background: '#C9A84C', color: '#0F172A',
@@ -135,7 +135,7 @@ export default function VybePage() {
 
       <SiteNav />
 
-      {/* ── HERO ── */}
+      {/*  HERO  */}
       <div style={{
         paddingTop: '64px', position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(160deg, #030818 0%, #07010E 60%)',
@@ -153,7 +153,7 @@ export default function VybePage() {
             background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)',
             color: '#C9A84C', padding: '4px 14px', borderRadius: 999, fontSize: 11, fontWeight: 700,
           }}>
-            ✦ Live Feed
+             Live Feed
           </div>
           <h1 style={{
             fontFamily: "'Playfair Display',serif",
@@ -171,14 +171,14 @@ export default function VybePage() {
             {UNI_TABS.map(u => (
               <button key={u} className={`tab-btn ${filter === u ? 'active' : ''}`}
                 onClick={() => setFilter(u)}>
-                {u === 'All' ? '🌍 All' : `🎓 ${u}`}
+                {u === 'All' ? ' All' : ` ${u}`}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── FEED ── */}
+      {/*  FEED  */}
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '1.5rem 5% 5rem' }}>
 
         {loading ? (
@@ -189,7 +189,7 @@ export default function VybePage() {
           </div>
         ) : posts.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>✦</div>
+            <div style={{ fontSize: 48, marginBottom: 12 }}></div>
             <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.3rem',
               color: '#fff', marginBottom: 8 }}>No Posts Yet</h3>
             <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: 14, marginBottom: 20 }}>
@@ -219,7 +219,7 @@ export default function VybePage() {
           <>
             <p style={{ color: 'rgba(255,255,255,0.30)', fontSize: 12,
               marginBottom: '1.25rem', textAlign: 'center' }}>
-              {posts.length} post{posts.length !== 1 ? 's' : ''} • Updated live
+              {posts.length} post{posts.length !== 1 ? 's' : ''}  Updated live
             </p>
 
             {/* Masonry-style grid */}
@@ -230,7 +230,7 @@ export default function VybePage() {
                 const content   = getContent(post)
                 const likesCount = getLikes(post)
                 const isLiked   = liked.has(post.id)
-                const initials  = (post.shop_name || '✦').slice(0, 2).toUpperCase()
+                const initials  = (post.shop_name || '').slice(0, 2).toUpperCase()
 
                 return (
                   <div key={post.id} className="post-card">
@@ -262,7 +262,7 @@ export default function VybePage() {
                           </div>
                           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>
                             {ago(post.created_at)}
-                            {post.university_abbr && ` · ${post.university_abbr}`}
+                            {post.university_abbr && `  ${post.university_abbr}`}
                           </div>
                         </div>
                         {post.tag && (

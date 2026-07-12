@@ -45,7 +45,7 @@ function DealCard({ deal }: { deal: Deal }) {
       <div style={{ position:'relative', height:180, background:'linear-gradient(135deg,#FEF3C7,#FDE68A)' }}>
         {deal.product_image
           ? <Image src={deal.product_image} alt={deal.product_name} fill className="object-cover" />
-          : <div style={{ height:'100%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:48 }}>⚡</div>
+          : <div style={{ height:'100%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:48 }}></div>
         }
         {/* Discount badge */}
         <div style={{ position:'absolute', top:10, right:10, background:'#EF4444',
@@ -58,7 +58,7 @@ function DealCard({ deal }: { deal: Deal }) {
           color:'#fff', borderRadius:8, padding:'6px 10px',
           display:'flex', alignItems:'center', gap:6, fontSize:13, fontWeight:700 }}>
           <Clock size={13} />
-          {time.done ? '⏰ Ended' : `${time.h}:${time.m}:${time.s}`}
+          {time.done ? ' Ended' : `${time.h}:${time.m}:${time.s}`}
         </div>
       </div>
 
@@ -141,7 +141,7 @@ export default function FlashDealsPage() {
               <Zap size={12} /> FLASH DEALS, LIMITED TIME
             </div>
             <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:'clamp(1.8rem,4vw,2.8rem)',
-              fontWeight:900, marginBottom:8 }}>⚡ Bomba la Siku</h1>
+              fontWeight:900, marginBottom:8 }}> Bomba la Siku</h1>
             <p style={{ color:'rgba(255,255,255,0.75)', fontSize:14 }}>
               Huge discounts for a limited time only. Grab them before they expire!
             </p>
@@ -158,12 +158,12 @@ export default function FlashDealsPage() {
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'2rem 5% 5rem' }}>
         {loading ? (
           <div style={{ textAlign:'center', padding:'4rem 0', color:'#92400E' }}>
-            <div style={{ fontSize:32, animation:'pulse 1.5s infinite', marginBottom:12 }}>⚡</div>
+            <div style={{ fontSize:32, animation:'pulse 1.5s infinite', marginBottom:12 }}></div>
             <p>Loading deals...</p>
           </div>
         ) : deals.length === 0 ? (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <div style={{ fontSize:56, marginBottom:16 }}>⏰</div>
+            <div style={{ fontSize:56, marginBottom:16 }}></div>
             <h2 style={{ fontFamily:"'Playfair Display',serif", color:'#0F172A', marginBottom:8 }}>
               No Active Deals Right Now
             </h2>

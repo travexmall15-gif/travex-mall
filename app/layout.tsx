@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Travex Mall — Tanzania\'s Digital Marketplace',
+    default: 'Travex Mall, Tanzania\'s Digital Marketplace',
     template: '%s | Travex Mall',
   },
   description: 'Travex Mall is Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying, and more. Shop online in Tanzania today.',
@@ -52,20 +52,20 @@ export const metadata: Metadata = {
     locale: 'en_TZ',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: 'Travex Mall — Tanzania\'s Digital Marketplace',
+    title: 'Travex Mall, Tanzania\'s Digital Marketplace',
     description: 'Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Business Market, Campus Market, Social Vybe, Flash Deals and more.',
     images: [
       {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'Travex Mall — Tanzania\'s Digital Marketplace',
+        alt: 'Travex Mall, Tanzania\'s Digital Marketplace',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Travex Mall — Tanzania\'s Digital Marketplace',
+    title: 'Travex Mall, Tanzania\'s Digital Marketplace',
     description: 'Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania.',
     images: [`${SITE_URL}/og-image.png`],
     creator: '@travexmall',

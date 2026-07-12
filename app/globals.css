@@ -92,7 +92,7 @@
 }
 
 /* ════════════════════════════════════════
-   TRAVEX POLISH V2 — FinTrack design layer
+   TRAVEX POLISH V2, FinTrack design layer
    Applies to ALL Next.js pages globally
    ════════════════════════════════════════ */
 
@@ -152,7 +152,7 @@ header.border-white\/10 {
 }
 
 /* ════ HERO SECTIONS (dark navy) ════ */
-/* The homepage hero already has navy bg — we enhance it */
+/* The homepage hero already has navy bg, we enhance it */
 section[style*="background:'#0D1B3E'"],
 section[style*='background:"#0D1B3E"'],
 section[style*="background: '#0D1B3E'"],
@@ -211,7 +211,7 @@ div[class*="shadow"] {
   box-shadow: 0 16px 40px rgba(13,27,62,0.12) !important;
 }
 
-/* ════ BUTTONS — pill style ════ */
+/* ════ BUTTONS, pill style ════ */
 /* All link/button elements styled with bg-gold, bg-navy get pill radius */
 a[style*="borderRadius:'10px'"],
 a[style*="borderRadius: '10px'"],
@@ -428,7 +428,7 @@ input, textarea, select {
   font-size: 16px !important; /* Prevents iOS zoom on focus */
 }
 
-/* Bottom nav — fixed at bottom with safe area */
+/* Bottom nav, fixed at bottom with safe area */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -438,4 +438,56 @@ input, textarea, select {
   background: var(--white, #fff);
   border-top: 1px solid var(--border, #E2E8F0);
   z-index: 300;
+}
+
+/* ── SUPER APP POLISH ── */
+* { -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { overscroll-behavior: none; }
+
+/* Smooth page transitions */
+main { animation: pageIn 0.25s ease; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Better focus states */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #C9A84C;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 768px) {
+  a, button { min-height: 44px; }
+  nav a { padding: 12px 16px; }
+}
+
+/* Prevent text selection on interactive elements */
+button, .nav-link { user-select: none; -webkit-user-select: none; }
+
+/* Better image rendering */
+img { -webkit-user-drag: none; image-rendering: -webkit-optimize-contrast; }
+
+/* Loading skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+}
+
+/* Card hover — super app feel */
+.shop-card-wrap { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.shop-card-wrap:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+
+/* Bottom safe area for mobile */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  footer { padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); }
 }

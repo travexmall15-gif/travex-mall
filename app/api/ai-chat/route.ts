@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   }
 
   const productList = (products || []).map(p =>
-    `- ${p.name}: TZS ${Number(p.price).toLocaleString()} (${p.stock} in stock)${p.description ? ' — ' + p.description : ''}`
+    `- ${p.name}: TZS ${Number(p.price).toLocaleString()} (${p.stock} in stock)${p.description ? ', ' + p.description : ''}`
   ).join('\n')
 
   const systemPrompt = `You are an intelligent AI assistant for "${shop?.shop_name || 'a shop'}" on Travex Mall, Tanzania's digital marketplace.

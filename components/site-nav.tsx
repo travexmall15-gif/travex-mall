@@ -8,12 +8,12 @@ import { Logo } from '@/components/logo'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
-  { href: '/campus', label: 'Campus Market' },
-  { href: '/market', label: 'Business Market' },
+  { href: '/home', label: 'Home' },
+  { href: '/market', label: 'Business' },
+  { href: '/campus', label: 'Campus' },
   { href: '/vybe', label: 'Social Vybe' },
-  { href: '/flash-deals', label: '⚡Flash Deals' },
-  { href: '/group-buy', label: '👥Group Buy' },
-  { href: '/campus-apply', label: 'Open Shop' },
+  { href: '/flash-deals', label: 'Flash Deals' },
+  { href: '/move/index.html', label: 'Move' },
 ]
 
 export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
@@ -35,7 +35,10 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
       }
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-        <Logo onDark={dark} />
+        <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            <img src="/icon-192.png" alt="Travex" style={{width:'28px',height:'28px',borderRadius:'50%',objectFit:'cover'}} />
+            <Logo onDark={dark} />
+          </div>
 
         <div className="hidden items-center gap-7 md:flex">
           {navLinks.map((link) => (

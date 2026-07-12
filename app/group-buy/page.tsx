@@ -106,7 +106,7 @@ export default function GroupBuyPage() {
             <Users size={12} /> NUNUA PAMOJA, GROUP BUYING
           </div>
           <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:'clamp(1.8rem,4vw,2.8rem)', fontWeight:900, marginBottom:8 }}>
-            👥 Buy Together, Save More
+             Buy Together, Save More
           </h1>
           <p style={{ color:'rgba(255,255,255,0.75)', fontSize:14 }}>
             Join a group and get up to 20% off. Share with friends on WhatsApp!
@@ -122,7 +122,7 @@ export default function GroupBuyPage() {
           </div>
         ) : groups.length === 0 ? (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <div style={{ fontSize:56, marginBottom:16 }}>👥</div>
+            <div style={{ fontSize:56, marginBottom:16 }}></div>
             <h2 style={{ fontFamily:"'Playfair Display',serif", color:'#0F172A', marginBottom:8 }}>
               No Active Groups
             </h2>
