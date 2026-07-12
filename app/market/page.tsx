@@ -1,5 +1,16 @@
 'use client'
 
+const TANZANIAN_REGIONS = [
+  'All', 'Dar es Salaam', 'Mwanza', 'Arusha', 'Dodoma', 'Mbeya',
+  'Morogoro', 'Tanga', 'Zanzibar', 'Kigoma', 'Tabora',
+]
+
+const SHOP_CATEGORIES = [
+  'All', 'Fashion & Clothing', 'Electronics', 'Food & Groceries',
+  'Beauty & Health', 'Agriculture', 'Services', 'Home & Living',
+  'Sports & Fitness', 'Education', 'Automotive', 'Arts & Crafts',
+]
+
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
@@ -53,15 +64,18 @@ export default function MarketPage() {
         setShops(data)
         setTotalApproved(data.length)
         // Build category list from real data
-        const cats = [...new Set(data.map((s: MarketShop) => s.shop_category).filter(Boolean))] as string[]
-        setCategories(cats)
+        const dbCats = [...new Set(data.map((s: MarketShop) => s.shop_category).filter(Boolean))] as string[]
+        const allCats = [...new Set([...SHOP_CATEGORIES.filter(c => c !== 'All'), ...dbCats])]
+        setCategories(allCats)
       }
       setLoading(false)
     }
     load()
   }, [])
 
-  const regions = ['All', ...Array.from(new Set(shops.map(s => s.shop_region).filter(Boolean))) as string[]]
+  // Merge hardcoded regions with any new ones from DB
+  const dbRegions = Array.from(new Set(shops.map(s => s.shop_region).filter(Boolean))) as string[]
+  const regions = [...new Set([...TANZANIAN_REGIONS, ...dbRegions])]
 
   const filtered = shops.filter(s => {
     const q = search.toLowerCase()
