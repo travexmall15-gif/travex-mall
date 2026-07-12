@@ -33,71 +33,67 @@ const CAT_COLORS: Record<string, { bg: string; accent: string }> = {
 }
 
 function StoreCard({ store, index }: { store: CampusStore; index: number }) {
-  const initials  = store.store_name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
-  // Use category color if available, otherwise use index-based palette
-  const catStyle  = store.category ? (CAT_COLORS[store.category] || CAT_COLORS['Other']) : null
-  const palette   = CARD_PALETTES[index % CARD_PALETTES.length]
-  const bg        = store.primary_color ? `linear-gradient(135deg,${store.primary_color},${store.primary_color}88)` : (catStyle?.bg || palette.bg)
-  const accent    = store.primary_color || catStyle?.accent || palette.accent
-  const wa        = (store.whatsapp_number || '').replace(/\D/g, '')
+  const initials = store.store_name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
+  const catStyle = store.category ? (CAT_COLORS[store.category] || CAT_COLORS['Other']) : null
+  const palette  = CARD_PALETTES[index % CARD_PALETTES.length]
+  const bg       = store.primary_color ? `linear-gradient(135deg,${store.primary_color},${store.primary_color}88)` : (catStyle?.bg || palette.bg)
+  const accent   = store.primary_color || catStyle?.accent || palette.accent
 
   return (
-    <div className="rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-      style={{ background: '#fff', border: `2px solid ${accent}30`, boxShadow: `0 4px 20px ${accent}15` }}>
+    <div style={{ background: '#fff', border: '1.5px solid #EEF0F6', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 6px rgba(15,23,42,0.06)', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer' }}
+      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 10px 24px rgba(15,23,42,0.10)' }}
+      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 6px rgba(15,23,42,0.06)' }}>
 
-      {/* Colored Banner */}
-      <div className="relative h-28" style={{ background: bg }}>
-        {store.banner && (
-          <Image src={store.banner} alt={store.store_name} fill className="object-cover" />
+      {/* Banner */}
+      <div style={{ height: '70px', position: 'relative', overflow: 'hidden' }}>
+        {store.banner ? (
+          <Image src={store.banner} alt={store.store_name} fill style={{ objectFit: 'cover' }} />
+        ) : (
+          <div style={{ width: '100%', height: '100%', background: bg }} />
         )}
         {/* Verified badge */}
         {store.is_verified && (
-          <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold"
-            style={{ background: 'rgba(34,197,94,0.9)', color: '#fff' }}>
-            <ShieldCheck className="h-3 w-3" /> Verified
-          </div>
-        )}
-        {/* Category pill */}
-        {store.category && (
-          <div className="absolute bottom-2 left-3 px-2 py-0.5 rounded-full text-xs font-bold"
-            style={{ background: 'rgba(0,0,0,0.45)', color: '#fff', backdropFilter: 'blur(4px)' }}>
-            {store.category}
+          <div style={{ position: 'absolute', top: 6, right: 8, display: 'flex', alignItems: 'center', gap: 3, background: 'rgba(5,150,105,0.9)', color: '#fff', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: 999 }}>
+            <ShieldCheck style={{ width: 9, height: 9 }} /> Verified
           </div>
         )}
       </div>
 
-      {/* Card Body */}
-      <div className="p-4">
-        {/* Logo + Name row */}
-        <div className="flex items-center gap-3 mb-3 -mt-8">
-          <div className="w-14 h-14 rounded-xl border-4 border-white shadow-md flex items-center justify-center font-bold text-base flex-shrink-0 relative z-10"
-            style={{ background: bg, color: accent, fontSize: '1.1rem' }}>
-            {store.logo
-              ? <Image src={store.logo} alt="" fill className="object-cover rounded-lg" />
-              : initials}
+      {/* Body */}
+      <div style={{ padding: '0.6rem 0.75rem 0.75rem' }}>
+        {/* Logo left + name */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+          <div style={{ width: 30, height: 30, borderRadius: '8px', border: '1.5px solid #E8ECF4', overflow: 'hidden', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            {store.logo ? (
+              <Image src={store.logo} alt={initials} width={30} height={30} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+            ) : (
+              <span style={{ fontSize: '0.65rem', fontWeight: 900, color: accent }}>{initials}</span>
+            )}
           </div>
-          <div style={{ marginTop: '16px' }}>
-            <h3 className="font-bold text-sm leading-tight" style={{ color: '#0D1B3E' }}>
-              {store.store_name}
-            </h3>
-            <p className="text-xs" style={{ color: '#64748B' }}>{store.university_abbr}</p>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: '0.78rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{store.store_name}</div>
+            <div style={{ fontSize: '0.58rem', color: '#94A3B8', marginTop: 1 }}>{store.university_abbr}</div>
           </div>
         </div>
 
+        {/* Category */}
+        {store.category && (
+          <div style={{ marginBottom: '0.35rem' }}>
+            <span style={{ fontSize: '0.58rem', background: `${accent}18`, color: accent, padding: '2px 7px', borderRadius: 999, fontWeight: 700 }}>{store.category}</span>
+          </div>
+        )}
+
         {/* Description */}
         {store.description && (
-          <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: '#64748B' }}>
+          <p style={{ fontSize: '0.68rem', color: '#94A3B8', lineHeight: 1.5, marginBottom: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>
             {store.description}
           </p>
         )}
 
-        {/* Accent bar */}
-        <div className="h-0.5 w-full rounded mb-3" style={{ background: `linear-gradient(90deg,${accent},${accent}33)` }} />
-
-        {/* Visit Shop only */}
+        {/* Visit Shop */}
         <Link href={`/store/${store.id}`}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: '#0D1B3E', color: '#fff', borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none' }}>
-          <Store className="h-3 w-3" /> Visit Shop
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '4px 12px', background: '#0D1B3E', color: '#fff', borderRadius: 7, fontSize: '0.62rem', fontWeight: 700, textDecoration: 'none' }}>
+          <Store style={{ width: 10, height: 10 }} /> Visit Shop
         </Link>
       </div>
     </div>
@@ -237,7 +233,7 @@ export default function UniversityPage({ params }: { params: Promise<{ slug: str
             <p className="text-sm mb-4" style={{ color: '#94A3B8' }}>
               {filtered.length} shop{filtered.length !== 1 ? 's' : ''} found
             </p>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(170px,1fr))", gap: "0.85rem" }}>
               {filtered.map((store, i) => (
                 <StoreCard key={store.id} store={store} index={i} />
               ))}
