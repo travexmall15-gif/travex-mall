@@ -10,34 +10,9 @@ import { sb, type CampusStore, fmtTZS } from '@/lib/supabase'
 import { getUniversity } from '@/lib/data'
 import { MapPin, ArrowLeft, Search, ShieldCheck, Store } from 'lucide-react'
 
-// Distinct color palettes, index-based so every card looks different
-const CARD_PALETTES = [
-  { bg: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', accent: '#60A5FA', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#7C2D12,#C2410C)', accent: '#FB923C', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#14532D,#166534)', accent: '#4ADE80', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#4C1D95,#7C3AED)', accent: '#C084FC', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#831843,#9D174D)', accent: '#F472B6', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#713F12,#A16207)', accent: '#FCD34D', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#0C4A6E,#0369A1)', accent: '#38BDF8', text: '#fff' },
-  { bg: 'linear-gradient(135deg,#1C1917,#44403C)', accent: '#A8A29E', text: '#fff' },
-]
-
-const CAT_COLORS: Record<string, { bg: string; accent: string }> = {
-  'Fashion':     { bg: 'linear-gradient(135deg,#7C3009,#B8540A)', accent: '#FB923C' },
-  'Food':        { bg: 'linear-gradient(135deg,#14532D,#166534)', accent: '#4ADE80' },
-  'Electronics': { bg: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', accent: '#60A5FA' },
-  'Beauty':      { bg: 'linear-gradient(135deg,#831843,#9D174D)', accent: '#F472B6' },
-  'Books':       { bg: 'linear-gradient(135deg,#1C1917,#292524)', accent: '#A8A29E' },
-  'Services':    { bg: 'linear-gradient(135deg,#4C1D95,#7C3AED)', accent: '#C084FC' },
-  'Other':       { bg: 'linear-gradient(135deg,#0C4A6E,#0369A1)', accent: '#38BDF8' },
-}
-
-function StoreCard({ store, index }: { store: CampusStore; index: number }) {
+function StoreCard({ store }: { store: CampusStore; index?: number }) {
   const initials = store.store_name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
-  const catStyle = store.category ? (CAT_COLORS[store.category] || CAT_COLORS['Other']) : null
-  const palette  = CARD_PALETTES[index % CARD_PALETTES.length]
-  const bg       = store.primary_color ? `linear-gradient(135deg,${store.primary_color},${store.primary_color}88)` : (catStyle?.bg || palette.bg)
-  const accent   = store.primary_color || catStyle?.accent || palette.accent
+  const color = store.primary_color || '#0D1B3E'
 
   return (
     <div style={{ background: '#fff', border: '1.5px solid #EEF0F6', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 6px rgba(15,23,42,0.06)', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer' }}
@@ -49,9 +24,8 @@ function StoreCard({ store, index }: { store: CampusStore; index: number }) {
         {store.banner ? (
           <Image src={store.banner} alt={store.store_name} fill style={{ objectFit: 'cover' }} />
         ) : (
-          <div style={{ width: '100%', height: '100%', background: bg }} />
+          <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55, #0D1B3E)` }} />
         )}
-        {/* Verified badge */}
         {store.is_verified && (
           <div style={{ position: 'absolute', top: 6, right: 8, display: 'flex', alignItems: 'center', gap: 3, background: 'rgba(5,150,105,0.9)', color: '#fff', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: 999 }}>
             <ShieldCheck style={{ width: 9, height: 9 }} /> Verified
@@ -60,18 +34,18 @@ function StoreCard({ store, index }: { store: CampusStore; index: number }) {
       </div>
 
       {/* Body */}
-      <div style={{ padding: '0.6rem 0.75rem 0.75rem' }}>
+      <div style={{ padding: '0.5rem 0.7rem 0.65rem' }}>
         {/* Logo left + name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-          <div style={{ width: 30, height: 30, borderRadius: '8px', border: '1.5px solid #E8ECF4', overflow: 'hidden', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.35rem' }}>
+          <div style={{ width: 28, height: 28, borderRadius: '7px', border: '1.5px solid #E8ECF4', overflow: 'hidden', background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {store.logo ? (
-              <Image src={store.logo} alt={initials} width={30} height={30} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+              <Image src={store.logo} alt={initials} width={28} height={28} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
             ) : (
-              <span style={{ fontSize: '0.65rem', fontWeight: 900, color: accent }}>{initials}</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: 900, color: '#fff' }}>{initials}</span>
             )}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: '0.78rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{store.store_name}</div>
+            <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{store.store_name}</div>
             <div style={{ fontSize: '0.58rem', color: '#94A3B8', marginTop: 1 }}>{store.university_abbr}</div>
           </div>
         </div>
@@ -235,7 +209,7 @@ export default function UniversityPage({ params }: { params: Promise<{ slug: str
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(170px,1fr))", gap: "0.85rem" }}>
               {filtered.map((store, i) => (
-                <StoreCard key={store.id} store={store} index={i} />
+                <StoreCard key={store.id} store={store} />
               ))}
             </div>
           </>
