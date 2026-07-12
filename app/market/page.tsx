@@ -302,7 +302,7 @@ export default function MarketPage() {
 
         {/* Shops grid */}
         {!loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '1.1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops found</div>
@@ -354,7 +354,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
       onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 6px rgba(15,23,42,0.06)' }}
     >
       {/* Banner — user image or gradient */}
-      <div style={{ height: '56px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ height: '44px', position: 'relative', overflow: 'hidden' }}>
         {shop.shop_banner ? (
           <img src={shop.shop_banner} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
@@ -367,33 +367,33 @@ function ShopCard({ shop }: { shop: MarketShop }) {
       </div>
 
       {/* Body */}
-      <div style={{ padding: '0.6rem 0.8rem 0.75rem' }}>
+      <div style={{ padding: '0.45rem 0.7rem 0.6rem' }}>
         {/* Logo left + shop name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', marginBottom: '0.45rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
           {/* Logo — left side */}
-          <div style={{ width: '34px', height: '34px', borderRadius: '9px', border: '1.5px solid #E8ECF4', overflow: 'hidden', flexShrink: 0, background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '7px', border: '1.5px solid #E8ECF4', overflow: 'hidden', flexShrink: 0, background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {shop.shop_logo ? (
               <img src={shop.shop_logo} alt={init} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
-              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.72rem', fontWeight: 900, color: '#fff' }}>{init}</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.62rem', fontWeight: 900, color: '#fff' }}>{init}</span>
             )}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{shop.shop_name}</div>
+            <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{shop.shop_name}</div>
             {shop.shop_region && <div style={{ fontSize: '0.58rem', color: '#94A3B8', marginTop: '1px' }}>{shop.shop_region}</div>}
           </div>
         </div>
 
         {/* Category tag */}
         {shop.shop_category && (
-          <div style={{ marginBottom: '0.4rem' }}>
+          <div style={{ marginBottom: '0.3rem' }}>
             <span style={{ fontSize: '0.58rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '2px 7px', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>
           </div>
         )}
 
         {/* Description */}
         {shop.shop_desc && (
-          <p style={{ fontSize: '0.7rem', color: '#94A3B8', lineHeight: 1.5, marginBottom: '0.55rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
+          <p style={{ fontSize: '0.65rem', color: '#94A3B8', lineHeight: 1.45, marginBottom: '0.3rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
         )}
 
         {/* Visit Shop — small button */}
