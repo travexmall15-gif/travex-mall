@@ -55,8 +55,13 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
   const [orderLocation, setOrderLocation] = useState('')
   const [placing, setPlacing]   = useState(false)
   const [success, setSuccess]   = useState(false)
-  const [searchQ, setSearchQ]   = useState('')
-  const [selCat, setSelCat]     = useState('All')
+  const [searchQ, setSearchQ]     = useState('')
+  const [selCat, setSelCat]       = useState('All')
+  const [showWelcome, setShowWelcome] = useState(false)
+  const [showMsg, setShowMsg]     = useState(false)
+  const [msgText, setMsgText]     = useState('')
+  const [msgName, setMsgName]     = useState('')
+  const [msgSent, setMsgSent]     = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -76,6 +81,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
       if (shopData) {
         setStore(shopData)
+        setTimeout(() => setShowWelcome(true), 800)
         const { data: prods } = await sb
           .from('campus_products')
           .select('*')
@@ -534,6 +540,133 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
           </div>
         </div>
       )}
+      {/* ── FLOATING MESSAGE BUTTON ── */}
+      {store && (
+        <button
+          onClick={() => setShowMsg(true)}
+          style={{ position: 'fixed', bottom: '5rem', right: '1.25rem', zIndex: 50, display: 'flex', alignItems: 'center', gap: 7, background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 999, padding: '10px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(13,27,62,0.35)', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#1a3060'}
+          onMouseOut={e => (e.currentTarget as HTMLElement).style.background = '#0D1B3E'}
+        >
+          <MessageCircle size={15} /> Message Seller
+        </button>
+      )}
+
+      {/* ── WELCOME MODAL ── */}
+      {showWelcome && store && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', pointerEvents: 'none' }}>
+          <div style={{ pointerEvents: 'auto', background: '#fff', borderRadius: '20px 20px 0 0', padding: '1.5rem', width: '100%', maxWidth: 420, boxShadow: '0 -8px 40px rgba(0,0,0,0.18)', animation: 'slideUp 0.4s cubic-bezier(0.34,1.2,0.64,1)', marginBottom: 0 }}>
+            <style>{`@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
+
+            {/* Close */}
+            <button onClick={() => setShowWelcome(false)} style={{ position: 'absolute', top: 12, right: 14, background: '#F1F5F9', border: 'none', borderRadius: '50%', width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}>
+              <X size={14} />
+            </button>
+
+            {/* Customer care avatar + message */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', marginBottom: '1.25rem' }}>
+              {/* Female avatar SVG */}
+              <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#E0E7FF,#C7D2FE)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #818CF8', overflow: 'hidden' }}>
+                <svg viewBox="0 0 48 48" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="48" r="16" fill="#A5B4FC"/>
+                  <circle cx="24" cy="18" r="9" fill="#C7D2FE"/>
+                  <circle cx="24" cy="18" r="7" fill="#EEF2FF"/>
+                  <ellipse cx="21" cy="17" rx="1.2" ry="1.5" fill="#4338CA"/>
+                  <ellipse cx="27" cy="17" rx="1.2" ry="1.5" fill="#4338CA"/>
+                  <path d="M20.5 22 Q24 25 27.5 22" stroke="#818CF8" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                  <path d="M15 14 Q17 8 24 8 Q31 8 33 14" stroke="#818CF8" strokeWidth="2" fill="#C7D2FE"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0F172A' }}>Travex Customer Care</span>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22C55E', display: 'inline-block' }} />
+                </div>
+                <div style={{ background: '#F1F5F9', borderRadius: '0 12px 12px 12px', padding: '0.65rem 0.9rem' }}>
+                  <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.65, margin: 0 }}>
+                    Welcome to <strong>{store.shop_name}</strong>! I am your Travex assistant. How can I help you today? Browse products, place an order, or ask me anything!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => { setShowWelcome(false) }}
+                style={{ flex: 1, padding: '10px', borderRadius: 10, border: '1.5px solid #E2E8F0', background: '#fff', color: '#64748B', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
+                Browse Store
+              </button>
+              <button
+                onClick={() => { setShowWelcome(false) }}
+                style={{ flex: 1, padding: '10px', borderRadius: 10, border: 'none', background: '#0D1B3E', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
+                Start Chatting
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── MESSAGE SELLER MODAL ── */}
+      {showMsg && store && (
+        <div className="modal-bg" onClick={e => { if(e.target === e.currentTarget) setShowMsg(false) }}>
+          <div className="modal">
+            {msgSent ? (
+              <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                  <CheckCircle style={{ width: 28, height: 28, color: '#22C55E' }} />
+                </div>
+                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem', color: '#fff', marginBottom: 8 }}>Message Sent!</h3>
+                <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
+                  The seller will respond to you shortly.
+                </p>
+                <button onClick={() => { setShowMsg(false); setMsgSent(false); setMsgText(''); setMsgName('') }}
+                  style={{ padding: '10px 24px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                  Close
+                </button>
+              </div>
+            ) : (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+                  <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.1rem', color: '#fff', fontWeight: 800 }}>
+                    Message {store.shop_name}
+                  </h3>
+                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <X size={16} />
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
+                  <input className="form-inp" value={msgName} onChange={e => setMsgName(e.target.value)} placeholder="Your Name *" />
+                  <textarea className="form-inp" value={msgText} onChange={e => setMsgText(e.target.value)} placeholder="Your message to the seller..." rows={4} style={{ resize: 'vertical' as const }} />
+                </div>
+
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {wa && (
+                    <a
+                      href={`https://wa.me/${wa}?text=${encodeURIComponent(`Hi! I am ${msgName || 'a customer'}. ${msgText}`)}`}
+                      target="_blank"
+                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: "'Inter',sans-serif" }}>
+                      <MessageCircle size={14} /> WhatsApp
+                    </a>
+                  )}
+                  <button
+                    onClick={async () => {
+                      if (!msgName.trim() || !msgText.trim()) return
+                      await sb.from('store_messages').insert({ store_id: store.id, sender_name: msgName, message: msgText, created_at: new Date().toISOString() }).catch(() => {})
+                      setMsgSent(true)
+                    }}
+                    disabled={!msgName.trim() || !msgText.trim()}
+                    style={{ flex: 2, padding: '11px', borderRadius: 10, background: accentColor, color: isPremium ? '#0F172A' : '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: "'Inter',sans-serif", opacity: (!msgName.trim() || !msgText.trim()) ? 0.5 : 1 }}>
+                    <MessageCircle size={14} /> Send Message
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {store && <AIChatWidget storeId={store.id} shopName={store.shop_name} welcomeMessage={`Welcome to ${store.shop_name}! I am here to help you find products and place orders. What are you looking for today?`} />}
       <SiteFooter />
     </main>
