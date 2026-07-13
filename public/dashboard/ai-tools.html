@@ -359,25 +359,19 @@ function switchAI(tab) {
   document.getElementById('panel-' + tab).classList.add('on');
 }
 
-async function aiCall(prompt, btnId) {
+async function aiCall(tool, params, btnId) {
   const btn = document.getElementById(btnId);
   const origText = btn.innerHTML;
-  btn.innerHTML = '<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span> Thinking...';
+  btn.innerHTML = '<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span> Analyzing...';
   btn.disabled = true;
-
   try {
-    const res = await fetch('/api/ai-chat', {
+    const res = await fetch('/api/ai-tools', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        store_id: shopData?.id || 'general',
-        message: prompt,
-        session_id: 'ai-tools-' + Date.now(),
-        history: []
-      })
+      body: JSON.stringify({ tool, store_id: shopData?.id || 'demo', ...params })
     });
     const data = await res.json();
-    return data.reply || 'Sorry, please try again.';
+    return data.result || 'Could not generate result. Please try again.';
   } catch(e) {
     return 'Error: ' + e.message;
   } finally {
@@ -424,7 +418,7 @@ Write TWO versions:
 
 Also suggest 3-5 hashtags for social media.`;
 
-  const result = await aiCall(prompt, 'pdBtn');
+  const result = await aiCall('description', {name, category: category||shopData?.shop_category, features, price}, 'pdBtn');
   showResult('pdResult', result, 'pdActions');
 }
 
@@ -446,7 +440,7 @@ Give pricing advice:
 4. Best time to offer discounts
 Keep it practical for a small Tanzanian business seller.`;
 
-  const result = await aiCall(prompt, 'prBtn');
+  const result = await aiCall('price', {name, price, condition: cond, category: shopData?.shop_category}, 'prBtn');
   showResult('prResult', result);
 }
 
@@ -495,7 +489,7 @@ Write a brief business report with:
 
 Keep it simple and practical for a Tanzanian small business owner.`;
 
-  const result = await aiCall(prompt, 'rptBtn');
+  const result = await aiCall('report', {period: days}, 'rptBtn');
   showResult('rptResult', result);
 }
 
@@ -517,7 +511,7 @@ Then give:
 - Total overall
 - Tips to reduce expenses`;
 
-  const result = await aiCall(prompt, 'expBtn');
+  const result = await aiCall('expenses', {text: input}, 'expBtn');
   showResult('expResult', result);
 }
 
@@ -549,7 +543,7 @@ ${platform === 'all' ? '1. Instagram post (with emojis, hashtags)
 
 Include the shop link. Make it natural for Tanzanian audience (can mix English and Swahili naturally).`;
 
-  const result = await aiCall(prompt, 'smBtn');
+  const result = await aiCall('social', {product, platform, tone, offer}, 'smBtn');
   showResult('smResult', result, 'smActions');
 }
 
@@ -567,7 +561,7 @@ Write the message ready to send, with emojis, professional but friendly.
 Can naturally mix English and Swahili (Tanzanian style).
 Keep it short (max 5 lines). Include a call to action.`;
 
-  const result = await aiCall(prompt, 'waBtn2');
+  const result = await aiCall('whatsapp', {type, detail}, 'waBtn2');
   showResult('waResult', result, 'waActions');
 }
 
@@ -602,18 +596,18 @@ Keep responses concise (3-5 sentences max). Can mix English and Swahili naturall
   coachHistory.push({ role: 'user', content: msg });
 
   try {
-    const res = await fetch('/api/ai-chat', {
+    const res = await fetch('/api/ai-tools', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        store_id: shopData?.id || 'coach',
-        message: context + '\n\nUser asks: ' + msg,
-        session_id: 'coach-' + (shopData?.id || 'x'),
+        tool: 'coach',
+        store_id: shopData?.id || 'demo',
+        message: msg,
         history: coachHistory.slice(-6)
       })
     });
     const data = await res.json();
-    const reply = data.reply || 'Sorry, try again!';
+    const reply = data.result || 'Sorry, try again!';
     coachHistory.push({ role: 'bot', content: reply });
 
     document.getElementById('coachTyping').outerHTML = `<div class="chat-msg bot">${reply}</div>`;
@@ -648,24 +642,18 @@ Give exactly 5 tips. Each tip should have:
 Format each tip as: [EMOJI] [Title]: [1-2 sentence advice]`;
 
   try {
-    const res = await fetch('/api/ai-chat', {
+    const res = await fetch('/api/ai-tools', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        store_id: shopData?.id || 'tips',
-        message: prompt,
-        session_id: 'tips-' + Date.now(),
-        history: []
-      })
+      body: JSON.stringify({ tool: 'tips', store_id: shopData?.id || 'demo' })
     });
     const data = await res.json();
-    const tips = (data.reply || '').split('\n').filter(l => l.trim().length > 10);
+    const tips = (data.result || '').split('\n\n').filter(l => l.trim().length > 10);
 
     const container = document.getElementById('tipsContainer');
     container.innerHTML = tips.map(tip => `
       <div class="tip-card">
-        <div class="tip-icon">${tip.match(/[\p{Emoji}]/u)?.[0] || ''}</div>
-        <div class="tip-text">${tip.replace(/^[\p{Emoji}\s]+/u, '')}</div>
+        <div class="tip-text">${tip}</div>
       </div>
     `).join('') || '<div class="tip-card"><div class="tip-icon"></div><div class="tip-text">Add more products, post on Vybe, and create Flash Deals to attract customers!</div></div>';
   } catch(e) {
