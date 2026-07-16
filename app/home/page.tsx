@@ -1,4 +1,5 @@
 'use client'
+import Script from 'next/script'
 import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
@@ -54,6 +55,13 @@ export default function HomePage() {
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
               Enter Travex Mall
             </Link>
+            <button
+              className="travex-lang-btn"
+              onClick={() => typeof window !== 'undefined' && (window as any).TravexLang?.toggle()}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.10)', border: '1.5px solid rgba(255,255,255,0.20)', color: '#fff', padding: '0.85rem 1.6rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s' }}
+            >
+              🇹🇿 Kiswahili
+            </button>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
             {[['500+', 'Active Shops'], ['5', 'Regions'], ['3M+', 'Tanzania SMEs']].map(([v, l]) => (
@@ -277,6 +285,7 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+      <Script src="/lang.js" strategy="afterInteractive" />
       <SiteFooter />
     </main>
   )
