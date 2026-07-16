@@ -1,4 +1,6 @@
 'use client'
+import { useLanguage } from '@/lib/useLanguage'
+import { t } from '@/lib/i18n'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
@@ -114,6 +116,7 @@ function GroupCard({ group }: { group: Group }) {
 }
 
 export default function GroupBuyPage() {
+  const { lang } = useLanguage()
   const [groups, setGroups]   = useState<Group[]>([])
   const [search, setSearch]   = useState('')
   const [loading, setLoading] = useState(true)
@@ -243,7 +246,7 @@ export default function GroupBuyPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search group deals, products, sellers..."
+            placeholder={t("groupBuy.search", lang)}
             style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter',sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
             onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
             onBlur={e => (e.target.style.borderColor = '#E2E8F0')}

@@ -1,4 +1,6 @@
 'use client'
+import { useLanguage } from '@/lib/useLanguage'
+import { t } from '@/lib/i18n'
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -61,6 +63,7 @@ function isVideo(post: FeedPost) {
 }
 
 export default function VybePage() {
+  const { lang } = useLanguage()
   const [posts, setPosts]     = useState<FeedPost[]>([])
   const [mediaFilter, setMediaFilter] = useState<'all' | 'photo' | 'video'>('all')
   const [loading, setLoading] = useState(true)
@@ -245,7 +248,7 @@ export default function VybePage() {
 
                     {post.store_id && (
                       <Link href={`/store/${post.store_id}`} className="visit-btn">
-                        <Store size={11} /> Visit Shop
+                        <Store size={11} /> {t("vybe.visitShop", lang)}
                       </Link>
                     )}
                   </div>

@@ -1,4 +1,5 @@
 'use client'
+import { LangToggle } from './lang-toggle'
 
 import { useState } from 'react'
 import Link from 'next/link'

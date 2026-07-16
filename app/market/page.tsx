@@ -1,4 +1,6 @@
 'use client'
+import { useLanguage } from '@/lib/useLanguage'
+import { t } from '@/lib/i18n'
 
 const TANZANIAN_REGIONS = [
   'All', 'Dar es Salaam', 'Mwanza', 'Arusha', 'Dodoma', 'Mbeya',
@@ -43,6 +45,7 @@ type MarketShop = {
 
 
 export default function MarketPage() {
+  const { lang } = useLanguage()
   const [shops, setShops] = useState<MarketShop[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -117,7 +120,7 @@ export default function MarketPage() {
               <Store size={11} /> Business Market
             </div>
             <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.4rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 16px rgba(201,168,76,0.30)' }}>
-              <Store size={13} /> Open Shop
+              <Store size={13} /> {t('common.openShop', lang)}
             </Link>
           </div>
 
@@ -169,12 +172,12 @@ export default function MarketPage() {
             <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
               {[
                 ...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops', lang), color: '#C9A84C' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('market.basicShops', lang), color: 'rgba(255,255,255,0.6)' },
                   { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
+                  { val: 'OPEN', label: t('market.registration', lang), color: '#86EFAC' },
+                  { val: loading ? '...' : String(totalApproved), label: t('market.activeSelrers', lang), color: 'rgba(255,255,255,0.6)' },
+                  { val: String(MARKET_TOTAL_SLOTS), label: t('market.totalSlots', lang), color: 'rgba(255,255,255,0.6)' },
                 ],
                 ...[
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
@@ -239,7 +242,7 @@ export default function MarketPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search shops, products, sellers..."
+            placeholder={t('market.searchPlaceholder', lang)}
             style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
             onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
             onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
@@ -305,7 +308,7 @@ export default function MarketPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops found</div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No {t('market.shopsFound', lang).replace('{n}', String(filtered.length))}</div>
                 <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try different filters or search term</p>
               </div>
             ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}

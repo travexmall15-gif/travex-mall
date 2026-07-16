@@ -175,7 +175,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased" suppressHydrationWarning style={{ WebkitTapHighlightColor: 'transparent' as any }}>
-        <ToastProvider>{children}</ToastProvider>
+        <LanguageProvider><ToastProvider>{children}</ToastProvider></LanguageProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <Script src="/pwa-init.js" strategy="afterInteractive" />
       </body>

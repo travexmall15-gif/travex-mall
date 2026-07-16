@@ -1,4 +1,6 @@
 'use client'
+import { useLanguage } from '@/lib/useLanguage'
+import { t } from '@/lib/i18n'
 import { SiteFooter } from '@/components/site-footer'
 
 import Image from 'next/image'
@@ -285,7 +287,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
-                  <CheckCircle size={10} /> Verified
+                  <CheckCircle size={10} /> {t("store.verified", lang)}
                 </span>
               </div>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
@@ -302,7 +304,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                 onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
-                <MessageCircle size={13} /> Message Seller
+                <MessageCircle size={13} /> {t("store.messageSeller", lang)}
               </button>
             </div>
           </div>

@@ -1,4 +1,6 @@
 'use client'
+import { useLanguage } from '@/lib/useLanguage'
+import { t } from '@/lib/i18n'
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -16,6 +18,7 @@ const CAMPUS_CATEGORIES = [
 ]
 
 export default function CampusPage() {
+  const { lang } = useLanguage()
   const [uniStats, setUniStats] = useState<UniStats[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -91,7 +94,7 @@ export default function CampusPage() {
               <GraduationCap size={12} /> Campus Market
             </div>
             <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
-              <GraduationCap size={13} /> Open Your Shop
+              <GraduationCap size={13} /> {t("common.openShop", lang)}
             </Link>
           </div>
 
@@ -171,7 +174,7 @@ export default function CampusPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search universities..."
+            placeholder={t("campus.subtext", lang)}
             style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
             onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
             onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
