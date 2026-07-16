@@ -4,6 +4,8 @@ import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
 import Script from 'next/script'
 import './globals.css'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, getLocale } from 'next-intl/server'
 
 const SITE_URL = 'https://travex-mall.vercel.app'
 const SITE_NAME = 'Travex Mall'

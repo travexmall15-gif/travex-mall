@@ -86,7 +86,8 @@
     "left": "left",
     "activeShops": "active shops",
     "slotsLeft": "slots left",
-    "universitiesFound": "{count} universities found"
+    "universitiesFound": "{count} universities found",
+    "university_abbr": "University"
   },
   "vybe": {
     "headline": "Travex Social Vybe",
@@ -155,7 +156,8 @@
     "placeOrder": "Place an order",
     "checkPrices": "Check prices",
     "ariaBadge": "AI Assistant",
-    "online": "Online"
+    "online": "Online",
+    "stock": "Stock"
   },
   "flash": {
     "badge": "Flash Deals",

@@ -86,7 +86,8 @@
     "left": "zilizobaki",
     "activeShops": "maduka yanayofanya kazi",
     "slotsLeft": "nafasi zilizobaki",
-    "universitiesFound": "Vyuo vikuu {count} vimepatikana"
+    "universitiesFound": "Vyuo vikuu {count} vimepatikana",
+    "university_abbr": "Chuo Kikuu"
   },
   "vybe": {
     "headline": "Travex Social Vybe",
@@ -155,7 +156,8 @@
     "placeOrder": "Fanya agizo",
     "checkPrices": "Angalia bei",
     "ariaBadge": "Msaidizi wa AI",
-    "online": "Mtandaoni"
+    "online": "Mtandaoni",
+    "stock": "Hisa"
   },
   "flash": {
     "badge": "Ofa za Haraka",

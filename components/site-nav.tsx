@@ -10,9 +10,9 @@ import { Logo } from '@/components/logo'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
-  { href: '/home', label: 'Home' },
-  { href: '/market', label: 'Business' },
-  { href: '/campus', label: 'Campus' },
+  { href: '/home', key: 'home' },
+  { href: '/market', key: 'business' },
+  { href: '/campus', key: 'campus' },
   { href: '/vybe', label: 'Social Vybe' },
   { href: '/flash-deals', label: 'Flash Deals' },
   { href: '/group-buy', label: 'Group Buy' },
