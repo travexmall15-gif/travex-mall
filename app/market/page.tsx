@@ -157,7 +157,7 @@ export default function MarketPage() {
           </div>
 
           {/* Stats ticker — auto scroll right to left */}
-          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '0' }}>
+          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginLeft: '-5%', marginRight: '-5%', paddingLeft: 0 }}>
             <style>{`
               @keyframes tickerRTL {
                 0%   { transform: translateX(0); }
@@ -210,7 +210,7 @@ export default function MarketPage() {
           .quick-chip:hover { opacity: 0.8; transform: scale(0.97); }
         `}</style>
         <div style={{ padding: '10px 0' }}>
-          <div className="quick-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '5%' }}>
+          <div className="quick-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '24px' }}>
             {[
               { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
               { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },

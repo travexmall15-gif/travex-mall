@@ -314,7 +314,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
               .store-chips{animation:storeChips 12s linear infinite}
               .store-chips:hover{animation-play-state:paused}
             `}</style>
-            <div className="store-chips" style={{ display: 'flex', gap: 8, width: 'max-content' }}>
+            <div className="store-chips" style={{ display: 'flex', gap: 8, width: 'max-content', paddingLeft: '24px' }}>
               {[
                 { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
                 { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },

@@ -187,8 +187,8 @@ export default function GroupBuyPage() {
           </div>
 
           {/* Stats ticker RTL */}
-          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <div className="gb-ticker" style={{ display: 'flex', gap: 0, width: 'max-content' }}>
+          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginLeft: '-5%', marginRight: '-5%' }}>
+            <div className="gb-ticker" style={{ display: 'flex', gap: 0, width: 'max-content', paddingLeft: '8px' }}>
               {[
                 { val: loading ? '...' : String(groups.length), label: 'Active Groups', color: '#C9A84C' },
                 { val: loading ? '...' : String(groups.filter(g => (g.current_members || 0) >= (g.min_members || 1)).length), label: 'Groups Ready', color: '#86EFAC' },
