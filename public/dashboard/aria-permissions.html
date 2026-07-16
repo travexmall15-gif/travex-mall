@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Aria Permissions, Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.perm-section { margin-bottom: 24px; }
+.perm-section-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--text-primary); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.perm-item { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; background:var(--bg); border-radius:12px; border:1px solid var(--border); margin-bottom:8px; }
+.perm-info { display:flex; align-items:flex-start; gap:12px; flex:1; }
+.perm-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.perm-name { font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:3px; }
+.perm-desc { font-size:11px; color:var(--text-muted); line-height:1.45; }
+.perm-risk { font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; margin-top:4px; display:inline-block; }
+.risk-high { background:rgba(239,68,68,.1); color:#EF4444; }
+.risk-medium { background:rgba(249,115,22,.1); color:#F97316; }
+.risk-low { background:rgba(34,197,94,.1); color:#22C55E; }
+.toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-slider { position:absolute; inset:0; background:#CBD5E1; border-radius:999px; cursor:pointer; transition:all .3s; }
+.toggle-slider::before { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:all .3s; }
+.toggle input:checked + .toggle-slider { background:#C9A84C; }
+.toggle input:checked + .toggle-slider::before { transform:translateX(20px); }
+.memory-item { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--bg); border-radius:10px; border:1px solid var(--border); margin-bottom:6px; }
+.memory-key { font-size:12px; font-weight:600; color:var(--text-primary); }
+.memory-value { font-size:11px; color:var(--text-muted); }
+</style>
+<script src="/lang.js"></script>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
+<div id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div>
+      <div class="header-title">Aria Permission Center</div>
+      <div class="header-sub">Control what Aria can do automatically. You are always the boss.</div>
+    </div>
+    <div class="header-right">
+      <a href="aria-home.html" class="btn btn-navy btn-sm"><i class="ti ti-arrow-left"></i> Back to Aria</a>
+    </div>
+  </div>
+  <div class="main-content">
+
+    <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:12px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:10px">
+      <i class="ti ti-shield-lock" style="font-size:20px;color:#F97316"></i>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#92400E">Philosophy: The AI works for you, but you are always in charge.</div>
+        <div style="font-size:11px;color:#B45309">High-risk actions always require your approval, regardless of these settings.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+
+        <!-- Customer Service -->
+        <div class="perm-section">
+          <div class="perm-section-title"><i class="ti ti-headset" style="color:#3B82F6"></i> Customer Service</div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(59,130,246,.1)"><i class="ti ti-message-reply" style="color:#3B82F6"></i></div>
+              <div>
+                <div class="perm-name">Auto-Reply to Customers</div>
+                <div class="perm-desc">Aria automatically replies to common customer questions</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-autoReply" onchange="savePerm('autoReply',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(59,130,246,.1)"><i class="ti ti-language" style="color:#3B82F6"></i></div>
+              <div>
+                <div class="perm-name">Auto-Translate Messages</div>
+                <div class="perm-desc">Translate customer messages automatically</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-autoTranslate" onchange="savePerm('autoTranslate',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <!-- Marketing -->
+        <div class="perm-section">
+          <div class="perm-section-title"><i class="ti ti-speakerphone" style="color:#8B5CF6"></i> Marketing</div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(139,92,246,.1)"><i class="ti ti-file-text" style="color:#8B5CF6"></i></div>
+              <div>
+                <div class="perm-name">Generate Advertisements</div>
+                <div class="perm-desc">Aria creates marketing content for your products</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-generateAds" onchange="savePerm('generateAds',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(139,92,246,.1)"><i class="ti ti-send" style="color:#8B5CF6"></i></div>
+              <div>
+                <div class="perm-name">Publish Posts to Social Vybe</div>
+                <div class="perm-desc">Aria posts on Social Vybe automatically</div>
+                <span class="perm-risk risk-medium">MEDIUM RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-publishPosts" onchange="savePerm('publishPosts',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(139,92,246,.1)"><i class="ti ti-bolt" style="color:#8B5CF6"></i></div>
+              <div>
+                <div class="perm-name">Create Flash Deals</div>
+                <div class="perm-desc">Aria creates limited-time deals based on your inventory</div>
+                <span class="perm-risk risk-medium">MEDIUM RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-createDeals" onchange="savePerm('createDeals',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+      </div>
+      <div>
+
+        <!-- Inventory -->
+        <div class="perm-section">
+          <div class="perm-section-title"><i class="ti ti-package" style="color:#22C55E"></i> Inventory</div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(34,197,94,.1)"><i class="ti ti-bell" style="color:#22C55E"></i></div>
+              <div>
+                <div class="perm-name">Stock Alerts</div>
+                <div class="perm-desc">Notify when stock is running low</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-stockAlerts" onchange="savePerm('stockAlerts',this.checked)" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(239,68,68,.1)"><i class="ti ti-trash" style="color:#EF4444"></i></div>
+              <div>
+                <div class="perm-name">Delete Products</div>
+                <div class="perm-desc">Aria can remove out-of-stock products automatically</div>
+                <span class="perm-risk risk-high">HIGH RISK — Always needs approval</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-deleteProducts" disabled><span class="toggle-slider" style="opacity:.5"></span></label>
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="perm-section">
+          <div class="perm-section-title"><i class="ti ti-coin" style="color:#C9A84C"></i> Pricing</div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(201,168,76,.1)"><i class="ti ti-currency-dollar" style="color:#C9A84C"></i></div>
+              <div>
+                <div class="perm-name">Suggest Prices</div>
+                <div class="perm-desc">Aria recommends optimal prices based on market data</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-suggestPrices" onchange="savePerm('suggestPrices',this.checked)" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(239,68,68,.1)"><i class="ti ti-adjustments" style="color:#EF4444"></i></div>
+              <div>
+                <div class="perm-name">Change Prices Automatically</div>
+                <div class="perm-desc">Aria adjusts prices based on demand</div>
+                <span class="perm-risk risk-high">HIGH RISK — Always needs approval</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-changePrices" disabled><span class="toggle-slider" style="opacity:.5"></span></label>
+          </div>
+        </div>
+
+        <!-- Reports -->
+        <div class="perm-section">
+          <div class="perm-section-title"><i class="ti ti-chart-bar" style="color:#3B82F6"></i> Reports & Analysis</div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(59,130,246,.1)"><i class="ti ti-mail" style="color:#3B82F6"></i></div>
+              <div>
+                <div class="perm-name">Business Notifications</div>
+                <div class="perm-desc">Receive smart business alerts and insights</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-notifications" onchange="savePerm('notifications',this.checked)" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="perm-item">
+            <div class="perm-info">
+              <div class="perm-icon" style="background:rgba(59,130,246,.1)"><i class="ti ti-report-analytics" style="color:#3B82F6"></i></div>
+              <div>
+                <div class="perm-name">Auto-Generate Reports</div>
+                <div class="perm-desc">Weekly and monthly reports generated automatically</div>
+                <span class="perm-risk risk-low">LOW RISK</span>
+              </div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="perm-autoReports" onchange="savePerm('autoReports',this.checked)"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AI Memory -->
+    <div class="table-card" style="margin-top:8px">
+      <div class="table-card-header">
+        <div><div class="table-card-title">Aria Memory</div><div class="table-card-sub">What Aria has learned about your business</div></div>
+        <button onclick="clearMemory()" class="btn btn-outline btn-sm"><i class="ti ti-trash"></i> Clear Memory</button>
+      </div>
+      <div style="padding:14px" id="memoryList">
+        <div style="text-align:center;color:var(--text-muted);font-size:13px">Loading memory...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="dashboard.js"></script>
+<script src="aria-engine.js"></script>
+<script src="i18n.js"></script>
+<script>
+function init() {
+  Auth.requireAuth()
+  const perms = JSON.parse(localStorage.getItem('aria_permissions') || '{}')
+  Object.entries(perms).forEach(([key, val]) => {
+    const el = document.getElementById(`perm-${key}`)
+    if (el) el.checked = val
+  })
+  loadMemory()
+  document.getElementById('loadingOverlay').style.display = 'none'
+}
+
+function savePerm(key, val) {
+  const perms = JSON.parse(localStorage.getItem('aria_permissions') || '{}')
+  perms[key] = val
+  localStorage.setItem('aria_permissions', JSON.stringify(perms))
+  showToast(`Permission ${val ? 'enabled' : 'disabled'}: ${key}`)
+}
+
+function loadMemory() {
+  const memory = JSON.parse(localStorage.getItem('aria_memory') || '{}')
+  const list = document.getElementById('memoryList')
+  if (!Object.keys(memory).length) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px 0">No memories yet. Keep chatting with Aria!</div>'
+    return
+  }
+  const labels = { preferredCategory:'Preferred Category', businessGoal:'Business Goal', lastFocus:'Last Focus', lastSeen:'Last Seen', totalMessages:'Total Conversations' }
+  list.innerHTML = Object.entries(memory).map(([k,v]) => `
+    <div class="memory-item">
+      <span class="memory-key">${labels[k]||k}</span>
+      <span class="memory-value">${k==='lastSeen'?new Date(v).toLocaleDateString():v}</span>
+    </div>
+  `).join('')
+}
+
+function clearMemory() {
+  if (!confirm('Clear all of Aria\'s memory? This cannot be undone.')) return
+  localStorage.removeItem('aria_memory')
+  loadMemory()
+  showToast('Memory cleared.')
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 3000)
+}
+
+document.addEventListener('DOMContentLoaded', init)
+</script>
+</body>
+</html>
