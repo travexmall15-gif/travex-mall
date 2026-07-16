@@ -684,7 +684,7 @@ async function submitApplication() {
     if (ppErr) throw ppErr
 
     // Notify admin
-    await sb.from('admin_notifications').insert({
+    await sb.from('feed_posts').insert({
       type:     'new_market_application',
       title:    ` New Shop Application, ${shopName}`,
       body:     `${name} applied for a ${selectedPlan === 'premium' ? ' Premium' : ' Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,

@@ -50,6 +50,7 @@
 let shopData = null, invoices = [];
 (async () => {
   const session = await Auth.requireAuth();
+    document.getElementById(\'loadingOverlay\').style.display = \'none\';
   if (!session) return;
   shopData = await Shop.get(session.user.email);
   await loadSidebar('invoice', shopData);

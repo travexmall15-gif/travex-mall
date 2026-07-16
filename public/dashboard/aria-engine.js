@@ -78,15 +78,21 @@ const ARIA = (() => {
 
   async function fetchProducts() {
     const id = getStoreId()
-    return await sb('campus_products', 'GET', null, `?store_id=eq.${id}&order=created_at.desc`)
+    const session = getSession()
+    // Business sellers use campus_products table (Travex Mall schema)
+    const table = 'campus_products'
+    return await sb(table, 'GET', null, `?store_id=eq.${id}&order=created_at.desc`)
   }
 
   async function fetchOrders(days=30) {
     const id = getStoreId()
     const since = new Date()
     since.setDate(since.getDate() - days)
-    return await sb('orders', 'GET', null,
-      `?store_id=eq.${id}&created_at=gte.${since.toISOString()}&order=created_at.desc`)
+    try {
+      const data = await sb('orders', 'GET', null,
+        `?store_id=eq.${id}&created_at=gte.${since.toISOString()}&order=created_at.desc&limit=100`)
+      return Array.isArray(data) ? data : []
+    } catch { return [] }
   }
 
   async function fetchSales(days=30) {

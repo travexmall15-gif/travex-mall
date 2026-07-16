@@ -426,10 +426,10 @@ async function loadAll(){
     }
   };
 
-  cApps   = await safe(() => sb.from('campus_applications').select('*').order('created_at',{ascending:false}), 'campus_applications');
+  cApps   = await safe(() => sb.from('pending_payments').select('*').order('created_at',{ascending:false}), 'pending_payments');
   cStores = await safe(() => sb.from('campus_stores').select('*').order('created_at',{ascending:false}), 'campus_stores');
   mApps   = await safe(() => sb.from('pending_payments').select('*').order('created_at',{ascending:false}), 'pending_payments');
-  notifs  = await safe(() => sb.from('admin_notifications').select('*').order('created_at',{ascending:false}).limit(30), 'admin_notifications');
+  notifs  = await safe(() => sb.from('feed_posts').select('*').order('created_at',{ascending:false}).limit(30), 'feed_posts');
   pageViews = [];
 
   console.log('[Admin] Loaded:', {cApps:cApps.length, cStores:cStores.length, mApps:mApps.length, notifs:notifs.length});
@@ -577,7 +577,7 @@ async function acCA(id){
     return;
   }
 
-  const {error:updErr} = await sb.from('campus_applications').update({status:'approved'}).eq('id',id);
+  const {error:updErr} = await sb.from('pending_payments').update({status:'approved'}).eq('id',id);
   if(updErr){ alert(' Shop created but application status update failed: '+updErr.message); }
 
   toast(' Campus shop approved, now live!','ok');
@@ -604,14 +604,14 @@ async function acCA(id){
   toast(' Campus seller approved!','ok');
   await loadAll();
 }
-async function rejCA(id){const a=cApps.find(x=>x.id===id);if(!a||!confirm('Reject?'))return;await sb.from('campus_applications').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
+async function rejCA(id){const a=cApps.find(x=>x.id===id);if(!a||!confirm('Reject?'))return;await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
 async function pendCA(id){if(!confirm('Set to pending? Store will be hidden.'))return;
-  const a=cApps.find(x=>x.id===id);if(a)await sb.from('campus_applications').update({status:'pending'}).eq('id',id);
+  const a=cApps.find(x=>x.id===id);if(a)await sb.from('pending_payments').update({status:'pending'}).eq('id',id);
   const store=cStores.find(s=>s.application_id===id);if(store)await sb.from('campus_stores').update({is_active:false}).eq('id',store.id);
   toast('Set to pending','ok');await loadAll()}
 async function delCA(id){if(!confirm('DELETE this application and store? Cannot be undone!'))return;
   const store=cStores.find(s=>s.application_id===id);if(store)await sb.from('campus_stores').delete().eq('id',store.id);
-  await sb.from('campus_applications').delete().eq('id',id);toast('Deleted','err');await loadAll()}
+  await sb.from('pending_payments').delete().eq('id',id);toast('Deleted','err');await loadAll()}
 function viewCA(id){
   const a=cApps.find(x=>x.id===id);if(!a)return;
   const rows=[['Full Name',a.full_name],['University',a.university_abbr],['Year',a.year_of_study],['Category',a.business_category],['Phone',a.phone],['WhatsApp',a.whatsapp_number],['Shop Name',a.business_description?.startsWith('SHOP:')?a.business_description.split('\n')[0].replace('SHOP:','').trim():'-'],['Description',a.business_description],['Status',a.status],['Date',a.created_at?new Date(a.created_at).toLocaleString():'-']];
@@ -751,12 +751,12 @@ function renderNotifs(){
     </div>`).join('');
 }
 async function markRead(id){
-  await sb.from('admin_notifications').update({is_read:true}).eq('id',id);
+  await sb.from('feed_posts').update({is_read:true}).eq('id',id);
   notifs=notifs.map(n=>n.id===id?{...n,is_read:true}:n);
   renderNotifs();
 }
 async function markAllRead(){
-  await sb.from('admin_notifications').update({is_read:true}).eq('is_read',false);
+  await sb.from('feed_posts').update({is_read:true}).eq('is_read',false);
   notifs=notifs.map(n=>({...n,is_read:true}));
   renderNotifs();
   toast('All marked as read','ok');
@@ -1072,7 +1072,7 @@ async function deleteSeller(id, type, shopName) {
       // 3. Delete sales
       await sb.from('seller_sales').delete().eq('store_id', id);
       // 4. Delete debts
-      await sb.from('seller_debts').delete().eq('store_id', id);
+      await sb.from('seller_sales').delete().eq('store_id', id);
       // 5. Delete feed posts
       await sb.from('feed_posts').delete().eq('store_id', id);
       // 6. Mark as deleted (can't delete auth user from client)

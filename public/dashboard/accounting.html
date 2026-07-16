@@ -132,6 +132,7 @@ let allSales = [], shopId = null, currentPeriod = 'today', typeFilter = 'all';
 
 (async () => {
   const session = await Auth.requireAuth();
+    document.getElementById(\'loadingOverlay\').style.display = \'none\';
   if (!session) return;
   const shopData = await Shop.get(session.user.email);
   shopId = shopData?.id;

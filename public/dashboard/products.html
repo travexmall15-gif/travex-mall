@@ -1,241 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Products, Travex Mall</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
 <script src="/lang.js"></script>
 </head>
 <body>
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">Loading products...</div>
-</div>
-<div class="sidebar" id="sidebar"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
+<div id="sidebar"></div>
 <div class="main-wrapper">
   <div class="main-header">
-    <div><div class="header-title">Products</div><div class="header-sub">Manage your product listings</div></div>
+    <div><div class="header-title" data-i18n="Products">Products</div><div class="header-sub" data-i18n="Manage your store products">Manage your store products</div></div>
     <div class="header-right">
-      <button class="btn btn-gold" onclick="openAddModal()">
-        <i class="ti ti-plus"></i> Add Product
-      </button>
+      <button class="btn btn-gold" onclick="openModal()"><i class="ti ti-plus"></i> <span data-i18n="Add Product">Add Product</span></button>
     </div>
   </div>
   <div class="main-content">
+
     <!-- Stats -->
     <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-package"></i> Total</div><div class="stat-value" id="pTotal">-</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-circle-check"></i> In Stock</div><div class="stat-value" id="pInStock" style="color:var(--green)">-</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-alert-triangle"></i> Low Stock</div><div class="stat-value" id="pLow" style="color:var(--yellow)">-</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-x"></i> Out of Stock</div><div class="stat-value" id="pOut" style="color:var(--red)">-</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="Total Products">Total Products</div><div class="stat-value" id="statTotal">0</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="In Stock">In Stock</div><div class="stat-value" id="statInStock">0</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="Low Stock">Low Stock</div><div class="stat-value" id="statLow" style="color:#EF4444">0</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="Out of Stock">Out of Stock</div><div class="stat-value" id="statOut" style="color:#94A3B8">0</div></div>
     </div>
-    <!-- Search & Filter -->
-    <div class="table-card">
-      <div class="table-card-header">
-        <div class="table-card-title">All Products</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input class="form-input" id="searchInput" placeholder="Search products..." 
-            style="width:200px" oninput="renderProducts()">
-          <select class="form-select" id="stockFilter" style="width:140px" onchange="renderProducts()">
-            <option value="all">All Stock</option>
-            <option value="in">In Stock</option>
-            <option value="low">Low Stock</option>
-            <option value="out">Out of Stock</option>
-          </select>
-        </div>
+
+    <!-- Search + Filter -->
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="position:relative;flex:1;min-width:200px">
+        <i class="ti ti-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94A3B8"></i>
+        <input id="searchInput" oninput="filterProducts()" placeholder="Search products..." style="width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;outline:none;font-family:inherit"/>
       </div>
-      <div id="productsTable"></div>
+      <select id="catFilter" onchange="filterProducts()" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;background:#fff">
+        <option value="">All Categories</option>
+        <option>Fashion & Clothing</option><option>Electronics</option>
+        <option>Food & Groceries</option><option>Beauty & Health</option>
+        <option>Agriculture</option><option>Services</option>
+        <option>Home & Living</option><option>Sports & Fitness</option>
+        <option>Education</option><option>Arts & Crafts</option>
+      </select>
+      <select id="stockFilter" onchange="filterProducts()" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;background:#fff">
+        <option value="">All Stock</option>
+        <option value="in">In Stock</option>
+        <option value="low">Low Stock (≤5)</option>
+        <option value="out">Out of Stock</option>
+      </select>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="productsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px"></div>
+    <div id="emptyState" style="display:none;text-align:center;padding:4rem 0">
+      <i class="ti ti-package" style="font-size:48px;color:#CBD5E1;display:block;margin-bottom:12px"></i>
+      <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#0F172A;margin-bottom:8px" data-i18n="No products yet">No products yet</div>
+      <p style="color:#94A3B8;font-size:14px;margin-bottom:20px" data-i18n="Add your first product to start selling">Add your first product to start selling</p>
+      <button class="btn btn-gold" onclick="openModal()"><i class="ti ti-plus"></i> Add First Product</button>
     </div>
   </div>
 </div>
 
 <!-- Add/Edit Modal -->
-<div class="modal-bg" id="productModal" onclick="if(event.target===this)closeModal('productModal')">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Add Product</div>
-      <button class="modal-close" onclick="closeModal('productModal')"></button>
+<div class="modal-overlay" id="productModal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal" style="max-width:520px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:#fff" id="modalTitle">Add Product</h3>
+      <button onclick="closeModal()" style="background:rgba(255,255,255,0.08);border:none;border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,0.6);cursor:pointer;font-size:18px">×</button>
     </div>
-    <div class="modal-body">
-      <input type="hidden" id="pId">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Product Name *</label>
-          <input class="form-input" id="pName" placeholder="e.g. Blue Dress">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Category</label>
-          <input class="form-input" id="pCategory" placeholder="e.g. Fashion">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Price (TZS) *</label>
-          <input class="form-input" id="pPrice" type="number" placeholder="15000">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Stock Quantity *</label>
-          <input class="form-input" id="pStock" type="number" placeholder="10">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Cost Price (TZS)</label>
-          <input class="form-input" id="pCost" type="number" placeholder="10000">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Low Stock Alert (qty)</label>
-          <input class="form-input" id="pAlert" type="number" placeholder="5">
-        </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group" style="grid-column:1/-1">
+        <label class="form-label">Product Name *</label>
+        <input class="form-control" id="pName" placeholder="e.g. Nike Air Max"/>
       </div>
       <div class="form-group">
+        <label class="form-label">Price (TZS) *</label>
+        <input class="form-control" id="pPrice" type="number" placeholder="45000"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stock Quantity *</label>
+        <input class="form-control" id="pStock" type="number" placeholder="10"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-control" id="pCategory">
+          <option value="">Select category</option>
+          <option>Fashion & Clothing</option><option>Electronics</option>
+          <option>Food & Groceries</option><option>Beauty & Health</option>
+          <option>Agriculture</option><option>Services</option>
+          <option>Home & Living</option><option>Sports & Fitness</option>
+          <option>Education</option><option>Arts & Crafts</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Image URL (optional)</label>
+        <input class="form-control" id="pImage" placeholder="https://..."/>
+      </div>
+      <div class="form-group" style="grid-column:1/-1">
         <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="pDesc" placeholder="Describe your product..."></textarea>
+        <textarea class="form-control" id="pDesc" rows="3" placeholder="Describe your product..."></textarea>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('productModal')">Cancel</button>
-      <button class="btn btn-gold" onclick="saveProduct()">
-        <i class="ti ti-check"></i> Save Product
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-gold" style="flex:1" id="saveBtn" onclick="saveProduct()">
+        <i class="ti ti-device-floppy"></i> Save Product
       </button>
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
     </div>
   </div>
 </div>
 
-<nav class="bottom-nav">
-  <a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a>
-  <a href="products.html" class="active"><i class="ti ti-package"></i><span>Products</span></a>
-  <a href="orders.html"><i class="ti ti-shopping-cart"></i><span>Orders</span></a>
-  <a href="accounting.html"><i class="ti ti-cash"></i><span>Finance</span></a>
-  <a href="settings.html"><i class="ti ti-settings"></i><span>More</span></a>
-</nav>
 <div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="dashboard.js"></script>
+<script src="aria-engine.js"></script>
+<script src="aria-widget.js"></script>
 <script src="i18n.js"></script>
 <script>
-let products = [], shopId = null;
+let allProducts = []
+let editingId = null
+const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
 
-(async () => {
-  const session = await Auth.requireAuth();
-  if (!session) return;
-  const shopData = await Shop.get(session.user.email);
-  shopId = shopData?.id;
-  await loadSidebar('products', shopData);
-  products = await DB.products.getAll(shopId);
-  renderProducts();
-  updateStats();
-  showLoading(false);
-})();
+async function loadData() {
+  Auth.requireAuth()
+  const session = JSON.parse(localStorage.getItem('travex_session') || '{}')
+  const storeId = session?.id
+  if (!storeId) return
 
-function updateStats() {
-  document.getElementById('pTotal').textContent = products.length;
-  document.getElementById('pInStock').textContent = products.filter(p => Number(p.stock) > Number(p.stock_alert||5)).length;
-  document.getElementById('pLow').textContent = products.filter(p => Number(p.stock) > 0 && Number(p.stock) <= Number(p.stock_alert||5)).length;
-  document.getElementById('pOut').textContent = products.filter(p => Number(p.stock) === 0).length;
+  const { data, error } = await sb.from('campus_products')
+    .select('*').eq('store_id', storeId).order('created_at', { ascending: false })
+
+  if (error) { showToast('Error loading products'); return }
+  allProducts = data || []
+  renderProducts(allProducts)
+  updateStats(allProducts)
+  document.getElementById('loadingOverlay').style.display = 'none'
 }
 
-function renderProducts() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const sf = document.getElementById('stockFilter').value;
-  let list = products.filter(p => {
-    const match = !q || (p.name||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q);
-    const alert = Number(p.stock_alert||5);
-    const stock = Number(p.stock||0);
-    const stockOk = sf==='all'||(sf==='out'&&stock===0)||(sf==='low'&&stock>0&&stock<=alert)||(sf==='in'&&stock>alert);
-    return match && stockOk;
-  });
-
-  const el = document.getElementById('productsTable');
-  if (!list.length) {
-    el.innerHTML = `<div class="empty-state"><i class="ti ti-package"></i><h4>No products found</h4><p>Add your first product to start selling.</p><button class="btn btn-gold" onclick="openAddModal()"><i class="ti ti-plus"></i> Add Product</button></div>`;
-    return;
-  }
-  el.innerHTML = `<table><thead><tr>
-    <th>Product</th><th>Category</th><th>Price</th><th>Cost</th><th>Stock</th><th>Status</th><th>Actions</th>
-  </tr></thead><tbody>${list.map(p => {
-    const stock = Number(p.stock||0);
-    const alert = Number(p.stock_alert||5);
-    const profit = Number(p.price||0) - Number(p.cost_price||0);
-    const status = stock===0 ? ['badge-danger','Out of Stock'] : stock<=alert ? ['badge-warning','Low Stock'] : ['badge-success','In Stock'];
-    return `<tr>
-      <td><div class="text-navy fw-700">${p.name}</div><div class="text-muted fs-12">${truncate(p.description||'',35)}</div></td>
-      <td><span class="badge badge-navy">${p.category||'-'}</span></td>
-      <td class="fw-700">${formatTZS(p.price)}</td>
-      <td class="text-muted">${p.cost_price ? formatTZS(p.cost_price) : '-'}</td>
-      <td><b>${stock}</b> <span class="text-muted fs-12">units</span></td>
-      <td><span class="badge ${status[0]}">${status[1]}</span></td>
-      <td><div style="display:flex;gap:6px">
-        <button class="btn-icon" onclick="editProduct('${p.id}')" title="Edit"><i class="ti ti-pencil"></i></button>
-        <button class="btn-icon" onclick="deleteProduct('${p.id}')" title="Delete" style="color:var(--red)"><i class="ti ti-trash"></i></button>
-      </div></td>
-    </tr>`;
-  }).join('')}</tbody></table>`;
+function updateStats(products) {
+  document.getElementById('statTotal').textContent = products.length
+  document.getElementById('statInStock').textContent = products.filter(p=>p.stock>5).length
+  document.getElementById('statLow').textContent = products.filter(p=>p.stock>0&&p.stock<=5).length
+  document.getElementById('statOut').textContent = products.filter(p=>p.stock===0).length
 }
 
-function openAddModal() {
-  document.getElementById('pId').value = '';
-  document.getElementById('pName').value = '';
-  document.getElementById('pCategory').value = '';
-  document.getElementById('pPrice').value = '';
-  document.getElementById('pStock').value = '';
-  document.getElementById('pCost').value = '';
-  document.getElementById('pAlert').value = '5';
-  document.getElementById('pDesc').value = '';
-  document.getElementById('modalTitle').textContent = 'Add Product';
-  openModal('productModal');
+function filterProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase()
+  const cat = document.getElementById('catFilter').value
+  const stock = document.getElementById('stockFilter').value
+  let filtered = allProducts.filter(p => {
+    const matchQ = !q || p.name?.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q)
+    const matchCat = !cat || p.category === cat
+    const matchStock = !stock ||
+      (stock === 'in' && p.stock > 5) ||
+      (stock === 'low' && p.stock > 0 && p.stock <= 5) ||
+      (stock === 'out' && p.stock === 0)
+    return matchQ && matchCat && matchStock
+  })
+  renderProducts(filtered)
 }
+
+function renderProducts(products) {
+  const grid = document.getElementById('productsGrid')
+  const empty = document.getElementById('emptyState')
+  if (!products.length) { grid.style.display = 'none'; empty.style.display = 'block'; return }
+  grid.style.display = 'grid'; empty.style.display = 'none'
+  grid.innerHTML = products.map(p => {
+    const stockColor = p.stock === 0 ? '#EF4444' : p.stock <= 5 ? '#F97316' : '#22C55E'
+    const stockLabel = p.stock === 0 ? 'Out of Stock' : p.stock <= 5 ? `${p.stock} left` : `${p.stock} in stock`
+    return `
+    <div style="background:#fff;border:1.5px solid #E2E8F4;border-radius:14px;overflow:hidden;transition:all .2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(13,27,62,.10)'" onmouseout="this.style.boxShadow='none'">
+      <div style="height:80px;background:${p.image_url?`url(${p.image_url}) center/cover`:'linear-gradient(135deg,#0D1B3E,#1B3A8A)'};position:relative">
+        ${!p.image_url ? `<i class="ti ti-package" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;color:rgba(255,255,255,.3)"></i>` : ''}
+        <span style="position:absolute;top:6px;right:6px;background:${stockColor};color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:999px">${stockLabel}</span>
+      </div>
+      <div style="padding:10px 12px 12px">
+        <div style="font-weight:700;font-size:13px;color:#0F172A;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:11px;color:#94A3B8;margin-bottom:6px">${p.category||'General'}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:#0D1B3E;margin-bottom:8px">${fmt(p.price)}</div>
+        <div style="display:flex;gap:6px">
+          <button onclick="editProduct('${p.id}')" style="flex:1;padding:5px;background:#F8FAFF;border:1px solid #E2E8F4;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;color:#0D1B3E" title="Edit">
+            <i class="ti ti-edit"></i> Edit
+          </button>
+          <button onclick="deleteProduct('${p.id}')" style="padding:5px 8px;background:#FFF1F1;border:1px solid #FECACA;border-radius:8px;font-size:11px;cursor:pointer;color:#EF4444" title="Delete">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function openModal(product=null) {
+  editingId = product?.id || null
+  document.getElementById('modalTitle').textContent = product ? 'Edit Product' : 'Add Product'
+  document.getElementById('pName').value = product?.name || ''
+  document.getElementById('pPrice').value = product?.price || ''
+  document.getElementById('pStock').value = product?.stock || ''
+  document.getElementById('pCategory').value = product?.category || ''
+  document.getElementById('pDesc').value = product?.description || ''
+  document.getElementById('pImage').value = product?.image_url || ''
+  document.getElementById('productModal').style.display = 'flex'
+  setTimeout(() => document.getElementById('pName').focus(), 100)
+}
+
+function closeModal() { document.getElementById('productModal').style.display = 'none'; editingId = null }
 
 function editProduct(id) {
-  const p = products.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('pId').value = p.id;
-  document.getElementById('pName').value = p.name||'';
-  document.getElementById('pCategory').value = p.category||'';
-  document.getElementById('pPrice').value = p.price||'';
-  document.getElementById('pStock').value = p.stock||'';
-  document.getElementById('pCost').value = p.cost_price||'';
-  document.getElementById('pAlert').value = p.stock_alert||5;
-  document.getElementById('pDesc').value = p.description||'';
-  document.getElementById('modalTitle').textContent = 'Edit Product';
-  openModal('productModal');
+  const p = allProducts.find(x => x.id === id)
+  if (p) openModal(p)
 }
 
 async function saveProduct() {
-  const name = document.getElementById('pName').value.trim();
-  const price = document.getElementById('pPrice').value;
-  const stock = document.getElementById('pStock').value;
-  if (!name || !price || !stock) { showToast('Please fill in required fields', 'error'); return; }
+  const name = document.getElementById('pName').value.trim()
+  const price = parseFloat(document.getElementById('pPrice').value)
+  const stock = parseInt(document.getElementById('pStock').value)
+  if (!name || isNaN(price) || isNaN(stock)) { showToast('Please fill in all required fields'); return }
 
-  const item = {
-    id: document.getElementById('pId').value || undefined,
-    store_id: shopId, name,
+  const session = JSON.parse(localStorage.getItem('travex_session') || '{}')
+  const btn = document.getElementById('saveBtn')
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin .8s linear infinite"></i> Saving...'
+  btn.disabled = true
+
+  const payload = {
+    store_id: session.id,
+    name, price, stock,
     category: document.getElementById('pCategory').value,
-    price: Number(price),
-    stock: Number(stock),
-    cost_price: Number(document.getElementById('pCost').value) || null,
-    stock_alert: Number(document.getElementById('pAlert').value) || 5,
-    description: document.getElementById('pDesc').value,
-  };
+    description: document.getElementById('pDesc').value.trim(),
+    image_url: document.getElementById('pImage').value.trim() || null,
+    updated_at: new Date().toISOString(),
+  }
 
-  const { error } = await DB.products.save(item);
-  if (error) { showToast('Error saving product: ' + error.message, 'error'); return; }
-  showToast(item.id ? ' Product updated!' : ' Product added!', 'success');
-  closeModal('productModal');
-  products = await DB.products.getAll(shopId);
-  renderProducts(); updateStats();
+  let error
+  if (editingId) {
+    ;({ error } = await sb.from('campus_products').update(payload).eq('id', editingId))
+  } else {
+    payload.created_at = new Date().toISOString()
+    ;({ error } = await sb.from('campus_products').insert(payload))
+  }
+
+  btn.innerHTML = '<i class="ti ti-device-floppy"></i> Save Product'
+  btn.disabled = false
+
+  if (error) { showToast('Error saving product: ' + error.message); return }
+  showToast(editingId ? 'Product updated!' : 'Product added!')
+  closeModal()
+  loadData()
 }
 
 async function deleteProduct(id) {
-  if (!confirm('Delete this product?')) return;
-  await DB.products.delete(id);
-  showToast('Product deleted', 'error');
-  products = products.filter(p => p.id !== id);
-  renderProducts(); updateStats();
+  if (!confirm('Delete this product? This cannot be undone.')) return
+  const { error } = await sb.from('campus_products').delete().eq('id', id)
+  if (error) { showToast('Error deleting product'); return }
+  showToast('Product deleted')
+  loadData()
 }
+
+function showToast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 3000)
+}
+
+document.addEventListener('DOMContentLoaded', loadData)
 </script>
-  <script src="aria-engine.js"></script>
-  <script src="aria-widget.js"></script>
 </body>
 </html>
