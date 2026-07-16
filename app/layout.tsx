@@ -178,6 +178,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ToastProvider>{children}</ToastProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <Script src="/pwa-init.js" strategy="afterInteractive" />
+        <Script src="/lang.js" strategy="afterInteractive" />
       </body>
     </html>
   )

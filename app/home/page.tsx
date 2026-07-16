@@ -57,8 +57,8 @@ export default function HomePage() {
             </Link>
             <button
               className="travex-lang-btn"
-              onClick={() => typeof window !== 'undefined' && (window as any).TravexLang?.toggle()}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.10)', border: '1.5px solid rgba(255,255,255,0.20)', color: '#fff', padding: '0.85rem 1.6rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s' }}
+              onClick={() => { if (typeof window !== 'undefined') { (window as any).TravexLang?.toggle() } }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.10)', border: '1.5px solid rgba(255,255,255,0.20)', color: '#fff', padding: '0.85rem 1.6rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s', letterSpacing: '0.02em' }}
             >
               🇹🇿 Kiswahili
             </button>
@@ -285,7 +285,6 @@ export default function HomePage() {
           </a>
         </div>
       </section>
-      <Script src="/lang.js" strategy="afterInteractive" />
       <SiteFooter />
     </main>
   )
