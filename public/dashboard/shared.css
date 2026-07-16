@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
   --navy: #0D1B3E;
@@ -11,7 +11,7 @@
   --white: #ffffff;
   --bg: #F0F4FF;
   --card-bg: #ffffff;
-  --border: #e5e7eb;
+  --border: #E2E8F4;
   --text-primary: #1a2332;
   --text-secondary: #6b7280;
   --text-muted: #9ca3af;
@@ -30,15 +30,15 @@
   --header-height: 60px;
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow: 0 1px 4px rgba(13,27,62,0.08);
+  --shadow-md: 0 4px 16px rgba(13,27,62,0.12);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 button, a, .nav-link, .stat-card, .table-card { transition: all 0.2s ease; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text-primary);
   font-size: 14px;
@@ -46,7 +46,7 @@ body {
 }
 
 h1, h2, h3, h4, h5 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 700;
 }
 
@@ -70,7 +70,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .sidebar-logo-brand {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-size: 16px;
   font-weight: 800;
   color: var(--gold);
@@ -110,7 +110,7 @@ a { text-decoration: none; color: inherit; }
 .sidebar-user-plan {
   font-size: 10px;
   color: var(--gold);
-  background: rgba(255,215,0,0.15);
+  background: rgba(201,168,76,0.15);
   padding: 1px 6px;
   border-radius: 20px;
   display: inline-block;
@@ -149,7 +149,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .nav-item.active {
-  background: rgba(255,215,0,0.1);
+  background: rgba(201,168,76,0.10);
   color: var(--gold);
   border-left-color: var(--gold);
 }
@@ -174,7 +174,7 @@ a { text-decoration: none; color: inherit; }
   width: 100%;
   background: none;
   border: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .logout-btn:hover { background: rgba(255,107,107,0.1); }
@@ -229,7 +229,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .stat-value {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: var(--gold);
@@ -307,7 +307,7 @@ tbody tr:hover td { background: #f9fafb; }
   font-weight: 600;
   cursor: pointer;
   border: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   transition: all 0.2s;
   white-space: nowrap;
 }
@@ -356,7 +356,7 @@ tbody tr:hover td { background: #f9fafb; }
   color: var(--text-primary);
   outline: none;
   width: 180px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 .search-box i { font-size: 15px; color: var(--text-muted); }
 
@@ -375,7 +375,7 @@ tbody tr:hover td { background: #f9fafb; }
   border: 1px solid var(--border);
   border-radius: 10px;
   font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: var(--text-primary);
   background: var(--white);
   outline: none;
@@ -470,7 +470,7 @@ select.form-control { cursor: pointer; }
   cursor: pointer;
   border: none;
   background: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
   transition: all 0.2s;
@@ -515,7 +515,7 @@ select.form-control { cursor: pointer; }
   background: var(--white);
   color: var(--text-secondary);
   transition: all 0.2s;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 .filter-btn.active {
   background: var(--navy);
@@ -611,11 +611,11 @@ select.form-control { cursor: pointer; }
 
   .bottom-nav a.active {
     color: var(--gold);
-    background: rgba(255,215,0,0.1);
+    background: rgba(201,168,76,0.10);
   }
 
   .bottom-nav a i { font-size: 20px; }
-  .bottom-nav a span { font-size: 9px; font-weight: 600; font-family: 'DM Sans', sans-serif; }
+  .bottom-nav a span { font-size: 9px; font-weight: 600; font-family: 'Inter', sans-serif; }
 
   /* POS GRID */
   .pos-grid { grid-template-columns: 1fr !important; }
@@ -651,7 +651,7 @@ select.form-control { cursor: pointer; }
     z-index: 50;
   }
   .mobile-header-logo {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 800;
     color: var(--navy);
