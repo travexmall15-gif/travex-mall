@@ -1,6 +1,5 @@
 'use client'
-import { useLanguage } from '@/lib/useLanguage'
-import { t } from '@/lib/i18n'
+import { T } from '@/components/T'
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -18,7 +17,6 @@ const CAMPUS_CATEGORIES = [
 ]
 
 export default function CampusPage() {
-  const { lang } = useLanguage()
   const [uniStats, setUniStats] = useState<UniStats[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -91,20 +89,20 @@ export default function CampusPage() {
           {/* Top row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <GraduationCap size={12} /> Campus Market
+              <GraduationCap size={12} /> <T en="Campus Market" sw="Soko la Vyuo" />
             </div>
             <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
-              <GraduationCap size={13} /> {t("common.openShop", lang)}
+              <GraduationCap size={13} /> <T en="Open Your Shop" sw="Fungua Duka Lako" />
             </Link>
           </div>
 
           {/* Headline */}
           <div style={{ maxWidth: '560px', marginBottom: '2rem' }}>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              <span style={{ color: '#C9A84C' }}>Campus</span> Marketplace.
+              <span style={{ color: '#C9A84C' }}><T en="Campus" sw="Vyuo" /></span> <T en="Marketplace." sw="Soko." />
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
-              Buy and sell within your university community. Verified student sellers. {loading ? '...' : totalActive} active shops across {uniData.length} universities.
+              <T en="Buy and sell within your university community." sw="Nunua na uza ndani ya jamii ya chuo chako." /> Verified student sellers. {loading ? '...' : totalActive} <T en="active shops" sw="maduka yanayofanya kazi" /> across {uniData.length} universities.
             </p>
           </div>
 
@@ -174,7 +172,7 @@ export default function CampusPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder={t("campus.subtext", lang)}
+            placeholder="Search / Tafuta..."
             style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
             onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
             onBlur={e => (e.target.style.borderColor = '#E2E8F0')}

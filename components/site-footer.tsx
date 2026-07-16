@@ -1,10 +1,8 @@
 'use client'
-import { useLanguage } from '@/lib/useLanguage'
-import { t } from '@/lib/i18n'
+import { T } from '@/components/T'
 import Link from 'next/link'
 
 export function SiteFooter() {
-  const { lang } = useLanguage()
   return (
     <footer style={{
       background: '#060B18',

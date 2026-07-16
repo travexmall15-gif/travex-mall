@@ -1,4 +1,5 @@
 'use client'
+import { T } from '@/components/T'
 
 import { useState } from 'react'
 import Link from 'next/link'

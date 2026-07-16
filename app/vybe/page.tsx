@@ -1,6 +1,5 @@
 'use client'
-import { useLanguage } from '@/lib/useLanguage'
-import { t } from '@/lib/i18n'
+import { T } from '@/components/T'
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -63,7 +62,6 @@ function isVideo(post: FeedPost) {
 }
 
 export default function VybePage() {
-  const { lang } = useLanguage()
   const [posts, setPosts]     = useState<FeedPost[]>([])
   const [mediaFilter, setMediaFilter] = useState<'all' | 'photo' | 'video'>('all')
   const [loading, setLoading] = useState(true)
@@ -135,7 +133,7 @@ export default function VybePage() {
             Travex Social Vybe
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: '1.5rem' }}>
-            Products, offers and updates from verified Tanzania sellers
+            <T en="Products, offers and updates from verified Tanzania sellers" sw="Bidhaa, ofa na habari kutoka wauzaji waliohakikishwa Tanzania" />
           </p>
 
           {/* Media type filter */}
@@ -248,7 +246,7 @@ export default function VybePage() {
 
                     {post.store_id && (
                       <Link href={`/store/${post.store_id}`} className="visit-btn">
-                        <Store size={11} /> {t("vybe.visitShop", lang)}
+                        <Store size={11} /> <T en="Visit Shop" sw="Tembelea Duka" />
                       </Link>
                     )}
                   </div>

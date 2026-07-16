@@ -1,6 +1,5 @@
 'use client'
-import { useLanguage } from '@/lib/useLanguage'
-import { t } from '@/lib/i18n'
+import { T } from '@/components/T'
 import { SiteFooter } from '@/components/site-footer'
 
 import Image from 'next/image'
@@ -287,7 +286,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
-                  <CheckCircle size={10} /> {t("store.verified", lang)}
+                  <CheckCircle size={10} /> <T en="Verified" sw="Imethibitishwa" />
                 </span>
               </div>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
@@ -304,7 +303,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                 onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
-                <MessageCircle size={13} /> {t("store.messageSeller", lang)}
+                <MessageCircle size={13} /> <T en=<T en="Message Seller" sw="Wasiliana na Muuzaji" /> sw="Wasiliana na Muuzaji" />
               </button>
             </div>
           </div>
@@ -680,7 +679,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
-                  <input className="form-inp" value={msgName} onChange={e => setMsgName(e.target.value)} placeholder="Your Name *" />
+                  <input className="form-inp" value={msgName} onChange={e => setMsgName(e.target.value)} placeholder="Your Name * / Jina Lako *" />
                   <textarea className="form-inp" value={msgText} onChange={e => setMsgText(e.target.value)} placeholder="Your message to the seller..." rows={4} style={{ resize: 'vertical' as const }} />
                 </div>
 

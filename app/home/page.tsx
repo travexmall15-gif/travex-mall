@@ -1,4 +1,5 @@
 'use client'
+import { T } from '@/components/T'
 import Script from 'next/script'
 import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
@@ -46,14 +47,14 @@ export default function HomePage() {
             Africa&apos;s #1 AI-Powered Marketplace, Tanzania 2026
           </div>
           <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: 900, lineHeight: 1.06, color: '#fff', marginBottom: '0.75rem', letterSpacing: '-0.02em', maxWidth: '680px' }}>
-            Africa&apos;s <span style={{ color: '#C9A84C', textShadow: '0 2px 20px rgba(201,168,76,0.30)' }}>Intelligent</span><br />Digital Marketplace
+            <T en="Africa's" sw="Afrika" /> <span style={{ color: '#C9A84C', textShadow: '0 2px 20px rgba(201,168,76,0.30)' }}><T en="Intelligent" sw="Yenye Akili" /></span><br /><T en="Digital Marketplace" sw="Soko la Kidijitali" />
           </h1>
           <p className="hero-sub" style={{ fontSize: 'clamp(0.88rem, 1.6vw, 1rem)', lineHeight: 1.78, color: 'rgba(255,255,255,0.50)', marginBottom: '1.2rem', maxWidth: '500px' }}>
-            Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur.
+            {<T en="Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur." sw="Fungua duka lako la mtandaoni kwa dakika chache. Uza Tanzania nzima. Kukua na nguvu ya AI, kwa kila mjasiriamali wa Afrika." />}
           </p>
           <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
-              Enter Travex Mall
+              <T en="Enter Travex Mall" sw="Ingia Travex Mall" />
             </Link>
             <button
               className="travex-lang-btn"
@@ -64,7 +65,7 @@ export default function HomePage() {
             </button>
           </div>
           <div className="hero-stats" style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
-            {[['500+', 'Active Shops'], ['5', 'Regions'], ['3M+', 'Tanzania SMEs']].map(([v, l]) => (
+            {[['500+', <T en='Active Shops' sw='Maduka Yanayofanya Kazi' />], ['5', <T en='Regions' sw='Mikoa' />], ['3M+', <T en='Tanzania SMEs' sw='Biashara Ndogo Tanzania' />]].map(([v, l]) => (
               <div key={l}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{v}</div>
                 <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.32)', marginTop: '3px', letterSpacing: '0.04em' }}>{l}</div>
@@ -80,11 +81,11 @@ export default function HomePage() {
       <div style={{ background: 'linear-gradient(180deg,#071540,#0A0C20)', overflow: 'hidden', width: '100%', padding: '14px 0' }}>
         <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
           {[
-            { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'  },
-            { href: '/market',      label: 'Business',    sub: '500+ shops'     },
-            { href: '/campus',      label: 'Campus',      sub: '5 universities' },
+            { href: '/group-buy',   label: <T en='Group Buy' sw='Nunua Pamoja' />,   sub: 'Save together'  },
+            { href: '/market',      label: <T en='Business' sw='Biashara' />,    sub: '500+ shops'     },
+            { href: '/campus',      label: <T en='Campus' sw='Vyuo' />,      sub: '5 universities' },
             { href: '/vybe',        label: 'Social Vybe', sub: 'Community'      },
-            { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+            { href: '/flash-deals', label: <T en='Flash Deals' sw='Ofa za Haraka' />, sub: 'Limited offers' },
             { href: '/move',        label: 'Travex Move', sub: 'Logistics'      },
             { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'  },
             { href: '/market',      label: 'Business',    sub: '500+ shops'     },
