@@ -1,5 +1,6 @@
 'use client'
-import { T } from '@/components/T'
+import { useTranslations } from 'next-intl'
+import { LangSwitcher } from './lang-switcher'
 
 import { useState } from 'react'
 import Link from 'next/link'

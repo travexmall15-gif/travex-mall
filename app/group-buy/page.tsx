@@ -1,5 +1,5 @@
 'use client'
-import { T } from '@/components/T'
+import { useTranslations } from 'next-intl'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
@@ -115,6 +115,8 @@ function GroupCard({ group }: { group: Group }) {
 }
 
 export default function GroupBuyPage() {
+  const t = useTranslations('groupBuy')
+  const tc = useTranslations('common')
   const [groups, setGroups]   = useState<Group[]>([])
   const [search, setSearch]   = useState('')
   const [loading, setLoading] = useState(true)
@@ -170,7 +172,7 @@ export default function GroupBuyPage() {
           {/* Top row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: 999, fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <Users size={11} /> <T en="Group Buy" sw="Nunua Pamoja" />
+              <Users size={11} /> {t('badge')}
             </div>
             <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: 999, fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
               Open Your Shop
@@ -180,10 +182,10 @@ export default function GroupBuyPage() {
           {/* Headline */}
           <div style={{ maxWidth: 560, marginBottom: '2rem' }}>
             <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(2rem,4.5vw,3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              <span style={{ color: '#C9A84C' }}><T en="Buy Together," sw="Nunua Pamoja," /></span> <T en="Save More." sw="Okoa Zaidi." />
+              {t('headline1')} {t('headline2')}
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: 440 }}>
-              <T en="Join a group with other buyers and unlock discounts up to 20%." sw="Jiunge na kikundi na wanunuzi wengine na pata punguzo hadi 20%." />
+              {t('subtext')}
             </p>
           </div>
 
@@ -244,7 +246,7 @@ export default function GroupBuyPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search / Tafuta..."
+            placeholder={t('searchPlaceholder')}
             style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter',sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
             onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
             onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
@@ -270,10 +272,10 @@ export default function GroupBuyPage() {
           <div style={{ textAlign: 'center', padding: '5rem 0' }}>
             <Users size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
             <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>
-              {search ? 'No matching groups' : '<T en="No Active Group Deals" sw="Hakuna Ofa za Kikundi" />'}
+              {search ? t('noMatching') : t('noGroups')}
             </h3>
             <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 24 }}>
-              {search ? 'Try a different search term.' : 'Sellers will post group deals soon. Check back!'}
+              {search ? t('tryOther') : t('checkBack')}
             </p>
             <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#0D1B3E', color: '#fff', padding: '12px 28px', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 13 }}>
               Browse Market

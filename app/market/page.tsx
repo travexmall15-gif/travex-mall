@@ -1,5 +1,5 @@
 'use client'
-import { T } from '@/components/T'
+import { useTranslations } from 'next-intl'
 
 const TANZANIAN_REGIONS = [
   'All', 'Dar es Salaam', 'Mwanza', 'Arusha', 'Dodoma', 'Mbeya',
@@ -44,6 +44,8 @@ type MarketShop = {
 
 
 export default function MarketPage() {
+  const t = useTranslations('market')
+  const tc = useTranslations('common')
   const [shops, setShops] = useState<MarketShop[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -115,20 +117,20 @@ export default function MarketPage() {
           {/* Top row — badge + CTA */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '0.3rem 0.9rem', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <Store size={11} /> <T en="Business Market" sw="Soko la Biashara" />
+              <Store size={11} /> {t('badge')}
             </div>
             <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.4rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 16px rgba(201,168,76,0.30)' }}>
-              <Store size={13} /> <T en="Open Shop" sw="Fungua Duka" />
+              <Store size={13} /> {t('openShop')}
             </Link>
           </div>
 
           {/* Headline + description */}
           <div style={{ maxWidth: '600px', marginBottom: '2rem' }}>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              <span style={{ color: '#C9A84C' }}><T en="Business" sw="Biashara" /></span> <T en="Marketplace." sw="Soko." />
+              {t('headline')}
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
-              <><T en="Verified sellers. All categories. Five regions. Join" sw="Wauzaji waliohakikishwa. Aina zote. Mikoa mitano. Jiunge na" /> {loading ? '...' : totalApproved} <T en="businesses already selling on Travex Mall." sw="biashara zinazouza Travex Mall." /></>
+              {t('subtext', { count: loading ? '...' : totalApproved })}
             </p>
           </div>
 
@@ -170,20 +172,20 @@ export default function MarketPage() {
             <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
               {[
                 ...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('premiumShops'), color: '#C9A84C' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('basicShops'), color: 'rgba(255,255,255,0.6)' },
                   { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
+                  { val: 'OPEN', label: t('registration'), color: '#86EFAC' },
+                  { val: loading ? '...' : String(totalApproved), label: t('activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
+                  { val: String(MARKET_TOTAL_SLOTS), label: t('totalSlots'), color: 'rgba(255,255,255,0.6)' },
                 ],
                 ...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('premiumShops'), color: '#C9A84C' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('basicShops'), color: 'rgba(255,255,255,0.6)' },
                   { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
+                  { val: 'OPEN', label: t('registration'), color: '#86EFAC' },
+                  { val: loading ? '...' : String(totalApproved), label: t('activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
+                  { val: String(MARKET_TOTAL_SLOTS), label: t('totalSlots'), color: 'rgba(255,255,255,0.6)' },
                 ],
               ].map((s, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
@@ -240,7 +242,7 @@ export default function MarketPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search / Tafuta..."
+            placeholder={t('searchPlaceholder')}
             style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
             onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
             onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
@@ -306,7 +308,7 @@ export default function MarketPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No <><T en="shops found" sw="maduka yamepatikana" /></></div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>t('noShops')</div>
                 <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try different filters or search term</p>
               </div>
             ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}
