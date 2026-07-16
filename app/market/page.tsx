@@ -170,12 +170,12 @@ export default function MarketPage() {
             <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
               {[
                 ...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops', lang), color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('market.basicShops', lang), color: 'rgba(255,255,255,0.6)' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
+                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
                   { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: t('market.registration', lang), color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: t('market.activeSelrers', lang), color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: t('market.totalSlots', lang), color: 'rgba(255,255,255,0.6)' },
+                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
+                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
+                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
                 ],
                 ...[
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
