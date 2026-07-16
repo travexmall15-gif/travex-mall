@@ -27,10 +27,10 @@ export default function HomePage() {
         .market-card.campus:hover  { box-shadow: 0 20px 50px rgba(56,120,255,0.15) !important; border-color: rgba(96,165,250,0.40) !important; }
         .market-card.vybe:hover    { box-shadow: 0 20px 50px rgba(120,0,255,0.20) !important; border-color: rgba(200,123,255,0.45) !important; }
         @keyframes chipScroll {
-          0%   { transform: translateX(-33.33%); }
-          100% { transform: translateX(0%); }
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-33.33%); }
         }
-        .chips-track { animation: chipScroll 16s linear infinite; }
+        .chips-track { animation: chipScroll 28s linear infinite; }
         .chips-track:hover { animation-play-state: paused; }
       `}</style>
 
@@ -64,27 +64,35 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Feature chips — auto-scroll left to right */}
-          <div style={{ overflow: 'hidden', marginTop: '1rem', maxWidth: '480px' }}>
-            <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
-              {[
-                { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
-                { href: '/group-buy',  label: 'Group Buy',   sub: 'Save together' },
-                { href: '/market',     label: 'Business',    sub: '500+ shops'    },
-                { href: '/campus',     label: 'Campus',      sub: '5 universities'},
-                { href: '/vybe',       label: 'Social Vybe', sub: 'Community'     },
-                { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
-                { href: '/group-buy',  label: 'Group Buy',   sub: 'Save together' },
-                { href: '/market',     label: 'Business',    sub: '500+ shops'    },
-                { href: '/campus',     label: 'Campus',      sub: '5 universities'},
-                { href: '/vybe',       label: 'Social Vybe', sub: 'Community'     },
-              ].map((chip, i) => (
-                <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: '#fff', borderRadius: '10px', padding: '8px 14px', textDecoration: 'none', flexShrink: 0, cursor: 'pointer' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap' }}>{chip.label}</span>
-                  <span style={{ fontSize: '0.6rem', color: '#64748B', whiteSpace: 'nowrap' }}>{chip.sub}</span>
-                </a>
-              ))}
-            </div>
+        </div>
+
+        {/* Feature chips — FULL WIDTH, outside maxWidth container */}
+        <div style={{ overflow: 'hidden', width: '100%', paddingBottom: '1.5rem' }}>
+          <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content', paddingLeft: '20px' }}>
+            {[
+              { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'   },
+              { href: '/market',      label: 'Business',    sub: '500+ shops'      },
+              { href: '/campus',      label: 'Campus',      sub: '5 universities'  },
+              { href: '/vybe',        label: 'Social Vybe', sub: 'Community'       },
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers'  },
+              { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'   },
+              { href: '/market',      label: 'Business',    sub: '500+ shops'      },
+              { href: '/campus',      label: 'Campus',      sub: '5 universities'  },
+              { href: '/vybe',        label: 'Social Vybe', sub: 'Community'       },
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers'  },
+              { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'   },
+              { href: '/market',      label: 'Business',    sub: '500+ shops'      },
+              { href: '/campus',      label: 'Campus',      sub: '5 universities'  },
+              { href: '/vybe',        label: 'Social Vybe', sub: 'Community'       },
+              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers'  },
+            ].map((chip, i) => (
+              <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', borderRadius: '10px', padding: '8px 16px', textDecoration: 'none', flexShrink: 0, cursor: 'pointer', transition: 'all 0.2s' }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' as const }}>{chip.label}</span>
+                <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.5)', whiteSpace: 'nowrap' as const }}>{chip.sub}</span>
+              </a>
+            ))}
           </div>
         </div>
       </section>
