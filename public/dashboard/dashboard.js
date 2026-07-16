@@ -261,8 +261,9 @@ async function loadSidebar(activePage, shopData) {
       ${navItem('vybe',       'vybe.html',       'ti-bolt',          'Social Vybe')}
       ${navItem('flash-deals','flash-deals.html','ti-flame',         ' Flash Deals')}
       ${navItem('group-buy',  'group-buy.html',  'ti-users-group',   ' Group Buying')}
-      ${navItem('ai-tools',  'ai-tools.html',  'ti-robot',         'AI Tools',      true)}
-      ${navItem('marketing', 'marketing.html', 'ti-speakerphone',  'Marketing',     true)}
+      ${navItem('ai-tools',    'ai-tools.html',    'ti-robot',          'AI Tools')}
+      ${navItem('ai-marketing','ai-marketing.html','ti-speakerphone',   'AI Marketing')}
+      ${navItem('ai-finance',  'ai-finance.html',  'ti-chart-arrows-vertical','AI Finance')}
 
       <div class="nav-label">Account</div>
       ${navItem('settings',  'settings.html',  'ti-settings',      'Settings')}

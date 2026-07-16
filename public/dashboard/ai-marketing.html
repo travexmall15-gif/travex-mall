@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI Marketing, Travex Mall</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div><div class="loading-text">Loading...</div>
+</div>
+<div id="sidebar"></div>
+<div class="main-wrapper">
+  <div class="main-header">
+    <div><div class="header-title">AI Marketing Manager</div><div class="header-sub">Aria generates your marketing content using real store data</div></div>
+    <div class="header-right"><div id="headerDate" style="font-size:12px;color:var(--text-muted)"></div></div>
+  </div>
+  <div class="main-content">
+
+    <!-- Quick Generate Row -->
+    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:20px">
+      <button class="stat-card" style="cursor:pointer;text-align:left;border:none" onclick="quickGen('instagram')">
+        <div class="stat-label">Instagram Post</div>
+        <div style="font-size:22px;margin:4px 0"><i class="ti ti-brand-instagram"></i></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5)">AI generates + hashtags</div>
+      </button>
+      <button class="stat-card" style="cursor:pointer;text-align:left;border:none" onclick="quickGen('whatsapp')">
+        <div class="stat-label">WhatsApp Status</div>
+        <div style="font-size:22px;margin:4px 0"><i class="ti ti-brand-whatsapp"></i></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5)">Ready to copy-paste</div>
+      </button>
+      <button class="stat-card" style="cursor:pointer;text-align:left;border:none" onclick="quickGen('facebook')">
+        <div class="stat-label">Facebook Post</div>
+        <div style="font-size:22px;margin:4px 0"><i class="ti ti-brand-facebook"></i></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5)">Engagement optimised</div>
+      </button>
+      <button class="stat-card" style="cursor:pointer;text-align:left;border:none" onclick="quickGen('broadcast')">
+        <div class="stat-label">Customer Broadcast</div>
+        <div style="font-size:22px;margin:4px 0"><i class="ti ti-speakerphone"></i></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5)">Message all customers</div>
+      </button>
+      <button class="stat-card" style="cursor:pointer;text-align:left;border:none" onclick="quickGen('ideas')">
+        <div class="stat-label">Marketing Ideas</div>
+        <div style="font-size:22px;margin:4px 0"><i class="ti ti-bulb"></i></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5)">Tanzania-specific tips</div>
+      </button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+      <!-- Custom Post Generator -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div><div class="table-card-title">Custom Post Generator</div><div class="table-card-sub">Aria writes your post with your product data</div></div>
+        </div>
+        <div style="padding:16px">
+          <div class="form-group">
+            <label class="form-label">Product (optional)</label>
+            <select class="form-control" id="mktProduct">
+              <option value="">All products / Store promotion</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Platform</label>
+            <select class="form-control" id="mktPlatform">
+              <option value="instagram">Instagram</option>
+              <option value="whatsapp">WhatsApp Status</option>
+              <option value="facebook">Facebook</option>
+              <option value="all">All Platforms</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tone</label>
+            <select class="form-control" id="mktTone">
+              <option value="casual and fun">Casual & Fun</option>
+              <option value="professional">Professional</option>
+              <option value="urgent/FOMO">Urgent / FOMO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Special Offer (optional)</label>
+            <input class="form-control" id="mktOffer" placeholder="e.g. Buy 2 Get 1 Free"/>
+          </div>
+          <button class="btn btn-gold" style="width:100%" id="mktGenBtn" onclick="generatePost()">
+            <i class="ti ti-sparkles"></i> Generate Post
+          </button>
+        </div>
+      </div>
+
+      <!-- Output -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div><div class="table-card-title">Generated Content</div><div class="table-card-sub">Copy and use directly on your platforms</div></div>
+          <button class="btn btn-outline btn-sm" onclick="copyOutput()"><i class="ti ti-copy"></i> Copy</button>
+        </div>
+        <div style="padding:16px">
+          <div id="mktOutput" style="min-height:220px;background:var(--bg);border-radius:10px;padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--text-primary)">
+            Bonyeza "Generate Post" ili Aria aandike content yako...
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn btn-navy btn-sm" onclick="postToVybe()"><i class="ti ti-bolt"></i> Post to Vybe</button>
+            <button class="btn btn-outline btn-sm" onclick="copyOutput()"><i class="ti ti-copy"></i> Copy Text</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing Calendar -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div><div class="table-card-title">Marketing Calendar</div><div class="table-card-sub">Aria plans your week</div></div>
+          <button class="btn btn-gold btn-sm" onclick="generateCalendar()"><i class="ti ti-calendar"></i> Generate</button>
+        </div>
+        <div style="padding:16px" id="calendarOutput">
+          <div class="empty-state"><i class="ti ti-calendar"></i><p>Bonyeza Generate ili Aria apange ratiba yako ya wiki</p></div>
+        </div>
+      </div>
+
+      <!-- Hashtag Strategy -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <div><div class="table-card-title">Hashtag Strategy</div><div class="table-card-sub">Tanzania-specific hashtags per category</div></div>
+        </div>
+        <div style="padding:16px" id="hashtagsOutput">
+          <div id="hashtagList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="dashboard.js"></script>
+<script src="aria-engine.js"></script>
+<script src="aria-widget.js"></script>
+<script>
+const HASHTAGS_BY_CAT = {
+  'Fashion & Clothing': '#MtaaniStyle #TanzaniaFashion #DarFashion #AfricanFashion #KenteFashion #SwahiliFashion #StyleTZ',
+  'Electronics': '#TechTanzania #GadgetsDar #ElectronicsTZ #TechAfrica #SmartphoneTZ #iPhoneTZ',
+  'Food & Groceries': '#ChakularTZ #FoodDar #TanzaniaFood #FreshFoodTZ #NjaaIpite #MealsofTanzania',
+  'Beauty & Health': '#BeautyTZ #SkincareTanzania #NaturalBeautyTZ #GlowTZ #BeautyDar #HealthTZ',
+  'Agriculture': '#KilimoTZ #AgriTanzania #FarmFreshTZ #AgricultureTZ #KilimoKijani',
+  'General': '#TravexMall #ShopOnlineTZ #NunuaOnline #TanzaniaShopping #DarShops #OnlineShoppingTZ',
+}
+
+async function init() {
+  const session = Auth.getSession()
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})
+
+  // Load products into select
+  const products = await ARIA.fetchProducts()
+  const sel = document.getElementById('mktProduct')
+  products.forEach(p => {
+    const opt = document.createElement('option')
+    opt.value = p.name; opt.textContent = `${p.name} — ${ARIA.fmt(p.price)}`
+    sel.appendChild(opt)
+  })
+
+  // Show hashtags
+  const store = await ARIA.fetchStore()
+  const cat = store?.shop_category || 'General'
+  const tags = HASHTAGS_BY_CAT[cat] || HASHTAGS_BY_CAT['General']
+  document.getElementById('hashtagList').innerHTML = `
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Category: <strong>${cat}</strong></p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${tags.split(' ').map(t=>`<span style="background:var(--info-bg);color:var(--info-text);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer" onclick="copyTag('${t}')">${t}</span>`).join('')}
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:12px">+ Universal: #TravexMall #ShopOnlineTZ #NunuaOnline #Tanzania</p>
+  `
+  document.getElementById('loadingOverlay').style.display = 'none'
+}
+
+function copyTag(t) {
+  navigator.clipboard.writeText(t)
+  showToast('Hashtag copied!')
+}
+
+async function generatePost() {
+  const btn = document.getElementById('mktGenBtn')
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 0.8s linear infinite"></i> Aria anaandika...'
+  btn.disabled = true
+
+  const product = document.getElementById('mktProduct').value
+  const platform = document.getElementById('mktPlatform').value
+  const tone = document.getElementById('mktTone').value
+  const offer = document.getElementById('mktOffer').value
+
+  const msg = `Tengeneza ${platform} post${product?' ya '+product:''}${offer?' na offer: '+offer:''} tone: ${tone}`
+  const result = await ARIA.chat(msg, [])
+  document.getElementById('mktOutput').textContent = result.reply
+
+  btn.innerHTML = '<i class="ti ti-sparkles"></i> Generate Post'
+  btn.disabled = false
+}
+
+async function quickGen(type) {
+  const map = {
+    instagram: 'Tengeneza Instagram post',
+    whatsapp: 'Tengeneza WhatsApp Status',
+    facebook: 'Tengeneza Facebook post',
+    broadcast: 'Tengeneza message kwa customers wote',
+    ideas: 'Nipe marketing ideas',
+  }
+  document.getElementById('mktOutput').textContent = 'Aria anaandika...'
+  const result = await ARIA.chat(map[type], [])
+  document.getElementById('mktOutput').textContent = result.reply
+}
+
+function copyOutput() {
+  const text = document.getElementById('mktOutput').textContent
+  navigator.clipboard.writeText(text)
+  showToast('Content copied to clipboard!')
+}
+
+async function postToVybe() {
+  const content = document.getElementById('mktOutput').textContent
+  if (!content || content.includes('Bonyeza')) { showToast('Generate content kwanza!'); return }
+  const result = await ARIA.chat(`Post kwenye Vybe: ${content.substring(0,200)}`, [])
+  showToast(result.reply.includes('✅') ? 'Post imechapishwa kwenye Vybe!' : 'Hitilafu - jaribu tena')
+}
+
+async function generateCalendar() {
+  const store = await ARIA.fetchStore()
+  const products = await ARIA.fetchProducts()
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+  const types = ['Product showcase', 'Customer testimonial', 'Flash Deal', 'Behind the scenes', 'Tips for buyers', 'Weekend special', 'New arrival']
+  document.getElementById('calendarOutput').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${days.map((d,i) => `
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:12px">
+          <span style="font-weight:700;color:var(--navy);width:70px">${d}</span>
+          <span style="flex:1;color:var(--text-secondary)">${types[i]}</span>
+          <span style="color:var(--gold);font-size:10px;font-weight:600">${i===4||i===5?'Peak Day!':''}</span>
+        </div>
+      `).join('')}
+      <p style="font-size:11px;color:var(--text-muted);margin-top:4px">Friday & Saturday = peak buying days in Tanzania. Post your best deals then!</p>
+    </div>
+  `
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 3000)
+}
+
+document.addEventListener('DOMContentLoaded', () => { Auth.requireAuth(); init() })
+</script>
+</body>
+</html>
