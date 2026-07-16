@@ -66,36 +66,42 @@ export default function HomePage() {
 
         </div>
 
-        {/* Feature chips — FULL WIDTH, outside maxWidth container */}
-        <div style={{ overflow: 'hidden', width: '100%', paddingBottom: '1.5rem' }}>
-          <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content', paddingLeft: '20px' }}>
-            {[
-              { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'   },
-              { href: '/market',      label: 'Business',    sub: '500+ shops'      },
-              { href: '/campus',      label: 'Campus',      sub: '5 universities'  },
-              { href: '/vybe',        label: 'Social Vybe', sub: 'Community'       },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers'  },
-              { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'   },
-              { href: '/market',      label: 'Business',    sub: '500+ shops'      },
-              { href: '/campus',      label: 'Campus',      sub: '5 universities'  },
-              { href: '/vybe',        label: 'Social Vybe', sub: 'Community'       },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers'  },
-              { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'   },
-              { href: '/market',      label: 'Business',    sub: '500+ shops'      },
-              { href: '/campus',      label: 'Campus',      sub: '5 universities'  },
-              { href: '/vybe',        label: 'Social Vybe', sub: 'Community'       },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers'  },
-            ].map((chip, i) => (
-              <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', borderRadius: '10px', padding: '8px 16px', textDecoration: 'none', flexShrink: 0, cursor: 'pointer', transition: 'all 0.2s' }}
-                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
-                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
-                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' as const }}>{chip.label}</span>
-                <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.5)', whiteSpace: 'nowrap' as const }}>{chip.sub}</span>
-              </a>
-            ))}
-          </div>
-        </div>
       </section>
+
+      {/* ── CHIPS TICKER — full screen width, sibling to hero ── */}
+      <div style={{ background: 'linear-gradient(180deg,#071540,#0A0C20)', overflow: 'hidden', width: '100%', padding: '14px 0' }}>
+        <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
+          {[
+            { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'  },
+            { href: '/market',      label: 'Business',    sub: '500+ shops'     },
+            { href: '/campus',      label: 'Campus',      sub: '5 universities' },
+            { href: '/vybe',        label: 'Social Vybe', sub: 'Community'      },
+            { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+            { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'  },
+            { href: '/market',      label: 'Business',    sub: '500+ shops'     },
+            { href: '/campus',      label: 'Campus',      sub: '5 universities' },
+            { href: '/vybe',        label: 'Social Vybe', sub: 'Community'      },
+            { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+            { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'  },
+            { href: '/market',      label: 'Business',    sub: '500+ shops'     },
+            { href: '/campus',      label: 'Campus',      sub: '5 universities' },
+            { href: '/vybe',        label: 'Social Vybe', sub: 'Community'      },
+            { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+            { href: '/group-buy',   label: 'Group Buy',   sub: 'Save together'  },
+            { href: '/market',      label: 'Business',    sub: '500+ shops'     },
+            { href: '/campus',      label: 'Campus',      sub: '5 universities' },
+            { href: '/vybe',        label: 'Social Vybe', sub: 'Community'      },
+            { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers' },
+          ].map((chip, i) => (
+            <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 18px', textDecoration: 'none', flexShrink: 0, transition: 'background 0.2s', whiteSpace: 'nowrap' as const }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.16)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.4)' }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.12)' }}>
+              <span style={{ fontSize: '0.77rem', fontWeight: 700, color: '#fff' }}>{chip.label}</span>
+              <span style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.42)' }}>{chip.sub}</span>
+            </a>
+          ))}
+        </div>
+      </div>
 
       {/*  TWO MARKET CARDS  */}
       <section style={{ background: '#FFFFFF', padding: '5rem 5%', borderBottom: '1px solid #E2E8F0' }}>
