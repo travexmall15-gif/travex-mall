@@ -161,41 +161,30 @@ export default function MarketPage() {
             <style>{`
               @keyframes tickerRTL {
                 0%   { transform: translateX(0); }
-                100% { transform: translateX(-25%); }
+                100% { transform: translateX(-33.33%); }
               }
-              .stats-ticker { animation: tickerRTL 28s linear infinite; }
+              .stats-ticker { animation: tickerRTL 14s linear infinite; }
               .stats-ticker:hover { animation-play-state: paused; }
             `}</style>
             <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
-              [...[
+              {[
+                ...[
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
                   { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
                   { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
                   { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
                   { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
-                ],...[
+                ],
+                ...[
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
                   { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
                   { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
                   { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
                   { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
-                ],...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
-                  { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
-                ],...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: 'Premium Shops', color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: 'Basic Shops', color: 'rgba(255,255,255,0.6)' },
-                  { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: 'Registration', color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: 'Active Sellers', color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: 'Total Slots', color: 'rgba(255,255,255,0.6)' },
-                ]].map((s, i) => (
+                ],
+              ].map((s, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
                   <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
                     <div style={{ fontSize: 'clamp(0.9rem,2vw,1.1rem)', fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: '3px' }}>{s.val}</div>
@@ -215,35 +204,23 @@ export default function MarketPage() {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-33.33%); }
           }
-          .quick-ticker { animation: quickScroll 24s linear infinite; }
+          .quick-ticker { animation: quickScroll 18s linear infinite; }
           .quick-ticker:hover { animation-play-state: paused; }
           .quick-chip { transition: all 0.2s; }
           .quick-chip:hover { opacity: 0.8; transform: scale(0.97); }
         `}</style>
         <div style={{ padding: '10px 0' }}>
           <div className="quick-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '24px' }}>
-[...[
+            {[
               { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
               { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
               { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
               { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
               { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
               { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-            ],...[
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
               { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
               { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-            ],...[
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-              { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
-              { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-            ]].map((c, i) => (
+            ].map((c, i) => (
               <a key={i} href={c.href} className="quick-chip" style={{ display: 'inline-flex', flexDirection: 'column', gap: '1px', background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '6px 14px', borderRadius: '10px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{c.label}</span>
                 <span style={{ fontSize: '0.58rem', opacity: 0.7 }}>{c.sub}</span>
