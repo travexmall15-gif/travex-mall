@@ -161,9 +161,9 @@ export default function MarketPage() {
             <style>{`
               @keyframes tickerRTL {
                 0%   { transform: translateX(0); }
-                100% { transform: translateX(-33.33%); }
+                100% { transform: translateX(-50%); }
               }
-              .stats-ticker { animation: tickerRTL 14s linear infinite; }
+              .stats-ticker { animation: tickerRTL 22s linear infinite; will-change: transform; }
               .stats-ticker:hover { animation-play-state: paused; }
             `}</style>
             <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
@@ -202,9 +202,9 @@ export default function MarketPage() {
         <style>{`
           @keyframes quickScroll {
             0%   { transform: translateX(0); }
-            100% { transform: translateX(-33.33%); }
+            100% { transform: translateX(-50%); }
           }
-          .quick-ticker { animation: quickScroll 18s linear infinite; }
+          .quick-ticker { animation: quickScroll 18s linear infinite; will-change: transform; }
           .quick-ticker:hover { animation-play-state: paused; }
           .quick-chip { transition: all 0.2s; }
           .quick-chip:hover { opacity: 0.8; transform: scale(0.97); }

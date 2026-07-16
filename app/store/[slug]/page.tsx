@@ -310,8 +310,8 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
           {/* Animated chips — Flash Deals + Group Buy */}
           <div style={{ overflow: 'hidden', marginTop: '1rem', paddingBottom: '1rem', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1rem' }}>
             <style>{`
-              @keyframes storeChips{0%{transform:translateX(0)}100%{transform:translateX(-33.33%)}}
-              .store-chips{animation:storeChips 24s linear infinite}
+              @keyframes storeChips{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+              .store-chips{animation:storeChips 24s linear infinite; will-change: transform; }
               .store-chips:hover{animation-play-state:paused}
             `}</style>
             <div className="store-chips" style={{ display: 'flex', gap: 8, width: 'max-content', paddingLeft: '24px' }}>

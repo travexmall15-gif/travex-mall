@@ -154,8 +154,8 @@ export default function GroupBuyPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
         *{box-sizing:border-box}
-        @keyframes gbTicker{0%{transform:translateX(0)}100%{transform:translateX(-33.33%)}}
-        .gb-ticker{animation:gbTicker 36s linear infinite}
+        @keyframes gbTicker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .gb-ticker{animation:gbTicker 36s linear infinite; will-change: transform; }
         .gb-ticker:hover{animation-play-state:paused}
       `}</style>
 
