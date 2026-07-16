@@ -27,10 +27,10 @@ export default function HomePage() {
         .market-card.campus:hover  { box-shadow: 0 20px 50px rgba(56,120,255,0.15) !important; border-color: rgba(96,165,250,0.40) !important; }
         .market-card.vybe:hover    { box-shadow: 0 20px 50px rgba(120,0,255,0.20) !important; border-color: rgba(200,123,255,0.45) !important; }
         @keyframes chipScroll {
-          0%   { transform: translateX(-50%); }
+          0%   { transform: translateX(-33.33%); }
           100% { transform: translateX(0%); }
         }
-        .chips-track { animation: chipScroll 8s linear infinite; }
+        .chips-track { animation: chipScroll 16s linear infinite; }
         .chips-track:hover { animation-play-state: paused; }
       `}</style>
 
@@ -217,9 +217,9 @@ export default function HomePage() {
         <style>{`
           @keyframes shopScroll {
             0%   { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            100% { transform: translateX(-33.33%); }
           }
-          .shop-track { display: flex; gap: 1rem; animation: shopScroll 28s linear infinite; width: max-content; }
+          .shop-track { display: flex; gap: 1rem; animation: shopScroll 56s linear infinite; width: max-content; }
           .shop-track:hover { animation-play-state: paused; }
           .shop-item { width: 200px; flex-shrink: 0; background: #fff; border-radius: 16px; padding: 1.25rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.05); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; display: block; }
           .shop-item:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(15,23,42,0.12); }

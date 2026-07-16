@@ -65,10 +65,10 @@ export default function CampusPage() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
         * { box-sizing: border-box; }
         @keyframes campusTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        .campus-ticker { animation: campusTicker 16s linear infinite; }
+        .campus-ticker { animation: campusTicker 32s linear infinite; }
         .campus-ticker:hover { animation-play-state: paused; }
         @keyframes campusStats { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        .campus-stats-ticker { animation: campusStats 14s linear infinite; }
+        .campus-stats-ticker { animation: campusStats 28s linear infinite; }
         .campus-stats-ticker:hover { animation-play-state: paused; }
         .uni-card { transition: transform 0.2s, box-shadow 0.2s; }
         .uni-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(15,23,42,0.10) !important; }
@@ -200,7 +200,7 @@ export default function CampusPage() {
         {/* University cards — horizontal auto-scroll */}
         <style>{`
           @keyframes uniScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-          .uni-scroll-track { animation: uniScroll 20s linear infinite; }
+          .uni-scroll-track { animation: uniScroll 40s linear infinite; }
           .uni-scroll-track:hover { animation-play-state: paused; }
           .uni-card:hover { transform: translateY(-3px) !important; box-shadow: 0 12px 28px rgba(15,23,42,0.12) !important; }
         `}</style>
