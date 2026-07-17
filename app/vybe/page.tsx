@@ -164,7 +164,7 @@ export default function VybePage() {
         ) : error ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: 14, marginBottom: 16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding: '10px 24px', background: '#C9A84C', color: '#0F172A', border: 'none', borderRadius: 999, fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>Retry</button>
+            <button onClick={loadPosts} style={{ padding: '10px 24px', background: '#C9A84C', color: '#0F172A', border: 'none', borderRadius: 999, fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>{t('common.retry')}</button>
           </div>
 
         ) : filtered.length === 0 ? (

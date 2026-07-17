@@ -59,7 +59,7 @@ export default function StorePage({
   const [placing, setPlacing]   = useState(false)
   const [success, setSuccess]   = useState(false)
   const [searchQ, setSearchQ]     = useState('')
-  const [selCat, setSelCat]       = useState('All')
+  const [selCat, setSelCat]       = useState(t('store.allCategories'))
   const [showWelcome, setShowWelcome] = useState(false)
   const [showMsg, setShowMsg]     = useState(false)
   const [msgText, setMsgText]     = useState('')
@@ -187,11 +187,11 @@ export default function StorePage({
     setSuccess(true)
   }
 
-  const categories = ['All', ...Array.from(new Set(products.map(p => p.category).filter(Boolean) as string[]))]
+  const categories = [t('store.allCategories'), ...Array.from(new Set(products.map(p => p.category).filter(Boolean) as string[]))]
 
   const filtered = products.filter(p => {
     const matchQ = !searchQ || p.name.toLowerCase().includes(searchQ.toLowerCase())
-    const matchC = selCat === 'All' || p.category === selCat
+    const matchC = selCat === t('store.allCategories') || p.category === selCat
     return matchQ && matchC
   })
 
@@ -660,7 +660,7 @@ export default function StorePage({
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 28, height: 28, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem', color: '#fff', marginBottom: 8 }}>Message Sent!</h3>
+                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem', color: '#fff', marginBottom: 8 }}>{t('store.messageSent')}</h3>
                 <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
                   The seller will respond to you shortly.
                 </p>

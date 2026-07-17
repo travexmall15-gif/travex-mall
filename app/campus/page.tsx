@@ -183,7 +183,7 @@ export default function CampusPage() {
         {/* University filter */}
         <div style={{ marginBottom: '0.75rem', overflowX: 'auto', scrollbarWidth: 'none' as const }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingBottom: '2px', minWidth: 'max-content' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>University</span>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>{t('campus.university')}</span>
             {uniOptions.map(u => (
               <button key={u} onClick={() => setSelectedUni(u)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: selectedUni === u ? '#0D1B3E' : '#E2E8F0', background: selectedUni === u ? '#0D1B3E' : '#fff', color: selectedUni === u ? '#fff' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}>
                 {u}

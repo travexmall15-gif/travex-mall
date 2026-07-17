@@ -138,21 +138,21 @@ export default function MarketPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#94A3B8', flexShrink: 0 }} />
               <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Basic Plan</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{t('market.basicPlan')}</div>
                 <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{formatTZS(MARKET_BASIC_PRICE)} / month</div>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
               <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Premium Plan</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{t('market.premiumPlan')}</div>
                 <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{formatTZS(MARKET_PREMIUM_PRICE)} / month</div>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
               <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>Top Estate</div>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{t('market.topEstate')}</div>
                 <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>TZS 200,000 / month</div>
               </div>
             </div>
@@ -173,16 +173,16 @@ export default function MarketPage() {
                 ...[
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops'), color: '#C9A84C' },
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('market.basicShops'), color: 'rgba(255,255,255,0.6)' },
-                  { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: t('market.registration'), color: '#86EFAC' },
+                  { val: '5', label: t('home.regions'), color: 'rgba(255,255,255,0.6)' },
+                  { val: t('market.open'), label: t('market.registration'), color: '#86EFAC' },
                   { val: loading ? '...' : String(totalApproved), label: t('market.activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
                   { val: String(MARKET_TOTAL_SLOTS), label: t('market.totalSlots'), color: 'rgba(255,255,255,0.6)' },
                 ],
                 ...[
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops'), color: '#C9A84C' },
                   { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('market.basicShops'), color: 'rgba(255,255,255,0.6)' },
-                  { val: '5', label: 'Regions', color: 'rgba(255,255,255,0.6)' },
-                  { val: 'OPEN', label: t('market.registration'), color: '#86EFAC' },
+                  { val: '5', label: t('home.regions'), color: 'rgba(255,255,255,0.6)' },
+                  { val: t('market.open'), label: t('market.registration'), color: '#86EFAC' },
                   { val: loading ? '...' : String(totalApproved), label: t('market.activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
                   { val: String(MARKET_TOTAL_SLOTS), label: t('market.totalSlots'), color: 'rgba(255,255,255,0.6)' },
                 ],
@@ -253,7 +253,7 @@ export default function MarketPage() {
 
           {/* Region row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>Region</span>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>{t('market.region')}</span>
             {regions.map(r => (
               <button
                 key={r}
@@ -265,7 +265,7 @@ export default function MarketPage() {
 
           {/* Category row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>Category</span>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>{t('market.category')}</span>
             {['All', ...categories].map(cat => (
               <button
                 key={cat}
