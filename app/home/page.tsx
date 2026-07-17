@@ -89,11 +89,11 @@ export default function HomePage() {
             { href: '/vybe',        label: 'Social Vybe', sub: t('chips.vybeSub')      },
             { href: '/flash-deals', label: t('chips.flashDeals'), sub: t('chips.flashDealsSub') },
             { href: '/move',        label: 'Travex Move', sub: 'Usafirishaji'      },
-            { href: '/group-buy',   label: 'Group Buy',   sub: t('chips.groupBuySub')  },
-            { href: '/market',      label: 'Business',    sub: t('chips.businessSub')     },
-            { href: '/campus',      label: 'Campus',      sub: t('chips.campusSub') },
+            { href: '/group-buy',   label: t('chips.groupBuy'),   sub: t('chips.groupBuySub')  },
+            { href: '/market',      label: t('chips.business'),    sub: t('chips.businessSub')     },
+            { href: '/campus',      label: t('chips.campus'),      sub: t('chips.campusSub') },
             { href: '/vybe',        label: 'Social Vybe', sub: t('chips.vybeSub')      },
-            { href: '/flash-deals', label: 'Flash Deals', sub: t('chips.flashDealsSub') },
+            { href: '/flash-deals', label: t('chips.flashDeals'), sub: t('chips.flashDealsSub') },
             { href: '/move',        label: 'Travex Move', sub: 'Usafirishaji'      },
           ].map((chip, i) => (
             <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 18px', textDecoration: 'none', flexShrink: 0, transition: 'background 0.2s', whiteSpace: 'nowrap' as const }}
@@ -128,7 +128,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Basic</span>
                 
               </div>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>Business Market</h3>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{t('markets.businessTitle')}</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s unified marketplace for entrepreneurs, retailers and SMEs. 500 verified shops across 5 major regions.
               </p>
@@ -161,7 +161,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(59,130,246,0.15)', color: '#93C5FD', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Students Only</span>
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.15)', color: '#86EFAC', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Verified</span>
               </div>
-              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>Campus Market</h3>
+              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{t('markets.campusTitle')}</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.50)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s dedicated campus marketplace. Sell directly to fellow students, verified sellers, 5 campuses, 60 slots each.
               </p>

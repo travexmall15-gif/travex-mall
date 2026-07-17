@@ -76,6 +76,7 @@ function StoreCard({ store }: { store: CampusStore; index?: number }) {
 }
 
 export default function UniversityPage({ params }: { params: Promise<{ slug: string }> }) {
+  const t = useTranslations('campus')
   const { slug } = use(params)
   const router = useRouter()
   const uni = getUniversity(slug)

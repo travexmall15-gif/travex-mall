@@ -84,7 +84,7 @@ export default function VybePage() {
       if (err) throw err
       setPosts(data || [])
     } catch {
-      setError('Could not load posts. Please try again.')
+      setError(t('loadError'))
     } finally {
       setLoading(false)
     }
@@ -159,7 +159,7 @@ export default function VybePage() {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Loader2 style={{ width: 32, height: 32, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#C9A84C' }} />
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>Loading posts...</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{t('loadingPosts')}</p>
           </div>
 
         ) : error ? (
@@ -170,7 +170,7 @@ export default function VybePage() {
 
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>No posts yet.</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{t('noPosts')}</p>
           </div>
 
         ) : (

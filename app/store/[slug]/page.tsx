@@ -622,7 +622,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
             {/* Quick action chips */}
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-              {['Find a product', 'Place an order', 'Check prices'].map(t => (
+              {[t('findProduct'), t('placeOrder'), t('checkPrices')].map(t => (
                 <button key={t} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>{t}</button>
               ))}
             </div>
@@ -682,7 +682,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
                   <input className="form-inp" value={msgName} onChange={e => setMsgName(e.target.value)} placeholder="Your Name * / Jina Lako *" />
-                  <textarea className="form-inp" value={msgText} onChange={e => setMsgText(e.target.value)} placeholder="Your message to the seller..." rows={4} style={{ resize: 'vertical' as const }} />
+                  <textarea className="form-inp" value={msgText} onChange={e => setMsgText(e.target.value)} placeholder={t('yourMessage')} rows={4} style={{ resize: 'vertical' as const }} />
                 </div>
 
                 <div style={{ display: 'flex', gap: 8 }}>

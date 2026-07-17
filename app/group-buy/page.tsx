@@ -25,7 +25,7 @@ type Group = {
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
 function timeLeft(exp: string | null) {
-  if (!exp) return 'Ongoing'
+  if (!exp) return t('ongoing')
   const diff = new Date(exp).getTime() - Date.now()
   if (diff <= 0) return 'Expired'
   const h = Math.floor(diff / 3600000)
@@ -257,7 +257,7 @@ export default function GroupBuyPage() {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#0D1B3E', margin: '0 auto 12px', display: 'block' }} />
-            <p style={{ color: '#94A3B8', fontSize: 14 }}>Loading group deals...</p>
+            <p style={{ color: '#94A3B8', fontSize: 14 }}>{t('groupsFound', {count:0})}</p>
           </div>
 
         ) : error ? (

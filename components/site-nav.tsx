@@ -20,6 +20,7 @@ const navLinks = [
 ]
 
 export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
+  const t = useTranslations('nav')
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const dark = variant === 'dark'
@@ -53,12 +54,13 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
                 pathname === link.href ? 'text-gold' : dark ? 'text-white/80' : 'text-navy/80',
               )}
             >
-              {link.label}
+              {t(link.key as any)}
             </Link>
           ))}
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
+          <LangSwitcher />
           <Link
             href="/login"
             className={cn(
@@ -104,7 +106,7 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-gold/10 hover:text-gold"
               >
-                {link.label}
+                {t(link.key as any)}
               </Link>
             ))}
             <div className="mt-3 flex gap-2">
