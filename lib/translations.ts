@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════
-// TRAVEX MALL — Complete Translation Dictionary
-// EN ↔ SW   |   Travex Mall, Travex Stay, Travex Move = UNCHANGED
+// SHOPNEKT — Complete Translation Dictionary
+// EN ↔ SW   |   ShopNekt, Travex Stay, Travex Move = UNCHANGED
 // ═══════════════════════════════════════════════════════════
 
 export type Lang = 'en' | 'sw'
@@ -41,7 +41,7 @@ export const TX: Record<string, Record<Lang, string>> = {
   // ── BUSINESS MARKET ─────────────────────────────────────
   'Business Marketplace.': { en: 'Business Marketplace.', sw: 'Soko la Biashara.' },
   'Verified sellers. All categories. Five regions.': { en: 'Verified sellers. All categories. Five regions.', sw: 'Wauzaji waliohakikishwa. Aina zote. Mikoa mitano.' },
-  'businesses already selling on Travex Mall.': { en: 'businesses already selling on Travex Mall.', sw: 'biashara zinazouza Travex Mall.' },
+  'businesses already selling on ShopNekt.': { en: 'businesses already selling on ShopNekt.', sw: 'biashara zinazouza ShopNekt.' },
   'Join': { en: 'Join', sw: 'Jiunge' },
   'Region':                { en: 'Region',              sw: 'Mkoa' },
   'Category':              { en: 'Category',            sw: 'Aina' },
@@ -153,7 +153,7 @@ export const TX: Record<string, Record<Lang, string>> = {
   'Processing...':         { en: 'Processing...',       sw: 'Inashughulikia...' },
   // ── OPEN STORE FORM ──────────────────────────────────────
   'Start Selling Today':   { en: 'Start Selling Today', sw: 'Anza Kuuza Leo' },
-  'Create your store on Travex Mall': { en: 'Create your store on Travex Mall', sw: 'Fungua duka lako kwenye Travex Mall' },
+  'Create your store on ShopNekt': { en: 'Create your store on ShopNekt', sw: 'Fungua duka lako kwenye ShopNekt' },
   'Shop Name':             { en: 'Shop Name',           sw: 'Jina la Duka' },
   'Your Email':            { en: 'Your Email',          sw: 'Barua Pepe Yako' },
   'WhatsApp Number':       { en: 'WhatsApp Number',     sw: 'Nambari ya WhatsApp' },

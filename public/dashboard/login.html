@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Login — Travex Mall Dashboard</title>
+<title>Login — ShopNekt Dashboard</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -99,7 +99,7 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 </div>
 
 <div class="footer-links">
-  <a href="/">← Rudi Travex Mall</a> &nbsp;·&nbsp;
+  <a href="/">← Rudi ShopNekt</a> &nbsp;·&nbsp;
   <a href="/open-store">Fungua Duka Jipya</a>
 </div>
 
@@ -158,7 +158,7 @@ async function doLogin() {
     const shop = data[0]
 
     if (shop.status !== 'approved') {
-      showError('Duka lako bado halijaidhinishwa. Wasiliana na Travex Mall.')
+      showError('Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.')
       btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
       return
     }

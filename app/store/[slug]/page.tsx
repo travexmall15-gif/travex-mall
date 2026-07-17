@@ -178,7 +178,7 @@ export default function StorePage({
         `📱 Simu: *${orderPhone}*\n` +
         (orderLocation ? `Location: *${orderLocation}*\n` : '') +
         (orderNotes ? `📝 Notes: ${orderNotes}\n` : '') +
-        `\n_From Travex Mall_`
+        `\n_From ShopNekt_`
       )
       window.open(`https://wa.me/${wa}?text=${msg}`, '_blank')
     }

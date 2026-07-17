@@ -13,7 +13,7 @@ export default function JoinPage() {
       <header style={{ background: '#0D1B3E', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/icon-192.png" alt="Travex" width={36} height={36} style={{ borderRadius: 8 }} />
-          <span style={{ color: '#C9A84C', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>TRAVEX MALL</span>
+          <span style={{ color: '#C9A84C', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>SHOPNEKT</span>
         </div>
         <Link href="/" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 999 }}>
          {t('join.browseMarket')} 
@@ -27,7 +27,7 @@ export default function JoinPage() {
         </div>
         <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem', maxWidth: 700, margin: '0 auto 1rem' }}>
           {t('join.heroTitle1')}<br />
-          <span style={{ color: '#C9A84C' }}>Travex Mall</span>
+          <span style={{ color: '#C9A84C' }}>ShopNekt</span>
         </h1>
         <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', color: 'rgba(255,255,255,0.7)', maxWidth: 520, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
           {t('join.heroSubtitle')}

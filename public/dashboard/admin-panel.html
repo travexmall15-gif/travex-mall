@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin, Travex Mall</title>
+<title>Admin, ShopNekt</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -215,7 +215,7 @@ tr:last-child td{border-bottom:none}
     <!-- ANALYTICS & VALUE -->
     <div class="pg" id="pg-analytics">
       <div class="vc">
-        <h4> Travex Mall Revenue Potential</h4>
+        <h4> ShopNekt Revenue Potential</h4>
         <div class="vc-row"><span style="color:var(--muted)">Campus Stores  TZS 15,000/mo</span><span id="v-campus" style="color:#fff;font-weight:700">-</span></div>
         <div class="vc-row"><span style="color:var(--muted)">Basic Stores  TZS 25,000/mo</span><span id="v-basic" style="color:#fff;font-weight:700">-</span></div>
         <div class="vc-row"><span style="color:var(--muted)">Premium Stores  TZS 45,000/mo</span><span id="v-premium" style="color:#fff;font-weight:700">-</span></div>
@@ -607,7 +607,7 @@ async function acCA(id){
   const authLink = `${location.origin}/dashboard/auth.html?token=${token}`;
   const waMsg = encodeURIComponent(
     `🎉 *Hongera ${a.full_name||a.owner_name}!*\n\n`+
-    `Duka lako *"${sn}"* limeidhinishwa kwenye *Travex Mall*! 🛍️\n`+
+    `Duka lako *"${sn}"* limeidhinishwa kwenye *ShopNekt*! 🛍️\n`+
     `Wewe ni duka namba *${shopNum}* kwenye platform yetu!\n\n`+
     `━━━━━━━━━━━━━━━━━\n`+
     `🔗 *Bonyeza kuingia sasa* (saa 24 tu):\n`+
@@ -619,7 +619,7 @@ async function acCA(id){
     `${location.origin}/dashboard/login.html\n`+
     `PIN: ${fullPin}\n\n`+
     `⚠️ PIN yako ni siri. Usimwambie mtu yeyote.\n\n`+
-    `— *Travex Mall Team* 🌍`
+    `— *ShopNekt Team* 🌍`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
   toast('✅ Duka #'+shopNum+' imeidhinishwa! WhatsApp imefunguliwa.','ok');
@@ -710,7 +710,7 @@ async function acMA(id){
   }
 
   const pl=a.plan==='premium'?' Premium':' Basic';
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(` *Congratulations ${a.owner_name}!*\n\nYour shop *"${a.shop_name}"* is now LIVE on Travex Mall!\n\n\n *LOGIN DETAILS*\n Phone: *${phone}*\n Password: *${rawPass}*\n Plan: *${pl}*\n\n ${location.origin}/dashboard/login.html\n\nWelcome to Travex Mall! `)}`,'_blank');
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(` *Congratulations ${a.owner_name}!*\n\nYour shop *"${a.shop_name}"* is now LIVE on ShopNekt!\n\n\n *LOGIN DETAILS*\n Phone: *${phone}*\n Password: *${rawPass}*\n Plan: *${pl}*\n\n ${location.origin}/dashboard/login.html\n\nWelcome to ShopNekt! `)}`,'_blank');
   toast(' Approved!','ok');
   await loadAll();
 }

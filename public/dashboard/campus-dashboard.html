@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Campus Dashboard, Travex Mall</title>
+<title>Campus Dashboard, ShopNekt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1551,7 +1551,7 @@ async function generateMarketingPlan(){
   output.innerHTML='<div style="color:rgba(255,255,255,0.4);font-style:italic"> Writing your 30-day marketing plan...</div>';
   try{
     const shopInfo=currentShop?`Shop: "${currentShop.store_name}" at ${currentShop.university_abbr}.`:'';
-    const prompt=`Create a practical 30-day campus marketing plan for a Travex Mall student seller in Tanzania.\n${shopInfo}\nProducts: ${products}\nTarget: ${audience||'university students'}\nBudget: ${budget?'TZS '+budget:'Limited'}\n\nInclude: weekly action items, Social Vybe strategy, WhatsApp tips, pricing advice, quick wins. Keep it practical and specific for Tanzanian campus market.`;
+    const prompt=`Create a practical 30-day campus marketing plan for a ShopNekt student seller in Tanzania.\n${shopInfo}\nProducts: ${products}\nTarget: ${audience||'university students'}\nBudget: ${budget?'TZS '+budget:'Limited'}\n\nInclude: weekly action items, Social Vybe strategy, WhatsApp tips, pricing advice, quick wins. Keep it practical and specific for Tanzanian campus market.`;
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
     const data=await res.json();
     const reply=data.content?.[0]?.text||'Could not generate plan.';

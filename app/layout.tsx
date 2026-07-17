@@ -7,7 +7,7 @@ import Script from 'next/script'
 import './globals.css'
 
 const SITE_URL = 'https://travex-mall.vercel.app'
-const SITE_NAME = 'Travex Mall'
+const SITE_NAME = 'ShopNekt'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -18,24 +18,24 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Travex Mall, Tanzania\'s Digital Marketplace',
-    template: '%s | Travex Mall',
+    default: 'ShopNekt, Tanzania\'s Digital Marketplace',
+    template: '%s | ShopNekt',
   },
-  description: 'Travex Mall is Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying, and more. Shop online in Tanzania today.',
+  description: 'ShopNekt is Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying, and more. Shop online in Tanzania today.',
   keywords: [
-    'Travex Mall','Travex','Tanzania marketplace','online marketplace Tanzania',
+    'ShopNekt','Travex','Tanzania marketplace','online marketplace Tanzania',
     'buy online Tanzania','sell online Tanzania','digital marketplace Tanzania',
     'Tanzania e-commerce','duka online Tanzania','best marketplace Tanzania',
     'campus market Tanzania','student marketplace Tanzania','business market Tanzania',
     'online shop Tanzania','shops Tanzania','Africa marketplace','Africa digital commerce',
-    'Dar es Salaam marketplace','Tanzania online shopping','Travex Digital Group',
+    'Dar es Salaam marketplace','Tanzania online shopping','QNEX360',
     'flash deals Tanzania','group buying Tanzania','marketplace Africa',
     'best online shop Africa','Tanzania SME digital','AI marketplace Tanzania',
     'social commerce Tanzania','Kiswahili marketplace',
   ],
-  authors: [{ name: 'Travex Digital Group', url: SITE_URL }],
-  creator: 'Travex Digital Group',
-  publisher: 'Travex Digital Group',
+  authors: [{ name: 'QNEX360', url: SITE_URL }],
+  creator: 'QNEX360',
+  publisher: 'QNEX360',
   applicationName: SITE_NAME,
   manifest: '/manifest.json',
   robots: {
@@ -53,20 +53,20 @@ export const metadata: Metadata = {
     locale: 'en_TZ',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: 'Travex Mall, Tanzania\'s Digital Marketplace',
+    title: 'ShopNekt, Tanzania\'s Digital Marketplace',
     description: 'Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Business Market, Campus Market, Social Vybe, Flash Deals and more.',
     images: [
       {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'Travex Mall, Tanzania\'s Digital Marketplace',
+        alt: 'ShopNekt, Tanzania\'s Digital Marketplace',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Travex Mall, Tanzania\'s Digital Marketplace',
+    title: 'ShopNekt, Tanzania\'s Digital Marketplace',
     description: 'Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania.',
     images: [`${SITE_URL}/og-image.png`],
     creator: '@travexmall',
@@ -106,7 +106,7 @@ const jsonLd = {
     {
       '@type': 'Organization',
       '@id': `${SITE_URL}/#organization`,
-      name: 'Travex Digital Group',
+      name: 'QNEX360',
       url: SITE_URL,
       logo: `${SITE_URL}/icon-512.png`,
       description: 'Tanzanian technology company building Africa\'s first integrated AI-powered digital commerce ecosystem for SMEs.',
@@ -132,7 +132,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: 'Travex Mall',
+      name: 'ShopNekt',
       description: 'Tanzania\'s leading digital marketplace. Buy and sell online across Tanzania.',
       publisher: { '@id': `${SITE_URL}/#organization` },
       potentialAction: {
@@ -148,7 +148,7 @@ const jsonLd = {
     {
       '@type': 'OnlineStore',
       '@id': `${SITE_URL}/#store`,
-      name: 'Travex Mall',
+      name: 'ShopNekt',
       url: SITE_URL,
       description: 'Tanzania\'s digital marketplace with Business Market, Campus Market, Social Vybe, Flash Deals and Group Buy features.',
       areaServed: {

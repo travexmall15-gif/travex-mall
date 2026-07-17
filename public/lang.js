@@ -1,11 +1,11 @@
-// TRAVEX MALL — Complete Bilingual System
+// SHOPNEKT — Complete Bilingual System
 // Translates EVERY word on EVERY page
 ;(function(){
 const KEY = 'travex_lang'
 
 // ═══════════════════════════════════════════════════════
 // COMPLETE TRANSLATION DICTIONARY — EN → SW
-// Travex Mall, Travex Move, Travex Stay, Travex Digital
+// ShopNekt, Travex Move, Travex Stay, QNEX360
 // Group stay unchanged in both languages
 // ═══════════════════════════════════════════════════════
 const DICT = {
@@ -30,7 +30,7 @@ const DICT = {
   'Intelligent': 'Yenye Akili',
   'Digital Marketplace': 'Soko la Kidijitali',
   'Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur.': 'Fungua duka lako la mtandaoni kwa dakika chache. Uza Tanzania nzima. Kukua na nguvu ya AI, kwa kila mjasiriamali wa Afrika.',
-  'Enter Travex Mall': 'Ingia Travex Mall',
+  'Enter ShopNekt': 'Ingia ShopNekt',
   'Active Shops': 'Maduka Yanayofanya Kazi',
   'Regions': 'Mikoa',
   'Tanzania SMEs': 'Biashara Ndogo Tanzania',
@@ -59,7 +59,7 @@ const DICT = {
   // ── BUSINESS MARKET ──────────────────────────────────
   'Business Marketplace.': 'Soko la Biashara.',
   'Verified sellers. All categories. Five regions.': 'Wauzaji waliohakikishwa. Aina zote. Mikoa mitano.',
-  'businesses already selling on Travex Mall.': 'biashara zinazouza Travex Mall.',
+  'businesses already selling on ShopNekt.': 'biashara zinazouza ShopNekt.',
   'Join': 'Jiunge',
   'Region': 'Mkoa',
   'Category': 'Aina',
@@ -217,7 +217,7 @@ const DICT = {
   'Thank you! The seller will contact you via WhatsApp to confirm.': 'Asante! Muuzaji atawasiliana nawe kupitia WhatsApp kuthibitisha.',
   'Processing...': 'Inashughulikia...',
   // ── FOOTER ───────────────────────────────────────────
-  // NOTE: Travex Mall, Travex Stay, Travex Move, Travex Digital stay same
+  // NOTE: ShopNekt, Travex Stay, Travex Move, QNEX360 stay same
   // ── DASHBOARD ────────────────────────────────────────
   'Overview': 'Muhtasari',
   'Orders': 'Maagizo',

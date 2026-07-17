@@ -1,4 +1,4 @@
-// Travex Mall — PWA Initializer
+// ShopNekt — PWA Initializer
 (function() {
   // Register service worker
   if ('serviceWorker' in navigator) {
@@ -22,7 +22,7 @@
       _prompt.prompt();
       _prompt.userChoice.then(function() { _prompt = null; });
     } else {
-      alert('To install Travex Mall:\n\nAndroid: Tap menu (\u22EE) \u2192 "Add to Home Screen"\niOS Safari: Tap Share (\u25A1\u2191) \u2192 "Add to Home Screen"');
+      alert('To install ShopNekt:\n\nAndroid: Tap menu (\u22EE) \u2192 "Add to Home Screen"\niOS Safari: Tap Share (\u25A1\u2191) \u2192 "Add to Home Screen"');
     }
   };
 })();

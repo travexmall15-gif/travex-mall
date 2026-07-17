@@ -1,4 +1,4 @@
-// Travex Mall — Service Worker
+// ShopNekt — Service Worker
 // Strategy: Network-first with cache fallback for reliability + faster repeat loads
 
 const CACHE_NAME = 'travex-mall-v1';

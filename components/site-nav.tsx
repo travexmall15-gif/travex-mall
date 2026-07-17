@@ -125,7 +125,7 @@ export function SiteNav() {
             fontSize: '1.1rem', fontWeight: 800,
             color: '#0D1B3E', letterSpacing: '-0.04em',
           }}>
-            travex <span style={{ color: '#C9A84C' }}>mall</span>
+            shop<span style={{ color: '#C9A84C' }}>nekt</span>
           </span>
         </Link>
 

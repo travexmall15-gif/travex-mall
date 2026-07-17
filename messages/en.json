@@ -48,7 +48,7 @@
   "market": {
     "badge": "Business Market",
     "headline": "Business Marketplace.",
-    "subtext": "Verified sellers. All categories. Five regions. Join {count} businesses already selling on Travex Mall.",
+    "subtext": "Verified sellers. All categories. Five regions. Join {count} businesses already selling on ShopNekt.",
     "searchPlaceholder": "Search shops, products, sellers...",
     "regionLabel": "Region",
     "categoryLabel": "Category",
@@ -177,7 +177,7 @@
   "footer": {
     "move": "Travex Move",
     "stay": "Travex Stay",
-    "digital": "Travex Digital"
+    "digital": "QNEX360"
   },
   "common": {
     "loading": "Loading...",

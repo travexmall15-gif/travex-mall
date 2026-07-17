@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Group Buying, Travex Mall</title>
+<title>Group Buying, ShopNekt</title>
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -165,7 +165,7 @@ function renderGroups() {
         <td style="font-size:12px">${new Date(g.expires_at).toLocaleDateString('en-GB')}</td>
         <td><span class="badge ${g.status==='open'?'badge-success':g.status==='completed'?'badge-info':'badge-warning'}">${g.status}</span></td>
         <td>
-          <a href="https://wa.me/?text=${encodeURIComponent(' Join my group deal on Travex Mall!\n\n'+g.product_name+' at -'+g.discount_pct+'% off!\n\nJoin here: '+base+'/group-buy/'+g.id)}"
+          <a href="https://wa.me/?text=${encodeURIComponent(' Join my group deal on ShopNekt!\n\n'+g.product_name+' at -'+g.discount_pct+'% off!\n\nJoin here: '+base+'/group-buy/'+g.id)}"
             target="_blank" class="btn btn-success btn-sm">
             <i class="ti ti-brand-whatsapp"></i> Share
           </a>

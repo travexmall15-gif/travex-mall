@@ -23,7 +23,7 @@ export function SiteFooter() {
           {[
             { label: 'Travex Move',    href: '/move/index.html' },
             { label: 'Travex Stay',    href: '#'                },
-            { label: 'Travex Digital', href: 'https://travex-mall.vercel.app' },
+            { label: 'QNEX360', href: 'https://travex-mall.vercel.app' },
           ].map(({ label, href }) => (
             <Link key={label} href={href} style={{
               display: 'inline-flex', alignItems: 'center',
@@ -58,7 +58,7 @@ export function SiteFooter() {
           color: 'rgba(255,255,255,0.22)',
           margin: 0, textAlign: 'center',
         }}>
-          © {new Date().getFullYear()} Travex Digital Group · Dar es Salaam, Tanzania
+          © {new Date().getFullYear()} QNEX360 · Dar es Salaam, Tanzania
         </p>
       </div>
     </footer>

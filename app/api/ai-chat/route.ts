@@ -174,7 +174,7 @@ export async function POST(req: Request) {
     reply += `\nAu niambie tatizo lako nami nitasaidia!\n\nPia unaweza kutuma message kupitia kitufe cha "Message Seller" juu.`
 
   } else if (intent === 'ask_location') {
-    reply = `${shop.name} ipo:\n📍 Mkoa: ${shop.region}\n📦 Category: ${shop.category}\n📅 Imefunguliwa: ${shop.since || 'Hivi karibuni'}\n${shop.plan === 'premium' ? '\nSeller hii ni Premium — wamethhibitishwa na Travex Mall.' : ''}`
+    reply = `${shop.name} ipo:\n📍 Mkoa: ${shop.region}\n📦 Category: ${shop.category}\n📅 Imefunguliwa: ${shop.since || 'Hivi karibuni'}\n${shop.plan === 'premium' ? '\nSeller hii ni Premium — wamethhibitishwa na ShopNekt.' : ''}`
 
   } else if (intent === 'order_intent') {
     const found = findProducts(msg, allProducts)
@@ -265,7 +265,7 @@ export async function POST(req: Request) {
             `💰 Jumla: ${fmt(total)}\n` +
             `👤 Mteja: ${state.customerName}\n` +
             `📱 Simu: ${state.customerPhone}\n\n` +
-            `_Order imepelekwa kupitia Aria AI Assistant - Travex Mall_`
+            `_Order imepelekwa kupitia Aria AI Assistant - ShopNekt_`
           )
           // Note: In production, send via server-side WhatsApp Business API
           // For now we log for seller dashboard to pick up

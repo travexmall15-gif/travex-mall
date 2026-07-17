@@ -59,7 +59,7 @@
     "perMonth": "/ month",
     "startSelling": "Start Selling",
     "howItWorks": "How It Works",
-    "whyTravex": "Why Travex Mall",
+    "whyTravex": "Why ShopNekt",
     "features": "Features",
     "marketBadge": "Business Market",
     "campusBadge": "Campus Market",
@@ -131,7 +131,7 @@
     "whatsapp": "WhatsApp",
     "location": "Location",
     "heroBadge": "Business Market",
-    "joinCount": "Join {count} businesses already selling on Travex Mall.",
+    "joinCount": "Join {count} businesses already selling on ShopNekt.",
     "resultsFound": "{count} shops found",
     "resultFound": "{count} shop found",
     "loadingShops": "Loading shops...",
@@ -484,7 +484,7 @@
     "aria": "AI Assistant"
   },
   "openStore": {
-    "title": "Open Your Store on Travex Mall",
+    "title": "Open Your Store on ShopNekt",
     "subtitle": "Join thousands of sellers across Tanzania. Start selling in minutes.",
     "businessMarket": "Business Market",
     "campusMarket": "Campus Market",
@@ -515,7 +515,7 @@
     "contactWhatsApp": "Contact us on WhatsApp",
     "reviewTitle": "Review Your Application",
     "confirmSubmit": "Confirm and Submit",
-    "termsAgree": "I agree to Travex Mall terms and conditions",
+    "termsAgree": "I agree to ShopNekt terms and conditions",
     "ownerName": "Your Full Name",
     "universityLabel": "Your University",
     "universityPlan": "Campus Plan",
@@ -550,12 +550,12 @@
     "loggingIn": "Logging in...",
     "forgotPin": "Forgot PIN?",
     "resetPin": "Reset PIN here",
-    "backToSite": "← Back to Travex Mall",
+    "backToSite": "← Back to ShopNekt",
     "openNewShop": "Open a New Shop",
     "errorInvalid": "Invalid PIN format. Example: 8842-048",
     "errorNotFound": "Shop not found. Please check your PIN.",
     "errorWrongPin": "Incorrect PIN. Please try again or reset your PIN.",
-    "errorNotApproved": "Your shop is not yet approved. Please contact Travex Mall.",
+    "errorNotApproved": "Your shop is not yet approved. Please contact ShopNekt.",
     "errorNetwork": "Network error. Please check your connection.",
     "successLogin": "Welcome back! Redirecting..."
   },
@@ -570,7 +570,7 @@
     "linkInvalid": "Invalid Link",
     "linkInvalidDesc": "This link is not valid. Please use your PIN to log in.",
     "notApproved": "Not Yet Approved",
-    "notApprovedDesc": "Your shop is not yet approved. Please contact Travex Mall.",
+    "notApprovedDesc": "Your shop is not yet approved. Please contact ShopNekt.",
     "loginWithPin": "Log In with PIN",
     "backToHome": "← Back to Home",
     "shopNumber": "Shop"
@@ -605,7 +605,7 @@
     "allRights": "All rights reserved.",
     "move": "Travex Move",
     "stay": "Travex Stay",
-    "digital": "Travex Digital"
+    "digital": "QNEX360"
   },
   "common": {
     "loading": "Loading...",
@@ -683,7 +683,7 @@
     "refunded": "Refunded"
   },
   "join": {
-    "title": "Join Travex Mall",
+    "title": "Join ShopNekt",
     "subtitle": "Start selling across Tanzania today",
     "shops": "Shops",
     "regions": "Regions",
@@ -707,7 +707,7 @@
     "benefit4": "WhatsApp support",
     "digitalBadge": "Digital Commerce · Tanzania",
     "heroTitle1": "Open Your Shop on",
-    "heroTitle2": "Travex Mall",
+    "heroTitle2": "ShopNekt",
     "heroSubtitle": "Tanzania's first AI-powered digital marketplace for students and entrepreneurs. Start selling online today and reach more customers.",
     "openStoreNow": "Open Your Store Now",
     "browseMarket": "Browse Market",
@@ -730,7 +730,7 @@
     "browseBusiness": "Browse Business Market",
     "browseCampus": "Browse Campus Market",
     "whyLabel": "WHY TRAVEX",
-    "whyTitle": "Why Sellers Choose Travex Mall",
+    "whyTitle": "Why Sellers Choose ShopNekt",
     "basicPlanLabel": "Basic Plan",
     "premiumPlanLabel": "Premium Plan",
     "campusPlanLabel": "Campus Plan",

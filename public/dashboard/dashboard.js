@@ -1,5 +1,5 @@
 // 
-// TRAVEX MALL, Shared Dashboard JS
+// SHOPNEKT, Shared Dashboard JS
 // Modelled after Travex Finance pattern
 // 
 
@@ -233,7 +233,7 @@ async function loadSidebar(activePage, shopData) {
 
   el.innerHTML = `
     <div class="sidebar-logo">
-      <div class="sidebar-logo-brand">TRAVEX MALL</div>
+      <div class="sidebar-logo-brand">SHOPNEKT</div>
       <div class="sidebar-logo-tag">Seller Dashboard</div>
     </div>
 

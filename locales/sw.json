@@ -59,7 +59,7 @@
     "perMonth": "/ mwezi",
     "startSelling": "Anza Kuuza",
     "howItWorks": "Jinsi Inavyofanya Kazi",
-    "whyTravex": "Kwa Nini Travex Mall",
+    "whyTravex": "Kwa Nini ShopNekt",
     "features": "Vipengele",
     "marketBadge": "Soko la Biashara",
     "campusBadge": "Soko la Vyuo",
@@ -131,7 +131,7 @@
     "whatsapp": "WhatsApp",
     "location": "Mahali",
     "heroBadge": "Soko la Biashara",
-    "joinCount": "Jiunge na biashara {count} zinazouza Travex Mall.",
+    "joinCount": "Jiunge na biashara {count} zinazouza ShopNekt.",
     "resultsFound": "Maduka {count} yamepatikana",
     "resultFound": "Duka {count} limepatikana",
     "loadingShops": "Inapakia maduka...",
@@ -484,7 +484,7 @@
     "aria": "Msaidizi wa AI"
   },
   "openStore": {
-    "title": "Fungua Duka Lako kwenye Travex Mall",
+    "title": "Fungua Duka Lako kwenye ShopNekt",
     "subtitle": "Jiunge na maelfu ya wauzaji Tanzania. Anza kuuza kwa dakika chache.",
     "businessMarket": "Soko la Biashara",
     "campusMarket": "Soko la Vyuo",
@@ -515,7 +515,7 @@
     "contactWhatsApp": "Wasiliana nasi kwa WhatsApp",
     "reviewTitle": "Angalia Ombi Lako",
     "confirmSubmit": "Thibitisha na Wasilisha",
-    "termsAgree": "Nakubaliana na masharti ya Travex Mall",
+    "termsAgree": "Nakubaliana na masharti ya ShopNekt",
     "ownerName": "Jina Lako Kamili",
     "universityLabel": "Chuo Chako",
     "universityPlan": "Mpango wa Chuo",
@@ -550,12 +550,12 @@
     "loggingIn": "Inaingia...",
     "forgotPin": "Umesahau PIN?",
     "resetPin": "Reset PIN hapa",
-    "backToSite": "← Rudi Travex Mall",
+    "backToSite": "← Rudi ShopNekt",
     "openNewShop": "Fungua Duka Jipya",
     "errorInvalid": "Muundo wa PIN si sahihi. Mfano: 8842-048",
     "errorNotFound": "Duka halikupatikana. Angalia PIN yako.",
     "errorWrongPin": "PIN si sahihi. Jaribu tena au reset PIN yako.",
-    "errorNotApproved": "Duka lako bado halijaidhinishwa. Wasiliana na Travex Mall.",
+    "errorNotApproved": "Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.",
     "errorNetwork": "Hitilafu ya mtandao. Angalia muunganiko wako.",
     "successLogin": "Karibu tena! Unaingiwa..."
   },
@@ -570,7 +570,7 @@
     "linkInvalid": "Link Si Sahihi",
     "linkInvalidDesc": "Link hii haipo kwenye mfumo wetu. Tumia PIN yako kuingia.",
     "notApproved": "Bado Haijaidhinishwa",
-    "notApprovedDesc": "Duka lako bado halijaidhinishwa. Wasiliana na Travex Mall.",
+    "notApprovedDesc": "Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.",
     "loginWithPin": "Ingia kwa PIN",
     "backToHome": "← Rudi Nyumbani",
     "shopNumber": "Duka"
@@ -605,7 +605,7 @@
     "allRights": "Haki zote zimehifadhiwa.",
     "move": "Travex Move",
     "stay": "Travex Stay",
-    "digital": "Travex Digital"
+    "digital": "QNEX360"
   },
   "common": {
     "loading": "Inapakia...",
@@ -683,7 +683,7 @@
     "refunded": "Imerudishwa"
   },
   "join": {
-    "title": "Jiunge na Travex Mall",
+    "title": "Jiunge na ShopNekt",
     "subtitle": "Anza kuuza Tanzania nzima leo",
     "shops": "Maduka",
     "regions": "Mikoa",
@@ -707,7 +707,7 @@
     "benefit4": "Msaada wa WhatsApp",
     "digitalBadge": "Biashara ya Kidijitali · Tanzania",
     "heroTitle1": "Fungua Duka Lako kwenye",
-    "heroTitle2": "Travex Mall",
+    "heroTitle2": "ShopNekt",
     "heroSubtitle": "Soko la kwanza la kidijitali Tanzania lenye AI, kwa wanafunzi na wafanyabiashara. Uza bidhaa zako mtandaoni leo hii.",
     "openStoreNow": "Fungua Duka Sasa",
     "browseMarket": "Angalia Soko",
@@ -730,7 +730,7 @@
     "browseBusiness": "Vinjari Soko la Biashara",
     "browseCampus": "Vinjari Soko la Vyuo",
     "whyLabel": "KWA NINI TRAVEX",
-    "whyTitle": "Kwa Nini Wauzaji Wanachagua Travex Mall",
+    "whyTitle": "Kwa Nini Wauzaji Wanachagua ShopNekt",
     "basicPlanLabel": "Mpango wa Msingi",
     "premiumPlanLabel": "Mpango wa Premium",
     "campusPlanLabel": "Mpango wa Vyuo",

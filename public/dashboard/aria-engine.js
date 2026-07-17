@@ -79,7 +79,7 @@ const ARIA = (() => {
   async function fetchProducts() {
     const id = getStoreId()
     const session = getSession()
-    // Business sellers use campus_products table (Travex Mall schema)
+    // Business sellers use campus_products table (ShopNekt schema)
     const table = 'campus_products'
     return await sb(table, 'GET', null, `?store_id=eq.${id}&order=created_at.desc`)
   }

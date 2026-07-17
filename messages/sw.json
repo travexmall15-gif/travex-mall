@@ -48,7 +48,7 @@
   "market": {
     "badge": "Soko la Biashara",
     "headline": "Soko la Biashara.",
-    "subtext": "Wauzaji waliohakikishwa. Aina zote. Mikoa mitano. Jiunge na biashara {count} zinazouza Travex Mall.",
+    "subtext": "Wauzaji waliohakikishwa. Aina zote. Mikoa mitano. Jiunge na biashara {count} zinazouza ShopNekt.",
     "searchPlaceholder": "Tafuta maduka, bidhaa, wauzaji...",
     "regionLabel": "Mkoa",
     "categoryLabel": "Aina",
@@ -177,7 +177,7 @@
   "footer": {
     "move": "Travex Move",
     "stay": "Travex Stay",
-    "digital": "Travex Digital"
+    "digital": "QNEX360"
   },
   "common": {
     "loading": "Inapakia...",

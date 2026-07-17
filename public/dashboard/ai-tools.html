@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Tools, Travex Mall</title>
+<title>AI Tools, ShopNekt</title>
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -583,7 +583,7 @@ async function sendCoach() {
   msgsEl.innerHTML += `<div class="chat-msg bot" id="coachTyping"><span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span></div>`;
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
-  const context = `You are an AI Business Coach for a Tanzanian small business seller on Travex Mall.
+  const context = `You are an AI Business Coach for a Tanzanian small business seller on ShopNekt.
 
 SELLER CONTEXT:
 - Shop: ${shopData?.shop_name || 'Unknown'}
@@ -640,7 +640,7 @@ Product names: ${products.map(p => p.name + ' (TZS ' + Number(p.price).toLocaleS
 Give exactly 5 tips. Each tip should have:
 - A specific action (not generic advice)
 - Expected impact
-- How to implement it on Travex Mall
+- How to implement it on ShopNekt
 
 Format each tip as: [EMOJI] [Title]: [1-2 sentence advice]`;
 

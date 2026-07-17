@@ -1,4 +1,4 @@
-// ── Travex Mall Data Layer ──
+// ── ShopNekt Data Layer ──
 
 export type University = {
   slug: string
