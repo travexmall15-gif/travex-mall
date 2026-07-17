@@ -1,5 +1,5 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 import Script from 'next/script'
 import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
@@ -7,6 +7,7 @@ import { SiteNav } from '@/components/site-nav'
 import { ArrowRight, GraduationCap, Store, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
+  const { t } = useTranslation()
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', overflowX: 'hidden', paddingTop: '108px' }}>
       <style>{`
@@ -42,17 +43,17 @@ export default function HomePage() {
       <div style={{ background: 'linear-gradient(180deg,#071540,#0A0C20)', overflow: 'hidden', width: '100%', padding: '14px 0' }}>
         <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
           {[
-            { href: '/group-buy',   label: <T en="Group Buy" sw="Nunua Pamoja" />,   sub: <T en="Save together" sw="Okoa pamoja" />  },
-            { href: '/market',      label: <T en="Business" sw="Biashara" />,    sub: <T en="500+ shops" sw="Maduka 500+" />     },
-            { href: '/campus',      label: <T en="Campus" sw="Vyuo" />,      sub: <T en="5 universities" sw="Vyuo vikuu 5" /> },
-            { href: '/vybe',        label: 'Social Vybe', sub: <T en="Community" sw="Jamii" />      },
-            { href: '/flash-deals', label: <T en="Flash Deals" sw="Ofa za Haraka" />, sub: <T en="Limited offers" sw="Ofa za muda" /> },
+            { href: '/group-buy',   label: "Group Buy",   sub: "Save together"  },
+            { href: '/market',      label: "Business",    sub: "500+ shops"     },
+            { href: '/campus',      label: "Campus",      sub: "5 universities" },
+            { href: '/vybe',        label: 'Social Vybe', sub: "Community"      },
+            { href: '/flash-deals', label: "Flash Deals", sub: "Limited offers" },
             { href: '/move',        label: 'Travex Move', sub: 'Usafirishaji'      },
-            { href: '/group-buy',   label: <T en="Group Buy" sw="Nunua Pamoja" />,   sub: <T en="Save together" sw="Okoa pamoja" />  },
-            { href: '/market',      label: <T en="Business" sw="Biashara" />,    sub: <T en="500+ shops" sw="Maduka 500+" />     },
-            { href: '/campus',      label: <T en="Campus" sw="Vyuo" />,      sub: <T en="5 universities" sw="Vyuo vikuu 5" /> },
-            { href: '/vybe',        label: 'Social Vybe', sub: <T en="Community" sw="Jamii" />      },
-            { href: '/flash-deals', label: <T en="Flash Deals" sw="Ofa za Haraka" />, sub: <T en="Limited offers" sw="Ofa za muda" /> },
+            { href: '/group-buy',   label: "Group Buy",   sub: "Save together"  },
+            { href: '/market',      label: "Business",    sub: "500+ shops"     },
+            { href: '/campus',      label: "Campus",      sub: "5 universities" },
+            { href: '/vybe',        label: 'Social Vybe', sub: "Community"      },
+            { href: '/flash-deals', label: "Flash Deals", sub: "Limited offers" },
             { href: '/move',        label: 'Travex Move', sub: 'Usafirishaji'      },
           ].map((chip, i) => (
             <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 18px', textDecoration: 'none', flexShrink: 0, transition: 'background 0.2s', whiteSpace: 'nowrap' as const }}
@@ -87,7 +88,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Basic</span>
                 
               </div>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{<T en="Business Market" sw="Soko la Biashara" />}</h3>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Business Market"}</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s unified marketplace for entrepreneurs, retailers and SMEs. 500 verified shops across 5 major regions.
               </p>
@@ -120,7 +121,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(59,130,246,0.15)', color: '#93C5FD', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Students Only</span>
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.15)', color: '#86EFAC', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Verified</span>
               </div>
-              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{<T en="Campus Market" sw="Soko la Vyuo" />}</h3>
+              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Campus Market"}</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.50)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s dedicated campus marketplace. Sell directly to fellow students, verified sellers, 5 campuses, 60 slots each.
               </p>

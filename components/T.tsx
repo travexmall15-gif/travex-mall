@@ -1,19 +1,13 @@
 'use client'
-import { useLang } from '@/lib/lang-context'
-import { TX } from '@/lib/translations'
+import { useTranslation } from '@/hooks/useTranslation'
 
-interface Props { en: string; sw: string }
+interface Props { k: string; vars?: Record<string, string | number> }
 
-export function T({ en, sw }: Props) {
-  const { lang } = useLang()
-  return <>{lang === 'sw' ? sw : en}</>
+// Key-based: <T k="nav.home" />
+export function T({ k, vars }: Props) {
+  const { t } = useTranslation()
+  return <>{t(k, vars)}</>
 }
 
-// Quick helper for non-JSX contexts (placeholder, title, etc.)
-export function useT() {
-  const { lang } = useLang()
-  return (en: string): string => {
-    if (lang === 'en') return en
-    return TX[en]?.[lang] ?? en
-  }
-}
+// Re-export hook for string contexts
+export { useTranslation }

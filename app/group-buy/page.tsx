@@ -1,5 +1,5 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
@@ -25,7 +25,7 @@ type Group = {
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
 function timeLeft(exp: string | null) {
-  if (!exp) return <T en="Ongoing" sw="Inaendelea" />
+  if (!exp) return 'Ongoing'
   const diff = new Date(exp).getTime() - Date.now()
   if (diff <= 0) return 'Expired'
   const h = Math.floor(diff / 3600000)
@@ -115,6 +115,7 @@ function GroupCard({ group }: { group: Group }) {
 }
 
 export default function GroupBuyPage() {
+  const { t } = useTranslation()
   const [groups, setGroups]   = useState<Group[]>([])
   const [search, setSearch]   = useState('')
   const [loading, setLoading] = useState(true)
@@ -170,7 +171,7 @@ export default function GroupBuyPage() {
           {/* Top row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: 999, fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <Users size={11} /> {<T en="Business Market" sw="Soko la Biashara" />}
+              <Users size={11} /> {t('groupBuy.tryOther')}
             </div>
             <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: 999, fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
               Open Your Shop
@@ -180,10 +181,10 @@ export default function GroupBuyPage() {
           {/* Headline */}
           <div style={{ maxWidth: 560, marginBottom: '2rem' }}>
             <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(2rem,4.5vw,3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              {<T en="Buy Together," sw="Nunua Pamoja," />} {<T en="Save More." sw="Okoa Zaidi." />}
+              {t('groupBuy.headline1')} {t('groupBuy.headline2')}
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: 440 }}>
-              {<T en="Products, offers and updates from verified Tanzania sellers" sw="Bidhaa, ofa na habari kutoka wauzaji waliohakikishwa Tanzania" />}
+              {t('groupBuy.tryOther')}
             </p>
           </div>
 
@@ -255,7 +256,7 @@ export default function GroupBuyPage() {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#0D1B3E', margin: '0 auto 12px', display: 'block' }} />
-            <p style={{ color: '#94A3B8', fontSize: 14 }}>{<T en="group deals available" sw="ofa za kikundi zinapatikana" />}</p>
+            <p style={{ color: '#94A3B8', fontSize: 14 }}>{t('groupBuy.groupsFound', {count: filtered.length})}</p>
           </div>
 
         ) : error ? (
@@ -270,10 +271,10 @@ export default function GroupBuyPage() {
           <div style={{ textAlign: 'center', padding: '5rem 0' }}>
             <Users size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
             <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>
-              {search ? <T en="No matching groups" sw="Hakuna vikundi vinavyolingana" /> : <T en="No Active Group Deals" sw="Hakuna Ofa za Kikundi" />}
+              {search ? t('groupBuy.noMatching') : t('groupBuy.noGroups')}
             </h3>
             <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 24 }}>
-              {search ? <T en="Try a different search term." sw="Jaribu neno tofauti la utafutaji." /> : <T en="Sellers will post group deals soon." sw="Wauzaji wataweka ofa hivi karibuni." />}
+              {search ? t('groupBuy.tryOther') : t('groupBuy.checkBack')}
             </p>
             <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#0D1B3E', color: '#fff', padding: '12px 28px', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 13 }}>
               Browse Market

@@ -1,8 +1,9 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 import Link from 'next/link'
 
 export function SiteFooter() {
+  const { t } = useTranslation()
   return (
     <footer style={{
       background: '#060B18',

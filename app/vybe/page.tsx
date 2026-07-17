@@ -1,5 +1,5 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -62,6 +62,7 @@ function isVideo(post: FeedPost) {
 }
 
 export default function VybePage() {
+  const { t } = useTranslation()
   const [posts, setPosts]     = useState<FeedPost[]>([])
   const [mediaFilter, setMediaFilter] = useState<'all' | 'photo' | 'video'>('all')
   const [loading, setLoading] = useState(true)
@@ -133,7 +134,7 @@ export default function VybePage() {
             Travex Social Vybe
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: '1.5rem' }}>
-            {<T en="Products, offers and updates from verified Tanzania sellers" sw="Bidhaa, ofa na habari kutoka wauzaji waliohakikishwa Tanzania" />}
+            {"Products, offers and updates from verified Tanzania sellers"}
           </p>
 
           {/* Media type filter */}
@@ -168,7 +169,7 @@ export default function VybePage() {
 
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{<T en="No posts yet." sw="Hakuna machapisho bado." />}</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{t('vybe.noPosts')}</p>
           </div>
 
         ) : (
@@ -246,7 +247,7 @@ export default function VybePage() {
 
                     {post.store_id && (
                       <Link href={`/store/${post.store_id}`} className="visit-btn">
-                        <Store size={11} /> {<T en="Visit Shop" sw="Tembelea Duka" />}
+                        <Store size={11} /> {t('market.visitShop')}
                       </Link>
                     )}
                   </div>

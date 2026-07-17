@@ -1,5 +1,5 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 import { SiteFooter } from '@/components/site-footer'
 
 import Image from 'next/image'
@@ -42,7 +42,9 @@ type Product = {
 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
-export default function StorePage({ params }: { params: Promise<{ slug: string }> }) {
+export default function StorePage({
+  params }: { params: Promise<{ slug: string }> }) {
+  const { t } = useTranslation()
   const { slug } = use(params)
   const [store, setStore]       = useState<Store | null>(null)
   const [products, setProducts] = useState<Product[]>([])
@@ -286,7 +288,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
-                  <CheckCircle size={10} /> {<T en="Verified" sw="Imethibitishwa" />}
+                  <CheckCircle size={10} /> {t('store.verified')}
                 </span>
               </div>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
@@ -303,7 +305,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                 onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
-                <MessageCircle size={13} /> {<T en="Message Seller" sw="Wasiliana na Muuzaji" />}
+                <MessageCircle size={13} /> {t('store.messageSeller')}
               </button>
             </div>
           </div>
@@ -620,8 +622,8 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
             {/* Quick action chips */}
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-              {[<T en="Find a product" sw="Tafuta bidhaa" />, <T en="Place an order" sw="Fanya agizo" />, <T en="Check prices" sw="Angalia bei" />].map(t => (
-                <button key={t} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>{t}</button>
+              {[t('store.findProduct'), t('store.placeOrder'), t('store.checkPrices')].map((chip, chipIdx) => (
+                <button key={chipIdx} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>{ chip }</button>
               ))}
             </div>
 

@@ -1,5 +1,5 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -17,6 +17,7 @@ const CAMPUS_CATEGORIES = [
 ]
 
 export default function CampusPage() {
+  const { t } = useTranslation()
   const [uniStats, setUniStats] = useState<UniStats[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -89,20 +90,20 @@ export default function CampusPage() {
           {/* Top row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <GraduationCap size={12} /> {<T en="Business Market" sw="Soko la Biashara" />}
+              <GraduationCap size={12} /> {"Business Market"}
             </div>
             <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
-              <GraduationCap size={13} /> {<T en="Open Shop" sw="Fungua Duka" />}
+              <GraduationCap size={13} /> {t('nav.openShop')}
             </Link>
           </div>
 
           {/* Headline */}
           <div style={{ maxWidth: '560px', marginBottom: '2rem' }}>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              {<T en="Business Marketplace." sw="Soko la Biashara." />}
+              {"Business Marketplace."}
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
-              <T en="Buy and sell within your university community." sw="Nunua na uza ndani ya jamii ya chuo chako." /> Verified student sellers. {loading ? '...' : totalActive} <T en="active shops" sw="maduka yanayofanya kazi" /> across {uniData.length} universities.
+              "Buy and sell within your university community." Verified student sellers. {loading ? '...' : totalActive} {t('campus.activeShops')} across {uniData.length} universities.
             </p>
           </div>
 

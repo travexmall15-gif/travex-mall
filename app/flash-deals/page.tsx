@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -105,6 +106,7 @@ function DealCard({ deal }: { deal: Deal }) {
 }
 
 export default function FlashDealsPage() {
+  const { t } = useTranslation()
   const [deals, setDeals]   = useState<Deal[]>([])
   const [loading, setLoading] = useState(true)
 

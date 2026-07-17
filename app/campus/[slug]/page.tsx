@@ -1,5 +1,5 @@
 'use client'
-import { T, useT } from '@/components/T'
+import { useTranslation } from '@/hooks/useTranslation'
 
 import { use, useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -75,7 +75,9 @@ function StoreCard({ store }: { store: CampusStore; index?: number }) {
   )
 }
 
-export default function UniversityPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function UniversityPage({
+  params }: { params: Promise<{ slug: string }> }) {
+  const { t } = useTranslation()
   const { slug } = use(params)
   const router = useRouter()
   const uni = getUniversity(slug)
@@ -119,7 +121,7 @@ export default function UniversityPage({ params }: { params: Promise<{ slug: str
           {/* Top row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
             <button onClick={() => router.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '5px 12px', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 600, cursor: 'pointer' }}>
-              <ArrowLeft size={12} /> {<T en="Browse" sw="Vinjari" />}
+              <ArrowLeft size={12} /> {t('campus.browse')}
             </button>
             <Link href="/campus-apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#C9A84C', color: '#0F172A', padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(201,168,76,0.28)' }}>
               Open Your Shop
@@ -168,7 +170,7 @@ export default function UniversityPage({ params }: { params: Promise<{ slug: str
         {/* Category filter */}
         <div style={{ overflowX: 'auto', scrollbarWidth: 'none' as const, marginBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 'max-content', paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>{<T en="Category" sw="Aina" />}</span>
+            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', flexShrink: 0, minWidth: '52px' }}>{t('market.category')}</span>
             {categories.map(c => (
               <button key={c} onClick={() => setCat(c)} style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: cat === c ? '#C9A84C' : '#E2E8F0', background: cat === c ? '#C9A84C' : '#fff', color: cat === c ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}>
                 {c}

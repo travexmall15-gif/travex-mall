@@ -6,7 +6,7 @@ import {
   Home, Store, GraduationCap, MessageCircle, Zap,
   Users, Truck, Search, Menu, Lock, ShoppingBag, Globe, X, ArrowRight, Loader2
 } from 'lucide-react'
-import { T } from './T'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
 import { sb } from '@/lib/supabase'
 
@@ -28,6 +28,7 @@ const NAV_ICONS = [
 ]
 
 export function SiteNav() {
+  const { t } = useTranslation()
   const pathname = usePathname()
   const router   = useRouter()
   const { lang, setLang } = useLang()
@@ -188,7 +189,7 @@ export function SiteNav() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: '13px', fontWeight: 600, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.shop_name}</div>
                     <div style={{ fontSize: '10px', color: '#94A3B8' }}>
-                      {r.source === 'business' ? 'Business Market' : 'Campus Market'}{r.shop_city ? ` · ${r.shop_city}` : ''}
+                      {r.source === 'business' ? t('nav.businessMarket') : t('nav.campusMarket')}{r.shop_city ? ` · ${r.shop_city}` : ''}
                     </div>
                   </div>
                   <ArrowRight size={13} color="#CBD5E1" />
@@ -200,7 +201,7 @@ export function SiteNav() {
                   onClick={() => setShowDrop(false)}
                   style={{ fontSize: '12px', color: '#0D1B3E', fontWeight: 600, textDecoration: 'none' }}
                 >
-                  See all results for &ldquo;{query}&rdquo; →
+                  {t('nav.searchAll')} "{query}" →
                 </Link>
               </div>
             </div>
@@ -242,7 +243,7 @@ export function SiteNav() {
                 onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
               >
                 <Lock size={16} color="#0D1B3E" />
-                <span style={{ fontSize: '13px', fontWeight: 600 }}><T en="Log In" sw="Ingia" /></span>
+                <span style={{ fontSize: '13px', fontWeight: 600 }}>{t('nav.login')}</span>
               </Link>
               <Link
                 href="/open-store"
@@ -252,14 +253,14 @@ export function SiteNav() {
                 onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
               >
                 <ShoppingBag size={16} color="#C9A84C" />
-                <span style={{ fontSize: '13px', fontWeight: 600 }}><T en="Open Your Shop" sw="Fungua Duka Lako" /></span>
+                <span style={{ fontSize: '13px', fontWeight: 600 }}>{t('nav.openYourShop')}</span>
               </Link>
 
               <div style={{ height: '1px', background: '#F1F5F9', margin: '4px 0' }} />
 
               <div style={{ padding: '10px 16px 14px' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <Globe size={11} /> <T en="Language" sw="Lugha" />
+                  <Globe size={11} /> {t('nav.language')}
                 </div>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   {(['en', 'sw'] as const).map(code => (
