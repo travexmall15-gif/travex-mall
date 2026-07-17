@@ -47,10 +47,10 @@ export default function HomePage() {
             Africa&apos;s #1 AI-Powered Marketplace, Tanzania 2026
           </div>
           <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: 900, lineHeight: 1.06, color: '#fff', marginBottom: '0.75rem', letterSpacing: '-0.02em', maxWidth: '680px' }}>
-            {<T en="Buy Together," sw="Nunua Pamoja," />} <span style={{ color: '#C9A84C', textShadow: '0 2px 20px rgba(201,168,76,0.30)' }}>{<T en="Save More." sw="Okoa Zaidi." />}</span><br />{<T en="Digital Marketplace" sw="Soko la Kidijitali" />}
+            <T en="Africa's" sw="Afrika" /> <span style={{ color: '#C9A84C', textShadow: '0 2px 20px rgba(201,168,76,0.30)' }}><T en="Intelligent" sw="Yenye Akili" /></span><br /><T en="Digital Marketplace" sw="Soko la Kidijitali" />
           </h1>
           <p className="hero-sub" style={{ fontSize: 'clamp(0.88rem, 1.6vw, 1rem)', lineHeight: 1.78, color: 'rgba(255,255,255,0.50)', marginBottom: '1.2rem', maxWidth: '500px' }}>
-            {<T en="Products, offers and updates from verified Tanzania sellers" sw="Bidhaa, ofa na habari kutoka wauzaji waliohakikishwa Tanzania" />}
+            <T en="Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur." sw="Fungua duka lako la mtandaoni kwa dakika chache. Uza Tanzania nzima. Kukua na nguvu ya AI, kwa kila mjasiriamali wa Afrika." />
           </p>
           <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
@@ -64,14 +64,7 @@ export default function HomePage() {
               🇹🇿 Kiswahili
             </button>
           </div>
-          <div className="hero-stats" style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }}>
-            {[['5', <T en="Regions" sw="Mikoa" />], ['3M+', <T en="Tanzania SMEs" sw="Biashara Ndogo Tanzania" />]].map(([v, l]) => (
-              <div key={l}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{v}</div>
-                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.32)', marginTop: '3px', letterSpacing: '0.04em' }}>{l}</div>
-              </div>
-            ))}
-          </div>
+
 
         </div>
 
