@@ -78,7 +78,7 @@ export default function OpenStorePage() {
             Open Your Store Today
           </div>
           <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem,5vw,3.2rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
-            Open Your <span style={{ color: '#C9A84C' }}>Store</span>
+            Open Your <span style={{ color: '#C9A84C' }}>{'Store'}</span>
           </h1>
           <p style={{ fontSize: 'clamp(0.88rem,1.6vw,1rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.65, maxWidth: '420px', margin: '0 auto' }}>
             Choose the market that fits your business. Select your plan and get started.
@@ -132,7 +132,7 @@ export default function OpenStorePage() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg, #040C32, #071545)', borderRadius: '14px', padding: '1rem 1.25rem' }}>
               <div>
-                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monthly</div>
+                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{'Monthly'}</div>
                 <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>JOIN</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.2rem', borderRadius: '999px', fontSize: '0.80rem', fontWeight: 700 }}>
@@ -182,7 +182,7 @@ export default function OpenStorePage() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg, #040C32, #0A1858)', borderRadius: '14px', padding: '1rem 1.25rem' }}>
               <div>
-                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Per month</div>
+                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{'Per month'}</div>
                 <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', fontWeight: 900, color: '#93C5FD', lineHeight: 1 }}>TZS 10K</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#3B82F6', color: '#fff', padding: '0.6rem 1.2rem', borderRadius: '999px', fontSize: '0.80rem', fontWeight: 700 }}>
@@ -194,7 +194,7 @@ export default function OpenStorePage() {
 
         {/* Bottom note */}
         <p style={{ textAlign: 'center', fontSize: '0.78rem', color: '#94A3B8', marginTop: '2rem', lineHeight: 1.65 }}>
-          Not sure which to choose? <Link href="/market" style={{ color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>Browse Business Market</Link> or <Link href="/campus" style={{ color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>Browse Campus Market</Link> first.
+          Not sure which to choose? <Link href="/market" style={{ color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>{'Browse Business Market'}</Link> or <Link href="/campus" style={{ color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>{'Browse Campus Market'}</Link> first.
         </p>
       </section>
       <SiteFooter />

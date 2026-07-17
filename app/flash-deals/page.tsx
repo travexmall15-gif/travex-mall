@@ -143,7 +143,7 @@ export default function FlashDealsPage() {
               <Zap size={12} /> FLASH DEALS, LIMITED TIME
             </div>
             <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.8rem,4vw,2.8rem)',
-              fontWeight:900, marginBottom:8 }}> Bomba la Siku</h1>
+              fontWeight:900, marginBottom:8 }}> {t('flash.featuredDeal')}</h1>
             <p style={{ color:'rgba(255,255,255,0.75)', fontSize:14 }}>
               Huge discounts for a limited time only. Grab them before they expire!
             </p>
@@ -151,7 +151,7 @@ export default function FlashDealsPage() {
           <div style={{ background:'rgba(255,255,255,0.15)', borderRadius:16, padding:'1rem 1.5rem',
             textAlign:'center', backdropFilter:'blur(10px)' }}>
             <div style={{ fontSize:28, fontWeight:900 }}>{deals.length}</div>
-            <div style={{ fontSize:12, color:'rgba(255,255,255,0.7)' }}>Active Deals</div>
+            <div style={{ fontSize:12, color:'rgba(255,255,255,0.7)' }}>{t('flash.activeDeals')}</div>
           </div>
         </div>
       </div>
@@ -167,7 +167,7 @@ export default function FlashDealsPage() {
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
             <div style={{ fontSize:56, marginBottom:16 }}></div>
             <h2 style={{ fontFamily:"'Inter',sans-serif", color:'#0F172A', marginBottom:8 }}>
-              No Active Deals Right Now
+              {t('flash.noDeals')}
             </h2>
             <p style={{ color:'#64748B', marginBottom:24 }}>
               Check back soon! Sellers post new deals every day.

@@ -216,7 +216,7 @@ export default function StorePage({
     <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: '2rem' }}>
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Store Not Found</h2>
+        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
         <p style={{ color: '#94A3B8', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
         <Link href="/market" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
@@ -348,7 +348,7 @@ export default function StorePage({
               color: 'rgba(255,255,255,0.35)', fontSize: 16 }}>🔍</span>
             <input className="search-inp" value={searchQ}
               onChange={e => setSearchQ(e.target.value)}
-              placeholder="Search products..." />
+              placeholder={t('store.searchProducts')} />
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {categories.map(cat => (
@@ -364,7 +364,7 @@ export default function StorePage({
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <p style={{ color: '#94A3B8', fontSize: 14 }}>No products found</p>
+            <p style={{ color: '#94A3B8', fontSize: 14 }}>{t('store.noProducts')}</p>
           </div>
         ) : (
           <div className="prod-grid" style={{ display: 'grid',
@@ -423,7 +423,7 @@ export default function StorePage({
         {products.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Setting Up Shop</h3>
+            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>{t('store.settingUpShop')}</h3>
             <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 20 }}>
               This seller is adding products soon. Check back shortly.
             </p>
@@ -470,9 +470,7 @@ export default function StorePage({
               // ── Order form ──
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>
-                    Place Order
-                  </h3>
+                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
                   <button onClick={() => setCartItem(null)}
                     style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.08)',
                       border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.55)',
@@ -497,7 +495,7 @@ export default function StorePage({
                 {/* Quantity */}
                 <div style={{ marginBottom: '1.25rem' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.55)',
-                    marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Quantity</div>
+                    marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('store.quantity')}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <button className="qty-btn" onClick={() => setQty(q => Math.max(1, q-1))}>
                       <Minus size={14} />
@@ -519,7 +517,7 @@ export default function StorePage({
                 <div style={{ background: `${accentColor}11`, border: `1px solid ${accentColor}33`,
                   borderRadius: 10, padding: '10px 14px', marginBottom: '1.25rem',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.60)', fontWeight: 600 }}>Total Amount</span>
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.60)', fontWeight: 600 }}>{t('store.totalAmount')}</span>
                   <span style={{ fontSize: 18, fontWeight: 900, color: accentColor }}>
                     {fmt(cartItem.price * qty)}
                   </span>
@@ -558,7 +556,7 @@ export default function StorePage({
                     {placing ? (
                       <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Placing...</>
                     ) : (
-                      <><ShoppingCart size={15} /> Place Order</>
+                      <><ShoppingCart size={15} />{t('store.placeOrderBtn')}</>
                     )}
                   </button>
                 </div>
@@ -610,7 +608,7 @@ export default function StorePage({
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: '#0F172A' }}>Aria</span>
-                  <span style={{ fontSize: 10, fontWeight: 600, color: '#6366F1', background: '#EEF2FF', padding: '1px 7px', borderRadius: 999, border: '1px solid #C7D2FE' }}>AI Assistant</span>
+                  <span style={{ fontSize: 10, fontWeight: 600, color: '#6366F1', background: '#EEF2FF', padding: '1px 7px', borderRadius: 999, border: '1px solid #C7D2FE' }}>{t('store.aria')}</span>
                 </div>
                 <div style={{ background: '#F8FAFF', border: '1px solid #E0E7FF', borderRadius: '0 14px 14px 14px', padding: '0.8rem 1rem' }}>
                   <p style={{ fontSize: 13, color: '#1E293B', lineHeight: 1.7, margin: 0 }}>

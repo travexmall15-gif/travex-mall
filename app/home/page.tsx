@@ -72,7 +72,7 @@ export default function HomePage() {
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Our Markets</div>
             <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A' }}>
-              Three Markets, <span style={{ color: '#C9A84C' }}>One Platform</span>
+              Three Markets, <span style={{ color: '#C9A84C' }}>{t('home.platform')}</span>
             </h2>
           </div>
           <div className="market-cards" style={{ display: 'flex', gap: '1.5rem', alignItems: 'stretch', minHeight: '420px' }}>
@@ -84,11 +84,11 @@ export default function HomePage() {
                 <Store style={{ width: '26px', height: '26px', color: '#C9A84C' }} />
               </div>
               <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(201,168,76,0.10)', color: '#A07830', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Premium</span>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Basic</span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(201,168,76,0.10)', color: '#A07830', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> {t('home.premium')}</span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>{t('home.basic')}</span>
                 
               </div>
-              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Business Market"}</h3>
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{t('home.marketBadge')}</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s unified marketplace for entrepreneurs, retailers and SMEs. 500 verified shops across 5 major regions.
               </p>
@@ -118,10 +118,10 @@ export default function HomePage() {
                 <GraduationCap style={{ width: '26px', height: '26px', color: '#93C5FD' }} />
               </div>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(59,130,246,0.15)', color: '#93C5FD', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Students Only</span>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.15)', color: '#86EFAC', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Verified</span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(59,130,246,0.15)', color: '#93C5FD', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>{t('home.studentsOnly')}</span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.15)', color: '#86EFAC', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>{t('home.verified')}</span>
               </div>
-              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Campus Market"}</h3>
+              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{t('home.campusBadge')}</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.50)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s dedicated campus marketplace. Sell directly to fellow students, verified sellers, 5 campuses, 60 slots each.
               </p>

@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from '@/hooks/useTranslation'
 import { SiteFooter } from '@/components/site-footer'
 
 import React from 'react'
@@ -35,6 +36,7 @@ const EMPTY: Form = {
 }
 
 export default function CampusApplyPage() {
+  const { t } = useTranslation()
   const [form, setForm]       = useState<Form>(EMPTY)
   const [step, setStep]       = useState(1)
   const [loading, setLoading] = useState(false)
@@ -210,7 +212,7 @@ export default function CampusApplyPage() {
             <GraduationCap style={{ width: 26, height: 26, color: '#0F172A' }} />
           </div>
           <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.7rem',
-            fontWeight: 900, color: '#fff', marginBottom: 8 }}>Open Your Campus Shop</h1>
+            fontWeight: 900, color: '#fff', marginBottom: 8 }}>{t('openStore.campusTitle2')}</h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
             TZS 10,000/month
           </p>
@@ -235,7 +237,7 @@ export default function CampusApplyPage() {
           {step === 1 && (
             <>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem',
-                color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>Your Details</h3>
+                color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>{t('openStore.step1Title')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
                   <label style={labelStyle}>Full Name *</label>
@@ -270,7 +272,7 @@ export default function CampusApplyPage() {
           {step === 2 && (
             <>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem',
-                color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>Shop Details</h3>
+                color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>{t('openStore.step2Title')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
                   <label style={labelStyle}>Shop Name *</label>
@@ -378,7 +380,7 @@ export default function CampusApplyPage() {
               {loading ? (
                 <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Submitting...</>
               ) : step === 3 ? (
-                <><Store size={15} /> Submit Application</>
+                <><Store size={15} />{t('openStore.submitBtn')}</>
               ) : (
                 'Continue →'
               )}
@@ -389,7 +391,7 @@ export default function CampusApplyPage() {
         {/* Info below */}
         <p style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,0.30)', marginTop: '1.5rem', lineHeight: 1.7 }}>
           After approval you will receive your login details via WhatsApp within 24 hours.<br />
-          Questions? <a href="https://wa.me/255651919915" target="_blank" style={{ color: '#C9A84C' }}>Contact us on WhatsApp</a>
+          Questions? <a href="https://wa.me/255651919915" target="_blank" style={{ color: '#C9A84C' }}>{t('openStore.contactWA')}</a>
         </p>
       </div>
       <SiteFooter />

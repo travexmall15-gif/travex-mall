@@ -151,7 +151,7 @@ export default function GroupDetailPage({
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem',
             boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
             <h3 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.1rem',
-              color:'#0F172A', fontWeight:800, marginBottom:16 }}>Join This Group</h3>
+              color:'#0F172A', fontWeight:800, marginBottom:16 }}>{t('groupBuy.joinTitle')}</h3>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:16 }}>
               <input value={name} onChange={e=>setName(e.target.value)}
                 placeholder="Your Full Name *"
@@ -173,7 +173,7 @@ export default function GroupDetailPage({
                 display:'flex', alignItems:'center', justifyContent:'center', gap:6,
                 fontFamily:'inherit' }}>
               {joining ? <><Loader2 size={15} style={{animation:'spin 1s linear infinite'}} /> Joining...</>
-                : <><Users size={15} /> Join Group</>}
+                : <><Users size={15} /> {t('groupBuy.joinBtn')}</>}
             </button>
           </div>
         )}
