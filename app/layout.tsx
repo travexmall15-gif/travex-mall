@@ -2,10 +2,9 @@ import React from 'react'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
+import { LangProvider } from '@/lib/lang-context'
 import Script from 'next/script'
 import './globals.css'
-import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getLocale } from 'next-intl/server'
 
 const SITE_URL = 'https://travex-mall.vercel.app'
 const SITE_NAME = 'Travex Mall'
@@ -163,12 +162,9 @@ const jsonLd = {
   ],
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const messages = await getMessages()
-  const locale = await getLocale()
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -180,7 +176,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="antialiased" suppressHydrationWarning style={{ WebkitTapHighlightColor: 'transparent' as any }}>
-        <NextIntlClientProvider messages={messages}><ToastProvider>{children}</ToastProvider></NextIntlClientProvider>
+        <LangProvider><ToastProvider>{children}</ToastProvider></LangProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <Script src="/pwa-init.js" strategy="afterInteractive" />
         <Script src="/lang.js" strategy="afterInteractive" />

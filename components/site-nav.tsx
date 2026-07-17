@@ -1,6 +1,6 @@
 'use client'
-import { useTranslations } from 'next-intl'
 import { LangSwitcher } from './lang-switcher'
+import { T } from './T'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -10,9 +10,9 @@ import { Logo } from '@/components/logo'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
-  { href: '/home', key: 'home' },
-  { href: '/market', key: 'business' },
-  { href: '/campus', key: 'campus' },
+  { href: '/home', en: 'Home', sw: 'Nyumbani' },
+  { href: '/market', en: 'Business', sw: 'Biashara' },
+  { href: '/campus', en: 'Campus', sw: 'Vyuo' },
   { href: '/vybe', label: 'Social Vybe' },
   { href: '/flash-deals', label: 'Flash Deals' },
   { href: '/group-buy', label: 'Group Buy' },
@@ -20,7 +20,6 @@ const navLinks = [
 ]
 
 export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
-  const t = useTranslations('nav')
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const dark = variant === 'dark'
@@ -54,7 +53,7 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
                 pathname === link.href ? 'text-gold' : dark ? 'text-white/80' : 'text-navy/80',
               )}
             >
-              {t(link.key as any)}
+              <T en={link.en} sw={link.sw} />
             </Link>
           ))}
         </div>
@@ -106,7 +105,7 @@ export function SiteNav({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-gold/10 hover:text-gold"
               >
-                {t(link.key as any)}
+                <T en={link.en} sw={link.sw} />
               </Link>
             ))}
             <div className="mt-3 flex gap-2">

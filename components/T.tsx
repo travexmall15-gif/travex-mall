@@ -1,18 +1,19 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useLang } from '@/lib/lang-context'
+import { TX } from '@/lib/translations'
 
-type Props = { en: string; sw: string }
+interface Props { en: string; sw: string }
 
 export function T({ en, sw }: Props) {
-  const [lang, setLang] = useState<'en'|'sw'>('en')
-
-  useEffect(() => {
-    const saved = (localStorage.getItem('travex_lang') || 'en') as 'en'|'sw'
-    setLang(saved)
-    const handler = (e: Event) => setLang((e as CustomEvent).detail)
-    window.addEventListener('travex-lang-change', handler)
-    return () => window.removeEventListener('travex-lang-change', handler)
-  }, [])
-
+  const { lang } = useLang()
   return <>{lang === 'sw' ? sw : en}</>
+}
+
+// Quick helper for non-JSX contexts (placeholder, title, etc.)
+export function useT() {
+  const { lang } = useLang()
+  return (en: string): string => {
+    if (lang === 'en') return en
+    return TX[en]?.[lang] ?? en
+  }
 }

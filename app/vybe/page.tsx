@@ -1,5 +1,5 @@
 'use client'
-import { useTranslations } from 'next-intl'
+import { T, useT } from '@/components/T'
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -62,8 +62,6 @@ function isVideo(post: FeedPost) {
 }
 
 export default function VybePage() {
-  const t = useTranslations('vybe')
-  const tc = useTranslations('common')
   const [posts, setPosts]     = useState<FeedPost[]>([])
   const [mediaFilter, setMediaFilter] = useState<'all' | 'photo' | 'video'>('all')
   const [loading, setLoading] = useState(true)
@@ -84,7 +82,7 @@ export default function VybePage() {
       if (err) throw err
       setPosts(data || [])
     } catch {
-      setError(t('loadError'))
+      setError("Could not load posts.")
     } finally {
       setLoading(false)
     }
@@ -135,7 +133,7 @@ export default function VybePage() {
             Travex Social Vybe
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: '1.5rem' }}>
-            {t('subtext')}
+            {<T en="Products, offers and updates from verified Tanzania sellers" sw="Bidhaa, ofa na habari kutoka wauzaji waliohakikishwa Tanzania" />}
           </p>
 
           {/* Media type filter */}
@@ -159,7 +157,7 @@ export default function VybePage() {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Loader2 style={{ width: 32, height: 32, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#C9A84C' }} />
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{t('loadingPosts')}</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{"Inapakia..."}</p>
           </div>
 
         ) : error ? (
@@ -170,7 +168,7 @@ export default function VybePage() {
 
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{t('noPosts')}</p>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{<T en="No posts yet." sw="Hakuna machapisho bado." />}</p>
           </div>
 
         ) : (
@@ -248,7 +246,7 @@ export default function VybePage() {
 
                     {post.store_id && (
                       <Link href={`/store/${post.store_id}`} className="visit-btn">
-                        <Store size={11} /> {t('visitShop')}
+                        <Store size={11} /> {<T en="Visit Shop" sw="Tembelea Duka" />}
                       </Link>
                     )}
                   </div>
