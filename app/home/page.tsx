@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', overflowX: 'hidden', paddingTop: '108px' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
         @media (max-width: 768px) {
           .hero-section { min-height: auto !important; padding: 3.5rem 5% 2.5rem !important; }
@@ -71,7 +71,7 @@ export default function HomePage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Our Markets</div>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A' }}>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, color: '#0F172A' }}>
               Three Markets, <span style={{ color: '#C9A84C' }}>One Platform</span>
             </h2>
           </div>
@@ -88,14 +88,14 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Basic</span>
                 
               </div>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Business Market"}</h3>
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Business Market"}</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s unified marketplace for entrepreneurs, retailers and SMEs. 500 verified shops across 5 major regions.
               </p>
               <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid #F1F5F9' }}>
                 {[['500', 'Slots'], ['5', 'Regions'], ['TZS 25K', 'Basic/mo']].map(([v, l]) => (
                   <div key={l}>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 900, color: '#0F172A', lineHeight: 1 }}>{v}</div>
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 900, color: '#0F172A', lineHeight: 1 }}>{v}</div>
                     <div style={{ fontSize: '0.65rem', color: '#94A3B8', marginTop: '2px' }}>{l}</div>
                   </div>
                 ))}
@@ -121,14 +121,14 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(59,130,246,0.15)', color: '#93C5FD', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Students Only</span>
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.15)', color: '#86EFAC', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Verified</span>
               </div>
-              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Campus Market"}</h3>
+              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{"Campus Market"}</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.50)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s dedicated campus marketplace. Sell directly to fellow students, verified sellers, 5 campuses, 60 slots each.
               </p>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 {[['5', 'Universities'], ['300', 'Total Slots'], ['TZS 10K', 'Per Month']].map(([v, l]) => (
                   <div key={l}>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{v}</div>
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>{v}</div>
                     <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{l}</div>
                   </div>
                 ))}
@@ -154,14 +154,14 @@ export default function HomePage() {
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(255,0,128,0.12)', color: '#FF80B5', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Social</span>
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(120,0,255,0.12)', color: '#C87BFF', padding: '0.2rem 0.65rem', borderRadius: '999px' }}> Live</span>
               </div>
-              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>Social Vybe</h3>
+              <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>Social Vybe</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
                 Tanzania&apos;s first business social network. Post products, grow your brand and connect with buyers across Tanzania.
               </p>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                 {[['POST', 'Daily Content'], ['LIKE', 'Real Engagement'], ['SELL', 'Direct to Buyers']].map(([v, l]) => (
                   <div key={l}>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 900, color: '#C87BFF', lineHeight: 1 }}>{v}</div>
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', fontWeight: 900, color: '#C87BFF', lineHeight: 1 }}>{v}</div>
                     <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.30)', marginTop: '2px' }}>{l}</div>
                   </div>
                 ))}
@@ -186,7 +186,7 @@ export default function HomePage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto', paddingLeft: '5%', paddingRight: '5%' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '0.5rem' }}>// Featured</div>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 800, color: '#0F172A' }}>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 800, color: '#0F172A' }}>
               Top Rated <span style={{ color: '#C9A84C' }}>Shops</span>
             </h2>
           </div>
@@ -230,7 +230,7 @@ export default function HomePage() {
             ].map((shop, i) => (
               <a key={i} href="/market" className={`shop-item ${shop.plan === 'premium' ? 'shop-premium' : 'shop-basic'}`}>
                 <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg,#040C32,#071545)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.85rem' }}>
-                  <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1rem', fontWeight: 900, color: '#C9A84C' }}>{shop.name.charAt(0)}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: '1rem', fontWeight: 900, color: '#C9A84C' }}>{shop.name.charAt(0)}</span>
                 </div>
                 <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0F172A', marginBottom: '0.25rem', lineHeight: 1.3 }}>{shop.name}</div>
                 <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginBottom: '0.6rem' }}>{shop.region}</div>

@@ -216,7 +216,7 @@ export default function StorePage({
     <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: '2rem' }}>
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Store Not Found</h2>
+        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Store Not Found</h2>
         <p style={{ color: '#94A3B8', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
         <Link href="/market" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
@@ -228,7 +228,7 @@ export default function StorePage({
   return (
     <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -274,14 +274,14 @@ export default function StorePage({
               {store.shop_logo ? (
                 <Image src={store.shop_logo} alt={initials} width={52} height={52} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               ) : (
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 900, color: '#fff' }}>{initials}</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, fontWeight: 900, color: '#fff' }}>{initials}</span>
               )}
             </div>
 
             {/* Info */}
             <div style={{ flex: 1, minWidth: 180 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
-                <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>
+                <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.06)', color: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
@@ -402,7 +402,7 @@ export default function StorePage({
                     </div>
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 16,
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 16,
                       fontWeight: 900, color: accentColor }}>
                       {fmt(p.price)}
                     </div>
@@ -423,7 +423,7 @@ export default function StorePage({
         {products.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Setting Up Shop</h3>
+            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>Setting Up Shop</h3>
             <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 20 }}>
               This seller is adding products soon. Check back shortly.
             </p>
@@ -443,7 +443,7 @@ export default function StorePage({
                   display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 30, height: 30, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.3rem', color: '#fff',
+                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', color: '#fff',
                   marginBottom: 8 }}>Order Placed! 🎉</h3>
                 <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
                   Your order for <strong style={{ color: '#fff' }}>{cartItem.name}</strong> has been sent to the seller.
@@ -470,7 +470,7 @@ export default function StorePage({
               // ── Order form ──
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>
+                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>
                     Place Order
                   </h3>
                   <button onClick={() => setCartItem(null)}
@@ -660,7 +660,7 @@ export default function StorePage({
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 28, height: 28, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem', color: '#fff', marginBottom: 8 }}>{t('store.messageSent')}</h3>
+                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', marginBottom: 8 }}>{t('store.messageSent')}</h3>
                 <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
                   The seller will respond to you shortly.
                 </p>
@@ -672,7 +672,7 @@ export default function StorePage({
             ) : (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.1rem', color: '#fff', fontWeight: 800 }}>
+                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', color: '#fff', fontWeight: 800 }}>
                     Message {store.shop_name}
                   </h3>
                   <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

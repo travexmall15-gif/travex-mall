@@ -1,3 +1,5 @@
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
@@ -723,7 +725,7 @@ select.form-control { cursor: pointer; }
 
 /*  Welcome bar  */
 .welcome-bar { background:linear-gradient(135deg,var(--navy),#1B3A8A);color:#fff;border-radius:var(--radius);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap }
-.welcome-bar h2 { font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;margin:0 0 4px }
+.welcome-bar h2 { font-family:'Inter',sans-serif;font-size:1.2rem;font-weight:900;margin:0 0 4px }
 .welcome-bar p  { font-size:12px;color:rgba(255,255,255,0.7);margin:0 }
 .plan-badge     { background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:8px 14px;text-align:center;min-width:100px }
 .plan-name      { font-size:14px;font-weight:900;color:#F0C96B }
@@ -795,7 +797,7 @@ select.form-control { cursor: pointer; }
 .modal-footer  { padding:.75rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end }
 
 /*  Stats extra  */
-.stat-val   { font-size:1.6rem;font-weight:900;color:var(--text);font-family:'Playfair Display',serif }
+.stat-val   { font-size:1.6rem;font-weight:900;color:var(--text);font-family:'Inter',sans-serif }
 .stat-lbl   { font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em }
 .stat-icon  { width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(13,27,62,0.08);color:var(--navy);flex-shrink:0 }
 .stat-trend { font-size:11px;font-weight:600;margin-top:4px }
@@ -857,7 +859,7 @@ select.form-control { cursor: pointer; }
 .plan-card    { background:var(--card-bg);border:2px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;transition:all .2s }
 .plan-card:hover,.plan-card.pop { border-color:var(--gold);box-shadow:0 8px 24px rgba(201,168,76,0.2) }
 .plan-tier    { font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px }
-.plan-price   { font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--navy) }
+.plan-price   { font-family:'Inter',sans-serif;font-size:2rem;font-weight:900;color:var(--navy) }
 .plan-period  { font-size:12px;color:var(--text-muted);margin-left:4px }
 .plan-features,.plan-feat { list-style:none;padding:0;margin:12px 0;display:flex;flex-direction:column;gap:6px }
 .plan-feat    { font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px }
@@ -877,7 +879,7 @@ select.form-control { cursor: pointer; }
 .prog-step.current { color:var(--navy);font-weight:800 }
 .step          { display:none }
 .step.active   { display:block }
-.step-title    { font-size:18px;font-weight:800;color:var(--text);font-family:'Playfair Display',serif;margin-bottom:4px }
+.step-title    { font-size:18px;font-weight:800;color:var(--text);font-family:'Inter',sans-serif;margin-bottom:4px }
 .step-sub      { font-size:13px;color:var(--text-muted);margin-bottom:20px }
 
 /*  Payment methods  */
@@ -897,8 +899,8 @@ select.form-control { cursor: pointer; }
 /*  Login page  */
 .bg-beam,.bg-glow,.bg-grid { position:absolute;pointer-events:none }
 .topbar        { height:56px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid var(--border);background:var(--card-bg);position:sticky;top:0;z-index:100 }
-.nav-logo      { font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--navy) }
-.logo,.logo-mark { font-family:'Playfair Display',serif;font-weight:900;color:var(--navy) }
+.nav-logo      { font-family:'Inter',sans-serif;font-size:16px;font-weight:900;color:var(--navy) }
+.logo,.logo-mark { font-family:'Inter',sans-serif;font-weight:900;color:var(--navy) }
 .back-link,.nav-back { font-size:13px;color:var(--text-muted);text-decoration:none;display:inline-flex;align-items:center;gap:4px }
 .back-link:hover,.nav-back:hover { color:var(--navy) }
 .pass-wrap     { position:relative }

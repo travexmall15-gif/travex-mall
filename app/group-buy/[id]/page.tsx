@@ -65,7 +65,8 @@ export default function GroupDetailPage({
 
   return (
     <main style={{ minHeight:'100vh', background:'#EFF6FF', fontFamily:"'Inter',sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');*{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:'Inter',sans-serif}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        *{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:'Inter',sans-serif}`}</style>
       <SiteNav />
       <div style={{ paddingTop:80, maxWidth:560, margin:'0 auto', padding:'80px 5% 4rem' }}>
         <Link href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
@@ -77,7 +78,7 @@ export default function GroupDetailPage({
           boxShadow:'0 8px 30px rgba(29,78,216,0.1)', marginBottom:20 }}>
           <div style={{ fontSize:11, color:'#1E40AF', fontWeight:700, textTransform:'uppercase',
             letterSpacing:'.06em', marginBottom:4 }}>{group.shop_name}</div>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.4rem',
+          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.4rem',
             fontWeight:900, color:'#0F172A', marginBottom:12 }}>{group.product_name}</h1>
 
           <div style={{ display:'flex', alignItems:'baseline', gap:8, marginBottom:16 }}>
@@ -133,7 +134,7 @@ export default function GroupDetailPage({
           <div style={{ background:'#fff', borderRadius:20, padding:'2rem', textAlign:'center',
             boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
             <CheckCircle size={48} style={{ color:'#22C55E', margin:'0 auto 12px' }} />
-            <h2 style={{ fontFamily:"'Playfair Display',serif", color:'#0F172A', marginBottom:8 }}>
+            <h2 style={{ fontFamily:"'Inter',sans-serif", color:'#0F172A', marginBottom:8 }}>
               You&apos;re In! 🎉
             </h2>
             <p style={{ color:'#64748B', fontSize:13, marginBottom:16 }}>
@@ -149,7 +150,7 @@ export default function GroupDetailPage({
         ) : (
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem',
             boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
-            <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.1rem',
+            <h3 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.1rem',
               color:'#0F172A', fontWeight:800, marginBottom:16 }}>Join This Group</h3>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:16 }}>
               <input value={name} onChange={e=>setName(e.target.value)}

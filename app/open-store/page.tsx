@@ -27,7 +27,7 @@ export default function OpenStorePage() {
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', minHeight: '100vh' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
         .choice-card {
           display: flex; flex-direction: column;
@@ -77,10 +77,10 @@ export default function OpenStorePage() {
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)', color: '#C9A84C', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.70rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '1.4rem' }}>
             Open Your Store Today
           </div>
-          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2rem,5vw,3.2rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem,5vw,3.2rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
             Open Your <span style={{ color: '#C9A84C' }}>Store</span>
           </h1>
-          <p style={{ fontSize: 'clamp(0.88rem,1.6vw,1rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.78, maxWidth: '420px', margin: '0 auto' }}>
+          <p style={{ fontSize: 'clamp(0.88rem,1.6vw,1rem)', color: 'rgba(255,255,255,0.50)', lineHeight: 1.65, maxWidth: '420px', margin: '0 auto' }}>
             Choose the market that fits your business. Select your plan and get started.
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function OpenStorePage() {
               <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(15,23,42,0.06)', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>🥈 Basic Available</span>
             </div>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.55rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.55rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>
               Business Market
             </h2>
             <p style={{ fontSize: '0.86rem', color: '#64748B', lineHeight: 1.70, marginBottom: '1.5rem', flexGrow: 1 }}>
@@ -133,7 +133,7 @@ export default function OpenStorePage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg, #040C32, #071545)', borderRadius: '14px', padding: '1rem 1.25rem' }}>
               <div>
                 <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monthly</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>JOIN</div>
+                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', fontWeight: 900, color: '#C9A84C', lineHeight: 1 }}>JOIN</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.2rem', borderRadius: '999px', fontSize: '0.80rem', fontWeight: 700 }}>
                 Apply Now <ArrowRight style={{ width: '14px', height: '14px' }} />
@@ -157,7 +157,7 @@ export default function OpenStorePage() {
               <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(5,150,105,0.10)', color: '#065F46', padding: '0.2rem 0.65rem', borderRadius: '999px' }}>✅ 5 Universities</span>
             </div>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.55rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.55rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>
               Campus Market
             </h2>
             <p style={{ fontSize: '0.86rem', color: '#64748B', lineHeight: 1.70, marginBottom: '1.5rem', flexGrow: 1 }}>
@@ -183,7 +183,7 @@ export default function OpenStorePage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(135deg, #040C32, #0A1858)', borderRadius: '14px', padding: '1rem 1.25rem' }}>
               <div>
                 <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Per month</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', fontWeight: 900, color: '#93C5FD', lineHeight: 1 }}>TZS 10K</div>
+                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', fontWeight: 900, color: '#93C5FD', lineHeight: 1 }}>TZS 10K</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#3B82F6', color: '#fff', padding: '0.6rem 1.2rem', borderRadius: '999px', fontSize: '0.80rem', fontWeight: 700 }}>
                 Apply Now <ArrowRight style={{ width: '14px', height: '14px' }} />

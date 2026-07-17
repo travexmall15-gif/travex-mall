@@ -133,7 +133,7 @@ export default function UniversityPage({
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.25)', color: '#C9A84C', padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 700, marginBottom: '0.85rem' }}>
               Campus Market · {slug.toUpperCase()}
             </div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.5rem' }}>
+            <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700, color: '#fff', lineHeight: 1.1, marginBottom: '0.5rem' }}>
               {uni?.name || slug.toUpperCase()}
             </h1>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
@@ -191,7 +191,7 @@ export default function UniversityPage({
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <Store size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <h3 className="text-xl font-bold mb-2" style={{ color: '#0D1B3E', fontFamily: "'Playfair Display',serif" }}>
+            <h3 className="text-xl font-bold mb-2" style={{ color: '#0D1B3E', fontFamily: "'Inter',sans-serif" }}>
               {stores.length === 0 ? 'No Shops Yet' : t('campus.noMatching')}
             </h3>
             <p className="text-gray-500 text-sm mb-4">

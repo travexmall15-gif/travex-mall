@@ -71,7 +71,7 @@ export default function CampusPage() {
   return (
     <main style={{ background: '#F8FAFF', overflowX: 'hidden', paddingTop: '108px' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
         @keyframes campusTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
         .campus-ticker { animation: campusTicker 32s linear infinite; will-change: transform; }
@@ -106,10 +106,10 @@ export default function CampusPage() {
 
           {/* Headline */}
           <div style={{ maxWidth: '560px', marginBottom: '2rem' }}>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
+            <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
               {"Business Marketplace."}
             </h1>
-            <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
+            <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '440px' }}>
               "Buy and sell within your university community." Verified student sellers. {loading ? '...' : totalActive} {t('campus.activeShops')} across {uniData.length} universities.
             </p>
           </div>
@@ -222,7 +222,7 @@ export default function CampusPage() {
                   {/* Banner */}
                   <div style={{ height: '68px', background: uni.bgGradient, position: 'relative', display: 'flex', alignItems: 'center', padding: '0 0.85rem' }}>
                     <div>
-                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.05rem', fontWeight: 900, color: uni.color, letterSpacing: '0.04em', lineHeight: 1 }}>{uni.abbr}</div>
+                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.05rem', fontWeight: 900, color: uni.color, letterSpacing: '0.04em', lineHeight: 1 }}>{uni.abbr}</div>
                       <div style={{ fontSize: '0.56rem', color: uni.color, opacity: 0.6, marginTop: '2px' }}>{uni.city}</div>
                     </div>
                     <div style={{ position: 'absolute', top: '6px', right: '7px', background: uni.slotsLeft > 0 ? 'rgba(5,150,105,0.15)' : 'rgba(220,38,38,0.12)', color: uni.slotsLeft > 0 ? '#059669' : '#DC2626', fontSize: '0.5rem', fontWeight: 800, padding: '2px 6px', borderRadius: '999px' }}>

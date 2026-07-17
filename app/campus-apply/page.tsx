@@ -126,7 +126,8 @@ export default function CampusApplyPage() {
   // ── Success ──
   if (success) return (
     <main style={{ minHeight: '100vh', background: '#060C1A' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap');*{box-sizing:border-box}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        *{box-sizing:border-box}`}</style>
       <SiteNav />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',
         minHeight: 'calc(100vh - 64px)', padding: '2rem 5%' }}>
@@ -135,9 +136,9 @@ export default function CampusApplyPage() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
             <CheckCircle style={{ width: 36, height: 36, color: '#22C55E' }} />
           </div>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.8rem', color: '#fff',
+          <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.8rem', color: '#fff',
             fontWeight: 900, marginBottom: '0.75rem' }}>Application Submitted! 🎓</h2>
-          <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 14, lineHeight: 1.8, marginBottom: '1.5rem' }}>
+          <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 14, lineHeight: 1.65, marginBottom: '1.5rem' }}>
             Your campus shop application for <strong style={{ color: '#C9A84C' }}>{form.storeName}</strong> at{' '}
             <strong style={{ color: '#fff' }}>{form.university}</strong> has been received.
             We will review and respond within 24 hours via WhatsApp.
@@ -179,7 +180,7 @@ export default function CampusApplyPage() {
   return (
     <main style={{ minHeight: '100vh', background: '#060C1A', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box}
         input:focus,select:focus,textarea:focus{border-color:#C9A84C!important;background:rgba(255,255,255,0.10)!important}
         input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.28)}
@@ -208,7 +209,7 @@ export default function CampusApplyPage() {
           }}>
             <GraduationCap style={{ width: 26, height: 26, color: '#0F172A' }} />
           </div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.7rem',
+          <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.7rem',
             fontWeight: 900, color: '#fff', marginBottom: 8 }}>Open Your Campus Shop</h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
             TZS 10,000/month
@@ -233,7 +234,7 @@ export default function CampusApplyPage() {
           {/* ── STEP 1 ── */}
           {step === 1 && (
             <>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem',
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem',
                 color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>Your Details</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
@@ -268,7 +269,7 @@ export default function CampusApplyPage() {
           {/* ── STEP 2 ── */}
           {step === 2 && (
             <>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem',
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem',
                 color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>Shop Details</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
@@ -307,7 +308,7 @@ export default function CampusApplyPage() {
           {/* ── STEP 3, Review ── */}
           {step === 3 && (
             <>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.15rem',
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem',
                 color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>Review & Submit</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
                 {[

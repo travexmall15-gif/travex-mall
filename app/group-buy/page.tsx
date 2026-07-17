@@ -69,7 +69,7 @@ function GroupCard({ group }: { group: Group }) {
 
       {/* Body */}
       <div style={{ padding: '1rem' }}>
-        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.95rem', fontWeight: 800, color: '#0F172A', marginBottom: 4, lineHeight: 1.3 }}>
+        <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '0.95rem', fontWeight: 800, color: '#0F172A', marginBottom: 4, lineHeight: 1.3 }}>
           {group.product_name || t('groupBuy.groupDeal')}
         </div>
 
@@ -154,7 +154,7 @@ export default function GroupBuyPage() {
   return (
     <main style={{ minHeight: '100vh', background: '#F8FAFF', paddingTop: '108px', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box}
         @keyframes gbTicker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
         .gb-ticker{animation:gbTicker 36s linear infinite; will-change: transform; }
@@ -180,10 +180,10 @@ export default function GroupBuyPage() {
 
           {/* Headline */}
           <div style={{ maxWidth: 560, marginBottom: '2rem' }}>
-            <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(2rem,4.5vw,3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
+            <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem,4.5vw,3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
               {t('groupBuy.headline1')} {t('groupBuy.headline2')}
             </h1>
-            <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: 440 }}>
+            <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: 440 }}>
               {t('groupBuy.tryOther')}
             </p>
           </div>
@@ -270,7 +270,7 @@ export default function GroupBuyPage() {
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '5rem 0' }}>
             <Users size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>
+            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>
               {search ? t('groupBuy.noMatching') : t('groupBuy.noGroups')}
             </h3>
             <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 24 }}>

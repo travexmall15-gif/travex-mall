@@ -53,7 +53,7 @@
     <div id="productsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px"></div>
     <div id="emptyState" style="display:none;text-align:center;padding:4rem 0">
       <i class="ti ti-package" style="font-size:48px;color:#CBD5E1;display:block;margin-bottom:12px"></i>
-      <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#0F172A;margin-bottom:8px" data-i18n="No products yet">No products yet</div>
+      <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:1.2rem;font-weight:700;color:#0F172A;margin-bottom:8px" data-i18n="No products yet">No products yet</div>
       <p style="color:#94A3B8;font-size:14px;margin-bottom:20px" data-i18n="Add your first product to start selling">Add your first product to start selling</p>
       <button class="btn btn-gold" onclick="openModal()"><i class="ti ti-plus"></i> Add First Product</button>
     </div>
@@ -64,7 +64,7 @@
 <div class="modal-overlay" id="productModal" style="display:none" onclick="if(event.target===this)closeModal()">
   <div class="modal" style="max-width:520px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:#fff" id="modalTitle">Add Product</h3>
+      <h3 style="font-family:'Inter',sans-serif;font-weight:700;font-size:1.1rem;font-weight:800;color:#fff" id="modalTitle">Add Product</h3>
       <button onclick="closeModal()" style="background:rgba(255,255,255,0.08);border:none;border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,0.6);cursor:pointer;font-size:18px">×</button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -175,7 +175,7 @@ function renderProducts(products) {
       <div style="padding:10px 12px 12px">
         <div style="font-weight:700;font-size:13px;color:#0F172A;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
         <div style="font-size:11px;color:#94A3B8;margin-bottom:6px">${p.category||'General'}</div>
-        <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:#0D1B3E;margin-bottom:8px">${fmt(p.price)}</div>
+        <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:15px;font-weight:900;color:#0D1B3E;margin-bottom:8px">${fmt(p.price)}</div>
         <div style="display:flex;gap:6px">
           <button onclick="editProduct('${p.id}')" style="flex:1;padding:5px;background:#F8FAFF;border:1px solid #E2E8F4;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;color:#0D1B3E" title="Edit">
             <i class="ti ti-edit"></i> Edit

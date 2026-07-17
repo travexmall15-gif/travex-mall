@@ -125,10 +125,10 @@ export default function MarketPage() {
 
           {/* Headline + description */}
           <div style={{ maxWidth: '600px', marginBottom: '2rem' }}>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
+            <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
               {"Business Marketplace."}
             </h1>
-            <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
+            <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '440px' }}>
               {<>"Verified sellers. All categories. Five regions. Join" {loading ? '...' : totalApproved} "businesses already selling on Travex Mall."</>}
             </p>
           </div>
@@ -294,7 +294,7 @@ export default function MarketPage() {
         {!loading && shops.length === 0 && (
           <div style={{ textAlign: 'center', padding: '6rem 0' }}>
             <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}></div>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
+            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
             <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Be the first to open a shop on Travex Business Market!</p>
             <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
               Open Shop 
@@ -307,7 +307,7 @@ export default function MarketPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>{t('market.noShops')}</div>
+                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>{t('market.noShops')}</div>
                 <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try different filters or search term</p>
               </div>
             ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}
@@ -355,7 +355,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
             {shop.shop_logo ? (
               <img src={shop.shop_logo} alt={init} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
-              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.62rem', fontWeight: 900, color: '#fff' }}>{init}</span>
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: '0.62rem', fontWeight: 900, color: '#fff' }}>{init}</span>
             )}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>

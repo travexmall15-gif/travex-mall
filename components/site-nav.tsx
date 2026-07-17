@@ -121,9 +121,9 @@ export function SiteNav() {
             style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }}
           />
           <span style={{
-            fontFamily: "'Space Grotesk', 'Inter', sans-serif",
-            fontSize: '1.1rem', fontWeight: 700,
-            color: '#0D1B3E', letterSpacing: '-0.03em',
+            fontFamily: "'Inter',sans-serif",
+            fontSize: '1.1rem', fontWeight: 800,
+            color: '#0D1B3E', letterSpacing: '-0.04em',
           }}>
             travex <span style={{ color: '#C9A84C' }}>mall</span>
           </span>

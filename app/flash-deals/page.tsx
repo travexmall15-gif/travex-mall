@@ -68,7 +68,7 @@ function DealCard({ deal }: { deal: Deal }) {
           textTransform:'uppercase', letterSpacing:'.06em', marginBottom:4 }}>
           {deal.shop_name}
         </div>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'1rem',
+        <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1rem',
           fontWeight:800, color:'#0F172A', marginBottom:10 }}>
           {deal.product_name}
         </div>
@@ -122,7 +122,7 @@ export default function FlashDealsPage() {
   return (
     <main style={{ minHeight:'100vh', background:'#FFFBEB' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
       `}</style>
@@ -142,7 +142,7 @@ export default function FlashDealsPage() {
               fontSize:11, fontWeight:700 }}>
               <Zap size={12} /> FLASH DEALS, LIMITED TIME
             </div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:'clamp(1.8rem,4vw,2.8rem)',
+            <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.8rem,4vw,2.8rem)',
               fontWeight:900, marginBottom:8 }}> Bomba la Siku</h1>
             <p style={{ color:'rgba(255,255,255,0.75)', fontSize:14 }}>
               Huge discounts for a limited time only. Grab them before they expire!
@@ -166,7 +166,7 @@ export default function FlashDealsPage() {
         ) : deals.length === 0 ? (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
             <div style={{ fontSize:56, marginBottom:16 }}></div>
-            <h2 style={{ fontFamily:"'Playfair Display',serif", color:'#0F172A', marginBottom:8 }}>
+            <h2 style={{ fontFamily:"'Inter',sans-serif", color:'#0F172A', marginBottom:8 }}>
               No Active Deals Right Now
             </h2>
             <p style={{ color:'#64748B', marginBottom:24 }}>
