@@ -680,7 +680,7 @@ export default function StorePage({ params }: { params: Promise<{ slug: string }
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
                   <input className="form-inp" value={msgName} onChange={e => setMsgName(e.target.value)} placeholder="Your Name * / Jina Lako *" />
-                  <textarea className="form-inp" value={msgText} onChange={e => setMsgText(e.target.value)} placeholder={t('yourMessage')} rows={4} style={{ resize: 'vertical' as const }} />
+                  <textarea className="form-inp" value={msgText} onChange={e => setMsgText(e.target.value)} placeholder={"Your message to the seller..."} rows={4} style={{ resize: 'vertical' as const }} />
                 </div>
 
                 <div style={{ display: 'flex', gap: 8 }}>

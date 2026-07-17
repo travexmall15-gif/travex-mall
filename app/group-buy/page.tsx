@@ -255,7 +255,7 @@ export default function GroupBuyPage() {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#0D1B3E', margin: '0 auto 12px', display: 'block' }} />
-            <p style={{ color: '#94A3B8', fontSize: 14 }}>{t('groupsFound', {count:0})}</p>
+            <p style={{ color: '#94A3B8', fontSize: 14 }}>{<T en="group deals available" sw="ofa za kikundi zinapatikana" />}</p>
           </div>
 
         ) : error ? (

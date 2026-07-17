@@ -102,7 +102,7 @@ export default function CampusPage() {
               {<T en="Business Marketplace." sw="Soko la Biashara." />}
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem,1.5vw,0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
-              {t('subtext', { count: totalActive, unis: uniData.length })} Verified student sellers. {loading ? '...' : totalActive} {<T en="active shops" sw="maduka yanayofanya kazi" />} across {uniData.length} universities.
+              <T en="Buy and sell within your university community." sw="Nunua na uza ndani ya jamii ya chuo chako." /> Verified student sellers. {loading ? '...' : totalActive} <T en="active shops" sw="maduka yanayofanya kazi" /> across {uniData.length} universities.
             </p>
           </div>
 

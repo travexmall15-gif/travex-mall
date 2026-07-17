@@ -128,7 +128,7 @@ export default function MarketPage() {
               {<T en="Business Marketplace." sw="Soko la Biashara." />}
             </h1>
             <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, maxWidth: '440px' }}>
-              {t('subtext', { count: loading ? '...' : totalApproved })}
+              {<><T en="Verified sellers. All categories. Five regions. Join" sw="Wauzaji waliohakikishwa. Aina zote. Mikoa mitano. Jiunge na" /> {loading ? '...' : totalApproved} <T en="businesses already selling on Travex Mall." sw="biashaa zinazouza Travex Mall." /></>}
             </p>
           </div>
 
