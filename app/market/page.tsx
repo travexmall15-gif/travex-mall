@@ -1,196 +1,164 @@
 'use client'
-import { useTranslation } from '@/hooks/useTranslation'
 
-const TANZANIAN_REGIONS = [
-  'All', 'Dar es Salaam', 'Mwanza', 'Arusha', 'Dodoma', 'Mbeya',
-  'Morogoro', 'Tanga', 'Zanzibar', 'Kigoma', 'Tabora',
-]
-
-const SHOP_CATEGORIES = [
-  'All', 'Fashion & Clothing', 'Electronics', 'Food & Groceries',
-  'Beauty & Health', 'Agriculture', 'Services', 'Home & Living',
-  'Sports & Fitness', 'Education', 'Automotive', 'Arts & Crafts',
-]
-
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
+import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS, formatTZS } from '@/lib/data'
 import {
-  MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS, formatTZS,
-} from '@/lib/data'
-import { Search, MessageCircle, Store, ArrowRight, Star, Loader2 } from 'lucide-react'
+  Search, Store, ArrowRight, MapPin, Star, Loader2,
+  SlidersHorizontal, ChevronDown, X, Zap, Users, GraduationCap,
+  MessageCircle, ShoppingBag, CheckCircle2
+} from 'lucide-react'
 
-// Types matching pending_payments table
+const REGIONS = [
+  'Dar es Salaam','Mwanza','Arusha','Dodoma','Mbeya',
+  'Morogoro','Tanga','Zanzibar','Kigoma','Tabora',
+]
+
+const CATEGORIES = [
+  'Fashion & Clothing','Electronics','Food & Groceries','Beauty & Health',
+  'Agriculture','Services','Home & Living','Sports & Fitness',
+  'Education','Automotive','Arts & Crafts','Technology',
+]
+
 type MarketShop = {
-  id: string
-  owner_name: string
-  owner_email: string | null
-  owner_phone: string | null
-  shop_name: string
-  shop_category: string | null
-  shop_region: string | null
-  shop_whatsapp: string | null
-  shop_desc: string | null
-  shop_color: string | null
-  shop_banner: string | null
-  shop_logo: string | null
-  plan: 'premium' | 'basic'
-  status: string
-  slug: string | null
-  created_at: string
+  id: string; owner_name: string; owner_email: string | null
+  owner_phone: string | null; shop_name: string; shop_category: string | null
+  shop_region: string | null; shop_whatsapp: string | null; shop_desc: string | null
+  shop_color: string | null; shop_banner: string | null; shop_logo: string | null
+  plan: 'premium' | 'basic'; status: string; slug: string | null; created_at: string
 }
-
 
 export default function MarketPage() {
   const { t } = useTranslation()
-  const [shops, setShops] = useState<MarketShop[]>([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [category, setCategory] = useState('All')
-  const [categories, setCategories] = useState<string[]>([])
-  const [totalApproved, setTotalApproved] = useState(0)
-  const [region, setRegion] = useState('All')
+  const [shops, setShops]           = useState<MarketShop[]>([])
+  const [loading, setLoading]       = useState(true)
+  const [search, setSearch]         = useState('')
+  const [category, setCategory]     = useState('')
+  const [region, setRegion]         = useState('')
+  const [totalApproved, setTotal]   = useState(0)
+  const searchRef                   = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    async function load() {
+    (async () => {
       setLoading(true)
-      // Fetch approved shops from pending_payments
-      const { data, error } = await sb
-        .from('pending_payments')
-        .select('*')
-        .eq('status', 'approved')
-        .order('plan', { ascending: false }) // premium first
-        .order('created_at', { ascending: false })
-
-      if (data) {
-        setShops(data)
-        setTotalApproved(data.length)
-        // Build category list from real data
-        const dbCats = [...new Set(data.map((s: MarketShop) => s.shop_category).filter(Boolean))] as string[]
-        const allCats = [...new Set([...SHOP_CATEGORIES.filter(c => c !== 'All'), ...dbCats])]
-        setCategories(allCats)
-      }
+      const { data } = await sb.from('pending_payments')
+        .select('*').eq('status','approved')
+        .order('plan',{ascending:false}).order('created_at',{ascending:false})
+      if (data) { setShops(data); setTotal(data.length) }
       setLoading(false)
-    }
-    load()
+    })()
   }, [])
-
-  // Merge hardcoded regions with any new ones from DB
-  const dbRegions = Array.from(new Set(shops.map(s => s.shop_region).filter(Boolean))) as string[]
-  const regions = [...new Set([...TANZANIAN_REGIONS, ...dbRegions])]
 
   const filtered = shops.filter(s => {
     const q = search.toLowerCase()
-    const matchSearch = !q ||
-      s.shop_name.toLowerCase().includes(q) ||
-      (s.shop_desc || '').toLowerCase().includes(q) ||
-      (s.owner_name || '').toLowerCase().includes(q)
-    const matchCat    = category === 'All' || s.shop_category === category
-    const matchRegion = region  === 'All' || s.shop_region  === region
-    return matchSearch && matchCat && matchRegion
+    return (
+      (!q || s.shop_name.toLowerCase().includes(q) || (s.shop_desc||'').toLowerCase().includes(q)) &&
+      (!category || s.shop_category === category) &&
+      (!region   || s.shop_region   === region)
+    )
   })
 
-  const slotsLeft = MARKET_TOTAL_SLOTS - totalApproved
-  const premiumShops = filtered.filter(s => s.plan === 'premium')
-  const basicShops = filtered.filter(s => s.plan === 'basic')
+  const premiumCount = shops.filter(s => s.plan === 'premium').length
+  const basicCount   = shops.filter(s => s.plan === 'basic').length
+
+  const clearFilters = () => { setSearch(''); setCategory(''); setRegion('') }
+  const hasFilters   = search || category || region
+
+  // Stats for ticker (rendered twice for infinite scroll)
+  const STATS = [
+    { val: loading ? '…' : String(premiumCount), label: t('market.premiumShops'), color: '#C9A84C' },
+    { val: loading ? '…' : String(basicCount),   label: t('market.basicShops'),   color: 'rgba(255,255,255,0.55)' },
+    { val: '5',                                   label: t('home.regions'),         color: 'rgba(255,255,255,0.55)' },
+    { val: t('market.open'),                      label: t('market.registration'),  color: '#86EFAC' },
+    { val: loading ? '…' : String(totalApproved), label: t('market.activeSellersStat'), color: 'rgba(255,255,255,0.55)' },
+    { val: String(MARKET_TOTAL_SLOTS),            label: t('market.totalSlots'),    color: 'rgba(255,255,255,0.55)' },
+  ]
+
+  const QUICK_CHIPS = [
+    { href: '/flash-deals', icon: Zap,          label: t('nav.flashDeals'),  sub: t('market.flash_time'), bg:'#FEF3C7',border:'#FCD34D',color:'#92400E' },
+    { href: '/group-buy',   icon: Users,        label: t('nav.groupBuy'),    sub: t('market.save_together'), bg:'#DBEAFE',border:'#93C5FD',color:'#1E40AF' },
+    { href: '/vybe',        icon: MessageCircle,label: 'Social Vybe',        sub: t('market.community'),  bg:'#EDE9FE',border:'#C4B5FD',color:'#5B21B6' },
+    { href: '/campus',      icon: GraduationCap,label: t('nav.campus'),      sub: t('market.students'),   bg:'#ECFDF5',border:'#6EE7B7',color:'#065F46' },
+  ]
 
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', paddingTop: '108px', minHeight: '100vh' }}>
+    <main style={{ fontFamily:"'Inter',sans-serif", background:'#F8FAFF', paddingTop:'108px', minHeight:'100vh' }}>
       <SiteNav />
 
-      {/* ── BUSINESS MARKET HERO ── */}
+      {/* ── HERO ─────────────────────────────────────────────── */}
       <section style={{
-        position: 'relative',
-        overflow: 'hidden',
-        paddingTop: '64px',
-        color: '#fff',
-        background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)',
+        position:'relative', overflow:'hidden', color:'#fff',
+        background:'linear-gradient(160deg,#010510 0%,#030920 35%,#050E2E 65%,#071540 100%)',
       }}>
-        {/* Subtle glow */}
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 60% 80% at 90% 20%, rgba(56,120,255,0.35) 0%, transparent 65%)', zIndex: 0 }} />
+        {/* Glow orb */}
+        <div style={{ position:'absolute', inset:0, pointerEvents:'none', zIndex:0,
+          background:'radial-gradient(ellipse 55% 75% at 85% 15%, rgba(56,120,255,0.32) 0%, transparent 65%)' }} />
+        {/* Grid texture */}
+        <div style={{ position:'absolute', inset:0, pointerEvents:'none', zIndex:0, opacity:0.03,
+          backgroundImage:'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)',
+          backgroundSize:'40px 40px' }} />
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '3rem 5% 0' }}>
+        <div style={{ position:'relative', zIndex:1, maxWidth:'1200px', margin:'0 auto', padding:'3.5rem 5% 0' }}>
 
-          {/* Top row — badge + CTA */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '0.3rem 0.9rem', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <Store size={11} /> {"Business Market"}
+          {/* Row — badge + CTA */}
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'1rem', marginBottom:'2.5rem' }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:'0.4rem', background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.14)', color:'rgba(255,255,255,0.7)', padding:'0.32rem 0.9rem', borderRadius:'999px', fontSize:'0.68rem', fontWeight:700, letterSpacing:'0.07em', textTransform:'uppercase' }}>
+              <Store size={10} /> {t('market.hero_badge')}
             </div>
-            <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.4rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 16px rgba(201,168,76,0.30)' }}>
-              <Store size={13} /> {t('nav.openShop')}
+            <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:'5px', background:'#C9A84C', color:'#0F172A', padding:'0.65rem 1.4rem', borderRadius:'999px', fontWeight:700, fontSize:'0.82rem', textDecoration:'none', boxShadow:'0 4px 16px rgba(201,168,76,0.32)', letterSpacing:'-0.01em', transition:'all 0.2s' }}
+              onMouseOver={e=>{(e.currentTarget as HTMLElement).style.transform='translateY(-1px)';(e.currentTarget as HTMLElement).style.boxShadow='0 8px 24px rgba(201,168,76,0.40)'}}
+              onMouseOut={e=>{(e.currentTarget as HTMLElement).style.transform='translateY(0)';(e.currentTarget as HTMLElement).style.boxShadow='0 4px 16px rgba(201,168,76,0.32)'}}>
+              <ShoppingBag size={13} /> {t('market.open_shop_btn')}
             </Link>
           </div>
 
-          {/* Headline + description */}
-          <div style={{ maxWidth: '600px', marginBottom: '2rem' }}>
-            <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 900, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.01em' }}>
-              {"Business Marketplace."}
+          {/* Headline */}
+          <div style={{ maxWidth:'560px', marginBottom:'2.5rem' }}>
+            <h1 style={{ fontSize:'clamp(2.2rem,5vw,3.5rem)', fontWeight:800, color:'#fff', lineHeight:1.08, marginBottom:'0.9rem', letterSpacing:'-0.03em' }}>
+              {t('market.headline')}
             </h1>
-            <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '440px' }}>
-              {<>"Verified sellers. All categories. Five regions. Join" {loading ? '...' : totalApproved} "businesses already selling on Travex Mall."</>}
+            <p style={{ fontSize:'clamp(0.85rem,1.5vw,0.95rem)', color:'rgba(255,255,255,0.48)', lineHeight:1.65, maxWidth:'420px' }}>
+              {t('market.subtitle')}{' '}
+              <span style={{ color:'rgba(255,255,255,0.65)', fontWeight:500 }}>
+                {t('market.join_count', { count: loading ? '…' : String(totalApproved) })}
+              </span>
             </p>
-          </div>
 
-          {/* Plan pills — white bg, centered */}
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#94A3B8', flexShrink: 0 }} />
-              <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{t('market.basicPlan')}</div>
-                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{formatTZS(MARKET_BASIC_PRICE)} / month</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
-              <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{t('market.premiumPlan')}</div>
-                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{formatTZS(MARKET_PREMIUM_PRICE)} / month</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A84C', flexShrink: 0 }} />
-              <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{t('market.topEstate')}</div>
-                <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>TZS 200,000 / month</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats ticker — auto scroll right to left */}
-          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginLeft: '-5%', marginRight: '-5%', paddingLeft: 0 }}>
-            <style>{`
-              @keyframes tickerRTL {
-                0%   { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-              }
-              .stats-ticker { animation: tickerRTL 22s linear infinite; will-change: transform; }
-              .stats-ticker:hover { animation-play-state: paused; }
-            `}</style>
-            <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
+            {/* Plan pills */}
+            <div style={{ display:'flex', gap:'10px', flexWrap:'wrap', marginTop:'1.5rem' }}>
               {[
-                ...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops'), color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('market.basicShops'), color: 'rgba(255,255,255,0.6)' },
-                  { val: '5', label: t('home.regions'), color: 'rgba(255,255,255,0.6)' },
-                  { val: t('market.open'), label: t('market.registration'), color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: t('market.activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: t('market.totalSlots'), color: 'rgba(255,255,255,0.6)' },
-                ],
-                ...[
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops'), color: '#C9A84C' },
-                  { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length), label: t('market.basicShops'), color: 'rgba(255,255,255,0.6)' },
-                  { val: '5', label: t('home.regions'), color: 'rgba(255,255,255,0.6)' },
-                  { val: t('market.open'), label: t('market.registration'), color: '#86EFAC' },
-                  { val: loading ? '...' : String(totalApproved), label: t('market.activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
-                  { val: String(MARKET_TOTAL_SLOTS), label: t('market.totalSlots'), color: 'rgba(255,255,255,0.6)' },
-                ],
-              ].map((s, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
-                  <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ fontSize: 'clamp(0.9rem,2vw,1.1rem)', fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: '3px' }}>{s.val}</div>
-                    <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>{s.label}</div>
+                { dot:'#64748B', label:t('market.basicPlan'),   price:formatTZS(MARKET_BASIC_PRICE) },
+                { dot:'#C9A84C', label:t('market.premiumPlan'), price:formatTZS(MARKET_PREMIUM_PRICE) },
+                { dot:'#C9A84C', label:t('market.topEstate'),   price:'TZS 200,000' },
+              ].map((p,i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:'10px', padding:'8px 14px', backdropFilter:'blur(8px)' }}>
+                  <div style={{ width:'6px', height:'6px', borderRadius:'50%', background:p.dot, flexShrink:0 }} />
+                  <div>
+                    <div style={{ fontSize:'0.75rem', fontWeight:700, color:'#fff', lineHeight:1 }}>{p.label}</div>
+                    <div style={{ fontSize:'0.6rem', color:'rgba(255,255,255,0.38)', marginTop:'2px' }}>{p.price} {t('market.per_month')}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Stats ticker */}
+          <div style={{ overflow:'hidden', paddingBottom:'0', borderTop:'1px solid rgba(255,255,255,0.06)', marginLeft:'-5%', marginRight:'-5%' }}>
+            <style>{`
+              @keyframes tickerRTL { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+              .stats-ticker { animation:tickerRTL 24s linear infinite; will-change:transform; }
+              .stats-ticker:hover { animation-play-state:paused; }
+            `}</style>
+            <div className="stats-ticker" style={{ display:'flex', width:'max-content', paddingTop:'1.25rem', paddingBottom:'1.5rem' }}>
+              {[...STATS,...STATS].map((s,i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', paddingRight:'2.5rem' }}>
+                  <div style={{ paddingRight:'2.5rem', borderRight:'1px solid rgba(255,255,255,0.07)' }}>
+                    <div style={{ fontSize:'clamp(0.88rem,2vw,1.05rem)', fontWeight:800, color:s.color, lineHeight:1, marginBottom:'3px', letterSpacing:'-0.02em' }}>{s.val}</div>
+                    <div style={{ fontSize:'0.58rem', color:'rgba(255,255,255,0.25)', textTransform:'uppercase', letterSpacing:'0.09em', whiteSpace:'nowrap' }}>{s.label}</div>
                   </div>
                 </div>
               ))}
@@ -199,192 +167,323 @@ export default function MarketPage() {
         </div>
       </section>
 
-      {/* ── QUICK ACCESS TICKER ── */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', overflow: 'hidden' }}>
+      {/* ── QUICK ACCESS CHIPS ───────────────────────────────── */}
+      <div style={{ background:'#fff', borderBottom:'1px solid #E2E8F0', overflow:'hidden' }}>
         <style>{`
-          @keyframes quickScroll {
-            0%   { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .quick-ticker { animation: quickScroll 18s linear infinite; will-change: transform; }
-          .quick-ticker:hover { animation-play-state: paused; }
-          .quick-chip { transition: all 0.2s; }
-          .quick-chip:hover { opacity: 0.8; transform: scale(0.97); }
+          @keyframes chipsScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+          .chips-scroll { animation:chipsScroll 20s linear infinite; will-change:transform; }
+          .chips-scroll:hover { animation-play-state:paused; }
+          .quick-chip { transition:all 0.18s; text-decoration:none; }
+          .quick-chip:hover { opacity:0.82; transform:translateY(-1px); }
         `}</style>
-        <div style={{ padding: '10px 0' }}>
-          <div className="quick-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '24px' }}>
-            {[
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-              { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
-              { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
-              { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited Time', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-              { href: '/group-buy',  label: 'Group Buy',   sub: 'Save Together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
-              { href: '/vybe',       label: 'Social Vybe', sub: 'Community Feed', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
-              { href: '/campus',     label: 'Campus Market', sub: 'Students Only', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
-            ].map((c, i) => (
-              <a key={i} href={c.href} className="quick-chip" style={{ display: 'inline-flex', flexDirection: 'column', gap: '1px', background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '6px 14px', borderRadius: '10px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{c.label}</span>
-                <span style={{ fontSize: '0.58rem', opacity: 0.7 }}>{c.sub}</span>
+        <div style={{ padding:'10px 0' }}>
+          <div className="chips-scroll" style={{ display:'flex', gap:'8px', width:'max-content', paddingLeft:'20px' }}>
+            {[...QUICK_CHIPS,...QUICK_CHIPS].map((c,i) => (
+              <a key={i} href={c.href} className="quick-chip" style={{ display:'inline-flex', alignItems:'center', gap:'6px', background:c.bg, border:`1px solid ${c.border}`, color:c.color, padding:'6px 14px', borderRadius:'10px', whiteSpace:'nowrap', flexShrink:0 }}>
+                <c.icon size={11} />
+                <div>
+                  <div style={{ fontSize:'0.73rem', fontWeight:700, lineHeight:1 }}>{c.label}</div>
+                  <div style={{ fontSize:'0.58rem', opacity:0.65, lineHeight:1, marginTop:'2px' }}>{c.sub}</div>
+                </div>
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── SEARCH + FILTERS + SHOPS ── */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 5% 2rem' }}>
+      {/* ── MAIN CONTENT ─────────────────────────────────────── */}
+      <section style={{ maxWidth:'1200px', margin:'0 auto', padding:'2rem 5% 4rem' }}>
 
-        {/* 1. Search bar */}
-        <div style={{ position: 'relative', marginBottom: '1rem' }}>
-          <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder={"Search / Tafuta..."}
-            style={{ width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '12px', fontSize: '0.88rem', outline: 'none', fontFamily: "'Inter', sans-serif", background: '#fff', boxShadow: '0 1px 4px rgba(15,23,42,0.05)', transition: 'border-color 0.2s' }}
-            onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
-            onBlur={e => (e.target.style.borderColor = '#E2E8F0')}
-          />
-        </div>
+        {/* Search + Filters bar */}
+        <div style={{ background:'#fff', borderRadius:'16px', border:'1.5px solid #E2E8F0', padding:'16px', marginBottom:'1.5rem', boxShadow:'0 2px 8px rgba(15,23,42,0.04)' }}>
 
-        {/* Filters — Region + Category horizontal */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.25rem' }}>
-
-          {/* Region row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>{t('market.region')}</span>
-            {regions.map(r => (
-              <button
-                key={r}
-                onClick={() => setRegion(r)}
-                style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: region === r ? '#0D1B3E' : '#E2E8F0', background: region === r ? '#0D1B3E' : '#fff', color: region === r ? '#fff' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}
-              >{r}</button>
-            ))}
+          {/* Search */}
+          <div style={{ position:'relative', marginBottom:'12px' }}>
+            <Search size={15} style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', color:'#94A3B8' }} />
+            <input
+              ref={searchRef}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={t('market.search_placeholder')}
+              style={{ width:'100%', boxSizing:'border-box', padding:'10px 36px 10px 36px', border:'1.5px solid #E2E8F0', borderRadius:'10px', fontSize:'0.88rem', outline:'none', fontFamily:"'Inter',sans-serif", background:'#F8FAFF', color:'#0F172A', transition:'all 0.2s', letterSpacing:'-0.01em' }}
+              onFocus={e=>{e.target.style.borderColor='#0D1B3E';e.target.style.background='#fff'}}
+              onBlur={e=>{e.target.style.borderColor='#E2E8F0';e.target.style.background='#F8FAFF'}}
+            />
+            {search && (
+              <button onClick={()=>setSearch('')} style={{ position:'absolute', right:'10px', top:'50%', transform:'translateY(-50%)', background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#94A3B8', display:'flex' }}>
+                <X size={14} />
+              </button>
+            )}
           </div>
 
-          {/* Category row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>{t('market.category')}</span>
-            {['All', ...categories].map(cat => (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat)}
-                style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s' }}
-              >{cat}</button>
-            ))}
+          {/* Region chips */}
+          <div style={{ marginBottom:'10px' }}>
+            <div style={{ fontSize:'0.6rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'6px' }}>
+              {t('market.region_label')}
+            </div>
+            <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+              <button onClick={()=>setRegion('')}
+                style={{ padding:'4px 12px', borderRadius:'7px', border:'1.5px solid', borderColor:!region?'#0D1B3E':'#E2E8F0', background:!region?'#0D1B3E':'#fff', color:!region?'#fff':'#475569', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', transition:'all 0.15s', fontFamily:"'Inter',sans-serif" }}>
+                {t('market.all')}
+              </button>
+              {REGIONS.map(r => (
+                <button key={r} onClick={()=>setRegion(r===region?'':r)}
+                  style={{ padding:'4px 12px', borderRadius:'7px', border:'1.5px solid', borderColor:region===r?'#0D1B3E':'#E2E8F0', background:region===r?'#0D1B3E':'#fff', color:region===r?'#fff':'#475569', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.15s', fontFamily:"'Inter',sans-serif" }}>
+                  {r}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* Category chips */}
+          <div>
+            <div style={{ fontSize:'0.6rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'6px' }}>
+              {t('market.category_label')}
+            </div>
+            <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+              <button onClick={()=>setCategory('')}
+                style={{ padding:'4px 12px', borderRadius:'7px', border:'1.5px solid', borderColor:!category?'#C9A84C':'#E2E8F0', background:!category?'#C9A84C':'#fff', color:!category?'#0F172A':'#475569', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', transition:'all 0.15s', fontFamily:"'Inter',sans-serif" }}>
+                {t('market.all')}
+              </button>
+              {CATEGORIES.map(cat => (
+                <button key={cat} onClick={()=>setCategory(cat===category?'':cat)}
+                  style={{ padding:'4px 12px', borderRadius:'7px', border:'1.5px solid', borderColor:category===cat?'#C9A84C':'#E2E8F0', background:category===cat?'#C9A84C':'#fff', color:category===cat?'#0F172A':'#475569', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.15s', fontFamily:"'Inter',sans-serif" }}>
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Active filters + clear */}
+          {hasFilters && (
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:'12px', paddingTop:'12px', borderTop:'1px solid #F1F5F9' }}>
+              <div style={{ fontSize:'0.72rem', color:'#64748B', fontWeight:500 }}>
+                {filtered.length === 1
+                  ? t('market.results_one', { count: '1' })
+                  : t('market.results_many', { count: String(filtered.length) })}
+              </div>
+              <button onClick={clearFilters} style={{ display:'flex', alignItems:'center', gap:'4px', padding:'4px 10px', background:'#FEF2F2', border:'1px solid #FECACA', borderRadius:'7px', color:'#EF4444', fontSize:'0.7rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+                <X size={11} /> Clear filters
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Results count */}
-        <div style={{ fontSize: '0.76rem', color: '#94A3B8', fontWeight: 500, marginBottom: '1.25rem' }}>
-          {filtered.length} shop{filtered.length !== 1 ? 's' : ''} found
-        </div>
-
-        {/* Loading */}
-        {loading && (
-          <div style={{ textAlign: 'center', padding: '5rem 0' }}>
-            <Loader2 style={{ width: '32px', height: '32px', color: '#3B82F6', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }} />
-            <p style={{ color: '#64748B', fontSize: '0.88rem' }}>Loading shops...</p>
-            <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+        {/* Results count bar */}
+        {!hasFilters && !loading && (
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'1.25rem' }}>
+            <p style={{ fontSize:'0.78rem', color:'#64748B', fontWeight:500, letterSpacing:'-0.01em' }}>
+              {totalApproved === 1
+                ? t('market.results_one', { count: '1' })
+                : t('market.results_many', { count: String(totalApproved) })}
+            </p>
+            <div style={{ display:'flex', gap:'6px' }}>
+              {[
+                { icon:Star, label:t('market.premium_badge'), count:String(shops.filter(s=>s.plan==='premium').length), color:'#C9A84C' },
+                { icon:Store, label:t('market.basic_badge'), count:String(shops.filter(s=>s.plan==='basic').length), color:'#64748B' },
+              ].map((tag,i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', gap:'4px', background:'#fff', border:'1px solid #E2E8F0', borderRadius:'8px', padding:'4px 10px', fontSize:'0.68rem', color:'#475569', fontWeight:600 }}>
+                  <tag.icon size={10} color={tag.color} /> {tag.count} {tag.label}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* No shops yet */}
+        {/* Loading state */}
+        {loading && (
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:'1rem' }}>
+            {Array.from({length:8}).map((_,i) => (
+              <div key={i} style={{ background:'#fff', borderRadius:'16px', border:'1.5px solid #F1F5F9', overflow:'hidden', height:'240px' }}>
+                <div style={{ height:'100px', background:'linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 50%,#F1F5F9 75%)', backgroundSize:'200% 100%', animation:'shimmer 1.5s infinite' }} />
+                <div style={{ padding:'12px 16px' }}>
+                  {[80,60,40].map((w,j)=><div key={j} style={{ height:'12px', background:'#F1F5F9', borderRadius:'6px', width:`${w}%`, marginBottom:'8px' }} />)}
+                </div>
+                <style>{`@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`}</style>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty — no shops at all */}
         {!loading && shops.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '6rem 0' }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}></div>
-            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>No shops yet</h3>
-            <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Be the first to open a shop on Travex Business Market!</p>
-            <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 22px rgba(201,168,76,0.30)' }}>
-              Open Shop 
+          <div style={{ textAlign:'center', padding:'6rem 1rem' }}>
+            <div style={{ width:'72px', height:'72px', background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderRadius:'20px', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 1.25rem' }}>
+              <Store size={32} color="#C9A84C" />
+            </div>
+            <h3 style={{ fontSize:'1.3rem', fontWeight:700, color:'#0D1B3E', marginBottom:'0.5rem', letterSpacing:'-0.02em' }}>
+              {t('market.empty_title')}
+            </h3>
+            <p style={{ fontSize:'0.9rem', color:'#64748B', marginBottom:'1.75rem', maxWidth:'340px', margin:'0 auto 1.75rem', lineHeight:1.6 }}>
+              {t('market.empty_desc')}
+            </p>
+            <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:'6px', background:'#C9A84C', color:'#0F172A', padding:'0.85rem 2rem', borderRadius:'999px', fontWeight:700, fontSize:'0.88rem', textDecoration:'none', boxShadow:'0 8px 22px rgba(201,168,76,0.30)', letterSpacing:'-0.01em' }}>
+              <ShoppingBag size={15} /> {t('market.open_shop_btn')}
             </Link>
           </div>
         )}
 
-        {/* Shops grid */}
-        {!loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))', gap: '1.1rem' }}>
-            {filtered.length === 0 ? (
-              <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
-                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>{t('market.noShops')}</div>
-                <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>Try different filters or search term</p>
-              </div>
-            ) : filtered.map(shop => <ShopCard key={shop.id} shop={shop} />)}
+        {/* No results from filters */}
+        {!loading && shops.length > 0 && filtered.length === 0 && (
+          <div style={{ textAlign:'center', padding:'5rem 1rem' }}>
+            <Search size={40} color="#CBD5E1" style={{ margin:'0 auto 1rem' }} />
+            <h3 style={{ fontSize:'1.2rem', fontWeight:700, color:'#0D1B3E', marginBottom:'0.5rem', letterSpacing:'-0.02em' }}>
+              {t('market.no_results_title')}
+            </h3>
+            <p style={{ fontSize:'0.88rem', color:'#94A3B8', marginBottom:'1.5rem', lineHeight:1.6 }}>
+              {t('market.no_results_desc')}
+            </p>
+            <button onClick={clearFilters} style={{ display:'inline-flex', alignItems:'center', gap:'6px', background:'#0D1B3E', color:'#fff', padding:'0.75rem 1.75rem', borderRadius:'999px', fontWeight:700, fontSize:'0.85rem', border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", letterSpacing:'-0.01em' }}>
+              <X size={13} /> Clear filters
+            </button>
           </div>
         )}
 
+        {/* Shop grid */}
+        {!loading && filtered.length > 0 && (
+          <>
+            {/* Premium section */}
+            {filtered.filter(s=>s.plan==='premium').length > 0 && (
+              <div style={{ marginBottom:'2.5rem' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'1rem' }}>
+                  <Star size={13} color="#C9A84C" fill="#C9A84C" />
+                  <span style={{ fontSize:'0.72rem', fontWeight:800, color:'#C9A84C', textTransform:'uppercase', letterSpacing:'0.08em' }}>
+                    {t('market.premiumShops')}
+                  </span>
+                  <div style={{ flex:1, height:'1px', background:'linear-gradient(90deg,rgba(201,168,76,0.25),transparent)' }} />
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:'1rem' }}>
+                  {filtered.filter(s=>s.plan==='premium').map(shop => (
+                    <ShopCard key={shop.id} shop={shop} t={t} />
+                  ))}
+                </div>
+              </div>
+            )}
 
+            {/* Basic section */}
+            {filtered.filter(s=>s.plan==='basic').length > 0 && (
+              <div>
+                <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'1rem' }}>
+                  <Store size={12} color="#94A3B8" />
+                  <span style={{ fontSize:'0.72rem', fontWeight:800, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.08em' }}>
+                    {t('market.basicShops')}
+                  </span>
+                  <div style={{ flex:1, height:'1px', background:'linear-gradient(90deg,rgba(148,163,184,0.25),transparent)' }} />
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:'1rem' }}>
+                  {filtered.filter(s=>s.plan==='basic').map(shop => (
+                    <ShopCard key={shop.id} shop={shop} t={t} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </section>
 
       <SiteFooter />
+
+      <style>{`
+        @media (max-width:640px) {
+          .market-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (max-width:400px) {
+          .market-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </main>
   )
 }
 
-function ShopCard({ shop }: { shop: MarketShop }) {
-  const init = shop.shop_name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
+// ── SHOP CARD ─────────────────────────────────────────────────
+function ShopCard({ shop, t }: { shop: MarketShop; t: (k: string) => string }) {
   const isPremium = shop.plan === 'premium'
-  const color = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
+  const accentColor = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
+  const initials = shop.shop_name.split(' ').map((w:string)=>w[0]).join('').slice(0,2).toUpperCase()
 
   return (
     <div
-      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.20)' : '#EEF0F6'}`, borderRadius: '16px', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer', boxShadow: '0 1px 6px rgba(15,23,42,0.06)' }}
-      onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 10px 28px rgba(15,23,42,0.10)' }}
-      onMouseOut={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 6px rgba(15,23,42,0.06)' }}
+      style={{ background:'#fff', borderRadius:'16px', border:`1.5px solid ${isPremium?'rgba(201,168,76,0.22)':'#EEF0F6'}`, overflow:'hidden', transition:'all 0.22s', cursor:'pointer', boxShadow:'0 1px 4px rgba(15,23,42,0.05)', display:'flex', flexDirection:'column' }}
+      onMouseOver={e=>{const el=e.currentTarget as HTMLElement;el.style.transform='translateY(-4px)';el.style.boxShadow=isPremium?'0 12px 32px rgba(201,168,76,0.14)':'0 12px 32px rgba(15,23,42,0.10)'}}
+      onMouseOut={e=>{const el=e.currentTarget as HTMLElement;el.style.transform='translateY(0)';el.style.boxShadow='0 1px 4px rgba(15,23,42,0.05)'}}
     >
-      {/* Banner — user image or gradient */}
-      <div style={{ height: '70px', position: 'relative', overflow: 'hidden' }}>
-        {shop.shop_banner ? (
-          <img src={shop.shop_banner} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        ) : (
-          <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}99 50%, #050B2E 100%)` }} />
-        )}
-        {/* Plan badge */}
-        <div style={{ position: 'absolute', top: '6px', right: '8px', background: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.85)', color: isPremium ? '#0F172A' : '#64748B', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px', letterSpacing: '0.04em' }}>
-          {isPremium ? 'PREMIUM' : 'BASIC'}
+      {/* Banner */}
+      <div style={{ height:'96px', position:'relative', overflow:'hidden', flexShrink:0 }}>
+        {shop.shop_banner
+          ? <img src={shop.shop_banner} alt="" style={{ width:'100%',height:'100%',objectFit:'cover' }} />
+          : <div style={{ width:'100%',height:'100%',background:`linear-gradient(135deg,${accentColor}44 0%,${accentColor}88 50%,#030920 100%)` }} />
+        }
+        {/* Premium line */}
+        {isPremium && <div style={{ position:'absolute', top:0, left:0, right:0, height:'2px', background:'linear-gradient(90deg,#C9A84C,#F0C96B,#C9A84C)' }} />}
+        {/* Badge */}
+        <div style={{ position:'absolute', top:'8px', right:'8px', background:isPremium?'#C9A84C':'rgba(15,23,42,0.65)', backdropFilter:'blur(8px)', color:isPremium?'#0F172A':'rgba(255,255,255,0.85)', fontSize:'0.5rem', fontWeight:800, padding:'2px 8px', borderRadius:'999px', letterSpacing:'0.05em', textTransform:'uppercase' }}>
+          {isPremium ? t('market.premium_badge') : t('market.basic_badge')}
         </div>
       </div>
 
       {/* Body */}
-      <div style={{ padding: '0.45rem 0.7rem 0.6rem' }}>
-        {/* Logo left + shop name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-          {/* Logo — left side */}
-          <div style={{ width: '28px', height: '28px', borderRadius: '7px', border: '1.5px solid #E8ECF4', overflow: 'hidden', flexShrink: 0, background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {shop.shop_logo ? (
-              <img src={shop.shop_logo} alt={init} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: '0.62rem', fontWeight: 900, color: '#fff' }}>{init}</span>
-            )}
+      <div style={{ padding:'12px 14px 14px', display:'flex', flexDirection:'column', flex:1, gap:'8px' }}>
+
+        {/* Logo + Name row */}
+        <div style={{ display:'flex', alignItems:'flex-start', gap:'10px' }}>
+          <div style={{ width:'36px', height:'36px', borderRadius:'10px', border:`2px solid ${isPremium?'rgba(201,168,76,0.25)':'#E8ECF4'}`, overflow:'hidden', flexShrink:0, background:`linear-gradient(135deg,${accentColor},#030920)`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            {shop.shop_logo
+              ? <img src={shop.shop_logo} alt={initials} style={{ width:'100%',height:'100%',objectFit:'cover' }} />
+              : <span style={{ fontSize:'0.72rem', fontWeight:800, color:'#fff', letterSpacing:'-0.02em' }}>{initials}</span>
+            }
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{shop.shop_name}</div>
-            {shop.shop_region && <div style={{ fontSize: '0.58rem', color: '#94A3B8', marginTop: '1px' }}>{shop.shop_region}</div>}
+          <div style={{ flex:1, minWidth:0 }}>
+            <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#0F172A', lineHeight:1.25, letterSpacing:'-0.01em', marginBottom:'2px', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+              {shop.shop_name}
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:'4px', flexWrap:'wrap' }}>
+              {shop.shop_region && (
+                <span style={{ display:'inline-flex', alignItems:'center', gap:'2px', fontSize:'0.62rem', color:'#94A3B8', fontWeight:500 }}>
+                  <MapPin size={9} /> {shop.shop_region}
+                </span>
+              )}
+              {isPremium && (
+                <span style={{ display:'inline-flex', alignItems:'center', gap:'2px', fontSize:'0.6rem', color:'#16A34A', fontWeight:700 }}>
+                  <CheckCircle2 size={9} /> {t('market.verified')}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Category tag */}
+        {/* Category */}
         {shop.shop_category && (
-          <div style={{ marginBottom: '0.3rem' }}>
-            <span style={{ fontSize: '0.58rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '2px 7px', borderRadius: '999px', fontWeight: 700 }}>{shop.shop_category}</span>
+          <div>
+            <span style={{ fontSize:'0.62rem', background:isPremium?'rgba(201,168,76,0.10)':'rgba(59,130,246,0.07)', color:isPremium?'#92741a':'#1D4ED8', padding:'3px 9px', borderRadius:'999px', fontWeight:700, letterSpacing:'0.01em' }}>
+              {shop.shop_category}
+            </span>
           </div>
         )}
 
         {/* Description */}
         {shop.shop_desc && (
-          <p style={{ fontSize: '0.65rem', color: '#94A3B8', lineHeight: 1.45, marginBottom: '0.3rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{shop.shop_desc}</p>
+          <p style={{ fontSize:'0.72rem', color:'#64748B', lineHeight:1.55, margin:0, overflow:'hidden', display:'-webkit-box', WebkitLineClamp:2 as any, WebkitBoxOrient:'vertical' as any }}>
+            {shop.shop_desc}
+          </p>
         )}
 
-        {/* Visit Shop — small button */}
-        <a
-          href={`/store/${shop.id}`}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: isPremium ? '#C9A84C' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity = '0.82'}
-          onMouseOut={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-        >
-          <Store size={10} /> Visit Shop
-        </a>
+        {/* Footer row */}
+        <div style={{ display:'flex', alignItems:'center', gap:'6px', marginTop:'auto', paddingTop:'4px' }}>
+          <Link href={`/store/${shop.id}`}
+            style={{ flex:1, display:'inline-flex', alignItems:'center', justifyContent:'center', gap:'5px', padding:'8px 14px', background:isPremium?'#C9A84C':'#0D1B3E', color:isPremium?'#0F172A':'#fff', borderRadius:'9px', fontSize:'0.72rem', fontWeight:700, textDecoration:'none', transition:'opacity 0.2s', letterSpacing:'-0.01em' }}
+            onMouseOver={e=>(e.currentTarget as HTMLElement).style.opacity='0.85'}
+            onMouseOut={e=>(e.currentTarget as HTMLElement).style.opacity='1'}>
+            <Store size={11} /> {t('market.visit_shop')}
+          </Link>
+          {shop.shop_whatsapp && (
+            <a href={`https://wa.me/${shop.shop_whatsapp.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+              style={{ padding:'8px 10px', background:'#F0FDF4', border:'1px solid #BBF7D0', borderRadius:'9px', color:'#15803D', textDecoration:'none', display:'flex', alignItems:'center', transition:'all 0.2s' }}
+              onMouseOver={e=>{(e.currentTarget as HTMLElement).style.background='#DCFCE7'}}
+              onMouseOut={e=>{(e.currentTarget as HTMLElement).style.background='#F0FDF4'}}>
+              <MessageCircle size={13} />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   )
