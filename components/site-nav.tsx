@@ -2,6 +2,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import {
+  Home, Store, GraduationCap, MessageCircle, Zap,
+  Users, Truck, Search, Menu, Lock, ShoppingBag, Globe, X, ArrowRight, Loader2
+} from 'lucide-react'
 import { T } from './T'
 import { useLang } from '@/lib/lang-context'
 import { sb } from '@/lib/supabase'
@@ -14,33 +18,33 @@ type ShopResult = {
 }
 
 const NAV_ICONS = [
-  { href: '/home',        icon: 'ti-home-2',        label: 'Home'        },
-  { href: '/market',      icon: 'ti-building-store', label: 'Business'    },
-  { href: '/campus',      icon: 'ti-school',         label: 'Campus'      },
-  { href: '/vybe',        icon: 'ti-chart-bubble',   label: 'Social Vybe' },
-  { href: '/flash-deals', icon: 'ti-bolt',           label: 'Flash Deals' },
-  { href: '/group-buy',   icon: 'ti-users-group',    label: 'Group Buy'   },
-  { href: '/move',        icon: 'ti-truck',          label: 'Move'        },
+  { href: '/home',        Icon: Home,          label: 'Home'        },
+  { href: '/market',      Icon: Store,         label: 'Business'    },
+  { href: '/campus',      Icon: GraduationCap, label: 'Campus'      },
+  { href: '/vybe',        Icon: MessageCircle, label: 'Social Vybe' },
+  { href: '/flash-deals', Icon: Zap,           label: 'Flash Deals' },
+  { href: '/group-buy',   Icon: Users,         label: 'Group Buy'   },
+  { href: '/move',        Icon: Truck,         label: 'Move'        },
 ]
 
 export function SiteNav() {
-  const pathname  = usePathname()
-  const router    = useRouter()
+  const pathname = usePathname()
+  const router   = useRouter()
   const { lang, setLang } = useLang()
 
-  const [query,   setQuery]   = useState('')
-  const [results, setResults] = useState<ShopResult[]>([])
+  const [query,     setQuery]     = useState('')
+  const [results,   setResults]   = useState<ShopResult[]>([])
   const [searching, setSearching] = useState(false)
-  const [showDrop, setShowDrop] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [showDrop,  setShowDrop]  = useState(false)
+  const [menuOpen,  setMenuOpen]  = useState(false)
 
   const searchRef = useRef<HTMLDivElement>(null)
   const menuRef   = useRef<HTMLDivElement>(null)
-  const debounce  = useRef<NodeJS.Timeout>()
+  const debounceRef = useRef<NodeJS.Timeout>()
 
-  // ── Close dropdowns on outside click ─────────────────────
+  // Close on outside click
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const fn = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setShowDrop(false)
       }
@@ -48,153 +52,155 @@ export function SiteNav() {
         setMenuOpen(false)
       }
     }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    document.addEventListener('mousedown', fn)
+    return () => document.removeEventListener('mousedown', fn)
   }, [])
 
-  // ── Search handler ────────────────────────────────────────
+  // Search
   const handleSearch = useCallback((val: string) => {
     setQuery(val)
-    clearTimeout(debounce.current)
+    clearTimeout(debounceRef.current)
     if (!val.trim()) { setResults([]); setShowDrop(false); return }
 
-    debounce.current = setTimeout(async () => {
+    debounceRef.current = setTimeout(async () => {
       setSearching(true)
-      const q = val.toLowerCase()
-      const [{ data: biz }, { data: campus }] = await Promise.all([
-        sb.from('pending_payments')
-          .select('id,shop_name,shop_city')
-          .ilike('shop_name', `%${q}%`)
-          .eq('status','approved')
-          .limit(5),
-        sb.from('campus_stores')
-          .select('id,shop_name,university_abbr')
-          .ilike('shop_name', `%${q}%`)
-          .eq('is_active', true)
-          .limit(4),
-      ])
-      const combined: ShopResult[] = [
-        ...(biz    || []).map((s: any) => ({ id: s.id, shop_name: s.shop_name, shop_city: s.shop_city, source: 'business' as const })),
-        ...(campus || []).map((s: any) => ({ id: s.id, shop_name: s.shop_name, shop_city: s.university_abbr, source: 'campus' as const })),
-      ]
-      setResults(combined)
-      setShowDrop(true)
+      try {
+        const [{ data: biz }, { data: campus }] = await Promise.all([
+          sb.from('pending_payments')
+            .select('id,shop_name,shop_city')
+            .ilike('shop_name', `%${val}%`)
+            .eq('status', 'approved')
+            .limit(5),
+          sb.from('campus_stores')
+            .select('id,shop_name,university_abbr')
+            .ilike('shop_name', `%${val}%`)
+            .eq('is_active', true)
+            .limit(4),
+        ])
+        const combined: ShopResult[] = [
+          ...(biz    || []).map((s: any) => ({ id: s.id, shop_name: s.shop_name, shop_city: s.shop_city, source: 'business' as const })),
+          ...(campus || []).map((s: any) => ({ id: s.id, shop_name: s.shop_name, shop_city: s.university_abbr, source: 'campus' as const })),
+        ]
+        setResults(combined)
+        setShowDrop(true)
+      } catch {}
       setSearching(false)
     }, 300)
   }, [])
 
   const goToShop = (id: string) => {
-    setShowDrop(false)
-    setQuery('')
+    setShowDrop(false); setQuery('')
     router.push(`/store/${id}`)
   }
 
   const isActive = (href: string) =>
-    href === '/home' ? pathname === '/' || pathname === '/home' : pathname.startsWith(href)
+    href === '/home'
+      ? pathname === '/' || pathname === '/home'
+      : pathname.startsWith(href)
 
   return (
     <header style={{
       position: 'sticky', top: 0, zIndex: 200,
       background: '#fff',
       borderBottom: '1px solid #E2E8F0',
-      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+      fontFamily: "'Inter', sans-serif",
     }}>
 
-      {/* ── ROW 1: Logo | Search | Menu ─────────────────── */}
+      {/* ── ROW 1: Brand | [spacer] | Search | Menu ── */}
       <div style={{
         display: 'flex', alignItems: 'center',
-        padding: '10px 5%', gap: '16px',
+        padding: '10px 5%', gap: '14px',
       }}>
 
         {/* Brand */}
-        <Link href="/home" style={{ display:'flex', alignItems:'center', gap:'8px', textDecoration:'none', flexShrink:0 }}>
-          <img src="/icon-192.png" alt="Travex" style={{ width:'34px', height:'34px', borderRadius:'50%', objectFit:'cover' }}/>
+        <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
+          <img
+            src="/icon-192.png" alt="Travex"
+            style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }}
+          />
           <span style={{
-            fontFamily:"'Space Grotesk',sans-serif",
-            fontSize:'1.12rem', fontWeight:700,
-            color:'#0D1B3E', letterSpacing:'-0.03em',
+            fontFamily: "'Space Grotesk', 'Inter', sans-serif",
+            fontSize: '1.1rem', fontWeight: 700,
+            color: '#0D1B3E', letterSpacing: '-0.03em',
           }}>
-            travex <span style={{ color:'#C9A84C' }}>mall</span>
+            travex <span style={{ color: '#C9A84C' }}>mall</span>
           </span>
         </Link>
 
-        {/* Spacer */}
+        {/* Push search + menu to right */}
         <div style={{ flex: 1 }} />
 
         {/* Search bar */}
-        <div ref={searchRef} style={{ position:'relative', width:'min(420px,45%)' }}>
-          <div style={{ position:'relative' }}>
-            <i className="ti ti-search" style={{
-              position:'absolute', left:'12px', top:'50%',
-              transform:'translateY(-50%)', color:'#94A3B8', fontSize:'15px',
-            }}/>
-            {searching && (
-              <i className="ti ti-loader-2" style={{
-                position:'absolute', right:'12px', top:'50%',
-                transform:'translateY(-50%)', color:'#94A3B8', fontSize:'14px',
-                animation:'spin .8s linear infinite',
-              }}/>
-            )}
+        <div ref={searchRef} style={{ position: 'relative', width: 'clamp(180px, 38%, 420px)' }}>
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            {searching
+              ? <Loader2 size={15} style={{ position: 'absolute', left: 11, color: '#94A3B8', animation: 'spin .8s linear infinite' }} />
+              : <Search size={15} style={{ position: 'absolute', left: 11, color: '#94A3B8' }} />
+            }
             <input
               type="text"
               value={query}
               onChange={e => handleSearch(e.target.value)}
-              onFocus={() => { if (results.length) setShowDrop(true) }}
-              placeholder="Search shops, products..."
+              onFocus={() => results.length && setShowDrop(true)}
+              placeholder="Search shops..."
               style={{
-                width:'100%', boxSizing:'border-box' as const,
-                padding:'9px 36px 9px 36px',
-                background:'#F1F5F9', border:'1.5px solid transparent',
-                borderRadius:'999px', fontSize:'0.84rem',
-                color:'#0F172A', outline:'none',
-                fontFamily:"'Inter',sans-serif",
-                transition:'all 0.2s',
+                width: '100%', boxSizing: 'border-box' as const,
+                padding: '8px 14px 8px 34px',
+                background: '#F1F5F9',
+                border: '1.5px solid transparent',
+                borderRadius: '999px', fontSize: '0.83rem',
+                color: '#0F172A', outline: 'none',
+                fontFamily: "'Inter', sans-serif",
+                transition: 'all 0.2s',
               }}
-              onMouseOver={e=>(e.currentTarget.style.background='#E8EDF4')}
-              onMouseOut={e=>{if(document.activeElement!==e.currentTarget)e.currentTarget.style.background='#F1F5F9'}}
-              onFocus={e=>{e.currentTarget.style.background='#fff';e.currentTarget.style.borderColor='#0D1B3E'}}
-              onBlur={e=>{e.currentTarget.style.background='#F1F5F9';e.currentTarget.style.borderColor='transparent'}}
+              onFocus={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#0D1B3E' }}
+              onBlur={e => { if (!showDrop) { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.borderColor = 'transparent' } }}
             />
           </div>
 
-          {/* Search results dropdown */}
+          {/* Dropdown results */}
           {showDrop && results.length > 0 && (
             <div style={{
-              position:'absolute', top:'calc(100% + 6px)', left:0, right:0,
-              background:'#fff', borderRadius:'14px',
-              boxShadow:'0 8px 32px rgba(0,0,0,0.14)',
-              border:'1px solid #E2E8F0', overflow:'hidden', zIndex:300,
+              position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
+              background: '#fff', borderRadius: '14px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
+              border: '1px solid #E2E8F0', overflow: 'hidden', zIndex: 400,
             }}>
               {results.map(r => (
-                <div key={r.id} onClick={() => goToShop(r.id)} style={{
-                  display:'flex', alignItems:'center', gap:'10px',
-                  padding:'10px 16px', cursor:'pointer',
-                  transition:'background 0.15s',
-                }}
-                onMouseOver={e=>(e.currentTarget.style.background='#F8FAFF')}
-                onMouseOut={e=>(e.currentTarget.style.background='transparent')}>
+                <div
+                  key={r.id}
+                  onClick={() => goToShop(r.id)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', cursor: 'pointer', transition: 'background .15s' }}
+                  onMouseOver={e => (e.currentTarget.style.background = '#F8FAFF')}
+                  onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
+                >
                   <div style={{
-                    width:'32px', height:'32px', borderRadius:'8px',
-                    background: r.source==='business'?'rgba(201,168,76,0.12)':'rgba(59,130,246,0.10)',
-                    display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,
+                    width: '30px', height: '30px', borderRadius: '8px', flexShrink: 0,
+                    background: r.source === 'business' ? 'rgba(201,168,76,0.12)' : 'rgba(59,130,246,0.10)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <i className={r.source==='business'?'ti ti-building-store':'ti ti-school'}
-                      style={{ fontSize:'16px', color:r.source==='business'?'#C9A84C':'#3B82F6' }}/>
+                    {r.source === 'business'
+                      ? <Store size={14} color="#C9A84C" />
+                      : <GraduationCap size={14} color="#3B82F6" />
+                    }
                   </div>
-                  <div>
-                    <div style={{ fontSize:'13px', fontWeight:600, color:'#0F172A' }}>{r.shop_name}</div>
-                    <div style={{ fontSize:'11px', color:'#94A3B8' }}>
-                      {r.source==='business'?'Business Market':'Campus Market'} {r.shop_city?`· ${r.shop_city}`:''}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.shop_name}</div>
+                    <div style={{ fontSize: '10px', color: '#94A3B8' }}>
+                      {r.source === 'business' ? 'Business Market' : 'Campus Market'}{r.shop_city ? ` · ${r.shop_city}` : ''}
                     </div>
                   </div>
-                  <i className="ti ti-arrow-right" style={{ marginLeft:'auto', color:'#CBD5E1', fontSize:'14px' }}/>
+                  <ArrowRight size={13} color="#CBD5E1" />
                 </div>
               ))}
-              <div style={{ padding:'8px 16px 10px', borderTop:'1px solid #F1F5F9' }}>
-                <Link href={`/market?search=${encodeURIComponent(query)}`}
+              <div style={{ padding: '8px 14px 10px', borderTop: '1px solid #F1F5F9' }}>
+                <Link
+                  href={`/market?search=${encodeURIComponent(query)}`}
                   onClick={() => setShowDrop(false)}
-                  style={{ fontSize:'12px', color:'#0D1B3E', fontWeight:600, textDecoration:'none' }}>
-                  View all results for "{query}" →
+                  style={{ fontSize: '12px', color: '#0D1B3E', fontWeight: 600, textDecoration: 'none' }}
+                >
+                  See all results for &ldquo;{query}&rdquo; →
                 </Link>
               </div>
             </div>
@@ -202,69 +208,75 @@ export function SiteNav() {
         </div>
 
         {/* Menu button */}
-        <div ref={menuRef} style={{ position:'relative', flexShrink:0 }}>
-          <button onClick={() => setMenuOpen(v => !v)} style={{
-            width:'38px', height:'38px', borderRadius:'50%',
-            background: menuOpen?'#0D1B3E':'#F1F5F9',
-            border:'none', cursor:'pointer',
-            display:'flex', alignItems:'center', justifyContent:'center',
-            transition:'all 0.2s',
-          }}>
-            <i className="ti ti-menu-2" style={{ fontSize:'18px', color: menuOpen?'#C9A84C':'#475569' }}/>
+        <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
+          <button
+            onClick={() => setMenuOpen(v => !v)}
+            style={{
+              width: '38px', height: '38px', borderRadius: '50%',
+              background: menuOpen ? '#0D1B3E' : '#F1F5F9',
+              border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'all 0.2s',
+            }}
+          >
+            {menuOpen
+              ? <X size={18} color="#C9A84C" />
+              : <Menu size={18} color="#475569" />
+            }
           </button>
 
-          {/* Menu dropdown */}
+          {/* Dropdown menu */}
           {menuOpen && (
             <div style={{
-              position:'absolute', top:'calc(100% + 8px)', right:0,
-              background:'#fff', borderRadius:'16px',
-              boxShadow:'0 8px 32px rgba(0,0,0,0.14)',
-              border:'1px solid #E2E8F0',
-              minWidth:'200px', overflow:'hidden', zIndex:300,
+              position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+              background: '#fff', borderRadius: '16px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
+              border: '1px solid #E2E8F0', minWidth: '210px',
+              overflow: 'hidden', zIndex: 400,
             }}>
-              {/* Login */}
-              <Link href="/login" onClick={() => setMenuOpen(false)} style={{
-                display:'flex', alignItems:'center', gap:'10px',
-                padding:'12px 16px', textDecoration:'none',
-                color:'#0F172A', transition:'background 0.15s',
-              }}
-              onMouseOver={e=>(e.currentTarget.style.background='#F8FAFF')}
-              onMouseOut={e=>(e.currentTarget.style.background='transparent')}>
-                <i className="ti ti-lock" style={{ fontSize:'18px', color:'#0D1B3E' }}/>
-                <span style={{ fontSize:'13px', fontWeight:600 }}><T en="Log In" sw="Ingia" /></span>
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '13px 16px', textDecoration: 'none', color: '#0F172A', transition: 'background .15s' }}
+                onMouseOver={e => (e.currentTarget.style.background = '#F8FAFF')}
+                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <Lock size={16} color="#0D1B3E" />
+                <span style={{ fontSize: '13px', fontWeight: 600 }}><T en="Log In" sw="Ingia" /></span>
+              </Link>
+              <Link
+                href="/open-store"
+                onClick={() => setMenuOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '13px 16px', textDecoration: 'none', color: '#0F172A', transition: 'background .15s' }}
+                onMouseOver={e => (e.currentTarget.style.background = '#F8FAFF')}
+                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <ShoppingBag size={16} color="#C9A84C" />
+                <span style={{ fontSize: '13px', fontWeight: 600 }}><T en="Open Your Shop" sw="Fungua Duka Lako" /></span>
               </Link>
 
-              {/* Open Shop */}
-              <Link href="/open-store" onClick={() => setMenuOpen(false)} style={{
-                display:'flex', alignItems:'center', gap:'10px',
-                padding:'12px 16px', textDecoration:'none',
-                color:'#0F172A', transition:'background 0.15s',
-              }}
-              onMouseOver={e=>(e.currentTarget.style.background='#F8FAFF')}
-              onMouseOut={e=>(e.currentTarget.style.background='transparent')}>
-                <i className="ti ti-store" style={{ fontSize:'18px', color:'#C9A84C' }}/>
-                <span style={{ fontSize:'13px', fontWeight:600 }}><T en="Open Your Shop" sw="Fungua Duka Lako" /></span>
-              </Link>
+              <div style={{ height: '1px', background: '#F1F5F9', margin: '4px 0' }} />
 
-              <div style={{ height:'1px', background:'#F1F5F9', margin:'4px 0' }}/>
-
-              {/* Language switcher */}
-              <div style={{ padding:'8px 16px 12px' }}>
-                <div style={{ fontSize:'11px', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'8px' }}>
-                  <T en="Language" sw="Lugha" />
+              <div style={{ padding: '10px 16px 14px' }}>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <Globe size={11} /> <T en="Language" sw="Lugha" />
                 </div>
-                <div style={{ display:'flex', gap:'6px' }}>
-                  {(['en','sw'] as const).map(code => (
-                    <button key={code} onClick={() => { setLang(code); setMenuOpen(false) }} style={{
-                      flex:1, padding:'7px 8px',
-                      background: lang===code?'#0D1B3E':'#F1F5F9',
-                      color: lang===code?'#fff':'#475569',
-                      border:'none', borderRadius:'8px',
-                      fontSize:'12px', fontWeight:700,
-                      cursor:'pointer', fontFamily:"'Inter',sans-serif",
-                      transition:'all 0.2s',
-                    }}>
-                      {code==='en'?'🇬🇧 English':'🇹🇿 Kiswahili'}
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  {(['en', 'sw'] as const).map(code => (
+                    <button
+                      key={code}
+                      onClick={() => { setLang(code); setMenuOpen(false) }}
+                      style={{
+                        flex: 1, padding: '7px 6px',
+                        background: lang === code ? '#0D1B3E' : '#F1F5F9',
+                        color: lang === code ? '#C9A84C' : '#64748B',
+                        border: 'none', borderRadius: '8px',
+                        fontSize: '11px', fontWeight: 700,
+                        cursor: 'pointer', fontFamily: "'Inter', sans-serif",
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {code === 'en' ? '🇬🇧 English' : '🇹🇿 Kiswahili'}
                     </button>
                   ))}
                 </div>
@@ -274,33 +286,41 @@ export function SiteNav() {
         </div>
       </div>
 
-      {/* ── ROW 2: Icon Nav ─────────────────────────────── */}
+      {/* ── ROW 2: Icon Nav ─── */}
       <div style={{
-        display:'flex', alignItems:'stretch',
-        borderTop:'1px solid #F1F5F9',
-        padding:'0 5%',
+        display: 'flex', alignItems: 'stretch',
+        borderTop: '1px solid #F1F5F9',
+        padding: '0 5%',
       }}>
-        {NAV_ICONS.map(item => (
-          <Link key={item.href} href={item.href} title={item.label} style={{
-            flex:1, display:'flex', alignItems:'center', justifyContent:'center',
-            padding:'10px 0',
-            borderBottom: isActive(item.href)?'3px solid #C9A84C':'3px solid transparent',
-            textDecoration:'none',
-            transition:'all 0.15s',
-            minWidth:0,
-          }}
-          onMouseOver={e=>{(e.currentTarget as HTMLElement).style.background='#F8FAFF'}}
-          onMouseOut={e=>{(e.currentTarget as HTMLElement).style.background='transparent'}}>
-            <i className={`ti ${item.icon}`} style={{
-              fontSize:'22px',
-              color: isActive(item.href)?'#C9A84C':'#94A3B8',
-              transition:'color 0.15s',
-            }}/>
-          </Link>
-        ))}
+        {NAV_ICONS.map(({ href, Icon, label }) => {
+          const active = isActive(href)
+          return (
+            <Link
+              key={href}
+              href={href}
+              title={label}
+              style={{
+                flex: 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '11px 0',
+                borderBottom: active ? '3px solid #C9A84C' : '3px solid transparent',
+                textDecoration: 'none',
+                transition: 'all 0.15s',
+              }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = '#F8FAFF' }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+            >
+              <Icon
+                size={22}
+                color={active ? '#C9A84C' : '#94A3B8'}
+                strokeWidth={active ? 2.2 : 1.8}
+              />
+            </Link>
+          )
+        })}
       </div>
 
-      <style>{`@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}`}</style>
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </header>
   )
 }
