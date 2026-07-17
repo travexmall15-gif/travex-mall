@@ -550,11 +550,19 @@ function rCA(){
 
 async function acCA(id){
   const a=cApps.find(x=>x.id===id);
-  if(!a||!confirm(`Approve "${a.full_name||a.owner_name}"?\n\n1. Campus shop goes LIVE\n2. Generate login password\n3. Send WhatsApp with password`))return;
+  if(!a||!confirm(`Approve "${a.full_name||a.owner_name}"?\n\nSystem itatengeneza:\n1. Shop number ya kipekee\n2. Token ya saa 24\n3. WhatsApp message na PIN kamili`))return;
 
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
-  const rawPass=`TRX-${r4()}-${r4()}`;
+  // Get shop count for unique shop number
+  const {data:allApproved} = await sb.from('pending_payments').select('id').eq('status','approved');
+  const shopNum = String((allApproved?.length||0)+1).padStart(3,'0');
+
+  // Generate 24hr token
+  const token = Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const expires = new Date(Date.now() + 24*60*60*1000).toISOString();
+
+  // Get PIN from application
+  const pin = a.seller_pin || '????';
+  const fullPin = `${pin}-${shopNum}`;
 
   const sn = a.shop_name || a.store_name ||
     (a.business_description?.startsWith('SHOP:') ? a.business_description.split('\n')[0].replace('SHOP:','').trim() : null) ||
@@ -588,20 +596,33 @@ async function acCA(id){
     return;
   }
 
-  const waMsg=encodeURIComponent(
-    ` *Congratulations ${a.full_name||a.owner_name}!*\n\n`+
-    `Your shop *"${sn}"* is now LIVE on Travex Campus Market! \n\n`+
-    `\n`+
-    ` *Login Details:*\n`+
-    ` Phone: ${phone}\n`+
-    ` Password: ${rawPass}\n\n`+
-    ` Login: ${location.origin}/dashboard/login.html\n`+
-    `\n`+
-    `_Welcome to Travex Mall Campus! _`
+  // Update DB with shop_number, token, expiry
+  await sb.from('pending_payments').update({
+    status: 'approved',
+    shop_number: shopNum,
+    login_token: token,
+    token_expires_at: expires
+  }).eq('id', id);
+
+  const authLink = `${location.origin}/dashboard/auth.html?token=${token}`;
+  const waMsg = encodeURIComponent(
+    `🎉 *Hongera ${a.full_name||a.owner_name}!*\n\n`+
+    `Duka lako *"${sn}"* limeidhinishwa kwenye *Travex Mall*! 🛍️\n`+
+    `Wewe ni duka namba *${shopNum}* kwenye platform yetu!\n\n`+
+    `━━━━━━━━━━━━━━━━━\n`+
+    `🔗 *Bonyeza kuingia sasa* (saa 24 tu):\n`+
+    `${authLink}\n\n`+
+    `🔑 *PIN yako ya kudumu:*\n`+
+    `*${fullPin}*\n\n`+
+    `━━━━━━━━━━━━━━━━━\n`+
+    `📲 *Kuingia baadaye:*\n`+
+    `${location.origin}/dashboard/login.html\n`+
+    `PIN: ${fullPin}\n\n`+
+    `⚠️ PIN yako ni siri. Usimwambie mtu yeyote.\n\n`+
+    `— *Travex Mall Team* 🌍`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
-
-  toast(' Campus seller approved!','ok');
+  toast('✅ Duka #'+shopNum+' imeidhinishwa! WhatsApp imefunguliwa.','ok');
   await loadAll();
 }
 async function rejCA(id){const a=cApps.find(x=>x.id===id);if(!a||!confirm('Reject?'))return;await sb.from('pending_payments').update({status:'rejected'}).eq('id',id);toast('Rejected','err');await loadAll()}
@@ -1110,5 +1131,6 @@ function showModal(html) {
 </script>
   <script src="aria-engine.js"></script>
   <script src="aria-widget.js"></script>
+<div id="waModal"></div>
 </body>
 </html>

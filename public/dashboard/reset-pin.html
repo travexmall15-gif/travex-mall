@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Reset PIN — Travex Mall</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18,#0D1B3E,#071540);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:24px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.24)}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px}
+.logo-row img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.brand{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#0D1B3E;letter-spacing:-0.03em}
+.brand span{color:#C9A84C}
+h1{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:#0D1B3E;text-align:center;margin-bottom:6px}
+.sub{font-size:13px;color:#64748B;text-align:center;margin-bottom:24px;line-height:1.5}
+.step{display:none}
+.step.active{display:block}
+.form-group{margin-bottom:16px}
+label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.02em;text-transform:uppercase}
+input{width:100%;padding:11px 14px;border:2px solid #E2E8F0;border-radius:12px;font-size:0.9rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s}
+input:focus{border-color:#0D1B3E;box-shadow:0 0 0 3px rgba(13,27,62,0.08)}
+input[type=number]{text-align:center;font-size:1.4rem;font-weight:800;letter-spacing:0.15em}
+.btn{width:100%;padding:13px;border:none;border-radius:12px;font-size:0.9rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:4px}
+.btn-primary{background:#0D1B3E;color:#fff}
+.btn-primary:hover{background:#1B3A8A;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:0.6;cursor:wait;transform:none}
+.btn-outline{background:#fff;color:#0D1B3E;border:2px solid #E2E8F0;margin-top:8px}
+.btn-outline:hover{border-color:#0D1B3E}
+.error{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:9px 12px;border-radius:10px;font-size:12px;margin-bottom:12px;display:none}
+.success{background:#F0FDF4;border:1px solid #86EFAC;color:#16A34A;padding:9px 12px;border-radius:10px;font-size:12px;margin-bottom:12px;display:none}
+.pin-hint{background:#F8FAFF;border:1px solid #E2E8F0;border-radius:10px;padding:10px 12px;font-size:11px;color:#64748B;margin-top:6px}
+.pin-hint strong{color:#0D1B3E}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo-row">
+    <img src="/icon-192.png" alt="Travex"/>
+    <span class="brand">travex <span>mall</span></span>
+  </div>
+
+  <h1>Reset PIN 🔄</h1>
+  <p class="sub">Thibitisha duka lako kisha weka PIN mpya</p>
+
+  <!-- Error / Success -->
+  <div class="error" id="errorBox"></div>
+  <div class="success" id="successBox"></div>
+
+  <!-- STEP 1: Verify identity -->
+  <div class="step active" id="step1">
+    <div class="form-group">
+      <label>Jina la Duka Lako</label>
+      <input type="text" id="verifyShopName" placeholder="Jina kamili la duka lako"/>
+    </div>
+    <div class="form-group">
+      <label>Nambari ya Simu (WhatsApp)</label>
+      <input type="tel" id="verifyPhone" placeholder="+255 7XX XXX XXX"/>
+    </div>
+    <button class="btn btn-primary" onclick="verifyIdentity()">Thibitisha →</button>
+    <button class="btn btn-outline" onclick="window.location.href='login.html'">← Rudi Login</button>
+  </div>
+
+  <!-- STEP 2: Set new PIN -->
+  <div class="step" id="step2">
+    <div style="background:linear-gradient(135deg,#0D1B3E,#1B3A8A);border-radius:12px;padding:12px 16px;margin-bottom:20px;text-align:center">
+      <div style="font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em">Duka Lililothibitishwa</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:#C9A84C;margin-top:4px" id="confirmedShop">—</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px" id="confirmedNum">Duka #—</div>
+    </div>
+    <div class="form-group">
+      <label>PIN Mpya (namba 4 tu)</label>
+      <input type="number" id="newPin" placeholder="0000" min="1000" max="9999" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)"/>
+      <div class="pin-hint">
+        PIN mpya yako ya kuingia itakuwa:<br/>
+        <strong id="previewPin">????-000</strong>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Rudia PIN Mpya</label>
+      <input type="number" id="confirmPin" placeholder="0000" min="1000" max="9999" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)"/>
+    </div>
+    <button class="btn btn-primary" onclick="doReset()">✅ Badilisha PIN</button>
+    <button class="btn btn-outline" onclick="showStep(1)">← Rudi</button>
+  </div>
+
+  <!-- STEP 3: Done -->
+  <div class="step" id="step3" style="text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">✅</div>
+    <h1 style="font-size:1.2rem">PIN Imebadilishwa!</h1>
+    <p class="sub" style="margin-bottom:20px">PIN yako mpya ya kuingia ni:</p>
+    <div style="background:linear-gradient(135deg,#0D1B3E,#1B3A8A);border-radius:12px;padding:16px;margin-bottom:20px">
+      <div style="font-size:1.8rem;font-weight:900;color:#C9A84C;letter-spacing:0.1em" id="finalPin">—</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:6px">Hii ndiyo PIN yako mpya. Ihifadhi mahali salama.</div>
+    </div>
+    <button class="btn btn-primary" onclick="window.location.href='login.html'">🔐 Ingia Sasa</button>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
+const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+let foundShop = null
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach((s,i) => {
+    s.classList.toggle('active', i+1 === n)
+  })
+  document.getElementById('errorBox').style.display = 'none'
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBox')
+  el.textContent = msg; el.style.display = 'block'
+}
+
+async function verifyIdentity() {
+  const shopName = document.getElementById('verifyShopName').value.trim()
+  const phone    = document.getElementById('verifyPhone').value.trim().replace(/\s/g,'')
+  if (!shopName || !phone) { showError('Jaza sehemu zote.'); return }
+
+  const btn = document.querySelector('#step1 .btn-primary')
+  btn.textContent = 'Inathibitisha...'; btn.disabled = true
+
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?shop_name=ilike.${encodeURIComponent(shopName)}&owner_phone=eq.${encodeURIComponent(phone)}&select=id,shop_name,shop_number,status`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    )
+    const data = await res.json()
+    if (!data?.length) {
+      showError('Jina la duka au nambari ya simu si sahihi. Jaribu tena.')
+      btn.textContent = 'Thibitisha →'; btn.disabled = false
+      return
+    }
+    foundShop = data[0]
+    document.getElementById('confirmedShop').textContent = foundShop.shop_name
+    document.getElementById('confirmedNum').textContent = `Duka #${String(foundShop.shop_number||'000').padStart(3,'0')}`
+    showStep(2)
+  } catch {
+    showError('Hitilafu ya mtandao. Jaribu tena.')
+  }
+  btn.textContent = 'Thibitisha →'; btn.disabled = false
+}
+
+// Preview new PIN as user types
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'newPin' && foundShop) {
+    const pin = e.target.value.padEnd(4,'?')
+    const num = String(foundShop.shop_number||'000').padStart(3,'0')
+    document.getElementById('previewPin').textContent = `${pin}-${num}`
+  }
+})
+
+async function doReset() {
+  const newPin     = document.getElementById('newPin').value.trim()
+  const confirmPin = document.getElementById('confirmPin').value.trim()
+
+  if (newPin.length !== 4) { showError('PIN lazima iwe namba 4.'); return }
+  if (newPin !== confirmPin) { showError('PIN hazilingani. Jaribu tena.'); return }
+  if (!/^\d{4}$/.test(newPin)) { showError('PIN lazima iwe namba tu.'); return }
+
+  const btn = document.querySelector('#step2 .btn-primary')
+  btn.textContent = 'Inabadilisha...'; btn.disabled = true
+
+  try {
+    const { error } = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?id=eq.${foundShop.id}`,
+      {
+        method: 'PATCH',
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ seller_pin: newPin })
+      }
+    )
+    const num = String(foundShop.shop_number||'000').padStart(3,'0')
+    document.getElementById('finalPin').textContent = `${newPin}-${num}`
+    showStep(3)
+  } catch {
+    showError('Hitilafu imetokea. Jaribu tena.')
+  }
+  btn.textContent = '✅ Badilisha PIN'; btn.disabled = false
+}
+</script>
+</body>
+</html>

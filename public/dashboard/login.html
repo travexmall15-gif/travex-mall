@@ -1,398 +1,201 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login, Travex Mall</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Login — Travex Mall Dashboard</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"/>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-:root{
-  --navy:#050B2E;--navy-deep:#020714;--blue:#0A1858;--blue-soft:#2B4F8E;
-  --gold:#C9A84C;--gold2:#F0C96B;
-  --white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--dark:#0F172A;
-  --green:#059669;--red:#DC2626;
-  --radius-card:24px;--radius-input:12px;--radius-pill:999px;
-}
-html,body{height:100%}
-body{
-  font-family:"Inter",sans-serif;
-  background:linear-gradient(150deg,var(--navy-deep) 0%,var(--navy) 45%,#142B57 100%);
-  min-height:100vh;display:flex;flex-direction:column;
-  position:relative;overflow-x:hidden;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18 0%,#0D1B3E 50%,#071540 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 
-/*  Light beam (FinTrack-style diagonal glow)  */
-.bg-beam{
-  position:fixed;inset:-20%;pointer-events:none;z-index:0;
-  background:
-    linear-gradient(112deg,transparent 32%,rgba(56,120,255,0.32) 46%,rgba(201,168,76,0.14) 56%,transparent 72%);
-  filter:blur(48px);
-  transform:translateZ(0);
-}
-/*  Faint grid lines  */
-.bg-grid{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
-}
-/*  Top glow  */
-.bg-glow{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 70% 45% at 50% -5%,rgba(201,168,76,0.10),transparent 65%);
-}
+.card{background:#fff;border-radius:24px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.24)}
 
-/*  Topbar  */
-.topbar{padding:1.4rem 5%;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
-.logo{display:flex;align-items:center;gap:0.55rem;font-size:1.05rem;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.01em}
-.logo-mark{
-  width:30px;height:30px;border-radius:9px;flex:0 0 auto;
-  background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--navy);font-size:0.85rem;font-weight:800;
-  box-shadow:0 4px 14px rgba(201,168,76,0.35);
-}
-.logo span{color:var(--gold)}
-.back-link{
-  font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.65);text-decoration:none;
-  padding:0.5rem 1.1rem;border:1px solid rgba(255,255,255,0.18);border-radius:var(--radius-pill);
-  transition:all 0.2s;backdrop-filter:blur(6px);
-}
-.back-link:hover{color:var(--white);border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.06)}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:28px}
+.logo-row img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.brand{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:#0D1B3E;letter-spacing:-0.03em}
+.brand span{color:#C9A84C}
 
-/*  Card  */
-.card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem;position:relative;z-index:2}
-.card{
-  background:#FFFFFF;width:100%;max-width:430px;padding:2.6rem 2.4rem;
-  border-radius:var(--radius-card);
-  box-shadow:0 24px 70px rgba(1,5,20,0.55),0 2px 8px rgba(1,5,20,0.30),0 2px 8px rgba(4,10,30,0.25);
-  animation:cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
-}
-@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@media (prefers-reduced-motion:reduce){.card{animation:none}}
+h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;color:#0D1B3E;text-align:center;margin-bottom:6px}
+.sub{font-size:13px;color:#64748B;text-align:center;margin-bottom:28px;line-height:1.5}
 
-.card-badge{
-  display:inline-flex;align-items:center;gap:0.45rem;
-  font-size:0.7rem;font-weight:600;color:var(--blue);
-  background:#F8FAFF;border:1px solid var(--lgray);
-  padding:0.38rem 0.9rem;border-radius:var(--radius-pill);margin-bottom:1.1rem;
-}
-.card-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex:0 0 auto}
-.card-title{font-size:1.45rem;font-weight:800;color:var(--navy);letter-spacing:-0.02em;margin-bottom:0.35rem;line-height:1.15}
-.card-sub{font-size:0.86rem;color:var(--gray);margin-bottom:1.8rem;line-height:1.65}
+.form-group{margin-bottom:18px}
+label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.02em}
+input{width:100%;padding:12px 16px;border:2px solid #E2E8F0;border-radius:12px;font-size:0.95rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s;letter-spacing:0.05em;text-align:center;font-weight:700;font-size:1.1rem}
+input:focus{border-color:#0D1B3E;box-shadow:0 0 0 3px rgba(13,27,62,0.08)}
+input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacing:normal}
 
-/*  Form  */
-.form-group{margin-bottom:1.15rem}
-.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.45rem}
-.form-input{
-  width:100%;padding:0.8rem 1.05rem;
-  background:#F8FAFF;border:1.5px solid var(--lgray);border-radius:var(--radius-input);
-  font-family:"Inter",sans-serif;font-size:0.875rem;color:var(--dark);
-  outline:none;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;
-}
-.form-input:focus{border-color:var(--navy);background:var(--white);box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
-.form-input::placeholder{color:#94A3B8}
-.pass-wrap{position:relative}
-.pass-wrap .form-input{padding-right:4.6rem}
-.pass-toggle{
-  position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;color:var(--gray);
-  font-size:0.74rem;font-weight:600;font-family:"Inter",sans-serif;
-}
-.pass-toggle:hover{color:var(--navy)}
+.hint{font-size:11px;color:#94A3B8;margin-top:6px;text-align:center}
+.hint strong{color:#0D1B3E}
 
-/*  Buttons (pill, FinTrack-style)  */
-.btn-primary{
-  width:100%;padding:0.95rem;border-radius:var(--radius-pill);
-  background:var(--navy);color:var(--white);
-  font-size:0.92rem;font-weight:700;border:none;cursor:pointer;font-family:"Inter",sans-serif;
-  transition:background 0.2s,transform 0.15s,box-shadow 0.2s;margin-bottom:0.8rem;
-  box-shadow:0 8px 22px rgba(13,27,62,0.30);
-}
-.btn-primary:hover:not(:disabled){background:var(--blue);transform:translateY(-1px);box-shadow:0 12px 26px rgba(13,27,62,0.35)}
-.btn-primary:disabled{background:var(--lgray);color:var(--gray);cursor:not-allowed;box-shadow:none}
-.btn-gold{
-  display:block;width:100%;padding:0.9rem;border-radius:var(--radius-pill);
-  background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);
-  color:var(--navy);font-size:0.875rem;font-weight:700;text-align:center;text-decoration:none;
-  transition:transform 0.15s,box-shadow 0.2s;
-  box-shadow:0 8px 22px rgba(201,168,76,0.30);
-}
-.btn-gold:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(201,168,76,0.40)}
-.btn-secondary{
-  width:100%;padding:0.85rem;border-radius:var(--radius-pill);
-  background:var(--white);color:var(--gray);
-  font-size:0.86rem;font-weight:600;border:1.5px solid var(--lgray);
-  cursor:pointer;font-family:"Inter",sans-serif;transition:all 0.2s;
-}
-.btn-secondary:hover{border-color:var(--navy);color:var(--navy)}
+.btn-login{width:100%;padding:14px;background:#0D1B3E;color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:8px;letter-spacing:0.02em}
+.btn-login:hover{background:#1B3A8A;transform:translateY(-1px);box-shadow:0 8px 20px rgba(13,27,62,0.25)}
+.btn-login:disabled{opacity:0.6;cursor:wait;transform:none}
 
-/*  Alerts  */
-.alert{padding:0.8rem 1rem;font-size:0.8rem;margin-bottom:1rem;display:none;line-height:1.6;border-radius:var(--radius-input)}
-.alert.show{display:block}
-.alert-error{background:#FEE2E2;border:1px solid #FCA5A5;color:#B91C1C}
-.alert-success{background:#D1FAE5;border:1px solid #6EE7B7;color:#065F46}
-.alert-warn{background:#FEF3C7;border:1px solid #FCD34D;color:#92400E}
+.divider{display:flex;align-items:center;gap:10px;margin:18px 0;color:#94A3B8;font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#E2E8F0}
 
-.forgot-link{
-  display:block;text-align:right;font-size:0.76rem;font-weight:600;color:var(--gray);
-  cursor:pointer;background:none;border:none;font-family:"Inter",sans-serif;margin-top:0.5rem;width:100%;
-  text-decoration:none;
-}
-.forgot-link:hover{color:var(--navy);text-decoration:underline}
+.btn-reset{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-reset:hover{border-color:#0D1B3E;background:#EEF2FF}
 
-.divider{display:flex;align-items:center;gap:0.8rem;margin:1.1rem 0;color:var(--gray);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em}
-.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--lgray)}
+.error-box{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:14px;display:none}
+.success-box{background:#F0FDF4;border:1px solid #86EFAC;color:#16A34A;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:14px;display:none}
 
-.card-footer{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--lgray);text-align:center;font-size:0.78rem;color:var(--gray)}
-.card-footer a{color:var(--navy);font-weight:600;text-decoration:none}
-.card-footer a:hover{text-decoration:underline}
+.pin-format{background:linear-gradient(135deg,#0D1B3E,#1B3A8A);border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:center}
+.pin-format-label{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.pin-format-value{font-size:1.3rem;font-weight:900;color:#C9A84C;letter-spacing:0.1em}
+.pin-format-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
 
-.page-footer{padding:1.4rem 5%;text-align:center;position:relative;z-index:2}
-.page-footer p{font-size:0.72rem;color:rgba(255,255,255,0.25)}
-
-/*  Mobile  */
-@media(max-width:640px){
-  .topbar{padding:1.1rem 1.25rem}
-  .card{padding:2rem 1.5rem;border-radius:20px}
-  .card-title{font-size:1.3rem}
-  input{min-height:48px;font-size:16px!important}
-  .btn-primary,.btn-gold,.btn-secondary{min-height:48px}
-}
+.footer-links{margin-top:20px;text-align:center;font-size:12px;color:rgba(255,255,255,0.4)}
+.footer-links a{color:#C9A84C;text-decoration:none;font-weight:600}
 </style>
-<script src="/lang.js"></script>
 </head>
 <body>
-<div class="bg-grid"></div>
-<div class="bg-beam"></div>
-<div class="bg-glow"></div>
 
-<div class="topbar">
-  <a href="/" class="logo"><span class="logo-mark">T</span>TRAVEX <span>MALL</span></a>
-  <a href="/" class="back-link"> Back Marketplace</a>
-</div>
-
-<div class="card-wrap">
-  <div class="card">
-
-    <!--  LOGIN PANEL  -->
-    <div id="loginPanel">
-      <div class="card-badge"><span class="dot"></span>Travex Seller Portal</div>
-      <div class="card-title">Sign In Account Yako</div>
-      <div class="card-sub">Enter your phone number and password received after your shop was approved.</div>
-
-      <div class="alert alert-error" id="loginError"></div>
-      <div class="alert alert-warn"  id="loginWarn"></div>
-
-      <div class="form-group">
-        <label class="form-label">Namba ya Phone</label>
-        <input type="tel" class="form-input" id="phone" placeholder="+255 712 000 000"
-          autocomplete="tel" onkeypress="if(event.key==='Enter')doLogin()">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <div class="pass-wrap">
-          <input type="password" class="form-input" id="password" placeholder="Enter your passwordko"
-            autocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()">
-          <button class="pass-toggle" type="button" onclick="togglePass('password',this)">Onyesha</button>
-        </div>
-        <button class="forgot-link" onclick="showPanel('resetPanel')">Forgot password?</button>
-      </div>
-
-      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Sign In Dashboard </button>
-
-      <div class="divider">or</div>
-      <a href="/open-store" class="btn-gold"> Open Shop Jipya </a>
-
-      <div class="card-footer">
-        <p>Help? <a href="https://wa.me/255651919915">WhatsApp: +255 651 919 915</a></p>
-      </div>
-    </div>
-
-    <!--  RESET PANEL  -->
-    <div id="resetPanel" style="display:none">
-      <div class="card-badge"><span class="dot"></span>Password Reset</div>
-      <div class="card-title">Edit Password</div>
-      <div class="card-sub">Enter your phone number, we will send a password reset link to your email yako.</div>
-
-      <div class="alert alert-error"   id="resetError"></div>
-      <div class="alert alert-success" id="resetSuccess"></div>
-
-      <div class="form-group">
-        <label class="form-label">Namba ya Phone</label>
-        <input type="tel" class="form-input" id="resetPhone" placeholder="+255 712 000 000"
-          onkeypress="if(event.key==='Enter')doReset()">
-      </div>
-
-      <button class="btn-primary" id="resetBtn" onclick="doReset()">Submit Link ya Reset </button>
-      <button class="btn-secondary" onclick="showPanel('loginPanel')"> Back Login</button>
-    </div>
-
+<div class="card">
+  <div class="logo-row">
+    <img src="/icon-192.png" alt="Travex"/>
+    <span class="brand">travex <span>mall</span></span>
   </div>
+
+  <h1>Karibu Tena 👋</h1>
+  <p class="sub">Ingiza PIN yako kuingia kwenye dashboard ya duka lako</p>
+
+  <!-- PIN Format Guide -->
+  <div class="pin-format">
+    <div class="pin-format-label">Muundo wa PIN Yako</div>
+    <div class="pin-format-value">XXXX — 0XX</div>
+    <div class="pin-format-desc">PIN yako (namba 4) + dash + namba ya duka lako</div>
+  </div>
+
+  <!-- Error / Success -->
+  <div class="error-box" id="errorBox"></div>
+  <div class="success-box" id="successBox"></div>
+
+  <!-- Login Form -->
+  <div class="form-group">
+    <label>PIN YAKO</label>
+    <input
+      type="text"
+      id="pinInput"
+      placeholder="mfano: 8842-048"
+      maxlength="8"
+      autocomplete="off"
+      oninput="formatPin(this)"
+      onkeydown="if(event.key==='Enter')doLogin()"
+    />
+    <div class="hint">PIN uliyopewa kupitia WhatsApp baada ya kuidhinishwa</div>
+  </div>
+
+  <button class="btn-login" id="loginBtn" onclick="doLogin()">
+    🔐 Ingia Dashboard
+  </button>
+
+  <div class="divider">au</div>
+
+  <button class="btn-reset" onclick="window.location.href='reset-pin.html'">
+    🔄 Nimesahau PIN — Reset hapa
+  </button>
 </div>
 
-<div class="page-footer"><p> 2026 Travex Mall  Travex Digital Group (TDG)  Tanzania</p></div>
+<div class="footer-links">
+  <a href="/">← Rudi Travex Mall</a> &nbsp;·&nbsp;
+  <a href="/open-store">Fungua Duka Jipya</a>
+</div>
 
 <script>
-const SUPABASE_URL  = "https://bscecjbgnjitlfmgwcic.supabase.co";
-const SUPABASE_ANON = "sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos";
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
+const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
-// Already logged in  redirect to dashboard
-//  Auto-login: check existing session 
-sb.auth.getSession().then(async ({ data: { session } }) => {
-  if (session) {
-    await redirectToDashboard(session.user);
+// Auto-format PIN as user types: 8842 → 8842-048
+function formatPin(input) {
+  let val = input.value.replace(/[^0-9]/g,'')
+  if (val.length > 4) {
+    val = val.slice(0,4) + '-' + val.slice(4,7)
   }
-});
+  input.value = val
+}
 
+function showError(msg) {
+  const el = document.getElementById('errorBox')
+  el.textContent = msg; el.style.display = 'block'
+  document.getElementById('successBox').style.display = 'none'
+}
+function showSuccess(msg) {
+  const el = document.getElementById('successBox')
+  el.textContent = msg; el.style.display = 'block'
+  document.getElementById('errorBox').style.display = 'none'
+}
 
-
-//  HELPERS 
-function showPanel(id) {
-  ["loginPanel","resetPanel"].forEach(p => {
-    document.getElementById(p).style.display = p === id ? "block" : "none";
-  });
-  clearAlerts();
-}
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.innerHTML = msg;
-  el.className = "alert alert-error show";
-}
-function showWarn(id, msg) {
-  const el = document.getElementById(id);
-  el.innerHTML = msg;
-  el.className = "alert alert-warn show";
-}
-function showOk(id, msg) {
-  const el = document.getElementById(id);
-  el.innerHTML = msg;
-  el.className = "alert alert-success show";
-}
-function clearAlerts() {
-  ["loginError","loginWarn","resetError","resetSuccess"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.className = "alert"; el.textContent = ""; }
-  });
-}
-function togglePass(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  const isPass = inp.type === "password";
-  inp.type = isPass ? "text" : "password";
-  btn.textContent = isPass ? "Ficha" : "Onyesha";
-}
-function normalizePhone(phone) {
-  let digits = (phone || "").replace(/\D/g, "");
-  if (digits.length === 10 && digits.startsWith("0")) {
-    digits = "255" + digits.substring(1);
-  } else if (digits.length === 9) {
-    digits = "255" + digits;
-  }
-  return digits;
-}
-// phoneToEmail removed, no longer using email-based auth
-
-//  LOGIN 
 async function doLogin() {
-  clearAlerts();
-  const phoneInput = document.getElementById("phone").value.trim();
-  const pass  = document.getElementById("password").value;
-  const btn   = document.getElementById("loginBtn");
+  const pin = document.getElementById('pinInput').value.trim()
 
-  if (!phoneInput) { showErr("loginError", " Please enter your phone number."); return; }
-  if (!pass)  { showErr("loginError", " Please enter your password."); return; }
-
-  btn.textContent = "Signing in...";
-  btn.disabled = true;
-
-  const normalized = normalizePhone(phoneInput);
-
-  //  Try Business Market (pending_payments) 
-  const { data: bizList } = await sb.from("pending_payments")
-    .select("id, owner_phone, shop_whatsapp, login_password, plan, shop_name, shop_category, shop_region, owner_name, status")
-    .eq("status", "approved");
-
-  const bizMatch = (bizList || []).find(s =>
-    [s.owner_phone, s.shop_whatsapp].some(p => p && normalizePhone(p) === normalized)
-    && s.login_password === pass
-  );
-
-  if (bizMatch) {
-    localStorage.setItem("travex_session", JSON.stringify({ id: bizMatch.id, market: "business" }));
-    localStorage.setItem("travex_plan", bizMatch.plan || "basic");
-    localStorage.setItem("travex_shop_name", bizMatch.shop_name || "");
-    localStorage.setItem("travex_owner_name", bizMatch.owner_name || "");
-    localStorage.setItem("travex_category", bizMatch.shop_category || "");
-    localStorage.setItem("travex_region", bizMatch.shop_region || "");
-    btn.textContent = " Welcome! Loading...";
-    window.location.replace("dashboard.html");
-    return;
+  // Validate format: XXXX-XXX
+  if (!/^\d{4}-\d{3}$/.test(pin)) {
+    showError('Muundo wa PIN si sahihi. Mfano: 8842-048')
+    return
   }
 
-  //  Try Campus Market (campus_stores) 
-  const { data: campusList } = await sb.from("campus_stores")
-    .select("id, phone, whatsapp, login_password, store_name, owner_name, university_abbr, is_active")
-    .eq("is_active", true);
+  const [sellerPin, shopNum] = pin.split('-')
+  const btn = document.getElementById('loginBtn')
+  btn.textContent = 'Inaingia...'
+  btn.disabled = true
+  document.getElementById('errorBox').style.display = 'none'
 
-  const campusMatch = (campusList || []).find(s =>
-    [s.phone, s.whatsapp].some(p => p && normalizePhone(p) === normalized)
-    && s.login_password === pass
-  );
+  try {
+    // Find shop by shop_number and verify PIN
+    const res = await fetch(`${SB_URL}/rest/v1/pending_payments?shop_number=eq.${shopNum}&select=id,shop_name,owner_name,owner_phone,status,plan,seller_pin,shop_number`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    })
+    const data = await res.json()
 
-  if (campusMatch) {
-    localStorage.setItem("travex_session", JSON.stringify({ id: campusMatch.id, market: "campus" }));
-    localStorage.setItem("travex_plan", "campus");
-    localStorage.setItem("travex_shop_name", campusMatch.store_name || "");
-    localStorage.setItem("travex_owner_name", campusMatch.owner_name || "");
-    localStorage.setItem("travex_region", campusMatch.university_abbr || "");
-    btn.textContent = " Welcome! Loading...";
-    window.location.replace("dashboard.html");
-    return;
+    if (!data || !data.length) {
+      showError('Duka halikupatikana. Angalia PIN yako tena.')
+      btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+      return
+    }
+
+    const shop = data[0]
+
+    if (shop.status !== 'approved') {
+      showError('Duka lako bado halijaidhinishwa. Wasiliana na Travex Mall.')
+      btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+      return
+    }
+
+    // Verify PIN
+    if (shop.seller_pin !== sellerPin) {
+      showError('PIN si sahihi. Jaribu tena au reset PIN yako.')
+      btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+      return
+    }
+
+    // ✅ Login success — save session
+    const session = {
+      id: shop.id,
+      shop_name: shop.shop_name,
+      owner_name: shop.owner_name,
+      owner_phone: shop.owner_phone,
+      plan: shop.plan,
+      shop_number: shop.shop_number,
+      logged_in_at: new Date().toISOString()
+    }
+    localStorage.setItem('travex_session', JSON.stringify(session))
+
+    showSuccess(`✅ Karibu ${shop.shop_name}! Unaingia...`)
+    setTimeout(() => { window.location.href = 'dashboard.html' }, 1000)
+
+  } catch(e) {
+    showError('Hitilafu imetokea. Angalia internet yako na ujaribu tena.')
+    btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
   }
-
-  //  No match found, show debug info 
-  btn.textContent = "Sign In Dashboard ";
-  btn.disabled = false;
-
-  // DEBUG: show exactly what we got from DB
-  const debugInfo = [
-    "Phone typed: " + phoneInput,
-    "Normalized: " + normalized,
-    "Records from DB: " + (bizList ? bizList.length : "null/error"),
-  ];
-  if (bizList && bizList.length > 0) {
-    bizList.forEach((r, i) => {
-      debugInfo.push("Record " + (i+1) + ": phone=" + r.owner_phone + " | wa=" + r.shop_whatsapp + " | pass_stored=" + (r.login_password ? "YES (" + r.login_password + ")" : "NULL") + " | status=" + r.status);
-    });
-  }
-  showErr("loginError", " Incorrect phone or password.<br><small style='font-size:10px;opacity:.7;line-height:1.6;display:block;margin-top:6px'>" + debugInfo.join("<br>") + "</small>");
 }
 
-//  RESET PASSWORD 
-async function doReset() {
-  clearAlerts();
-  const phone = document.getElementById("resetPhone").value.trim();
-  const btn   = document.getElementById("resetBtn");
-
-  if (!phone) { showErr("resetError", " Please enter your phone number."); return; }
-
-  btn.textContent = "Submitting...";
-  btn.disabled = true;
-
-  const email = phoneToEmail(phone);
-  await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + "/dashboard"
-  });
-
-  // Always show success (security: don't reveal if account exists)
-  showOk("resetSuccess", " Link imetumwa! Kama namba hiyo ipo kwenye mfumo, angalia email inayohusiana na akaunti yako.");
-  btn.textContent = "Submit Link ya Reset ";
-  btn.disabled = false;
+// Check if already logged in
+const existing = JSON.parse(localStorage.getItem('travex_session') || '{}')
+if (existing?.id) {
+  window.location.href = 'dashboard.html'
 }
 </script>
-  <script src="aria-engine.js"></script>
-  <script src="aria-widget.js"></script>
 </body>
 </html>

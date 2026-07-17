@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ingia — Travex Mall</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18 0%,#0D1B3E 50%,#071540 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:24px;padding:40px 36px;width:100%;max-width:380px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.24)}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px}
+.logo-row img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.brand{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#0D1B3E;letter-spacing:-0.03em}
+.brand span{color:#C9A84C}
+.spinner{width:48px;height:48px;border:4px solid #E2E8F0;border-top-color:#0D1B3E;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:#0D1B3E;margin-bottom:8px}
+.sub{font-size:13px;color:#64748B;line-height:1.5;margin-bottom:20px}
+.shop-badge{background:linear-gradient(135deg,#0D1B3E,#1B3A8A);color:#fff;border-radius:12px;padding:12px 20px;margin-bottom:20px;display:none}
+.shop-badge .name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:#C9A84C}
+.shop-badge .num{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px}
+.btn{width:100%;padding:13px;background:#0D1B3E;color:#fff;border:none;border-radius:12px;font-size:0.9rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:none}
+.btn:hover{background:#1B3A8A}
+.btn-outline{background:#fff;color:#0D1B3E;border:2px solid #E2E8F0;margin-top:8px}
+.btn-outline:hover{border-color:#0D1B3E;background:#F8FAFF}
+.error-icon{font-size:40px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo-row">
+    <img src="/icon-192.png" alt="Travex"/>
+    <span class="brand">travex <span>mall</span></span>
+  </div>
+
+  <!-- Loading state -->
+  <div id="loadingState">
+    <div class="spinner"></div>
+    <h1>Inakuthibitisha...</h1>
+    <p class="sub">Subiri kidogo, tunakuingizia kwenye dashboard yako.</p>
+  </div>
+
+  <!-- Success state -->
+  <div id="successState" style="display:none">
+    <div style="font-size:48px;margin-bottom:12px">🎉</div>
+    <h1>Karibu!</h1>
+    <div class="shop-badge" id="shopBadge">
+      <div class="name" id="shopName">Duka lako</div>
+      <div class="num" id="shopNum">Duka #000</div>
+    </div>
+    <p class="sub">Unaingiwa kwenye dashboard yako moja kwa moja...</p>
+    <button class="btn" id="goBtn" onclick="window.location.href='dashboard.html'" style="display:block">
+      Ingia Dashboard →
+    </button>
+  </div>
+
+  <!-- Error state -->
+  <div id="errorState" style="display:none">
+    <div class="error-icon">⏰</div>
+    <h1 id="errorTitle">Link Imekwisha</h1>
+    <p class="sub" id="errorMsg">Link yako ya mara ya kwanza imekwisha (saa 24). Tumia login ya kawaida.</p>
+    <button class="btn" style="display:block" onclick="window.location.href='login.html'">
+      🔐 Ingia kwa PIN
+    </button>
+    <button class="btn btn-outline" style="display:block" onclick="window.location.href='/'">
+      ← Rudi Nyumbani
+    </button>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
+const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+
+function show(id) {
+  ['loadingState','successState','errorState'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? 'block' : 'none'
+  })
+}
+
+function showError(title, msg) {
+  document.getElementById('errorTitle').textContent = title
+  document.getElementById('errorMsg').textContent = msg
+  show('errorState')
+}
+
+async function checkToken() {
+  const params = new URLSearchParams(window.location.search)
+  const token = params.get('token')
+
+  if (!token) {
+    showError('Token Haipo', 'Link hii si sahihi. Tumia login ya kawaida.')
+    return
+  }
+
+  try {
+    // Check token in DB
+    const res = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?login_token=eq.${token}&select=id,shop_name,owner_name,owner_phone,plan,shop_number,token_expires_at,status`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    )
+    const data = await res.json()
+
+    if (!data || !data.length) {
+      showError('Link Si Sahihi', 'Token hii haipo kwenye mfumo wetu. Omba admin akutumie link mpya.')
+      return
+    }
+
+    const shop = data[0]
+
+    // Check expiry
+    if (shop.token_expires_at) {
+      const expires = new Date(shop.token_expires_at)
+      const now = new Date()
+      if (now > expires) {
+        showError('Link Imekwisha ⏰', `Link yako iliisha tarehe ${expires.toLocaleString()}. Saa 24 zimepita. Tumia PIN yako kuingia.`)
+        return
+      }
+    }
+
+    if (shop.status !== 'approved') {
+      showError('Duka Halijaidhinishwa', 'Duka lako bado halijaidhinishwa. Wasiliana na Travex Mall.')
+      return
+    }
+
+    // ✅ Valid token — save session and redirect
+    const session = {
+      id: shop.id,
+      shop_name: shop.shop_name,
+      owner_name: shop.owner_name,
+      owner_phone: shop.owner_phone,
+      plan: shop.plan,
+      shop_number: shop.shop_number,
+      logged_in_at: new Date().toISOString()
+    }
+    localStorage.setItem('travex_session', JSON.stringify(session))
+
+    // Invalidate token after use (one-time use)
+    await fetch(`${SB_URL}/rest/v1/pending_payments?id=eq.${shop.id}`, {
+      method: 'PATCH',
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ login_token: null })
+    })
+
+    // Show success
+    document.getElementById('shopName').textContent = shop.shop_name
+    document.getElementById('shopNum').textContent = `Duka #${String(shop.shop_number).padStart(3,'0')}`
+    document.getElementById('shopBadge').style.display = 'block'
+    show('successState')
+
+    // Auto-redirect after 2s
+    setTimeout(() => { window.location.href = 'dashboard.html' }, 2000)
+
+  } catch(e) {
+    showError('Hitilafu', 'Tatizo la mtandao. Jaribu tena au tumia PIN yako.')
+  }
+}
+
+checkToken()
+</script>
+</body>
+</html>

@@ -210,9 +210,11 @@ textarea.form-input{resize:vertical;min-height:90px}
           <input class="form-input" id="ownerEmail" type="email" placeholder="you@email.com" />
         </div>
         <div class="form-group">
-          <label class="form-label">Password <span>*</span></label>
-          <input class="form-input" id="ownerPass" type="password" placeholder="Min. 8 characters" />
-          <div class="form-hint">Use a strong password, this protects your shop and orders.</div>
+          <label class="form-label">PIN ya Siri (namba 4) <span>*</span></label>
+          <input class="form-input" id="ownerPin" type="number" placeholder="e.g. 8842" maxlength="4" min="1000" max="9999" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)" />
+          <div class="form-hint" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;padding:8px 12px;border-radius:8px;margin-top:6px">
+            ⚠️ <strong>Muhimu:</strong> PIN hii itakuwa sehemu ya password yako ya kuingia dashboard. <strong>Usimwambie mtu yeyote.</strong> Baada ya kuidhinishwa utapata: PIN-NambaYaDuka (mfano: 8842-048)
+          </div>
         </div>
       </div>
     </div>
@@ -418,7 +420,7 @@ textarea.form-input{resize:vertical;min-height:90px}
       <span style="font-size:1.5rem"></span>
       <div>
         <div style="font-size:0.82rem;font-weight:700;color:#059669">Free Registration, Hakuna Malipo</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">You will receive your password yako kwa WhatsApp baada ya kuidhinishwa.</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">Baada ya kuidhinishwa utapata PIN kamili yako kwa WhatsApp. Itakuwa: <strong>PIN-NambaYaDuka</strong></div>
       </div>
     </div>
 
