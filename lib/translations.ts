@@ -18,6 +18,7 @@ export const TX: Record<string, Record<Lang, string>> = {
   'Sign Up':               { en: 'Sign Up',             sw: 'Jiandikishe' },
   'Open Shop':             { en: 'Open Shop',           sw: 'Fungua Duka' },
   'Open Your Shop':        { en: 'Open Your Shop',      sw: 'Fungua Duka Lako' },
+  'Login to Your Shop':    { en: 'Login to Your Shop',  sw: 'Ingia Dukani' },
   'Open Store':            { en: 'Open Store',          sw: 'Fungua Duka' },
   // ── HOME ────────────────────────────────────────────────
   "Africa's":              { en: "Africa's",            sw: 'Afrika' },

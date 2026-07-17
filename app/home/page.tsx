@@ -38,36 +38,151 @@ export default function HomePage() {
 
       <SiteNav />
 
-      {/*  HERO  */}
-      <section className="hero-section" style={{ position: 'relative', overflow: 'hidden', color: '#fff', minHeight: 'auto', display: 'flex', alignItems: 'center', paddingTop: '80px', paddingBottom: '2.5rem', background: 'linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)' }}>
-        <div style={{ position: 'absolute', top: '-25%', right: '-8%', width: '65%', height: '115%', pointerEvents: 'none', zIndex: 0, background: 'radial-gradient(ellipse 55% 55% at 62% 28%, rgba(56,120,255,0.65) 0%, rgba(35,80,220,0.35) 30%, rgba(20,55,180,0.12) 55%, transparent 75%)', filter: 'blur(22px)' }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 5% 2rem', width: '100%' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(56,120,255,0.12)', border: '1px solid rgba(96,165,250,0.25)', color: '#93C5FD', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.70rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '0.85rem' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#60A5FA', boxShadow: '0 0 8px rgba(96,165,250,0.9)', flexShrink: 0 }} />
-            Africa&apos;s #1 AI-Powered Marketplace, Tanzania 2026
-          </div>
-          <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: 900, lineHeight: 1.06, color: '#fff', marginBottom: '0.75rem', letterSpacing: '-0.02em', maxWidth: '680px' }}>
-            <T en="Africa's" sw="Afrika" /> <span style={{ color: '#C9A84C', textShadow: '0 2px 20px rgba(201,168,76,0.30)' }}><T en="Intelligent" sw="Yenye Akili" /></span><br /><T en="Digital Marketplace" sw="Soko la Kidijitali" />
-          </h1>
-          <p className="hero-sub" style={{ fontSize: 'clamp(0.88rem, 1.6vw, 1rem)', lineHeight: 1.78, color: 'rgba(255,255,255,0.50)', marginBottom: '1.2rem', maxWidth: '500px' }}>
-            <T en="Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur." sw="Fungua duka lako la mtandaoni kwa dakika chache. Uza Tanzania nzima. Kukua na nguvu ya AI, kwa kila mjasiriamali wa Afrika." />
-          </p>
-          <div className="hero-btns" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-            <Link href="/open-store" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.9rem 2.2rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', boxShadow: '0 8px 24px rgba(201,168,76,0.38)' }}>
-              {<T en="Open Your Shop" sw="Fungua Duka Lako" />}
-            </Link>
-            <button
-              className="travex-lang-btn"
-              onClick={() => { if (typeof window !== 'undefined') { (window as any).TravexLang?.toggle() } }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.10)', border: '1.5px solid rgba(255,255,255,0.20)', color: '#fff', padding: '0.85rem 1.6rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s', letterSpacing: '0.02em' }}
-            >
-              🇹🇿 Kiswahili
-            </button>
+      {/* ── NEW HERO — Facebook-style ── */}
+      <section style={{
+        background: '#fff',
+        borderBottom: '1px solid #E2E8F0',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      }}>
+
+        {/* Row 1: Logo + Search + Login */}
+        <div style={{
+          maxWidth: '1200px', margin: '0 auto',
+          padding: '10px 5%',
+          display: 'flex', alignItems: 'center', gap: '12px',
+        }}>
+
+          {/* Logo + Brand Name */}
+          <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
+            <img src="/icon-192.png" alt="Travex" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} />
+            <span style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '1.18rem',
+              fontWeight: 700,
+              color: '#0D1B3E',
+              letterSpacing: '-0.03em',
+            }}>
+              travex <span style={{ color: '#C9A84C' }}>mall</span>
+            </span>
+          </Link>
+
+          {/* Search bar */}
+          <div style={{ flex: 1, maxWidth: '520px', position: 'relative' }}>
+            <svg style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#94A3B8' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="search"
+              placeholder="Search shops, products, sellers..."
+              onFocus={(e) => { window.location.href = '/market' }}
+              style={{
+                width: '100%',
+                padding: '9px 16px 9px 38px',
+                background: '#F1F5F9',
+                border: '1.5px solid transparent',
+                borderRadius: '999px',
+                fontSize: '0.875rem',
+                color: '#0F172A',
+                outline: 'none',
+                fontFamily: "'Inter', sans-serif",
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxSizing: 'border-box' as const,
+              }}
+              onMouseOver={e => (e.currentTarget.style.background = '#E2E8F0')}
+              onMouseOut={e => (e.currentTarget.style.background = '#F1F5F9')}
+            />
           </div>
 
-
+          {/* Login button */}
+          <Link href="/login" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '5px',
+            padding: '8px 18px',
+            background: '#0D1B3E', color: '#fff',
+            borderRadius: '999px',
+            fontSize: '0.82rem', fontWeight: 700,
+            textDecoration: 'none', flexShrink: 0,
+            transition: 'all 0.2s',
+          }}
+          onMouseOver={(e: any) => e.currentTarget.style.background = '#1B3A8A'}
+          onMouseOut={(e: any) => e.currentTarget.style.background = '#0D1B3E'}>
+            <T en="Log In" sw="Ingia" />
+          </Link>
         </div>
 
+        {/* Row 2: Icon Navigation */}
+        <div style={{
+          maxWidth: '1200px', margin: '0 auto',
+          padding: '0 5%',
+          display: 'flex', alignItems: 'center',
+          borderTop: '1px solid #F1F5F9',
+          overflowX: 'auto',
+        }}>
+          {[
+            { href: '/home',        icon: '🏠', label: <T en="Home" sw="Nyumbani" />,           active: true  },
+            { href: '/market',      icon: '🛍️', label: <T en="Business" sw="Biashara" />,        active: false },
+            { href: '/campus',      icon: '🎓', label: <T en="Campus" sw="Vyuo" />,              active: false },
+            { href: '/vybe',        icon: '📱', label: 'Social Vybe',                             active: false },
+            { href: '/flash-deals', icon: '⚡', label: <T en="Flash Deals" sw="Ofa za Haraka" />, active: false },
+            { href: '/group-buy',   icon: '👥', label: <T en="Group Buy" sw="Nunua Pamoja" />,   active: false },
+          ].map((item, i) => (
+            <Link key={i} href={item.href} style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              gap: '3px', padding: '10px 22px',
+              textDecoration: 'none', flexShrink: 0,
+              borderBottom: item.active ? '3px solid #C9A84C' : '3px solid transparent',
+              transition: 'all 0.15s',
+            }}
+            onMouseOver={(e: any) => { if (!item.active) e.currentTarget.style.background = '#F8FAFF' }}
+            onMouseOut={(e: any) => { e.currentTarget.style.background = 'transparent' }}>
+              <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{item.icon}</span>
+              <span style={{
+                fontSize: '0.68rem', fontWeight: 600,
+                color: item.active ? '#C9A84C' : '#64748B',
+                whiteSpace: 'nowrap' as const,
+              }}>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+
+        {/* Row 3: CTA Buttons */}
+        <div style={{
+          maxWidth: '1200px', margin: '0 auto',
+          padding: '12px 5%',
+          display: 'flex', gap: '12px', justifyContent: 'center',
+          borderTop: '1px solid #F1F5F9',
+          flexWrap: 'wrap',
+        }}>
+          <Link href="/open-store" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            padding: '11px 32px',
+            background: '#C9A84C', color: '#0F172A',
+            borderRadius: '999px', fontWeight: 800,
+            fontSize: '0.88rem', textDecoration: 'none',
+            boxShadow: '0 4px 16px rgba(201,168,76,0.30)',
+            transition: 'all 0.2s',
+          }}
+          onMouseOver={(e: any) => e.currentTarget.style.transform = 'translateY(-1px)'}
+          onMouseOut={(e: any) => e.currentTarget.style.transform = 'none'}>
+            🏪 <T en="Open Your Shop" sw="Fungua Duka Lako" />
+          </Link>
+          <Link href="/login" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            padding: '11px 32px',
+            background: '#fff', color: '#0D1B3E',
+            border: '2px solid #0D1B3E',
+            borderRadius: '999px', fontWeight: 700,
+            fontSize: '0.88rem', textDecoration: 'none',
+            transition: 'all 0.2s',
+          }}
+          onMouseOver={(e: any) => { e.currentTarget.style.background = '#0D1B3E'; e.currentTarget.style.color = '#fff' }}
+          onMouseOut={(e: any) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#0D1B3E' }}>
+            🔐 <T en="Login to Your Shop" sw="Ingia Dukani" />
+          </Link>
+        </div>
       </section>
 
       {/* ── CHIPS TICKER — full screen width, sibling to hero ── */}
