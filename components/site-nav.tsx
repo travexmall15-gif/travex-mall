@@ -100,10 +100,10 @@ export function SiteNav() {
 
   return (
     <header style={{
-      position: 'sticky', top: 0, zIndex: 200,
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 999,
       background: '#fff',
       borderBottom: '1px solid #E2E8F0',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
       fontFamily: "'Inter', sans-serif",
     }}>
 
@@ -303,7 +303,7 @@ export function SiteNav() {
                 flex: 1,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '11px 0',
-                borderBottom: active ? '3px solid #C9A84C' : '3px solid transparent',
+                borderBottom: active ? '3px solid #0D1B3E' : '3px solid transparent',
                 textDecoration: 'none',
                 transition: 'all 0.15s',
               }}
@@ -312,7 +312,7 @@ export function SiteNav() {
             >
               <Icon
                 size={22}
-                color={active ? '#C9A84C' : '#94A3B8'}
+                color={active ? '#0D1B3E' : '#94A3B8'}
                 strokeWidth={active ? 2.2 : 1.8}
               />
             </Link>

@@ -8,7 +8,7 @@ import { ArrowRight, GraduationCap, Store, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', overflowX: 'hidden' }}>
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', overflowX: 'hidden', paddingTop: '108px' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; }

@@ -96,7 +96,7 @@ export default function MarketPage() {
   const basicShops = filtered.filter(s => s.plan === 'basic')
 
   return (
-    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', minHeight: '100vh' }}>
+    <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', paddingTop: '108px', minHeight: '100vh' }}>
       <SiteNav />
 
       {/* ── BUSINESS MARKET HERO ── */}
