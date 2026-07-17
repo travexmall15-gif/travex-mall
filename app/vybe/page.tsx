@@ -1,14 +1,19 @@
 'use client'
-import { useTranslation } from '@/hooks/useTranslation'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
-import { Heart, Store, Loader2, Image as ImageIcon, Play } from 'lucide-react'
+import {
+  Heart, Store, Loader2, Image as ImageIcon,
+  Play, Search, Zap, TrendingUp, Star, RefreshCw,
+  ShieldCheck, Tag, Clock
+} from 'lucide-react'
 
+// ── Types ─────────────────────────────────────────────────────
 type FeedPost = {
   id: string
   store_id: string | null
@@ -25,61 +30,57 @@ type FeedPost = {
   media_url: string | null
   media_type: string | null
   university_abbr: string | null
+  is_verified?: boolean | null
   created_at: string
 }
 
-const SITE = 'https://travex-mall.vercel.app'
-
-function ago(d: string) {
-  const diff = Date.now() - new Date(d).getTime()
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'just now'
-  if (m < 60) return `${m}m ago`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `${h}h ago`
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-}
-
+// ── Helpers ───────────────────────────────────────────────────
 function fmtTZS(n: number) {
   return 'TZS ' + Number(n).toLocaleString('en-US')
 }
-
-function getContent(post: FeedPost) {
-  return post.content || post.post_text || post.caption || ''
+function getContent(p: FeedPost) {
+  return p.content || p.post_text || p.caption || ''
+}
+function getLikes(p: FeedPost) {
+  return p.likes_count ?? p.likes ?? 0
+}
+function isVideo(p: FeedPost) {
+  if (p.media_type?.includes('video')) return true
+  const u = (p.media_url || '').toLowerCase()
+  return u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || u.includes('video')
 }
 
-function getLikes(post: FeedPost) {
-  return post.likes_count || post.likes || 0
-}
-
-function isVideo(post: FeedPost) {
-  if (post.media_type && post.media_type.includes('video')) return true
-  if (post.media_url) {
-    const url = post.media_url.toLowerCase()
-    return url.includes('.mp4') || url.includes('.mov') || url.includes('.webm') || url.includes('video')
-  }
-  return false
-}
-
+// ── Main Page ─────────────────────────────────────────────────
 export default function VybePage() {
   const { t } = useTranslation()
-  const [posts, setPosts]     = useState<FeedPost[]>([])
-  const [mediaFilter, setMediaFilter] = useState<'all' | 'photo' | 'video'>('all')
-  const [loading, setLoading] = useState(true)
-  const [error, setError]     = useState<string | null>(null)
-  const [liked, setLiked]     = useState<Set<string>>(new Set())
 
-  useEffect(() => { loadPosts() }, [])
+  const [posts, setPosts]         = useState<FeedPost[]>([])
+  const [filter, setFilter]       = useState<'all' | 'photo' | 'video'>('all')
+  const [search, setSearch]       = useState('')
+  const [loading, setLoading]     = useState(true)
+  const [error, setError]         = useState<string | null>(null)
+  const [liked, setLiked]         = useState<Set<string>>(new Set())
+  const [visible, setVisible]     = useState(12)
 
-  async function loadPosts() {
-    setLoading(true)
-    setError(null)
+  // Time formatter — uses t() from closure — re-runs on lang change
+  const ago = useCallback((d: string) => {
+    const diff = Date.now() - new Date(d).getTime()
+    const m = Math.floor(diff / 60000)
+    if (m < 1)  return t('vybe.justNow')
+    if (m < 60) return t('vybe.minAgo', { n: String(m) })
+    const h = Math.floor(m / 60)
+    if (h < 24) return t('vybe.hrAgo', { n: String(h) })
+    return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+  }, [t])
+
+  const loadPosts = useCallback(async () => {
+    setLoading(true); setError(null)
     try {
       const { data, error: err } = await sb
         .from('feed_posts')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(50)
+        .limit(100)
       if (err) throw err
       setPosts(data || [])
     } catch {
@@ -87,179 +88,417 @@ export default function VybePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [t])
 
-  async function toggleLike(post: FeedPost) {
+  useEffect(() => { loadPosts() }, [])
+
+  const toggleLike = async (post: FeedPost) => {
     const isLiked = liked.has(post.id)
-    const newCount = getLikes(post) + (isLiked ? -1 : 1)
-    setLiked(prev => { const n = new Set(prev); isLiked ? n.delete(post.id) : n.add(post.id); return n })
-    setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: newCount, likes_count: newCount } : p))
-    await sb.from('feed_posts').update({ likes: newCount, likes_count: newCount }).eq('id', post.id)
+    const n = getLikes(post) + (isLiked ? -1 : 1)
+    setLiked(prev => { const s = new Set(prev); isLiked ? s.delete(post.id) : s.add(post.id); return s })
+    setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: n, likes_count: n } : p))
+    await sb.from('feed_posts').update({ likes: n, likes_count: n }).eq('id', post.id)
   }
 
-  const filtered = posts.filter(p => {
-    if (mediaFilter === 'photo') return p.media_url && !isVideo(p)
-    if (mediaFilter === 'video') return p.media_url && isVideo(p)
-    return true
-  })
+  const filtered = useMemo(() => {
+    let list = posts
+    if (filter === 'photo') list = list.filter(p => p.media_url && !isVideo(p))
+    if (filter === 'video') list = list.filter(p => p.media_url &&  isVideo(p))
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      list = list.filter(p =>
+        (p.shop_name||'').toLowerCase().includes(q) ||
+        getContent(p).toLowerCase().includes(q) ||
+        (p.tag||'').toLowerCase().includes(q) ||
+        (p.category||'').toLowerCase().includes(q)
+      )
+    }
+    return list
+  }, [posts, filter, search])
+
+  // Stats
+  const totalLikes = posts.reduce((a, p) => a + getLikes(p), 0)
+  const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: '#07010E', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#060B18', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        *{box-sizing:border-box}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-        .post-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;transition:border-color 0.2s;animation:fadeUp 0.3s ease}
-        .post-card:hover{border-color:rgba(201,168,76,0.25)}
-        .like-btn{display:flex;align-items:center;gap:5px;background:none;border:none;color:rgba(255,255,255,0.45);cursor:pointer;font-size:13px;font-weight:600;padding:6px 10px;border-radius:999px;transition:all 0.15s;font-family:'Inter',sans-serif}
-        .like-btn:hover,.like-btn.liked{color:#EF4444}
-        .like-btn.liked svg{fill:#EF4444}
-        .filter-btn{padding:6px 16px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.50);transition:all 0.15s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px}
-        .filter-btn.active{background:#C9A84C;border-color:#C9A84C;color:#0F172A}
-        .visit-btn{display:inline-flex;align-items:center;gap:5px;background:#0D1B3E;color:#C9A84C;border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:5px 14px;font-size:11px;font-weight:700;text-decoration:none;transition:all 0.2s}
-        .visit-btn:hover{background:#C9A84C;color:#0F172A}
+        @keyframes spin    { to { transform: rotate(360deg) } }
+        @keyframes fadeUp  { from { opacity:0; transform:translateY(16px) } to { opacity:1; transform:translateY(0) } }
+        @keyframes pulse   { 0%,100% { opacity:1 } 50% { opacity:.5 } }
+
+        .vybe-card {
+          background: rgba(255,255,255,0.035);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 20px;
+          overflow: hidden;
+          transition: border-color .22s, box-shadow .22s, transform .22s;
+          animation: fadeUp .35s ease;
+        }
+        .vybe-card:hover {
+          border-color: rgba(201,168,76,.3);
+          box-shadow: 0 8px 40px rgba(201,168,76,.08);
+          transform: translateY(-2px);
+        }
+
+        .like-btn {
+          display:inline-flex; align-items:center; gap:5px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.10);
+          border-radius: 999px;
+          color: rgba(255,255,255,0.55);
+          cursor:pointer; font-size:13px; font-weight:600;
+          padding: 7px 14px;
+          transition: all .18s;
+          font-family: 'Inter',sans-serif;
+        }
+        .like-btn:hover { background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.3); color:#EF4444; }
+        .like-btn.liked { background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.4); color:#EF4444; }
+
+        .visit-btn {
+          display:inline-flex; align-items:center; gap:6px;
+          background: linear-gradient(135deg, #0D1B3E, #1B3A8A);
+          border: 1px solid rgba(201,168,76,.30);
+          color: #C9A84C;
+          border-radius: 999px;
+          padding: 7px 18px;
+          font-size:13px; font-weight:700;
+          text-decoration:none;
+          transition: all .18s;
+        }
+        .visit-btn:hover {
+          background: #C9A84C;
+          color: #0F172A;
+          border-color: #C9A84C;
+          box-shadow: 0 4px 16px rgba(201,168,76,.35);
+        }
+
+        .filter-pill {
+          display:inline-flex; align-items:center; gap:5px;
+          padding: 7px 18px; border-radius:999px;
+          font-size:13px; font-weight:600; cursor:pointer;
+          border: 1.5px solid rgba(255,255,255,0.12);
+          background: transparent;
+          color: rgba(255,255,255,0.45);
+          transition: all .18s;
+          font-family: 'Inter',sans-serif;
+          white-space: nowrap;
+        }
+        .filter-pill:hover  { border-color:rgba(255,255,255,.25); color:rgba(255,255,255,.75); }
+        .filter-pill.active { background:#C9A84C; border-color:#C9A84C; color:#0F172A; }
+
+        .cat-chip {
+          display:inline-flex; align-items:center; gap:4px;
+          padding:5px 14px; border-radius:999px;
+          font-size:12px; font-weight:600; cursor:pointer;
+          border:1px solid rgba(255,255,255,0.08);
+          background:rgba(255,255,255,0.04);
+          color:rgba(255,255,255,0.50);
+          text-decoration:none;
+          transition:all .15s;
+          white-space:nowrap;
+        }
+        .cat-chip:hover { border-color:rgba(201,168,76,.4); color:#C9A84C; background:rgba(201,168,76,.08); }
+
+        .search-input {
+          width:100%; padding:11px 16px 11px 42px;
+          background:rgba(255,255,255,0.06);
+          border:1.5px solid rgba(255,255,255,0.10);
+          border-radius:14px; font-size:14px;
+          color:#fff; outline:none;
+          font-family:'Inter',sans-serif;
+          transition:all .2s; box-sizing:border-box;
+        }
+        .search-input::placeholder { color:rgba(255,255,255,0.28); }
+        .search-input:focus { border-color:rgba(201,168,76,.45); background:rgba(255,255,255,0.08); }
+
+        .live-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; animation:pulse 1.8s ease-in-out infinite; }
+        .price-badge { background:rgba(201,168,76,.12); color:#C9A84C; padding:3px 11px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid rgba(201,168,76,.2); }
+
+        @media (max-width:480px) {
+          .vybe-actions { flex-wrap:wrap; gap:8px !important; }
+          .visit-btn, .like-btn { flex:1; justify-content:center; }
+        }
       `}</style>
 
       <SiteNav />
 
-      {/* HERO */}
-      <div style={{ paddingTop: '64px', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #030818 0%, #07010E 60%)' }}>
-        <div style={{ position: 'absolute', top: '-20%', left: '50%', transform: 'translateX(-50%)', width: '80%', height: '200%', background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, transparent 60%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 800, margin: '0 auto', padding: '2.5rem 5% 1.5rem', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 12, background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.30)', color: '#C9A84C', padding: '4px 14px', borderRadius: 999, fontSize: 11, fontWeight: 700 }}>
-            Live Feed
+      {/* ── HERO ──────────────────────────────────────────────── */}
+      <div style={{ paddingTop: '108px', position:'relative', overflow:'hidden',
+        background:'linear-gradient(160deg, #030B1A 0%, #060B18 70%)' }}>
+        {/* Glow */}
+        <div style={{ position:'absolute', top:'-30%', left:'50%', transform:'translateX(-50%)',
+          width:'70%', height:'200%', pointerEvents:'none',
+          background:'radial-gradient(ellipse at center, rgba(201,168,76,.18) 0%, transparent 60%)',
+          filter:'blur(60px)' }} />
+        {/* Grid */}
+        <div style={{ position:'absolute', inset:0, pointerEvents:'none', opacity:.025,
+          backgroundImage:'linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)',
+          backgroundSize:'44px 44px' }} />
+
+        <div style={{ position:'relative', zIndex:1, maxWidth:760, margin:'0 auto', padding:'3rem 5% 2rem', textAlign:'center' }}>
+
+          {/* Live badge */}
+          <div style={{ display:'inline-flex', alignItems:'center', gap:8, marginBottom:16,
+            background:'rgba(201,168,76,0.10)', border:'1px solid rgba(201,168,76,0.28)',
+            color:'#C9A84C', padding:'5px 16px', borderRadius:999, fontSize:11, fontWeight:700,
+            letterSpacing:'0.06em' }}>
+            <div className="live-dot" />
+            {t('vybe.heroBadge')}
           </div>
-          <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem,5vw,3rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.5rem' }}>
-            Travex Social Vybe
+
+          {/* Brand — NEVER translated */}
+          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#fff',
+            lineHeight:1.1, marginBottom:'0.6rem', letterSpacing:'-0.03em' }}>
+            Social Vybe
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: '1.5rem' }}>
-            {"Products, offers and updates from verified Tanzania sellers"}
+          <p style={{ color:'rgba(255,255,255,0.42)', fontSize:'clamp(13px,2vw,15px)',
+            marginBottom:'1.75rem', lineHeight:1.6, maxWidth:480, margin:'0 auto 1.75rem' }}>
+            {t('vybe.subtitle')}
           </p>
 
-          {/* Media type filter */}
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className={`filter-btn ${mediaFilter === 'all' ? 'active' : ''}`} onClick={() => setMediaFilter('all')}>
-              All Posts
+          {/* Stats row */}
+          {!loading && posts.length > 0 && (
+            <div style={{ display:'flex', gap:'2rem', justifyContent:'center', marginBottom:'1.75rem', flexWrap:'wrap' }}>
+              {[
+                { val: String(posts.length), label: t('vybe.totalPosts') },
+                { val: totalLikes > 999 ? `${(totalLikes/1000).toFixed(1)}k` : String(totalLikes), label: t('vybe.totalLikes') },
+              ].map((s,i) => (
+                <div key={i} style={{ textAlign:'center' }}>
+                  <div style={{ fontSize:'1.4rem', fontWeight:900, color:'#C9A84C', lineHeight:1 }}>{s.val}</div>
+                  <div style={{ fontSize:'0.6rem', color:'rgba(255,255,255,0.3)', textTransform:'uppercase', letterSpacing:'0.09em', marginTop:3 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Search */}
+          <div style={{ position:'relative', maxWidth:500, margin:'0 auto 1.5rem' }}>
+            <Search size={15} style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'rgba(255,255,255,0.3)' }} />
+            <input
+              className="search-input"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={t('vybe.searchPlaceholder')}
+            />
+          </div>
+
+          {/* Filter pills */}
+          <div style={{ display:'flex', gap:8, justifyContent:'center', flexWrap:'wrap' }}>
+            <button className={`filter-pill ${filter==='all'   ? 'active' : ''}`} onClick={() => setFilter('all')}>
+              <TrendingUp size={12} /> {t('vybe.allPosts')}
             </button>
-            <button className={`filter-btn ${mediaFilter === 'photo' ? 'active' : ''}`} onClick={() => setMediaFilter('photo')}>
-              <ImageIcon size={12} /> Photos
+            <button className={`filter-pill ${filter==='photo' ? 'active' : ''}`} onClick={() => setFilter('photo')}>
+              <ImageIcon size={12} /> {t('vybe.photos')}
             </button>
-            <button className={`filter-btn ${mediaFilter === 'video' ? 'active' : ''}`} onClick={() => setMediaFilter('video')}>
-              <Play size={12} /> Reels
+            <button className={`filter-pill ${filter==='video' ? 'active' : ''}`} onClick={() => setFilter('video')}>
+              <Play size={12} /> {t('vybe.reels')}
             </button>
           </div>
+
+          {/* Category chips */}
+          {categories.length > 0 && (
+            <div style={{ display:'flex', gap:6, justifyContent:'center', flexWrap:'wrap', marginTop:'1rem' }}>
+              {categories.slice(0,8).map(cat => (
+                <button key={cat} className="cat-chip" onClick={() => setSearch(cat)}>
+                  <Tag size={10} /> {cat}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* FEED */}
-      <div style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 5% 5rem' }}>
+      {/* ── FEED ──────────────────────────────────────────────── */}
+      <div style={{ maxWidth:680, margin:'0 auto', padding:'1.5rem 4% 5rem' }}>
 
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <Loader2 style={{ width: 32, height: 32, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#C9A84C' }} />
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{"Inapakia..."}</p>
+        {/* Loading */}
+        {loading && (
+          <div style={{ textAlign:'center', padding:'5rem 0' }}>
+            <Loader2 style={{ width:32, height:32, margin:'0 auto 12px', animation:'spin 1s linear infinite', color:'#C9A84C' }} />
+            <p style={{ color:'rgba(255,255,255,0.3)', fontSize:14 }}>{t('vybe.loading')}</p>
           </div>
+        )}
 
-        ) : error ? (
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: 14, marginBottom: 16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding: '10px 24px', background: '#C9A84C', color: '#0F172A', border: 'none', borderRadius: 999, fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>{t('common.retry')}</button>
+        {/* Error */}
+        {!loading && error && (
+          <div style={{ textAlign:'center', padding:'5rem 0' }}>
+            <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(239,68,68,.1)', border:'1px solid rgba(239,68,68,.2)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
+              <RefreshCw size={22} color="#EF4444" />
+            </div>
+            <p style={{ color:'rgba(255,255,255,0.40)', fontSize:14, marginBottom:16 }}>{error}</p>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#C9A84C', color:'#0F172A', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+              {t('vybe.retry')}
+            </button>
           </div>
+        )}
 
-        ) : filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>{t('vybe.noPosts')}</p>
+        {/* Empty */}
+        {!loading && !error && filtered.length === 0 && (
+          <div style={{ textAlign:'center', padding:'5rem 0' }}>
+            <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(201,168,76,0.08)', border:'1px solid rgba(201,168,76,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
+              <Star size={28} color="rgba(201,168,76,0.4)" />
+            </div>
+            <p style={{ color:'rgba(255,255,255,0.35)', fontSize:14 }}>
+              {search ? t('vybe.noResults') : t('vybe.noPosts')}
+            </p>
+            {search && (
+              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.6)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
+                {t('vybe.allPosts')}
+              </button>
+            )}
           </div>
+        )}
 
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {filtered.map(post => {
-              const content  = getContent(post)
-              const likesCount = getLikes(post)
-              const isLiked  = liked.has(post.id)
-              const initials = (post.shop_name || 'TX').split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
-              const video    = isVideo(post)
+        {/* Posts */}
+        {!loading && !error && filtered.length > 0 && (
+          <>
+            <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
+              {filtered.slice(0, visible).map(post => (
+                <PostCard key={post.id} post={post} liked={liked.has(post.id)} onLike={() => toggleLike(post)} ago={ago} t={t} />
+              ))}
+            </div>
 
-              return (
-                <div key={post.id} className="post-card">
-
-                  {/* Shop header — logo + name */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', padding: '0.85rem 1rem 0' }}>
-                    {/* Logo */}
-                    <div style={{ width: 38, height: 38, borderRadius: '10px', flexShrink: 0, background: 'linear-gradient(135deg, #0D1B3E, #1B3A8A)', border: '1.5px solid rgba(201,168,76,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                      {post.shop_logo ? (
-                        <Image src={post.shop_logo} alt={initials} width={38} height={38} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                      ) : (
-                        <span style={{ fontSize: 12, fontWeight: 800, color: '#C9A84C' }}>{initials}</span>
-                      )}
-                    </div>
-                    {/* Name + time */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {post.shop_name || 'Travex Seller'}
-                      </div>
-                      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.30)', marginTop: 1 }}>
-                        {ago(post.created_at)}{post.category ? ` · ${post.category}` : ''}
-                      </div>
-                    </div>
-                    {/* Tag badge */}
-                    {post.tag && (
-                      <span style={{ fontSize: 10, fontWeight: 700, color: '#C9A84C', background: 'rgba(201,168,76,0.12)', padding: '2px 8px', borderRadius: 999, flexShrink: 0 }}>
-                        {post.tag}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Caption */}
-                  {content && (
-                    <div style={{ padding: '0.6rem 1rem 0' }}>
-                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, margin: 0 }}>{content}</p>
-                    </div>
-                  )}
-
-                  {/* Price */}
-                  {post.price && (
-                    <div style={{ padding: '0.4rem 1rem 0' }}>
-                      <span style={{ background: 'rgba(201,168,76,0.12)', color: '#C9A84C', padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 800 }}>
-                        {fmtTZS(post.price)}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Media */}
-                  {post.media_url && (
-                    <div style={{ marginTop: '0.75rem', position: 'relative', background: '#000', maxHeight: 320, overflow: 'hidden' }}>
-                      {video ? (
-                        <video src={post.media_url} controls style={{ width: '100%', maxHeight: 320, display: 'block' }} />
-                      ) : (
-                        <Image src={post.media_url} alt="Post" width={720} height={320} style={{ width: '100%', height: 'auto', maxHeight: 320, objectFit: 'cover', display: 'block' }} />
-                      )}
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 1rem 0.85rem', borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: '0.75rem' }}>
-                    <button className={`like-btn ${isLiked ? 'liked' : ''}`} onClick={() => toggleLike(post)}>
-                      <Heart size={14} style={{ fill: isLiked ? '#EF4444' : 'none' }} />
-                      {likesCount > 0 ? likesCount : 'Like'}
-                    </button>
-
-                    {post.store_id && (
-                      <Link href={`/store/${post.store_id}`} className="visit-btn">
-                        <Store size={11} /> {t('market.visitShop')}
-                      </Link>
-                    )}
-                  </div>
-
-                </div>
-              )
-            })}
-          </div>
+            {/* Load more */}
+            {visible < filtered.length && (
+              <div style={{ textAlign:'center', marginTop:'1.5rem' }}>
+                <button onClick={() => setVisible(v => v + 12)}
+                  style={{ padding:'11px 32px', background:'rgba(255,255,255,0.06)', border:'1.5px solid rgba(255,255,255,0.12)', color:'rgba(255,255,255,0.65)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(201,168,76,.4)'; (e.currentTarget as HTMLElement).style.color='#C9A84C' }}
+                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color='rgba(255,255,255,0.65)' }}>
+                  {t('vybe.loadMore')} · {filtered.length - visible} {t('vybe.totalPosts').toLowerCase()}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
 
       <SiteFooter />
     </main>
+  )
+}
+
+// ── POST CARD ─────────────────────────────────────────────────
+type PostCardProps = {
+  post: FeedPost
+  liked: boolean
+  onLike: () => void
+  ago: (d: string) => string
+  t: (k: string, vars?: Record<string, string | number>) => string
+}
+
+function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
+  const content  = getContent(post)
+  const likes    = getLikes(post)
+  const initials = (post.shop_name || 'TX').split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
+  const video    = isVideo(post)
+  const isNew    = (Date.now() - new Date(post.created_at).getTime()) < 3600000 * 6
+
+  return (
+    <article className="vybe-card">
+
+      {/* ── Shop header ── */}
+      <div style={{ display:'flex', alignItems:'center', gap:'0.7rem', padding:'0.9rem 1rem 0' }}>
+
+        {/* Logo */}
+        <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
+          background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)',
+          border:'1.5px solid rgba(201,168,76,0.2)',
+          display:'flex', alignItems:'center', justifyContent:'center' }}>
+          {post.shop_logo ? (
+            <Image src={post.shop_logo} alt={initials} width={42} height={42} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
+          ) : (
+            <span style={{ fontSize:13, fontWeight:800, color:'#C9A84C', letterSpacing:'-0.02em' }}>{initials}</span>
+          )}
+        </div>
+
+        {/* Name + meta */}
+        <div style={{ flex:1, minWidth:0 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
+            <span style={{ fontSize:14, fontWeight:700, color:'#fff', letterSpacing:'-0.01em' }}>
+              {post.shop_name || t('vybe.seller')}
+            </span>
+            {/* Verified badge */}
+            {post.is_verified !== false && (
+              <span style={{ display:'inline-flex', alignItems:'center', gap:2, background:'rgba(5,150,105,0.12)', border:'1px solid rgba(5,150,105,0.2)', color:'#10B981', fontSize:'0.58rem', fontWeight:700, padding:'1px 6px', borderRadius:999, letterSpacing:'0.04em' }}>
+                <ShieldCheck size={8} /> {t('vybe.verified')}
+              </span>
+            )}
+            {/* New badge */}
+            {isNew && (
+              <span style={{ background:'rgba(201,168,76,0.15)', color:'#C9A84C', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(201,168,76,0.2)' }}>
+                {t('vybe.newPost')}
+              </span>
+            )}
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:2 }}>
+            <Clock size={9} color="rgba(255,255,255,0.25)" />
+            <span style={{ fontSize:11, color:'rgba(255,255,255,0.28)' }}>{ago(post.created_at)}</span>
+            {post.category && (
+              <><span style={{ color:'rgba(255,255,255,0.15)' }}>·</span>
+              <span style={{ fontSize:11, color:'rgba(255,255,255,0.28)' }}>{post.category}</span></>
+            )}
+          </div>
+        </div>
+
+        {/* Tag */}
+        {post.tag && (
+          <span style={{ fontSize:10, fontWeight:700, color:'#C9A84C', background:'rgba(201,168,76,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(201,168,76,0.15)', letterSpacing:'0.02em' }}>
+            #{post.tag}
+          </span>
+        )}
+      </div>
+
+      {/* ── Caption ── */}
+      {content && (
+        <div style={{ padding:'0.65rem 1rem 0' }}>
+          <p style={{ fontSize:14, color:'rgba(255,255,255,0.78)', lineHeight:1.65, margin:0, letterSpacing:'-0.005em' }}>
+            {content}
+          </p>
+        </div>
+      )}
+
+      {/* ── Price ── */}
+      {post.price && post.price > 0 && (
+        <div style={{ padding:'0.5rem 1rem 0' }}>
+          <span className="price-badge">{fmtTZS(post.price)}</span>
+        </div>
+      )}
+
+      {/* ── Media ── */}
+      {post.media_url && (
+        <div style={{ marginTop:'0.75rem', position:'relative', background:'#000', borderRadius:0, overflow:'hidden', maxHeight:400 }}>
+          {video ? (
+            <video src={post.media_url} controls playsInline style={{ width:'100%', maxHeight:400, display:'block' }} />
+          ) : (
+            <Image src={post.media_url} alt={content || t('vybe.noImage')} width={680} height={400}
+              style={{ width:'100%', height:'auto', maxHeight:400, objectFit:'cover', display:'block' }} />
+          )}
+        </div>
+      )}
+
+      {/* ── Actions — Like + Visit Shop ONLY ── */}
+      <div className="vybe-actions" style={{ display:'flex', alignItems:'center', gap:10, padding:'0.75rem 1rem 0.9rem', marginTop:'0.6rem', borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+
+        {/* Like button */}
+        <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={onLike} aria-label={liked ? t('vybe.liked') : t('vybe.like')}>
+          <Heart size={14} style={{ fill: liked ? '#EF4444' : 'none', transition:'fill .15s' }} />
+          <span>{likes > 0 ? likes : t('vybe.like')}</span>
+        </button>
+
+        {/* Spacer */}
+        <div style={{ flex:1 }} />
+
+        {/* Visit Shop — only if store exists */}
+        {post.store_id && (
+          <Link href={`/store/${post.store_id}`} className="visit-btn" aria-label={`${t('vybe.visitShop')}: ${post.shop_name}`}>
+            <Store size={12} />
+            {t('vybe.visitShop')}
+          </Link>
+        )}
+      </div>
+
+    </article>
   )
 }
