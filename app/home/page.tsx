@@ -43,18 +43,18 @@ export default function HomePage() {
       <div style={{ background: 'linear-gradient(180deg,#071540,#0A0C20)', overflow: 'hidden', width: '100%', padding: '14px 0' }}>
         <div className="chips-track" style={{ display: 'flex', gap: '10px', width: 'max-content' }}>
           {[
-            { href: '/group-buy',   label: "Group Buy",   sub: "Save together"  },
-            { href: '/market',      label: "Business",    sub: "500+ shops"     },
-            { href: '/campus',      label: "Campus",      sub: "5 universities" },
-            { href: '/vybe',        label: 'Social Vybe', sub: "Community"      },
-            { href: '/flash-deals', label: "Flash Deals", sub: "Limited offers" },
-            { href: '/move',        label: 'Travex Move', sub: 'Usafirishaji'      },
-            { href: '/group-buy',   label: "Group Buy",   sub: "Save together"  },
-            { href: '/market',      label: "Business",    sub: "500+ shops"     },
-            { href: '/campus',      label: "Campus",      sub: "5 universities" },
-            { href: '/vybe',        label: 'Social Vybe', sub: "Community"      },
-            { href: '/flash-deals', label: "Flash Deals", sub: "Limited offers" },
-            { href: '/move',        label: 'Travex Move', sub: 'Usafirishaji'      },
+            { href: '/group-buy',   label: t('nav.groupBuy'),    sub: t('home.saveTogether')  },
+            { href: '/market',      label: t('nav.business'),    sub: t('home.business500')   },
+            { href: '/campus',      label: t('nav.campus'),      sub: t('home.campus5uni')    },
+            { href: '/vybe',        label: 'Social Vybe',        sub: t('home.community')     },
+            { href: '/flash-deals', label: t('nav.flashDeals'),  sub: t('home.limitedOffers') },
+            { href: '/move',        label: 'Travex Move',        sub: t('home.logistics')     },
+            { href: '/group-buy',   label: t('nav.groupBuy'),    sub: t('home.saveTogether')  },
+            { href: '/market',      label: t('nav.business'),    sub: t('home.business500')   },
+            { href: '/campus',      label: t('nav.campus'),      sub: t('home.campus5uni')    },
+            { href: '/vybe',        label: 'Social Vybe',        sub: t('home.community')     },
+            { href: '/flash-deals', label: t('nav.flashDeals'),  sub: t('home.limitedOffers') },
+            { href: '/move',        label: 'Travex Move',        sub: t('home.logistics')     },
           ].map((chip, i) => (
             <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 18px', textDecoration: 'none', flexShrink: 0, transition: 'background 0.2s', whiteSpace: 'nowrap' as const }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.16)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.4)' }}

@@ -16,7 +16,14 @@
     "searchPlaceholder": "Search shops, products...",
     "searchAll": "See all results for",
     "businessMarket": "Business Market",
-    "campusMarket": "Campus Market"
+    "campusMarket": "Campus Market",
+    "homeLabel": "Home",
+    "businessLabel": "Business Market",
+    "campusLabel": "Campus Market",
+    "vybeLabel": "Social Vybe",
+    "flashDealsLabel": "Flash Deals",
+    "groupBuyLabel": "Group Buy",
+    "moveLabel": "Travex Move"
   },
   "home": {
     "headline1": "Africa's",
@@ -116,7 +123,17 @@
     "searchCampusPlaceholder": "Search products, sellers...",
     "back": "Campus Market",
     "shopsFound": "{count} shops found",
-    "noShops": "No shops found yet"
+    "noShops": "No shops found yet",
+    "noMatching": "No shops match your search",
+    "trySearch": "Try a different search term",
+    "electronics": "Electronics",
+    "services": "Services",
+    "fashion": "Fashion",
+    "food": "Food",
+    "beauty": "Beauty",
+    "books": "Books & Stationery",
+    "tech": "Technology",
+    "health": "Health"
   },
   "vybe": {
     "headline": "Travex Social Vybe",
@@ -143,7 +160,12 @@
     "reportPost": "Report",
     "trending": "Trending",
     "latest": "Latest",
-    "mostLiked": "Most Liked"
+    "mostLiked": "Most Liked",
+    "couldNotLoad": "Could not load posts. Please try again.",
+    "loading": "Loading posts...",
+    "business": "Business",
+    "campus": "Campus",
+    "marketOnly": "Market Only"
   },
   "groupBuy": {
     "badge": "Group Buy",
@@ -180,7 +202,17 @@
     "waitingForMembers": "Waiting for members...",
     "yourSaving": "You save",
     "originalPrice": "Original",
-    "groupPrice": "Group Price"
+    "groupPrice": "Group Price",
+    "expired2": "Expired",
+    "groupDeal": "Group Deal",
+    "joinTitle": "Join This Group Deal",
+    "yourName": "Your Name",
+    "namePlaceholder": "Enter your full name",
+    "yourPhone": "Phone Number",
+    "phonePlaceholder": "e.g. +255 712 345 678",
+    "joinBtn": "Join Group",
+    "alreadyJoined": "You already joined this group!",
+    "confirmJoin": "Confirm and Join"
   },
   "flash": {
     "badge": "Flash Deals",
@@ -197,7 +229,7 @@
     "days": "d",
     "off": "OFF",
     "loading": "Loading deals...",
-    "todaysDeal": "Deal of the Day",
+    "todaysDeal": "Today's Deal",
     "activeDeals": "Active Deals",
     "allDeals": "All Flash Deals",
     "discount": "discount",
@@ -205,7 +237,8 @@
     "dealPrice": "Deal Price",
     "timeLeft": "Time Left",
     "buyNow": "Buy Now",
-    "dealEnded": "Deal Ended"
+    "dealEnded": "Deal Ended",
+    "featuredDeal": "Featured Deal"
   },
   "store": {
     "back": "Market",
@@ -235,7 +268,7 @@
     "cancel": "Cancel",
     "ariaWelcome": "Hi! Welcome to {shop}. I am Aria, your AI shopping assistant. I can help you find products, answer questions, and guide you through placing an order.",
     "findProduct": "Find a product",
-    "placeOrder": "Place an order",
+    "placeOrder": "Place Order",
     "checkPrices": "Check prices",
     "ariaBadge": "AI Assistant",
     "online": "Online",
@@ -263,7 +296,11 @@
     "noProductsYet": "No products yet",
     "shopDescription": "About this shop",
     "allProducts": "All Products",
-    "search": "Search products in this shop..."
+    "search": "Search products in this shop...",
+    "confirm": "Confirm Order",
+    "contactSeller": "Contact Seller",
+    "shopNotFound": "This store may have been removed or is not yet active.",
+    "backToMarket": "Go to Market"
   },
   "openStore": {
     "title": "Open Your Store on Travex Mall",
@@ -450,5 +487,29 @@
     "delivered": "Delivered",
     "cancelled": "Cancelled",
     "refunded": "Refunded"
+  },
+  "join": {
+    "title": "Join Travex Mall",
+    "subtitle": "Start selling across Tanzania today",
+    "shops": "Shops",
+    "regions": "Regions",
+    "aiProducts": "AI Products",
+    "requestShop": "Open a Shop",
+    "adminReview": "Admin Review",
+    "getLogin": "Get Login",
+    "addProducts": "Add Products",
+    "receiveOrders": "Receive Orders",
+    "howItWorks": "How It Works",
+    "step1": "Fill in your shop details",
+    "step2": "Wait for approval (24 hours)",
+    "step3": "Get your PIN and start selling",
+    "getStarted": "Get Started",
+    "alreadySeller": "Already a seller?",
+    "loginHere": "Login here",
+    "benefits": "Benefits",
+    "benefit1": "Sell across Tanzania",
+    "benefit2": "AI-powered tools",
+    "benefit3": "Free to start",
+    "benefit4": "WhatsApp support"
   }
 }

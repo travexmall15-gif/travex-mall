@@ -11,13 +11,20 @@ import { GraduationCap, ArrowRight, Search } from 'lucide-react'
 
 type UniStats = { abbr: string; count: number }
 
-const CAMPUS_CATEGORIES = [
-  'All', 'Fashion & Clothing', 'Food & Drinks', 'Electronics',
-  'Beauty & Health', 'Books & Stationery', 'Services', 'Arts & Crafts',
+const CAMPUS_CATEGORIES_KEYS = [
+  { key: 'campus.allCategories', label: 'All' },
+  { key: null, label: 'Fashion & Clothing' },
+  { key: null, label: 'Food & Drinks' },
+  { key: 'campus.electronics', label: 'Electronics' },
+  { key: null, label: 'Beauty & Health' },
+  { key: null, label: 'Books & Stationery' },
+  { key: 'campus.services', label: 'Services' },
+  { key: null, label: 'Arts & Crafts' },
 ]
 
 export default function CampusPage() {
   const { t } = useTranslation()
+  const CAMPUS_CATEGORIES = CAMPUS_CATEGORIES_KEYS.map(c => c.key ? t(c.key) : c.label)
   const [uniStats, setUniStats] = useState<UniStats[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -124,10 +131,10 @@ export default function CampusPage() {
               {[
                 ...uniData.map(u => ({ val: loading ? '...' : String(u.slotsLeft), label: `${u.abbr} Slots Left`, color: u.slotsLeft > 10 ? '#86EFAC' : '#FCA5A5' })),
                 { val: loading ? '...' : String(totalLeft), label: 'Total Slots Left', color: '#C9A84C' },
-                { val: loading ? '...' : String(totalActive), label: 'Active Shops', color: 'rgba(255,255,255,0.6)' },
+                { val: loading ? '...' : String(totalActive), label: t('home.topRatedShops'), color: 'rgba(255,255,255,0.6)' },
                 ...uniData.map(u => ({ val: loading ? '...' : String(u.slotsLeft), label: `${u.abbr} Slots Left`, color: u.slotsLeft > 10 ? '#86EFAC' : '#FCA5A5' })),
                 { val: loading ? '...' : String(totalLeft), label: 'Total Slots Left', color: '#C9A84C' },
-                { val: loading ? '...' : String(totalActive), label: 'Active Shops', color: 'rgba(255,255,255,0.6)' },
+                { val: loading ? '...' : String(totalActive), label: t('home.topRatedShops'), color: 'rgba(255,255,255,0.6)' },
               ].map((s, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
                   <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>

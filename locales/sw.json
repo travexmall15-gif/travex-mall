@@ -16,7 +16,14 @@
     "searchPlaceholder": "Tafuta maduka, bidhaa...",
     "searchAll": "Ona matokeo yote ya",
     "businessMarket": "Soko la Biashara",
-    "campusMarket": "Soko la Vyuo"
+    "campusMarket": "Soko la Vyuo",
+    "homeLabel": "Nyumbani",
+    "businessLabel": "Soko la Biashara",
+    "campusLabel": "Soko la Vyuo",
+    "vybeLabel": "Social Vybe",
+    "flashDealsLabel": "Ofa za Haraka",
+    "groupBuyLabel": "Nunua Pamoja",
+    "moveLabel": "Travex Move"
   },
   "home": {
     "headline1": "Afrika",
@@ -116,7 +123,17 @@
     "searchCampusPlaceholder": "Tafuta bidhaa, wauzaji...",
     "back": "Soko la Vyuo",
     "shopsFound": "Maduka {count} yamepatikana",
-    "noShops": "Hakuna maduka bado"
+    "noShops": "Hakuna maduka bado",
+    "noMatching": "Hakuna maduka yanayolingana na utafutaji wako",
+    "trySearch": "Jaribu neno tofauti la utafutaji",
+    "electronics": "Elektroniki",
+    "services": "Huduma",
+    "fashion": "Mitindo",
+    "food": "Chakula",
+    "beauty": "Urembo",
+    "books": "Vitabu na Vifaa",
+    "tech": "Teknolojia",
+    "health": "Afya"
   },
   "vybe": {
     "headline": "Travex Social Vybe",
@@ -143,7 +160,12 @@
     "reportPost": "Ripoti",
     "trending": "Inayoongezeka",
     "latest": "Mpya Zaidi",
-    "mostLiked": "Inayopendwa Zaidi"
+    "mostLiked": "Inayopendwa Zaidi",
+    "couldNotLoad": "Imeshindwa kupakia machapisho. Jaribu tena.",
+    "loading": "Inapakia machapisho...",
+    "business": "Biashara",
+    "campus": "Vyuo",
+    "marketOnly": "Soko Tu"
   },
   "groupBuy": {
     "badge": "Nunua Pamoja",
@@ -180,7 +202,17 @@
     "waitingForMembers": "Inasubiri wanachama...",
     "yourSaving": "Unaokoa",
     "originalPrice": "Bei ya Kawaida",
-    "groupPrice": "Bei ya Kikundi"
+    "groupPrice": "Bei ya Kikundi",
+    "expired2": "Imekwisha",
+    "groupDeal": "Ofa ya Kikundi",
+    "joinTitle": "Jiunge na Ofa Hii",
+    "yourName": "Jina Lako",
+    "namePlaceholder": "Ingiza jina lako kamili",
+    "yourPhone": "Nambari ya Simu",
+    "phonePlaceholder": "mfano: +255 712 345 678",
+    "joinBtn": "Jiunge",
+    "alreadyJoined": "Umeshajiunga na kikundi hiki!",
+    "confirmJoin": "Thibitisha na Jiunge"
   },
   "flash": {
     "badge": "Ofa za Haraka",
@@ -205,7 +237,8 @@
     "dealPrice": "Bei ya Ofa",
     "timeLeft": "Muda Uliobaki",
     "buyNow": "Nunua Sasa",
-    "dealEnded": "Ofa Imekwisha"
+    "dealEnded": "Ofa Imekwisha",
+    "featuredDeal": "Ofa Maalum"
   },
   "store": {
     "back": "Soko",
@@ -235,7 +268,7 @@
     "cancel": "Acha",
     "ariaWelcome": "Habari! Karibu {shop}. Mimi ni Aria, msaidizi wako wa ununuzi wa AI. Ninaweza kukusaidia kupata bidhaa, kujibu maswali, na kukuongoza kufanya agizo.",
     "findProduct": "Tafuta bidhaa",
-    "placeOrder": "Fanya agizo",
+    "placeOrder": "Weka Agizo",
     "checkPrices": "Angalia bei",
     "ariaBadge": "Msaidizi wa AI",
     "online": "Mtandaoni",
@@ -263,7 +296,11 @@
     "noProductsYet": "Bado hakuna bidhaa",
     "shopDescription": "Kuhusu duka hili",
     "allProducts": "Bidhaa Zote",
-    "search": "Tafuta bidhaa katika duka hili..."
+    "search": "Tafuta bidhaa katika duka hili...",
+    "confirm": "Thibitisha Agizo",
+    "contactSeller": "Wasiliana na Muuzaji",
+    "shopNotFound": "Duka hili linaweza kuwa limeondolewa au bado halijafunguliwa.",
+    "backToMarket": "Nenda Sokoni"
   },
   "openStore": {
     "title": "Fungua Duka Lako kwenye Travex Mall",
@@ -450,5 +487,29 @@
     "delivered": "Imetolewa",
     "cancelled": "Imefutwa",
     "refunded": "Imerudishwa"
+  },
+  "join": {
+    "title": "Jiunge na Travex Mall",
+    "subtitle": "Anza kuuza Tanzania nzima leo",
+    "shops": "Maduka",
+    "regions": "Mikoa",
+    "aiProducts": "Bidhaa za AI",
+    "requestShop": "Omba Duka",
+    "adminReview": "Tathmini na Admin",
+    "getLogin": "Pata Kuingia",
+    "addProducts": "Weka Bidhaa",
+    "receiveOrders": "Pokea Maagizo",
+    "howItWorks": "Jinsi Inavyofanya Kazi",
+    "step1": "Jaza taarifa za duka lako",
+    "step2": "Subiri kuidhinishwa (saa 24)",
+    "step3": "Pata PIN yako na uanze kuuza",
+    "getStarted": "Anza Sasa",
+    "alreadySeller": "Tayari una duka?",
+    "loginHere": "Ingia hapa",
+    "benefits": "Faida",
+    "benefit1": "Uza Tanzania nzima",
+    "benefit2": "Zana za AI",
+    "benefit3": "Bure kuanza",
+    "benefit4": "Msaada wa WhatsApp"
   }
 }

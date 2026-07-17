@@ -25,9 +25,9 @@ type Group = {
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
 function timeLeft(exp: string | null) {
-  if (!exp) return 'Ongoing'
+  if (!exp) return '__ongoing__'
   const diff = new Date(exp).getTime() - Date.now()
-  if (diff <= 0) return 'Expired'
+  if (diff <= 0) return '__expired__'
   const h = Math.floor(diff / 3600000)
   if (h < 24) return `${h}h left`
   return `${Math.floor(h / 24)}d left`
@@ -43,7 +43,7 @@ function GroupCard({ group }: { group: Group }) {
   const pct       = Math.min(Math.round((curr / min) * 100), 100)
   const remaining = Math.max(min - curr, 0)
   const tl        = timeLeft(group.expires_at)
-  const expired   = tl === 'Expired'
+  const expired   = tl === t('groupBuy.expired')
 
   return (
     <div style={{ background: '#fff', borderRadius: 16, border: '1.5px solid #E2E8F0', overflow: 'hidden', boxShadow: '0 2px 10px rgba(15,23,42,0.06)', transition: 'transform 0.2s, box-shadow 0.2s' }}
@@ -70,7 +70,7 @@ function GroupCard({ group }: { group: Group }) {
       {/* Body */}
       <div style={{ padding: '1rem' }}>
         <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.95rem', fontWeight: 800, color: '#0F172A', marginBottom: 4, lineHeight: 1.3 }}>
-          {group.product_name || 'Group Deal'}
+          {group.product_name || t('groupBuy.groupDeal')}
         </div>
 
         {group.description && (
@@ -107,7 +107,7 @@ function GroupCard({ group }: { group: Group }) {
         <Link href={`/group-buy/${group.id}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: expired ? '#F1F5F9' : '#0D1B3E', color: expired ? '#94A3B8' : '#fff', borderRadius: 10, padding: '0.6rem', fontWeight: 700, fontSize: 13, textDecoration: 'none', transition: 'opacity 0.2s', pointerEvents: expired ? 'none' : 'auto' as any }}
           onMouseOver={e => !expired && ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
           onMouseOut={e => !expired && ((e.currentTarget as HTMLElement).style.opacity = '1')}>
-          <Users size={13} /> {expired ? 'Expired' : 'Join Group'}
+          <Users size={13} /> {expired ? t('groupBuy.expired') : t('groupBuy.joinBtn')}
         </Link>
       </div>
     </div>

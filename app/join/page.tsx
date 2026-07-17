@@ -1,9 +1,11 @@
 'use client'
+import { useTranslation } from '@/hooks/useTranslation'
 import { SiteFooter } from '@/components/site-footer'
 
 import Link from 'next/link'
 
 export default function JoinPage() {
+  const { t } = useTranslation()
   return (
     <main style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", background: '#f8f9fc', minHeight: '100vh', color: '#0D1B3E' }}>
 
@@ -41,7 +43,7 @@ export default function JoinPage() {
 
         {/* Stats */}
         <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', marginTop: '3rem', flexWrap: 'wrap' }}>
-          {[['500+', 'Maduka'], ['5', 'Mikoa'], ['5', 'Vyuo'], ['3', 'Bidhaa za AI']].map(([v, l]) => (
+          {[['500+', t('join.shops')], ['5', t('join.regions')], ['5', 'Vyuo'], ['3', t('join.aiProducts')]].map(([v, l]) => (
             <div key={l} style={{ textAlign: 'center' }}>
               <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.8rem', fontWeight: 900, color: '#C9A84C' }}>{v}</div>
               <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 2 }}>{l}</div>
@@ -54,15 +56,15 @@ export default function JoinPage() {
       <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', maxWidth: 900, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: '#C9A84C', marginBottom: 8 }}>MCHAKATO</div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 900, color: '#0D1B3E' }}>Jinsi Inavyofanya Kazi</h2>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 900, color: '#0D1B3E' }}>{t('join.howItWorks')}</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
           {[
-            { n: '1', icon: '', t: 'Omba Duka', d: 'Jaza fomu rahisi ya online, jina, bidhaa, mkoa wako. Inachukua dakika 3 tu.' },
-            { n: '2', icon: '', t: 'Tathmini na Admin', d: 'Timu yetu inakipitia ombi lako. Jibu ndani ya saa 24. Utapata ujumbe wa WhatsApp.' },
-            { n: '3', icon: '', t: 'Pata Login', d: 'Ukiapprove, utapata namba ya simu yako na password kupitia WhatsApp. Ingia dashboard yako.' },
-            { n: '4', icon: '', t: 'Weka Bidhaa', d: 'Pakia bidhaa zako na picha. Duka lako linaonekana kwenye soko mara moja.' },
-            { n: '5', icon: '', t: 'Pokea Maagizo', d: 'Wateja wanaagiza bidhaa, unapata arifa papo hapo. Wasiliana nao kupitia WhatsApp.' },
+            { n: '1', icon: '', t: t('join.requestShop'), d: 'Jaza fomu rahisi ya online, jina, bidhaa, mkoa wako. Inachukua dakika 3 tu.' },
+            { n: '2', icon: '', t: t('join.adminReview'), d: 'Timu yetu inakipitia ombi lako. Jibu ndani ya saa 24. Utapata ujumbe wa WhatsApp.' },
+            { n: '3', icon: '', t: t('join.getLogin'), d: 'Ukiapprove, utapata namba ya simu yako na password kupitia WhatsApp. Ingia dashboard yako.' },
+            { n: '4', icon: '', t: t('join.addProducts'), d: 'Pakia bidhaa zako na picha. Duka lako linaonekana kwenye soko mara moja.' },
+            { n: '5', icon: '', t: t('join.receiveOrders'), d: 'Wateja wanaagiza bidhaa, unapata arifa papo hapo. Wasiliana nao kupitia WhatsApp.' },
             { n: '6', icon: '', t: 'Kukua na AI', d: 'Tumia AI tools, maelezo ya bidhaa, ushauri wa bei, machapisho ya mitandao ya kijamii.' },
           ].map(s => (
             <div key={s.n} style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', border: '1px solid #E8ECF4', boxShadow: '0 2px 12px rgba(13,27,62,0.04)' }}>

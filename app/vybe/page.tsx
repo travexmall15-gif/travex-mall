@@ -83,7 +83,7 @@ export default function VybePage() {
       if (err) throw err
       setPosts(data || [])
     } catch {
-      setError("Could not load posts.")
+      setError(t('vybe.couldNotLoad'))
     } finally {
       setLoading(false)
     }

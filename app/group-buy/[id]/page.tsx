@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from '@/hooks/useTranslation'
 import { use, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
@@ -14,7 +15,9 @@ type Group = {
 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString()
 
-export default function GroupDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function GroupDetailPage({
+  params }: { params: Promise<{ id: string }> }) {
+  const { t } = useTranslation()
   const { id }       = use(params)
   const [group, setGroup]   = useState<Group | null>(null)
   const [members, setMembers] = useState<any[]>([])
@@ -33,10 +36,10 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
   }, [id])
 
   async function joinGroup() {
-    if (!name.trim() || !phone.trim()) { setError('Enter your name and phone'); return }
+    if (!name.trim() || !phone.trim()) { setError(t('groupBuy.joinTitle')); return }
     setJoining(true); setError('')
     const already = members.find(m => m.phone === phone.trim())
-    if (already) { setError('You already joined this group!'); setJoining(false); return }
+    if (already) { setError(t('groupBuy.alreadyJoined')); setJoining(false); return }
     await sb.from('group_order_members').insert({ group_id: id, name: name.trim(), phone: phone.trim() })
     const newCount = (group?.current_members || 0) + 1
     await sb.from('group_orders').update({ current_members: newCount }).eq('id', id)

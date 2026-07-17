@@ -17,14 +17,14 @@ type ShopResult = {
   source: 'business' | 'campus'
 }
 
-const NAV_ICONS = [
-  { href: '/home',        Icon: Home,          label: 'Home'        },
-  { href: '/market',      Icon: Store,         label: 'Business'    },
-  { href: '/campus',      Icon: GraduationCap, label: 'Campus'      },
-  { href: '/vybe',        Icon: MessageCircle, label: 'Social Vybe' },
-  { href: '/flash-deals', Icon: Zap,           label: 'Flash Deals' },
-  { href: '/group-buy',   Icon: Users,         label: 'Group Buy'   },
-  { href: '/move',        Icon: Truck,         label: 'Move'        },
+const NAV_ICON_DATA = [
+  { href: '/home',        Icon: Home,          labelKey: 'nav.homeLabel'       },
+  { href: '/market',      Icon: Store,         labelKey: 'nav.businessLabel'   },
+  { href: '/campus',      Icon: GraduationCap, labelKey: 'nav.campusLabel'     },
+  { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
+  { href: '/flash-deals', Icon: Zap,           labelKey: 'nav.flashDealsLabel' },
+  { href: '/group-buy',   Icon: Users,         labelKey: 'nav.groupBuyLabel'   },
+  { href: '/move',        Icon: Truck,         labelKey: 'nav.moveLabel'       },
 ]
 
 export function SiteNav() {
@@ -293,13 +293,13 @@ export function SiteNav() {
         borderTop: '1px solid #F1F5F9',
         padding: '0 5%',
       }}>
-        {NAV_ICONS.map(({ href, Icon, label }) => {
+        {NAV_ICON_DATA.map(({ href, Icon, labelKey }) => {
           const active = isActive(href)
           return (
             <Link
               key={href}
               href={href}
-              title={label}
+              title={t(labelKey)}
               style={{
                 flex: 1,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',

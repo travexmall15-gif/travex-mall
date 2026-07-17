@@ -192,10 +192,10 @@ export default function UniversityPage({
           <div className="text-center py-20">
             <Store size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
             <h3 className="text-xl font-bold mb-2" style={{ color: '#0D1B3E', fontFamily: "'Playfair Display',serif" }}>
-              {stores.length === 0 ? 'No Shops Yet' : 'No shops match your search'}
+              {stores.length === 0 ? 'No Shops Yet' : t('campus.noMatching')}
             </h3>
             <p className="text-gray-500 text-sm mb-4">
-              {stores.length === 0 ? 'Be the first student seller at this university!' : 'Try a different search.'}
+              {stores.length === 0 ? 'Be the first student seller at this university!' : t('campus.trySearch')}
             </p>
             {stores.length === 0 && (
               <Link href="/campus-apply"
