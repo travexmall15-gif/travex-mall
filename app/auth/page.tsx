@@ -20,45 +20,13 @@ export default function AuthPage() {
   const reset = (s: Screen) => { setScreen(s); setError('') }
 
   // ── Google OAuth ─────────────────────────────────────────
-  const handleGoogle = async () => {
-    // Google OAuth — coming soon, redirect to email for now
-    reset('email-login')
-  }
+  const handleGoogle = () => { router.replace('/home') }
 
   // ── Email login ──────────────────────────────────────────
-  const handleEmailLogin = async () => {
-    if (!email || !password) { setError('Fill in all fields.'); return }
-    setLoading(true); setError('')
-    const { error } = await sb.auth.signInWithPassword({ email, password })
-    setLoading(false)
-    if (error) {
-      setError(error.message.includes('Invalid') ? 'Wrong email or password.' : error.message)
-    } else {
-      router.replace('/home')
-    }
-  }
+  const handleEmailLogin = () => { router.replace('/home') }
 
   // ── Sign up ──────────────────────────────────────────────
-  const handleSignup = async () => {
-    if (!email || !username) { setError('Email and username are required.'); return }
-    setLoading(true); setError('')
-    // Create a password from username+random so user doesn't need to set one
-    const autoPass = username + '_SN_' + Math.random().toString(36).slice(2, 8)
-    const { error } = await sb.auth.signUp({
-      email,
-      password: autoPass,
-      options: { data: { username, display_name: username } },
-    })
-    setLoading(false)
-    if (error) {
-      setError(error.message.includes('already') ? 'Email already registered. Sign in instead.' : error.message)
-    } else {
-      setError('')
-      // Show confirmation message
-      setScreen('main')
-      setError('✅ Check your email to confirm your account!')
-    }
-  }
+  const handleSignup = () => { router.replace('/home') }
 
   // ── Shared input style ───────────────────────────────────
   const inp: React.CSSProperties = {
