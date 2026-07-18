@@ -248,7 +248,7 @@ const ARIA = (() => {
         return `🏛️ TAX ESTIMATE (Tanzania):\n\nRevenue: ${fmt(revenue)}\n\nVAT (18%) — applicable ukizidi TZS 100M/yr:\n${revenue * 12 >= 100000000 ? fmt(vat) : 'Bado chini ya threshold'}\n\nIncome Tax (30% ya profit):\n${fmt(profit * 0.30)}\n\nWithholding Tax (5% kwenye services):\nAngalia aina ya bidhaa\n\n⚠️ DISCLAIMER: Hizi ni estimates tu. Wasiliana na TRA au accountant kwa ushauri rasmi.`
 
       case 'TOP_EXPENSES':
-        return `💸 TOP EXPENSES ANALYSIS:\n\nKulingana na rekodi zako:\n${expenses > 0 ? `Total Expenses: ${fmt(expenses)}\n\nCategories zinazoweza kufanywa:\n• Stock/Inventory — punguza kwa kununua bulk\n• Transport — tumia Travex Move kwa bei nzuri\n• Communication — pata business data bundle\n• Marketing — tumia free platforms (Vybe, WhatsApp)\n\nTip: Angalia Accounting > Expenses kwa breakdown kamili.` : 'Bado hujasajili expenses yoyote. Nenda Accounting > Record ukisajili.'}`
+        return `💸 TOP EXPENSES ANALYSIS:\n\nKulingana na rekodi zako:\n${expenses > 0 ? `Total Expenses: ${fmt(expenses)}\n\nCategories zinazoweza kufanywa:\n• Stock/Inventory — punguza kwa kununua bulk\n• Transport — tumia ShopNekt Move kwa bei nzuri\n• Communication — pata business data bundle\n• Marketing — tumia free platforms (Vybe, WhatsApp)\n\nTip: Angalia Accounting > Expenses kwa breakdown kamili.` : 'Bado hujasajili expenses yoyote. Nenda Accounting > Record ukisajili.'}`
 
       case 'RISK_ANALYSIS':
         const risks = []

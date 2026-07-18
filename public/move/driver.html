@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Driver Registration & Dashboard — Travex Move</title>
+<title>Driver Registration & Dashboard — ShopNekt Move</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -157,7 +157,7 @@ input:checked + .toggle-slider:before{transform:translateX(20px)}
 <div id="tab-content-register">
   <div class="reg-wrap">
     <div class="reg-header">
-      <h1 class="reg-h1">Join Travex Move</h1>
+      <h1 class="reg-h1">Join ShopNekt Move</h1>
       <p class="reg-sub">Register as a driver, pay your monthly subscription and start receiving delivery requests from sellers across Tanzania.</p>
     </div>
 
@@ -420,7 +420,7 @@ async function registerDriver(){
       localStorage.setItem("move_driver",JSON.stringify(data));
       currentDriver=data;
       setTimeout(()=>{
-        window.open(`https://wa.me/255651919915?text=${encodeURIComponent(`Hello Travex Move!\n\nI have registered as a driver.\n\nName: ${name}\nPhone: ${phone}\nVehicle: ${ICONS[selectedVehicle]} ${selectedVehicle}\nReg: ${reg}\nPlan: TZS ${PRICES[selectedVehicle].toLocaleString()}/month\n\nPlease activate my account.`)}`,"_blank");
+        window.open(`https://wa.me/255651919915?text=${encodeURIComponent(`Hello ShopNekt Move!\n\nI have registered as a driver.\n\nName: ${name}\nPhone: ${phone}\nVehicle: ${ICONS[selectedVehicle]} ${selectedVehicle}\nReg: ${reg}\nPlan: TZS ${PRICES[selectedVehicle].toLocaleString()}/month\n\nPlease activate my account.`)}`,"_blank");
         showTab("dashboard",document.getElementById("tab-dashboard"));
         document.getElementById("tab-dashboard").style.display="inline-block";
       },2000);

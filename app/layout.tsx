@@ -6,7 +6,7 @@ import { LangProvider } from '@/lib/lang-context'
 import Script from 'next/script'
 import './globals.css'
 
-const SITE_URL = 'https://travex-mall.vercel.app'
+const SITE_URL = 'https://shopnekt.vercel.app'
 const SITE_NAME = 'ShopNekt'
 
 export const viewport: Viewport = {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: 'ShopNekt, Tanzania\'s Digital Marketplace',
     template: '%s | ShopNekt',
   },
-  description: 'ShopNekt is Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying, and more. Shop online in Tanzania today.',
+  description: 'ShopNekt (formerly Travex Mall) is Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying, and more. Shop online in Tanzania today.',
   keywords: [
     'ShopNekt','Travex','Tanzania marketplace','online marketplace Tanzania',
     'buy online Tanzania','sell online Tanzania','digital marketplace Tanzania',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     title: 'ShopNekt, Tanzania\'s Digital Marketplace',
-    description: 'Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania. Business Market, Campus Market, Social Vybe, Flash Deals and more.',
+    description: 'ShopNekt (formerly Travex Mall) — Tanzania\'s digital marketplace. Business Market, Campus Market, Social Vybe, Flash Deals and Group Buy. Powered by QNEX360.',
     images: [
       {
         url: `${SITE_URL}/og-image.png`,
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ShopNekt, Tanzania\'s Digital Marketplace',
-    description: 'Tanzania\'s leading digital commerce platform. Buy and sell across Tanzania.',
+    description: 'ShopNekt (formerly Travex Mall) — Tanzania\'s digital marketplace by QNEX360.',
     images: [`${SITE_URL}/og-image.png`],
     creator: '@travexmall',
   },
@@ -109,7 +109,7 @@ const jsonLd = {
       name: 'QNEX360',
       url: SITE_URL,
       logo: `${SITE_URL}/icon-512.png`,
-      description: 'Tanzanian technology company building Africa\'s first integrated AI-powered digital commerce ecosystem for SMEs.',
+      description: 'QNEX360 — Parent company of ShopNekt (formerly Travex Mall). Building Africa\'s AI-powered digital commerce ecosystem.',
       foundingDate: '2025',
       address: {
         '@type': 'PostalAddress',
@@ -133,7 +133,7 @@ const jsonLd = {
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
       name: 'ShopNekt',
-      description: 'Tanzania\'s leading digital marketplace. Buy and sell online across Tanzania.',
+      description: 'ShopNekt (formerly Travex Mall) — Tanzania\'s digital marketplace. Powered by QNEX360.',
       publisher: { '@id': `${SITE_URL}/#organization` },
       potentialAction: {
         '@type': 'SearchAction',
@@ -150,7 +150,7 @@ const jsonLd = {
       '@id': `${SITE_URL}/#store`,
       name: 'ShopNekt',
       url: SITE_URL,
-      description: 'Tanzania\'s digital marketplace with Business Market, Campus Market, Social Vybe, Flash Deals and Group Buy features.',
+      description: 'ShopNekt — Business Market, Campus Market, Social Vybe, Flash Deals and Group Buy. Formerly Travex Mall. By QNEX360.',
       areaServed: {
         '@type': 'Country',
         name: 'Tanzania',

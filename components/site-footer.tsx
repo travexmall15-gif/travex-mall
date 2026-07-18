@@ -21,8 +21,8 @@ export function SiteFooter() {
           flexWrap: 'wrap', justifyContent: 'center',
         }}>
           {[
-            { label: 'Travex Move',    href: '/move/index.html' },
-            { label: 'Travex Stay',    href: '#'                },
+            { label: 'ShopNekt Move',    href: '/move/index.html' },
+            { label: 'ShopNekt Stay',    href: '#'                },
             { label: 'QNEX360', href: 'https://travex-mall.vercel.app' },
           ].map(({ label, href }) => (
             <Link key={label} href={href} style={{

@@ -5,7 +5,7 @@ const KEY = 'travex_lang'
 
 // ═══════════════════════════════════════════════════════
 // COMPLETE TRANSLATION DICTIONARY — EN → SW
-// ShopNekt, Travex Move, Travex Stay, QNEX360
+// ShopNekt, ShopNekt Move, ShopNekt Stay, QNEX360
 // Group stay unchanged in both languages
 // ═══════════════════════════════════════════════════════
 const DICT = {
@@ -217,7 +217,7 @@ const DICT = {
   'Thank you! The seller will contact you via WhatsApp to confirm.': 'Asante! Muuzaji atawasiliana nawe kupitia WhatsApp kuthibitisha.',
   'Processing...': 'Inashughulikia...',
   // ── FOOTER ───────────────────────────────────────────
-  // NOTE: ShopNekt, Travex Stay, Travex Move, QNEX360 stay same
+  // NOTE: ShopNekt, ShopNekt Stay, ShopNekt Move, QNEX360 stay same
   // ── DASHBOARD ────────────────────────────────────────
   'Overview': 'Muhtasari',
   'Orders': 'Maagizo',

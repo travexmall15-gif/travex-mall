@@ -48,13 +48,13 @@ export default function HomePage() {
             { href: '/campus',      label: t('nav.campus'),      sub: t('home.campus5uni')    },
             { href: '/vybe',        label: 'Social Vybe',        sub: t('home.community')     },
             { href: '/flash-deals', label: t('nav.flashDeals'),  sub: t('home.limitedOffers') },
-            { href: '/move',        label: 'Travex Move',        sub: t('home.logistics')     },
+            { href: '/move',        label: 'ShopNekt Move',        sub: t('home.logistics')     },
             { href: '/group-buy',   label: t('nav.groupBuy'),    sub: t('home.saveTogether')  },
             { href: '/market',      label: t('nav.business'),    sub: t('home.business500')   },
             { href: '/campus',      label: t('nav.campus'),      sub: t('home.campus5uni')    },
             { href: '/vybe',        label: 'Social Vybe',        sub: t('home.community')     },
             { href: '/flash-deals', label: t('nav.flashDeals'),  sub: t('home.limitedOffers') },
-            { href: '/move',        label: 'Travex Move',        sub: t('home.logistics')     },
+            { href: '/move',        label: 'ShopNekt Move',        sub: t('home.logistics')     },
           ].map((chip, i) => (
             <a key={i} href={chip.href} style={{ display: 'inline-flex', flexDirection: 'column', gap: '2px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 18px', textDecoration: 'none', flexShrink: 0, transition: 'background 0.2s', whiteSpace: 'nowrap' as const }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.16)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.4)' }}

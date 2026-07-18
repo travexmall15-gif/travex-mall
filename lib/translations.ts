@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════
 // SHOPNEKT — Complete Translation Dictionary
-// EN ↔ SW   |   ShopNekt, Travex Stay, Travex Move = UNCHANGED
+// EN ↔ SW   |   ShopNekt, ShopNekt Stay, ShopNekt Move = UNCHANGED
 // ═══════════════════════════════════════════════════════════
 
 export type Lang = 'en' | 'sw'

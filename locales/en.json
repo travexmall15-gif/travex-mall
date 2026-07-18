@@ -23,7 +23,7 @@
     "vybeLabel": "Social Vybe",
     "flashDealsLabel": "Flash Deals",
     "groupBuyLabel": "Group Buy",
-    "moveLabel": "Travex Move"
+    "moveLabel": "ShopNekt Move"
   },
   "home": {
     "headline1": "Africa's",
@@ -603,8 +603,8 @@
   "footer": {
     "poweredBy": "Powered by AI. Built for Africa.",
     "allRights": "All rights reserved.",
-    "move": "Travex Move",
-    "stay": "Travex Stay",
+    "move": "ShopNekt Move",
+    "stay": "",
     "digital": "QNEX360"
   },
   "common": {

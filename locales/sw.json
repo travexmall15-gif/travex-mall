@@ -23,7 +23,7 @@
     "vybeLabel": "Social Vybe",
     "flashDealsLabel": "Ofa za Haraka",
     "groupBuyLabel": "Nunua Pamoja",
-    "moveLabel": "Travex Move"
+    "moveLabel": "ShopNekt Move"
   },
   "home": {
     "headline1": "Afrika",
@@ -603,8 +603,8 @@
   "footer": {
     "poweredBy": "Inayotumiwa na AI. Imejengwa kwa Afrika.",
     "allRights": "Haki zote zimehifadhiwa.",
-    "move": "Travex Move",
-    "stay": "Travex Stay",
+    "move": "ShopNekt Move",
+    "stay": "",
     "digital": "QNEX360"
   },
   "common": {
