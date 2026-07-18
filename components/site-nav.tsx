@@ -1,23 +1,4 @@
-'use client
-
-  // ── Auth: load user + listen for changes ─────────────────
-  useEffect(() => {
-    sb.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        const m = session.user.user_metadata
-        setUser({ email: session.user.email || '', name: m?.display_name || m?.username || session.user.email?.split('@')[0] || 'User' })
-      }
-    })
-    const { data: { subscription } } = sb.auth.onAuthStateChange((_e, session) => {
-      if (session?.user) {
-        const m = session.user.user_metadata
-        setUser({ email: session.user.email || '', name: m?.display_name || m?.username || 'User' })
-      } else {
-        setUser(null)
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [])'
+'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -58,6 +39,22 @@ export function SiteNav() {
   const [showDrop,  setShowDrop]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [user, setUser] = useState<{email:string, name:string} | null>(null)
+  useEffect(() => {
+    sb.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const m = session.user.user_metadata
+        setUser({ email: session.user.email || '', name: m?.display_name || m?.username || session.user.email?.split('@')[0] || 'User' })
+      }
+    })
+    const { data: { subscription } } = sb.auth.onAuthStateChange((_evt, session) => {
+      if (session?.user) {
+        const m = session.user.user_metadata
+        setUser({ email: session.user.email || '', name: m?.display_name || m?.username || 'User' })
+      } else { setUser(null) }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
 
   const searchRef = useRef<HTMLDivElement>(null)
   const menuRef   = useRef<HTMLDivElement>(null)
