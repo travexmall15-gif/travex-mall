@@ -115,11 +115,19 @@ export function SiteNav() {
       }}>
 
         {/* Brand */}
-        <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
+        <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
           <img
-            src="/shopnekt-logo.png" alt="ShopNekt"
-            style={{ height: '44px', width: 'auto', objectFit: 'contain' }}
+            src="/icon-192.png" alt="ShopNekt"
+            style={{ height: '40px', width: '40px', objectFit: 'contain', borderRadius: '10px' }}
           />
+          <span style={{
+            fontFamily: "'Inter',sans-serif",
+            fontSize: '1.15rem', fontWeight: 900,
+            color: '#0D1B3E', letterSpacing: '-0.04em',
+            lineHeight: 1,
+          }}>
+            Shop<span style={{ color: '#F97316' }}>Nekt</span>
+          </span>
         </Link>
 
         {/* Push search + menu to right */}
