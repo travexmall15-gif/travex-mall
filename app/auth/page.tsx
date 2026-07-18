@@ -21,12 +21,8 @@ export default function AuthPage() {
 
   // ── Google OAuth ─────────────────────────────────────────
   const handleGoogle = async () => {
-    setLoading(true)
-    const { error } = await sb.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/home` },
-    })
-    if (error) { setError(error.message); setLoading(false) }
+    // Google OAuth — coming soon, redirect to email for now
+    reset('email-login')
   }
 
   // ── Email login ──────────────────────────────────────────
