@@ -58,7 +58,7 @@ export function SiteFooter() {
           color: 'rgba(255,255,255,0.22)',
           margin: 0, textAlign: 'center',
         }}>
-          © {new Date().getFullYear()} QNEX360 · Dar es Salaam, Tanzania
+          © {new Date().getFullYear()} QNEX360 · Global, Tanzania
         </p>
       </div>
     </footer>

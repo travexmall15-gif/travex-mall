@@ -1,7 +1,7 @@
 {
   "name": "ShopNekt",
   "short_name": "ShopNekt",
-  "description": "Tanzania's Digital Commerce Super App \u2014 Shop, Sell, Move",
+  "description": "ShopNekt \u2014 The Global Digital Marketplace. Shop More. Save More. Live Better.",
   "start_url": "/",
   "display": "standalone",
   "display_override": [

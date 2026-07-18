@@ -12,16 +12,16 @@
     "openShop": "Open Shop"
   },
   "home": {
-    "badge": "Africa's #1 AI-Powered Marketplace, Tanzania 2026",
+    "badge": "The Global AI-Powered Marketplace",
     "headline1": "Africa's",
     "headline2": "Intelligent",
     "headline3": "Digital Marketplace",
-    "subtext": "Create your online store in minutes. Sell across Tanzania. Grow with AI-powered intelligence, built for every African entrepreneur.",
+    "subtext": "Create your online store in minutes. Sell Globally. Grow with AI-powered intelligence, built for every entrepreneur.",
     "enterBtn": "Open Your Shop",
     "stats": {
       "activeShops": "Active Shops",
       "regions": "Regions",
-      "smes": "Tanzania SMEs"
+      "smes": "SMEs Worldwide"
     },
     "chips": {
       "groupBuy": "Group Buy",
@@ -38,7 +38,7 @@
     "markets": {
       "title": "Three Markets, One Platform",
       "businessTitle": "Business Market",
-      "businessDesc": "Shop across Tanzania's verified sellers",
+      "businessDesc": "Shop globally's verified sellers",
       "campusTitle": "Campus Market",
       "campusDesc": "Buy and sell within your university",
       "vybeTitle": "Social Vybe Feed",
@@ -91,7 +91,7 @@
   },
   "vybe": {
     "headline": "Social Vybe",
-    "subtext": "Products, offers and updates from verified Tanzania sellers",
+    "subtext": "Products, offers and updates from verified sellers",
     "liveFeed": "Live Feed",
     "allPosts": "All Posts",
     "photos": "Photos",
@@ -163,7 +163,7 @@
     "badge": "Flash Deals",
     "headline1": "Flash.",
     "headline2": "Deals.",
-    "subtext": "Limited time offers from verified Tanzania sellers.",
+    "subtext": "Limited time offers from verified sellers.",
     "endsIn": "Ends in",
     "shopNow": "Shop Now",
     "noDeals": "No Active Flash Deals",

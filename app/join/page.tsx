@@ -92,7 +92,7 @@ export default function JoinPage() {
             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(201,168,76,0.3)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: '#C9A84C', marginBottom: 12 }}> BIASHARA MARKET</div>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
-              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali Tanzania. Uza bidhaa na huduma zako kwa wateja nchi nzima.</p>
+              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -128,7 +128,7 @@ export default function JoinPage() {
             <div style={{ background: 'rgba(59,130,246,0.08)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(59,130,246,0.25)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: '#93C5FD', marginBottom: 12 }}> CAMPUS MARKET</div>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>{t('join.campusTitle2')}</h3>
-              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wanafunzi wa vyuo Tanzania. Uza bidhaa kwa wanafunzi wenzako. Salama, rahisi na ya bei nafuu.</p>
+              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wanafunzi wa vyuo duniani kote. Uza bidhaa kwa wanafunzi wenzako. Salama, rahisi na ya bei nafuu.</p>
 
               <div style={{ background: 'rgba(59,130,246,0.12)', borderRadius: 12, padding: '1.25rem', border: '1px solid rgba(59,130,246,0.2)', marginBottom: '1.5rem' }}>
                 <div style={{ fontWeight: 800, color: '#93C5FD', marginBottom: 8 }}>{t('join.campusPlanLabel')}</div>
@@ -167,7 +167,7 @@ export default function JoinPage() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
           {[
-            { icon: '', t: 'AI Business Assistant', d: 'Andika maelezo ya bidhaa kwa Kiswahili na Kiingereza. Pata ushauri wa bei kwa soko la Tanzania.' },
+            { icon: '', t: 'AI Business Assistant', d: 'Andika maelezo ya bidhaa kwa Kiswahili na Kiingereza. Pata ushauri wa bei kwa soko la kimataifa.' },
             { icon: '', t: 'AI Accountant', d: 'Taarifa ya biashara yako otomatiki. Gawanya matumizi, angalia faida, pata ushauri wa fedha.' },
             { icon: '', t: 'Marketing Manager', d: 'Tengeneza machapisho ya Instagram, WhatsApp na Facebook papo hapo. Share kwa wateja wako.' },
             { icon: '', t: 'Business Coach', d: 'Zungumza na AI Coach wako binafsi. Uliza swali lolote la biashara, upate jibu mara moja.' },

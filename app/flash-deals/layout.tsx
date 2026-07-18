@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Flash Deals, Best Deals in Tanzania | ShopNekt",
-  description: "Find the best flash deals from verified sellers across Tanzania on ShopNekt.",
+  title: "Flash Deals, Best Deals Worldwide | ShopNekt",
+  description: "Find the best flash deals from verified sellers worldwide on ShopNekt.",
   openGraph: {
-    title: "Flash Deals, Best Deals in Tanzania | ShopNekt",
-    description: "Find the best flash deals from verified sellers across Tanzania on ShopNekt.",
+    title: "Flash Deals, Best Deals Worldwide | ShopNekt",
+    description: "Find the best flash deals from verified sellers worldwide on ShopNekt.",
     url: "https://travex-mall.vercel.app/flash-deals",
     siteName: "ShopNekt",
     type: "website",

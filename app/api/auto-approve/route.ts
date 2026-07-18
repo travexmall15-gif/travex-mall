@@ -11,7 +11,7 @@ const GEMINI_KEY = process.env.GEMINI_API_KEY || ''
 async function scoreApplication(app: any) {
   if (!GEMINI_KEY) return { score: 50, decision: 'flagged', reasons: ['No AI key'] }
 
-  const prompt = `You are reviewing a Tanzanian marketplace application.
+  const prompt = `You are reviewing a ShopNekt marketplace application.
 Evaluate this seller application and give a score 0-100.
 
 Shop: ${app.shop_name || app.store_name || app.business_description}
@@ -21,7 +21,7 @@ Category: ${app.shop_category || app.business_category}
 Description: ${app.shop_desc || app.business_description}
 
 Score criteria:
-- Phone is valid Tanzania number (starts 255 or 0, 10-12 digits): +30
+- Phone is valid (10-12 digits): +30
 - Has description (>20 chars): +20
 - Has category: +15
 - Name looks real (not test/demo): +20

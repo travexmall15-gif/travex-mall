@@ -24,11 +24,11 @@ const MARKET_PRICES: Record<string,{min:number,max:number,avg:number}> = {
 }
 
 const HASHTAGS: Record<string,string[]> = {
-  'Fashion & Clothing': ['#MtaaniStyle','#TanzaniaFashion','#DarFashion','#AfricanFashion'],
-  'Electronics':        ['#TechTanzania','#GadgetsDar','#ElectronicsTZ','#TechAfrica'],
-  'Food & Groceries':   ['#ChakularTanzania','#FoodDar','#TanzaniaFood','#FreshFood'],
-  'Beauty & Health':    ['#BeautyTZ','#SkincareTanzania','#NaturalBeauty','#GlowTZ'],
-  'General':            ['#ShopNekt','#ShopOnlineTZ','#NunuaOnline','#TanzaniaShopping'],
+  'Fashion & Clothing': ['#MtaaniStyle','#GlobalFashion','#DarFashion','#AfricanFashion'],
+  'Electronics':        ['#TechGlobal','#GadgetsDar','#ElectronicsTZ','#TechAfrica'],
+  'Food & Groceries':   ['#FoodLovers','#FoodOnline','#GlobalFood','#FreshFood'],
+  'Beauty & Health':    ['#BeautyTZ','#SkincareGlobal','#NaturalBeauty','#GlowTZ'],
+  'General':            ['#ShopNekt','#ShopOnlineGlobal','#NunuaOnline','#GlobalShopping'],
 }
 
 const EXPENSE_CATS = [
@@ -54,10 +54,10 @@ function extractAmt(line: string): number {
 }
 
 function descTool(name:string,category:string,features:string,price:number,shopName:string){
-  const tags = [...(HASHTAGS[category]||HASHTAGS['General']),'#ShopNekt','#ShopOnlineTZ'].join(' ')
+  const tags = [...(HASHTAGS[category]||HASHTAGS['General']),'#ShopNekt','#ShopOnlineGlobal'].join(' ')
   const ps = price ? fmt(price) : ''
-  const eng = `${name} — now available at ${shopName} on ShopNekt! ${features?`Key features: ${features}. `:''}${ps?`Priced at only ${ps}. `:''}Order now and get fast delivery across Tanzania. Quality guaranteed by a verified ShopNekt seller.`
-  const swa = `${name} — inapatikana sasa hivi katika ${shopName} kwenye ShopNekt! ${features?`Maelezo: ${features}. `:''}${ps?`Bei yake ni ${ps} tu. `:''}Agiza sasa na kupata delivery haraka Tanzania nzima.`
+  const eng = `${name} — now available at ${shopName} on ShopNekt! ${features?`Key features: ${features}. `:''}${ps?`Priced at only ${ps}. `:''}Order now and get fast delivery worldwide. Quality guaranteed by a verified ShopNekt seller.`
+  const swa = `${name} — inapatikana sasa hivi katika ${shopName} kwenye ShopNekt! ${features?`Maelezo: ${features}. `:''}${ps?`Bei yake ni ${ps} tu. `:''}Agiza sasa na kupata delivery haraka duniani kote.`
   return `ENGLISH VERSION:\n${eng}\n\nSWAHILI VERSION:\n${swa}\n\nHASHTAGS:\n${tags}`
 }
 
@@ -72,7 +72,7 @@ function priceTool(name:string,price:number,cond:string,category:string){
     else if (price>mx) note = `Your price ${fmt(price)} is ABOVE market maximum. Consider reducing.`
     else if (price<av*0.85) note = `Your price ${fmt(price)} is BELOW average — great for attracting buyers quickly.`
     else if (price>av*1.15) note = `Your price ${fmt(price)} is ABOVE average. Highlight premium quality to justify it.`
-    else note = `Your price ${fmt(price)} is in the SWEET SPOT for Tanzania market!`
+    else note = `Your price ${fmt(price)} is in the SWEET SPOT for global market!`
   }
   return `PRICE ADVICE: ${name} (${cond})\nCategory: ${category}\n\nTANZANIA MARKET RANGE:\n• Min: ${fmt(mn)}\n• Avg: ${fmt(av)}\n• Max: ${fmt(mx)}\n\n${note?`ASSESSMENT:\n${note}\n\n`:''}RECOMMENDED: ${fmt(av)}\n\nSTRATEGY:\n• Fast sales: ${fmt(Math.round(av*0.88))}\n• Normal: ${fmt(av)}\n• Premium: ${fmt(Math.round(av*1.12))}\n\nTIP: Run Flash Deals on weekends and month-end for best results.`
 }
@@ -99,7 +99,7 @@ function socialTool(product:string,platform:string,tone:string,offer:string,shop
   const posts:Record<string,string>={
     instagram: tone==='urgent/FOMO'?`LIMITED TIME — Do not miss out!\n\n${product}${offerLine}\n\nOrder before stock runs out!\n${link}\n\n${tags}`:tone==='professional'?`Introducing: ${product}\n\nAvailable at ${shopName}.${offer?`\n${offer}`:' Premium quality at competitive prices.'}\n\nShop: ${link}\n\n${tags}`:`${product} ipo dukani!\n\n${shopName} inakupa ${product} bora zaidi.${offerLine}\n\nAgiza hapa: ${link}\n\n${tags}`,
     whatsapp: `*${product}*${offerLine?`\n${offerLine}`:''}\n\nAvailable at ${shopName}\nOrder: ${link}`,
-    facebook: `Habari friends!\n\n${shopName} tunakupa ${product}!${offerLine?`\n\n${offerLine}`:''} Quality guaranteed. Fast delivery across Tanzania.\n\nShop here: ${link}\n\nShare with friends!`,
+    facebook: `Habari friends!\n\n${shopName} tunakupa ${product}!${offerLine?`\n\n${offerLine}`:''} Quality guaranteed. Fast delivery worldwide.\n\nShop here: ${link}\n\nShare with friends!`,
   }
   if(platform==='all') return `INSTAGRAM:\n${posts.instagram}\n\n---\n\nWHATSAPP:\n${posts.whatsapp}\n\n---\n\nFACEBOOK:\n${posts.facebook}`
   return posts[platform]||posts.instagram

@@ -5,11 +5,11 @@ import { SiteNav } from '@/components/site-nav'
 import { ArrowRight, GraduationCap, Store, CheckCircle } from 'lucide-react'
 
 export const metadata = {
-  title: "Open Your Store, Sell Online in Tanzania | ShopNekt",
-  description: "Open your online store on ShopNekt. Reach customers across Tanzania with Business Market or Campus Market. Start selling today.",
+  title: "Open Your Store, Sell Online — Anywhere | ShopNekt",
+  description: "Open your online store on ShopNekt. Reach customers everywhere with Business Market or Campus Market. Start selling today.",
   openGraph: {
-    title: "Open Your Store, Sell Online in Tanzania | ShopNekt",
-    description: "Open your online store on ShopNekt. Reach customers across Tanzania with Business Market or Campus Market. Start selling today.",
+    title: "Open Your Store, Sell Online — Anywhere | ShopNekt",
+    description: "Open your online store on ShopNekt. Reach customers everywhere with Business Market or Campus Market. Start selling today.",
     url: "https://travex-mall.vercel.app/open-store",
     siteName: "ShopNekt",
     locale: "en_TZ",
@@ -17,8 +17,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Open Your Store, Sell Online in Tanzania | ShopNekt",
-    description: "Open your online store on ShopNekt. Reach customers across Tanzania with Business Market or Campus Market. Start selling today.",
+    title: "Open Your Store, Sell Online — Anywhere | ShopNekt",
+    description: "Open your online store on ShopNekt. Reach customers everywhere with Business Market or Campus Market. Start selling today.",
   },
   alternates: { canonical: "https://travex-mall.vercel.app/open-store" },
 }
@@ -111,7 +111,7 @@ export default function OpenStorePage() {
               Business Market
             </h2>
             <p style={{ fontSize: '0.86rem', color: '#64748B', lineHeight: 1.70, marginBottom: '1.5rem', flexGrow: 1 }}>
-              For entrepreneurs, SMEs, retailers and wholesalers. Reach customers across Tanzania's 5 major regions. 500 slots total.
+              For entrepreneurs, SMEs, retailers and wholesalers. Reach customers everywhere's 5 major regions. 500 slots total.
             </p>
 
             {/* Features */}

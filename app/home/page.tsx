@@ -90,7 +90,7 @@ export default function HomePage() {
               </div>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.6rem', lineHeight: 1.15 }}>{t('home.marketBadge')}</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: 1.72, marginBottom: '1.5rem' }}>
-                Tanzania&apos;s unified marketplace for entrepreneurs, retailers and SMEs. 500 verified shops across 5 major regions.
+                A unified global marketplace for entrepreneurs, retailers and SMEs. Verified shops across multiple regions.
               </p>
               <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid #F1F5F9' }}>
                 {[['500', 'Slots'], ['5', 'Regions'], ['TZS 25K', 'Basic/mo']].map(([v, l]) => (
@@ -123,7 +123,7 @@ export default function HomePage() {
               </div>
               <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>{t('home.campusBadge')}</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.50)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
-                Tanzania&apos;s dedicated campus marketplace. Sell directly to fellow students, verified sellers, 5 campuses, 60 slots each.
+                A dedicated campus marketplace. Sell directly to fellow students. Verified sellers, multiple campuses.
               </p>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 {[['5', 'Universities'], ['300', 'Total Slots'], ['TZS 10K', 'Per Month']].map(([v, l]) => (
@@ -156,7 +156,7 @@ export default function HomePage() {
               </div>
               <h3 style={{ position: 'relative', zIndex: 1, fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 900, color: '#fff', marginBottom: '0.6rem', lineHeight: 1.15 }}>Social Vybe</h3>
               <p style={{ position: 'relative', zIndex: 1, fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
-                Tanzania&apos;s first business social network. Post products, grow your brand and connect with buyers across Tanzania.
+                Tanzania&apos;s first business social network. Post products, grow your brand and connect with buyers globally.
               </p>
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '1.5rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                 {[['POST', 'Daily Content'], ['LIKE', 'Real Engagement'], ['SELL', 'Direct to Buyers']].map(([v, l]) => (

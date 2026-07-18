@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Campus Market, Student Marketplace Tanzania | ShopNekt",
-  description: "Tanzania's dedicated campus marketplace for university students across 5 universities.",
+  title: "Campus Market, Student Marketplace | ShopNekt",
+  description: "A dedicated campus marketplace for university students across 5 universities.",
   openGraph: {
-    title: "Campus Market, Student Marketplace Tanzania | ShopNekt",
-    description: "Tanzania's dedicated campus marketplace for university students across 5 universities.",
+    title: "Campus Market, Student Marketplace | ShopNekt",
+    description: "A dedicated campus marketplace for university students across 5 universities.",
     url: "https://travex-mall.vercel.app/campus",
     siteName: "ShopNekt",
     type: "website",
