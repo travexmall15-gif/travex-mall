@@ -23,7 +23,13 @@
     "vybeLabel": "Social Vybe",
     "flashDealsLabel": "Ofa za Haraka",
     "groupBuyLabel": "Nunua Pamoja",
-    "moveLabel": "ShopNekt Move"
+    "moveLabel": "ShopNekt Move",
+    "loginDashboard": "Ingia Dashibodi",
+    "settings": "Mipangilio",
+    "privacy": "Sera ya Faragha",
+    "logOut": "Toka",
+    "signIn": "Ingia",
+    "profile": "Wasifu"
   },
   "home": {
     "headline1": "Afrika",

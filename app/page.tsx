@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { sb } from '@/lib/supabase'
 
 export default function SplashPage() {
   const router = useRouter()
@@ -8,7 +9,15 @@ export default function SplashPage() {
 
   useEffect(() => {
     const t1 = setTimeout(() => setFade(true), 1800)
-    const t2 = setTimeout(() => router.replace('/home'), 2400)
+    const t2 = setTimeout(async () => {
+      // Check if user is already logged in
+      const { data: { session } } = await sb.auth.getSession()
+      if (session) {
+        router.replace('/home')   // returning user → go straight in
+      } else {
+        router.replace('/auth')   // new user → sign up/login
+      }
+    }, 2400)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [router])
 
@@ -22,57 +31,19 @@ export default function SplashPage() {
         .sp-line { height:2px;background:linear-gradient(90deg,transparent,#F97316,transparent);animation:lineGrow 0.5s ease 1.1s both;margin:10px 0 }
       `}</style>
 
-      {/* App Icon */}
       <img src="/icon-192.png" alt="ShopNekt" className="sp-logo" />
 
-      {/* shopNekt wordmark — small letters */}
       <div style={{ animation:'fadeUp 0.5s ease 0.5s both' }}>
-        <span style={{
-          fontFamily:"'Inter',sans-serif",
-          fontSize:'clamp(1.6rem,5vw,3rem)',
-          fontWeight: 800,
-          letterSpacing: '-0.03em',
-          color: '#fff',
-        }}>
-          shop
-        </span>
-        <span style={{
-          fontFamily:"'Inter',sans-serif",
-          fontSize:'clamp(1.6rem,5vw,3rem)',
-          fontWeight: 800,
-          letterSpacing: '-0.03em',
-          color: '#F97316',
-        }}>
-          nekt
-        </span>
+        <span style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.6rem,5vw,3rem)', fontWeight:800, letterSpacing:'-0.03em', color:'#fff' }}>shop</span>
+        <span style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.6rem,5vw,3rem)', fontWeight:800, letterSpacing:'-0.03em', color:'#F97316' }}>nekt</span>
       </div>
 
-      {/* Line */}
       <div className="sp-line" />
 
-      {/* Tagline */}
-      <p style={{
-        fontFamily:"'Inter',sans-serif",
-        fontSize:'clamp(0.48rem,1.1vw,0.65rem)',
-        color:'rgba(255,255,255,0.32)',
-        letterSpacing:'0.22em',
-        textTransform:'uppercase',
-        margin: '0',
-        animation:'fadeUp 0.5s ease 1.25s both',
-      }}>
+      <p style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(0.48rem,1.1vw,0.65rem)', color:'rgba(255,255,255,0.32)', letterSpacing:'0.22em', textTransform:'uppercase', margin:'0', animation:'fadeUp 0.5s ease 1.25s both' }}>
         shop more. save more. live better.
       </p>
-
-      {/* from QNEX360 */}
-      <p style={{
-        fontFamily:"'Inter',sans-serif",
-        fontSize:'clamp(0.45rem,0.9vw,0.58rem)',
-        color:'rgba(255,255,255,0.18)',
-        letterSpacing:'0.20em',
-        textTransform:'uppercase',
-        marginTop:'8px',
-        animation:'fadeUp 0.5s ease 1.45s both',
-      }}>
+      <p style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(0.45rem,0.9vw,0.58rem)', color:'rgba(255,255,255,0.18)', letterSpacing:'0.20em', textTransform:'uppercase', marginTop:'8px', animation:'fadeUp 0.5s ease 1.45s both' }}>
         from qnex360
       </p>
     </div>

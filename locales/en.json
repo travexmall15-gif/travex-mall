@@ -23,7 +23,13 @@
     "vybeLabel": "Social Vybe",
     "flashDealsLabel": "Flash Deals",
     "groupBuyLabel": "Group Buy",
-    "moveLabel": "ShopNekt Move"
+    "moveLabel": "ShopNekt Move",
+    "loginDashboard": "Login to Dashboard",
+    "settings": "Settings",
+    "privacy": "Privacy Policy",
+    "logOut": "Log Out",
+    "signIn": "Sign In",
+    "profile": "Profile"
   },
   "home": {
     "headline1": "Africa's",

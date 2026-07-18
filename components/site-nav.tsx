@@ -1,4 +1,23 @@
-'use client'
+'use client
+
+  // ── Auth: load user + listen for changes ─────────────────
+  useEffect(() => {
+    sb.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const m = session.user.user_metadata
+        setUser({ email: session.user.email || '', name: m?.display_name || m?.username || session.user.email?.split('@')[0] || 'User' })
+      }
+    })
+    const { data: { subscription } } = sb.auth.onAuthStateChange((_e, session) => {
+      if (session?.user) {
+        const m = session.user.user_metadata
+        setUser({ email: session.user.email || '', name: m?.display_name || m?.username || 'User' })
+      } else {
+        setUser(null)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [])'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -38,6 +57,7 @@ export function SiteNav() {
   const [searching, setSearching] = useState(false)
   const [showDrop,  setShowDrop]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
+  const [user, setUser] = useState<{email:string, name:string} | null>(null)
 
   const searchRef = useRef<HTMLDivElement>(null)
   const menuRef   = useRef<HTMLDivElement>(null)
@@ -227,62 +247,104 @@ export function SiteNav() {
             }
           </button>
 
-          {/* Dropdown menu */}
+          {/* ── Dropdown Menu ── */}
           {menuOpen && (
             <div style={{
               position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-              background: '#fff', borderRadius: '16px',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
-              border: '1px solid #E2E8F0', minWidth: '210px',
+              background: '#fff', borderRadius: '18px',
+              boxShadow: '0 12px 40px rgba(0,0,0,0.16)',
+              border: '1px solid #E2E8F0', minWidth: '230px',
               overflow: 'hidden', zIndex: 400,
             }}>
-              <Link
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '13px 16px', textDecoration: 'none', color: '#0F172A', transition: 'background .15s' }}
-                onMouseOver={e => (e.currentTarget.style.background = '#F8FAFF')}
-                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
-              >
-                <Lock size={16} color="#0D1B3E" />
-                <span style={{ fontSize: '13px', fontWeight: 600 }}>{t('nav.login')}</span>
-              </Link>
-              <Link
-                href="/open-store"
-                onClick={() => setMenuOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '13px 16px', textDecoration: 'none', color: '#0F172A', transition: 'background .15s' }}
-                onMouseOver={e => (e.currentTarget.style.background = '#F8FAFF')}
-                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
-              >
-                <ShoppingBag size={16} color="#C9A84C" />
-                <span style={{ fontSize: '13px', fontWeight: 600 }}>{t('nav.openYourShop')}</span>
-              </Link>
 
-              <div style={{ height: '1px', background: '#F1F5F9', margin: '4px 0' }} />
-
-              <div style={{ padding: '10px 16px 14px' }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <Globe size={11} /> {t('nav.language')}
+              {/* ── Profile section ── */}
+              <div style={{ padding: '14px 16px 12px', background: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#F97316', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fff' }}>
+                    {user ? user.name.slice(0,2).toUpperCase() : '?'}
+                  </span>
                 </div>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  {(['en', 'sw'] as const).map(code => (
-                    <button
-                      key={code}
-                      onClick={() => { setLang(code); setMenuOpen(false) }}
-                      style={{
-                        flex: 1, padding: '7px 6px',
-                        background: lang === code ? '#0D1B3E' : '#F1F5F9',
-                        color: lang === code ? '#C9A84C' : '#64748B',
-                        border: 'none', borderRadius: '8px',
-                        fontSize: '11px', fontWeight: 700,
-                        cursor: 'pointer', fontFamily: "'Inter', sans-serif",
-                        transition: 'all 0.2s',
-                      }}
-                    >
-                      {code === 'en' ? '🇬🇧 English' : '🇹🇿 Kiswahili'}
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {user ? user.name : 'Guest'}
+                  </div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {user ? user.email : 'Not signed in'}
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Menu items ── */}
+              {[
+                { icon: '🏪', label: t('nav.openYourShop'),    href: '/open-store',                 color: '#C9A84C' },
+                { icon: '📊', label: t('nav.loginDashboard'),  href: '/dashboard/login.html',        color: '#3B82F6' },
+              ].map((item, i) => (
+                <a key={i} href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '11px 16px', textDecoration: 'none', color: '#0F172A', transition: 'background .15s', cursor: 'pointer' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#F8FAFF'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                  <span style={{ fontSize: '0.95rem' }}>{item.icon}</span>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#0F172A' }}>{item.label}</span>
+                </a>
+              ))}
+
+              <div style={{ height: '1px', background: '#F1F5F9', margin: '2px 0' }} />
+
+              {/* ── Language ── */}
+              <div style={{ padding: '10px 16px' }}>
+                <div style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: '7px', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Globe size={10} /> {t('nav.language')}
+                </div>
+                <div style={{ display: 'flex', gap: '5px' }}>
+                  {(['en','sw'] as const).map(code => (
+                    <button key={code} onClick={() => { setLang(code); setMenuOpen(false) }}
+                      style={{ flex:1, padding:'6px', background: lang===code ? '#0D1B3E' : '#F1F5F9', color: lang===code ? '#C9A84C' : '#64748B', border:'none', borderRadius:'8px', fontSize:'0.7rem', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all 0.2s' }}>
+                      {code === 'en' ? '🇬🇧 EN' : '🇹🇿 SW'}
                     </button>
                   ))}
                 </div>
               </div>
+
+              <div style={{ height: '1px', background: '#F1F5F9', margin: '2px 0' }} />
+
+              {/* ── Settings + Privacy ── */}
+              {[
+                { icon: '⚙️', label: 'Settings',       href: '/settings' },
+                { icon: '🔒', label: 'Privacy Policy',  href: '/privacy'  },
+              ].map((item, i) => (
+                <a key={i} href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 16px', textDecoration: 'none', color: '#0F172A', transition: 'background .15s' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#F8FAFF'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                  <span style={{ fontSize: '0.9rem' }}>{item.icon}</span>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748B' }}>{item.label}</span>
+                </a>
+              ))}
+
+              <div style={{ height: '1px', background: '#F1F5F9', margin: '2px 0' }} />
+
+              {/* ── Sign In / Log Out ── */}
+              {user ? (
+                <button
+                  onClick={async () => { await sb.auth.signOut(); setUser(null); setMenuOpen(false); router.push('/auth') }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:'12px', padding:'11px 16px', background:'none', border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' as const }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#FFF1F2'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                  <span style={{ fontSize: '0.9rem' }}>🚪</span>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#EF4444' }}>Log Out</span>
+                </button>
+              ) : (
+                <a href="/auth"
+                  onClick={() => setMenuOpen(false)}
+                  style={{ display:'flex', alignItems:'center', gap:'12px', padding:'11px 16px', textDecoration:'none', transition:'background .15s' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#F0FDF4'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                  <span style={{ fontSize: '0.9rem' }}>👤</span>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#059669' }}>Sign In</span>
+                </a>
+              )}
             </div>
           )}
         </div>
