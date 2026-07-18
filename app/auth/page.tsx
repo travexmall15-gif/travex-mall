@@ -20,7 +20,14 @@ export default function AuthPage() {
   const reset = (s: Screen) => { setScreen(s); setError('') }
 
   // ── Google OAuth ─────────────────────────────────────────
-  const handleGoogle = () => { router.replace('/home') }
+  const handleGoogle = async () => {
+    setLoading(true)
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/home` },
+    })
+    if (error) { setError(error.message); setLoading(false) }
+  }
 
   // ── Email login ──────────────────────────────────────────
   const handleEmailLogin = () => { router.replace('/home') }
