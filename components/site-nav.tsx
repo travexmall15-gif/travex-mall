@@ -118,11 +118,11 @@ export function SiteNav() {
         <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
           <img
             src="/icon-192.png" alt="ShopNekt"
-            style={{ height: '40px', width: '40px', objectFit: 'contain', borderRadius: '10px' }}
+            style={{ height: '52px', width: '52px', objectFit: 'contain', borderRadius: '12px' }}
           />
           <span style={{
             fontFamily: "'Inter',sans-serif",
-            fontSize: '1.15rem', fontWeight: 900,
+            fontSize: '1.35rem', fontWeight: 900,
             color: '#0D1B3E', letterSpacing: '-0.04em',
             lineHeight: 1,
           }}>
