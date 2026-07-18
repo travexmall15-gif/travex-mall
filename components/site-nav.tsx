@@ -117,7 +117,7 @@ export function SiteNav() {
         {/* Brand */}
         <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
           <img
-            src="/icon-192.png" alt="Travex"
+            src="/icon-192.png" alt="ShopNekt"
             style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }}
           />
           <span style={{

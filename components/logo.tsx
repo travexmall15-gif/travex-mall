@@ -16,7 +16,7 @@ export function Logo({
         className,
       )}
     >
-      <span className={onDark ? 'text-white' : 'text-navy'}>TRAVEX</span>{' '}
+      <span className={onDark ? 'text-white' : 'text-navy'}>SHOP</span>{' '}
       <span className="text-gold">MALL</span>
     </Link>
   )

@@ -2,7 +2,7 @@
 export function InstallButtons() {
   return (
     <div style={{ display:'flex',gap:'12px',flexWrap:'wrap',justifyContent:'center',alignItems:'center' }}>
-      <a href="/Travex_Mall.apk" download="Travex_Mall.apk" style={{ display:'inline-flex',alignItems:'center',gap:'10px',background:'#0D1B3E',color:'#fff',border:'none',borderRadius:'14px',padding:'13px 22px',textDecoration:'none',fontFamily:'inherit',boxShadow:'0 4px 14px rgba(13,27,62,0.25)',minWidth:'165px' }}>
+      <a href="/ShopNekt.apk" download="ShopNekt.apk" style={{ display:'inline-flex',alignItems:'center',gap:'10px',background:'#0D1B3E',color:'#fff',border:'none',borderRadius:'14px',padding:'13px 22px',textDecoration:'none',fontFamily:'inherit',boxShadow:'0 4px 14px rgba(13,27,62,0.25)',minWidth:'165px' }}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M3.18 23.82a2 2 0 0 1-.95-1.74V1.92A2 2 0 0 1 3.18.18l11.9 11.82L3.18 23.82zm14.45-8.05L5.01 22.15l10.3-10.22 2.32 3.84zM20.5 11.3l-2.72-1.57-2.6 2.27 2.6 2.28 2.74-1.58a1.05 1.05 0 0 0 0-1.4zM5.01 1.85l12.62 6.38-2.32 3.84L5.01 1.85z"/></svg>
         <div style={{ textAlign:'left' }}>
           <div style={{ fontSize:'9px',color:'rgba(255,255,255,0.55)',lineHeight:1,marginBottom:'2px' }}>DIRECT DOWNLOAD</div>

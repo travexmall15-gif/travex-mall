@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* 
-   TRAVEX CAMPUS DASHBOARD, Premium Design
+   SHOPNEKT CAMPUS DASHBOARD, Premium Design
     */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -508,7 +508,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 <!--  AUTH OVERLAY  -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card">
-    <div class="auth-logo">TRAVEX <span>CAMPUS</span></div>
+    <div class="auth-logo">SHOPNEKT <span>CAMPUS</span></div>
     <div class="auth-sub">Seller Dashboard  Sign in to continue</div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuth('login')">Sign In</button>
@@ -560,7 +560,7 @@ textarea.form-input{resize:vertical;min-height:80px}
   <header class="topbar">
     <div class="topbar-left">
       <button class="mob-menu-btn" onclick="toggleMobileSidebar()"><span></span><span></span><span></span></button>
-      <div class="topbar-logo">TRAVEX <span>CAMPUS</span></div>
+      <div class="topbar-logo">SHOPNEKT <span>CAMPUS</span></div>
       <div class="topbar-divider"></div>
       <div class="topbar-page">Dashboard / <span class="page-name" id="topbarPage">Overview</span></div>
     </div>
@@ -989,7 +989,7 @@ textarea.form-input{resize:vertical;min-height:80px}
     <div class="panel" id="panel-subscription">
       <div class="page-header">
         <div class="page-title">Subscription</div>
-        <div class="page-sub">Manage your Travex Campus plan.</div>
+        <div class="page-sub">Manage your ShopNekt Campus plan.</div>
       </div>
       <div class="sub-plans">
         <div class="sub-plan current">
@@ -1106,7 +1106,7 @@ let currentAI     = 'care';
 let accPeriod     = 'daily';
 
 //  RATE LIMIT 
-const LIMIT_KEY = 'travex_ai_limit';
+const LIMIT_KEY = 'shopnekt_ai_limit';
 function getRateLimit(){ try{ const d=JSON.parse(localStorage.getItem(LIMIT_KEY)||'{}'); const t=new Date().toDateString(); if(d.date!==t) return {date:t,count:0}; return d; }catch{ return {date:new Date().toDateString(),count:0}; } }
 function incrementRateLimit(){ const d=getRateLimit(); d.count++; localStorage.setItem(LIMIT_KEY,JSON.stringify(d)); }
 function checkRateLimit(){ const d=getRateLimit(); return d.count < 30; }
@@ -1497,10 +1497,10 @@ async function loadMyVybePosts(){
 
 //  AI 
 const systemPrompts = {
-  care: "You are a friendly Customer Care AI for a student seller on Travex Campus Mall, Tanzania. Help with handling orders, responding to customers, improving service, and WhatsApp communication. Be warm, practical and concise. Respond in English or Swahili based on what the seller uses.",
-  marketing: "You are a Marketing AI for a student seller on Travex Campus Mall, Tanzania. Help create campaigns, Social Vybe posts, WhatsApp messages, pricing strategies and ways to attract campus customers. Be creative and practical.",
-  accounting: "You are an Accounting AI for a student seller on Travex Campus Mall, Tanzania. Help with pricing, profit calculations, revenue tracking and financial planning. Use TZS for all amounts. Be practical and encouraging.",
-  advisor: "You are a Business Advisor AI for student entrepreneurs on Travex Campus Mall, Tanzania. Help with growth strategy, business registration, scaling, investment and long-term planning. Be motivating and practical."
+  care: "You are a friendly Customer Care AI for a student seller on ShopNekt Campus Mall, Tanzania. Help with handling orders, responding to customers, improving service, and WhatsApp communication. Be warm, practical and concise. Respond in English or Swahili based on what the seller uses.",
+  marketing: "You are a Marketing AI for a student seller on ShopNekt Campus Mall, Tanzania. Help create campaigns, Social Vybe posts, WhatsApp messages, pricing strategies and ways to attract campus customers. Be creative and practical.",
+  accounting: "You are an Accounting AI for a student seller on ShopNekt Campus Mall, Tanzania. Help with pricing, profit calculations, revenue tracking and financial planning. Use TZS for all amounts. Be practical and encouraging.",
+  advisor: "You are a Business Advisor AI for student entrepreneurs on ShopNekt Campus Mall, Tanzania. Help with growth strategy, business registration, scaling, investment and long-term planning. Be motivating and practical."
 };
 
 function switchAI(type){
@@ -1639,8 +1639,8 @@ function previewProductImage(input){ const f=input.files[0]; if(!f) return; cons
   if(session) await init();
 })();
 </script>
-<style id="travex-polish-v2">
-/*  TRAVEX POLISH V2, FinTrack design layer (visual only, no logic)  */
+<style id="shopnekt-polish-v2">
+/*  SHOPNEKT POLISH V2, FinTrack design layer (visual only, no logic)  */
 *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{background:linear-gradient(160deg,#060C20 0%,#070E25 50%,#0A1B3C 100%)!important}
 body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:-1;

@@ -28,7 +28,7 @@ const HASHTAGS: Record<string,string[]> = {
   'Electronics':        ['#TechTanzania','#GadgetsDar','#ElectronicsTZ','#TechAfrica'],
   'Food & Groceries':   ['#ChakularTanzania','#FoodDar','#TanzaniaFood','#FreshFood'],
   'Beauty & Health':    ['#BeautyTZ','#SkincareTanzania','#NaturalBeauty','#GlowTZ'],
-  'General':            ['#TravexMall','#ShopOnlineTZ','#NunuaOnline','#TanzaniaShopping'],
+  'General':            ['#ShopNekt','#ShopOnlineTZ','#NunuaOnline','#TanzaniaShopping'],
 }
 
 const EXPENSE_CATS = [
@@ -54,9 +54,9 @@ function extractAmt(line: string): number {
 }
 
 function descTool(name:string,category:string,features:string,price:number,shopName:string){
-  const tags = [...(HASHTAGS[category]||HASHTAGS['General']),'#TravexMall','#ShopOnlineTZ'].join(' ')
+  const tags = [...(HASHTAGS[category]||HASHTAGS['General']),'#ShopNekt','#ShopOnlineTZ'].join(' ')
   const ps = price ? fmt(price) : ''
-  const eng = `${name} — now available at ${shopName} on ShopNekt! ${features?`Key features: ${features}. `:''}${ps?`Priced at only ${ps}. `:''}Order now and get fast delivery across Tanzania. Quality guaranteed by a verified Travex seller.`
+  const eng = `${name} — now available at ${shopName} on ShopNekt! ${features?`Key features: ${features}. `:''}${ps?`Priced at only ${ps}. `:''}Order now and get fast delivery across Tanzania. Quality guaranteed by a verified ShopNekt seller.`
   const swa = `${name} — inapatikana sasa hivi katika ${shopName} kwenye ShopNekt! ${features?`Maelezo: ${features}. `:''}${ps?`Bei yake ni ${ps} tu. `:''}Agiza sasa na kupata delivery haraka Tanzania nzima.`
   return `ENGLISH VERSION:\n${eng}\n\nSWAHILI VERSION:\n${swa}\n\nHASHTAGS:\n${tags}`
 }
@@ -93,7 +93,7 @@ function reportTool(rev:number,exp:number,ords:number,prods:number,days:number,t
 }
 
 function socialTool(product:string,platform:string,tone:string,offer:string,shopName:string,storeId:string){
-  const link=`https://travex-mall.vercel.app/store/${storeId}`
+  const link=`https://shopnekt.vercel.app/store/${storeId}`
   const offerLine=offer?`\nOFFER: ${offer}`:''
   const tags=(HASHTAGS['General']).join(' ')
   const posts:Record<string,string>={
@@ -106,7 +106,7 @@ function socialTool(product:string,platform:string,tone:string,offer:string,shop
 }
 
 function waTool(type:string,detail:string,shopName:string,storeId:string){
-  const link=`https://travex-mall.vercel.app/store/${storeId}`
+  const link=`https://shopnekt.vercel.app/store/${storeId}`
   const t:Record<string,string>={
     'new product announcement':`*NEW ARRIVAL at ${shopName}!*\n\n${detail||'Check our latest products.'}\n\nOrder here: ${link}\nFast delivery. Quality guaranteed!`,
     'thank you after purchase':`*Thank you for your order!*\n\nDear customer, thank you for choosing ${shopName}. Your order${detail?` (${detail})`:''} is being processed. We appreciate your support!\n\nVisit again: ${link}`,
@@ -139,7 +139,7 @@ function coachTool(q:string,ctx:any){
   const rev=ctx?.revenue||0
   if(/(price|bei|ngapi|cost|cheap|expensive)/i.test(q)) return `For ${name}, start by setting your price 10% below competitors to attract first buyers. Once you have 5+ reviews, raise prices. Use the Smart Price Advisor for specific product pricing.`
   if(/(customer|wateja|buyers|attract|draw)/i.test(q)) return `To attract more customers: (1) Post daily on Social Vybe. (2) Create a Flash Deal for your top product. (3) Ask satisfied customers to share your store link. Consistency is key — daily posters get 3x more visitors.`
-  if(/(marketing|tangazo|promote|advertise)/i.test(q)) return `Best free marketing on Travex: (1) WhatsApp Status — post products every morning. (2) Social Vybe — post with good photos. (3) Flash Deals — run weekend promos. (4) Group Buy — reward buyers who bring friends.`
+  if(/(marketing|tangazo|promote|advertise)/i.test(q)) return `Best free marketing on ShopNekt: (1) WhatsApp Status — post products every morning. (2) Social Vybe — post with good photos. (3) Flash Deals — run weekend promos. (4) Group Buy — reward buyers who bring friends.`
   if(/(profit|faida|earn|pesa|money)/i.test(q)) return `To increase profit: (1) Reduce transport and M-Pesa charges. (2) Buy stock in bulk for better supplier prices. (3) Focus on your top 3 best-selling products. Target 20-30% margin per product. Your revenue so far: ${fmt(rev)}.`
   if(/(delivery|logistics|transport|shipping)/i.test(q)) return `Use ShopNekt Move for deliveries — connects you with verified bodaboda riders and drivers. Set clear timeframes (Dar: same day, other regions: 1-3 days). Customers appreciate predictability.`
   if(/(review|rating|feedback)/i.test(q)) return `To get good reviews: (1) Deliver on time. (2) Package products properly. (3) Follow up after delivery. (4) Resolve complaints immediately. Good reviews improve your search ranking on ShopNekt.`

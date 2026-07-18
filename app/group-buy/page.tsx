@@ -103,7 +103,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
             textTransform: 'uppercase' as const,
             whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
-            {group.shop_name || 'Travex Seller'}
+            {group.shop_name || 'ShopNekt Seller'}
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>

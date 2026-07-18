@@ -141,7 +141,7 @@ const HASHTAGS_BY_CAT = {
   'Food & Groceries': '#ChakularTZ #FoodDar #TanzaniaFood #FreshFoodTZ #NjaaIpite #MealsofTanzania',
   'Beauty & Health': '#BeautyTZ #SkincareTanzania #NaturalBeautyTZ #GlowTZ #BeautyDar #HealthTZ',
   'Agriculture': '#KilimoTZ #AgriTanzania #FarmFreshTZ #AgricultureTZ #KilimoKijani',
-  'General': '#TravexMall #ShopOnlineTZ #NunuaOnline #TanzaniaShopping #DarShops #OnlineShoppingTZ',
+  'General': '#ShopNekt #ShopOnlineTZ #NunuaOnline #TanzaniaShopping #DarShops #OnlineShoppingTZ',
 }
 
 async function init() {
@@ -166,7 +166,7 @@ async function init() {
     <div style="display:flex;flex-wrap:wrap;gap:6px">
       ${tags.split(' ').map(t=>`<span style="background:var(--info-bg);color:var(--info-text);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer" onclick="copyTag('${t}')">${t}</span>`).join('')}
     </div>
-    <p style="font-size:11px;color:var(--text-muted);margin-top:12px">+ Universal: #TravexMall #ShopOnlineTZ #NunuaOnline #Tanzania</p>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:12px">+ Universal: #ShopNekt #ShopOnlineTZ #NunuaOnline #Tanzania</p>
   `
   document.getElementById('loadingOverlay').style.display = 'none'
 }

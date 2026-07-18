@@ -17,7 +17,7 @@
   });
 
   // Global install function
-  window.installTravexApp = function() {
+  window.installShopNektApp = function() {
     if (_prompt) {
       _prompt.prompt();
       _prompt.userChoice.then(function() { _prompt = null; });

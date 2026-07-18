@@ -31,7 +31,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* ── Travex Brand Colors ── */
+  /* ── ShopNekt Brand Colors ── */
   --color-navy: #0D1B3E;
   --color-blue: #1B3A6B;
   --color-gold: #C9A84C;
@@ -120,7 +120,7 @@
 }
 
 /* ════════════════════════════════════════
-   TRAVEX POLISH V2, FinTrack design layer
+   SHOPNEKT POLISH V2, FinTrack design layer
    Applies to ALL Next.js pages globally
    ════════════════════════════════════════ */
 

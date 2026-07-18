@@ -209,7 +209,7 @@ const ARIA = (() => {
 
       case 'GEN_INSTAGRAM':
         const instaProduct = products[0]
-        return `📸 INSTAGRAM POST:\n\n${instaProduct ? `✨ ${instaProduct.name} — ${fmt(instaProduct.price)}\n\nQuality yako. Bei yako. Delivered hadi kwako!\n\nAgiza sasa: ${storeLink}\n\n#TanzaniaFashion #${(shopName||'').replace(/\s+/g,'')} #TravexMall #ShopOnlineTZ #NunuaOnline` : `✨ ${shopName} — Tanzania's trusted seller!\n\nQuality products. Fast delivery. Verified seller.\n\nShop now: ${storeLink}\n\n#TanzaniaShops #TravexMall #ShopOnlineTZ`}`
+        return `📸 INSTAGRAM POST:\n\n${instaProduct ? `✨ ${instaProduct.name} — ${fmt(instaProduct.price)}\n\nQuality yako. Bei yako. Delivered hadi kwako!\n\nAgiza sasa: ${storeLink}\n\n#TanzaniaFashion #${(shopName||'').replace(/\s+/g,'')} #ShopNekt #ShopOnlineTZ #NunuaOnline` : `✨ ${shopName} — Tanzania's trusted seller!\n\nQuality products. Fast delivery. Verified seller.\n\nShop now: ${storeLink}\n\n#TanzaniaShops #ShopNekt #ShopOnlineTZ`}`
 
       case 'GEN_WHATSAPP':
         return `📱 WHATSAPP STATUS:\n\n*${shopName}* - Tunakuletea bidhaa bora!\n\n${products.slice(0,3).map(p=>`✅ ${p.name} — ${fmt(p.price)}`).join('\n')}\n\nAgiza hapa: ${storeLink}\nDelivery Tanzania nzima!`

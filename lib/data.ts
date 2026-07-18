@@ -24,7 +24,7 @@ export const shopCategories = [
   'Fashion', 'Food', 'Electronics', 'Beauty', 'Books', 'Services',
 ] as const
 
-// ── TRAVEX BUSINESS MARKET — One unified market ──
+// ── SHOPNEKT BUSINESS MARKET — One unified market ──
 export type MarketPlan = 'premium' | 'basic'
 
 export const MARKET_TOTAL_SLOTS   = 500

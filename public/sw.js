@@ -1,7 +1,7 @@
 // ShopNekt — Service Worker
 // Strategy: Network-first with cache fallback for reliability + faster repeat loads
 
-const CACHE_NAME = 'travex-mall-v1';
+const CACHE_NAME = 'shopnekt-v1';
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',

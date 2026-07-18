@@ -112,7 +112,7 @@ const DICT = {
   'of': 'kati ya',
   'filled': 'zimejazwa',
   // ── SOCIAL VYBE ──────────────────────────────────────
-  'Travex Social Vybe': 'Travex Social Vybe',
+  'Social Vybe': 'Social Vybe',
   'Products, offers and updates from verified Tanzania sellers': 'Bidhaa, ofa na habari kutoka wauzaji waliohakikishwa Tanzania',
   'Live Feed': 'Mpasho wa Moja kwa Moja',
   'All Posts': 'Machapisho Yote',
@@ -155,7 +155,7 @@ const DICT = {
   'h left': 'masaa yaliyobaki',
   'd left': 'siku zilizobaki',
   'OFF': 'PUNGUZO',
-  'Travex Seller': 'Muuzaji wa Travex',
+  'ShopNekt Seller': 'Muuzaji wa ShopNekt',
   // ── FLASH DEALS ──────────────────────────────────────
   'Flash. Deals.': 'Ofa. Za Haraka.',
   'Limited time offers from verified Tanzania sellers.': 'Ofa za muda mfupi kutoka wauzaji waliohakikishwa Tanzania.',
@@ -199,7 +199,7 @@ const DICT = {
   'The seller will respond to you shortly.': 'Muuzaji atajibu hivi karibuni.',
   'Close': 'Funga',
   'Cancel': 'Acha',
-  'Travex Customer Care': 'Huduma kwa Wateja wa Travex',
+  'ShopNekt Customer Care': 'Huduma kwa Wateja wa ShopNekt',
   'AI Assistant': 'Msaidizi wa AI',
   'Aria': 'Aria',
   'Ask about products, prices or order...': 'Uliza kuhusu bidhaa, bei au agizo...',
@@ -368,7 +368,7 @@ function shouldSkip(el) {
   if (el.classList) {
     for (const c of SKIP_CLASSES) if (el.classList.contains(c)) return true
   }
-  // Don't translate Travex brand names context
+  // Don't translate ShopNekt brand names context
   return false
 }
 
@@ -466,7 +466,7 @@ function watchDOM(lang) {
 }
 
 // ── Init ─────────────────────────────────────────────────────
-window.TravexLang = { get: getLang, toggle, apply }
+window.ShopNektLang = { get: getLang, toggle, apply }
 
 function init() {
   const lang = getLang()

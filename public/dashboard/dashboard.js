@@ -1,6 +1,6 @@
 // 
 // SHOPNEKT, Shared Dashboard JS
-// Modelled after Travex Finance pattern
+// Modelled after ShopNekt Finance pattern
 // 
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co';

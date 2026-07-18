@@ -1,7 +1,7 @@
 {
   "name": "ShopNekt",
   "short_name": "ShopNekt",
-  "description": "Africa's Intelligent Digital Marketplace \u2014 Tanzania",
+  "description": "Africa's Intelligent Digital Marketplace — Tanzania",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0D1B3E",
@@ -61,7 +61,7 @@
     {
       "name": "Campus Market",
       "short_name": "Campus",
-      "description": "Travex Uni-Student Market",
+      "description": "ShopNekt Campus Market",
       "url": "/campus.html",
       "icons": [
         {

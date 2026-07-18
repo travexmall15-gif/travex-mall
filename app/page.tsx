@@ -24,7 +24,7 @@ export default function SplashPage() {
         .sp-line { height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);animation:lineGrow 0.5s ease forwards;margin:12px 0 }
         .sp-sub  { font-family:'Inter',sans-serif;font-size:clamp(0.5rem,1.2vw,0.75rem);color:#C9A84C;letter-spacing:0.3em;text-transform:uppercase;opacity:0;animation:subFade 0.5s ease forwards;margin:0 }
       `}</style>
-      <img src="/icon-192.png" alt="Travex" className="sp-logo" />
+      <img src="/icon-192.png" alt="ShopNekt" className="sp-logo" />
       <div>
         {['T','R','A','V','E','X'].map((l,i) => (
           <span key={i} className="sp-letter" style={{ animationDelay:`${0.5+i*0.09}s` }}>{l}</span>
