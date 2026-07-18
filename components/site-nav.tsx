@@ -118,7 +118,7 @@ export function SiteNav() {
         <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
           <img
             src="/shopnekt-logo.png" alt="ShopNekt"
-            style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+            style={{ height: '44px', width: 'auto', objectFit: 'contain' }}
           />
         </Link>
 

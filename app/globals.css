@@ -508,7 +508,7 @@ img { -webkit-user-drag: none; image-rendering: -webkit-optimize-contrast; }
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
-  border-radius: 8px;
+  border-radius: 14px;
 }
 
 /* Card hover — super app feel */
@@ -591,3 +591,7 @@ a { font-family: 'Inter', system-ui, sans-serif; text-decoration: none; }
 @media (max-width: 768px) {
   body { font-size: 0.9375rem; }
 }
+
+/* ── Soft corner buttons — ShopNekt brand ── */
+a[style*="border-radius: 999px"],
+button { border-radius: 14px !important; }
