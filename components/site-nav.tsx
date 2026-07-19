@@ -216,6 +216,7 @@ export function SiteNav() {
 
               {/* ── Menu items ── */}
               {[
+                { icon: '🏪', label: 'Open Shop',              href: '/open-store'           },
                 { icon: '📊', label: 'Seller Dashboard',       href: '/dashboard/login.html' },
                 { icon: '🛒', label: 'Shopping Preferences',   href: '/settings/shopping'    },
               ].map((item, i) => (
