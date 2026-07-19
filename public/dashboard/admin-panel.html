@@ -159,7 +159,7 @@ tr:hover td{background:#FAFBFF}
     <h2>Welcome Back</h2>
     <p>Sign in to manage ShopNekt marketplace</p>
     <div class="lc-err" id="loginErr"></div>
-    <input type="password" id="loginPw" placeholder="Enter admin password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" autofocus>
+    <input type="password" id="loginPw" placeholder="Enter admin PIN" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" autofocus>
     <button onclick="doLogin()">Sign In →</button>
   </div>
 </div>
@@ -445,23 +445,30 @@ async function doLogin(){
   const pw=document.getElementById('loginPw').value
   const err=document.getElementById('loginErr')
   err.style.display='none'
-  if(!pw){err.textContent='Please enter the admin password';err.style.display='block';return}
-  const {error}=await sb.auth.signInWithPassword({email:'jmaregeri006@gmail.com',password:pw})
-  if(error){err.textContent='Incorrect password';err.style.display='block';return}
-  await checkSession()
+  if(!pw){err.textContent='Enter your admin PIN';err.style.display='block';return}
+  // Admin PIN check
+  const ADMIN_PIN='shopnekt2026'
+  if(pw!==ADMIN_PIN){err.textContent='Incorrect PIN. Try again.';err.style.display='block';return}
+  // Save session
+  sessionStorage.setItem('sn_admin','1')
+  showApp()
 }
 
-async function doLogout(){
-  await sb.auth.signOut();location.reload()
+function doLogout(){
+  sessionStorage.removeItem('sn_admin')
+  location.reload()
 }
 
 async function checkSession(){
-  const {data:{session}}=await sb.auth.getSession()
-  if(session?.user){
-    document.getElementById('loginScreen').style.display='none'
-    document.getElementById('app').classList.add('v')
-    await loadAll()
+  if(sessionStorage.getItem('sn_admin')==='1'){
+    showApp()
   }
+}
+
+function showApp(){
+  document.getElementById('loginScreen').style.display='none'
+  document.getElementById('app').classList.add('v')
+  loadAll()
 }
 
 // ── Load all data ────────────────────────────
