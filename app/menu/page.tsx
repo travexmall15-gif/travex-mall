@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { sb } from '@/lib/supabase'
 import { useLang } from '@/lib/lang-context'
@@ -77,7 +76,7 @@ export default function MenuPage() {
       {/* ── Header ── */}
       <div style={{ background:'linear-gradient(160deg,#0D1B3E,#1B3A8A)', padding:'52px 20px 24px', position:'sticky', top:0, zIndex:10 }}>
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
-          <button onClick={() => router.back()}
+          <button onClick={() => { if (window.history.length > 1) { router.back() } else { window.location.href = '/home' } }}
             style={{ background:'rgba(255,255,255,0.10)', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#fff' }}>
             <ArrowLeft size={17} color="#fff" />
           </button>
@@ -89,7 +88,7 @@ export default function MenuPage() {
         </div>
 
         {/* Profile section */}
-        <Link href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'rgba(255,255,255,0.08)', borderRadius:18, padding:'14px 16px', border:'1px solid rgba(255,255,255,0.12)' }}>
+        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'rgba(255,255,255,0.08)', borderRadius:18, padding:'14px 16px', border:'1px solid rgba(255,255,255,0.12)' }}>
           <div style={{ width:52, height:52, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', fontSize:'1.1rem', fontWeight:900, color:'#fff' }}>
             {user ? user.name.slice(0,2).toUpperCase() : '?'}
           </div>
@@ -98,7 +97,7 @@ export default function MenuPage() {
             <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.45)', marginTop:2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{user ? user.email : 'Sign in to continue'}</div>
           </div>
           <ChevronRight size={18} color="rgba(255,255,255,0.35)" />
-        </Link>
+        </a>
       </div>
 
       {/* ── Language Toggle ── */}
@@ -124,7 +123,7 @@ export default function MenuPage() {
             </p>
             <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', boxShadow:'0 1px 4px rgba(15,23,42,0.04)' }}>
               {section.items.map((item, i) => (
-                <Link key={i} href={item.href} style={{ textDecoration:'none' }}>
+                <a href={item.href} style={{ textDecoration:'none', display:'block' }}>
                   <div className="menu-item" style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 16px', borderBottom: i < section.items.length-1 ? '1px solid #F1F5F9' : 'none', background:'transparent', transition:'background .15s', cursor:'pointer' }}>
                     <div style={{ width:38, height:38, borderRadius:11, background:`${item.color}15`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                       <item.icon size={18} color={item.color} strokeWidth={1.8} />
@@ -132,7 +131,7 @@ export default function MenuPage() {
                     <span style={{ fontSize:'0.9rem', fontWeight:600, color:'#0F172A', flex:1 }}>{item.label}</span>
                     <ChevronRight size={15} color="#CBD5E1" />
                   </div>
-                </Link>
+                </a>
               ))}
             </div>
           </div>

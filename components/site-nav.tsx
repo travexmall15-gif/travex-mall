@@ -164,12 +164,13 @@ export function SiteNav() {
           <Truck size={16} color="#475569" />
         </Link>
 
-        {/* Menu button — links to /menu page */}
-        <Link href="/menu" style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, textDecoration:'none', transition:'background .2s' }}
+        {/* Menu button — direct navigation to /menu */}
+        <button onClick={() => { window.location.href = '/menu' }}
+          style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'none', cursor:'pointer', transition:'background .2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
           <Menu size={18} color="#475569" />
-        </Link>
+        </button>
       </div>
 
       {/* ── ROW 2: Icon Nav ─── */}
