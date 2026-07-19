@@ -601,22 +601,21 @@ async function acCA(id){
     token_expires_at: expires
   }).eq('id', id);
 
-  const authLink = `https://shopnekt.vercel.app/dashboard/auth.html?token=${token}`;
+  const loginLink = `https://shopnekt.vercel.app/dashboard/login.html`;
   const waMsg = encodeURIComponent(
     `🎉 *Hongera ${a.full_name||a.owner_name}!*\n\n`+
-    `Duka lako *"${sn}"* limeidhinishwa kwenye *ShopNekt*! 🛍️\n`+
-    `Wewe ni duka namba *${shopNum}* kwenye platform yetu!\n\n`+
+    `Duka lako *"${sn}"* limeidhinishwa kwenye *ShopNekt*! 🛍️\n\n`+
     `━━━━━━━━━━━━━━━━━━━━\n`+
-    `🔗 *LINK YA KUINGIA (saa 24):*\n`+
-    `${authLink}\n\n`+
-    `🔑 *PASSWORD YAKO YA KUDUMU:*\n`+
-    `PIN: *${fullPin}*\n`+
-    `Nambari: *${rawPass}*\n\n`+
+    `🔑 *PIN YAKO YA KUINGIA:*\n`+
+    `👉 *${fullPin}*\n\n`+
+    `📲 *Link ya Dashboard:*\n`+
+    `${loginLink}\n\n`+
     `━━━━━━━━━━━━━━━━━━━━\n`+
-    `📲 *Kuingia baadaye (kila wakati):*\n`+
-    `https://shopnekt.vercel.app/dashboard/login.html\n`+
-    `Weka PIN: *${fullPin}*\n\n`+
-    `⚠️ Usishirikishe PIN yako na mtu yeyote.\n`+
+    `📋 *Jinsi ya kuingia:*\n`+
+    `1. Fungua link hapo juu\n`+
+    `2. Weka PIN: *${fullPin}*\n`+
+    `3. Bonyeza "Ingia"\n\n`+
+    `⚠️ PIN yako ni siri. Usimwambie mtu yeyote.\n`+
     `— *ShopNekt by QNEX360* 🌍`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
