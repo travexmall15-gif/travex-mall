@@ -24,7 +24,7 @@ const NAV_ICON_DATA = [
   { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
   { href: '/flash-deals', Icon: Zap,           labelKey: 'nav.flashDealsLabel' },
   { href: '/group-buy',   Icon: Users,         labelKey: 'nav.groupBuyLabel'   },
-  { href: '/move',        Icon: Truck,         labelKey: 'nav.moveLabel'       },
+  { href: '/messages',    Icon: MessageSquare, labelKey: 'nav.messagesLabel'   },
 ]
 
 export function SiteNav() {
@@ -160,6 +160,14 @@ export function SiteNav() {
             ? <Loader2 size={16} color="#64748B" style={{ animation: 'spin .8s linear infinite' }} />
             : <Search size={16} color="#475569" />}
         </button>
+
+        {/* Move / Truck icon */}
+        <Link href="/move"
+          style={{ width: 38, height: 38, borderRadius: '50%', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+          <Truck size={16} color="#475569" />
+        </Link>
 
         {/* Menu button */}
         <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
