@@ -358,3 +358,112 @@ async function trackEvent(storeId, event, productId, source) {
     });
   } catch(e) { /* silent */ }
 }
+
+
+// ══════════════════════════════════════════
+//  360 AI — Seller Dashboard Assistant
+// ══════════════════════════════════════════
+(function(){
+  // Inject CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    #ai360-btn{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);box-shadow:0 6px 20px rgba(13,27,62,0.45);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9999;transition:transform .2s}
+    #ai360-btn:hover{transform:scale(1.1)}
+    #ai360-badge{position:absolute;top:0;right:0;width:16px;height:16px;background:#F97316;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:900;color:#fff}
+    #ai360-win{position:fixed;bottom:84px;right:16px;width:310px;max-height:420px;background:#fff;border-radius:18px;box-shadow:0 16px 48px rgba(13,27,62,0.22);display:none;flex-direction:column;z-index:9998;overflow:hidden;border:1.5px solid #E2E8F0;font-family:'Inter',sans-serif}
+    #ai360-win.open{display:flex}
+    #ai360-hd{background:linear-gradient(135deg,#0D1B3E,#1B3A8A);padding:10px 13px;display:flex;align-items:center;gap:9px;flex-shrink:0}
+    #ai360-hd-icon{width:30px;height:30px;background:rgba(255,255,255,0.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px}
+    #ai360-hd-title{flex:1}
+    #ai360-hd-title b{display:block;font-size:.8rem;font-weight:800;color:#fff}
+    #ai360-hd-title span{font-size:.62rem;color:rgba(255,255,255,0.5)}
+    #ai360-close{background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+    #ai360-msgs{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:7px;background:#F8FAFF}
+    .ai360-msg{max-width:80%;padding:7px 10px;font-size:.78rem;line-height:1.5;border-radius:12px}
+    .ai360-bot{background:#fff;color:#0F172A;border:1px solid #E2E8F0;align-self:flex-start;border-radius:3px 12px 12px 12px}
+    .ai360-user{background:#0D1B3E;color:#fff;align-self:flex-end;border-radius:12px 12px 3px 12px}
+    .ai360-typing{display:flex;gap:4px;padding:7px 10px}
+    .ai360-dot{width:6px;height:6px;border-radius:50%;background:#CBD5E1;animation:ai360bounce .8s ease infinite}
+    .ai360-dot:nth-child(2){animation-delay:.15s}.ai360-dot:nth-child(3){animation-delay:.3s}
+    @keyframes ai360bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    #ai360-inp-row{padding:8px 10px;border-top:1px solid #E2E8F0;display:flex;gap:7px;align-items:center;background:#fff;flex-shrink:0}
+    #ai360-inp{flex:1;padding:7px 11px;border:1.5px solid #E2E8F0;border-radius:10px;font-size:.78rem;font-family:'Inter',sans-serif;outline:none;background:#F8FAFF;color:#0F172A}
+    #ai360-inp:focus{border-color:#0D1B3E}
+    #ai360-send{width:30px;height:30px;border-radius:50%;background:#0D1B3E;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+    #ai360-send:disabled{background:#E2E8F0;cursor:not-allowed}
+  `;
+  document.head.appendChild(style);
+
+  // Inject HTML
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <button id="ai360-btn" onclick="ai360.toggle()">
+      ✨
+      <div id="ai360-badge">AI</div>
+    </button>
+    <div id="ai360-win">
+      <div id="ai360-hd">
+        <div id="ai360-hd-icon">✨</div>
+        <div id="ai360-hd-title"><b>360 AI</b><span>Seller Assistant</span></div>
+        <button id="ai360-close" onclick="ai360.toggle()">✕</button>
+      </div>
+      <div id="ai360-msgs">
+        <div class="ai360-msg ai360-bot">👋 Habari! Mimi ni <b>360 AI</b> — msaidizi wako wa duka.<br><br>Ninaweza kukusaidia na bidhaa, mauzo, bei, na zaidi. Unauliza nini?</div>
+      </div>
+      <div id="ai360-inp-row">
+        <input id="ai360-inp" placeholder="Uliza swali..." onkeydown="if(event.key==='Enter')ai360.send()">
+        <button id="ai360-send" onclick="ai360.send()">➤</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(el);
+
+  // AI Logic
+  window.ai360 = {
+    msgs: [],
+    loading: false,
+    toggle() {
+      document.getElementById('ai360-win').classList.toggle('open');
+    },
+    addMsg(role, text) {
+      const el = document.createElement('div');
+      el.className = 'ai360-msg ' + (role==='bot' ? 'ai360-bot' : 'ai360-user');
+      el.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+      const msgs = document.getElementById('ai360-msgs');
+      msgs.appendChild(el);
+      msgs.scrollTop = msgs.scrollHeight;
+    },
+    async send() {
+      const inp = document.getElementById('ai360-inp');
+      const msg = inp.value.trim();
+      if (!msg || this.loading) return;
+      inp.value = '';
+      this.addMsg('user', msg);
+      this.loading = true;
+      document.getElementById('ai360-send').disabled = true;
+
+      // Typing indicator
+      const typing = document.createElement('div');
+      typing.className = 'ai360-msg ai360-bot ai360-typing';
+      typing.innerHTML = '<div class="ai360-dot"></div><div class="ai360-dot"></div><div class="ai360-dot"></div>';
+      document.getElementById('ai360-msgs').appendChild(typing);
+
+      try {
+        const session = JSON.parse(localStorage.getItem('travex_session') || '{}');
+        const res = await fetch('/api/ai-chat-aria', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ message: msg, mode: 'seller', userId: session.id || null })
+        });
+        const data = await res.json();
+        typing.remove();
+        this.addMsg('bot', data.reply || 'Samahani, jaribu tena.');
+      } catch {
+        typing.remove();
+        this.addMsg('bot', '❌ Tatizo. Jaribu tena.');
+      }
+      this.loading = false;
+      document.getElementById('ai360-send').disabled = false;
+    }
+  };
+})();
