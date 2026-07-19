@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "ShopNekt",
+    "slug": "shopnekt",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "../public/icon-192.png",
+    "scheme": "shopnekt",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "../public/icon-512.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#080F37"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.qnex360.shopnekt"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "../public/icon-192.png",
+        "backgroundColor": "#080F37"
+      },
+      "package": "com.qnex360.shopnekt"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow ShopNekt to use your location for delivery."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
