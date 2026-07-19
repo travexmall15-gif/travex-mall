@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
 import { LangProvider } from '@/lib/lang-context'
-import { ThemeProvider } from '@/lib/theme-context' from '@/lib/lang-context'
+import { ThemeProvider } from '@/lib/theme-context'
 import Script from 'next/script'
 import './globals.css'
 
