@@ -178,7 +178,7 @@ async function doReset() {
       {
         method: 'PATCH',
         headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ seller_pin: newPin })
+        body: JSON.stringify({ login_password: newPin })
       }
     )
     const num = String(foundShop.shop_number||'000').padStart(3,'0')
