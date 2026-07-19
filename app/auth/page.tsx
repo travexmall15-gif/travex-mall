@@ -15,6 +15,7 @@ export default function AuthPage() {
   const [otp,      setOtp]      = useState('')
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState('')
+  const [agreed,   setAgreed]   = useState(false)
 
   const go = (s: Screen) => { setScreen(s); setError('') }
 
@@ -147,7 +148,7 @@ export default function AuthPage() {
           </div>
 
           {/* Email */}
-          <button onClick={() => go('email')} style={{ ...primaryBtn }}>
+          <button onClick={() => agreed && go('email')} style={{ ...primaryBtn, opacity: !agreed ? 0.45 : 1, cursor: !agreed ? 'not-allowed' : 'pointer' }}>
             <Mail size={16} /> Continue with Email
           </button>
 
