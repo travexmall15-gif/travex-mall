@@ -582,24 +582,24 @@ async function acCA(id){
     return;
   }
 
-  const {error:updErr} = await sb.from('pending_payments').update({status:'approved'}).eq('id',id);
-  if(updErr){ alert(' Shop created but application status update failed: '+updErr.message); }
+  // Save login_password and shop_number to pending_payments (login.html reads from here)
+  const {error:updErr} = await sb.from('pending_payments').update({
+    status: 'approved',
+    login_password: rawPass,
+    shop_number: shopNum,
+  }).eq('id',id);
+  if(updErr){ 
+    console.error('pending_payments update error:', updErr);
+    alert('⚠️ Shop created but PIN save failed: '+updErr.message+'\n\nManually give seller PIN: '+fullPin);
+  }
 
-  toast(' Campus shop approved, now live!','ok');
+  toast('✅ Campus shop approved!','ok');
 
   if(!phone){
-    alert(' Shop is LIVE, but no phone number on file.\n\nManually share this password with the seller:\n\n'+rawPass);
+    alert('✅ Shop is LIVE!\n\nNo phone on file. Share PIN manually:\n\nPIN: '+fullPin+'\nLogin: https://shopnekt.vercel.app/dashboard/login.html');
     await loadAll();
     return;
   }
-
-  // Update DB with shop_number, token, expiry
-  await sb.from('pending_payments').update({
-    status: 'approved',
-    shop_number: shopNum,
-    login_token: token,
-    token_expires_at: expires
-  }).eq('id', id);
 
   const loginLink = `https://shopnekt.vercel.app/dashboard/login.html`;
   const waMsg = encodeURIComponent(
@@ -687,12 +687,15 @@ async function acMA(id){
   if(!a){alert(' Application not found in local list. Try refreshing the page.');return}
   if(!confirm(`Approve "${a.shop_name}"?\n\n1. Set shop LIVE on marketplace\n2. Generate login password\n3. Send WhatsApp with password`))return;
 
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r4=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
-  const rawPass=`TRX-${r4()}-${r4()}`;
+  // Generate shop number and 4-digit PIN (matches login.html format XXXX-XXX)
+  const {data:mApproved} = await sb.from('pending_payments').select('id').eq('status','approved');
+  const shopNumMA = String((mApproved?.length||0)+1).padStart(3,'0');
+  const rawPass = String(Math.floor(1000 + Math.random() * 9000)); // 4-digit PIN
+  const fullPinMA = `${rawPass}-${shopNumMA}`; // e.g. 4728-003
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
 
   // No Supabase Auth, just store password directly, approve status
-  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',login_password:rawPass}).eq('id',id);
+  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',login_password:rawPass,shop_number:shopNumMA,login_password:rawPass}).eq('id',id);
   if(upErr){
     alert(' FAILED TO APPROVE, shop will NOT appear in market.\n\nError: '+upErr.message+'\n\nCode: '+(upErr.code||'unknown'));
     toast(' Approve failed: '+upErr.message,'err');
