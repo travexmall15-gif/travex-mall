@@ -91,7 +91,9 @@ export default function AIPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: content,
+          messages: newMsgs.slice(-6).map(m => ({ role: m.role, content: m.content })),
           userId: session?.user?.id || null,
+          mode: 'general',
         }),
       })
       const data = await res.json()

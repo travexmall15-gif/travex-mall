@@ -33,6 +33,7 @@ export function AIChatWidget({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: msg,
+          messages: msgs.slice(-6).map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.content })),
           storeId,
           shopName,
           shopCategory,
