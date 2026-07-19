@@ -56,7 +56,6 @@ export function SiteNav() {
 
 
   const searchRef = useRef<HTMLDivElement>(null)
-  const menuRef   = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<NodeJS.Timeout>()
 
   // Close on outside click
@@ -65,8 +64,6 @@ export function SiteNav() {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setShowDrop(false)
       }
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-          }
     }
     document.addEventListener('mousedown', fn)
     return () => document.removeEventListener('mousedown', fn)
