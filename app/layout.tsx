@@ -17,150 +17,46 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL('https://shopnekt.vercel.app'),
   title: {
     default: 'ShopNekt — The Global Digital Marketplace',
     template: '%s | ShopNekt',
   },
-  description: 'ShopNekt is Tanzania\'s leading digital commerce platform. Buy and sell. Anywhere. Anytime. Open your shop in Business Market or Campus Market. AI-powered tools, flash deals, group buying, and more. Shop online in Tanzania today.',
-  keywords: [
-    'ShopNekt','QNEX360','global marketplace','online marketplace',
-    'buy online','sell online','digital marketplace',
-    'global e-commerce','duka online','best marketplace',
-    'campus market','student marketplace','business market',
-    'online shop','global shops','Africa marketplace','Africa digital commerce',
-    'ShopNekt marketplace','global online shopping','QNEX360',
-    'flash deals','group buying','marketplace Africa',
-    'best online shop Africa','Tanzania SME digital','AI marketplace',
-    'social commerce','multilingual marketplace',
-  ],
-  authors: [{ name: 'QNEX360', url: SITE_URL }],
+  description: 'ShopNekt is a global digital marketplace by QNEX360. Shop from verified sellers worldwide. Business Market, Campus Market, Flash Deals, Group Buy, and more.',
+  keywords: ['ShopNekt', 'online marketplace', 'Tanzania', 'buy online', 'sell online', 'campus market', 'flash deals', 'group buy', 'QNEX360'],
+  authors: [{ name: 'QNEX360', url: 'https://qnex360.vercel.app' }],
   creator: 'QNEX360',
-  publisher: 'QNEX360',
-  applicationName: SITE_NAME,
-  manifest: '/manifest.json',
+  publisher: 'ShopNekt by QNEX360',
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    googleBot: { index: true, follow: true, 'max-video-preview': -1, 'max-image-preview': 'large', 'max-snippet': -1 },
   },
   openGraph: {
     type: 'website',
-    locale: 'en_TZ',
-    url: SITE_URL,
-    siteName: SITE_NAME,
+    locale: 'en_US',
+    alternateLocale: 'sw_TZ',
+    url: 'https://shopnekt.vercel.app',
+    siteName: 'ShopNekt',
     title: 'ShopNekt — The Global Digital Marketplace',
-    description: 'ShopNekt — The global digital marketplace. Business Market, Campus Market, Social Vybe, Flash Deals and Group Buy. Powered by QNEX360.',
-    images: [
-      {
-        url: `${SITE_URL}/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: 'ShopNekt — The Global Digital Marketplace',
-      },
-    ],
+    description: 'Buy and sell online on ShopNekt. Business Market, Campus Market, Flash Deals, Group Buy. Powered by QNEX360.',
+    images: [{ url: 'https://shopnekt.vercel.app/shopnekt-logo.png', width: 1200, height: 630, alt: 'ShopNekt Marketplace' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ShopNekt — The Global Digital Marketplace',
-    description: 'ShopNekt — Tanzania\'s digital marketplace by QNEX360.',
-    images: [`${SITE_URL}/og-image.png`],
-    creator: '@shopnekt',
-  },
-  alternates: {
-    canonical: SITE_URL,
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: SITE_NAME,
-  },
-  verification: {
-    google: 'googleb8594862b3bec06f',
-  },
-  other: {
-    'mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': SITE_NAME,
-    'msapplication-TileColor': '#0D1B3E',
+    description: 'Buy and sell online on ShopNekt. Business Market, Campus Market, Flash Deals, Group Buy.',
+    images: ['https://shopnekt.vercel.app/shopnekt-logo.png'],
   },
   icons: {
-    icon: [
-      { url: '/icon-dark-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-    ],
-    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
+    icon: '/favicon.png',
+    apple: '/icon-192.png',
+    shortcut: '/favicon.png',
   },
-}
-
-// JSON-LD Structured Data for AI and search engines
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}/#organization`,
-      name: 'QNEX360',
-      url: SITE_URL,
-      logo: `${SITE_URL}/icon-512.png`,
-      description: 'QNEX360 — Parent company of ShopNekt. Building Africa\'s AI-powered digital commerce ecosystem.',
-      foundingDate: '2025',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Dar es Salaam',
-        addressCountry: 'TZ',
-      },
-      contactPoint: {
-        '@type': 'ContactPoint',
-        telephone: '+255651919915',
-        email: 'jmaregeri006@gmail.com',
-        contactType: 'customer service',
-        availableLanguage: ['English', 'Swahili'],
-      },
-      sameAs: [
-        'https://www.linkedin.com/in/arch-jumanne-maregeri-b4262a372',
-        'https://shopnekt.vercel.app',
-      ],
-    },
-    {
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}/#website`,
-      url: SITE_URL,
-      name: 'ShopNekt',
-      description: 'ShopNekt — The global digital marketplace. Powered by QNEX360.',
-      publisher: { '@id': `${SITE_URL}/#organization` },
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: {
-          '@type': 'EntryPoint',
-          urlTemplate: `${SITE_URL}/market?search={search_term_string}`,
-        },
-        'query-input': 'required name=search_term_string',
-      },
-      inLanguage: ['en', 'sw'],
-    },
-    {
-      '@type': 'OnlineStore',
-      '@id': `${SITE_URL}/#store`,
-      name: 'ShopNekt',
-      url: SITE_URL,
-      description: 'ShopNekt — Business Market, Campus Market, Social Vybe, Flash Deals and Group Buy. By QNEX360.',
-      areaServed: {
-        '@type': 'Country',
-        name: 'Tanzania',
-      },
-      priceRange: 'TZS 10,000 - 200,000',
-      currenciesAccepted: 'TZS',
-      paymentAccepted: 'Mobile Money, M-Pesa, Airtel Money, Cash on Delivery',
-    },
-  ],
+  manifest: '/manifest.json',
+  verification: {
+    google: 'shopnekt-google-verification',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
