@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Home, Store, GraduationCap, MessageCircle, Zap,
-  Users, Truck, Search, Menu, Lock, ShoppingBag, Globe, X, ArrowRight, Loader2
+  Users, Truck, Search, Menu, Lock, ShoppingBag, Globe, X, ArrowRight, Loader2, MessageSquare
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
@@ -24,7 +24,7 @@ const NAV_ICON_DATA = [
   { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
   { href: '/flash-deals', Icon: Zap,           labelKey: 'nav.flashDealsLabel' },
   { href: '/group-buy',   Icon: Users,         labelKey: 'nav.groupBuyLabel'   },
-  { href: '/move',        Icon: Truck,         labelKey: 'nav.moveLabel'       },
+  { href: '/messages',    Icon: MessageSquare, labelKey: 'nav.messagesLabel'   },
 ]
 
 export function SiteNav() {
@@ -147,11 +147,8 @@ export function SiteNav() {
           </span>
         </Link>
 
-        {/* Push search + menu to right */}
-        <div style={{ flex: 1 }} />
-
-        {/* Search bar */}
-        <div ref={searchRef} style={{ position: 'relative', width: 'clamp(180px, 38%, 420px)' }}>
+        {/* Search bar — takes remaining space */}
+        <div ref={searchRef} style={{ position: 'relative', flex: 1, minWidth: 0 }}>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             {searching
               ? <Loader2 size={15} style={{ position: 'absolute', left: 11, color: '#94A3B8', animation: 'spin .8s linear infinite' }} />
@@ -225,6 +222,15 @@ export function SiteNav() {
             </div>
           )}
         </div>
+
+        {/* Chat icon with unread badge */}
+        <Link href="/messages" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: '#F1F5F9', flexShrink: 0, textDecoration: 'none', transition: 'all 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+          <MessageSquare size={18} color="#0D1B3E" />
+          {/* Unread dot — will be dynamic later */}
+          <div style={{ position: 'absolute', top: 5, right: 5, width: 8, height: 8, borderRadius: '50%', background: '#EF4444', border: '1.5px solid #fff' }} />
+        </Link>
 
         {/* Menu button */}
         <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
