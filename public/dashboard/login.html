@@ -144,7 +144,7 @@ async function doLogin() {
 
   try {
     // Find shop by shop_number and verify PIN
-    const res = await fetch(`${SB_URL}/rest/v1/pending_payments?shop_number=eq.${shopNum}&select=id,shop_name,owner_name,owner_phone,status,plan,seller_pin,shop_number`, {
+    const res = await fetch(`${SB_URL}/rest/v1/pending_payments?shop_number=eq.${shopNum}&select=id,shop_name,owner_name,owner_phone,status,plan,login_password,shop_number`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
     })
     const data = await res.json()
@@ -164,7 +164,7 @@ async function doLogin() {
     }
 
     // Verify PIN
-    if (shop.seller_pin !== sellerPin) {
+    if (shop.login_password !== sellerPin) {
       showError('PIN si sahihi. Jaribu tena au reset PIN yako.')
       btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
       return
