@@ -7,7 +7,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { useState, useEffect } from 'react'
 import {
-  Bell, Palette, Lock, Info, LogOut,
+  Bell, Lock, Info, LogOut,
   ChevronRight, Shield, FileText, HelpCircle, Trash2, User
 } from 'lucide-react'
 
@@ -41,7 +41,6 @@ export default function SettingsPage() {
       title: 'App Preferences',
       items: [
         { icon: Bell,       label: 'Notifications',    sub: 'Deals, orders, updates',  href: '/settings/notifications', color: '#F59E0B' },
-        { icon: Palette,    label: 'Appearance',       sub: 'Theme, font size',        href: '/settings/appearance',    color: '#EC4899' },
       ]
     },
     {
