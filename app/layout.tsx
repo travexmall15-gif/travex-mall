@@ -59,6 +59,31 @@ export const metadata: Metadata = {
   },
 }
 
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "ShopNekt",
+      "url": "https://shopnekt.vercel.app",
+      "description": "ShopNekt — The Global Digital Marketplace by QNEX360",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": { "@type": "EntryPoint", "urlTemplate": "https://shopnekt.vercel.app/market?q={search_term_string}" },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "ShopNekt",
+      "url": "https://shopnekt.vercel.app",
+      "logo": "https://shopnekt.vercel.app/icon-192.png",
+      "sameAs": ["https://qnex360.vercel.app"]
+    }
+  ]
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>

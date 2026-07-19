@@ -47,7 +47,7 @@ export default function AuthPage() {
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/auth/username` },
     })
-    if (error) { setError(error.message); setLoading(false) }
+    if (error) { setError(error.message || 'Something went wrong. Please try again.'); setLoading(false) }
   }
 
   // ── Email: send OTP ───────────────────────────────────────
@@ -62,7 +62,7 @@ export default function AuthPage() {
       },
     })
     setLoading(false)
-    if (error) setError(error.message)
+    if (error) setError(error.message || 'Something went wrong. Please try again.')
     else go('verify')
   }
 

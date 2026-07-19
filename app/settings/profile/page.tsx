@@ -19,7 +19,7 @@ export default function ProfilePage() {
         setName(m?.display_name || m?.username || '')
         setEmail(session.user.email || '')
       }
-    })
+    }).catch(console.error)
   }, [])
 
   const save = async () => {

@@ -14,6 +14,7 @@ import {
 export default function SettingsPage() {
   const router = useRouter()
   const [user, setUser] = useState<{name:string, email:string} | null>(null)
+  const [loading, setLoading] = useState(true)
   const [showDelete, setShowDelete] = useState(false)
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function SettingsPage() {
       if (!session?.user) { router.replace('/auth'); return }
       const m = session.user.user_metadata
       setUser({ name: m?.display_name || m?.username || 'User', email: session.user.email || '' })
+      setLoading(false)
     })
   }, [router])
 

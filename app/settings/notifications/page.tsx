@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
+import { SiteFooter } from '@/components/site-footer'
 import { Bell, Package, Tag, MessageCircle, Zap, Users, ArrowLeft } from 'lucide-react'
 
 const KEYS = ['push','orders','deals','messages','flashDeals','groupBuy']
@@ -66,6 +67,7 @@ export default function NotificationsPage() {
           Preferences saved automatically
         </p>
       </div>
+      <SiteFooter />
     </main>
   )
 }

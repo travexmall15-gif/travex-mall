@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
+import { SiteFooter } from '@/components/site-footer'
 import { useLang } from '@/lib/lang-context'
 import { useTheme } from '@/lib/theme-context'
 import {
@@ -164,6 +165,7 @@ export default function AppearancePage() {
           </div>
         )}
       </div>
+      <SiteFooter />
       <style>{`@keyframes fadeUp{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}`}</style>
     </main>
   )

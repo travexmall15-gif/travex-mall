@@ -22,7 +22,7 @@ export default function MenuPage() {
           name: m?.display_name || m?.username || session.user.email?.split('@')[0] || 'User',
         })
       }
-    })
+    }).catch(console.error)
   }, [])
 
   const handleLogout = async () => {

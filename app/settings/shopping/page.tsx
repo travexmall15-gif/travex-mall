@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
+import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import {
   ArrowLeft, Package, Heart, Tag, Bell,
@@ -140,6 +141,7 @@ export default function ShoppingPage() {
         </div>
 
       </div>
+      <SiteFooter />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
   )
