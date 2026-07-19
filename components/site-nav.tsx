@@ -172,8 +172,6 @@ export function SiteNav() {
         </Link>
       </div>
 
-      </div>
-
       {/* ── ROW 2: Icon Nav ─── */}
       <div style={{
         display: 'flex', alignItems: 'stretch',
