@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Home, Store, GraduationCap, MessageCircle, Zap,
-  Users, Truck, Search, Menu, Lock, ShoppingBag, Globe, X, ArrowRight, Loader2, MessageSquare
+  Users, Truck, Search, Menu, Loader2, MessageSquare
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
@@ -37,7 +37,6 @@ export function SiteNav() {
   const [results,   setResults]   = useState<ShopResult[]>([])
   const [searching, setSearching] = useState(false)
   const [showDrop,  setShowDrop]  = useState(false)
-  const [menuOpen,  setMenuOpen]  = useState(false)
   const [user, setUser] = useState<{email:string, name:string} | null>(null)
   useEffect(() => {
     sb.auth.getSession().then(({ data: { session } }) => {
@@ -67,8 +66,7 @@ export function SiteNav() {
         setShowDrop(false)
       }
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false)
-      }
+          }
     }
     document.addEventListener('mousedown', fn)
     return () => document.removeEventListener('mousedown', fn)
@@ -169,162 +167,14 @@ export function SiteNav() {
           <Truck size={16} color="#475569" />
         </Link>
 
-        {/* Menu button */}
-        <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
-          <button
-            onClick={() => setMenuOpen(v => !v)}
-            style={{
-              width: '38px', height: '38px', borderRadius: '50%',
-              background: menuOpen ? '#0D1B3E' : '#F1F5F9',
-              border: 'none', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'all 0.2s',
-            }}
-          >
-            {menuOpen
-              ? <X size={18} color="#C9A84C" />
-              : <Menu size={18} color="#475569" />
-            }
-          </button>
+        {/* Menu button — links to /menu page */}
+        <Link href="/menu" style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, textDecoration:'none', transition:'background .2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+          <Menu size={18} color="#475569" />
+        </Link>
+      </div>
 
-          {/* ── Full Page Menu ── */}
-          {menuOpen && (
-            <>
-              {/* Backdrop */}
-              <div onClick={() => setMenuOpen(false)}
-                style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', zIndex:490, backdropFilter:'blur(2px)', animation:'fadeIn .2s ease' }} />
-
-              {/* Full page drawer from right */}
-              <div style={{
-                position: 'fixed', top:0, right:0, bottom:0,
-                width: 'min(320px, 88vw)',
-                background: '#fff', zIndex:500,
-                display: 'flex', flexDirection:'column',
-                boxShadow: '-8px 0 40px rgba(0,0,0,0.18)',
-                animation: 'slideIn .25s cubic-bezier(0.34,1.1,0.64,1)',
-                overflowY: 'auto',
-              }}>
-
-                {/* ── Header ── */}
-                <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', padding:'48px 20px 20px', flexShrink:0 }}>
-                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                      <div style={{ width:52, height:52, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', border:'2.5px solid rgba(255,255,255,0.25)', fontSize:'1.1rem', fontWeight:900, color:'#fff', flexShrink:0 }}>
-                        {user ? user.name.slice(0,2).toUpperCase() : '?'}
-                      </div>
-                      <div style={{ minWidth:0 }}>
-                        <div style={{ fontSize:'1rem', fontWeight:800, color:'#fff', letterSpacing:'-0.01em' }}>{user ? user.name : 'Guest'}</div>
-                        <div style={{ fontSize:'0.7rem', color:'rgba(255,255,255,0.45)', marginTop:2 }}>{user ? user.email : 'Not signed in'}</div>
-                      </div>
-                    </div>
-                    <button onClick={() => setMenuOpen(false)}
-                      style={{ background:'rgba(255,255,255,0.1)', border:'none', borderRadius:'50%', width:34, height:34, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0 }}>
-                      <X size={16} color="#fff" />
-                    </button>
-                  </div>
-                  <a href="/settings/profile" onClick={() => setMenuOpen(false)}
-                    style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,255,255,0.1)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'5px 14px', textDecoration:'none', fontSize:'0.72rem', fontWeight:600, color:'rgba(255,255,255,0.8)' }}>
-                    Edit Profile →
-                  </a>
-                </div>
-
-                {/* ── Menu body ── */}
-                <div style={{ flex:1, padding:'8px 0' }}>
-
-                  {/* Main actions */}
-                  <div style={{ padding:'6px 12px' }}>
-                    <p style={{ fontSize:'0.6rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase' as const, letterSpacing:'0.09em', padding:'8px 8px 4px' }}>Store</p>
-                    {[
-                      { icon:'🏪', label:'Open Shop',            href:'/open-store',           bold:true  },
-                      { icon:'📊', label:'Seller Dashboard',     href:'/dashboard/login.html', bold:false },
-                    ].map((item,i) => (
-                      <a key={i} href={item.href} onClick={() => setMenuOpen(false)}
-                        style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 12px', borderRadius:14, textDecoration:'none', color:'#0F172A', transition:'background .15s', marginBottom:2 }}
-                        onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
-                        onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                        <span style={{ fontSize:'1.15rem', width:32, textAlign:'center' as const }}>{item.icon}</span>
-                        <span style={{ fontSize:'0.9rem', fontWeight: item.bold ? 700 : 600, color:'#0F172A' }}>{item.label}</span>
-                      </a>
-                    ))}
-                  </div>
-
-                  <div style={{ height:1, background:'#F1F5F9', margin:'4px 12px' }} />
-
-                  {/* Shopping */}
-                  <div style={{ padding:'6px 12px' }}>
-                    <p style={{ fontSize:'0.6rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase' as const, letterSpacing:'0.09em', padding:'8px 8px 4px' }}>Shopping</p>
-                    {[
-                      { icon:'🛒', label:'Shopping Preferences', href:'/settings/shopping' },
-                      { icon:'💬', label:'Messages',             href:'/messages'          },
-                    ].map((item,i) => (
-                      <a key={i} href={item.href} onClick={() => setMenuOpen(false)}
-                        style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 12px', borderRadius:14, textDecoration:'none', color:'#0F172A', transition:'background .15s', marginBottom:2 }}
-                        onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
-                        onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                        <span style={{ fontSize:'1.15rem', width:32, textAlign:'center' as const }}>{item.icon}</span>
-                        <span style={{ fontSize:'0.9rem', fontWeight:600, color:'#0F172A' }}>{item.label}</span>
-                      </a>
-                    ))}
-                  </div>
-
-                  <div style={{ height:1, background:'#F1F5F9', margin:'4px 12px' }} />
-
-                  {/* Language */}
-                  <div style={{ padding:'14px 20px' }}>
-                    <p style={{ fontSize:'0.6rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase' as const, letterSpacing:'0.09em', marginBottom:8 }}>Language</p>
-                    <div style={{ display:'flex', gap:8 }}>
-                      {(['en','sw'] as const).map(code => (
-                        <button key={code} onClick={() => { setLang(code); setMenuOpen(false) }}
-                          style={{ flex:1, padding:'10px 8px', background: lang===code ? '#0D1B3E' : '#F1F5F9', color: lang===code ? '#C9A84C' : '#64748B', border:'none', borderRadius:12, fontSize:'0.8rem', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all 0.2s' }}>
-                          {code === 'en' ? '🇬🇧 English' : '🇹🇿 Kiswahili'}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div style={{ height:1, background:'#F1F5F9', margin:'4px 12px' }} />
-
-                  {/* Settings & Legal */}
-                  <div style={{ padding:'6px 12px' }}>
-                    <p style={{ fontSize:'0.6rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase' as const, letterSpacing:'0.09em', padding:'8px 8px 4px' }}>Account</p>
-                    {[
-                      { icon:'⚙️', label:'Settings',      href:'/settings' },
-                      { icon:'🔒', label:'Privacy Policy', href:'/privacy'  },
-                      { icon:'ℹ️', label:'About ShopNekt', href:'/settings/about' },
-                    ].map((item,i) => (
-                      <a key={i} href={item.href} onClick={() => setMenuOpen(false)}
-                        style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 12px', borderRadius:14, textDecoration:'none', color:'#0F172A', transition:'background .15s', marginBottom:2 }}
-                        onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
-                        onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                        <span style={{ fontSize:'1.1rem', width:32, textAlign:'center' as const }}>{item.icon}</span>
-                        <span style={{ fontSize:'0.875rem', fontWeight:600, color:'#475569' }}>{item.label}</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── Footer — Log Out ── */}
-                <div style={{ padding:'12px 20px 28px', borderTop:'1px solid #F1F5F9', flexShrink:0 }}>
-                  {user ? (
-                    <button onClick={async () => { await sb.auth.signOut(); setUser(null); setMenuOpen(false); router.push('/auth') }}
-                      style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'13px 16px', background:'#FFF1F2', border:'1.5px solid #FEE2E2', borderRadius:14, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}
-                      onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#FFE4E6'}
-                      onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#FFF1F2'}>
-                      <span style={{ fontSize:'1.1rem', width:32, textAlign:'center' as const }}>🚪</span>
-                      <span style={{ fontSize:'0.9rem', fontWeight:700, color:'#EF4444' }}>Log Out</span>
-                    </button>
-                  ) : (
-                    <a href="/auth" onClick={() => setMenuOpen(false)}
-                      style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 16px', background:'#F0FDF4', border:'1.5px solid #BBF7D0', borderRadius:14, textDecoration:'none', transition:'all .2s' }}>
-                      <span style={{ fontSize:'1.1rem', width:32, textAlign:'center' as const }}>👤</span>
-                      <span style={{ fontSize:'0.9rem', fontWeight:700, color:'#059669' }}>Sign In</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
       </div>
 
       {/* ── ROW 2: Icon Nav ─── */}
