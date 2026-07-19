@@ -556,9 +556,10 @@ async function acCA(id){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b=>b.toString(16).padStart(2,'0')).join('');
   const expires = new Date(Date.now() + 24*60*60*1000).toISOString();
 
-  // Get PIN from application
-  const pin = a.seller_pin || '????';
-  const fullPin = `${pin}-${shopNum}`;
+  // Generate real 4-digit PIN password for seller
+  const rawPass = String(Math.floor(1000 + Math.random() * 9000)); // e.g. 4728
+  const pin = rawPass;
+  const fullPin = `${pin}-${shopNum}`; // e.g. 4728-003
 
   const sn = a.shop_name || a.store_name ||
     (a.business_description?.startsWith('SHOP:') ? a.business_description.split('\n')[0].replace('SHOP:','').trim() : null) ||
@@ -600,22 +601,23 @@ async function acCA(id){
     token_expires_at: expires
   }).eq('id', id);
 
-  const authLink = `${location.origin}/dashboard/auth.html?token=${token}`;
+  const authLink = `https://shopnekt.vercel.app/dashboard/auth.html?token=${token}`;
   const waMsg = encodeURIComponent(
     `🎉 *Hongera ${a.full_name||a.owner_name}!*\n\n`+
     `Duka lako *"${sn}"* limeidhinishwa kwenye *ShopNekt*! 🛍️\n`+
     `Wewe ni duka namba *${shopNum}* kwenye platform yetu!\n\n`+
-    `━━━━━━━━━━━━━━━━━\n`+
-    `🔗 *Bonyeza kuingia sasa* (saa 24 tu):\n`+
+    `━━━━━━━━━━━━━━━━━━━━\n`+
+    `🔗 *LINK YA KUINGIA (saa 24):*\n`+
     `${authLink}\n\n`+
-    `🔑 *PIN yako ya kudumu:*\n`+
-    `*${fullPin}*\n\n`+
-    `━━━━━━━━━━━━━━━━━\n`+
-    `📲 *Kuingia baadaye:*\n`+
-    `${location.origin}/dashboard/login.html\n`+
-    `PIN: ${fullPin}\n\n`+
-    `⚠️ PIN yako ni siri. Usimwambie mtu yeyote.\n\n`+
-    `— *ShopNekt Team* 🌍`
+    `🔑 *PASSWORD YAKO YA KUDUMU:*\n`+
+    `PIN: *${fullPin}*\n`+
+    `Nambari: *${rawPass}*\n\n`+
+    `━━━━━━━━━━━━━━━━━━━━\n`+
+    `📲 *Kuingia baadaye (kila wakati):*\n`+
+    `https://shopnekt.vercel.app/dashboard/login.html\n`+
+    `Weka PIN: *${fullPin}*\n\n`+
+    `⚠️ Usishirikishe PIN yako na mtu yeyote.\n`+
+    `— *ShopNekt by QNEX360* 🌍`
   );
   window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
   toast('✅ Duka #'+shopNum+' imeidhinishwa! WhatsApp imefunguliwa.','ok');
