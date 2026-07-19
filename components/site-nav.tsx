@@ -216,8 +216,8 @@ export function SiteNav() {
 
               {/* ── Menu items ── */}
               {[
-                { icon: '🏪', label: t('nav.openYourShop'),    href: '/open-store',                 color: '#C9A84C' },
-                { icon: '📊', label: t('nav.loginDashboard'),  href: '/dashboard/login.html',        color: '#3B82F6' },
+                { icon: '📊', label: 'Seller Dashboard',       href: '/dashboard/login.html' },
+                { icon: '🛒', label: 'Shopping Preferences',   href: '/settings/shopping'    },
               ].map((item, i) => (
                 <a key={i} href={item.href}
                   onClick={() => setMenuOpen(false)}
