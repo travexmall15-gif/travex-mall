@@ -42,24 +42,24 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .app.v{display:grid}
 
 /* Sidebar */
-.sb{grid-row:1/3;background:linear-gradient(180deg,#0D1B3E,#1B3A8A 100%);
+.sb{grid-row:1/3;background:linear-gradient(180deg,#0D1B3E,#1B3A8A);
   border-right:none;display:flex;flex-direction:column;overflow-y:auto;box-shadow:2px 0 12px rgba(13,27,62,0.15)}
 .sb-brand{padding:1.25rem 1.25rem 1rem;display:flex;align-items:center;gap:.6rem}
 .sb-logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
   display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;color:#0F172A}
 .sb-t{font-family:'Inter',sans-serif;font-weight:700;font-size:.92rem;font-weight:800;color:#fff}
-.sb-t span{color:var(--gold)}
+.sb-t span{color:#F97316}
 .sb-sec{padding:0 .75rem;margin-top:1.25rem}
 .sb-lbl{font-size:.58rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.16em;padding:0 .5rem;margin-bottom:.5rem}
 .sb-i{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;border-radius:10px;font-size:.8rem;
-  font-weight:500;color:var(--light);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+  font-weight:500;color:rgba(255,255,255,0.6);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .sb-i:hover{color:#fff;background:rgba(255,255,255,0.08)}
 .sb-i.on{color:#fff;background:rgba(249,115,22,0.2);font-weight:700;border-left:3px solid #F97316;padding-left:calc(.75rem - 3px)}
 .sb-i.on::before{display:none}
 .sb-c{margin-left:auto;background:var(--blue);color:#fff;font-size:.58rem;font-weight:800;padding:.1rem .45rem;border-radius:var(--pill);min-width:18px;text-align:center;display:none}
 
 /* Topbar */
-.tb{background:#fff;border-bottom:1.5px solid var(--border);
+.tb{background:#ffffff;border-bottom:1.5px solid #E2E8F0;
   padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between}
 .tb h1{font-family:'Inter',sans-serif;font-size:1rem;font-weight:800;color:#0D1B3E}
 .tb-r{display:flex;align-items:center;gap:.75rem}
@@ -73,8 +73,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 /* Stats */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.75rem}
 .st{background:#fff;border:1.5px solid #E2E8F0;border-radius:16px;padding:1.25rem;transition:box-shadow .2s}
-.st:hover{box-shadow:0 4px 16px rgba(13,27,62,0.08)}
-.st-l{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.st:hover{box-shadow:0 4px 16px rgba(13,27,62,0.07)}
+.st-l{font-size:.65rem;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
 .st-v{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:900;color:#0D1B3E}
 .st-v.go{color:var(--gold)}.st-v.gr{color:var(--green)}.st-v.ye{color:#FACC15}.st-v.bl{color:var(--blue)}
 .st-s{font-size:.65rem;color:var(--muted);margin-top:.25rem}
@@ -151,21 +151,20 @@ tr:last-child td{border-bottom:none}
 .action-btn{padding:4px 10px;border:none;border-radius: 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
 .action-btn:hover{opacity:.8}
 
-/* ── MOBILE ── */
-.mob-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:4px}
-.mob-btn span{width:20px;height:2.5px;background:#0D1B3E;border-radius:2px;display:block}
-.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:98}
-.mob-overlay.on{display:block}
+/* ── MOBILE ─────────────────────────────── */
+#mobBtn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:4px;margin-right:6px}
+#mobBtn span{width:20px;height:2.5px;background:#0D1B3E;border-radius:2px;display:block}
+#mobOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:98}
 @media(max-width:768px){
   .app.v{grid-template-columns:1fr!important;grid-template-rows:56px 1fr!important}
   .sb{display:none;position:fixed;top:56px;left:0;bottom:0;width:240px;z-index:99;grid-row:unset}
-  .sb.open{display:flex}
-  .mob-btn{display:flex!important}
+  .sb.mob{display:flex}
+  #mobBtn{display:flex!important}
   .sg{grid-template-columns:repeat(2,1fr)!important}
   .ct{padding:.85rem!important}
-  th:nth-child(n+4),td:nth-child(n+4){display:none}
+  th:nth-child(n+5),td:nth-child(n+5){display:none}
 }
-@media(min-width:769px){.mob-btn{display:none!important}}
+@media(min-width:769px){#mobBtn{display:none!important}}
 </style>
 <script src="/lang.js"></script>
 </head>
@@ -185,8 +184,8 @@ tr:last-child td{border-bottom:none}
 
 <!-- APP -->
 <div class="app" id="app">
-  <div class="sb" id="sb">
-    <div class="sb-brand"><div class="sb-logo">T</div><div class="sb-t">Shop<span>Nekt</span></div></div>
+  <div class="sb">
+    <div class="sb-brand"><div class="sb-logo">T</div><div class="sb-t">SHOPNEKT <span>ADMIN</span></div></div>
 
     <div class="sb-sec">
       <div class="sb-lbl">Overview</div>
@@ -215,7 +214,7 @@ tr:last-child td{border-bottom:none}
     </div>
   </div>
 
-  <div class="tb"><button class="mob-btn" onclick="document.getElementById('sb').classList.toggle('open');document.getElementById('mobOv').classList.toggle('on')" aria-label="Menu"><span></span><span></span><span></span></button><div class="mob-overlay" id="mobOv" onclick="this.classList.remove('on');document.getElementById('sb').classList.remove('open')"></div><h1 id="pTitle"> Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout </button></div></div>
+  <div class="tb"><button id="mobBtn" onclick="document.querySelector('.sb').classList.toggle('mob');document.getElementById('mobOv').style.display=document.querySelector('.sb').classList.contains('mob')?'block':'none'" aria-label="Menu"><span></span><span></span><span></span></button><div id="mobOv" onclick="document.querySelector('.sb').classList.remove('mob');this.style.display='none'"></div><h1 id="pTitle"> Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout </button></div></div>
 
   <div class="ct">
     <!-- OVERVIEW -->
@@ -407,11 +406,11 @@ function doLogin(){
   const err=document.getElementById('loginErr');
   err.style.display='none';
   if(!pass){err.textContent='Enter admin PIN';err.style.display='block';return}
-  if(pass!=='shopnekt2026'){err.textContent='Incorrect PIN. Try again.';err.style.display='block';return}
+  if(pass!=='shopnekt2026'){err.textContent='Incorrect PIN';err.style.display='block';return}
   sessionStorage.setItem('sn_admin','1');
   initApp();
 }
-function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
+async function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block'}
 function doLogout(){sessionStorage.removeItem('sn_admin');location.reload()}
 function checkSession(){
   if(sessionStorage.getItem('sn_admin')==='1')initApp();
@@ -422,7 +421,8 @@ checkSession();
 async function initApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').classList.add('v');
-  console.log('[Admin] Initializing...');
+  // Verify auth session
+
   await loadAll();
 }
 
