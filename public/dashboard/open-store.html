@@ -507,11 +507,11 @@ function validateStep(n) {
     const name  = ($id('ownerName')?.value || '').trim()
     const phone = ($id('ownerPhone')?.value || '').trim()
     const email = ($id('ownerEmail')?.value || '').trim()
-    const pass  = ($id('ownerPass')?.value || '')
+    const pass  = ($id('ownerPin')?.value || '')
     if (!name)  return showErr(err, ' Enter your full name')
     if (!phone) return showErr(err, ' Enter your WhatsApp number')
     if (!email || !email.includes('@')) return showErr(err, ' Enter a valid email')
-    if (pass.length < 8) return showErr(err, ' Password must be at least 8 characters')
+    if (pass.length < 4) return showErr(err, 'Weka PIN yako ya namba 4 (mfano: 8842)')
     return true
   }
 
@@ -652,7 +652,8 @@ async function submitApplication() {
     const name     = document.getElementById('ownerName').value.trim()
     const phone    = document.getElementById('ownerPhone').value.trim()
     const email    = document.getElementById('ownerEmail').value.trim()
-    const pass     = document.getElementById('ownerPass').value
+    const pinVal   = document.getElementById('ownerPin').value
+    const pass     = pinVal + '00' // pad to meet Supabase 6-char minimum
     const shopName = document.getElementById('shopName').value.trim()
     const category = document.getElementById('shopCategory').value
     const region   = document.getElementById('shopRegion').value
