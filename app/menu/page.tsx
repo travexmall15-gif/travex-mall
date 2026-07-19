@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { sb } from '@/lib/supabase'
 import { useLang } from '@/lib/lang-context'
-import { ArrowLeft, ChevronRight, Store, LayoutDashboard, ShoppingCart, MessageSquare, Settings, Shield, Info, LogOut, User, Globe, Zap, Users, Home, GraduationCap } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Store, LayoutDashboard, ShoppingCart, MessageSquare, Settings, Shield, Info, LogOut, User, Globe, Zap, Users, Home, GraduationCap, Sparkles } from 'lucide-react'
 
 export default function MenuPage() {
   const router = useRouter()
@@ -52,6 +52,7 @@ export default function MenuPage() {
     {
       label: 'Communication',
       items: [
+        { icon: Sparkles,       label: 'ARIA — AI Assistant', href: '/ai',           color: '#C9A84C' },
         { icon: MessageSquare,  label: 'Messages',            href: '/messages',     color: '#6366F1' },
       ]
     },
