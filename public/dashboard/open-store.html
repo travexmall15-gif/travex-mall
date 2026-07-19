@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+< } catch(e) { console.warn('Notify failed:', e) }!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
 <title>Open Your Shop, ShopNekt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--green:#059669;--red:#DC2626}
@@ -664,14 +664,8 @@ async function submitApplication() {
 
     // Free registration, no receipt needed
 
-    // Create auth account
-    const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pass })
-    if (authErr && !authErr.message.includes('already')) throw authErr
-
-    // Create slug
-    const slug = shopName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now()
-
-    // Save to pending_payments table
+    // Skip auth signUp — admin generates PIN on approval
+    // Direct insert to pending_payments
     const { error: ppErr } = await sb.from('pending_payments').insert({
       owner_name:    name,
       owner_phone:   phone,
@@ -680,15 +674,19 @@ async function submitApplication() {
       shop_name:     shopName,
       shop_category: category,
       shop_region:   region,
-      shop_whatsapp:   waNum,
-      shop_desc:       desc,
+      shop_whatsapp: waNum,
+      shop_desc:     desc,
       plan:          selectedPlan,
       status:        'pending',
+      created_at:    new Date().toISOString(),
     })
-    if (ppErr) throw ppErr
+    if (ppErr) {
+      console.error('Insert error:', ppErr)
+      throw new Error(ppErr.message || 'Failed to save application')
+    }
 
-    // Notify admin
-    await sb.from('feed_posts').insert({
+    // Notify admin (optional)
+    try { await sb.from('feed_posts').insert({
       type:     'new_market_application',
       title:    ` New Shop Application, ${shopName}`,
       body:     `${name} applied for a ${selectedPlan === 'premium' ? ' Premium' : ' Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,
