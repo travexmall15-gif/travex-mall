@@ -1,90 +1,170 @@
 'use client'
-import { useState, useEffect } from 'react'
+
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { useLang } from '@/lib/lang-context'
-import { ArrowLeft, Sun, Moon, Monitor, Check } from 'lucide-react'
+import { useTheme } from '@/lib/theme-context'
+import {
+  ArrowLeft, Sun, Moon, Monitor, Check, Globe,
+  Type, ChevronRight
+} from 'lucide-react'
 
 export default function AppearancePage() {
   const router = useRouter()
-  const { lang, setLang } = useLang()
-  const [fontSize, setFontSize] = useState<'small'|'medium'|'large'>('medium')
-  const [theme,    setTheme]    = useState<'light'|'dark'|'system'>('light')
-  const [saved,    setSaved]    = useState(false)
-
-  useEffect(() => {
-    try {
-      const p = JSON.parse(localStorage.getItem('sn_appearance') || '{}')
-      if (p.fontSize) setFontSize(p.fontSize)
-      if (p.theme)    setTheme(p.theme)
-    } catch {}
-  }, [])
+  const { lang, setLang }             = useLang()
+  const { theme, fontSize, setTheme, setFontSize } = useTheme()
+  const [saved, setSaved]             = useState(false)
 
   const save = () => {
-    localStorage.setItem('sn_appearance', JSON.stringify({ fontSize, theme }))
-    // Apply font size
-    const sizes = { small: '14px', medium: '16px', large: '18px' }
-    document.documentElement.style.fontSize = sizes[fontSize]
     setSaved(true)
-    setTimeout(() => setSaved(false), 1500)
+    setTimeout(() => setSaved(false), 1800)
   }
+
+  const row = (onClick: () => void, left: React.ReactNode, right: React.ReactNode, borderBottom = true) => (
+    <button onClick={onClick}
+      style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 16px', background:'none', border:'none', borderBottom: borderBottom?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
+      onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
+      onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
+      <div style={{ display:'flex', alignItems:'center', gap:12 }}>{left}</div>
+      <div style={{ display:'flex', alignItems:'center', gap:8 }}>{right}</div>
+    </button>
+  )
 
   return (
     <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
-        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
-          <ArrowLeft size={15} /> Back
-        </button>
-        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>Appearance</h1>
 
-        {/* Language */}
-        <div style={{ marginBottom:'1.25rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>Language</p>
-          <div style={{ background:'#fff', borderRadius:14, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
-            {[{code:'en',flag:'🇬🇧',label:'English'},{code:'sw',flag:'🇹🇿',label:'Kiswahili'}].map((l,i) => (
-              <button key={l.code} onClick={() => setLang(l.code as 'en'|'sw')}
-                style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 16px', background:'none', border:'none', borderBottom: i===0 ? '1px solid #F1F5F9' : 'none', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
-                <span style={{ fontSize:'0.9rem', fontWeight:600, color:'#0F172A' }}>{l.flag} {l.label}</span>
-                {lang === l.code && <Check size={16} color="#0D1B3E" strokeWidth={2.5} />}
+        <button onClick={() => router.back()}
+          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
+          <ArrowLeft size={15}/> Back
+        </button>
+
+        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>
+          Appearance & Language
+        </h1>
+
+        {/* ── Language ─────────────────────────────────── */}
+        <div style={{ marginBottom:'1.1rem' }}>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Language</p>
+          <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
+            {[
+              { code:'en', flag:'🇬🇧', label:'English',   sub:'App displayed in English'  },
+              { code:'sw', flag:'🇹🇿', label:'Kiswahili', sub:'Programu kwa Kiswahili'    },
+            ].map((l, i) => (
+              <button key={l.code}
+                onClick={() => { setLang(l.code as 'en'|'sw'); save() }}
+                style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i===0?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s' }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
+                onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
+                <div style={{ width:38, height:38, borderRadius:10, background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.3rem' }}>
+                  {l.flag}
+                </div>
+                <div style={{ flex:1, textAlign:'left' }}>
+                  <div style={{ fontSize:'0.9rem', fontWeight:600, color:'#0F172A' }}>{l.label}</div>
+                  <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{l.sub}</div>
+                </div>
+                {lang === l.code && (
+                  <div style={{ width:22, height:22, borderRadius:'50%', background:'#0D1B3E', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <Check size={13} color="#C9A84C" strokeWidth={3} />
+                  </div>
+                )}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Theme */}
-        <div style={{ marginBottom:'1.25rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>Theme</p>
+        {/* ── Theme ────────────────────────────────────── */}
+        <div style={{ marginBottom:'1.1rem' }}>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Theme</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
-            {[{v:'light',icon:Sun,label:'Light'},{v:'dark',icon:Moon,label:'Dark'},{v:'system',icon:Monitor,label:'System'}].map(t => (
-              <button key={t.v} onClick={() => setTheme(t.v as any)}
-                style={{ padding:'16px 8px', background: theme===t.v ? '#0D1B3E' : '#fff', border:`1.5px solid ${theme===t.v?'#0D1B3E':'#E2E8F0'}`, borderRadius:14, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:8, transition:'all .2s' }}>
-                <t.icon size={20} color={theme===t.v?'#C9A84C':'#64748B'} />
-                <span style={{ fontSize:'0.78rem', fontWeight:700, color: theme===t.v?'#fff':'#64748B' }}>{t.label}</span>
+            {[
+              { v:'light',  icon:Sun,     label:'Light',  sub:'Clean white' },
+              { v:'dark',   icon:Moon,    label:'Dark',   sub:'Easy on eyes' },
+              { v:'system', icon:Monitor, label:'System', sub:'Auto' },
+            ].map(t => (
+              <button key={t.v}
+                onClick={() => { setTheme(t.v as any); save() }}
+                style={{ padding:'16px 8px', background: theme===t.v?'#0D1B3E':'#fff', border:`2px solid ${theme===t.v?'#0D1B3E':'#E2E8F0'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
+                {theme===t.v && (
+                  <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'#C9A84C', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <Check size={10} color="#0D1B3E" strokeWidth={3} />
+                  </div>
+                )}
+                <t.icon size={22} color={theme===t.v?'#C9A84C':'#64748B'} />
+                <span style={{ fontSize:'0.82rem', fontWeight:700, color: theme===t.v?'#fff':'#0F172A' }}>{t.label}</span>
+                <span style={{ fontSize:'0.65rem', color: theme===t.v?'rgba(255,255,255,0.5)':'#94A3B8' }}>{t.sub}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Font size */}
+        {/* ── Font Size ────────────────────────────────── */}
+        <div style={{ marginBottom:'1.1rem' }}>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Font Size</p>
+          <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
+            {[
+              { v:'small',  label:'Small',  size:'0.82rem', desc:'Compact, fits more content' },
+              { v:'medium', label:'Medium', size:'0.9rem',  desc:'Default, balanced reading'  },
+              { v:'large',  label:'Large',  size:'1rem',    desc:'Easier on the eyes'         },
+            ].map((f, i) => (
+              <button key={f.v}
+                onClick={() => { setFontSize(f.v as any); save() }}
+                style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i<2?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
+                onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
+                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#0D1B3E':'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
+                  <Type size={16} color={fontSize===f.v?'#C9A84C':'#64748B'} />
+                </div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize: f.size, fontWeight:700, color:'#0F172A' }}>{f.label}</div>
+                  <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:2 }}>{f.desc}</div>
+                </div>
+                {fontSize===f.v && (
+                  <div style={{ width:22, height:22, borderRadius:'50%', background:'#0D1B3E', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <Check size={13} color="#C9A84C" strokeWidth={3} />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Other Links ──────────────────────────────── */}
         <div style={{ marginBottom:'1.5rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>Font Size</p>
-          <div style={{ background:'#fff', borderRadius:14, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
-            {[{v:'small',label:'Small',size:'0.82rem'},{v:'medium',label:'Medium',size:'0.9rem'},{v:'large',label:'Large',size:'1rem'}].map((f,i) => (
-              <button key={f.v} onClick={() => setFontSize(f.v as any)}
-                style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px', background:'none', border:'none', borderBottom: i<2 ? '1px solid #F1F5F9' : 'none', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
-                <span style={{ fontSize: f.size, fontWeight:600, color:'#0F172A' }}>{f.label}</span>
-                {fontSize === f.v && <Check size={16} color="#0D1B3E" strokeWidth={2.5} />}
-              </button>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>More Settings</p>
+          <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
+            {[
+              { label:'Notifications',     sub:'Manage alerts',      href:'/settings/notifications', icon:'🔔' },
+              { label:'Privacy Policy',    sub:'How we use data',    href:'/privacy',                icon:'🔒' },
+              { label:'About ShopNekt',    sub:'Version & contact',  href:'/settings/about',         icon:'ℹ️' },
+            ].map((item, i) => (
+              <Link key={i} href={item.href} style={{ textDecoration:'none' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 16px', borderBottom: i<2?'1px solid #F1F5F9':'none', transition:'background .15s', cursor:'pointer' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
+                  <span style={{ fontSize:'1.1rem', width:38, textAlign:'center' }}>{item.icon}</span>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#0F172A' }}>{item.label}</div>
+                    <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{item.sub}</div>
+                  </div>
+                  <ChevronRight size={14} color="#CBD5E1" />
+                </div>
+              </Link>
             ))}
           </div>
         </div>
 
-        <button onClick={save}
-          style={{ width:'100%', padding:'0.875rem', background: saved ? '#059669' : '#0D1B3E', color:'#fff', border:'none', borderRadius:14, fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:'0.9rem', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, transition:'all .2s' }}>
-          {saved ? <><Check size={16} /> Saved!</> : 'Save Preferences'}
-        </button>
+        {/* Save feedback */}
+        {saved && (
+          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#0D1B3E', color:'#C9A84C', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, animation:'fadeUp .2s ease' }}>
+            <Check size={14}/> Preference Saved
+          </div>
+        )}
       </div>
+      <style>{`@keyframes fadeUp{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}`}</style>
     </main>
   )
 }

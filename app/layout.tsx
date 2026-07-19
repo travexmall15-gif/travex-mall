@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
 import { LangProvider } from '@/lib/lang-context'
+import { ThemeProvider } from '@/lib/theme-context' from '@/lib/lang-context'
 import Script from 'next/script'
 import './globals.css'
 
@@ -176,7 +177,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased" suppressHydrationWarning style={{ WebkitTapHighlightColor: 'transparent' as any }}>
-        <LangProvider><ToastProvider>{children}</ToastProvider></LangProvider>
+        <ThemeProvider><LangProvider><ToastProvider>{children}</ToastProvider></LangProvider></ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <Script src="/pwa-init.js" strategy="afterInteractive" />
       </body>
