@@ -145,10 +145,19 @@ textarea.form-input{resize:vertical;min-height:90px}
 .detail-key{color:var(--gray)}
 .detail-val{font-weight:700;color:var(--navy)}
 .lbl{font-size:0.65rem;font-weight:600;color:var(--gray);text-align:center;flex:1;padding-top:6px}.lbl.active{color:var(--navy);font-weight:700}.lbl.done{color:var(--navy)}
+
+.lang-toggle{position:fixed;top:16px;right:16px;display:flex;gap:4px;background:rgba(13,27,62,0.08);border:1.5px solid #E2E8F0;border-radius:999px;padding:3px;z-index:999}
+.lang-btn{padding:4px 12px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;background:transparent;color:#94A3B8;transition:all .2s}
+.lang-btn.active{background:#0D1B3E;color:#C9A84C}
+
 </style>
 <script src="/lang.js"></script>
 </head>
 <body>
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="en" onclick="toggleLang('en')">EN</button>
+  <button class="lang-btn" data-lang="sw" onclick="toggleLang('sw')">SW</button>
+</div>
 
 <!-- NAV -->
 <nav class="nav">
@@ -412,8 +421,8 @@ textarea.form-input{resize:vertical;min-height:90px}
     </div>
     <div class="review-section">
       <div class="review-head">Shop</div>
-      <div class="review-row"><span class="review-label">Shop Name</span><span class="review-val" id="rv-shop">-</span></div>
-      <div class="review-row"><span class="review-label">Category</span><span class="review-val" id="rv-cat">-</span></div>
+      <div class="review-row"><span class="review-label" data-en="Shop Name" data-sw="Jina la Duka">Shop Name</span><span class="review-val" id="rv-shop">-</span></div>
+      <div class="review-row"><span class="review-label" data-en="Category" data-sw="Kategoria">Category</span><span class="review-val" id="rv-cat">-</span></div>
       <div class="review-row"><span class="review-label">Region</span><span class="review-val" id="rv-region">-</span></div>
     </div>
     <div style="background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.20);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem">
@@ -701,7 +710,7 @@ async function submitApplication() {
     const successPage = document.getElementById('successPage')
     successPage.classList.add('show')
     document.getElementById('successDetail').innerHTML = `
-      <div class="detail-row"><span class="detail-key">Shop Name</span><span class="detail-val">${shopName}</span></div>
+      <div class="detail-row"><span class="detail-key" data-en="Shop Name" data-sw="Jina la Duka">Shop Name</span><span class="detail-val">${shopName}</span></div>
       <div class="detail-row"><span class="detail-key">Plan</span><span class="detail-val">${selectedPlan === 'premium' ? ' Premium' : ' Basic'}</span></div>
       <div class="detail-row"><span class="detail-key">Amount Paid</span><span class="detail-val">${fmt(price)}/mo</span></div>
       <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)"> Under Review</span></div>
@@ -766,5 +775,18 @@ body{background:#F8FAFF!important}
 </style>
   <script src="aria-engine.js"></script>
   <script src="aria-widget.js"></script>
+<script>
+const LANG_KEY='sn_lang'
+let currentLang=localStorage.getItem(LANG_KEY)||'en'
+function applyLang(lang){
+  currentLang=lang;localStorage.setItem(LANG_KEY,lang)
+  document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.sw||el.dataset.en):el.dataset.en})
+  document.querySelectorAll('[data-ph-en]').forEach(el=>{el.placeholder=lang==='sw'?(el.dataset.phSw||el.dataset.phEn):el.dataset.phEn})
+  document.querySelectorAll('[data-opt-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.optSw||el.dataset.optEn):el.dataset.optEn})
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))
+}
+function toggleLang(lang){applyLang(lang)}
+document.addEventListener('DOMContentLoaded',()=>applyLang(currentLang))
+</script>
 </body>
 </html>

@@ -7,9 +7,19 @@
 <script src="/lang.js"></script>
 </head>
 <body>
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="en" onclick="toggleLang('en')">EN</button>
+  <button class="lang-btn" data-lang="sw" onclick="toggleLang('sw')">SW</button>
+</div>
 <p>Redirecting... <a href="open-store.html">Click here if not redirected</a></p>
 <script>window.location.replace("open-store.html");</script>
   <script src="aria-engine.js"></script>
   <script src="aria-widget.js"></script>
+<script>
+const LANG_KEY='sn_lang';let currentLang=localStorage.getItem(LANG_KEY)||'en'
+function applyLang(lang){currentLang=lang;localStorage.setItem(LANG_KEY,lang);document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.sw||el.dataset.en):el.dataset.en});document.querySelectorAll('[data-ph-en]').forEach(el=>{el.placeholder=lang==='sw'?(el.dataset.phSw||el.dataset.phEn):el.dataset.phEn});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))}
+function toggleLang(lang){applyLang(lang)}
+document.addEventListener('DOMContentLoaded',()=>applyLang(currentLang))
+</script>
 </body>
 </html>

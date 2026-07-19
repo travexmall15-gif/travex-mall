@@ -31,9 +31,18 @@ input[type=number]{text-align:center;font-size:1.4rem;font-weight:800;letter-spa
 .success{background:#F0FDF4;border:1px solid #86EFAC;color:#16A34A;padding:9px 12px;border-radius:10px;font-size:12px;margin-bottom:12px;display:none}
 .pin-hint{background:#F8FAFF;border:1px solid #E2E8F0;border-radius:10px;padding:10px 12px;font-size:11px;color:#64748B;margin-top:6px}
 .pin-hint strong{color:#0D1B3E}
+
+.lang-toggle{position:fixed;top:16px;right:16px;display:flex;gap:4px;background:rgba(13,27,62,0.08);border:1.5px solid #E2E8F0;border-radius:999px;padding:3px;z-index:9999}
+.lang-btn{padding:4px 12px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;background:transparent;color:#94A3B8;transition:all .2s}
+.lang-btn.active{background:#0D1B3E;color:#C9A84C}
+
 </style>
 </head>
 <body>
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="en" onclick="toggleLang('en')">EN</button>
+  <button class="lang-btn" data-lang="sw" onclick="toggleLang('sw')">SW</button>
+</div>
 <div class="card">
   <div class="logo-row">
     <img src="/icon-192.png" alt="ShopNekt"/>
@@ -180,6 +189,12 @@ async function doReset() {
   }
   btn.textContent = '✅ Badilisha PIN'; btn.disabled = false
 }
+</script>
+<script>
+const LANG_KEY='sn_lang';let currentLang=localStorage.getItem(LANG_KEY)||'en'
+function applyLang(lang){currentLang=lang;localStorage.setItem(LANG_KEY,lang);document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.sw||el.dataset.en):el.dataset.en});document.querySelectorAll('[data-ph-en]').forEach(el=>{el.placeholder=lang==='sw'?(el.dataset.phSw||el.dataset.phEn):el.dataset.phEn});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))}
+function toggleLang(lang){applyLang(lang)}
+document.addEventListener('DOMContentLoaded',()=>applyLang(currentLang))
 </script>
 </body>
 </html>

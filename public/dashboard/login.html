@@ -48,10 +48,19 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 
 .footer-links{margin-top:20px;text-align:center;font-size:12px;color:rgba(255,255,255,0.4)}
 .footer-links a{color:#C9A84C;text-decoration:none;font-weight:600}
+
+.lang-toggle{position:fixed;top:16px;right:16px;display:flex;gap:4px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:3px;z-index:999}
+.lang-btn{padding:4px 12px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;background:transparent;color:rgba(255,255,255,0.5);transition:all .2s}
+.lang-btn.active{background:#fff;color:#0D1B3E}
 </style>
 </head>
 <body>
 
+
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="en" onclick="toggleLang('en')">EN</button>
+  <button class="lang-btn" data-lang="sw" onclick="toggleLang('sw')">SW</button>
+</div>
 <div class="card">
   <div class="logo-row">
     <img src="/icon-192.png" alt="ShopNekt"/>
@@ -59,13 +68,13 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
   </div>
 
   <h1>Karibu Tena 👋</h1>
-  <p class="sub">Ingiza PIN yako kuingia kwenye dashboard ya duka lako</p>
+  <p class="sub" data-en="Enter your PIN to access your store dashboard" data-sw="Ingiza PIN yako kuingia kwenye dashboard ya duka lako">Enter your PIN to access your store dashboard</p>
 
   <!-- PIN Format Guide -->
   <div class="pin-format">
-    <div class="pin-format-label">Muundo wa PIN Yako</div>
+    <div class="pin-format-label" data-en="Your PIN Format" data-sw="Muundo wa PIN Yako">Your PIN Format</div>
     <div class="pin-format-value">XXXX — 0XX</div>
-    <div class="pin-format-desc">PIN yako (namba 4) + dash + namba ya duka lako</div>
+    <div class="pin-format-desc" data-en="Your 4-digit PIN + dash + your store number" data-sw="PIN yako (namba 4) + dash + namba ya duka lako">Your 4-digit PIN + dash + your store number</div>
   </div>
 
   <!-- Error / Success -->
@@ -74,7 +83,7 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 
   <!-- Login Form -->
   <div class="form-group">
-    <label>PIN YAKO</label>
+    <label data-en="YOUR PIN" data-sw="PIN YAKO">YOUR PIN</label>
     <input
       type="text"
       id="pinInput"
@@ -84,17 +93,17 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
       oninput="formatPin(this)"
       onkeydown="if(event.key==='Enter')doLogin()"
     />
-    <div class="hint">PIN uliyopewa kupitia WhatsApp baada ya kuidhinishwa</div>
+    <div class="hint" data-en="PIN sent via WhatsApp after your shop was approved" data-sw="PIN uliyopewa kupitia WhatsApp baada ya kuidhinishwa">PIN sent via WhatsApp after your shop was approved</div>
   </div>
 
   <button class="btn-login" id="loginBtn" onclick="doLogin()">
-    🔐 Ingia Dashboard
+    <span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>
   </button>
 
   <div class="divider">au</div>
 
   <button class="btn-reset" onclick="window.location.href='reset-pin.html'">
-    🔄 Nimesahau PIN — Reset hapa
+    <span data-en="🔄 Forgot PIN? Reset here" data-sw="🔄 Nimesahau PIN — Reset hapa">🔄 Forgot PIN? Reset here</span>
   </button>
 </div>
 
@@ -151,7 +160,7 @@ async function doLogin() {
 
     if (!data || !data.length) {
       showError('Duka halikupatikana. Angalia PIN yako tena.')
-      btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+      btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
       return
     }
 
@@ -159,14 +168,14 @@ async function doLogin() {
 
     if (shop.status !== 'approved') {
       showError('Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.')
-      btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+      btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
       return
     }
 
     // Verify PIN
     if (shop.login_password !== sellerPin) {
       showError('PIN si sahihi. Jaribu tena au reset PIN yako.')
-      btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+      btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
       return
     }
 
@@ -187,7 +196,7 @@ async function doLogin() {
 
   } catch(e) {
     showError('Hitilafu imetokea. Angalia internet yako na ujaribu tena.')
-    btn.textContent = '🔐 Ingia Dashboard'; btn.disabled = false
+    btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
   }
 }
 
@@ -196,6 +205,19 @@ const existing = JSON.parse(localStorage.getItem('travex_session') || '{}')
 if (existing?.id) {
   window.location.href = 'dashboard.html'
 }
+</script>
+
+<script>
+const LANG_KEY='sn_lang'
+let currentLang=localStorage.getItem(LANG_KEY)||'en'
+function applyLang(lang){
+  currentLang=lang;localStorage.setItem(LANG_KEY,lang)
+  document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.sw||el.dataset.en):el.dataset.en})
+  document.querySelectorAll('[data-ph-en]').forEach(el=>{el.placeholder=lang==='sw'?(el.dataset.phSw||el.dataset.phEn):el.dataset.phEn})
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))
+}
+function toggleLang(lang){applyLang(lang)}
+document.addEventListener('DOMContentLoaded',()=>applyLang(currentLang))
 </script>
 </body>
 </html>
