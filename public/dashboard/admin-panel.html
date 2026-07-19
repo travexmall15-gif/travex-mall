@@ -556,10 +556,10 @@ async function acCA(id){
   const token = Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b=>b.toString(16).padStart(2,'0')).join('');
   const expires = new Date(Date.now() + 24*60*60*1000).toISOString();
 
-  // Generate real 4-digit PIN password for seller
-  const rawPass = String(Math.floor(1000 + Math.random() * 9000)); // e.g. 4728
+  // Use seller's chosen PIN from their application
+  const rawPass = a.login_password || String(Math.floor(1000 + Math.random() * 9000));
   const pin = rawPass;
-  const fullPin = `${pin}-${shopNum}`; // e.g. 4728-003
+  const fullPin = `${pin}-${shopNum}`; // e.g. 8842-003 (seller's PIN + shop number)
 
   const sn = a.shop_name || a.store_name ||
     (a.business_description?.startsWith('SHOP:') ? a.business_description.split('\n')[0].replace('SHOP:','').trim() : null) ||
@@ -687,11 +687,11 @@ async function acMA(id){
   if(!a){alert(' Application not found in local list. Try refreshing the page.');return}
   if(!confirm(`Approve "${a.shop_name}"?\n\n1. Set shop LIVE on marketplace\n2. Generate login password\n3. Send WhatsApp with password`))return;
 
-  // Generate shop number and 4-digit PIN (matches login.html format XXXX-XXX)
+  // Generate shop number, use seller's chosen PIN from application
   const {data:mApproved} = await sb.from('pending_payments').select('id').eq('status','approved');
   const shopNumMA = String((mApproved?.length||0)+1).padStart(3,'0');
-  const rawPass = String(Math.floor(1000 + Math.random() * 9000)); // 4-digit PIN
-  const fullPinMA = `${rawPass}-${shopNumMA}`; // e.g. 4728-003
+  const rawPass = a.login_password || String(Math.floor(1000 + Math.random() * 9000)); // seller's own PIN
+  const fullPinMA = `${rawPass}-${shopNumMA}`; // e.g. 8842-003
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
 
   // No Supabase Auth, just store password directly, approve status
