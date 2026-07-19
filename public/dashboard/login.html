@@ -72,9 +72,9 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 
   <!-- PIN Format Guide -->
   <div class="pin-format">
-    <div class="pin-format-label" data-en="Your PIN Format" data-sw="Muundo wa PIN Yako">Your PIN Format</div>
+    <div class="pin-format-label" data-en="Your PIN Format" data-sw="PIN Yako">Your PIN Format</div>
     <div class="pin-format-value">XXXX — 0XX</div>
-    <div class="pin-format-desc" data-en="Your 4-digit PIN + dash + your store number" data-sw="PIN yako (namba 4) + dash + namba ya duka lako">Your 4-digit PIN + dash + your store number</div>
+    <div class="pin-format-desc" data-en="Your 4-digit PIN chosen during registration" data-sw="PIN yako ya namba 4 uliyochagua wakati wa kujiandikisha">Your 4-digit PIN chosen during registration</div>
   </div>
 
   <!-- Error / Success -->
@@ -87,7 +87,7 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
     <input
       type="text"
       id="pinInput"
-      placeholder="mfano: 8842-048"
+      placeholder="Weka PIN yako (namba 4)"
       maxlength="8"
       autocomplete="off"
       oninput="formatPin(this)"
@@ -140,20 +140,20 @@ async function doLogin() {
   const pin = document.getElementById('pinInput').value.trim()
 
   // Validate format: XXXX-XXX
-  if (!/^\d{4}-\d{3}$/.test(pin)) {
-    showError('Muundo wa PIN si sahihi. Mfano: 8842-048')
+  if (!/^\d{4}$/.test(pin)) {
+    showError('PIN lazima iwe namba 4 (mfano: 8842)')
     return
   }
 
-  const [sellerPin, shopNum] = pin.split('-')
+  const sellerPin = pin
   const btn = document.getElementById('loginBtn')
   btn.textContent = 'Inaingia...'
   btn.disabled = true
   document.getElementById('errorBox').style.display = 'none'
 
   try {
-    // Find shop by shop_number and verify PIN
-    const res = await fetch(`${SB_URL}/rest/v1/pending_payments?shop_number=eq.${shopNum}&select=id,shop_name,owner_name,owner_phone,status,plan,login_password,shop_number`, {
+    // Find shop by login_password
+    const res = await fetch(`${SB_URL}/rest/v1/pending_payments?login_password=eq.${sellerPin}&status=eq.approved&select=id,shop_name,owner_name,owner_phone,status,plan,login_password`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
     })
     const data = await res.json()
@@ -186,7 +186,6 @@ async function doLogin() {
       owner_name: shop.owner_name,
       owner_phone: shop.owner_phone,
       plan: shop.plan,
-      shop_number: shop.shop_number,
       logged_in_at: new Date().toISOString()
     }
     localStorage.setItem('travex_session', JSON.stringify(session))

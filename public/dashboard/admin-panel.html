@@ -586,7 +586,6 @@ async function acCA(id){
   const {error:updErr} = await sb.from('pending_payments').update({
     status: 'approved',
     login_password: rawPass,
-    shop_number: shopNum,
   }).eq('id',id);
   if(updErr){ 
     console.error('pending_payments update error:', updErr);
@@ -607,13 +606,13 @@ async function acCA(id){
     `Duka lako *"${sn}"* limeidhinishwa kwenye *ShopNekt*! 🛍️\n\n`+
     `━━━━━━━━━━━━━━━━━━━━\n`+
     `🔑 *PIN YAKO YA KUINGIA:*\n`+
-    `👉 *${fullPin}*\n\n`+
+    `👉 *${rawPass}*\n\n`+
     `📲 *Link ya Dashboard:*\n`+
     `${loginLink}\n\n`+
     `━━━━━━━━━━━━━━━━━━━━\n`+
     `📋 *Jinsi ya kuingia:*\n`+
     `1. Fungua link hapo juu\n`+
-    `2. Weka PIN: *${fullPin}*\n`+
+    `2. Weka PIN: *${rawPass}*\n`+
     `3. Bonyeza "Ingia"\n\n`+
     `⚠️ PIN yako ni siri. Usimwambie mtu yeyote.\n`+
     `— *ShopNekt by QNEX360* 🌍`
