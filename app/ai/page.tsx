@@ -19,7 +19,7 @@ const QUICK_PROMPTS = [
   { icon: '🎓', text: 'What is Campus Market?' },
 ]
 
-const SYSTEM_PROMPT = `You are ARIA — ShopNekt's AI Shopping Assistant. ShopNekt is a global digital marketplace built by QNEX360.
+const _UNUSED = `placeholder — ShopNekt's AI Shopping Assistant. ShopNekt is a global digital marketplace built by QNEX360.
 
 You help users with EVERYTHING on ShopNekt EXCEPT:
 ❌ Processing payments (direct the user to the Payment & Delivery page)
@@ -85,18 +85,19 @@ export default function AIPage() {
     setLoading(true)
 
     try {
+      const { data: { session } } = await (await import('@/lib/supabase')).sb.auth.getSession()
       const res = await fetch('/api/ai-chat-aria', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: newMsgs,
-          system: SYSTEM_PROMPT,
+          message: content,
+          userId: session?.user?.id || null,
         }),
       })
       const data = await res.json()
-      setMsgs([...newMsgs, { role: 'assistant', content: data.reply || 'Sorry, I could not respond.' }])
+      setMsgs([...newMsgs, { role: 'assistant', content: data.reply || 'Samahani, sijaweza kujibu.' }])
     } catch {
-      setMsgs([...newMsgs, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }])
+      setMsgs([...newMsgs, { role: 'assistant', content: '❌ Tatizo limetokea. Tafadhali jaribu tena.' }])
     }
     setLoading(false)
     inputRef.current?.focus()
