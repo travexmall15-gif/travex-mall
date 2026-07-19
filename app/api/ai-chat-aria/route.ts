@@ -81,8 +81,8 @@ export async function POST(req: NextRequest) {
       // ── GREETING ───────────────────────────────────────
       case 'greeting': {
         const greets = [
-          '👋 Habari! Mimi ni ARIA, msaidizi wako wa ShopNekt. Unaweza kuniuliza kuhusu bidhaa, order zako, deals, au chochote kuhusu ShopNekt!',
-          '🛍️ Karibu ShopNekt! Mimi ni ARIA. Ninaweza kukusaidia kupata bidhaa, kuangalia order, au kuelezea jinsi ShopNekt inavyofanya kazi. Unahitaji nini?',
+          '👋 Habari! Mimi ni 360 AI, msaidizi wako wa ShopNekt. Unaweza kuniuliza kuhusu bidhaa, order zako, deals, au chochote kuhusu ShopNekt!',
+          '🛍️ Karibu ShopNekt! Mimi ni 360 AI. Ninaweza kukusaidia kupata bidhaa, kuangalia order, au kuelezea jinsi ShopNekt inavyofanya kazi. Unahitaji nini?',
           '✨ Habari! Nina furaha kukusaidia leo. Je, unatafuta bidhaa, kuangalia deal, au kuna swali kuhusu ShopNekt?',
         ]
         reply = greets[Math.floor(Math.random() * greets.length)]

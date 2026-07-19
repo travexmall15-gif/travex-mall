@@ -52,7 +52,7 @@ export default function MenuPage() {
     {
       label: 'Communication',
       items: [
-        { icon: Sparkles,       label: 'ARIA — AI Assistant', href: '/ai',           color: '#C9A84C' },
+        { icon: Sparkles,       label: '360 AI — Assistant', href: '/ai',           color: '#C9A84C' },
         { icon: MessageSquare,  label: 'Messages',            href: '/messages',     color: '#6366F1' },
       ]
     },

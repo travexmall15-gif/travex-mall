@@ -19,7 +19,7 @@ const QUICK_PROMPTS = [
   { icon: '🎓', text: 'What is Campus Market?' },
 ]
 
-const _UNUSED = `placeholder — ShopNekt's AI Shopping Assistant. ShopNekt is a global digital marketplace built by QNEX360.
+const _UNUSED = `placeholder — ShopNekt Shopping Assistant. ShopNekt is a global digital marketplace built by QNEX360.
 
 You help users with EVERYTHING on ShopNekt EXCEPT:
 ❌ Processing payments (direct the user to the Payment & Delivery page)
@@ -119,7 +119,7 @@ export default function AIPage() {
           <Sparkles size={20} color="#C9A84C" />
         </div>
         <div style={{ flex:1 }}>
-          <div style={{ fontSize:'0.95rem', fontWeight:800, color:'#0D1B3E', letterSpacing:'-0.01em' }}>ARIA</div>
+          <div style={{ fontSize:'0.95rem', fontWeight:800, color:'#0D1B3E', letterSpacing:'-0.01em' }}>360 AI</div>
           <div style={{ fontSize:'0.65rem', color:'#22C55E', fontWeight:600 }}>● ShopNekt AI Assistant</div>
         </div>
         {msgs.length > 0 && (
@@ -143,7 +143,7 @@ export default function AIPage() {
               Habari, {userName}! 👋
             </h2>
             <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', lineHeight:1.6, marginBottom:'1.5rem', maxWidth:280 }}>
-              I&apos;m ARIA — your ShopNekt shopping assistant. Ask me anything about products, orders, features, or shopping!
+              I&apos;m 360 AI — your ShopNekt shopping assistant. Ask me anything about products, orders, features, or shopping!
             </p>
 
             {/* Quick prompts */}
@@ -211,7 +211,7 @@ export default function AIPage() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() } }}
-            placeholder="Ask ARIA anything..."
+            placeholder="Ask 360 AI anything..."
             rows={1}
             style={{ flex:1, border:'none', outline:'none', background:'transparent', fontSize:'0.875rem', fontFamily:"'Inter',sans-serif", resize:'none', lineHeight:1.5, color:'#0F172A', maxHeight:100 }}
           />
@@ -223,7 +223,7 @@ export default function AIPage() {
           </button>
         </div>
         <p style={{ textAlign:'center', fontSize:'0.62rem', color:'#CBD5E1', marginTop:8 }}>
-          ARIA by QNEX360 · Cannot process payments or access location
+          360 AI by QNEX360 · Cannot process payments or access location
         </p>
       </div>
 
