@@ -4,37 +4,41 @@
     "slug": "shopnekt",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "../public/icon-192.png",
+    "icon": "./assets/icon.png",
     "scheme": "shopnekt",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "../public/icon-512.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#080F37"
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.qnex360.shopnekt"
+      "bundleIdentifier": "com.qnex360.shopnekt",
+      "infoPlist": {
+        "NSCameraUsageDescription": "ShopNekt uses camera for product photos",
+        "NSLocationWhenInUseUsageDescription": "ShopNekt uses location for delivery",
+        "NSMicrophoneUsageDescription": "ShopNekt uses microphone for voice messages"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "../public/icon-192.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#080F37"
       },
-      "package": "com.qnex360.shopnekt"
+      "package": "com.qnex360.shopnekt",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET",
+        "VIBRATE"
+      ]
     },
     "plugins": [
-      "expo-router",
-      "expo-font",
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Allow ShopNekt to use your location for delivery."
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+      "expo-splash-screen"
+    ]
   }
 }
