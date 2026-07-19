@@ -8,10 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-:root{--bg:#F8FAFF;--sidebar:#0D1B3E;--sidebar2:#1B3A8A;
-  --card:#ffffff;--card-b:#E2E8F0;
+:root{--bg:#F8FAFF;--sidebar:#0D1B3E;--card:#ffffff;--card-b:#E2E8F0;
   --text:#0F172A;--muted:#64748B;--light:#94A3B8;--border:#E2E8F0;
-  --gold:#C9A84C;--gold2:#F97316;--blue:#3B82F6;--green:#059669;--red:#EF4444;--orange:#F97316;--navy:#0D1B3E;--r:12px;--pill:999px}
+  --gold:#C9A84C;--gold2:#F97316;--blue:#3B82F6;--green:#059669;--red:#EF4444;--r:12px;--pill:999px}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:9px}
 
@@ -43,7 +42,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
 /* Sidebar */
 .sb{grid-row:1/3;background:linear-gradient(180deg,#0D1B3E,#1B3A8A);
-  border-right:none;display:flex;flex-direction:column;overflow-y:auto;box-shadow:2px 0 12px rgba(13,27,62,0.15)}
+  border-right:none;display:flex;flex-direction:column;overflow-y:auto;box-shadow:2px 0 12px rgba(0,0,0,0.15)}
 .sb-brand{padding:1.25rem 1.25rem 1rem;display:flex;align-items:center;gap:.6rem}
 .sb-logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
   display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;color:#0F172A}
@@ -52,9 +51,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .sb-sec{padding:0 .75rem;margin-top:1.25rem}
 .sb-lbl{font-size:.58rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.16em;padding:0 .5rem;margin-bottom:.5rem}
 .sb-i{display:flex;align-items:center;gap:.6rem;padding:.65rem .75rem;border-radius:10px;font-size:.8rem;
-  font-weight:500;color:rgba(255,255,255,0.6);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+  font-weight:500;color:var(--light);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .sb-i:hover{color:#fff;background:rgba(255,255,255,0.08)}
-.sb-i.on{color:#fff;background:rgba(249,115,22,0.2);font-weight:700;border-left:3px solid #F97316;padding-left:calc(.75rem - 3px)}
+.sb-i.on{color:#fff;background:rgba(249,115,22,0.18);font-weight:700;border-left:3px solid #F97316}
 .sb-i.on::before{display:none}
 .sb-c{margin-left:auto;background:var(--blue);color:#fff;font-size:.58rem;font-weight:800;padding:.1rem .45rem;border-radius:var(--pill);min-width:18px;text-align:center;display:none}
 
@@ -74,13 +73,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.75rem}
 .st{background:#fff;border:1.5px solid #E2E8F0;border-radius:16px;padding:1.25rem;transition:box-shadow .2s}
 .st:hover{box-shadow:0 4px 16px rgba(13,27,62,0.07)}
-.st-l{font-size:.65rem;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.st-l{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
 .st-v{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:900;color:#0D1B3E}
 .st-v.go{color:var(--gold)}.st-v.gr{color:var(--green)}.st-v.ye{color:#FACC15}.st-v.bl{color:var(--blue)}
 .st-s{font-size:.65rem;color:var(--muted);margin-top:.25rem}
 
 /* Table */
-.tw{background:var(--card);border:1px solid var(--card-b);border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
+.tw{background:#ffffff;border:1.5px solid #E2E8F0;border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
 .th{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
 .th h3{font-family:'Inter',sans-serif;font-weight:700;font-size:1rem;font-weight:800;color:#fff}
 .sr{padding:.5rem 1rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--pill);
@@ -98,17 +97,17 @@ tr:last-child td{border-bottom:none}
 
 /* Badges */
 .bd{display:inline-block;padding:.15rem .55rem;border-radius:var(--pill);font-size:.6rem;font-weight:700}
-.bd-p{background:rgba(234,179,8,0.12);color:#FACC15}.bd-a{background:rgba(16,185,129,0.12);color:#34D399}
-.bd-r{background:rgba(239,68,68,0.12);color:#FCA5A5}.bd-pr{background:rgba(201,168,76,0.15);color:var(--gold)}
+.bd-p{background:#FEF3C7;color:#92400E}.bd-a{background:#DCFCE7;color:#059669}
+.bd-r{background:#FEE2E2;color:#DC2626}.bd-pr{background:rgba(201,168,76,0.15);color:var(--gold)}
 .bd-ba{background:rgba(255,255,255,0.08);color:var(--light)}.bd-fr{background:rgba(16,185,129,0.12);color:#34D399}
 
 /* Actions */
 .ab{padding:.3rem .65rem;border-radius:var(--pill);font-size:.66rem;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s}
-.ab-ok{background:rgba(16,185,129,0.15);color:#34D399}.ab-ok:hover{background:rgba(16,185,129,0.25)}
-.ab-no{background:rgba(239,68,68,0.12);color:#FCA5A5}.ab-no:hover{background:rgba(239,68,68,0.22)}
-.ab-pe{background:rgba(234,179,8,0.12);color:#FACC15}.ab-pe:hover{background:rgba(234,179,8,0.22)}
-.ab-del{background:rgba(239,68,68,0.20);color:#FCA5A5}.ab-del:hover{background:rgba(239,68,68,0.35)}
-.ab-wa{background:rgba(37,211,102,0.12);color:#25D366}.ab-wa:hover{background:rgba(37,211,102,0.22)}
+.ab-ok{background:#DCFCE7;color:#059669;border:1.5px solid #BBF7D0}.ab-ok:hover{background:#059669;color:#fff}
+.ab-no{background:#FEE2E2;color:#DC2626;border:1.5px solid #FECACA}.ab-no:hover{background:#DC2626;color:#fff}
+.ab-pe{background:#FEF3C7;color:#92400E;border:1.5px solid #FDE68A}.ab-pe:hover{background:#D97706;color:#fff}
+.ab-del{background:#FEE2E2;color:#DC2626;border:1.5px solid #FECACA}.ab-del:hover{background:#DC2626;color:#fff}
+.ab-wa{background:#DCFCE7;color:#16A34A;border:1.5px solid #BBF7D0}.ab-wa:hover{background:#16A34A;color:#fff}
 .ab-vw{background:rgba(59,130,246,0.12);color:#93C5FD}.ab-vw:hover{background:rgba(59,130,246,0.22)}
 
 /* Toast */
@@ -131,7 +130,7 @@ tr:last-child td{border-bottom:none}
 
 /* Value card */
 .vc{background:linear-gradient(135deg,#0C1535,#0A1858);border:1px solid rgba(201,168,76,0.20);border-radius:20px;padding:2rem;margin-bottom:1.5rem}
-.vc h4{font-family:'Inter',sans-serif;font-weight:700;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:1rem}
+.vc h4{font-family:'Inter',sans-serif;font-weight:700;font-size:1.1rem;font-weight:800;color:#0D1B3E;margin-bottom:1rem}
 .vc-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:.82rem}
 .vc-row:last-child{border:none;padding-top:.75rem}
 .vc-total{font-family:'Inter',sans-serif;font-weight:700;font-size:1.6rem;font-weight:900;color:var(--gold)}
@@ -151,20 +150,20 @@ tr:last-child td{border-bottom:none}
 .action-btn{padding:4px 10px;border:none;border-radius: 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
 .action-btn:hover{opacity:.8}
 
-/* ── MOBILE ─────────────────────────────── */
-#mobBtn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:4px;margin-right:6px}
-#mobBtn span{width:20px;height:2.5px;background:#0D1B3E;border-radius:2px;display:block}
-#mobOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:98}
+/* MOBILE */
+#hbg{display:none;background:none;border:none;cursor:pointer;padding:5px;flex-direction:column;gap:4px}
+#hbg span{width:20px;height:2.5px;background:#0D1B3E;border-radius:2px;display:block}
+#mOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:98}
 @media(max-width:768px){
   .app.v{grid-template-columns:1fr!important;grid-template-rows:56px 1fr!important}
   .sb{display:none;position:fixed;top:56px;left:0;bottom:0;width:240px;z-index:99;grid-row:unset}
-  .sb.mob{display:flex}
-  #mobBtn{display:flex!important}
+  .sb.op{display:flex}
+  #hbg{display:flex!important}
   .sg{grid-template-columns:repeat(2,1fr)!important}
   .ct{padding:.85rem!important}
   th:nth-child(n+5),td:nth-child(n+5){display:none}
 }
-@media(min-width:769px){#mobBtn{display:none!important}}
+@media(min-width:769px){#hbg,#mOv{display:none!important}}
 </style>
 <script src="/lang.js"></script>
 </head>
@@ -175,7 +174,7 @@ tr:last-child td{border-bottom:none}
   <div class="lc">
     <div class="lc-badge"> Admin Only</div>
     <h2>ShopNekt Admin</h2>
-    <p>Enter your admin password to continue.</p>
+    <p>Enter your admin PIN to continue.</p>
     <div class="lc-err" id="loginErr"></div>
     <input id="adminPass" placeholder="Enter admin PIN" type="password" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()" autofocus>
     <button onclick="doLogin()">Sign In </button>
@@ -214,7 +213,7 @@ tr:last-child td{border-bottom:none}
     </div>
   </div>
 
-  <div class="tb"><button id="mobBtn" onclick="document.querySelector('.sb').classList.toggle('mob');document.getElementById('mobOv').style.display=document.querySelector('.sb').classList.contains('mob')?'block':'none'" aria-label="Menu"><span></span><span></span><span></span></button><div id="mobOv" onclick="document.querySelector('.sb').classList.remove('mob');this.style.display='none'"></div><h1 id="pTitle"> Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout </button></div></div>
+  <div class="tb"><button id="hbg" onclick="document.querySelector('.sb').classList.toggle('op');document.getElementById('mOv').style.display=document.querySelector('.sb').classList.contains('op')?'block':'none'" aria-label="Menu"><span></span><span></span><span></span></button><div id="mOv" onclick="document.querySelector('.sb').classList.remove('op');this.style.display='none'"></div><h1 id="pTitle"> Dashboard</h1><div class="tb-r"><button class="lo-btn" onclick="doLogout()">Logout </button></div></div>
 
   <div class="ct">
     <!-- OVERVIEW -->
@@ -403,10 +402,10 @@ function sA(b){b.parentElement.querySelectorAll('.fb').forEach(x=>x.classList.re
 //  SECURE AUTH, signIn only, NO signUp 
 function doLogin(){
   const pass=document.getElementById('adminPass').value;
-  const err=document.getElementById('loginErr');
-  err.style.display='none';
-  if(!pass){err.textContent='Enter admin PIN';err.style.display='block';return}
-  if(pass!=='shopnekt2026'){err.textContent='Incorrect PIN';err.style.display='block';return}
+  const e=document.getElementById('loginErr');
+  e.style.display='none';
+  if(!pass){e.textContent='Enter admin PIN';e.style.display='block';return}
+  if(pass!=='shopnekt2026'){e.textContent='Incorrect PIN';e.style.display='block';return}
   sessionStorage.setItem('sn_admin','1');
   initApp();
 }
