@@ -24,7 +24,7 @@ const NAV_ICON_DATA = [
   { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
   { href: '/flash-deals', Icon: Zap,           labelKey: 'nav.flashDealsLabel' },
   { href: '/group-buy',   Icon: Users,         labelKey: 'nav.groupBuyLabel'   },
-  { href: '/messages',    Icon: MessageSquare, labelKey: 'nav.messagesLabel'   },
+  { href: '/move',        Icon: Truck,         labelKey: 'nav.moveLabel'       },
 ]
 
 export function SiteNav() {
@@ -147,90 +147,19 @@ export function SiteNav() {
           </span>
         </Link>
 
-        {/* Search bar — takes remaining space */}
-        <div ref={searchRef} style={{ position: 'relative', flex: 1, minWidth: 0 }}>
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            {searching
-              ? <Loader2 size={15} style={{ position: 'absolute', left: 11, color: '#94A3B8', animation: 'spin .8s linear infinite' }} />
-              : <Search size={15} style={{ position: 'absolute', left: 11, color: '#94A3B8' }} />
-            }
-            <input
-              type="text"
-              value={query}
-              onChange={e => handleSearch(e.target.value)}
-              onFocus={() => results.length && setShowDrop(true)}
-              placeholder="Search shops..."
-              style={{
-                width: '100%', boxSizing: 'border-box' as const,
-                padding: '8px 14px 8px 34px',
-                background: '#F1F5F9',
-                border: '1.5px solid transparent',
-                borderRadius: '999px', fontSize: '0.83rem',
-                color: '#0F172A', outline: 'none',
-                fontFamily: "'Inter', sans-serif",
-                transition: 'all 0.2s',
-              }}
-              onFocus={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#0D1B3E' }}
-              onBlur={e => { if (!showDrop) { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.borderColor = 'transparent' } }}
-            />
-          </div>
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
 
-          {/* Dropdown results */}
-          {showDrop && results.length > 0 && (
-            <div style={{
-              position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
-              background: '#fff', borderRadius: '14px',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
-              border: '1px solid #E2E8F0', overflow: 'hidden', zIndex: 400,
-            }}>
-              {results.map(r => (
-                <div
-                  key={r.id}
-                  onClick={() => goToShop(r.id)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', cursor: 'pointer', transition: 'background .15s' }}
-                  onMouseOver={e => (e.currentTarget.style.background = '#F8FAFF')}
-                  onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
-                >
-                  <div style={{
-                    width: '30px', height: '30px', borderRadius: '8px', flexShrink: 0,
-                    background: r.source === 'business' ? 'rgba(201,168,76,0.12)' : 'rgba(59,130,246,0.10)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    {r.source === 'business'
-                      ? <Store size={14} color="#C9A84C" />
-                      : <GraduationCap size={14} color="#3B82F6" />
-                    }
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.shop_name}</div>
-                    <div style={{ fontSize: '10px', color: '#94A3B8' }}>
-                      {r.source === 'business' ? t('nav.businessMarket') : t('nav.campusMarket')}{r.shop_city ? ` · ${r.shop_city}` : ''}
-                    </div>
-                  </div>
-                  <ArrowRight size={13} color="#CBD5E1" />
-                </div>
-              ))}
-              <div style={{ padding: '8px 14px 10px', borderTop: '1px solid #F1F5F9' }}>
-                <Link
-                  href={`/market?search=${encodeURIComponent(query)}`}
-                  onClick={() => setShowDrop(false)}
-                  style={{ fontSize: '12px', color: '#0D1B3E', fontWeight: 600, textDecoration: 'none' }}
-                >
-                  {t('nav.searchAll')} "{query}" →
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Chat icon with unread badge */}
-        <Link href="/messages" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: '#F1F5F9', flexShrink: 0, textDecoration: 'none', transition: 'all 0.2s' }}
+        {/* Search icon — circle button */}
+        <button
+          onClick={() => { const el = document.getElementById('nav-search-input'); el ? (el as HTMLInputElement).focus() : null }}
+          style={{ width: 38, height: 38, borderRadius: '50%', background: '#F1F5F9', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
-          <MessageSquare size={18} color="#0D1B3E" />
-          {/* Unread dot — will be dynamic later */}
-          <div style={{ position: 'absolute', top: 5, right: 5, width: 8, height: 8, borderRadius: '50%', background: '#EF4444', border: '1.5px solid #fff' }} />
-        </Link>
+          {searching
+            ? <Loader2 size={16} color="#64748B" style={{ animation: 'spin .8s linear infinite' }} />
+            : <Search size={16} color="#475569" />}
+        </button>
 
         {/* Menu button */}
         <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
