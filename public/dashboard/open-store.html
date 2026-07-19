@@ -6,7 +6,7 @@
 <title>Open Your Shop, ShopNekt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--green:#059669;--red:#DC2626}
@@ -664,25 +664,38 @@ async function submitApplication() {
 
     // Free registration, no receipt needed
 
-    // Skip auth signUp — admin generates PIN on approval
-    // Direct insert to pending_payments
-    const { error: ppErr } = await sb.from('pending_payments').insert({
-      owner_name:    name,
-      owner_phone:   phone,
-      owner_email:   email,
-      auth_email:    email,
-      shop_name:     shopName,
-      shop_category: category,
-      shop_region:   region,
-      shop_whatsapp: waNum,
-      shop_desc:     desc,
-      plan:          selectedPlan,
-      status:        'pending',
-      created_at:    new Date().toISOString(),
+    // Direct REST API call — bypasses any client version issues
+    const SUPA_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
+    const SUPA_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+
+    const res = await fetch(`${SUPA_URL}/rest/v1/pending_payments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({
+        owner_name:    name,
+        owner_phone:   phone,
+        owner_email:   email,
+        auth_email:    email,
+        shop_name:     shopName,
+        shop_category: category,
+        shop_region:   region,
+        shop_whatsapp: waNum,
+        shop_desc:     desc,
+        plan:          selectedPlan,
+        status:        'pending',
+        created_at:    new Date().toISOString(),
+      })
     })
-    if (ppErr) {
-      console.error('Insert error:', ppErr)
-      throw new Error(ppErr.message || 'Failed to save application')
+
+    if (!res.ok) {
+      const errText = await res.text()
+      console.error('Insert failed:', res.status, errText)
+      throw new Error(`Save failed (${res.status}): ${errText}`)
     }
 
     // Notify admin (optional)
