@@ -595,3 +595,104 @@ a { font-family: 'Inter', system-ui, sans-serif; text-decoration: none; }
 /* ── Soft corner buttons — ShopNekt brand ── */
 a[style*="border-radius: 999px"],
 button { border-radius: 14px !important; }
+
+/* ═══════════════════════════════════════════
+   SHOPNEKT THEME SYSTEM
+   ═══════════════════════════════════════════ */
+
+/* Font size variable */
+:root {
+  --base-font: 16px;
+}
+html {
+  font-size: var(--base-font);
+}
+
+/* ── DARK MODE ── */
+[data-theme="dark"] {
+  --sn-bg:        #0F1117;
+  --sn-surface:   #1A1D27;
+  --sn-border:    #2D3148;
+  --sn-text:      #F1F5F9;
+  --sn-muted:     #94A3B8;
+  --sn-navy:      #1B3A8A;
+}
+
+[data-theme="dark"] body {
+  background: #0F1117 !important;
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] main {
+  background: #0F1117 !important;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+  color: #F1F5F9 !important;
+}
+
+/* Cards & surfaces */
+[data-theme="dark"] div[style*="background: #fff"],
+[data-theme="dark"] div[style*="background: rgb(255, 255, 255)"],
+[data-theme="dark"] div[style*="background:#fff"] {
+  background: #1A1D27 !important;
+  border-color: #2D3148 !important;
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] div[style*="background: #F8FAFF"],
+[data-theme="dark"] div[style*="background:#F8FAFF"] {
+  background: #0F1117 !important;
+}
+
+[data-theme="dark"] div[style*="background: #F1F5F9"],
+[data-theme="dark"] div[style*="background:#F1F5F9"] {
+  background: #1E2235 !important;
+}
+
+/* Text colors */
+[data-theme="dark"] span[style*="color: #0F172A"],
+[data-theme="dark"] span[style*="color:#0F172A"],
+[data-theme="dark"] div[style*="color: #0F172A"],
+[data-theme="dark"] div[style*="color:#0F172A"],
+[data-theme="dark"] p[style*="color: #0F172A"] {
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] span[style*="color: #0D1B3E"],
+[data-theme="dark"] div[style*="color: #0D1B3E"],
+[data-theme="dark"] p[style*="color: #0D1B3E"] {
+  color: #E2E8F0 !important;
+}
+
+/* Border separator */
+[data-theme="dark"] div[style*="border-bottom: 1px solid #F1F5F9"],
+[data-theme="dark"] div[style*="borderBottom: '1px solid #F1F5F9'"] {
+  border-color: #2D3148 !important;
+}
+
+/* Nav */
+[data-theme="dark"] nav {
+  background: #1A1D27 !important;
+  border-color: #2D3148 !important;
+}
+
+/* Inputs */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  background: #1E2235 !important;
+  border-color: #2D3148 !important;
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #475569 !important;
+}
+
+/* ── FONT SIZE CLASSES ── */
+html[data-fontsize="small"]  { font-size: 13px !important; }
+html[data-fontsize="medium"] { font-size: 16px !important; }
+html[data-fontsize="large"]  { font-size: 19px !important; }
