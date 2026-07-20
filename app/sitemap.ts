@@ -1,31 +1,35 @@
 import { MetadataRoute } from 'next'
 
+const BASE = 'https://shopnekt.vercel.app'
+const NOW  = new Date()
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://shopnekt.vercel.app'
-  const now  = new Date()
-
   return [
-    { url: `${base}/`,            lastModified: now, changeFrequency: 'daily',  priority: 1.00 },
-    { url: `${base}/home`,        lastModified: now, changeFrequency: 'daily',  priority: 0.95 },
-    { url: `${base}/market`,      lastModified: now, changeFrequency: 'daily',  priority: 0.95 },
-    { url: `${base}/campus`,      lastModified: now, changeFrequency: 'daily',  priority: 0.90 },
-    { url: `${base}/vybe`,        lastModified: now, changeFrequency: 'daily',  priority: 0.85 },
-    { url: `${base}/flash-deals`, lastModified: now, changeFrequency: 'hourly', priority: 0.90 },
-    { url: `${base}/group-buy`,   lastModified: now, changeFrequency: 'daily',  priority: 0.80 },
-    { url: `${base}/open-store`,  lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${base}/join`,        lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
-    { url: `${base}/move`,        lastModified: now, changeFrequency: 'weekly', priority: 0.70 },
+    // ── Core ──────────────────────────────────────────────
+    { url: BASE,                  lastModified: NOW, changeFrequency: 'daily',  priority: 1.00 },
+    { url: `${BASE}/home`,        lastModified: NOW, changeFrequency: 'daily',  priority: 0.95 },
 
-    { url: `${base}/menu`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/ai`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/orders`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/messages`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/settings/shopping`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/settings/notifications`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/settings/appearance`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/settings/profile`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/settings/security`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/settings/about`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
+    // ── Marketplaces ──────────────────────────────────────
+    { url: `${BASE}/market`,      lastModified: NOW, changeFrequency: 'daily',  priority: 0.95 },
+    { url: `${BASE}/campus`,      lastModified: NOW, changeFrequency: 'daily',  priority: 0.90 },
+    { url: `${BASE}/vybe`,        lastModified: NOW, changeFrequency: 'daily',  priority: 0.85 },
+    { url: `${BASE}/flash-deals`, lastModified: NOW, changeFrequency: 'hourly', priority: 0.90 },
+    { url: `${BASE}/group-buy`,   lastModified: NOW, changeFrequency: 'daily',  priority: 0.80 },
+
+    // ── Seller ─────────────────────────────────────────────
+    { url: `${BASE}/open-store`,  lastModified: NOW, changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${BASE}/join`,        lastModified: NOW, changeFrequency: 'weekly', priority: 0.80 },
+    { url: `${BASE}/subscription`,lastModified: NOW, changeFrequency: 'weekly', priority: 0.70 },
+
+    // ── Features ───────────────────────────────────────────
+    { url: `${BASE}/ai`,          lastModified: NOW, changeFrequency: 'weekly', priority: 0.75 },
+    { url: `${BASE}/move`,        lastModified: NOW, changeFrequency: 'weekly', priority: 0.70 },
+    { url: `${BASE}/menu`,        lastModified: NOW, changeFrequency: 'weekly', priority: 0.60 },
+
+    // ── Auth ──────────────────────────────────────────────
+    { url: `${BASE}/auth`,        lastModified: NOW, changeFrequency: 'yearly', priority: 0.50 },
+
+    // ── Legal ─────────────────────────────────────────────
+    { url: `${BASE}/privacy`,     lastModified: NOW, changeFrequency: 'monthly',priority: 0.40 },
   ]
 }
