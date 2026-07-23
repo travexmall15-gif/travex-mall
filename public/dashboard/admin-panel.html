@@ -620,7 +620,7 @@ async function acCA(id){
     `⚠️ PIN yako ni siri. Usimwambie mtu yeyote.\n`+
     `— *ShopNekt by QNEX360* 🌍`
   );
-  window.open(\`https://wa.me/\${phone}?text=\${waMsg}\`,'_blank');
+  window.open(`https://wa.me/${phone}?text=${waMsg}`,'_blank');
   toast('✅ Duka #'+shopNum+' imeidhinishwa! WhatsApp imefunguliwa.','ok');
   await loadAll();
 }
@@ -731,7 +731,7 @@ async function acMA(id){
     `⚠️ PIN ni siri yako. Usimwambie mtu.\n`+
     `— *ShopNekt by QNEX360* 🌍`
   );
-  window.open(\`https://wa.me/\${phone}?text=\${mktMsg}\`,'_blank');
+  window.open(`https://wa.me/${phone}?text=${mktMsg}`,'_blank');
   toast(' Approved!','ok');
   await loadAll();
 }
