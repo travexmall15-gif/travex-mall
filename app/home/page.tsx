@@ -1,5 +1,4 @@
 'use client'
-import AiSearchBox from '@/components/ai-search-box'
 import { useTranslation } from '@/hooks/useTranslation'
 import Script from 'next/script'
 import { SiteFooter } from '@/components/site-footer'
@@ -68,38 +67,23 @@ export default function HomePage() {
       </div>
 
 
-      {/* ── 360 AI HERO SECTION ── */}
-      <section style={{ background: 'linear-gradient(135deg, #080F37 0%, #0D1B3E 60%, #1a1f4e 100%)', padding: '3.5rem 5% 3rem', position: 'relative', overflow: 'hidden' }}>
-        {/* Background glow */}
-        <div style={{ position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '300px', background: 'radial-gradient(ellipse, rgba(201,168,76,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        
-        <div style={{ maxWidth: '720px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          {/* Badge */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.3)', borderRadius: '999px', padding: '4px 14px', fontSize: '0.68rem', fontWeight: 700, color: '#C9A84C', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#C9A84C', animation: 'pulse 2s ease-in-out infinite' }} />
-              360 AI — Powered Search
-            </span>
-          </div>
-
-          {/* Heading */}
-          <h2 style={{ textAlign: 'center', fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', fontWeight: 800, color: '#fff', lineHeight: 1.2, marginBottom: '0.6rem' }}>
-            Chat with <span style={{ color: '#C9A84C' }}>360 AI</span>
-          </h2>
-          <p style={{ textAlign: 'center', fontSize: '0.9rem', color: 'rgba(255,255,255,0.55)', marginBottom: '1.8rem', lineHeight: 1.6 }}>
-            Describe what you need — AI inatafuta maduka yote na kukuletea orodha
-          </p>
-
-          {/* Search box */}
-          <AiSearchBox />
+      {/* ── 360 AI CHIP ── */}
+      <div style={{ background: 'linear-gradient(135deg,#080F37,#0D1B3E)', padding: '1.2rem 5%', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <a href="/ai" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(201,168,76,0.25)', borderRadius: '16px', padding: '14px 20px', textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' }}
+            onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.08)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.5)' }}
+            onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.25)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '1.3rem' }}>✨</span>
+              <div>
+                <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.9rem' }}>Chat with 360 AI</div>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginTop: '1px' }}>Niambie unataka nini — AI itakutafutia duka na bei</div>
+              </div>
+            </div>
+            <span style={{ color: '#C9A84C', fontSize: '1.2rem', fontWeight: 700 }}>›</span>
+          </a>
         </div>
-
-        <style>{`
-          @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-          @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-          .ai-result-item { animation: fadeIn 0.35s ease forwards; }
-        `}</style>
-      </section>
+      </div>
 
       {/*  TWO MARKET CARDS  */}
       <section style={{ background: '#FFFFFF', padding: '5rem 5%', borderBottom: '1px solid #E2E8F0' }}>

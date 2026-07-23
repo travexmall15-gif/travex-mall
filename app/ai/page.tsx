@@ -1,239 +1,357 @@
 'use client'
-
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
-import { ArrowLeft, Send, Loader2, Sparkles, RotateCcw, ChevronRight } from 'lucide-react'
 
-type Message = { role: 'user' | 'assistant'; content: string }
+// ── Types ──────────────────────────────────────────────────
+type Result = {
+  id: string
+  shop_name: string
+  shop_slug: string
+  shop_category: string
+  shop_city: string
+  logo_url: string
+  rating: number
+  match_reason: string
+  products: { name: string; price: number }[]
+}
 
-const QUICK_PROMPTS = [
-  { icon: '🛍️', text: 'Help me find a product' },
-  { icon: '📦', text: 'Track my order status' },
-  { icon: '🏪', text: 'How do I open a shop?' },
-  { icon: '⚡', text: 'Show me flash deals' },
-  { icon: '👥', text: 'Explain Group Buy' },
-  { icon: '💬', text: 'How do I message a seller?' },
-  { icon: '📱', text: 'How does ShopNekt work?' },
-  { icon: '🎓', text: 'What is Campus Market?' },
-]
+type Step = 'idle' | 'asking' | 'searching' | 'done'
 
-const _UNUSED = `placeholder — ShopNekt Shopping Assistant. ShopNekt is a global digital marketplace built by QNEX360.
+// ── Quick filters ──────────────────────────────────────────
+const CATEGORIES = ['Electronics','Fashion','Food','Beauty','Home','Books','Sports','Accessories','Kids','Health']
+const CITIES     = ['Dar es Salaam','Arusha','Mwanza','Dodoma','Moshi','Zanzibar','Tanga','Morogoro']
 
-You help users with EVERYTHING on ShopNekt EXCEPT:
-❌ Processing payments (direct the user to the Payment & Delivery page)
-❌ Sharing or accessing live location (direct to Location settings)
+export default function AiPage() {
+  const router = useRouter()
+  const inputRef = useRef<HTMLInputElement>(null)
 
-You CAN help with:
-✅ Finding products and shops
-✅ Navigating the app (Home, Market, Campus, Vybe, Flash Deals, Group Buy)
-✅ Explaining features (Social Vybe, Flash Deals, Group Buy, Business Market, Campus Market)
-✅ Order status questions — direct to /orders
-✅ Opening a shop — direct to /open-store
-✅ Messaging sellers — direct to /messages
-✅ Account and settings help
-✅ Shopping recommendations
-✅ Comparing products or deals
-✅ Explaining how Group Buy works
-✅ Shopping tips and advice
-✅ Explaining payment options (Full Escrow, Item Only, On Delivery) — but NOT processing them
-✅ General shopping questions
+  // Form state
+  const [query,    setQuery]    = useState('')
+  const [budget,   setBudget]   = useState('')
+  const [category, setCategory] = useState('')
+  const [city,     setCity]     = useState('')
+  const [step,     setStep]     = useState<Step>('idle')
+  const [results,  setResults]  = useState<Result[]>([])
+  const [aiMsg,    setAiMsg]    = useState('')
+  const [dots,     setDots]     = useState('.')
 
-ShopNekt Features:
-- Business Market: verified shops for businesses and retailers
-- Campus Market: students can sell to fellow students at universities
-- Social Vybe: social commerce — like posts, discover products
-- Flash Deals: limited-time discounts with countdown timers
-- Group Buy: buy together with others to unlock bulk discounts
-- Messages: in-app chat between buyers and sellers
-- ShopNekt Move: logistics and delivery service
-
-Tone: Friendly, helpful, concise. Use emojis occasionally. Always guide users to the right page or feature.
-Language: Respond in the same language the user writes in (English or Kiswahili).
-Keep responses short and actionable unless user asks for details.`
-
-export default function AIPage() {
-  const router  = useRouter()
-  const [msgs,     setMsgs]     = useState<Message[]>([])
-  const [input,    setInput]    = useState('')
-  const [loading,  setLoading]  = useState(false)
-  const [userName, setUserName] = useState('there')
-  const bottomRef = useRef<HTMLDivElement>(null)
-  const inputRef  = useRef<HTMLTextAreaElement>(null)
-
+  // Animated dots while searching
   useEffect(() => {
-    sb.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        const m = session.user.user_metadata
-        setUserName(m?.display_name || m?.username || 'there')
-      }
-    })
-  }, [])
+    if (step !== 'searching') return
+    const t = setInterval(() => setDots(d => d.length >= 3 ? '.' : d + '.'), 400)
+    return () => clearInterval(t)
+  }, [step])
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [msgs, loading])
-
-  const sendMessage = async (text?: string) => {
-    const content = (text || input).trim()
-    if (!content || loading) return
-    setInput('')
-
-    const newMsgs: Message[] = [...msgs, { role: 'user', content }]
-    setMsgs(newMsgs)
-    setLoading(true)
-
-    try {
-      const { data: { session } } = await (await import('@/lib/supabase')).sb.auth.getSession()
-      const res = await fetch('/api/ai-chat-aria', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: content,
-          messages: newMsgs.slice(-6).map(m => ({ role: m.role, content: m.content })),
-          userId: session?.user?.id || null,
-          mode: 'general',
-        }),
-      })
-      const data = await res.json()
-      setMsgs([...newMsgs, { role: 'assistant', content: data.reply || 'Samahani, sijaweza kujibu.' }])
-    } catch {
-      setMsgs([...newMsgs, { role: 'assistant', content: '❌ Tatizo limetokea. Tafadhali jaribu tena.' }])
-    }
-    setLoading(false)
-    inputRef.current?.focus()
+  // ── AI typing effect ────────────────────────────────────
+  function typeMessage(msg: string) {
+    setAiMsg('')
+    let i = 0
+    const t = setInterval(() => {
+      setAiMsg(msg.slice(0, i + 1))
+      i++
+      if (i >= msg.length) clearInterval(t)
+    }, 18)
   }
 
-  const reset = () => { setMsgs([]); setInput('') }
+  // ── Search ──────────────────────────────────────────────
+  async function runSearch() {
+    if (!query.trim()) { inputRef.current?.focus(); return }
+
+    setStep('searching')
+    setResults([])
+    setAiMsg('')
+
+    const budgetNum = budget ? parseInt(budget.replace(/,/g,'')) * (budget.toLowerCase().includes('k') ? 1000 : 1) : 0
+    const lq = query.toLowerCase()
+
+    // Detect category from query if not selected
+    const CAT_MAP: Record<string,string[]> = {
+      Electronics: ['simu','phone','laptop','computer','gadget','charger','tv','electronics'],
+      Fashion:     ['shoes','viatu','nguo','clothes','dress','shirt','bag','fashion','jeans'],
+      Food:        ['chakula','food','groceries','mkate','nyama','matunda','mboga','juice'],
+      Beauty:      ['beauty','makeup','skin','hair','nywele','sabuni','lotion','perfume'],
+    }
+    let detectedCat = category
+    if (!detectedCat) {
+      for (const [cat, kws] of Object.entries(CAT_MAP)) {
+        if (kws.some(k => lq.includes(k))) { detectedCat = cat; break }
+      }
+    }
+
+    // City from query
+    const CITY_KW: Record<string,string[]> = {
+      'Dar es Salaam': ['dar','kariakoo','ubungo','temeke'],
+      'Arusha':        ['arusha'],
+      'Mwanza':        ['mwanza'],
+      'Zanzibar':      ['zanzibar','unguja'],
+    }
+    let detectedCity = city
+    if (!detectedCity) {
+      for (const [c, kws] of Object.entries(CITY_KW)) {
+        if (kws.some(k => lq.includes(k))) { detectedCity = c; break }
+      }
+    }
+
+    try {
+      // Build shop query
+      let q2 = sb.from('shops')
+        .select('id,shop_name,shop_slug,shop_category,shop_city,logo_url,rating,is_verified,shop_description')
+        .eq('is_verified', true)
+        .limit(30)
+
+      if (detectedCat) q2 = q2.ilike('shop_category', `%${detectedCat}%`)
+      if (detectedCity) q2 = q2.ilike('shop_city', `%${detectedCity}%`)
+
+      const { data: shops } = await q2
+
+      const enriched: Result[] = []
+
+      for (const shop of (shops || []).slice(0, 15)) {
+        let pq = sb.from('products')
+          .select('name,price')
+          .eq('shop_id', shop.id)
+          .eq('is_available', true)
+          .limit(4)
+
+        if (budgetNum > 0) pq = pq.lte('price', budgetNum)
+
+        // Search product name from query
+        const searchTerms = query.split(' ').filter(w => w.length > 2 &&
+          !['nataka','ninatafuta','tafuta','find','nipe','please','na','ya','la','wa','za','kwa'].includes(w.toLowerCase())
+        )
+        if (searchTerms.length) pq = pq.or(searchTerms.map(t => `name.ilike.%${t}%`).join(','))
+
+        const { data: products } = await pq
+
+        // Text fallback search on shops
+        const textMatch = searchTerms.some(t =>
+          shop.shop_name?.toLowerCase().includes(t.toLowerCase()) ||
+          shop.shop_description?.toLowerCase().includes(t.toLowerCase())
+        )
+
+        if (products?.length || textMatch) {
+          const reasons: string[] = []
+          if (products?.length)             reasons.push(`${products.length} product${products.length > 1 ? 's' : ''} zinazolingana`)
+          if (budgetNum > 0 && products?.length) reasons.push(`ndani ya TZS ${budgetNum.toLocaleString()}`)
+          if (detectedCity)                 reasons.push(`📍 ${detectedCity}`)
+
+          enriched.push({
+            ...shop,
+            match_reason: reasons.join(' · ') || 'Verified store',
+            products: products || [],
+            rating: shop.rating || 0,
+          })
+        }
+      }
+
+      // Fallback — text search on shops if still empty
+      if (!enriched.length) {
+        const { data: fallback } = await sb.from('shops')
+          .select('id,shop_name,shop_slug,shop_category,shop_city,logo_url,rating')
+          .or(`shop_name.ilike.%${query}%,shop_description.ilike.%${query}%,shop_category.ilike.%${query}%`)
+          .limit(6)
+        for (const s of (fallback || [])) {
+          enriched.push({ ...s, match_reason: 'Matches search', products: [], rating: s.rating || 0 })
+        }
+      }
+
+      const sorted = enriched.sort((a,b) => b.products.length - a.products.length).slice(0, 8)
+      setResults(sorted)
+      setStep('done')
+
+      // AI message
+      if (sorted.length === 0) {
+        typeMessage(`Samahani, sikupata maduka yanayofanana na "${query}". Jaribu maneno tofauti au angalia market yote.`)
+      } else {
+        const summary = `Nimepata maduka ${sorted.length} yanayofanana na ulichotafuta${budgetNum ? ` ndani ya TZS ${budgetNum.toLocaleString()}` : ''}${detectedCity ? ` huko ${detectedCity}` : ''}. Angalia orodha hapa chini! 👇`
+        typeMessage(summary)
+      }
+
+    } catch (e) {
+      setStep('done')
+      typeMessage('Tatizo limetokea. Jaribu tena.')
+    }
+  }
+
+  const canSearch = query.trim().length > 1
 
   return (
-    <div style={{ height:'100vh', display:'flex', flexDirection:'column', background:'#F8FAFF', fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
+    <div style={{ minHeight: '100vh', background: '#F8FAFC', fontFamily: "'Inter',sans-serif" }}>
 
       {/* Header */}
-      <div style={{ paddingTop:108, background:'#fff', borderBottom:'1px solid #F1F5F9', padding:'108px 5% 14px', display:'flex', alignItems:'center', gap:12, position:'sticky', top:0, zIndex:10, flexShrink:0 }}>
-        <button onClick={() => router.back()}
-          style={{ background:'none', border:'none', cursor:'pointer', display:'flex', padding:4, color:'#64748B' }}>
-          <ArrowLeft size={20} />
-        </button>
-        <div style={{ width:40, height:40, borderRadius:12, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-          <Sparkles size={20} color="#C9A84C" />
+      <div style={{ background: 'linear-gradient(135deg,#080F37,#0D1B3E)', padding: '0 5%', position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px', height: '56px' }}>
+          <button onClick={() => router.back()} style={{ background: 'rgba(255,255,255,0.08)', border: 'none', color: '#fff', width: '32px', height: '32px', borderRadius: '10px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+          <span style={{ fontSize: '1.1rem' }}>✨</span>
+          <div>
+            <div style={{ fontWeight: 800, color: '#fff', fontSize: '0.92rem', letterSpacing: '-0.01em' }}>360 AI</div>
+            <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>Smart Store Finder</div>
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6ee7b7' }} />
+            <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>Online</span>
+          </div>
         </div>
-        <div style={{ flex:1 }}>
-          <div style={{ fontSize:'0.95rem', fontWeight:800, color:'#0D1B3E', letterSpacing:'-0.01em' }}>360 AI</div>
-          <div style={{ fontSize:'0.65rem', color:'#22C55E', fontWeight:600 }}>● ShopNekt AI Assistant</div>
-        </div>
-        {msgs.length > 0 && (
-          <button onClick={reset}
-            style={{ background:'#F1F5F9', border:'none', borderRadius:10, padding:'7px 12px', cursor:'pointer', display:'flex', alignItems:'center', gap:5, fontSize:'0.75rem', fontWeight:600, color:'#64748B', fontFamily:"'Inter',sans-serif" }}>
-            <RotateCcw size={13} /> New Chat
-          </button>
-        )}
       </div>
 
-      {/* Chat area */}
-      <div style={{ flex:1, overflowY:'auto', padding:'1rem 5%', display:'flex', flexDirection:'column', gap:12 }}>
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '24px 16px 120px' }}>
 
-        {/* Welcome screen */}
-        {msgs.length === 0 && (
-          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', padding:'1rem 0 1.5rem', animation:'fadeIn .4s ease' }}>
-            <div style={{ width:72, height:72, borderRadius:22, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:14, boxShadow:'0 8px 24px rgba(13,27,62,0.25)' }}>
-              <Sparkles size={32} color="#C9A84C" />
-            </div>
-            <h2 style={{ fontSize:'1.25rem', fontWeight:900, color:'#0D1B3E', marginBottom:6, letterSpacing:'-0.025em' }}>
-              Habari, {userName}! 👋
-            </h2>
-            <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', lineHeight:1.6, marginBottom:'1.5rem', maxWidth:280 }}>
-              I&apos;m 360 AI — your ShopNekt shopping assistant. Ask me anything about products, orders, features, or shopping!
-            </p>
+        {/* Welcome state */}
+        {step === 'idle' && (
+          <div style={{ textAlign: 'center', padding: '32px 0 28px' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🔍</div>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: '8px' }}>Niambie unataka nini</h1>
+            <p style={{ color: '#64748B', fontSize: '0.88rem', lineHeight: 1.6 }}>Andika bidhaa, budget, na eneo lako — 360 AI itakutafutia maduka yanayofaa</p>
 
-            {/* Quick prompts */}
-            <div style={{ width:'100%', display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8 }}>
-              {QUICK_PROMPTS.map((p, i) => (
-                <button key={i} onClick={() => sendMessage(p.text)}
-                  style={{ display:'flex', alignItems:'center', gap:10, padding:'11px 12px', background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:12, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', textAlign:'left' }}
-                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='#0D1B3E'; (e.currentTarget as HTMLElement).style.background='#F8FAFF' }}
-                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='#E2E8F0';  (e.currentTarget as HTMLElement).style.background='#fff' }}>
-                  <span style={{ fontSize:'1.1rem' }}>{p.icon}</span>
-                  <span style={{ fontSize:'0.78rem', fontWeight:600, color:'#0F172A', lineHeight:1.3 }}>{p.text}</span>
+            {/* Quick examples */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '20px' }}>
+              {[
+                'Shoes za chini ya 50k Dar',
+                'Laptop under 800,000',
+                'Chakula cha haraka Arusha',
+                'Nguo za watoto budget 30k',
+                'Phone accessories online',
+                'Beauty products affordable',
+              ].map((s, i) => (
+                <button key={i} onClick={() => { setQuery(s); setTimeout(runSearch, 50) }}
+                  style={{ padding: '7px 14px', borderRadius: '999px', background: '#F1F5F9', border: '1px solid #E2E8F0', color: '#475569', fontSize: '0.75rem', cursor: 'pointer', fontFamily: 'Inter,sans-serif', transition: 'all .2s' }}
+                  onMouseOver={e => { (e.target as HTMLElement).style.background = '#E2E8F0' }}
+                  onMouseOut={e => { (e.target as HTMLElement).style.background = '#F1F5F9' }}>
+                  {s}
                 </button>
               ))}
             </div>
           </div>
         )}
 
-        {/* Messages */}
-        {msgs.map((msg, i) => (
-          <div key={i} style={{ display:'flex', justifyContent: msg.role==='user'?'flex-end':'flex-start', gap:8 }}>
-            {msg.role === 'assistant' && (
-              <div style={{ width:32, height:32, borderRadius:10, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2 }}>
-                <Sparkles size={15} color="#C9A84C" />
-              </div>
-            )}
-            <div style={{
-              maxWidth:'78%', padding:'11px 14px',
-              borderRadius: msg.role==='user' ? '18px 18px 4px 18px' : '4px 18px 18px 18px',
-              background: msg.role==='user' ? '#0D1B3E' : '#fff',
-              color:      msg.role==='user' ? '#fff'    : '#0F172A',
-              fontSize:'0.875rem', lineHeight:1.6,
-              boxShadow:'0 1px 4px rgba(15,23,42,0.08)',
-              border: msg.role==='user' ? 'none' : '1px solid #E2E8F0',
-              whiteSpace:'pre-wrap',
-            }}>
-              {msg.content}
-            </div>
-          </div>
-        ))}
-
-        {/* Typing indicator */}
-        {loading && (
-          <div style={{ display:'flex', gap:8 }}>
-            <div style={{ width:32, height:32, borderRadius:10, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              <Sparkles size={15} color="#C9A84C" />
-            </div>
-            <div style={{ padding:'12px 16px', background:'#fff', border:'1px solid #E2E8F0', borderRadius:'4px 18px 18px 18px', display:'flex', alignItems:'center', gap:5 }}>
-              {[0,1,2].map(i => (
-                <div key={i} style={{ width:7, height:7, borderRadius:'50%', background:'#CBD5E1', animation:`bounce .9s ease ${i*0.15}s infinite` }} />
-              ))}
+        {/* AI typing message */}
+        {aiMsg && (
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '20px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'linear-gradient(135deg,#0D1B3E,#1a2a5e)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', flexShrink: 0 }}>✨</div>
+            <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '0 16px 16px 16px', padding: '12px 16px', fontSize: '0.88rem', color: '#334155', lineHeight: 1.6, boxShadow: '0 1px 6px rgba(0,0,0,0.05)', maxWidth: '85%' }}>
+              {aiMsg}
+              {step === 'searching' && <span style={{ opacity: 0.5 }}>{dots}</span>}
             </div>
           </div>
         )}
 
-        <div ref={bottomRef} />
+        {/* Searching skeleton */}
+        {step === 'searching' && !aiMsg && (
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '20px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'linear-gradient(135deg,#0D1B3E,#1a2a5e)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', flexShrink: 0 }}>✨</div>
+            <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '0 16px 16px 16px', padding: '12px 16px', boxShadow: '0 1px 6px rgba(0,0,0,0.05)' }}>
+              <span style={{ color: '#94A3B8', fontSize: '0.85rem' }}>Ninasearch maduka{dots}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Results */}
+        {results.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}>
+            {results.map((store, i) => (
+              <a key={store.id} href={`/store/${store.shop_slug}`}
+                style={{ display: 'flex', alignItems: 'center', gap: '14px', background: '#fff', border: '1.5px solid #E2E8F0', borderRadius: '16px', padding: '14px 16px', textDecoration: 'none', color: 'inherit', boxShadow: '0 1px 6px rgba(0,0,0,0.04)', transition: 'all .2s', animationDelay: `${i * 60}ms` }}
+                onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#C9A84C'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(201,168,76,0.12)' }}
+                onMouseOut={e => { (e.currentTarget as HTMLElement).style.borderColor = '#E2E8F0'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 6px rgba(0,0,0,0.04)' }}>
+
+                {/* Logo */}
+                <div style={{ width: '48px', height: '48px', borderRadius: '14px', flexShrink: 0, background: store.logo_url ? `url(${store.logo_url}) center/cover` : 'linear-gradient(135deg,#0D1B3E,#1a2a5e)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', color: '#C9A84C', fontWeight: 800, border: '1px solid #E2E8F0' }}>
+                  {!store.logo_url && (store.shop_name?.[0]?.toUpperCase() || '🏪')}
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+                    <span style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.92rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{store.shop_name}</span>
+                    {store.rating > 0 && <span style={{ fontSize: '0.68rem', color: '#C9A84C', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginBottom: '5px', display: 'flex', gap: '8px' }}>
+                    {store.shop_category && <span>{store.shop_category}</span>}
+                    {store.shop_city && <span>📍 {store.shop_city}</span>}
+                  </div>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.68rem', color: '#059669', background: 'rgba(5,150,105,0.08)', border: '1px solid rgba(5,150,105,0.15)', borderRadius: '999px', padding: '2px 8px' }}>
+                    ✓ {store.match_reason}
+                  </span>
+                  {store.products.length > 0 && (
+                    <div style={{ marginTop: '7px', display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                      {store.products.slice(0,3).map((p,j) => (
+                        <span key={j} style={{ fontSize: '0.68rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '2px 8px', color: '#475569' }}>
+                          {p.name} · <strong>TZS {p.price?.toLocaleString()}</strong>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <span style={{ color: '#CBD5E1', fontSize: '1.2rem', flexShrink: 0 }}>›</span>
+              </a>
+            ))}
+
+            <a href={`/market?q=${encodeURIComponent(query)}`}
+              style={{ display: 'block', textAlign: 'center', padding: '12px', color: '#3B82F6', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', borderRadius: '12px', background: '#EFF6FF', border: '1px solid #DBEAFE' }}>
+              Angalia maduka yote kwenye Market →
+            </a>
+          </div>
+        )}
+
+        {/* No results */}
+        {step === 'done' && results.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '24px', color: '#94A3B8', fontSize: '0.85rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔎</div>
+            Hakuna maduka yaliyopatikana.<br/>
+            <a href="/market" style={{ color: '#3B82F6', textDecoration: 'none', fontWeight: 600 }}>Angalia market yote →</a>
+          </div>
+        )}
       </div>
 
-      {/* Input */}
-      <div style={{ background:'#fff', borderTop:'1px solid #F1F5F9', padding:'12px 5% 20px', flexShrink:0 }}>
-        <div style={{ display:'flex', gap:8, alignItems:'flex-end', background:'#F8FAFF', border:'1.5px solid #E2E8F0', borderRadius:18, padding:'8px 8px 8px 14px', transition:'border-color .2s' }}
-          onFocusCapture={e => (e.currentTarget as HTMLElement).style.borderColor='#0D1B3E'}
-          onBlurCapture={e  => (e.currentTarget as HTMLElement).style.borderColor='#E2E8F0'}>
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() } }}
-            placeholder="Ask 360 AI anything..."
-            rows={1}
-            style={{ flex:1, border:'none', outline:'none', background:'transparent', fontSize:'0.875rem', fontFamily:"'Inter',sans-serif", resize:'none', lineHeight:1.5, color:'#0F172A', maxHeight:100 }}
-          />
-          <button onClick={() => sendMessage()} disabled={!input.trim() || loading}
-            style={{ width:38, height:38, borderRadius:12, background: input.trim()&&!loading ? '#0D1B3E' : '#E2E8F0', border:'none', cursor: input.trim()&&!loading ? 'pointer':'not-allowed', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
-            {loading
-              ? <Loader2 size={16} color="#94A3B8" style={{ animation:'spin 1s linear infinite' }} />
-              : <Send size={15} color={input.trim() ? '#C9A84C' : '#94A3B8'} />}
-          </button>
+      {/* ── Fixed bottom input ─────────────────────────────── */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#fff', borderTop: '1px solid #E2E8F0', padding: '12px 16px 20px', zIndex: 100 }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
+          {/* Filters row */}
+          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '2px' }}>
+            {/* Budget */}
+            <input
+              value={budget}
+              onChange={e => setBudget(e.target.value)}
+              placeholder="💰 Budget (e.g. 50000)"
+              style={{ minWidth: '150px', flex: '0 0 auto', padding: '7px 12px', borderRadius: '999px', border: '1.5px solid #E2E8F0', fontSize: '0.75rem', fontFamily: 'Inter,sans-serif', outline: 'none', color: '#334155' }}
+              onFocus={e => e.target.style.borderColor = '#C9A84C'}
+              onBlur={e => e.target.style.borderColor = '#E2E8F0'}
+            />
+            {/* Category */}
+            <select value={category} onChange={e => setCategory(e.target.value)}
+              style={{ minWidth: '130px', flex: '0 0 auto', padding: '7px 10px', borderRadius: '999px', border: '1.5px solid #E2E8F0', fontSize: '0.75rem', fontFamily: 'Inter,sans-serif', color: category ? '#334155' : '#94A3B8', outline: 'none', background: '#fff', cursor: 'pointer' }}>
+              <option value="">📦 Category</option>
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            {/* City */}
+            <select value={city} onChange={e => setCity(e.target.value)}
+              style={{ minWidth: '130px', flex: '0 0 auto', padding: '7px 10px', borderRadius: '999px', border: '1.5px solid #E2E8F0', fontSize: '0.75rem', fontFamily: 'Inter,sans-serif', color: city ? '#334155' : '#94A3B8', outline: 'none', background: '#fff', cursor: 'pointer' }}>
+              <option value="">📍 City</option>
+              {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          {/* Main input */}
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && runSearch()}
+              placeholder="Niambie unataka nini... e.g. 'nataka shoes'"
+              style={{ flex: 1, padding: '13px 16px', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '0.88rem', fontFamily: 'Inter,sans-serif', outline: 'none', color: '#0F172A' }}
+              onFocus={e => e.target.style.borderColor = '#C9A84C'}
+              onBlur={e => e.target.style.borderColor = '#E2E8F0'}
+            />
+            <button onClick={runSearch} disabled={!canSearch || step === 'searching'}
+              style={{ padding: '13px 22px', borderRadius: '14px', background: canSearch ? '#0D1B3E' : '#E2E8F0', border: 'none', color: canSearch ? '#C9A84C' : '#94A3B8', fontWeight: 700, fontSize: '0.85rem', cursor: canSearch ? 'pointer' : 'default', fontFamily: 'Inter,sans-serif', transition: 'all .2s', whiteSpace: 'nowrap' }}>
+              {step === 'searching' ? '...' : 'Search ✨'}
+            </button>
+          </div>
         </div>
-        <p style={{ textAlign:'center', fontSize:'0.62rem', color:'#CBD5E1', marginTop:8 }}>
-          360 AI by QNEX360 · Cannot process payments or access location
-        </p>
       </div>
-
-      <style>{`
-        @keyframes spin   { to { transform: rotate(360deg) } }
-        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-      `}</style>
     </div>
   )
 }
