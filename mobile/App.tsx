@@ -1,7 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
-  View, Text, StyleSheet, BackHandler,
-  ActivityIndicator, Platform, StatusBar, TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  BackHandler,
+  ActivityIndicator,
+  Platform,
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native'
 import { WebView } from 'react-native-webview'
 import * as SplashScreen from 'expo-splash-screen'
@@ -10,17 +16,15 @@ SplashScreen.preventAutoHideAsync()
 
 const BASE_URL = 'https://shopnekt.vercel.app'
 
-const INJECT_JS = [
-  'window.__SHOPNEKT_APP__ = true;',
-  'window.__SHOPNEKT_PLATFORM__ = "' + Platform.OS + '";',
-  'window.__SHOPNEKT_VERSION__ = "1.0.0";',
-  'true;',
-].join('\n')
+const INJECT_JS =
+  'window.__SHOPNEKT_APP__=true;' +
+  'window.__SHOPNEKT_NATIVE__=true;' +
+  'true;'
 
 export default function App() {
-  const webRef = useRef<InstanceType<typeof WebView>>(null)
-  const [loading, setLoading] = useState(true)
-  const [offline, setOffline] = useState(false)
+  const webRef = useRef<any>(null)
+  const [ready, setReady] = useState(false)
+  const [error, setError] = useState(false)
   const [canBack, setCanBack] = useState(false)
 
   useEffect(() => {
@@ -39,87 +43,88 @@ export default function App() {
     return () => sub.remove()
   }, [canBack])
 
-  function retry() {
-    setOffline(false)
-    setLoading(true)
-    webRef.current?.reload()
-  }
-
-  if (offline) {
+  if (error) {
     return (
-      <View style={s.offline}>
+      <View style={styles.center}>
         <StatusBar barStyle="light-content" backgroundColor="#080F37" />
-        <Text style={s.offlineIcon}>📵</Text>
-        <Text style={s.offlineTitle}>Hakuna Mtandao</Text>
-        <Text style={s.offlineSub}>Angalia connection yako na ujaribu tena</Text>
-        <TouchableOpacity style={s.retryBtn} onPress={retry}>
-          <Text style={s.retryText}>🔄 Jaribu Tena</Text>
+        <Text style={styles.emoji}>📵</Text>
+        <Text style={styles.title}>Hakuna Mtandao</Text>
+        <Text style={styles.sub}>Angalia connection yako na ujaribu tena</Text>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {
+            setError(false)
+            setReady(false)
+            if (webRef.current) webRef.current.reload()
+          }}
+        >
+          <Text style={styles.btnText}>🔄  Jaribu Tena</Text>
         </TouchableOpacity>
       </View>
     )
   }
 
   return (
-    <View style={s.container}>
+    <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#0D1B3E" translucent={false} />
 
-      {loading && (
-        <View style={s.splash}>
-          <Text style={s.brand}>
-            shop<Text style={s.orange}>nekt</Text>
+      {!ready && (
+        <View style={styles.splash}>
+          <Text style={styles.brand}>
+            <Text>shop</Text>
+            <Text style={styles.gold}>nekt</Text>
           </Text>
-          <ActivityIndicator color="#C9A84C" size="large" style={{ marginTop: 28 }} />
-          <Text style={s.tag}>powered by 360 AI</Text>
+          <ActivityIndicator color="#C9A84C" size="large" style={styles.spinner} />
+          <Text style={styles.tag}>by QNEX360</Text>
         </View>
       )}
 
       <WebView
         ref={webRef}
         source={{ uri: BASE_URL }}
-        style={loading ? s.hidden : s.webview}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        allowsInlineMediaPlayback={true}
-        mediaPlaybackRequiresUserAction={false}
-        geolocationEnabled={true}
+        style={ready ? styles.web : styles.hide}
+        javaScriptEnabled
+        domStorageEnabled
+        allowsInlineMediaPlayback
+        geolocationEnabled
         injectedJavaScript={INJECT_JS}
         applicationNameForUserAgent="ShopNektApp/1.0"
-        cacheEnabled={true}
-        allowFileAccess={true}
+        cacheEnabled
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        overScrollMode="never"
-        bounces={false}
-        onLoadStart={() => setLoading(true)}
-        onLoadEnd={() => setLoading(false)}
-        onError={() => { setLoading(false); setOffline(true) }}
-        onHttpError={() => { setLoading(false); setOffline(true) }}
-        onNavigationStateChange={state => setCanBack(state.canGoBack)}
+        onLoadEnd={() => setReady(true)}
+        onError={() => { setReady(true); setError(true) }}
+        onHttpError={() => { setReady(true); setError(true) }}
+        onNavigationStateChange={(s: any) => setCanBack(s.canGoBack)}
       />
     </View>
   )
 }
 
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0D1B3E' },
-  webview:   { flex: 1 },
-  hidden:    { width: 0, height: 0, opacity: 0 },
+const NAVY = '#080F37'
+const GOLD = '#C9A84C'
+
+const styles = StyleSheet.create({
+  root:    { flex: 1, backgroundColor: NAVY },
+  web:     { flex: 1 },
+  hide:    { flex: 0, width: 0, height: 0 },
 
   splash: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#080F37',
+    backgroundColor: NAVY,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 99,
+    zIndex: 10,
   },
-  brand:  { fontSize: 38, fontWeight: '900', color: '#FFFFFF', letterSpacing: -1 },
-  orange: { color: '#C9A84C' },
-  tag:    { color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', marginTop: 28 },
+  brand:   { fontSize: 40, fontWeight: '900', color: '#fff', letterSpacing: -1 },
+  gold:    { color: GOLD },
+  spinner: { marginTop: 28 },
+  tag:     { color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', marginTop: 24 },
 
-  offline: { flex: 1, backgroundColor: '#080F37', alignItems: 'center', justifyContent: 'center', padding: 32 },
-  offlineIcon:  { fontSize: 56, marginBottom: 16 },
-  offlineTitle: { fontSize: 22, fontWeight: '800', color: '#FFFFFF', marginBottom: 8 },
-  offlineSub:   { fontSize: 14, color: 'rgba(255,255,255,0.5)', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
-  retryBtn:  { backgroundColor: '#C9A84C', borderRadius: 999, paddingHorizontal: 32, paddingVertical: 14 },
-  retryText: { color: '#0D1B3E', fontWeight: '700', fontSize: 15 },
+  center:  { flex: 1, backgroundColor: NAVY, alignItems: 'center', justifyContent: 'center', padding: 32 },
+  emoji:   { fontSize: 56, marginBottom: 16 },
+  title:   { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 8 },
+  sub:     { fontSize: 14, color: 'rgba(255,255,255,0.5)', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
+  btn:     { backgroundColor: GOLD, borderRadius: 999, paddingHorizontal: 32, paddingVertical: 14 },
+  btnText: { color: NAVY, fontWeight: '700', fontSize: 15 },
 })
