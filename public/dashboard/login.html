@@ -208,7 +208,7 @@ async function goToPinScreen() {
   // Check email exists in pending_payments
   try {
     const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(email)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,seller_pin`,
+      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(email)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,login_password`,
       { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
     )
     const data = await res.json()
@@ -285,7 +285,7 @@ async function verifyPin() {
 
   try {
     const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(currentEmail)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,seller_pin,login_password`,
+      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(currentEmail)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,login_password`,
       { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
     )
     const data = await res.json()
@@ -297,7 +297,7 @@ async function verifyPin() {
     }
 
     const shop = data[0]
-    const storedPin = shop.seller_pin || shop.login_password || ''
+    const storedPin = shop.login_password || ''
 
     if (storedPin !== pinValue) {
       showError('PIN si sahihi. Jaribu tena.')
