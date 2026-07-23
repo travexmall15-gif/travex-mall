@@ -73,8 +73,8 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
   <!-- PIN Format Guide -->
   <div class="pin-format">
     <div class="pin-format-label" data-en="Your PIN Format" data-sw="PIN Yako">Your PIN Format</div>
-    <div class="pin-format-value">XXXX — 0XX</div>
-    <div class="pin-format-desc" data-en="Your 4-digit PIN chosen during registration" data-sw="PIN yako ya namba 4 uliyochagua wakati wa kujiandikisha">Your 4-digit PIN chosen during registration</div>
+    <div class="pin-format-value">8842</div>
+    <div class="pin-format-desc" data-en="Enter only the 4-digit PIN sent via WhatsApp" data-sw="Ingiza namba 4 tu ulizopewa WhatsApp">Ingiza namba 4 tu ulizopewa WhatsApp</div>
   </div>
 
   <!-- Error / Success -->
@@ -87,7 +87,7 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
     <input
       type="text"
       id="pinInput"
-      placeholder="Weka PIN yako (namba 4)"
+      placeholder="Ingiza namba 4 (mfano: 8842)"
       maxlength="8"
       autocomplete="off"
       oninput="formatPin(this)"
@@ -116,13 +116,12 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
-// Auto-format PIN as user types: 8842 → 8842-048
+// Only allow digits, max 7 chars (handles both 8842 and 8842-003)
 function formatPin(input) {
-  let val = input.value.replace(/[^0-9]/g,'')
-  if (val.length > 4) {
-    val = val.slice(0,4) + '-' + val.slice(4,7)
-  }
-  input.value = val
+  let val = input.value.replace(/[^0-9-]/g,'')
+  // Auto strip to first 4 digits only
+  const digits = val.replace(/[^0-9]/g,'').slice(0,4)
+  input.value = digits
 }
 
 function showError(msg) {
@@ -139,13 +138,14 @@ function showSuccess(msg) {
 async function doLogin() {
   const pin = document.getElementById('pinInput').value.trim()
 
-  // Validate format: XXXX-XXX
-  if (!/^\d{4}$/.test(pin)) {
-    showError('PIN lazima iwe namba 4 (mfano: 8842)')
+  // Accept both: "8842" or "8842-003"
+  const cleanPin = pin.replace(/[^0-9]/g, '').slice(0, 4)
+  if (!/^\d{4}$/.test(cleanPin)) {
+    showError('PIN si sahihi. Ingiza namba 4 ulizopewa (mfano: 8842)')
     return
   }
 
-  const sellerPin = pin
+  const sellerPin = cleanPin
   const btn = document.getElementById('loginBtn')
   btn.textContent = 'Inaingia...'
   btn.disabled = true
@@ -160,7 +160,7 @@ async function doLogin() {
 
     if (!data || !data.length) {
       showError('Duka halikupatikana. Angalia PIN yako tena.')
-      btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
+      btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
       return
     }
 
@@ -168,14 +168,14 @@ async function doLogin() {
 
     if (shop.status !== 'approved') {
       showError('Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.')
-      btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
+      btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
       return
     }
 
     // Verify PIN
     if (shop.login_password !== sellerPin) {
       showError('PIN si sahihi. Jaribu tena au reset PIN yako.')
-      btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
+      btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
       return
     }
 
@@ -195,7 +195,7 @@ async function doLogin() {
 
   } catch(e) {
     showError('Hitilafu imetokea. Angalia internet yako na ujaribu tena.')
-    btn.textContent = '<span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>'; btn.disabled = false
+    btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
   }
 }
 
