@@ -696,3 +696,69 @@ html {
 html[data-fontsize="small"]  { font-size: 13px !important; }
 html[data-fontsize="medium"] { font-size: 16px !important; }
 html[data-fontsize="large"]  { font-size: 19px !important; }
+
+/* ── Performance: reduce layout shift ─────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Font display swap — prevent invisible text */
+@font-face {
+  font-display: swap;
+}
+
+/* Reduce paint areas */
+.will-change-transform { will-change: transform; }
+
+/* GPU acceleration for animations */
+.animate-spin,
+.flags-track,
+[class*="animate-"] {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Prevent content layout shift */
+img[width][height] {
+  aspect-ratio: attr(width) / attr(height);
+}
+
+/* Lazy load images below fold */
+img:not([loading]) {
+  loading: lazy;
+}
+
+/* Reduce repaints on hover */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Content visibility for off-screen sections */
+section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

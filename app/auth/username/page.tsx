@@ -50,7 +50,7 @@ export default function UsernamePage() {
 
       {/* Logo */}
       <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-        <img src="/icon-192.png" alt="ShopNekt" style={{ width: 56, height: 56, borderRadius: 14, objectFit: 'cover', marginBottom: 10 }} />
+        <img src="/icon-192.png" alt="ShopNekt" style={{ width: 56, height: 56, borderRadius: 14, objectFit: 'cover', marginBottom: 10 }}  loading="lazy" />
         <div>
           <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.03em' }}>shop</span>
           <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#F97316', letterSpacing: '-0.03em' }}>nekt</span>

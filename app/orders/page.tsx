@@ -106,7 +106,7 @@ export default function OrdersPage() {
                     {/* Product image / icon */}
                     <div style={{ width:52, height:52, borderRadius:12, background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
                       {order.image_url
-                        ? <img src={order.image_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                        ? <img src={order.image_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }}  loading="lazy" />
                         : <Package size={22} color="#94A3B8" />}
                     </div>
                     <div style={{ flex:1, minWidth:0 }}>

@@ -66,7 +66,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', marginBottom:'1.1rem' }}>
           <div style={{ padding:'14px 16px', borderBottom:'1px solid #F1F5F9', display:'flex', gap:12 }}>
             <div style={{ width:56, height:56, borderRadius:12, background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
-              {order?.image_url ? <img src={order.image_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : <Package size={24} color="#94A3B8" />}
+              {order?.image_url ? <img src={order.image_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }}  loading="lazy" /> : <Package size={24} color="#94A3B8" />}
             </div>
             <div style={{ flex:1 }}>
               <div style={{ fontSize:'0.95rem', fontWeight:700, color:'#0F172A' }}>{order?.product_name}</div>

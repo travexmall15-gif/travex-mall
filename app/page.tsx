@@ -31,7 +31,7 @@ export default function SplashPage() {
         .sp-line { height:2px;background:linear-gradient(90deg,transparent,#F97316,transparent);animation:lineGrow 0.5s ease 1.1s both;margin:10px 0 }
       `}</style>
 
-      <img src="/icon-192.png" alt="ShopNekt" className="sp-logo" />
+      <img src="/icon-192.png" alt="ShopNekt" className="sp-logo"  loading="lazy" />
 
       <div style={{ animation:'fadeUp 0.5s ease 0.5s both' }}>
         <span style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.6rem,5vw,3rem)', fontWeight:800, letterSpacing:'-0.03em', color:'#fff' }}>shop</span>

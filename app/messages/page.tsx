@@ -117,7 +117,7 @@ export default function MessagesPage() {
                   {/* Store avatar */}
                   <div style={{ width: 46, height: 46, borderRadius: 12, background: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
                     {convo.store_logo
-                      ? <img src={convo.store_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ? <img src={convo.store_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}  loading="lazy" />
                       : <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#C9A84C' }}>
                           {convo.store_name?.slice(0,2).toUpperCase() || 'SH'}
                         </span>

@@ -1,6 +1,7 @@
 'use client'
+import NextImage from "next/image"
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
@@ -39,6 +40,8 @@ type MarketShop = {
   slug: string | null
   created_at: string
 }
+
+const PAGE_SIZE = 20
 
 export default function MarketPage() {
   const { t } = useTranslation()
@@ -346,7 +349,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
       {/* Banner */}
       <div style={{ height: '70px', position: 'relative', overflow: 'hidden' }}>
         {shop.shop_banner
-          ? <img src={shop.shop_banner} alt={`${shop.shop_name || 'Shop'} banner`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ? <img src={shop.shop_banner} alt={`${shop.shop_name || 'Shop'} banner`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
           : <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}99 50%, #050B2E 100%)` }} />
         }
         {/* Plan badge — translated */}
@@ -361,7 +364,7 @@ function ShopCard({ shop }: { shop: MarketShop }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
           <div style={{ width: '28px', height: '28px', borderRadius: '7px', border: '1.5px solid #E8ECF4', overflow: 'hidden', flexShrink: 0, background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {shop.shop_logo
-              ? <img src={shop.shop_logo} alt={`${shop.shop_name || 'Shop'} logo`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ? <img src={shop.shop_logo} alt={`${shop.shop_name || 'Shop'} logo`} style={{ width: '100%', height: '100%', objectFit: 'cover' }}  loading="lazy" />
               : <span style={{ fontSize: '0.62rem', fontWeight: 900, color: '#fff' }}>{init}</span>
             }
           </div>

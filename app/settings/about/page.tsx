@@ -15,7 +15,7 @@ export default function AboutPage() {
 
         {/* App identity */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <img src="/icon-192.png" alt="ShopNekt" style={{ width: 72, height: 72, borderRadius: 18, objectFit: 'cover', marginBottom: 12 }} />
+          <img src="/icon-192.png" alt="ShopNekt" style={{ width: 72, height: 72, borderRadius: 18, objectFit: 'cover', marginBottom: 12 }}  loading="lazy" />
           <div>
             <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#0D1B3E' }}>shop</span>
             <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#F97316' }}>nekt</span>
