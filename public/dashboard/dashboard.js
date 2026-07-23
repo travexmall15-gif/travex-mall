@@ -37,7 +37,7 @@ const Auth = {
   },
   async signOut() {
     ['travex_session','travex_plan','travex_shop_name','travex_owner_name',
-     'travex_category','travex_region','travex_user_id'].forEach(k => localStorage.removeItem(k));
+     'travex_category','travex_region','travex_user_id','travex_email'].forEach(k => localStorage.removeItem(k));
     window.location.href = 'login.html';
   },
 };

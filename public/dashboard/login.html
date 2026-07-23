@@ -183,9 +183,30 @@ function clearMessages() {
 
 // ── Determine which screen to show ────────────────────
 function init() {
-  // Already fully logged in?
+  // Already logged in? Validate session against DB first
   const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}')
-  if (session?.id) { window.location.href = 'dashboard.html'; return }
+  if (session?.id) {
+    try {
+      const res = await fetch(
+        `${SB_URL}/rest/v1/pending_payments?id=eq.${session.id}&status=eq.approved&select=id,status`,
+        { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+      )
+      const data = await res.json()
+      if (data && data.length) {
+        // Valid session — go to dashboard
+        window.location.href = 'dashboard.html'
+        return
+      } else {
+        // Session expired or invalid — clear and show login
+        localStorage.removeItem(SESSION_KEY)
+        localStorage.removeItem(EMAIL_KEY)
+      }
+    } catch(e) {
+      // Network error — clear session to be safe
+      localStorage.removeItem(SESSION_KEY)
+      localStorage.removeItem(EMAIL_KEY)
+    }
+  }
 
   // Remembered email from last visit?
   const savedEmail = localStorage.getItem(EMAIL_KEY)
