@@ -40,17 +40,13 @@ export default function HomePage() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
 
-        /* ── Hero ─────────────────────────────────────────── */
-        .hero-outer { background: linear-gradient(160deg,#FFFFFF 0%,#F5F8FF 55%,#EBF0FF 100%); border-bottom: 1px solid #E2E8F0; }
-        .hero-wrap { display: flex; align-items: center; gap: 4rem; min-height: calc(90vh - 108px); max-width: 1200px; margin: 0 auto; padding: 5rem 5% 5rem; }
-        .hero-left { flex: 1 1 50%; }
-        .hero-right { flex: 1 1 50%; display: flex; justify-content: flex-end; }
-        .hero-h1 { font-size: clamp(2.8rem,5vw,4.5rem); font-weight:900; color:#0F172A; line-height:1.06; letter-spacing:-0.035em; margin:0 0 2rem; }
-        .hero-cta-row { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
-        .hero-stats { display:flex; gap:2.5rem; margin-top:3rem; padding-top:2.5rem; border-top:1px solid #E2E8F0; flex-wrap:wrap; }
-        .hero-pill { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(201,168,76,0.10); border:1px solid rgba(201,168,76,0.28); border-radius:999px; padding:0.3rem 0.9rem; margin-bottom:1.75rem; }
-        .cta-btn { display:inline-flex; align-items:center; gap:0.5rem; background:#C9A84C; color:#0F172A; padding:1rem 2.25rem; border-radius:999px; font-weight:800; font-size:0.97rem; text-decoration:none; box-shadow:0 8px 28px rgba(201,168,76,0.40); letter-spacing:-0.01em; transition:all 0.22s; }
-        .cta-btn:hover { background:#B8973B; transform:translateY(-2px); box-shadow:0 14px 36px rgba(201,168,76,0.52); }
+        /* ── Sell chip ────────────────────────────────────── */
+        .sell-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .sell-chip-inner { max-width:1100px; margin:0 auto; }
+        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(201,168,76,0.25); border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; }
+        .sell-chip-card:hover { border-color:rgba(201,168,76,0.50); background:rgba(201,168,76,0.06); }
+        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#C9A84C; color:#0F172A; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+        .sell-cta:hover { background:#B8973B; transform:translateY(-1px); box-shadow:0 6px 18px rgba(201,168,76,0.40); }
 
         /* ── AI chip ──────────────────────────────────────── */
         .ai-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
@@ -72,13 +68,9 @@ export default function HomePage() {
         .spons-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(15,23,42,0.10); border-color:rgba(201,168,76,0.30); }
 
         /* ── Responsive ───────────────────────────────────── */
-        @media (max-width: 900px) {
-          .hero-wrap  { flex-direction:column; min-height:auto; padding:3rem 5% 3.5rem; gap:2.5rem; text-align:center; }
-          .hero-right { width:100%; max-width:380px; margin:0 auto; justify-content:center; }
-          .hero-cta-row { justify-content:center; }
-          .hero-stats { justify-content:center; gap:2rem; }
-        }
         @media (max-width: 768px) {
+          .sell-chip-card { gap:10px; }
+          .sell-cta { width:100%; justify-content:center; }
           .market-cards { flex-direction:column!important; }
           .market-card  { min-height:300px!important; }
           .spons-grid { display:flex; overflow-x:auto; gap:1rem; padding-bottom:0.75rem; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; }
@@ -88,46 +80,23 @@ export default function HomePage() {
 
       <SiteNav />
 
-      {/* ──────────────────────────────── HERO ─── */}
-      <section className="hero-outer">
-        <div className="hero-wrap">
-
-          {/* Left */}
-          <div className="hero-left">
-            <div className="hero-pill">
-              <span style={{ width:6,height:6,borderRadius:'50%',background:'#C9A84C',display:'inline-block' }} />
-              <span style={{ fontSize:'0.72rem',fontWeight:700,color:'#A07830',letterSpacing:'0.08em' }}>ShopNekt · The Global Marketplace</span>
+      {/* ──────────────────────────────── START SELLING CHIP ─── */}
+      <div className="sell-chip-wrap">
+        <div className="sell-chip-inner">
+          <div className="sell-chip-card">
+            <div style={{ display:'flex',alignItems:'center',gap:12 }}>
+              <span style={{ fontSize:'1.3rem' }}>🏪</span>
+              <div>
+                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
+                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.40)',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
+              </div>
             </div>
-
-            <h1 className="hero-h1">{t('home.heroHeadline')}</h1>
-
-            <div className="hero-cta-row">
-              <Link href="/open-store" className="cta-btn">
-                {t('home.heroCta')} <ArrowRight size={17} />
-              </Link>
-            </div>
-
-            <div className="hero-stats">
-              {([
-                ['500+', t('home.shopCount')],
-                ['5',    t('home.uniCount')],
-                ['AI',   t('home.aiLabel')],
-              ] as [string,string][]).map(([val, lbl]) => (
-                <div key={lbl}>
-                  <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.9rem',fontWeight:900,color:'#0F172A',lineHeight:1,letterSpacing:'-0.03em' }}>{val}</div>
-                  <div style={{ fontSize:'0.72rem',color:'#64748B',marginTop:4,fontWeight:500 }}>{lbl}</div>
-                </div>
-              ))}
-            </div>
+            <Link href="/open-store" className="sell-cta">
+              {t('home.heroCta')} <ArrowRight size={14} />
+            </Link>
           </div>
-
-          {/* Right — SVG illustration */}
-          <div className="hero-right">
-            <MarketplaceIllustration />
-          </div>
-
         </div>
-      </section>
+      </div>
 
       {/* ──────────────────────────────── 360 AI CHIP ─── */}
       <div className="ai-chip-wrap">
@@ -309,9 +278,8 @@ export default function HomePage() {
     </main>
   )
 }
-
-// ── Premium Marketplace Illustration ─────────────────────────────────────────
-function MarketplaceIllustration() {
+// ── (illustration removed — hero replaced with compact chip) ─────────────────
+function _unused() {
   return (
     <svg
       viewBox="0 0 520 430"
