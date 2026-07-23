@@ -3,7 +3,21 @@ import { createClient } from '@supabase/supabase-js'
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
-export const sb = createClient(SB_URL, SB_KEY)
+export const sb = createClient(SB_URL, SB_KEY, {
+  global: {
+    // Disable fetch caching — ensures fresh data on every query
+    // This prevents stale Supabase responses being served from HTTP cache
+    fetch: (url, options = {}) => fetch(url, {
+      ...options,
+      cache: 'no-store',
+      headers: {
+        ...((options as any).headers || {}),
+        'Cache-Control': 'no-cache, no-store',
+        'Pragma': 'no-cache',
+      },
+    }),
+  },
+})
 
 // ── TYPES matching exact Supabase schema ──
 export type CampusApplication = {

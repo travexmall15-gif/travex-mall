@@ -1,7 +1,7 @@
 'use client'
 import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, User, Mail, Camera, Check, Loader2 } from 'lucide-react'
@@ -12,6 +12,7 @@ export default function ProfilePage() {
   const [name,    setName]    = useState('')
   const [email,   setEmail]   = useState('')
   const [saved,   setSaved]   = useState(false)
+  const pathname = usePathname()
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {

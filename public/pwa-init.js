@@ -4,6 +4,7 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
       navigator.serviceWorker.register('/sw.js')
+        .then(reg => reg.update())
         .catch(function(e) { /* silently fail */ });
     });
   }
@@ -26,3 +27,14 @@
     }
   };
 })();
+
+  // Force SW update on every page load — prevents stale cached pages
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(reg => {
+      reg.update() // Check for new SW version
+    })
+    // When new SW activates, reload to get fresh content
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload()
+    })
+  }

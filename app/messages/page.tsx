@@ -3,7 +3,7 @@ import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import { MessageSquare, Store, Search, Loader2 } from 'lucide-react'
@@ -23,6 +23,7 @@ export default function MessagesPage() {
   const { t } = useTranslation()
   const router = useRouter()
   const [convos,   setConvos]  = useState<Conversation[]>([])
+  const pathname = usePathname()
   const [loading,  setLoading] = useState(true)
   const [search,   setSearch]  = useState('')
   const [userId,   setUserId]  = useState<string | null>(null)

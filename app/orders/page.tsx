@@ -2,7 +2,7 @@
 import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
@@ -31,6 +31,7 @@ export default function OrdersPage() {
   const router = useRouter()
   const [orders,  setOrders]  = useState<Order[]>([])
   const [filter,  setFilter]  = useState<Filter>('all')
+  const pathname = usePathname()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

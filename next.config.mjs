@@ -1,6 +1,3 @@
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ── Image optimization ──────────────────────────────────
@@ -10,12 +7,13 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    dangerouslyAllowSVG: true,
   },
 
   // ── Compiler ────────────────────────────────────────────
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+    removeConsole: process.env.NODE_ENV === 'production'
+      ? { exclude: ['error', 'warn'] }
+      : false,
   },
 
   // ── Build ───────────────────────────────────────────────
@@ -25,46 +23,49 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
 
-  // ── Bundle size ─────────────────────────────────────────
+  // ── Router cache — CRITICAL: prevents stale UI ──────────
+  // staleTimes: 0 = never serve cached page segments
+  // Without this, navigating back shows old page for up to 5 minutes
   experimental: {
+    staleTimes: {
+      dynamic: 0,    // dynamic pages: never cache in router
+      static:  60,   // static pages: 1 min (they don't change mid-session)
+    },
     optimizePackageImports: [
       '@supabase/supabase-js',
       'lucide-react',
       '@vercel/analytics',
     ],
-    optimizeCss: false, // only if critters is installed
-    turbo: {
-      rules: { '*.svg': { loaders: ['@svgr/webpack'], as: '*.js' } },
-    },
   },
 
-  // ── HTTP Headers ─────────────────────────────────────────
+  // ── HTTP Cache-Control headers ───────────────────────────
   async headers() {
     return [
+      // HTML pages — never cache
       {
-        source: '/(.*)',
+        source: '/((?!_next/static|_next/image|favicon|icon|apple|og-image|manifest).*)',
         headers: [
-          { key: 'X-Content-Type-Options',  value: 'nosniff' },
-          { key: 'X-Frame-Options',         value: 'SAMEORIGIN' },
-          { key: 'X-XSS-Protection',        value: '1; mode=block' },
-          { key: 'Referrer-Policy',         value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy',      value: 'camera=(), microphone=(), geolocation=(self)' },
+          { key: 'Cache-Control',      value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Pragma',             value: 'no-cache' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options',       value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy',       value: 'strict-origin-when-cross-origin' },
         ],
       },
-      {
-        source: '/(.*)\\.(png|jpg|jpeg|gif|svg|ico|webp|avif|woff|woff2|ttf|otf)',
-        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
-      },
+      // Static JS/CSS (hashed) — cache 1 year
       {
         source: '/_next/static/(.*)',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
+      // Static images/fonts — cache 1 year
+      {
+        source: '/(.*)\\.(png|jpg|jpeg|gif|svg|ico|webp|avif|woff|woff2|ttf|otf)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      // API routes — never cache
       {
         source: '/api/(.*)',
-        headers: [
-          { key: 'Cache-Control', value: 'no-store' },
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-        ],
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
       },
     ]
   },

@@ -1,4 +1,5 @@
 'use client'
+import { usePathname } from 'next/navigation'
 
 import { Suspense, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
@@ -258,6 +259,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
 // ── Main Page ─────────────────────────────────────────────────
 export default function FlashDealsPage() {
+  const pathname = usePathname()
   const { t } = useTranslation()
   const [deals, setDeals]     = useState<Deal[]>([])
   const [loading, setLoading] = useState(true)
@@ -269,7 +271,7 @@ export default function FlashDealsPage() {
       .gt('ends_at', new Date().toISOString())
       .order('ends_at', { ascending: true })
       .then(({ data }) => { setDeals(data || []); setLoading(false) })
-  }, [])
+  }, [pathname])
 
   const featured     = deals[0] || null
   const rest         = deals.slice(1)
