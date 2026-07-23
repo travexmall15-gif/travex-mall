@@ -19,9 +19,9 @@ type ShopResult = {
 
 const NAV_ICON_DATA = [
   { href: '/home',        Icon: Home,          labelKey: 'nav.homeLabel'       },
+  { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
   { href: '/market',      Icon: Store,         labelKey: 'nav.businessLabel'   },
   { href: '/campus',      Icon: GraduationCap, labelKey: 'nav.campusLabel'     },
-  { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
   { href: '/flash-deals', Icon: Zap,           labelKey: 'nav.flashDealsLabel' },
   { href: '/group-buy',   Icon: Users,         labelKey: 'nav.groupBuyLabel'   },
   { href: '/messages',    Icon: MessageSquare, labelKey: 'nav.messagesLabel'   },

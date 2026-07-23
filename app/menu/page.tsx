@@ -34,6 +34,7 @@ export default function MenuPage() {
       label: 'Quick Navigation',
       items: [
         { icon: Home,           label: 'Home',               href: '/home',         color: '#0D1B3E' },
+        { icon: Sparkles,       label: 'Social Vybe',         href: '/vybe',         color: '#7C3AED' },
         { icon: Store,          label: 'Business Market',     href: '/market',       color: '#3B82F6' },
         { icon: GraduationCap,  label: 'Campus Market',       href: '/campus',       color: '#8B5CF6' },
         { icon: Zap,            label: 'Flash Deals',         href: '/flash-deals',  color: '#EF4444' },
