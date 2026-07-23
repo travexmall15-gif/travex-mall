@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -7,6 +8,7 @@ import { useLang } from '@/lib/lang-context'
 import { ArrowLeft, ChevronRight, Store, LayoutDashboard, ShoppingCart, MessageSquare, Settings, Shield, Info, LogOut, User, Globe, Zap, Users, Home, GraduationCap, Sparkles } from 'lucide-react'
 
 export default function MenuPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { lang, setLang } = useLang()
   const [user, setUser] = useState<{name:string, email:string} | null>(null)
@@ -104,7 +106,7 @@ export default function MenuPage() {
       {/* ── Language Toggle ── */}
       <div style={{ padding:'14px 16px', background:'#fff', borderBottom:'1px solid #F1F5F9', display:'flex', alignItems:'center', gap:12 }}>
         <Globe size={16} color="#64748B" />
-        <span style={{ fontSize:'0.82rem', fontWeight:600, color:'#475569', flex:1 }}>Language</span>
+        <span style={{ fontSize:'0.82rem', fontWeight:600, color:'#475569', flex:1 }}>{t('menuPage.language')}</span>
         <div style={{ display:'flex', background:'#F1F5F9', borderRadius:10, padding:3, gap:3 }}>
           {(['en','sw'] as const).map(code => (
             <button key={code} onClick={() => setLang(code)}
@@ -147,7 +149,7 @@ export default function MenuPage() {
             <div style={{ width:38, height:38, borderRadius:11, background:'rgba(239,68,68,0.10)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
               <LogOut size={18} color="#EF4444" strokeWidth={1.8} />
             </div>
-            <span style={{ fontSize:'0.9rem', fontWeight:700, color:'#EF4444' }}>Log Out</span>
+            <span style={{ fontSize:'0.9rem', fontWeight:700, color:'#EF4444' }}>{t('menuPage.logOut')}</span>
           </button>
         </div>
 
@@ -160,8 +162,8 @@ export default function MenuPage() {
       {showLogout && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', zIndex:999, display:'flex', alignItems:'flex-end', justifyContent:'center', padding:16 }}>
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', width:'100%', maxWidth:400, boxShadow:'0 -8px 40px rgba(0,0,0,0.15)', }}>
-            <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>Log Out?</h3>
-            <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', marginBottom:'1.25rem' }}>You'll need to sign in again next time.</p>
+            <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('menuPage.logOutConfirm')}</h3>
+            <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', marginBottom:'1.25rem' }}>{t('menuPage.logOutDesc')}</p>
             <div style={{ display:'flex', gap:8 }}>
               <button onClick={() => setShowLogout(false)}
                 style={{ flex:1, padding:'12px', background:'#F1F5F9', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#475569' }}>

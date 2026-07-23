@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -19,6 +20,7 @@ type Conversation = {
 }
 
 export default function MessagesPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [convos,   setConvos]  = useState<Conversation[]>([])
   const [loading,  setLoading] = useState(true)
@@ -63,7 +65,7 @@ export default function MessagesPage() {
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', letterSpacing: '-0.025em' }}>Messages</h1>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', letterSpacing: '-0.025em' }}>{t('messages.title')}</h1>
           {convos.length > 0 && (
             <span style={{ background: '#EF4444', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderRadius: 999 }}>
               {convos.filter(c => c.unread > 0).length} unread
@@ -95,7 +97,7 @@ export default function MessagesPage() {
             <div style={{ width: 68, height: 68, borderRadius: 20, background: '#EEF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
               <MessageSquare size={30} color="#6366F1" />
             </div>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0D1B3E', marginBottom: 8 }}>No messages yet</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0D1B3E', marginBottom: 8 }}>{t('messages.empty')}</h3>
             <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginBottom: 20, lineHeight: 1.6 }}>
               Visit a shop and start a conversation with a seller.
             </p>

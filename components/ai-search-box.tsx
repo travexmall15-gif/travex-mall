@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useRef } from 'react'
 import { sb } from '@/lib/supabase'
 
@@ -25,6 +26,7 @@ const SUGGESTIONS = [
 ]
 
 export default function AiSearchBox() {
+  const { t } = useTranslation()
   const [query, setQuery]     = useState('')
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<StoreResult[]>([])
@@ -256,7 +258,7 @@ export default function AiSearchBox() {
       {!loading && searched && results.length === 0 && !error && (
         <div style={{ marginTop: '20px', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', padding: '24px' }}>
           Hakuna maduka yaliyopatikana kwa &quot;{query}&quot;.<br/>
-          <span style={{ fontSize: '0.8rem' }}>Jaribu maneno mengine au <a href="/market" style={{ color: '#C9A84C', textDecoration: 'none' }}>angalia market yote</a></span>
+          <span style={{ fontSize: '0.8rem' }}>{t('ai.noResultsDesc')} <a href="/market" style={{ color: '#C9A84C', textDecoration: 'none' }}>{t('ai.browseAll')}</a></span>
         </div>
       )}
 

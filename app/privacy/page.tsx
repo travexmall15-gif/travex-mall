@@ -1,9 +1,11 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
 import { ArrowLeft } from 'lucide-react'
 
 export default function PrivacyPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const sections = [
     { title: 'Information We Collect', body: 'We collect information you provide directly, such as your name, email address, and username when you create an account. We also collect usage data to improve your experience.' },
@@ -21,7 +23,7 @@ export default function PrivacyPage() {
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: '0.82rem', fontWeight: 600, fontFamily: "'Inter',sans-serif", marginBottom: '1.5rem', padding: 0 }}>
           <ArrowLeft size={15} /> Back
         </button>
-        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: 6, letterSpacing: '-0.025em' }}>Privacy Policy</h1>
+        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: 6, letterSpacing: '-0.025em' }}>{t('privacy.title')}</h1>
         <p style={{ fontSize: '0.72rem', color: '#94A3B8', marginBottom: '1.75rem' }}>Last updated: July 2026</p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

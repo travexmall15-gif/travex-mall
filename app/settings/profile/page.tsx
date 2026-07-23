@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
@@ -6,6 +7,7 @@ import { sb } from '@/lib/supabase'
 import { ArrowLeft, User, Mail, Camera, Check, Loader2 } from 'lucide-react'
 
 export default function ProfilePage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [name,    setName]    = useState('')
   const [email,   setEmail]   = useState('')
@@ -38,7 +40,7 @@ export default function ProfilePage() {
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: '0.82rem', fontWeight: 600, fontFamily: "'Inter',sans-serif", marginBottom: '1.5rem', padding: 0 }}>
           <ArrowLeft size={15} /> Back
         </button>
-        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '1.75rem', letterSpacing: '-0.025em' }}>Edit Profile</h1>
+        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '1.75rem', letterSpacing: '-0.025em' }}>{t('profile.title')}</h1>
 
         {/* Avatar */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -48,24 +50,24 @@ export default function ProfilePage() {
               <Camera size={12} color="#fff" />
             </div>
           </div>
-          <p style={{ fontSize: '0.72rem', color: '#94A3B8' }}>Tap to change photo</p>
+          <p style={{ fontSize: '0.72rem', color: '#94A3B8' }}>{t('profile.tapToChange')}</p>
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, border: '1.5px solid #E2E8F0', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
-            <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Display Name</label>
+            <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>{t('profile.displayName')}</label>
             <div style={{ position: 'relative' }}>
               <User size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
               <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={inp} onFocus={e => (e.target.style.borderColor = '#0D1B3E')} onBlur={e => (e.target.style.borderColor = '#E2E8F0')} />
             </div>
           </div>
           <div>
-            <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Email</label>
+            <label style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>{t('profile.email')}</label>
             <div style={{ position: 'relative' }}>
               <Mail size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
               <input value={email} disabled placeholder="Email" style={{ ...inp, opacity: 0.6, cursor: 'not-allowed' }} />
             </div>
-            <p style={{ fontSize: '0.65rem', color: '#94A3B8', marginTop: 4 }}>Email cannot be changed here</p>
+            <p style={{ fontSize: '0.65rem', color: '#94A3B8', marginTop: 4 }}>{t('profile.emailNote')}</p>
           </div>
         </div>
 

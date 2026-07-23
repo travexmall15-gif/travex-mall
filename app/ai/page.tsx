@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { sb } from '@/lib/supabase'
@@ -23,6 +24,7 @@ const CATEGORIES = ['Electronics','Fashion','Food','Beauty','Home','Books','Spor
 const CITIES     = ['Dar es Salaam','Arusha','Mwanza','Dodoma','Moshi','Zanzibar','Tanga','Morogoro']
 
 export default function AiPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -162,7 +164,7 @@ export default function AiPage() {
 
       // AI message
       if (sorted.length === 0) {
-        typeMessage(`Samahani, sikupata maduka yanayofanana na "${query}". Jaribu maneno tofauti au angalia market yote.`)
+        typeMessage(`Samahani, sikupata maduka yanayofanana na "${query}". Jaribu maneno tofauti au {t('ai.browseAll')}.`)
       } else {
         const summary = `Nimepata maduka ${sorted.length} yanayofanana na ulichotafuta${budgetNum ? ` ndani ya TZS ${budgetNum.toLocaleString()}` : ''}${detectedCity ? ` huko ${detectedCity}` : ''}. Angalia orodha hapa chini! 👇`
         typeMessage(summary)
@@ -185,12 +187,12 @@ export default function AiPage() {
           <button onClick={() => router.back()} style={{ background: 'rgba(255,255,255,0.08)', border: 'none', color: '#fff', width: '32px', height: '32px', borderRadius: '10px', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
           <span style={{ fontSize: '1.1rem' }}>✨</span>
           <div>
-            <div style={{ fontWeight: 800, color: '#fff', fontSize: '0.92rem', letterSpacing: '-0.01em' }}>360 AI</div>
-            <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>Smart Store Finder</div>
+            <div style={{ fontWeight: 800, color: '#fff', fontSize: '0.92rem', letterSpacing: '-0.01em' }}>{t('ai.title')}</div>
+            <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>{t('ai.subtitle')}</div>
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6ee7b7' }} />
-            <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>Online</span>
+            <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)' }}>{t('ai.online')}</span>
           </div>
         </div>
       </div>
@@ -201,7 +203,7 @@ export default function AiPage() {
         {step === 'idle' && (
           <div style={{ textAlign: 'center', padding: '32px 0 28px' }}>
             <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🔍</div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: '8px' }}>Niambie unataka nini</h1>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: '8px' }}>{t('ai.welcome')}</h1>
             <p style={{ color: '#64748B', fontSize: '0.88rem', lineHeight: 1.6 }}>Andika bidhaa, budget, na eneo lako — 360 AI itakutafutia maduka yanayofaa</p>
 
             {/* Quick examples */}
@@ -314,7 +316,7 @@ export default function AiPage() {
             <input
               value={budget}
               onChange={e => setBudget(e.target.value)}
-              placeholder="💰 Budget (e.g. 50000)"
+              placeholder={t('ai.budgetPlaceholder')}
               style={{ minWidth: '150px', flex: '0 0 auto', padding: '7px 12px', borderRadius: '999px', border: '1.5px solid #E2E8F0', fontSize: '0.75rem', fontFamily: 'Inter,sans-serif', outline: 'none', color: '#334155' }}
               onFocus={e => e.target.style.borderColor = '#C9A84C'}
               onBlur={e => e.target.style.borderColor = '#E2E8F0'}
@@ -340,7 +342,7 @@ export default function AiPage() {
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && runSearch()}
-              placeholder="Niambie unataka nini... e.g. 'nataka shoes'"
+              placeholder={t('ai.placeholder')}
               style={{ flex: 1, padding: '13px 16px', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '0.88rem', fontFamily: 'Inter,sans-serif', outline: 'none', color: '#0F172A' }}
               onFocus={e => e.target.style.borderColor = '#C9A84C'}
               onBlur={e => e.target.style.borderColor = '#E2E8F0'}

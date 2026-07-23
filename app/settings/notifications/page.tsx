@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
@@ -15,6 +16,7 @@ const Toggle = ({ on, onToggle }: { on:boolean; onToggle:()=>void }) => (
 )
 
 export default function NotificationsPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [s, setS] = useState(DEFAULTS)
 
@@ -47,7 +49,7 @@ export default function NotificationsPage() {
         <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
           <ArrowLeft size={15} /> Back
         </button>
-        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>Notifications</h1>
+        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>{t('notifications.title')}</h1>
 
         <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
           {items.map((item, i) => (

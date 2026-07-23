@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
@@ -15,7 +16,8 @@ const STATUS_STYLE: Record<string, { bg:string; color:string; label:string; desc
   delivered:        { bg:'#F0FDF4', color:'#059669', label:'Delivered',        desc:'Order delivered successfully' },
 }
 
-export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function OrderDetailPage({params }: { params: Promise<{ id: string }> }) {
+  const { t } = useTranslation()
   const { id } = use(params)
   const router  = useRouter()
   const [order, setOrder] = useState<any>(null)
@@ -51,7 +53,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           <ArrowLeft size={15}/> Back
         </button>
 
-        <h1 style={{ fontSize:'1.1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem' }}>Order Details</h1>
+        <h1 style={{ fontSize:'1.1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem' }}>{t('orders.orderDetails')}</h1>
 
         {/* Status banner */}
         <div style={{ background: st.bg, border:`1.5px solid ${st.color}30`, borderRadius:14, padding:'14px 16px', marginBottom:'1.25rem', display:'flex', gap:12, alignItems:'flex-start' }}>

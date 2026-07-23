@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -26,6 +27,7 @@ const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }>
 }
 
 export default function OrdersPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [orders,  setOrders]  = useState<Order[]>([])
   const [filter,  setFilter]  = useState<Filter>('all')
@@ -61,7 +63,7 @@ export default function OrdersPage() {
           style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
           <ArrowLeft size={15}/> Back
         </button>
-        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem', letterSpacing:'-0.025em' }}>My Orders</h1>
+        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem', letterSpacing:'-0.025em' }}>{t('orders.title')}</h1>
 
         {/* Filter pills */}
         <div style={{ display:'flex', gap:6, marginBottom:'1.25rem', overflowX:'auto', paddingBottom:4 }}>

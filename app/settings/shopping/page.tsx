@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -24,6 +25,7 @@ const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
 )
 
 export default function ShoppingPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [categories, setCategories] = useState<string[]>([])
   const [alerts, setAlerts] = useState({ flashDeals:true, groupBuy:true, priceDrops:false, newArrivals:false })
@@ -68,7 +70,7 @@ export default function ShoppingPage() {
           </button>
         </div>
 
-        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>Shopping Preferences</h1>
+        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>{t('shopping.title')}</h1>
 
         {/* ── Orders Button ─────────────────────────── */}
         <button onClick={() => router.push('/orders')}
@@ -77,7 +79,7 @@ export default function ShoppingPage() {
             <Package size={22} color="#C9A84C" />
           </div>
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:'1rem', fontWeight:800, color:'#fff' }}>My Orders</div>
+            <div style={{ fontSize:'1rem', fontWeight:800, color:'#fff' }}>{t('shopping.orders')}</div>
             <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.5)', marginTop:2 }}>
               {orderCount.total} total · {orderCount.pending} pending
             </div>
@@ -94,15 +96,15 @@ export default function ShoppingPage() {
             <Heart size={18} color="#EF4444" />
           </div>
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:'0.9rem', fontWeight:700, color:'#0F172A' }}>Saved Posts</div>
-            <div style={{ fontSize:'0.72rem', color:'#94A3B8', marginTop:2 }}>Products you liked on Social Vybe</div>
+            <div style={{ fontSize:'0.9rem', fontWeight:700, color:'#0F172A' }}>{t('shopping.savedPosts')}</div>
+            <div style={{ fontSize:'0.72rem', color:'#94A3B8', marginTop:2 }}>{t('shopping.savedPostsDesc')}</div>
           </div>
           <ChevronRight size={15} color="#CBD5E1" />
         </button>
 
         {/* ── Categories ────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Favourite Categories</p>
+          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('shopping.favouriteCategories')}</p>
           <div style={{ display:'flex', flexWrap:'wrap', gap:'7px' }}>
             {CATEGORIES.map(cat => {
               const sel = categories.includes(cat)
@@ -118,7 +120,7 @@ export default function ShoppingPage() {
 
         {/* ── Deal Alerts ───────────────────────────── */}
         <div style={{ marginBottom:'1.5rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Deal Alerts</p>
+          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('shopping.dealAlerts')}</p>
           <div style={{ background:'#fff', borderRadius:14, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { key:'flashDeals',  icon:Zap,   label:'Flash Deals',        sub:'Limited time offers',          color:'#EF4444' },

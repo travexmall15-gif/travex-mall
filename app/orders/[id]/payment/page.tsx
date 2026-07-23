@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
@@ -25,7 +26,8 @@ const PAYMENT_METHODS: PaymentMethod[] = [
 
 type PayOption = 'full' | 'item-only' | 'delivery-later'
 
-export default function PaymentPage({ params }: { params: Promise<{ id: string }> }) {
+export default function PaymentPage({params }: { params: Promise<{ id: string }> }) {
+  const { t } = useTranslation()
   const { id } = use(params)
   const router  = useRouter()
 
@@ -153,12 +155,12 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
         {/* Order summary card */}
         <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderRadius:16, padding:'14px 18px', marginBottom:'1.5rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <div>
-            <div style={{ fontSize:'0.75rem', color:'rgba(255,255,255,0.45)', marginBottom:3 }}>Order Total</div>
+            <div style={{ fontSize:'0.75rem', color:'rgba(255,255,255,0.45)', marginBottom:3 }}>{t('orders.orderTotal')}</div>
             <div style={{ fontSize:'1.2rem', fontWeight:900, color:'#C9A84C' }}>TZS {order?.total_amount?.toLocaleString() || '—'}</div>
             <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.5)', marginTop:2 }}>{order?.product_name}</div>
           </div>
           <div style={{ background:'rgba(239,68,68,0.15)', border:'1px solid rgba(239,68,68,0.3)', borderRadius:10, padding:'5px 12px' }}>
-            <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#EF4444' }}>Rejected</span>
+            <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#EF4444' }}>{t('orders.rejected')}</span>
           </div>
         </div>
 
@@ -192,7 +194,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
               <span style={{ fontSize:'1.2rem' }}>{method?.icon}</span>
               <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#0D1B3E' }}>{method?.name}</span>
             </div>
-            <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1rem', letterSpacing:'-0.02em' }}>How Would You Like to Pay?</h2>
+            <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1rem', letterSpacing:'-0.02em' }}>{t('payment.howToPay')}</h2>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:'1.25rem' }}>
               {PAY_OPTIONS.map(opt => (
                 <button key={opt.id} onClick={() => setSelOption(opt.id)}
@@ -222,7 +224,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
         {/* ── STEP 3: Delivery Location ── */}
         {step === 'location' && (
           <>
-            <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'0.5rem', letterSpacing:'-0.02em' }}>Delivery Location</h2>
+            <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'0.5rem', letterSpacing:'-0.02em' }}>{t('payment.deliveryLocation')}</h2>
             <p style={{ fontSize:'0.78rem', color:'#64748B', marginBottom:'1.25rem', lineHeight:1.5 }}>
               Share your location so the seller can arrange delivery.
             </p>
@@ -237,7 +239,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
 
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:'1rem' }}>
               <div style={{ flex:1, height:1, background:'#E2E8F0' }} />
-              <span style={{ fontSize:'0.7rem', color:'#94A3B8', fontWeight:600 }}>OR TYPE ADDRESS</span>
+              <span style={{ fontSize:'0.7rem', color:'#94A3B8', fontWeight:600 }}>{t('payment.orTypeAddress')}</span>
               <div style={{ flex:1, height:1, background:'#E2E8F0' }} />
             </div>
 
@@ -265,7 +267,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
         {/* ── STEP 4: Confirm ── */}
         {step === 'confirm' && (
           <>
-            <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem', letterSpacing:'-0.02em' }}>Confirm Payment</h2>
+            <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem', letterSpacing:'-0.02em' }}>{t('payment.confirmPayment')}</h2>
             <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', marginBottom:'1.25rem' }}>
               {[
                 { label:'Product',  value: order?.product_name },

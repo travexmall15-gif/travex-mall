@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react'
 
 export default function AppearancePage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { lang, setLang }             = useLang()
   const { theme, fontSize, setTheme, setFontSize } = useTheme()
@@ -49,7 +51,7 @@ export default function AppearancePage() {
 
         {/* ── Language ─────────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Language</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.language')}</p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { code:'en', flag:'🇬🇧', label:'English',   sub:'App displayed in English'  },
@@ -79,7 +81,7 @@ export default function AppearancePage() {
 
         {/* ── Theme ────────────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Theme</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.theme')}</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
             {[
               { v:'light',  icon:Sun,     label:'Light',  sub:'Clean white' },
@@ -104,7 +106,7 @@ export default function AppearancePage() {
 
         {/* ── Font Size ────────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>Font Size</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.fontSize')}</p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { v:'small',  label:'Small',  size:'0.82rem', desc:'Compact, fits more content' },
@@ -135,7 +137,7 @@ export default function AppearancePage() {
 
         {/* ── Other Links ──────────────────────────────── */}
         <div style={{ marginBottom:'1.5rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>More Settings</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.moreSettings')}</p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { label:'Notifications',     sub:'Manage alerts',      href:'/settings/notifications', icon:'🔔' },

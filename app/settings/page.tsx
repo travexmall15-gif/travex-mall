@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -12,6 +13,7 @@ import {
 } from 'lucide-react'
 
 export default function SettingsPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [user, setUser] = useState<{name:string, email:string} | null>(null)
   const [loading, setLoading] = useState(true)
@@ -60,7 +62,7 @@ export default function SettingsPage() {
       <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
-        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>Settings</h1>
+        <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>{t('settings.title')}</h1>
 
         {/* Profile card */}
         <Link href="/settings/profile" style={{ textDecoration:'none', display:'block', marginBottom:'1.25rem' }}>
@@ -107,7 +109,7 @@ export default function SettingsPage() {
 
         {/* Danger zone */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>Danger Zone</div>
+          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>{t('settings.dangerZone')}</div>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden' }}>
             <button onClick={() => setShowDelete(true)}
               style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'13px 16px', background:'none', border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
@@ -117,8 +119,8 @@ export default function SettingsPage() {
                 <Trash2 size={16} color="#EF4444" />
               </div>
               <div style={{ flex:1 }}>
-                <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#EF4444' }}>Delete Account</div>
-                <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>Permanently delete your account and data</div>
+                <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#EF4444' }}>{t('settings.deleteAccount')}</div>
+                <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{t('settings.deleteAccountDesc')}</div>
               </div>
             </button>
           </div>
@@ -133,7 +135,7 @@ export default function SettingsPage() {
             <div style={{ width:36, height:36, borderRadius:10, background:'rgba(239,68,68,0.10)', display:'flex', alignItems:'center', justifyContent:'center' }}>
               <LogOut size={16} color="#EF4444" />
             </div>
-            <span style={{ fontSize:'0.875rem', fontWeight:700, color:'#EF4444' }}>Log Out</span>
+            <span style={{ fontSize:'0.875rem', fontWeight:700, color:'#EF4444' }}>{t('settings.logOut')}</span>
           </button>
         </div>
 
@@ -147,7 +149,7 @@ export default function SettingsPage() {
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:999, display:'flex', alignItems:'center', justifyContent:'center', padding:'1rem' }}>
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', maxWidth:340, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ fontSize:'1.5rem', textAlign:'center', marginBottom:12 }}>⚠️</div>
-            <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>Delete Account?</h3>
+            <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('settings.deleteConfirmTitle')}</h3>
             <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
               This will permanently delete your account and all your data. This cannot be undone.
             </p>

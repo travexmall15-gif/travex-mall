@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -6,6 +7,7 @@ import { sb } from '@/lib/supabase'
 import { User, ArrowRight, Loader2 } from 'lucide-react'
 
 export default function UsernamePage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [loading,  setLoading]  = useState(false)

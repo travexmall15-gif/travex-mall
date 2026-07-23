@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -8,6 +9,7 @@ import { Mail, User, ArrowRight, ArrowLeft, Loader2, ShieldCheck } from 'lucide-
 type Screen = 'main' | 'email' | 'verify'
 
 export default function AuthPage() {
+  const { t } = useTranslation()
   const router  = useRouter()
   const [screen,   setScreen]   = useState<Screen>('main')
   const [email,    setEmail]    = useState('')
@@ -122,8 +124,8 @@ export default function AuthPage() {
 
         {/* ── MAIN ─────────────────────────────────────────── */}
         {screen === 'main' && <>
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>Welcome to ShopNekt</h2>
-          <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', textAlign: 'center', marginBottom: '1.75rem', lineHeight: 1.5 }}>Choose how you want to continue</p>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>{t('authPage.welcome')}</h2>
+          <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', textAlign: 'center', marginBottom: '1.75rem', lineHeight: 1.5 }}>{t('authPage.subtitle')}</p>
 
           {/* Google */}
           <button onClick={handleGoogle} disabled={loading}
@@ -161,7 +163,7 @@ export default function AuthPage() {
             <ArrowLeft size={14} /> Back
           </button>
 
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>Continue with Email</h2>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>{t('authPage.continueEmail')}</h2>
           <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
             We&apos;ll send a 6-digit code to verify your email.
           </p>
@@ -199,7 +201,7 @@ export default function AuthPage() {
             <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(249,115,22,0.12)', border: '1.5px solid rgba(249,115,22,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
               <ShieldCheck size={26} color="#F97316" />
             </div>
-            <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: 6 }}>Check Your Email</h2>
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: 6 }}>{t('authPage.checkEmail')}</h2>
             <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
               6-digit code sent to<br />
               <span style={{ color: '#F97316', fontWeight: 700 }}>{email}</span>

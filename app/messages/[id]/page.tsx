@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
@@ -14,7 +15,8 @@ type Message = {
   created_at: string
 }
 
-export default function ChatPage({ params }: { params: Promise<{ id: string }> }) {
+export default function ChatPage({params }: { params: Promise<{ id: string }> }) {
+  const { t } = useTranslation()
   const { id } = use(params)
   const router  = useRouter()
   const [messages,  setMessages]  = useState<Message[]>([])
@@ -178,7 +180,7 @@ export default function ChatPage({ params }: { params: Promise<{ id: string }> }
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-          placeholder="Type a message..."
+          placeholder={t('messages.typeMessage')}
           rows={1}
           style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: '#F8FAFF' }}
           onFocus={e => (e.target.style.borderColor = '#0D1B3E')}

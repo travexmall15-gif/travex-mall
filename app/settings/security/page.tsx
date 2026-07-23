@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from "@/hooks/useTranslation"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
@@ -6,6 +7,7 @@ import { sb } from '@/lib/supabase'
 import { ArrowLeft, Lock, Eye, EyeOff, Check, Loader2, Shield } from 'lucide-react'
 
 export default function SecurityPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [currentPw, setCurrentPw] = useState('')
   const [newPw,     setNewPw]     = useState('')
@@ -32,12 +34,12 @@ export default function SecurityPage() {
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: '0.82rem', fontWeight: 600, fontFamily: "'Inter',sans-serif", marginBottom: '1.5rem', padding: 0 }}>
           <ArrowLeft size={15} /> Back
         </button>
-        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '1.75rem', letterSpacing: '-0.025em' }}>Security</h1>
+        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '1.75rem', letterSpacing: '-0.025em' }}>{t('security.title')}</h1>
 
         <div style={{ background: '#fff', borderRadius: 16, border: '1.5px solid #E2E8F0', padding: '1.25rem', marginBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.25rem' }}>
             <Shield size={18} color="#8B5CF6" />
-            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0D1B3E' }}>Change Password</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0D1B3E' }}>{t('security.changePassword')}</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {[
