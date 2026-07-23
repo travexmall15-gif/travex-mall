@@ -26,20 +26,28 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
         onClick={() => setOpen(o => !o)}
         aria-label="Change language"
         style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          padding: compact ? '5px 10px' : '7px 14px',
-          background: 'rgba(255,255,255,0.08)',
-          border: '1.5px solid rgba(255,255,255,0.15)',
-          borderRadius: '999px', cursor: 'pointer',
-          color: '#fff', fontSize: '0.78rem', fontWeight: 600,
-          fontFamily: 'Inter, sans-serif', transition: 'all .2s',
+          display: 'flex', alignItems: 'center', gap: '5px',
+          padding: compact ? '0' : '7px 14px',
+          width: compact ? '38px' : 'auto',
+          height: compact ? '38px' : 'auto',
+          justifyContent: 'center',
+          background: compact ? '#F1F5F9' : 'rgba(255,255,255,0.08)',
+          border: compact ? 'none' : '1.5px solid rgba(255,255,255,0.15)',
+          borderRadius: compact ? '50%' : '999px',
+          cursor: 'pointer',
+          color: compact ? '#475569' : '#fff',
+          fontSize: compact ? '1rem' : '0.78rem',
+          fontWeight: 600,
+          fontFamily: 'Inter, sans-serif',
+          transition: 'all .2s',
+          flexShrink: 0,
         }}
-        onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.14)'}
-        onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'}
+        onMouseOver={e => (e.currentTarget as HTMLElement).style.background = compact ? '#E2E8F0' : 'rgba(255,255,255,0.14)'}
+        onMouseOut={e => (e.currentTarget as HTMLElement).style.background = compact ? '#F1F5F9' : 'rgba(255,255,255,0.08)'}
       >
-        <span style={{ fontSize: '1rem' }}>{current.flag}</span>
+        <span style={{ fontSize: compact ? '1.1rem' : '1rem', lineHeight: 1 }}>{current.flag}</span>
         {!compact && <span>{current.label}</span>}
-        <span style={{ fontSize: '0.6rem', opacity: 0.6 }}>▾</span>
+        {!compact && <span style={{ fontSize: '0.6rem', opacity: 0.6 }}>▾</span>}
       </button>
 
       {open && (
