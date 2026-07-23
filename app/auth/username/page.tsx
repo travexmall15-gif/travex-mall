@@ -44,7 +44,7 @@ export default function UsernamePage() {
     <div style={{ minHeight: '100vh', background: '#080F37', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg) } }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+         to{opacity:1;transform:translateY(0)} }
         input:focus { border-color: #F97316 !important; }
       `}</style>
 
@@ -58,7 +58,7 @@ export default function UsernamePage() {
       </div>
 
       {/* Card */}
-      <div style={{ width: '100%', maxWidth: 380, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)', animation: 'fadeIn 0.3s ease' }}>
+      <div style={{ width: '100%', maxWidth: 380, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)', }}>
 
         {/* Google icon */}
         <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>

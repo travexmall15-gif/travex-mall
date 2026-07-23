@@ -103,7 +103,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
       {isEndingSoon && !time.done && (
         <div style={{ position:'absolute', top:0, left:0, right:0, height:3,
           background:'linear-gradient(90deg,#EF4444,#F97316,#EF4444)',
-          backgroundSize:'200% 100%', animation:'shimmer 2s linear infinite', zIndex:2 }} />
+          backgroundSize:'200% 100%', zIndex:2 }} />
       )}
 
       {/* Image */}
@@ -280,10 +280,10 @@ export default function FlashDealsPage() {
   return (
     <main style={{ minHeight:'100vh', background:'#FFFBEB', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
-        @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
-        @keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:.5} }
-        @keyframes fadeUp  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes zapPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+         100%{background-position:-200%} }
+         50%{opacity:.5} }
+         to{opacity:1;transform:translateY(0)} }
+         50%{transform:scale(1.15)} }
         * { box-sizing: border-box; }
         .deal-grid { display:grid; gap:1.1rem; }
         @media (min-width:640px)  { .deal-grid { grid-template-columns:repeat(2,1fr); } }
@@ -321,7 +321,7 @@ export default function FlashDealsPage() {
                 background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.20)',
                 padding:'5px 14px', borderRadius:999, fontSize:11, fontWeight:800,
                 letterSpacing:'0.06em', backdropFilter:'blur(8px)' }}>
-                <Zap size={11} style={{ animation:'zapPulse 1.5s ease-in-out infinite' }} />
+                <Zap size={11} style={{ }} />
                 {t('flash.heroBadge')}
               </div>
 
@@ -361,7 +361,7 @@ export default function FlashDealsPage() {
         {/* Loading */}
         {loading && (
           <div style={{ textAlign:'center', padding:'6rem 0' }}>
-            <div style={{ fontSize:40, animation:'pulse 1.2s ease-in-out infinite', marginBottom:14 }}>⚡</div>
+            <div style={{ fontSize:40, marginBottom:14 }}>⚡</div>
             <p style={{ color:'#92400E', fontSize:15, fontWeight:500 }}>{t('flash.loading')}</p>
           </div>
         )}
@@ -393,9 +393,9 @@ export default function FlashDealsPage() {
           <>
             {/* Featured deal */}
             {featured && (
-              <div style={{ marginBottom:'2rem', animation:'fadeUp .4s ease' }}>
+              <div style={{ marginBottom:'2rem', }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
-                  <Zap size={14} color="#F59E0B" style={{ animation:'zapPulse 1.5s ease-in-out infinite' }} />
+                  <Zap size={14} color="#F59E0B" style={{ }} />
                   <span style={{ fontSize:12, fontWeight:800, color:'#92400E', textTransform:'uppercase' as const, letterSpacing:'0.09em' }}>
                     {t('flash.featuredDeal')}
                   </span>
@@ -407,7 +407,7 @@ export default function FlashDealsPage() {
 
             {/* Ending soon section */}
             {endingSoon.length > 0 && (
-              <div style={{ marginBottom:'2rem', animation:'fadeUp .4s ease .1s both' }}>
+              <div style={{ marginBottom:'2rem', }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
                   <Clock size={13} color="#EF4444" />
                   <span style={{ fontSize:12, fontWeight:800, color:'#EF4444', textTransform:'uppercase' as const, letterSpacing:'0.09em' }}>
@@ -423,7 +423,7 @@ export default function FlashDealsPage() {
 
             {/* All other deals */}
             {others.length > 0 && (
-              <div style={{ animation:'fadeUp .4s ease .2s both' }}>
+              <div style={{ }}>
                 {(endingSoon.length > 0 || featured) && (
                   <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
                     <TrendingUp size={13} color="#F59E0B" />

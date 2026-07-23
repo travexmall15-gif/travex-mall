@@ -335,8 +335,8 @@ export default function GroupBuyPage() {
   return (
     <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
-        @keyframes gbTicker  { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes fadeUp    { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+         100%{transform:translateX(-50%)} }
+         to{opacity:1;transform:translateY(0)} }
         @keyframes spin      { to{transform:rotate(360deg)} }
         .gb-ticker      { animation:gbTicker 36s linear infinite; will-change:transform; }
         .gb-ticker:hover{ animation-play-state:paused; }
@@ -528,7 +528,7 @@ export default function GroupBuyPage() {
 
         {/* Groups */}
         {!loading && !error && filtered.length > 0 && (
-          <div style={{ animation:'fadeUp .4s ease' }}>
+          <div style={{ }}>
             {/* Featured */}
             {featured && filter === 'all' && !search && (
               <div style={{ marginBottom:'2rem' }}>

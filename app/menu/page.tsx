@@ -70,7 +70,7 @@ export default function MenuPage() {
   return (
     <div style={{ minHeight:'100vh', background:'#F8FAFF', fontFamily:"'Inter',sans-serif", paddingBottom:32 }}>
       <style>{`
-        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+         to{opacity:1;transform:translateY(0)} }
         .menu-item:hover { background: #F1F5F9 !important; }
       `}</style>
 
@@ -116,7 +116,7 @@ export default function MenuPage() {
       </div>
 
       {/* ── Sections ── */}
-      <div style={{ padding:'10px 16px', animation:'fadeUp .3s ease' }}>
+      <div style={{ padding:'10px 16px', }}>
         {SECTIONS.map((section, si) => (
           <div key={si} style={{ marginBottom:'1.1rem' }}>
             <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:6, paddingLeft:4 }}>
@@ -159,7 +159,7 @@ export default function MenuPage() {
       {/* ── Logout confirm ── */}
       {showLogout && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', zIndex:999, display:'flex', alignItems:'flex-end', justifyContent:'center', padding:16 }}>
-          <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', width:'100%', maxWidth:400, boxShadow:'0 -8px 40px rgba(0,0,0,0.15)', animation:'fadeUp .25s ease' }}>
+          <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', width:'100%', maxWidth:400, boxShadow:'0 -8px 40px rgba(0,0,0,0.15)', }}>
             <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>Log Out?</h3>
             <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', marginBottom:'1.25rem' }}>You'll need to sign in again next time.</p>
             <div style={{ display:'flex', gap:8 }}>

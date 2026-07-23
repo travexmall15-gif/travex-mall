@@ -160,13 +160,13 @@ export default function AppearancePage() {
 
         {/* Save feedback */}
         {saved && (
-          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#0D1B3E', color:'#C9A84C', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, animation:'fadeUp .2s ease' }}>
+          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#0D1B3E', color:'#C9A84C', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, }}>
             <Check size={14}/> Preference Saved
           </div>
         )}
       </div>
       <SiteFooter />
-      <style>{`@keyframes fadeUp{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}`}</style>
+      <style>{`to{opacity:1;transform:translate(-50%,0)}}`}</style>
     </main>
   )
 }

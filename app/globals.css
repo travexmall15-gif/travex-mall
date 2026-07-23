@@ -435,16 +435,6 @@ p, h1, h2, h3, h4, span, div.content, td, li {
   }
 }
 
-/* PWA Splash / Loading feel */
-@keyframes appFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-main {
-  animation: appFadeIn 0.3s ease-out;
-}
-
 /* Native button press feel */
 button:active, a:active {
   transform: scale(0.97);
@@ -474,11 +464,6 @@ html { scroll-behavior: smooth; }
 body { overscroll-behavior: none; }
 
 /* Smooth page transitions */
-main { animation: pageIn 0.25s ease; }
-@keyframes pageIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 
 /* Better focus states */
 a:focus-visible, button:focus-visible {
@@ -714,10 +699,8 @@ img, video {
 /* Reduce paint areas */
 .will-change-transform { will-change: transform; }
 
-/* GPU acceleration for animations */
-.animate-spin,
-.flags-track,
-[class*="animate-"] {
+/* GPU acceleration for loading spinner only */
+.animate-spin {
   will-change: transform;
   transform: translateZ(0);
 }
@@ -738,10 +721,7 @@ a, button {
 }
 
 /* Content visibility for off-screen sections */
-section:not(:first-of-type) {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
-}
+
 
 /* Smooth scrolling */
 html {

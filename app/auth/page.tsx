@@ -102,7 +102,7 @@ export default function AuthPage() {
     <div style={{ minHeight: '100vh', background: '#080F37', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg) } }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+         to{opacity:1;transform:translateY(0)} }
         .a-card { animation: fadeIn 0.3s ease; }
         input:focus { border-color: #F97316 !important; }
       `}</style>

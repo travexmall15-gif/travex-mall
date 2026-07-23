@@ -124,8 +124,8 @@ export default function VybePage() {
     <main style={{ minHeight: '100vh', background: '#060B18', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
-        @keyframes fadeUp  { from { opacity:0; transform:translateY(16px) } to { opacity:1; transform:translateY(0) } }
-        @keyframes pulse   { 0%,100% { opacity:1 } 50% { opacity:.5 } }
+         to { opacity:1; transform:translateY(0) } }
+         50% { opacity:.5 } }
 
         .vybe-card {
           background: rgba(255,255,255,0.035);
