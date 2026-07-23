@@ -182,174 +182,39 @@ function clearMessages() {
 }
 
 // ── Determine which screen to show ────────────────────
-function init() {
-  // Already logged in? Validate session against DB first
-  const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}')
-  if (session?.id) {
-    try {
-      const res = await fetch(
-        `${SB_URL}/rest/v1/pending_payments?id=eq.${session.id}&status=eq.approved&select=id,status`,
-        { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-      )
-      const data = await res.json()
-      if (data && data.length) {
-        // Valid session — go to dashboard
-        window.location.href = 'dashboard.html'
-        return
-      } else {
-        // Session expired or invalid — clear and show login
-        localStorage.removeItem(SESSION_KEY)
-        localStorage.removeItem(EMAIL_KEY)
-      }
-    } catch(e) {
-      // Network error — clear session to be safe
+async function init() {
+  try {
+    // Check for valid existing session
+    const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}')
+    if (session?.id) {
+      try {
+        const res = await fetch(
+          `${SB_URL}/rest/v1/pending_payments?id=eq.${session.id}&status=eq.approved&select=id`,
+          { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+        )
+        const data = await res.json()
+        if (data && data.length) {
+          window.location.href = 'dashboard.html'
+          return
+        }
+      } catch(e) { /* ignore network errors */ }
+      // Stale session — clear it
       localStorage.removeItem(SESSION_KEY)
       localStorage.removeItem(EMAIL_KEY)
     }
-  }
 
-  // Remembered email from last visit?
-  const savedEmail = localStorage.getItem(EMAIL_KEY)
-  if (savedEmail) {
-    showPinScreen(savedEmail)
-  } else {
+    // Check if email was remembered
+    const savedEmail = localStorage.getItem(EMAIL_KEY)
+    if (savedEmail) {
+      showPinScreen(savedEmail)
+    } else {
+      document.getElementById('screenFirst').style.display = 'block'
+    }
+  } catch(e) {
+    // Always fallback to email screen
     document.getElementById('screenFirst').style.display = 'block'
   }
 }
-
-// ── Screen 1 → Screen 2 ────────────────────────────────
-async function goToPinScreen() {
-  const email = document.getElementById('emailInput').value.trim().toLowerCase()
-  if (!email || !email.includes('@')) {
-    showError('Ingiza email sahihi')
-    return
-  }
-  clearMessages()
-
-  // Check email exists in pending_payments
-  try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(email)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,login_password`,
-      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-    )
-    const data = await res.json()
-
-    if (!data || !data.length) {
-      showError('Email hii haijapatikana au duka halijaidhinishwa bado.')
-      return
-    }
-
-    localStorage.setItem(EMAIL_KEY, email)
-    showPinScreen(email, data[0])
-  } catch(e) {
-    showError('Hitilafu imetokea. Jaribu tena.')
-  }
-}
-
-function showPinScreen(email, shopData) {
-  currentEmail = email
-  document.getElementById('screenFirst').style.display = 'none'
-  document.getElementById('screenPin').style.display   = 'block'
-  clearMessages()
-  resetPin()
-
-  // Fill who badge
-  const name = shopData?.owner_name || email.split('@')[0]
-  document.getElementById('whoAvatar').textContent = name[0].toUpperCase()
-  document.getElementById('whoName').textContent   = shopData?.shop_name || name
-  document.getElementById('whoEmail').textContent  = email
-}
-
-// ── Switch account ──────────────────────────────────────
-function switchAccount() {
-  localStorage.removeItem(EMAIL_KEY)
-  document.getElementById('screenPin').style.display   = 'none'
-  document.getElementById('screenFirst').style.display = 'block'
-  document.getElementById('emailInput').value = ''
-  clearMessages()
-  resetPin()
-}
-
-// ── PIN Keypad ──────────────────────────────────────────
-function pressKey(digit) {
-  if (pinValue.length >= 4) return
-  pinValue += digit
-  updateDots()
-  if (pinValue.length === 4) {
-    setTimeout(verifyPin, 200)
-  }
-}
-
-function deleteLast() {
-  pinValue = pinValue.slice(0,-1)
-  updateDots()
-  clearMessages()
-  document.getElementById('pinHint').textContent = ''
-}
-
-function resetPin() {
-  pinValue = ''
-  updateDots()
-}
-
-function updateDots() {
-  for (let i = 0; i < 4; i++) {
-    const dot = document.getElementById('dot' + i)
-    dot.classList.toggle('filled', i < pinValue.length)
-  }
-}
-
-// ── Verify PIN ──────────────────────────────────────────
-async function verifyPin() {
-  document.getElementById('pinHint').textContent = '...'
-  clearMessages()
-
-  try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(currentEmail)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,login_password`,
-      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-    )
-    const data = await res.json()
-
-    if (!data || !data.length) {
-      showError('Duka halikupatikana.')
-      resetPin()
-      return
-    }
-
-    const shop = data[0]
-    const storedPin = shop.login_password || ''
-
-    if (storedPin !== pinValue) {
-      showError('PIN si sahihi. Jaribu tena.')
-      document.getElementById('pinHint').textContent = ''
-      resetPin()
-      return
-    }
-
-    // ✅ Login success
-    const session = {
-      id:           shop.id,
-      shop_name:    shop.shop_name,
-      owner_name:   shop.owner_name,
-      owner_email:  shop.owner_email,
-      owner_phone:  shop.owner_phone,
-      plan:         shop.plan,
-      logged_in_at: new Date().toISOString()
-    }
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
-    localStorage.setItem(EMAIL_KEY, currentEmail) // remember for next time
-
-    showSuccess(`✅ Karibu ${shop.shop_name}! Unaingia...`)
-    document.getElementById('pinHint').textContent = ''
-    setTimeout(() => { window.location.href = 'dashboard.html' }, 900)
-
-  } catch(e) {
-    showError('Hitilafu imetokea. Angalia internet yako.')
-    resetPin()
-  }
-}
-
 // ── Start ───────────────────────────────────────────────
 init()
 </script>
