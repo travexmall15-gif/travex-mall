@@ -1,152 +1,125 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   View, Text, StyleSheet, BackHandler,
-  ActivityIndicator, Platform, StatusBar
+  ActivityIndicator, Platform, StatusBar, TouchableOpacity,
 } from 'react-native'
 import { WebView } from 'react-native-webview'
 import * as SplashScreen from 'expo-splash-screen'
-import Constants from 'expo-constants'
 
 SplashScreen.preventAutoHideAsync()
 
 const BASE_URL = 'https://shopnekt.vercel.app'
 
-export default function App() {
-  const webRef    = useRef<WebView>(null)
-  const [loading, setLoading]   = useState(true)
-  const [offline, setOffline]   = useState(false)
-  const [canBack, setCanBack]   = useState(false)
+const INJECT_JS = [
+  'window.__SHOPNEKT_APP__ = true;',
+  'window.__SHOPNEKT_PLATFORM__ = "' + Platform.OS + '";',
+  'window.__SHOPNEKT_VERSION__ = "1.0.0";',
+  'true;',
+].join('\n')
 
-  // Hide splash once mounted
+export default function App() {
+  const webRef = useRef<InstanceType<typeof WebView>>(null)
+  const [loading, setLoading] = useState(true)
+  const [offline, setOffline] = useState(false)
+  const [canBack, setCanBack] = useState(false)
+
   useEffect(() => {
     SplashScreen.hideAsync()
   }, [])
 
-  // Android back button → navigate back in WebView
   useEffect(() => {
     if (Platform.OS !== 'android') return
-    const handler = BackHandler.addEventListener('hardwareBackPress', () => {
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
       if (canBack && webRef.current) {
         webRef.current.goBack()
         return true
       }
       return false
     })
-    return () => handler.remove()
+    return () => sub.remove()
   }, [canBack])
 
-  const INJECT = `
-    // Tell the website it's running inside a native app
-    window.__SHOPNEKT_APP__ = true;
-    window.__SHOPNEKT_PLATFORM__ = '${Platform.OS}';
-    window.__SHOPNEKT_VERSION__ = '1.0.0';
+  function retry() {
+    setOffline(false)
+    setLoading(true)
+    webRef.current?.reload()
+  }
 
-    // Prevent zoom on double tap
-    var meta = document.createElement('meta');
-    meta.name = 'viewport';
-    meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-    document.getElementsByTagName('head')[0].appendChild(meta);
-
-    true;
-  `
-
-  if (offline) return (
-    <View style={s.offline}>
-      <Text style={s.offlineIcon}>📵</Text>
-      <Text style={s.offlineTitle}>Hakuna Mtandao</Text>
-      <Text style={s.offlineSub}>Angalia connection yako na ujaribu tena</Text>
-      <Text style={s.retryBtn} onPress={() => { setOffline(false); webRef.current?.reload() }}>
-        🔄 Jaribu Tena
-      </Text>
-    </View>
-  )
+  if (offline) {
+    return (
+      <View style={s.offline}>
+        <StatusBar barStyle="light-content" backgroundColor="#080F37" />
+        <Text style={s.offlineIcon}>📵</Text>
+        <Text style={s.offlineTitle}>Hakuna Mtandao</Text>
+        <Text style={s.offlineSub}>Angalia connection yako na ujaribu tena</Text>
+        <TouchableOpacity style={s.retryBtn} onPress={retry}>
+          <Text style={s.retryText}>🔄 Jaribu Tena</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   return (
     <View style={s.container}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="#0D1B3E"
-        translucent={false}
-      />
+      <StatusBar barStyle="light-content" backgroundColor="#0D1B3E" translucent={false} />
 
-      {/* Loading indicator */}
       {loading && (
         <View style={s.splash}>
-          <Text style={s.splashBrand}>
-            shop<Text style={s.splashOrange}>nekt</Text>
+          <Text style={s.brand}>
+            shop<Text style={s.orange}>nekt</Text>
           </Text>
-          <ActivityIndicator color="#F97316" size="large" style={{ marginTop: 24 }} />
-          <Text style={s.splashTag}>from qnex360</Text>
+          <ActivityIndicator color="#C9A84C" size="large" style={{ marginTop: 28 }} />
+          <Text style={s.tag}>powered by 360 AI</Text>
         </View>
       )}
 
       <WebView
         ref={webRef}
         source={{ uri: BASE_URL }}
-        style={[s.webview, loading && s.hidden]}
-
-        // Behavior
+        style={loading ? s.hidden : s.webview}
         javaScriptEnabled={true}
         domStorageEnabled={true}
         allowsInlineMediaPlayback={true}
         mediaPlaybackRequiresUserAction={false}
-        allowsFullscreenVideo={true}
         geolocationEnabled={true}
-
-        // Inject JS to tell site it's in app
-        injectedJavaScript={INJECT}
-        injectedJavaScriptBeforeContentLoaded={INJECT}
-
-        // User agent — keeps web working
+        injectedJavaScript={INJECT_JS}
         applicationNameForUserAgent="ShopNektApp/1.0"
-
-        // Cache
         cacheEnabled={true}
-        cacheMode="LOAD_DEFAULT"
-
-        // File/camera upload
         allowFileAccess={true}
-        allowFileAccessFromFileURLs={true}
-        allowUniversalAccessFromFileURLs={true}
-
-        // Events
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        overScrollMode="never"
+        bounces={false}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
         onError={() => { setLoading(false); setOffline(true) }}
         onHttpError={() => { setLoading(false); setOffline(true) }}
         onNavigationStateChange={state => setCanBack(state.canGoBack)}
-
-        // Scroll
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        overScrollMode="never"
-        bounces={false}
       />
     </View>
   )
 }
 
 const s = StyleSheet.create({
-  container:    { flex:1, backgroundColor:'#0D1B3E' },
-  webview:      { flex:1 },
-  hidden:       { opacity:0, position:'absolute' },
+  container: { flex: 1, backgroundColor: '#0D1B3E' },
+  webview:   { flex: 1 },
+  hidden:    { width: 0, height: 0, opacity: 0 },
 
-  // Splash
   splash: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#080F37',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10,
+    zIndex: 99,
   },
-  splashBrand:  { fontSize:40, fontWeight:'900', color:'#fff', letterSpacing:-1 },
-  splashOrange: { color:'#F97316' },
-  splashTag:    { color:'rgba(255,255,255,0.3)', fontSize:11, letterSpacing:3, textTransform:'uppercase', marginTop:32 },
+  brand:  { fontSize: 38, fontWeight: '900', color: '#FFFFFF', letterSpacing: -1 },
+  orange: { color: '#C9A84C' },
+  tag:    { color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', marginTop: 28 },
 
-  // Offline
-  offline:      { flex:1, backgroundColor:'#080F37', alignItems:'center', justifyContent:'center', padding:32 },
-  offlineIcon:  { fontSize:64, marginBottom:16 },
-  offlineTitle: { fontSize:22, fontWeight:'800', color:'#fff', marginBottom:8 },
-  offlineSub:   { fontSize:14, color:'rgba(255,255,255,0.5)', textAlign:'center', lineHeight:22, marginBottom:32 },
-  retryBtn:     { backgroundColor:'#F97316', color:'#fff', fontWeight:'700', fontSize:15, paddingHorizontal:32, paddingVertical:14, borderRadius:999, overflow:'hidden' },
+  offline: { flex: 1, backgroundColor: '#080F37', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  offlineIcon:  { fontSize: 56, marginBottom: 16 },
+  offlineTitle: { fontSize: 22, fontWeight: '800', color: '#FFFFFF', marginBottom: 8 },
+  offlineSub:   { fontSize: 14, color: 'rgba(255,255,255,0.5)', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
+  retryBtn:  { backgroundColor: '#C9A84C', borderRadius: 999, paddingHorizontal: 32, paddingVertical: 14 },
+  retryText: { color: '#0D1B3E', fontWeight: '700', fontSize: 15 },
 })
