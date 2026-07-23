@@ -8,49 +8,58 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18 0%,#0D1B3E 60%,#071540 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-
 .card{background:#fff;border-radius:24px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.28)}
-
 .logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px}
 .logo-row img{width:38px;height:38px;border-radius:50%;object-fit:cover}
 .brand{font-size:1.2rem;font-weight:800;color:#0D1B3E;letter-spacing:-0.03em}
 .brand span{color:#C9A84C}
-
-h1{font-weight:800;font-size:1.45rem;color:#0D1B3E;text-align:center;margin-bottom:5px}
+h1{font-weight:800;font-size:1.4rem;color:#0D1B3E;text-align:center;margin-bottom:5px}
 .sub{font-size:13px;color:#64748B;text-align:center;margin-bottom:24px;line-height:1.5}
-
 .error-box{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:14px;display:none}
 .success-box{background:#F0FDF4;border:1px solid #86EFAC;color:#16A34A;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:14px;display:none}
-
 .form-group{margin-bottom:16px}
 label{display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.05em;text-transform:uppercase}
-
 .input-wrap{position:relative}
-.input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#94A3B8}
-input{width:100%;padding:12px 14px 12px 40px;border:2px solid #E2E8F0;border-radius:12px;font-size:1rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s;font-weight:600}
+.input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem}
+input{width:100%;padding:13px 14px 13px 42px;border:2px solid #E2E8F0;border-radius:12px;font-size:1rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s;font-weight:600}
 input:focus{border-color:#0D1B3E;box-shadow:0 0 0 3px rgba(13,27,62,0.08)}
 input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
-
 .hint{font-size:11px;color:#94A3B8;margin-top:5px;padding-left:2px}
-
 .btn-login{width:100%;padding:14px;background:#0D1B3E;color:#C9A84C;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:6px;letter-spacing:0.02em}
 .btn-login:hover{background:#1B3A8A;transform:translateY(-1px);box-shadow:0 8px 20px rgba(13,27,62,0.25)}
 .btn-login:disabled{opacity:0.6;cursor:wait;transform:none}
-
 .divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#94A3B8;font-size:12px}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:#E2E8F0}
-
-.btn-reset{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
-.btn-reset:hover{border-color:#0D1B3E;background:#EEF2FF}
-
+.btn-secondary{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-secondary:hover{border-color:#0D1B3E;background:#EEF2FF}
 .footer-links{margin-top:20px;text-align:center;font-size:12px;color:rgba(255,255,255,0.4)}
 .footer-links a{color:#C9A84C;text-decoration:none;font-weight:600}
-
 .lang-toggle{position:fixed;top:16px;right:16px;display:flex;gap:4px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:3px;z-index:999}
 .lang-btn{padding:4px 12px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;background:transparent;color:rgba(255,255,255,0.5);transition:all .2s}
 .lang-btn.active{background:#fff;color:#0D1B3E}
 
-.pin-badge{display:inline-flex;align-items:center;gap:6px;background:#FFF7E6;border:1px solid #F5C842;border-radius:8px;padding:7px 12px;font-size:11px;color:#92400E;margin-bottom:18px;width:100%;justify-content:center}
+/* PIN dots display */
+.pin-dots{display:flex;justify-content:center;gap:14px;margin:20px 0 8px}
+.pin-dot{width:18px;height:18px;border-radius:50%;border:2.5px solid #CBD5E1;transition:all 0.2s}
+.pin-dot.filled{background:#0D1B3E;border-color:#0D1B3E;transform:scale(1.1)}
+
+/* PIN keypad */
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.key{padding:16px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:14px;font-size:1.2rem;font-weight:700;color:#0F172A;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Inter',sans-serif;user-select:none}
+.key:hover{background:#EEF2FF;border-color:#0D1B3E}
+.key:active{transform:scale(0.94);background:#E2E8F0}
+.key.del{color:#EF4444;font-size:1rem}
+.key.empty{background:transparent;border-color:transparent;cursor:default}
+
+.who-badge{display:flex;align-items:center;gap:10px;background:#F1F5F9;border-radius:12px;padding:10px 14px;margin-bottom:20px}
+.who-badge .avatar{width:36px;height:36px;border-radius:10px;background:#0D1B3E;color:#C9A84C;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0}
+.who-badge .info{flex:1}
+.who-badge .name{font-weight:700;color:#0F172A;font-size:0.9rem}
+.who-badge .email{font-size:0.72rem;color:#94A3B8}
+.who-badge .change{font-size:0.72rem;color:#3B82F6;cursor:pointer;font-weight:600}
+
+/* Screens */
+#screenFirst, #screenPin{display:none}
 </style>
 </head>
 <body>
@@ -66,63 +75,76 @@ input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
     <span class="brand">shop<span>nekt</span></span>
   </div>
 
-  <h1 data-en="Welcome Back 👋" data-sw="Karibu Tena 👋">Welcome Back 👋</h1>
-  <p class="sub" data-en="Enter your PIN and WhatsApp number to sign in" data-sw="Ingiza PIN na namba ya WhatsApp yako kuingia">Enter your PIN and WhatsApp number to sign in</p>
-
-  <div class="pin-badge">
-    🔐 <span data-en="PIN + Phone = Your unique login" data-sw="PIN + Simu = Kuingia kwako peke yako">PIN + Phone = Your unique login</span>
-  </div>
-
   <div class="error-box" id="errorBox"></div>
   <div class="success-box" id="successBox"></div>
 
-  <!-- PIN Field -->
-  <div class="form-group">
-    <label data-en="YOUR 4-DIGIT PIN" data-sw="PIN YAKO (NAMBA 4)">YOUR 4-DIGIT PIN</label>
-    <div class="input-wrap">
-      <span class="icon">🔑</span>
-      <input
-        type="text"
-        id="pinInput"
-        placeholder="e.g. 8842"
-        maxlength="4"
-        inputmode="numeric"
-        autocomplete="off"
-        oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,4)"
-        onkeydown="if(event.key==='Enter')document.getElementById('phoneInput').focus()"
-      />
+  <!-- ══ SCREEN 1: First time — Email + PIN ══ -->
+  <div id="screenFirst">
+    <h1>👋 <span data-en="Welcome Back" data-sw="Karibu Tena">Welcome Back</span></h1>
+    <p class="sub" data-en="Enter your email and PIN to sign in" data-sw="Ingiza email na PIN yako kuingia">Enter your email and PIN to sign in</p>
+
+    <div class="form-group">
+      <label data-en="EMAIL ADDRESS" data-sw="BARUA PEPE">EMAIL ADDRESS</label>
+      <div class="input-wrap">
+        <span class="icon">✉️</span>
+        <input type="email" id="emailInput"
+          placeholder="your@email.com"
+          autocomplete="email"
+          onkeydown="if(event.key==='Enter')goToPinScreen()"/>
+      </div>
     </div>
-    <div class="hint" data-en="4-digit PIN sent to you via WhatsApp after approval" data-sw="PIN ya namba 4 uliyopewa WhatsApp baada ya kuidhinishwa">4-digit PIN sent via WhatsApp after approval</div>
+
+    <button class="btn-login" onclick="goToPinScreen()">
+      <span data-en="Continue →" data-sw="Endelea →">Continue →</span>
+    </button>
+
+    <div class="divider"><span data-en="or" data-sw="au">or</span></div>
+    <button class="btn-secondary" onclick="window.location.href='reset-pin.html'">
+      <span data-en="🔄 Forgot PIN? Reset here" data-sw="🔄 Umesahau PIN? Reset hapa">🔄 Forgot PIN? Reset here</span>
+    </button>
   </div>
 
-  <!-- Phone Field -->
-  <div class="form-group">
-    <label data-en="YOUR WHATSAPP NUMBER" data-sw="NAMBA YAKO YA WHATSAPP">YOUR WHATSAPP NUMBER</label>
-    <div class="input-wrap">
-      <span class="icon">📱</span>
-      <input
-        type="tel"
-        id="phoneInput"
-        placeholder="e.g. 0712345678"
-        maxlength="13"
-        inputmode="numeric"
-        autocomplete="off"
-        oninput="this.value=this.value.replace(/[^0-9+]/g,'')"
-        onkeydown="if(event.key==='Enter')doLogin()"
-      />
+  <!-- ══ SCREEN 2: PIN entry (keypad) ══ -->
+  <div id="screenPin">
+    <!-- Who is logging in -->
+    <div class="who-badge" id="whoBadge">
+      <div class="avatar" id="whoAvatar">J</div>
+      <div class="info">
+        <div class="name" id="whoName">Loading...</div>
+        <div class="email" id="whoEmail"></div>
+      </div>
+      <div class="change" onclick="switchAccount()"
+        data-en="Not you?" data-sw="Si wewe?">Not you?</div>
     </div>
-    <div class="hint" data-en="Same number you used to register your shop" data-sw="Namba ile ile uliyotumia kujiandikisha">Same number you used to register your shop</div>
+
+    <h1 data-en="Enter Your PIN" data-sw="Ingiza PIN Yako">Enter Your PIN</h1>
+    <p class="sub" data-en="4-digit PIN you created during registration" data-sw="PIN ya namba 4 uliyoweka wakati wa kujiandikisha">4-digit PIN you created during registration</p>
+
+    <!-- PIN dots -->
+    <div class="pin-dots">
+      <div class="pin-dot" id="dot0"></div>
+      <div class="pin-dot" id="dot1"></div>
+      <div class="pin-dot" id="dot2"></div>
+      <div class="pin-dot" id="dot3"></div>
+    </div>
+    <p class="hint" style="text-align:center" id="pinHint"></p>
+
+    <!-- Keypad -->
+    <div class="keypad">
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key empty"></button>
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key del" onclick="deleteLast()">⌫</button>
+    </div>
   </div>
-
-  <button class="btn-login" id="loginBtn" onclick="doLogin()">
-    🔐 <span data-en="Sign In to Dashboard" data-sw="Ingia Dashboard">Sign In to Dashboard</span>
-  </button>
-
-  <div class="divider" data-en="or" data-sw="au">or</div>
-
-  <button class="btn-reset" onclick="window.location.href='reset-pin.html'">
-    <span data-en="🔄 Forgot PIN? Reset here" data-sw="🔄 Umesahau PIN? Reset hapa">🔄 Forgot PIN? Reset here</span>
-  </button>
 </div>
 
 <div class="footer-links">
@@ -133,118 +155,191 @@ input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
 <script>
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+const SESSION_KEY = 'travex_session'
+const EMAIL_KEY   = 'travex_email'
 
+let pinValue = ''
+let currentEmail = ''
+
+// ── Helpers ────────────────────────────────────────────
 function showError(msg) {
   const el = document.getElementById('errorBox')
   el.textContent = msg; el.style.display = 'block'
   document.getElementById('successBox').style.display = 'none'
+  // Shake animation
+  const card = el.closest ? el.closest('.card') : document.querySelector('.card')
+  card.style.animation = 'none'
+  setTimeout(() => card.style.animation = '', 10)
 }
 function showSuccess(msg) {
   const el = document.getElementById('successBox')
   el.textContent = msg; el.style.display = 'block'
   document.getElementById('errorBox').style.display = 'none'
 }
-
-// Normalize phone — strip spaces, ensure starts with 0 or +255
-function normalizePhone(p) {
-  p = p.replace(/\s+/g,'').replace(/[^0-9+]/g,'')
-  // Convert +255712345678 → 0712345678
-  if (p.startsWith('+255')) p = '0' + p.slice(4)
-  if (p.startsWith('255'))  p = '0' + p.slice(3)
-  return p
+function clearMessages() {
+  document.getElementById('errorBox').style.display = 'none'
+  document.getElementById('successBox').style.display = 'none'
 }
 
-async function doLogin() {
-  const pin   = document.getElementById('pinInput').value.trim()
-  const phone = document.getElementById('phoneInput').value.trim()
+// ── Determine which screen to show ────────────────────
+function init() {
+  // Already fully logged in?
+  const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}')
+  if (session?.id) { window.location.href = 'dashboard.html'; return }
 
-  // Validate PIN
-  if (!/^\d{4}$/.test(pin)) {
-    showError('Ingiza PIN ya namba 4 (mfano: 8842)')
-    document.getElementById('pinInput').focus()
+  // Remembered email from last visit?
+  const savedEmail = localStorage.getItem(EMAIL_KEY)
+  if (savedEmail) {
+    showPinScreen(savedEmail)
+  } else {
+    document.getElementById('screenFirst').style.display = 'block'
+  }
+}
+
+// ── Screen 1 → Screen 2 ────────────────────────────────
+async function goToPinScreen() {
+  const email = document.getElementById('emailInput').value.trim().toLowerCase()
+  if (!email || !email.includes('@')) {
+    showError('Ingiza email sahihi')
     return
   }
+  clearMessages()
 
-  // Validate phone
-  if (phone.length < 9) {
-    showError('Ingiza namba yako ya WhatsApp')
-    document.getElementById('phoneInput').focus()
-    return
-  }
-
-  const normPhone = normalizePhone(phone)
-  const btn = document.getElementById('loginBtn')
-  btn.innerHTML = '⏳ Inaingia...'
-  btn.disabled = true
-  document.getElementById('errorBox').style.display = 'none'
-
+  // Check email exists in pending_payments
   try {
-    // Search by PIN + phone — both must match
-    // Try owner_phone column (from open-store form)
     const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?login_password=eq.${pin}&status=eq.approved&select=id,shop_name,owner_name,owner_phone,status,plan,login_password`,
+      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(email)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,seller_pin`,
       { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
     )
     const data = await res.json()
 
     if (!data || !data.length) {
-      showError('PIN si sahihi au duka halijaidhinishwa bado.')
-      btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
+      showError('Email hii haijapatikana au duka halijaidhinishwa bado.')
       return
     }
 
-    // Match phone among results with same PIN
-    const shop = data.find(s => {
-      const dbPhone = normalizePhone(s.owner_phone || '')
-      const inputPhone = normalizePhone(phone)
-      return dbPhone === inputPhone ||
-             dbPhone.endsWith(inputPhone.slice(-9)) ||
-             inputPhone.endsWith(dbPhone.slice(-9))
-    })
+    localStorage.setItem(EMAIL_KEY, email)
+    showPinScreen(email, data[0])
+  } catch(e) {
+    showError('Hitilafu imetokea. Jaribu tena.')
+  }
+}
 
-    if (!shop) {
-      showError('PIN au namba ya simu si sahihi. Angalia tena.')
-      btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
+function showPinScreen(email, shopData) {
+  currentEmail = email
+  document.getElementById('screenFirst').style.display = 'none'
+  document.getElementById('screenPin').style.display   = 'block'
+  clearMessages()
+  resetPin()
+
+  // Fill who badge
+  const name = shopData?.owner_name || email.split('@')[0]
+  document.getElementById('whoAvatar').textContent = name[0].toUpperCase()
+  document.getElementById('whoName').textContent   = shopData?.shop_name || name
+  document.getElementById('whoEmail').textContent  = email
+}
+
+// ── Switch account ──────────────────────────────────────
+function switchAccount() {
+  localStorage.removeItem(EMAIL_KEY)
+  document.getElementById('screenPin').style.display   = 'none'
+  document.getElementById('screenFirst').style.display = 'block'
+  document.getElementById('emailInput').value = ''
+  clearMessages()
+  resetPin()
+}
+
+// ── PIN Keypad ──────────────────────────────────────────
+function pressKey(digit) {
+  if (pinValue.length >= 4) return
+  pinValue += digit
+  updateDots()
+  if (pinValue.length === 4) {
+    setTimeout(verifyPin, 200)
+  }
+}
+
+function deleteLast() {
+  pinValue = pinValue.slice(0,-1)
+  updateDots()
+  clearMessages()
+  document.getElementById('pinHint').textContent = ''
+}
+
+function resetPin() {
+  pinValue = ''
+  updateDots()
+}
+
+function updateDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('dot' + i)
+    dot.classList.toggle('filled', i < pinValue.length)
+  }
+}
+
+// ── Verify PIN ──────────────────────────────────────────
+async function verifyPin() {
+  document.getElementById('pinHint').textContent = '...'
+  clearMessages()
+
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?owner_email=eq.${encodeURIComponent(currentEmail)}&status=eq.approved&select=id,shop_name,owner_name,owner_email,owner_phone,status,plan,seller_pin,login_password`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    )
+    const data = await res.json()
+
+    if (!data || !data.length) {
+      showError('Duka halikupatikana.')
+      resetPin()
       return
     }
 
-    if (shop.status !== 'approved') {
-      showError('Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.')
-      btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
+    const shop = data[0]
+    const storedPin = shop.seller_pin || shop.login_password || ''
+
+    if (storedPin !== pinValue) {
+      showError('PIN si sahihi. Jaribu tena.')
+      document.getElementById('pinHint').textContent = ''
+      resetPin()
       return
     }
 
-    // ✅ Success
+    // ✅ Login success
     const session = {
       id:           shop.id,
       shop_name:    shop.shop_name,
       owner_name:   shop.owner_name,
+      owner_email:  shop.owner_email,
       owner_phone:  shop.owner_phone,
       plan:         shop.plan,
       logged_in_at: new Date().toISOString()
     }
-    localStorage.setItem('travex_session', JSON.stringify(session))
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+    localStorage.setItem(EMAIL_KEY, currentEmail) // remember for next time
+
     showSuccess(`✅ Karibu ${shop.shop_name}! Unaingia...`)
-    setTimeout(() => { window.location.href = 'dashboard.html' }, 1000)
+    document.getElementById('pinHint').textContent = ''
+    setTimeout(() => { window.location.href = 'dashboard.html' }, 900)
 
   } catch(e) {
-    showError('Hitilafu imetokea. Angalia internet yako na ujaribu tena.')
-    btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
+    showError('Hitilafu imetokea. Angalia internet yako.')
+    resetPin()
   }
 }
 
-// Already logged in?
-const existing = JSON.parse(localStorage.getItem('travex_session') || '{}')
-if (existing?.id) window.location.href = 'dashboard.html'
+// ── Start ───────────────────────────────────────────────
+init()
 </script>
 
 <script>
+// Language toggle
 const LANG_KEY='sn_lang'
 let currentLang=localStorage.getItem(LANG_KEY)||'en'
 function applyLang(lang){
   currentLang=lang;localStorage.setItem(LANG_KEY,lang)
   document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.sw||el.dataset.en):el.dataset.en})
-  document.querySelectorAll('[data-ph-en]').forEach(el=>{el.placeholder=lang==='sw'?(el.dataset.phSw||el.dataset.phEn):el.dataset.phEn})
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))
 }
 function toggleLang(lang){applyLang(lang)}
