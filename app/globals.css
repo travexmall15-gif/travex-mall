@@ -742,3 +742,27 @@ html {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* ── RTL Support (Arabic) ─────────────────────────────── */
+[dir="rtl"] {
+  text-align: right;
+}
+[dir="rtl"] .bottom-nav {
+  direction: rtl;
+}
+[dir="rtl"] .site-nav-row {
+  flex-direction: row-reverse;
+}
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+  text-align: right;
+  direction: rtl;
+}
+[dir="rtl"] .nav-back {
+  flex-direction: row-reverse;
+}
+/* Arabic font override */
+:lang(ar) {
+  font-family: 'Cairo', 'Noto Sans Arabic', Arial, sans-serif;
+  line-height: 1.8;
+}

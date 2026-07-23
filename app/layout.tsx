@@ -161,13 +161,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Non-blocking font load */}
         <link
           rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap"
           as="style"
           onLoad="this.onload=null;this.rel='stylesheet'"
         />
         <noscript>
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
           />
         </noscript>
@@ -179,7 +179,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className="antialiased"
         suppressHydrationWarning
-        style={{ WebkitTapHighlightColor: 'transparent' as any }}
+        style={{ WebkitTapHighlightColor: 'transparent' as any, fontFamily: 'var(--font-body, Inter, sans-serif)' }}
       >
         <ThemeProvider>
           <LangProvider>
