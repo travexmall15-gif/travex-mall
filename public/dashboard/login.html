@@ -4,47 +4,44 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Login — ShopNekt Dashboard</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18 0%,#0D1B3E 50%,#071540 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18 0%,#0D1B3E 60%,#071540 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 
-.card{background:#fff;border-radius:24px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.24)}
+.card{background:#fff;border-radius:24px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.28)}
 
-.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:28px}
-.logo-row img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-.brand{font-family:'Inter',sans-serif;font-size:1.25rem;font-weight:700;color:#0D1B3E;letter-spacing:-0.03em}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px}
+.logo-row img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.brand{font-size:1.2rem;font-weight:800;color:#0D1B3E;letter-spacing:-0.03em}
 .brand span{color:#C9A84C}
 
-h1{font-family:'Inter',sans-serif;font-weight:700;font-size:1.5rem;font-weight:800;color:#0D1B3E;text-align:center;margin-bottom:6px}
-.sub{font-size:13px;color:#64748B;text-align:center;margin-bottom:28px;line-height:1.5}
-
-.form-group{margin-bottom:18px}
-label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.02em}
-input{width:100%;padding:12px 16px;border:2px solid #E2E8F0;border-radius:12px;font-size:0.95rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s;letter-spacing:0.05em;text-align:center;font-weight:700;font-size:1.1rem}
-input:focus{border-color:#0D1B3E;box-shadow:0 0 0 3px rgba(13,27,62,0.08)}
-input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacing:normal}
-
-.hint{font-size:11px;color:#94A3B8;margin-top:6px;text-align:center}
-.hint strong{color:#0D1B3E}
-
-.btn-login{width:100%;padding:14px;background:#0D1B3E;color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:8px;letter-spacing:0.02em}
-.btn-login:hover{background:#1B3A8A;transform:translateY(-1px);box-shadow:0 8px 20px rgba(13,27,62,0.25)}
-.btn-login:disabled{opacity:0.6;cursor:wait;transform:none}
-
-.divider{display:flex;align-items:center;gap:10px;margin:18px 0;color:#94A3B8;font-size:12px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:#E2E8F0}
-
-.btn-reset{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
-.btn-reset:hover{border-color:#0D1B3E;background:#EEF2FF}
+h1{font-weight:800;font-size:1.45rem;color:#0D1B3E;text-align:center;margin-bottom:5px}
+.sub{font-size:13px;color:#64748B;text-align:center;margin-bottom:24px;line-height:1.5}
 
 .error-box{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:14px;display:none}
 .success-box{background:#F0FDF4;border:1px solid #86EFAC;color:#16A34A;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;margin-bottom:14px;display:none}
 
-.pin-format{background:linear-gradient(135deg,#0D1B3E,#1B3A8A);border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:center}
-.pin-format-label{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
-.pin-format-value{font-size:1.3rem;font-weight:900;color:#C9A84C;letter-spacing:0.1em}
-.pin-format-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
+.form-group{margin-bottom:16px}
+label{display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.05em;text-transform:uppercase}
+
+.input-wrap{position:relative}
+.input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:#94A3B8}
+input{width:100%;padding:12px 14px 12px 40px;border:2px solid #E2E8F0;border-radius:12px;font-size:1rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s;font-weight:600}
+input:focus{border-color:#0D1B3E;box-shadow:0 0 0 3px rgba(13,27,62,0.08)}
+input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
+
+.hint{font-size:11px;color:#94A3B8;margin-top:5px;padding-left:2px}
+
+.btn-login{width:100%;padding:14px;background:#0D1B3E;color:#C9A84C;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:6px;letter-spacing:0.02em}
+.btn-login:hover{background:#1B3A8A;transform:translateY(-1px);box-shadow:0 8px 20px rgba(13,27,62,0.25)}
+.btn-login:disabled{opacity:0.6;cursor:wait;transform:none}
+
+.divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#94A3B8;font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#E2E8F0}
+
+.btn-reset{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-reset:hover{border-color:#0D1B3E;background:#EEF2FF}
 
 .footer-links{margin-top:20px;text-align:center;font-size:12px;color:rgba(255,255,255,0.4)}
 .footer-links a{color:#C9A84C;text-decoration:none;font-weight:600}
@@ -52,58 +49,79 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 .lang-toggle{position:fixed;top:16px;right:16px;display:flex;gap:4px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:3px;z-index:999}
 .lang-btn{padding:4px 12px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;background:transparent;color:rgba(255,255,255,0.5);transition:all .2s}
 .lang-btn.active{background:#fff;color:#0D1B3E}
+
+.pin-badge{display:inline-flex;align-items:center;gap:6px;background:#FFF7E6;border:1px solid #F5C842;border-radius:8px;padding:7px 12px;font-size:11px;color:#92400E;margin-bottom:18px;width:100%;justify-content:center}
 </style>
 </head>
 <body>
-
 
 <div class="lang-toggle">
   <button class="lang-btn active" data-lang="en" onclick="toggleLang('en')">EN</button>
   <button class="lang-btn" data-lang="sw" onclick="toggleLang('sw')">SW</button>
 </div>
+
 <div class="card">
   <div class="logo-row">
     <img src="/icon-192.png" alt="ShopNekt"/>
     <span class="brand">shop<span>nekt</span></span>
   </div>
 
-  <h1>Karibu Tena 👋</h1>
-  <p class="sub" data-en="Enter your PIN to access your store dashboard" data-sw="Ingiza PIN yako kuingia kwenye dashboard ya duka lako">Enter your PIN to access your store dashboard</p>
+  <h1 data-en="Welcome Back 👋" data-sw="Karibu Tena 👋">Welcome Back 👋</h1>
+  <p class="sub" data-en="Enter your PIN and WhatsApp number to sign in" data-sw="Ingiza PIN na namba ya WhatsApp yako kuingia">Enter your PIN and WhatsApp number to sign in</p>
 
-  <!-- PIN Format Guide -->
-  <div class="pin-format">
-    <div class="pin-format-label" data-en="Your PIN Format" data-sw="PIN Yako">Your PIN Format</div>
-    <div class="pin-format-value">8842</div>
-    <div class="pin-format-desc" data-en="Enter only the 4-digit PIN sent via WhatsApp" data-sw="Ingiza namba 4 tu ulizopewa WhatsApp">Ingiza namba 4 tu ulizopewa WhatsApp</div>
+  <div class="pin-badge">
+    🔐 <span data-en="PIN + Phone = Your unique login" data-sw="PIN + Simu = Kuingia kwako peke yako">PIN + Phone = Your unique login</span>
   </div>
 
-  <!-- Error / Success -->
   <div class="error-box" id="errorBox"></div>
   <div class="success-box" id="successBox"></div>
 
-  <!-- Login Form -->
+  <!-- PIN Field -->
   <div class="form-group">
-    <label data-en="YOUR PIN" data-sw="PIN YAKO">YOUR PIN</label>
-    <input
-      type="text"
-      id="pinInput"
-      placeholder="Ingiza namba 4 (mfano: 8842)"
-      maxlength="8"
-      autocomplete="off"
-      oninput="formatPin(this)"
-      onkeydown="if(event.key==='Enter')doLogin()"
-    />
-    <div class="hint" data-en="PIN sent via WhatsApp after your shop was approved" data-sw="PIN uliyopewa kupitia WhatsApp baada ya kuidhinishwa">PIN sent via WhatsApp after your shop was approved</div>
+    <label data-en="YOUR 4-DIGIT PIN" data-sw="PIN YAKO (NAMBA 4)">YOUR 4-DIGIT PIN</label>
+    <div class="input-wrap">
+      <span class="icon">🔑</span>
+      <input
+        type="text"
+        id="pinInput"
+        placeholder="e.g. 8842"
+        maxlength="4"
+        inputmode="numeric"
+        autocomplete="off"
+        oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,4)"
+        onkeydown="if(event.key==='Enter')document.getElementById('phoneInput').focus()"
+      />
+    </div>
+    <div class="hint" data-en="4-digit PIN sent to you via WhatsApp after approval" data-sw="PIN ya namba 4 uliyopewa WhatsApp baada ya kuidhinishwa">4-digit PIN sent via WhatsApp after approval</div>
+  </div>
+
+  <!-- Phone Field -->
+  <div class="form-group">
+    <label data-en="YOUR WHATSAPP NUMBER" data-sw="NAMBA YAKO YA WHATSAPP">YOUR WHATSAPP NUMBER</label>
+    <div class="input-wrap">
+      <span class="icon">📱</span>
+      <input
+        type="tel"
+        id="phoneInput"
+        placeholder="e.g. 0712345678"
+        maxlength="13"
+        inputmode="numeric"
+        autocomplete="off"
+        oninput="this.value=this.value.replace(/[^0-9+]/g,'')"
+        onkeydown="if(event.key==='Enter')doLogin()"
+      />
+    </div>
+    <div class="hint" data-en="Same number you used to register your shop" data-sw="Namba ile ile uliyotumia kujiandikisha">Same number you used to register your shop</div>
   </div>
 
   <button class="btn-login" id="loginBtn" onclick="doLogin()">
-    <span data-en="🔐 Sign In to Dashboard" data-sw="🔐 Ingia Dashboard">🔐 Sign In to Dashboard</span>
+    🔐 <span data-en="Sign In to Dashboard" data-sw="Ingia Dashboard">Sign In to Dashboard</span>
   </button>
 
-  <div class="divider">au</div>
+  <div class="divider" data-en="or" data-sw="au">or</div>
 
   <button class="btn-reset" onclick="window.location.href='reset-pin.html'">
-    <span data-en="🔄 Forgot PIN? Reset here" data-sw="🔄 Nimesahau PIN — Reset hapa">🔄 Forgot PIN? Reset here</span>
+    <span data-en="🔄 Forgot PIN? Reset here" data-sw="🔄 Umesahau PIN? Reset hapa">🔄 Forgot PIN? Reset here</span>
   </button>
 </div>
 
@@ -116,14 +134,6 @@ input::placeholder{font-size:0.85rem;color:#94A3B8;font-weight:400;letter-spacin
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
-// Only allow digits, max 7 chars (handles both 8842 and 8842-003)
-function formatPin(input) {
-  let val = input.value.replace(/[^0-9-]/g,'')
-  // Auto strip to first 4 digits only
-  const digits = val.replace(/[^0-9]/g,'').slice(0,4)
-  input.value = digits
-}
-
 function showError(msg) {
   const el = document.getElementById('errorBox')
   el.textContent = msg; el.style.display = 'block'
@@ -135,75 +145,97 @@ function showSuccess(msg) {
   document.getElementById('errorBox').style.display = 'none'
 }
 
-async function doLogin() {
-  const pin = document.getElementById('pinInput').value.trim()
+// Normalize phone — strip spaces, ensure starts with 0 or +255
+function normalizePhone(p) {
+  p = p.replace(/\s+/g,'').replace(/[^0-9+]/g,'')
+  // Convert +255712345678 → 0712345678
+  if (p.startsWith('+255')) p = '0' + p.slice(4)
+  if (p.startsWith('255'))  p = '0' + p.slice(3)
+  return p
+}
 
-  // Accept both: "8842" or "8842-003"
-  const cleanPin = pin.replace(/[^0-9]/g, '').slice(0, 4)
-  if (!/^\d{4}$/.test(cleanPin)) {
-    showError('PIN si sahihi. Ingiza namba 4 ulizopewa (mfano: 8842)')
+async function doLogin() {
+  const pin   = document.getElementById('pinInput').value.trim()
+  const phone = document.getElementById('phoneInput').value.trim()
+
+  // Validate PIN
+  if (!/^\d{4}$/.test(pin)) {
+    showError('Ingiza PIN ya namba 4 (mfano: 8842)')
+    document.getElementById('pinInput').focus()
     return
   }
 
-  const sellerPin = cleanPin
+  // Validate phone
+  if (phone.length < 9) {
+    showError('Ingiza namba yako ya WhatsApp')
+    document.getElementById('phoneInput').focus()
+    return
+  }
+
+  const normPhone = normalizePhone(phone)
   const btn = document.getElementById('loginBtn')
-  btn.textContent = 'Inaingia...'
+  btn.innerHTML = '⏳ Inaingia...'
   btn.disabled = true
   document.getElementById('errorBox').style.display = 'none'
 
   try {
-    // Find shop by login_password
-    const res = await fetch(`${SB_URL}/rest/v1/pending_payments?login_password=eq.${sellerPin}&status=eq.approved&select=id,shop_name,owner_name,owner_phone,status,plan,login_password`, {
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-    })
+    // Search by PIN + phone — both must match
+    // Try owner_phone column (from open-store form)
+    const res = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?login_password=eq.${pin}&status=eq.approved&select=id,shop_name,owner_name,owner_phone,status,plan,login_password`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    )
     const data = await res.json()
 
     if (!data || !data.length) {
-      showError('Duka halikupatikana. Angalia PIN yako tena.')
-      btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
+      showError('PIN si sahihi au duka halijaidhinishwa bado.')
+      btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
       return
     }
 
-    const shop = data[0]
+    // Match phone among results with same PIN
+    const shop = data.find(s => {
+      const dbPhone = normalizePhone(s.owner_phone || '')
+      const inputPhone = normalizePhone(phone)
+      return dbPhone === inputPhone ||
+             dbPhone.endsWith(inputPhone.slice(-9)) ||
+             inputPhone.endsWith(dbPhone.slice(-9))
+    })
+
+    if (!shop) {
+      showError('PIN au namba ya simu si sahihi. Angalia tena.')
+      btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
+      return
+    }
 
     if (shop.status !== 'approved') {
       showError('Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.')
-      btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
+      btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
       return
     }
 
-    // Verify PIN
-    if (shop.login_password !== sellerPin) {
-      showError('PIN si sahihi. Jaribu tena au reset PIN yako.')
-      btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
-      return
-    }
-
-    // ✅ Login success — save session
+    // ✅ Success
     const session = {
-      id: shop.id,
-      shop_name: shop.shop_name,
-      owner_name: shop.owner_name,
-      owner_phone: shop.owner_phone,
-      plan: shop.plan,
+      id:           shop.id,
+      shop_name:    shop.shop_name,
+      owner_name:   shop.owner_name,
+      owner_phone:  shop.owner_phone,
+      plan:         shop.plan,
       logged_in_at: new Date().toISOString()
     }
     localStorage.setItem('travex_session', JSON.stringify(session))
-
     showSuccess(`✅ Karibu ${shop.shop_name}! Unaingia...`)
     setTimeout(() => { window.location.href = 'dashboard.html' }, 1000)
 
   } catch(e) {
     showError('Hitilafu imetokea. Angalia internet yako na ujaribu tena.')
-    btn.textContent = '🔐 Sign In to Dashboard'; btn.disabled = false
+    btn.innerHTML = '🔐 <span>Sign In to Dashboard</span>'; btn.disabled = false
   }
 }
 
-// Check if already logged in
+// Already logged in?
 const existing = JSON.parse(localStorage.getItem('travex_session') || '{}')
-if (existing?.id) {
-  window.location.href = 'dashboard.html'
-}
+if (existing?.id) window.location.href = 'dashboard.html'
 </script>
 
 <script>
