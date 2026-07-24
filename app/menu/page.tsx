@@ -83,9 +83,9 @@ export default function MenuPage() {
             style={{ background:'rgba(255,255,255,0.10)', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#fff' }}>
             <ArrowLeft size={17} color="#fff" />
           </button>
-          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'#fff', letterSpacing:'-0.03em' }}>shop</span>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.03em' }}>nekt</span>
+          <div style={{ display:'flex', alignItems:'center', gap:0 }}>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'#fff', letterSpacing:'-0.03em' }}>Shop</span>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.03em' }}>Nekt</span>
           </div>
           <div style={{ width:36 }} />
         </div>
