@@ -6,13 +6,14 @@
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Login — ShopNekt Dashboard</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;600;700;800&display=swap"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#060B18 0%,#0D1B3E 60%,#071540 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+body[dir="rtl"]{font-family:'Cairo','Inter',sans-serif}
 .card{background:#fff;border-radius:24px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.28)}
-.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px}
-.logo-row img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:24px}
+.logo-row img{width:38px;height:38px;border-radius:10px;object-fit:cover;margin-right:8px}
 .brand{font-size:1.2rem;font-weight:800;color:#0D1B3E;letter-spacing:-0.03em}
 .brand span{color:#C9A84C}
 h1{font-weight:800;font-size:1.4rem;color:#0D1B3E;text-align:center;margin-bottom:5px}
@@ -23,21 +24,25 @@ h1{font-weight:800;font-size:1.4rem;color:#0D1B3E;text-align:center;margin-botto
 label{display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.05em;text-transform:uppercase}
 .input-wrap{position:relative}
 .input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem}
-input{width:100%;padding:13px 14px 13px 42px;border:2px solid #E2E8F0;border-radius:12px;font-size:1rem;font-family:'Inter',sans-serif;color:#0F172A;outline:none;transition:all 0.2s;font-weight:600}
+body[dir="rtl"] .input-wrap .icon{left:auto;right:14px}
+input{width:100%;padding:13px 14px 13px 42px;border:2px solid #E2E8F0;border-radius:12px;font-size:1rem;font-family:inherit;color:#0F172A;outline:none;transition:all 0.2s;font-weight:600}
+body[dir="rtl"] input{padding:13px 42px 13px 14px;text-align:right}
 input:focus{border-color:#0D1B3E;box-shadow:0 0 0 3px rgba(13,27,62,0.08)}
 input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
 .hint{font-size:11px;color:#94A3B8;margin-top:5px;padding-left:2px}
-.btn-login{width:100%;padding:14px;background:#0D1B3E;color:#C9A84C;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:6px;letter-spacing:0.02em}
+.btn-login{width:100%;padding:14px;background:#0D1B3E;color:#C9A84C;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:6px;letter-spacing:0.02em}
 .btn-login:hover{background:#1B3A8A;transform:translateY(-1px);box-shadow:0 8px 20px rgba(13,27,62,0.25)}
 .btn-login:disabled{opacity:0.6;cursor:wait;transform:none}
 .divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#94A3B8;font-size:12px}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:#E2E8F0}
-.btn-secondary{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-secondary{width:100%;padding:11px;background:#F8FAFF;color:#0D1B3E;border:1.5px solid #E2E8F0;border-radius:12px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s}
 .btn-secondary:hover{border-color:#0D1B3E;background:#EEF2FF}
 .footer-links{margin-top:20px;text-align:center;font-size:12px;color:rgba(255,255,255,0.4)}
 .footer-links a{color:#C9A84C;text-decoration:none;font-weight:600}
-.lang-toggle{position:fixed;top:16px;right:16px;display:flex;gap:4px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:3px;z-index:999}
-.lang-btn{padding:4px 12px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;background:transparent;color:rgba(255,255,255,0.5);transition:all .2s}
+
+/* Language toggle — 6 flags */
+.lang-toggle{position:fixed;top:14px;right:14px;display:flex;gap:3px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:3px;z-index:999;flex-wrap:nowrap}
+.lang-btn{padding:4px 8px;border-radius:999px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.65rem;font-weight:700;background:transparent;color:rgba(255,255,255,0.5);transition:all .2s;white-space:nowrap}
 .lang-btn.active{background:#fff;color:#0D1B3E}
 
 /* PIN dots display */
@@ -47,7 +52,7 @@ input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
 
 /* PIN keypad */
 .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-.key{padding:16px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:14px;font-size:1.2rem;font-weight:700;color:#0F172A;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Inter',sans-serif;user-select:none}
+.key{padding:16px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:14px;font-size:1.2rem;font-weight:700;color:#0F172A;cursor:pointer;text-align:center;transition:all 0.15s;font-family:inherit;user-select:none}
 .key:hover{background:#EEF2FF;border-color:#0D1B3E}
 .key:active{transform:scale(0.94);background:#E2E8F0}
 .key.del{color:#EF4444;font-size:1rem}
@@ -60,69 +65,69 @@ input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
 .who-badge .email{font-size:0.72rem;color:#94A3B8}
 .who-badge .change{font-size:0.72rem;color:#3B82F6;cursor:pointer;font-weight:600}
 
-/* Screens */
-#screenFirst, #screenPin{display:none}
+#screenFirst,#screenPin{display:none}
 </style>
 </head>
 <body>
 
+<!-- 6-language toggle -->
 <div class="lang-toggle">
-  <button class="lang-btn active" data-lang="en" onclick="toggleLang('en')">EN</button>
-  <button class="lang-btn" data-lang="sw" onclick="toggleLang('sw')">SW</button>
+  <button class="lang-btn" data-lang="en"  onclick="applyLang('en')">🇬🇧 EN</button>
+  <button class="lang-btn" data-lang="sw"  onclick="applyLang('sw')">🇹🇿 SW</button>
+  <button class="lang-btn" data-lang="fr"  onclick="applyLang('fr')">🇫🇷 FR</button>
+  <button class="lang-btn" data-lang="de"  onclick="applyLang('de')">🇩🇪 DE</button>
+  <button class="lang-btn" data-lang="pt"  onclick="applyLang('pt')">🇵🇹 PT</button>
+  <button class="lang-btn" data-lang="ar"  onclick="applyLang('ar')">🇸🇦 AR</button>
 </div>
 
 <div class="card">
   <div class="logo-row">
-    <img src="/icon-192.png" alt="ShopNekt"/>
-    <span class="brand">shop<span>nekt</span></span>
+    <img src="/sn-logo.png" alt="ShopNekt"/>
+    <span class="brand">Shop<span>Nekt</span></span>
   </div>
 
-  <div class="error-box" id="errorBox"></div>
+  <div class="error-box"   id="errorBox"></div>
   <div class="success-box" id="successBox"></div>
 
-  <!-- ══ SCREEN 1: First time — Email + PIN ══ -->
+  <!-- SCREEN 1: Email -->
   <div id="screenFirst">
-    <h1>👋 <span data-en="Welcome Back" data-sw="Karibu Tena">Welcome Back</span></h1>
-    <p class="sub" data-en="Enter your email and PIN to sign in" data-sw="Ingiza email na PIN yako kuingia">Enter your email and PIN to sign in</p>
+    <h1>👋 <span id="t-welcome">Welcome Back</span></h1>
+    <p class="sub" id="t-subtitle">Enter your email and PIN to sign in</p>
 
     <div class="form-group">
-      <label data-en="EMAIL ADDRESS" data-sw="BARUA PEPE">EMAIL ADDRESS</label>
+      <label id="t-emailLabel">EMAIL ADDRESS</label>
       <div class="input-wrap">
         <span class="icon">✉️</span>
-        <input type="email" id="emailInput"
+        <input type="email" id="emailInput" autocomplete="email"
           placeholder="your@email.com"
-          autocomplete="email"
           onkeydown="if(event.key==='Enter')goToPinScreen()"/>
       </div>
     </div>
 
     <button class="btn-login" onclick="goToPinScreen()">
-      <span data-en="Continue →" data-sw="Endelea →">Continue →</span>
+      <span id="t-continue">Continue →</span>
     </button>
 
-    <div class="divider"><span data-en="or" data-sw="au">or</span></div>
+    <div class="divider"><span id="t-or">or</span></div>
     <button class="btn-secondary" onclick="window.location.href='reset-pin.html'">
-      <span data-en="🔄 Forgot PIN? Reset here" data-sw="🔄 Umesahau PIN? Reset hapa">🔄 Forgot PIN? Reset here</span>
+      <span id="t-resetPin">🔄 Forgot PIN? Reset here</span>
     </button>
   </div>
 
-  <!-- ══ SCREEN 2: PIN entry (keypad) ══ -->
+  <!-- SCREEN 2: PIN keypad -->
   <div id="screenPin">
-    <!-- Who is logging in -->
     <div class="who-badge" id="whoBadge">
       <div class="avatar" id="whoAvatar">J</div>
       <div class="info">
-        <div class="name" id="whoName">Loading...</div>
+        <div class="name"  id="whoName">Loading...</div>
         <div class="email" id="whoEmail"></div>
       </div>
-      <div class="change" onclick="switchAccount()"
-        data-en="Not you?" data-sw="Si wewe?">Not you?</div>
+      <div class="change" onclick="switchAccount()" id="t-notYou">Not you?</div>
     </div>
 
-    <h1 data-en="Enter Your PIN" data-sw="Ingiza PIN Yako">Enter Your PIN</h1>
-    <p class="sub" data-en="4-digit PIN you created during registration" data-sw="PIN ya namba 4 uliyoweka wakati wa kujiandikisha">4-digit PIN you created during registration</p>
+    <h1 id="t-pinTitle">Enter Your PIN</h1>
+    <p class="sub" id="t-pinSub">4-digit PIN you created during registration</p>
 
-    <!-- PIN dots -->
     <div class="pin-dots">
       <div class="pin-dot" id="dot0"></div>
       <div class="pin-dot" id="dot1"></div>
@@ -131,7 +136,6 @@ input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
     </div>
     <p class="hint" style="text-align:center" id="pinHint"></p>
 
-    <!-- Keypad -->
     <div class="keypad">
       <button class="key" onclick="pressKey('1')">1</button>
       <button class="key" onclick="pressKey('2')">2</button>
@@ -150,8 +154,8 @@ input::placeholder{font-weight:400;color:#94A3B8;font-size:0.88rem}
 </div>
 
 <div class="footer-links">
-  <a href="/">← Rudi ShopNekt</a> &nbsp;·&nbsp;
-  <a href="/open-store">Fungua Duka Jipya</a>
+  <a href="/" id="t-back">← Back to ShopNekt</a> &nbsp;·&nbsp;
+  <a href="/open-store" id="t-openShop">Open a New Shop</a>
 </div>
 
 <script>
@@ -159,19 +163,136 @@ const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 const SESSION_KEY = 'travex_session'
 const EMAIL_KEY   = 'travex_email'
+const LANG_KEY    = 'travex_lang'   /* same key as the Next.js app */
 
 let pinValue = ''
 let currentEmail = ''
 
-// ── Helpers ────────────────────────────────────────────
+// ── Translations ──────────────────────────────────────────────
+const T = {
+  en: {
+    welcome:   'Welcome Back', subtitle: 'Enter your email and PIN to sign in',
+    emailLabel:'EMAIL ADDRESS', continue:'Continue →', or:'or',
+    resetPin:  '🔄 Forgot PIN? Reset here', notYou:'Not you?',
+    pinTitle:  'Enter Your PIN', pinSub:'4-digit PIN you created during registration',
+    back:'← Back to ShopNekt', openShop:'Open a New Shop',
+    loading:'Loading...', wrongPin:'Wrong PIN. Try again.',
+    notApproved:'Your shop is not approved yet. Contact ShopNekt.',
+    networkErr: 'Network error. Check your connection.',
+    enterEmail: 'Please enter your email address.',
+    shopNotFound:'Email not found. Check and try again.',
+    signingIn:  'Signing in...',
+  },
+  sw: {
+    welcome:   'Karibu Tena', subtitle:'Ingiza email na PIN yako kuingia',
+    emailLabel:'BARUA PEPE',  continue:'Endelea →', or:'au',
+    resetPin:  '🔄 Umesahau PIN? Reset hapa', notYou:'Si wewe?',
+    pinTitle:  'Ingiza PIN Yako', pinSub:'PIN ya namba 4 uliyoweka wakati wa kujiandikisha',
+    back:'← Rudi ShopNekt', openShop:'Fungua Duka Jipya',
+    loading:'Inapakia...', wrongPin:'PIN si sahihi. Jaribu tena.',
+    notApproved:'Duka lako halijaidhinishwa bado. Wasiliana na ShopNekt.',
+    networkErr: 'Hitilafu ya mtandao. Angalia muunganisho wako.',
+    enterEmail: 'Tafadhali ingiza anwani ya barua pepe.',
+    shopNotFound:'Barua pepe haikupatikana. Angalia na ujaribu tena.',
+    signingIn:  'Inaingia...',
+  },
+  fr: {
+    welcome:   'Bon retour', subtitle:'Entrez votre e-mail et PIN pour vous connecter',
+    emailLabel:'ADRESSE E-MAIL', continue:'Continuer →', or:'ou',
+    resetPin:  '🔄 PIN oublié ? Réinitialiser ici', notYou:'Ce n'est pas vous ?',
+    pinTitle:  'Entrez votre PIN', pinSub:'PIN à 4 chiffres créé lors de l'inscription',
+    back:'← Retour à ShopNekt', openShop:'Ouvrir une nouvelle boutique',
+    loading:'Chargement...', wrongPin:'PIN incorrect. Réessayez.',
+    notApproved:'Votre boutique n'est pas encore approuvée. Contactez ShopNekt.',
+    networkErr: 'Erreur réseau. Vérifiez votre connexion.',
+    enterEmail: 'Veuillez saisir votre adresse e-mail.',
+    shopNotFound:'E-mail introuvable. Vérifiez et réessayez.',
+    signingIn:  'Connexion...',
+  },
+  de: {
+    welcome:   'Willkommen zurück', subtitle:'E-Mail und PIN eingeben, um sich anzumelden',
+    emailLabel:'E-MAIL-ADRESSE', continue:'Weiter →', or:'oder',
+    resetPin:  '🔄 PIN vergessen? Hier zurücksetzen', notYou:'Nicht Sie?',
+    pinTitle:  'PIN eingeben', pinSub:'4-stellige PIN aus der Registrierung',
+    back:'← Zurück zu ShopNekt', openShop:'Neuen Shop eröffnen',
+    loading:'Laden...', wrongPin:'Falscher PIN. Erneut versuchen.',
+    notApproved:'Ihr Shop wurde noch nicht genehmigt. ShopNekt kontaktieren.',
+    networkErr: 'Netzwerkfehler. Verbindung prüfen.',
+    enterEmail: 'Bitte E-Mail-Adresse eingeben.',
+    shopNotFound:'E-Mail nicht gefunden. Prüfen und erneut versuchen.',
+    signingIn:  'Anmeldung...',
+  },
+  pt: {
+    welcome:   'Bem-vindo de volta', subtitle:'Digite seu e-mail e PIN para entrar',
+    emailLabel:'ENDEREÇO DE E-MAIL', continue:'Continuar →', or:'ou',
+    resetPin:  '🔄 Esqueceu o PIN? Redefinir aqui', notYou:'Não é você?',
+    pinTitle:  'Digite seu PIN', pinSub:'PIN de 4 dígitos criado no registro',
+    back:'← Voltar ao ShopNekt', openShop:'Abrir nova loja',
+    loading:'Carregando...', wrongPin:'PIN incorreto. Tente novamente.',
+    notApproved:'Sua loja ainda não foi aprovada. Entre em contato com ShopNekt.',
+    networkErr: 'Erro de rede. Verifique sua conexão.',
+    enterEmail: 'Por favor, insira seu endereço de e-mail.',
+    shopNotFound:'E-mail não encontrado. Verifique e tente novamente.',
+    signingIn:  'Entrando...',
+  },
+  ar: {
+    welcome:   'أهلاً بعودتك', subtitle:'أدخل بريدك الإلكتروني ورمز PIN لتسجيل الدخول',
+    emailLabel:'البريد الإلكتروني', continue:'متابعة ←', or:'أو',
+    resetPin:  '🔄 نسيت PIN؟ أعِد تعيينه هنا', notYou:'لست أنت؟',
+    pinTitle:  'أدخل رمز PIN', pinSub:'رمز PIN المكوّن من 4 أرقام الذي أنشأته عند التسجيل',
+    back:'العودة إلى ShopNekt ←', openShop:'فتح متجر جديد',
+    loading:'جارٍ التحميل...', wrongPin:'رمز PIN غير صحيح. حاول مرة أخرى.',
+    notApproved:'متجرك لم يتم الموافقة عليه بعد. تواصل مع ShopNekt.',
+    networkErr: 'خطأ في الشبكة. تحقق من اتصالك.',
+    enterEmail: 'الرجاء إدخال عنوان بريدك الإلكتروني.',
+    shopNotFound:'البريد الإلكتروني غير موجود. تحقق وحاول مرة أخرى.',
+    signingIn:  'جارٍ تسجيل الدخول...',
+  },
+}
+
+function applyLang(lang) {
+  if (!T[lang]) lang = 'en'
+  localStorage.setItem(LANG_KEY, lang)
+  const t = T[lang]
+  const isRTL = (lang === 'ar')
+  document.documentElement.lang = lang
+  document.body.dir = isRTL ? 'rtl' : 'ltr'
+  // Fire event so Next.js app picks it up
+  window.dispatchEvent(new CustomEvent('shopnekt-lang', { detail: lang }))
+
+  document.getElementById('t-welcome').textContent   = t.welcome
+  document.getElementById('t-subtitle').textContent  = t.subtitle
+  document.getElementById('t-emailLabel').textContent= t.emailLabel
+  document.getElementById('t-continue').textContent  = t.continue
+  document.getElementById('t-or').textContent        = t.or
+  document.getElementById('t-resetPin').textContent  = t.resetPin
+  document.getElementById('t-notYou').textContent    = t.notYou
+  document.getElementById('t-pinTitle').textContent  = t.pinTitle
+  document.getElementById('t-pinSub').textContent    = t.pinSub
+  document.getElementById('t-back').textContent      = t.back
+  document.getElementById('t-openShop').textContent  = t.openShop
+
+  const emailInput = document.getElementById('emailInput')
+  if (emailInput) emailInput.placeholder = lang === 'ar' ? 'بريدك@الإلكتروني.com' : 'your@email.com'
+
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang))
+}
+
+// Init lang from same key as Next.js app
+const savedLang = localStorage.getItem(LANG_KEY) || 'en'
+document.addEventListener('DOMContentLoaded', () => applyLang(savedLang))
+</script>
+
+<script>
+// ── Helpers ────────────────────────────────────────────────────
+function getLang() { return localStorage.getItem(LANG_KEY) || 'en' }
+function tr(key) { return (T[getLang()] || T.en)[key] || key }
+
 function showError(msg) {
   const el = document.getElementById('errorBox')
   el.textContent = msg; el.style.display = 'block'
   document.getElementById('successBox').style.display = 'none'
-  // Shake animation
-  const card = el.closest ? el.closest('.card') : document.querySelector('.card')
-  card.style.animation = 'none'
-  setTimeout(() => card.style.animation = '', 10)
 }
 function showSuccess(msg) {
   const el = document.getElementById('successBox')
@@ -179,14 +300,13 @@ function showSuccess(msg) {
   document.getElementById('errorBox').style.display = 'none'
 }
 function clearMessages() {
-  document.getElementById('errorBox').style.display = 'none'
+  document.getElementById('errorBox').style.display   = 'none'
   document.getElementById('successBox').style.display = 'none'
 }
 
-// ── Determine which screen to show ────────────────────
+// ── Session check ──────────────────────────────────────────────
 async function init() {
   try {
-    // Check for valid existing session
     const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}')
     if (session?.id) {
       try {
@@ -195,43 +315,97 @@ async function init() {
           { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
         )
         const data = await res.json()
-        if (data && data.length) {
-          window.location.href = 'dashboard.html'
-          return
-        }
-      } catch(e) { /* ignore network errors */ }
-      // Stale session — clear it
+        if (data && data.length) { window.location.href = 'dashboard.html'; return }
+      } catch(e) { /* ignore */ }
       localStorage.removeItem(SESSION_KEY)
       localStorage.removeItem(EMAIL_KEY)
     }
-
-    // Check if email was remembered
     const savedEmail = localStorage.getItem(EMAIL_KEY)
-    if (savedEmail) {
-      showPinScreen(savedEmail)
-    } else {
-      document.getElementById('screenFirst').style.display = 'block'
-    }
+    if (savedEmail) { showPinScreen(savedEmail) }
+    else { document.getElementById('screenFirst').style.display = 'block' }
   } catch(e) {
-    // Always fallback to email screen
     document.getElementById('screenFirst').style.display = 'block'
   }
 }
-// ── Start ───────────────────────────────────────────────
 init()
-</script>
 
-<script>
-// Language toggle
-const LANG_KEY='sn_lang'
-let currentLang=localStorage.getItem(LANG_KEY)||'en'
-function applyLang(lang){
-  currentLang=lang;localStorage.setItem(LANG_KEY,lang)
-  document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=lang==='sw'?(el.dataset.sw||el.dataset.en):el.dataset.en})
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang))
+// ── Screen transitions ─────────────────────────────────────────
+async function goToPinScreen() {
+  const email = document.getElementById('emailInput').value.trim()
+  if (!email) { showError(tr('enterEmail')); return }
+  clearMessages()
+  const btn = document.querySelector('#screenFirst .btn-login')
+  btn.disabled = true; btn.textContent = tr('loading')
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?email=eq.${encodeURIComponent(email)}&status=eq.approved&select=id,shop_name,email`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    )
+    const data = await res.json()
+    if (!data || !data.length) { showError(tr('shopNotFound')); btn.disabled=false; btn.textContent=tr('continue'); return }
+    localStorage.setItem(EMAIL_KEY, email)
+    showPinScreen(email, data[0])
+  } catch(e) {
+    showError(tr('networkErr')); btn.disabled=false; btn.textContent=tr('continue')
+  }
 }
-function toggleLang(lang){applyLang(lang)}
-document.addEventListener('DOMContentLoaded',()=>applyLang(currentLang))
+
+function showPinScreen(email, shopData) {
+  currentEmail = email
+  document.getElementById('screenFirst').style.display = 'none'
+  document.getElementById('screenPin').style.display   = 'block'
+  clearMessages(); pinValue = ''; updateDots()
+  const initials = email.slice(0,2).toUpperCase()
+  document.getElementById('whoAvatar').textContent = initials
+  document.getElementById('whoEmail').textContent  = email
+  document.getElementById('whoName').textContent   = shopData?.shop_name || tr('loading')
+}
+
+function switchAccount() {
+  localStorage.removeItem(EMAIL_KEY)
+  pinValue = ''; updateDots(); clearMessages()
+  document.getElementById('screenPin').style.display   = 'none'
+  document.getElementById('screenFirst').style.display = 'block'
+  document.getElementById('emailInput').value = ''
+}
+
+// ── PIN keypad ─────────────────────────────────────────────────
+function pressKey(k) {
+  if (pinValue.length >= 4) return
+  pinValue += k; updateDots()
+  if (pinValue.length === 4) setTimeout(submitPin, 120)
+}
+function deleteLast() { pinValue = pinValue.slice(0,-1); updateDots() }
+function updateDots() {
+  for (let i=0;i<4;i++)
+    document.getElementById('dot'+i).classList.toggle('filled', i < pinValue.length)
+  document.getElementById('pinHint').textContent = ''
+}
+
+async function submitPin() {
+  clearMessages()
+  const btn = document.querySelectorAll('#screenPin .key')
+  btn.forEach(b=>b.disabled=true)
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/pending_payments?email=eq.${encodeURIComponent(currentEmail)}&status=eq.approved&select=id,shop_name,login_password`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    )
+    const data = await res.json()
+    const shop = data?.[0]
+    if (!shop) { showError(tr('shopNotFound')); pinValue=''; updateDots(); btn.forEach(b=>b.disabled=false); return }
+
+    const expected = shop.login_password || ''
+    if (expected !== pinValue && !expected.endsWith('-'+pinValue) && !expected.startsWith(pinValue+'-')) {
+      showError(tr('wrongPin')); pinValue=''; updateDots(); btn.forEach(b=>b.disabled=false); return
+    }
+    showSuccess(tr('signingIn'))
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ id: shop.id, shop_name: shop.shop_name, email: currentEmail }))
+    setTimeout(() => window.location.href = 'dashboard.html', 600)
+  } catch(e) {
+    showError(tr('networkErr')); btn.forEach(b=>b.disabled=false)
+  }
+}
 </script>
 </body>
 </html>
