@@ -41,18 +41,18 @@ export default function HomePage() {
         * { box-sizing: border-box; }
 
         /* ── Sell chip ────────────────────────────────────── */
-        .sell-chip-wrap { background:linear-gradient(135deg,#0D1B3E,#1E3A8A); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .sell-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
         .sell-chip-inner { max-width:1100px; margin:0 auto; }
-        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.15); border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; }
-        .sell-chip-card:hover { border-color:rgba(255,255,255,0.30); background:rgba(255,255,255,0.10); }
-        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#2563EB; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#1D4ED8; transform:translateY(-1px); box-shadow:0 6px 18px rgba(37,99,235,0.45); }
+        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; }
+        .sell-chip-card:hover { border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); }
+        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#1E3A8A; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+        .sell-cta:hover { background:#1E40AF; transform:translateY(-1px); box-shadow:0 6px 18px rgba(30,58,138,0.50); }
 
         /* ── AI chip ──────────────────────────────────────── */
-        .ai-chip-wrap { background:linear-gradient(135deg,#0D1B3E,#1E3A8A); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .ai-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
-        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.15); border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; }
-        .ai-chip-link:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.30); }
+        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; }
+        .ai-chip-link:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.25); }
 
         /* ── Three Markets ────────────────────────────────── */
         .market-cards { display:flex; gap:1.5rem; align-items:stretch; min-height:420px; }
@@ -85,7 +85,7 @@ export default function HomePage() {
         <div className="sell-chip-inner">
           <div className="sell-chip-card">
             <div style={{ display:'flex',alignItems:'center',gap:12 }}>
-              <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#2563EB,#3B82F6)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+              <div style={{ width:38,height:38,borderRadius:10,background:'#1E3A8A',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
                 <Store size={20} color="#fff" />
               </div>
               <div>
