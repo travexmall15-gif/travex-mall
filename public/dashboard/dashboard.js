@@ -271,6 +271,8 @@ async function loadSidebar(activePage, shopData) {
       </button>
     </div>
   `;
+  // Apply i18n after sidebar renders
+  setTimeout(() => { if (window.LANG) window.LANG.apply(); }, 100);
 }
 
 //  MOBILE MENU 

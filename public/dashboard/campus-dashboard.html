@@ -1081,7 +1081,7 @@ textarea.form-input{resize:vertical;min-height:80px}
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+      <button class="btn btn-secondary" onclick="closeProductModal()" data-i18n="Cancel">Cancel</button>
       <button class="btn btn-primary" onclick="saveProduct()" id="saveProductBtn">Save Product</button>
     </div>
   </div>
@@ -1090,6 +1090,9 @@ textarea.form-input{resize:vertical;min-height:80px}
 <!-- TOAST -->
 <div class="toast" id="toastEl"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="dashboard.js"></script>
+<script src="i18n.js"></script>
 <script>
 const sb = supabase.createClient(
   'https://bscecjbgnjitlfmgwcic.supabase.co',
@@ -1369,7 +1372,7 @@ async function loadProducts(){
         <div class="prod-stock">Stock: ${p.stock||0}  ${p.category||''}</div>
         <div class="prod-actions">
           <button class="btn btn-secondary btn-sm" onclick="editProduct('${p.id}')">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">Delete</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')" data-i18n="Delete">Delete</button>
         </div>
       </div>
     </div>`).join('')}</div>`;

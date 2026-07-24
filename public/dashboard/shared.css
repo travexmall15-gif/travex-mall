@@ -926,3 +926,18 @@ select.form-control { cursor: pointer; }
 .color-swatch { width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:.15s }
 .color-swatch.selected { border-color:var(--navy);transform:scale(1.15) }
 .color-grid,.font-grid { display:flex;gap:8px;flex-wrap:wrap }
+
+/* ── RTL (Arabic) ── */
+body.rtl { font-family: 'Cairo', 'Inter', sans-serif; }
+body.rtl .sidebar { right: auto; left: 0; }
+body.rtl .main-wrapper { margin-left: 0; margin-right: var(--sidebar-w); }
+body.rtl .main-header { flex-direction: row-reverse; }
+body.rtl .header-right { flex-direction: row-reverse; }
+body.rtl .nav-item { flex-direction: row-reverse; text-align: right; }
+body.rtl .stat-card { text-align: right; }
+body.rtl .table-card-header { flex-direction: row-reverse; }
+@media (max-width: 768px) {
+  body.rtl .sidebar { left: -100%; right: auto; }
+  body.rtl .sidebar.open { left: 0; }
+  body.rtl .main-wrapper { margin-right: 0; }
+}
