@@ -992,7 +992,18 @@
     "qa3": "Kuwa Muuzaji",
     "qa4": "Maarufu",
     "qa5": "Karibu Nawe",
-    "qa6": "Fuatilia Oda"
+    "qa6": "Fuatilia Oda",
+    "matchReason": "mechi zimepatikana",
+    "productsFound": "bidhaa zimepatikana",
+    "withinBudget": "ndani ya bajeti",
+    "suggestions": [
+      "Viatu chini ya 50k Dar",
+      "Laptop chini ya 800,000",
+      "Chakula cha haraka Arusha",
+      "Nguo za watoto bajeti 30k",
+      "Vifaa vya simu mtandaoni",
+      "Bidhaa za urembo bei nafuu"
+    ]
   },
   "menuPage": {
     "language": "Lugha",
@@ -1047,7 +1058,9 @@
     "currentPlan": "Mpango wa Sasa",
     "upgrade": "Boresha",
     "contactSales": "Wasiliana na Mauzo",
-    "cancel": "Ghairi wakati wowote"
+    "cancel": "Ghairi wakati wowote",
+    "allBasic": "Kila kitu katika Msingi",
+    "features": "Vipengele vilivyojumuishwa"
   },
   "campusApply": {
     "title": "Omba Duka la Chuo",
@@ -1068,5 +1081,20 @@
     "title": "Ukurasa Haupatikani",
     "desc": "Ukurasa unaotafuta haupo.",
     "goHome": "Nenda Nyumbani"
+  },
+  "privacy": {
+    "title": "Sera ya Faragha",
+    "lastUpdated": "Imesasishwa mwisho",
+    "intro": "ShopNekt inachukua faragha yako kwa uzito."
+  },
+  "about": {
+    "title": "Kuhusu ShopNekt",
+    "version": "Toleo",
+    "builtBy": "Imejengwa na QNEX360",
+    "description": "ShopNekt ni soko la kidijitali la akili la Afrika.",
+    "website": "Tembelea Tovuti",
+    "contact": "Wasiliana Nasi",
+    "termsLink": "Masharti ya Huduma",
+    "privacyLink": "Sera ya Faragha"
   }
 }
