@@ -41,18 +41,18 @@ export default function HomePage() {
         * { box-sizing: border-box; }
 
         /* ── Sell chip ────────────────────────────────────── */
-        .sell-chip-wrap { background:#F0F4FF; padding:1.2rem 5%; border-bottom:1px solid #E2E8F0; }
+        .sell-chip-wrap { background:linear-gradient(135deg,#0D1B3E,#1E3A8A); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
         .sell-chip-inner { max-width:1100px; margin:0 auto; }
-        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1.5px solid #DBEAFE; border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; box-shadow:0 2px 8px rgba(59,130,246,0.06); }
-        .sell-chip-card:hover { border-color:#93C5FD; background:#F0F7FF; }
+        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.15); border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; }
+        .sell-chip-card:hover { border-color:rgba(255,255,255,0.30); background:rgba(255,255,255,0.10); }
         .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#2563EB; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#1D4ED8; transform:translateY(-1px); box-shadow:0 6px 18px rgba(37,99,235,0.35); }
+        .sell-cta:hover { background:#1D4ED8; transform:translateY(-1px); box-shadow:0 6px 18px rgba(37,99,235,0.45); }
 
         /* ── AI chip ──────────────────────────────────────── */
-        .ai-chip-wrap { background:#F0F4FF; padding:1.2rem 5%; border-bottom:1px solid #E2E8F0; }
+        .ai-chip-wrap { background:linear-gradient(135deg,#0D1B3E,#1E3A8A); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
-        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1.5px solid #DBEAFE; border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; box-shadow:0 2px 8px rgba(59,130,246,0.06); }
-        .ai-chip-link:hover { background:#F0F7FF; border-color:#93C5FD; }
+        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.15); border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; }
+        .ai-chip-link:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.30); }
 
         /* ── Three Markets ────────────────────────────────── */
         .market-cards { display:flex; gap:1.5rem; align-items:stretch; min-height:420px; }
@@ -89,8 +89,8 @@ export default function HomePage() {
                 <Store size={20} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight:700,color:'#0F172A',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
-                <div style={{ fontSize:'0.72rem',color:'#64748B',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
+                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
+                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.50)',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
               </div>
             </div>
             <Link href="/open-store" className="sell-cta">
@@ -109,11 +109,11 @@ export default function HomePage() {
                 <Sparkles size={20} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight:700,color:'#0F172A',fontSize:'0.9rem' }}>Chat with 360 AI</div>
-                <div style={{ fontSize:'0.72rem',color:'#64748B',marginTop:1 }}>{t('home.aiChipSub')}</div>
+                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>Chat with 360 AI</div>
+                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.50)',marginTop:1 }}>{t('home.aiChipSub')}</div>
               </div>
             </div>
-            <ArrowRight size={18} color="#2563EB" />
+            <ArrowRight size={18} color="rgba(255,255,255,0.60)" />
           </a>
         </div>
       </div>
