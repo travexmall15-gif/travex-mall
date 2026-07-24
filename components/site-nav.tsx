@@ -1,5 +1,4 @@
 'use client'
-import { LangSwitcher } from "@/components/lang-switcher"
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -164,9 +163,6 @@ export function SiteNav() {
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
           <Truck size={16} color="#475569" />
         </Link>
-
-        {/* Language Switcher */}
-        <LangSwitcher compact />
 
         {/* Menu button — direct navigation to /menu */}
         <button onClick={() => { window.location.href = '/menu' }}
