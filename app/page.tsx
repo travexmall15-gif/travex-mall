@@ -1,30 +1,28 @@
 'use client'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { sb } from '@/lib/supabase'
 import Image from 'next/image'
 
 export default function SplashPage() {
   const router = useRouter()
 
-  const handleEnter = async () => {
-    const { data: { session } } = await sb.auth.getSession()
-    if (session) {
-      // Returning user → home directly
-      router.replace('/home')
-      return
+  // Synchronous — no network call needed. App uses custom PIN auth, not Supabase Auth.
+  const handleEnter = () => {
+    const raw = typeof window !== 'undefined' ? localStorage.getItem('travex_session') : null
+    if (raw) {
+      try {
+        const sess = JSON.parse(raw)
+        if (sess?.id) { router.replace('/home'); return }
+      } catch {}
     }
-    const welcomed = localStorage.getItem('sn_welcomed')
-    if (!welcomed) {
-      router.push('/welcome')
-    } else {
-      router.push('/auth')
-    }
+    const welcomed = typeof window !== 'undefined' ? localStorage.getItem('sn_welcomed') : null
+    if (!welcomed) router.push('/welcome')
+    else router.push('/auth')
   }
 
-  // Auto-trigger after 3s if user doesn't tap
+  // Auto-trigger after 2s (down from 3.2s) — instant if user taps QNEX360
   useEffect(() => {
-    const t = setTimeout(handleEnter, 3200)
+    const t = setTimeout(handleEnter, 2000)
     return () => clearTimeout(t)
   }, [])
 

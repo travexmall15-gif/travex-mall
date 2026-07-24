@@ -39,12 +39,23 @@ export function SiteNav() {
   const [showDrop,  setShowDrop]  = useState(false)
   const [user, setUser] = useState<{email:string, name:string} | null>(null)
   useEffect(() => {
+    // Fast path: check custom session first (no network)
+    try {
+      const raw = localStorage.getItem('travex_session')
+      if (raw) {
+        const sess = JSON.parse(raw)
+        if (sess?.shop_name) {
+          setUser({ email: sess.email || '', name: sess.shop_name || 'Seller' })
+        }
+      }
+    } catch {}
+    // Supabase Auth check (background, non-blocking)
     sb.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         const m = session.user.user_metadata
         setUser({ email: session.user.email || '', name: m?.display_name || m?.username || session.user.email?.split('@')[0] || 'User' })
       }
-    })
+    }).catch(() => {})
     const { data: { subscription } } = sb.auth.onAuthStateChange((_evt, session) => {
       if (session?.user) {
         const m = session.user.user_metadata
