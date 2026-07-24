@@ -588,7 +588,8 @@
     "rejected": "Rejeitado",
     "delivered": "Entregue",
     "cancelled": "Cancelado",
-    "refunded": "Reembolsado"
+    "refunded": "Reembolsado",
+    "back2": "Voltar"
   },
   "openStore": {
     "title": "Abra Sua Loja no ShopNekt",
@@ -1026,7 +1027,8 @@
     "note": "Nota adicional (opcional)",
     "notePlaceholder": "Instruções especiais...",
     "onDeliveryDesc": "Pague ao receber seu pedido",
-    "successDesc": "O vendedor entrará em contato via WhatsApp para organizar a entrega."
+    "successDesc": "O vendedor entrará em contato via WhatsApp para organizar a entrega.",
+    "useMyLocation": "Usar minha localização atual"
   },
   "messages": {
     "title": "Mensagens",
@@ -1172,7 +1174,15 @@
     "displayNamePlaceholder": "Seu nome de exibição",
     "creating": "Criando...",
     "alreadyHave": "Já tem uma conta?",
-    "loginHere": "Faça login aqui"
+    "loginHere": "Faça login aqui",
+    "sendCodeDesc": "Enviaremos um código de 6 dígitos para verificar seu e-mail.",
+    "codeSentTo": "Código de 6 dígitos enviado para",
+    "verifyEnter": "Verificar & Entrar",
+    "didntReceive": "Não recebeu?",
+    "enterCodeError": "Digite o código de 6 dígitos.",
+    "verifying": "Verificando...",
+    "saving": "Salvando...",
+    "loginHere2": "Faça login aqui"
   },
   "campusApply": {
     "title": "Solicitar Loja Campus",
@@ -1190,7 +1200,16 @@
     "loginHere": "Fazer login aqui",
     "email": "Endereço de e-mail",
     "successDesc": "Revisaremos e entraremos em contato em 24 horas.",
-    "year": "Ano de estudo"
+    "year": "Ano de estudo",
+    "shopNameLabel": "Nome da loja",
+    "categoryLabel": "Categoria",
+    "descLabel": "Descrição da loja",
+    "yearLabel": "Ano de estudo",
+    "nameLabel": "Nome completo",
+    "phoneLabel": "Número WhatsApp",
+    "reviewSubmit": "Revisar & Enviar",
+    "savedIdCard": "Carteira estudantil (opcional)",
+    "minChars": "caracteres mínimos"
   },
   "notFound": {
     "title": "Página Não Encontrada",

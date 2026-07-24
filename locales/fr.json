@@ -589,7 +589,8 @@
     "inactive": "Inactif",
     "delivered": "Livré",
     "cancelled": "Annulé",
-    "refunded": "Remboursé"
+    "refunded": "Remboursé",
+    "back2": "Retour"
   },
   "openStore": {
     "title": "Ouvrez Votre Boutique sur ShopNekt",
@@ -1027,7 +1028,8 @@
     "note": "Note supplémentaire (optionnel)",
     "notePlaceholder": "Instructions spéciales...",
     "onDeliveryDesc": "Payez à la réception de votre commande",
-    "successDesc": "Le vendeur vous contactera sur WhatsApp pour organiser la livraison."
+    "successDesc": "Le vendeur vous contactera sur WhatsApp pour organiser la livraison.",
+    "useMyLocation": "Utiliser ma position en direct"
   },
   "messages": {
     "title": "Messages",
@@ -1173,7 +1175,15 @@
     "usernamePlaceholder": "Choisissez un nom d'utilisateur",
     "displayNamePlaceholder": "Votre nom d'affichage",
     "alreadyHave": "Vous avez déjà un compte ?",
-    "loginHere": "Connectez-vous ici"
+    "loginHere": "Connectez-vous ici",
+    "sendCodeDesc": "Nous enverrons un code à 6 chiffres pour vérifier votre e-mail.",
+    "codeSentTo": "Code à 6 chiffres envoyé à",
+    "verifyEnter": "Vérifier & Entrer",
+    "didntReceive": "Vous ne l'avez pas reçu ?",
+    "enterCodeError": "Entrez le code à 6 chiffres.",
+    "verifying": "Vérification...",
+    "saving": "Enregistrement...",
+    "loginHere2": "Connectez-vous ici"
   },
   "campusApply": {
     "title": "Demande de Boutique Campus",
@@ -1191,7 +1201,16 @@
     "loginHere": "Se connecter ici",
     "email": "Adresse e-mail",
     "successDesc": "Nous examinerons et vous contacterons dans les 24 heures.",
-    "year": "Année d'étude"
+    "year": "Année d'étude",
+    "shopNameLabel": "Nom de la boutique",
+    "categoryLabel": "Catégorie",
+    "descLabel": "Description de la boutique",
+    "yearLabel": "Année d'étude",
+    "nameLabel": "Nom complet",
+    "phoneLabel": "Numéro WhatsApp",
+    "reviewSubmit": "Vérifier & Soumettre",
+    "savedIdCard": "Carte étudiant (optionnel)",
+    "minChars": "caractères minimum"
   },
   "notFound": {
     "title": "Page Introuvable",

@@ -736,7 +736,8 @@
     "rejected": "Imekataliwa",
     "delivered": "Imetolewa",
     "cancelled": "Imefutwa",
-    "refunded": "Imerudishwa"
+    "refunded": "Imerudishwa",
+    "back2": "Rudi"
   },
   "join": {
     "title": "Jiunge na ShopNekt",
@@ -956,7 +957,8 @@
     "processing": "Inashughulika...",
     "successTitle": "Malipo Yamethibitishwa!",
     "successDesc": "Muuzaji atawasiliana nawe kwenye WhatsApp.",
-    "rejected": "Agizo Limekataliwa"
+    "rejected": "Agizo Limekataliwa",
+    "useMyLocation": "Tumia Mahali Pangu Halisi"
   },
   "messages": {
     "title": "Ujumbe",
@@ -1096,7 +1098,15 @@
     "createAccount": "Unda Akaunti",
     "creating": "Inaunda...",
     "alreadyHave": "Una akaunti tayari?",
-    "loginHere": "Ingia hapa"
+    "loginHere": "Ingia hapa",
+    "sendCodeDesc": "Tutatuma nambari ya tarakimu 6 kuthibitisha barua pepe yako.",
+    "codeSentTo": "Nambari ya tarakimu 6 imetumwa kwa",
+    "verifyEnter": "Thibitisha & Ingia",
+    "didntReceive": "Hujapokea?",
+    "enterCodeError": "Ingiza nambari ya tarakimu 6.",
+    "verifying": "Inathibitisha...",
+    "saving": "Inahifadhi...",
+    "loginHere2": "Ingia hapa"
   },
   "subscription": {
     "title": "Chagua Mpango Wako",
@@ -1129,7 +1139,17 @@
     "submit": "Wasilisha Ombi",
     "submitting": "Inawasilisha...",
     "success": "Ombi Limewasilishwa!",
-    "successDesc": "Tutapitia na kuwasiliana nawe ndani ya saa 24."
+    "successDesc": "Tutapitia na kuwasiliana nawe ndani ya saa 24.",
+    "shopNameLabel": "Jina la Duka",
+    "categoryLabel": "Aina",
+    "descLabel": "Maelezo ya Duka",
+    "yearLabel": "Mwaka wa Masomo",
+    "nameLabel": "Jina Kamili",
+    "phoneLabel": "Nambari ya WhatsApp",
+    "reviewSubmit": "Kagua & Wasilisha",
+    "loginHere": "Una duka tayari?",
+    "savedIdCard": "Kadi ya Mwanafunzi (hiari)",
+    "minChars": "herufi za chini"
   },
   "notFound": {
     "title": "Ukurasa Haupatikani",

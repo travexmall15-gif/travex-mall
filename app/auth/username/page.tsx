@@ -100,7 +100,7 @@ export default function UsernamePage() {
           style={{ width: '100%', padding: '0.875rem', background: '#F97316', color: '#fff', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading
             ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
-            : <>Continue to ShopNekt <ArrowRight size={14} /></>}
+            : <>{t('authPage.continueUsername')} <ArrowRight size={14} /></>}
         </button>
       </div>
     </div>

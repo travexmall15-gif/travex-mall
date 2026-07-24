@@ -588,7 +588,8 @@
     "inactive": "Inaktiv",
     "delivered": "Geliefert",
     "cancelled": "Storniert",
-    "refunded": "Erstattet"
+    "refunded": "Erstattet",
+    "back2": "Zurück"
   },
   "openStore": {
     "title": "Öffnen Sie Ihren Shop auf ShopNekt",
@@ -1026,7 +1027,8 @@
     "note": "Zusätzliche Notiz (optional)",
     "notePlaceholder": "Besondere Anweisungen...",
     "onDeliveryDesc": "Bei Erhalt bezahlen",
-    "successDesc": "Der Verkäufer kontaktiert Sie auf WhatsApp."
+    "successDesc": "Der Verkäufer kontaktiert Sie auf WhatsApp.",
+    "useMyLocation": "Meinen aktuellen Standort verwenden"
   },
   "messages": {
     "title": "Nachrichten",
@@ -1172,7 +1174,15 @@
     "displayNamePlaceholder": "Ihr Anzeigename",
     "creating": "Wird erstellt...",
     "alreadyHave": "Bereits ein Konto?",
-    "loginHere": "Hier anmelden"
+    "loginHere": "Hier anmelden",
+    "sendCodeDesc": "Wir senden einen 6-stelligen Code zur Verifizierung Ihrer E-Mail.",
+    "codeSentTo": "6-stelliger Code gesendet an",
+    "verifyEnter": "Verifizieren & Eintreten",
+    "didntReceive": "Nicht erhalten?",
+    "enterCodeError": "Geben Sie den 6-stelligen Code ein.",
+    "verifying": "Verifizierung...",
+    "saving": "Speichern...",
+    "loginHere2": "Hier anmelden"
   },
   "campusApply": {
     "title": "Campus-Shop Beantragen",
@@ -1190,7 +1200,16 @@
     "loginHere": "Hier anmelden",
     "email": "E-Mail-Adresse",
     "successDesc": "Wir werden überprüfen und Sie innerhalb von 24 Stunden kontaktieren.",
-    "year": "Studienjahr"
+    "year": "Studienjahr",
+    "shopNameLabel": "Shop-Name",
+    "categoryLabel": "Kategorie",
+    "descLabel": "Shop-Beschreibung",
+    "yearLabel": "Studienjahr",
+    "nameLabel": "Vollständiger Name",
+    "phoneLabel": "WhatsApp-Nummer",
+    "reviewSubmit": "Prüfen & Einreichen",
+    "savedIdCard": "Studentenausweis (optional)",
+    "minChars": "Mindestzeichen"
   },
   "notFound": {
     "title": "Seite Nicht Gefunden",

@@ -39,7 +39,7 @@ export default function ProfilePage() {
       <SiteNav />
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', fontSize: '0.82rem', fontWeight: 600, fontFamily: "'Inter',sans-serif", marginBottom: '1.5rem', padding: 0 }}>
-          <ArrowLeft size={15} /> Back
+          <ArrowLeft size={15} /> {t('common.back')}
         </button>
         <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '1.75rem', letterSpacing: '-0.025em' }}>{t('profile.title')}</h1>
 
@@ -75,7 +75,7 @@ export default function ProfilePage() {
         <button onClick={save} disabled={loading}
           style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : '#0D1B3E', color: '#fff', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
-           : saved   ? <><Check size={15} /> Saved!</>
+           : saved   ? <><Check size={15} /> {t('profile.saved')}</>
            : 'Save Changes'}
         </button>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>

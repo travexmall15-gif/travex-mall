@@ -133,7 +133,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
 
         <button onClick={() => step==='method' ? router.back() : setStep(step==='option'?'method':step==='location'?'option':'location')}
           style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
-          <ArrowLeft size={15}/> Back
+          <ArrowLeft size={15}/> {t('common.back')}
         </button>
 
         {/* Progress */}
@@ -234,7 +234,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'13px', background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', border:'none', borderRadius:14, color:'#fff', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", marginBottom:'1rem', transition:'opacity .2s', opacity: locLoading?0.7:1 }}>
               {locLoading
                 ? <><Loader2 size={16} style={{ animation:'spin 1s linear infinite' }}/> Getting location...</>
-                : <><MapPin size={16}/> Use My Live Location</>}
+                : <><MapPin size={16}/> {t('payment.useMyLocation')}</>}
             </button>
 
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:'1rem' }}>

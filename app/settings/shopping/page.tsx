@@ -62,11 +62,11 @@ export default function ShoppingPage() {
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'1.5rem' }}>
           <button onClick={() => router.back()}
             style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", padding:0 }}>
-            <ArrowLeft size={15} /> Back
+            <ArrowLeft size={15} /> {t('common.back')}
           </button>
           <button onClick={savePrefs}
             style={{ display:'flex', alignItems:'center', gap:6, background: saved?'#059669':'#0D1B3E', color:'#fff', border:'none', borderRadius:999, padding:'8px 18px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
-            {saved ? <><Check size={13}/> Saved!</> : <><Save size={13}/> Save</>}
+            {saved ? <><Check size={13}/> {t('profile.saved')}</> : <><Save size={13}/> {t('common.save')}</>}
           </button>
         </div>
 

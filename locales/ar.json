@@ -588,7 +588,8 @@
     "inactive": "غير نشط",
     "delivered": "تم التسليم",
     "cancelled": "ملغى",
-    "refunded": "مسترجع"
+    "refunded": "مسترجع",
+    "back2": "رجوع"
   },
   "openStore": {
     "title": "افتح متجرك على ShopNekt",
@@ -1026,7 +1027,8 @@
     "note": "ملاحظة إضافية (اختياري)",
     "notePlaceholder": "تعليمات خاصة...",
     "onDeliveryDesc": "ادفع عند استلام طلبك",
-    "successDesc": "سيتواصل معك البائع على واتساب لترتيب التسليم."
+    "successDesc": "سيتواصل معك البائع على واتساب لترتيب التسليم.",
+    "useMyLocation": "استخدم موقعي الحالي"
   },
   "messages": {
     "title": "الرسائل",
@@ -1172,7 +1174,15 @@
     "displayNamePlaceholder": "اسمك المعروض",
     "creating": "جارٍ الإنشاء...",
     "alreadyHave": "هل لديك حساب؟",
-    "loginHere": "تسجيل الدخول هنا"
+    "loginHere": "تسجيل الدخول هنا",
+    "sendCodeDesc": "سنرسل رمزًا من 6 أرقام للتحقق من بريدك الإلكتروني.",
+    "codeSentTo": "تم إرسال رمز من 6 أرقام إلى",
+    "verifyEnter": "تحقق وادخل",
+    "didntReceive": "لم تستلمه؟",
+    "enterCodeError": "أدخل الرمز المكوّن من 6 أرقام.",
+    "verifying": "جارٍ التحقق...",
+    "saving": "جارٍ الحفظ...",
+    "loginHere2": "سجّل الدخول هنا"
   },
   "campusApply": {
     "title": "طلب متجر الحرم الجامعي",
@@ -1190,7 +1200,16 @@
     "loginHere": "تسجيل الدخول هنا",
     "email": "البريد الإلكتروني",
     "successDesc": "سنراجع ونتواصل معك خلال 24 ساعة.",
-    "year": "سنة الدراسة"
+    "year": "سنة الدراسة",
+    "shopNameLabel": "اسم المتجر",
+    "categoryLabel": "الفئة",
+    "descLabel": "وصف المتجر",
+    "yearLabel": "سنة الدراسة",
+    "nameLabel": "الاسم الكامل",
+    "phoneLabel": "رقم واتساب",
+    "reviewSubmit": "مراجعة وإرسال",
+    "savedIdCard": "بطاقة الطالب (اختياري)",
+    "minChars": "حروف كحد أدنى"
   },
   "notFound": {
     "title": "الصفحة غير موجودة",

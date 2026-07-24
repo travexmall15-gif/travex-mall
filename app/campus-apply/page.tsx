@@ -255,10 +255,10 @@ export default function CampusApplyPage() {
                     onChange={e => set('email', e.target.value)} placeholder="student@university.ac.tz" />
                 </div>
                 <div>
-                  <label style={labelStyle}>Your University *</label>
+                  <label style={labelStyle}>{t('campusApply.selectUni').replace('...','').trim()} *</label>
                   <select style={inputStyle} value={form.university}
                     onChange={e => set('university', e.target.value)}>
-                    <option value="">Select university...</option>
+                    <option value="">{t('campusApply.selectUni')}</option>
                     {UNIVERSITIES.map(u => (
                       <option key={u.abbr} value={u.abbr}>{u.name} ({u.abbr})</option>
                     ))}
@@ -275,20 +275,20 @@ export default function CampusApplyPage() {
                 color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>{t('openStore.step2Title')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
-                  <label style={labelStyle}>Shop Name *</label>
+                  <label style={labelStyle}>{t('campusApply.shopNameLabel')} *</label>
                   <input style={inputStyle} value={form.storeName}
                     onChange={e => set('storeName', e.target.value)} placeholder="e.g. Amina's Fashion" />
                 </div>
                 <div>
-                  <label style={labelStyle}>Category *</label>
+                  <label style={labelStyle}>{t('campusApply.categoryLabel')} *</label>
                   <select style={inputStyle} value={form.category}
                     onChange={e => set('category', e.target.value)}>
-                    <option value="">Select category...</option>
+                    <option value="">{t('campusApply.selectCategory')}</option>
                     {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label style={labelStyle}>Shop Description *</label>
+                  <label style={labelStyle}>{t('campusApply.descLabel')} *</label>
                   <textarea style={{ ...inputStyle, minHeight: 90, resize: 'vertical' } as React.CSSProperties}
                     value={form.description}
                     onChange={e => set('description', e.target.value)}
@@ -298,7 +298,7 @@ export default function CampusApplyPage() {
                   </div>
                 </div>
                 <div>
-                  <label style={labelStyle}>Student ID Card (optional)</label>
+                  <label style={labelStyle}>{t('campusApply.savedIdCard')}</label>
                   <input type="file" accept="image/*,.pdf"
                     onChange={e => setForm(f => ({ ...f, idFile: e.target.files?.[0] || null }))}
                     style={{ ...inputStyle, padding: '8px 14px' } as React.CSSProperties} />
@@ -311,7 +311,7 @@ export default function CampusApplyPage() {
           {step === 3 && (
             <>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem',
-                color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>Review & Submit</h3>
+                color: '#fff', fontWeight: 800, marginBottom: '1.25rem' }}>{t('campusApply.reviewSubmit')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
                 {[
                   ['Name', form.ownerName],

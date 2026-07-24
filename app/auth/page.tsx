@@ -70,7 +70,7 @@ export default function AuthPage() {
 
   // ── Verify OTP ────────────────────────────────────────────
   const verifyOtp = async () => {
-    if (otp.length < 6) { setError('Enter the 6-digit code.'); return }
+    if (otp.length < 6) { setError(t('authPage.enterCodeError')); return }
     setLoading(true); setError('')
     const { error } = await sb.auth.verifyOtp({ email, token: otp, type: 'email' })
     setLoading(false)
@@ -152,12 +152,12 @@ export default function AuthPage() {
         {/* ── EMAIL + USERNAME ──────────────────────────────── */}
         {screen === 'email' && <>
           <button onClick={() => go('main')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.78rem', fontFamily: "'Inter',sans-serif", marginBottom: '1.25rem', padding: 0 }}>
-            <ArrowLeft size={14} /> Back
+            <ArrowLeft size={14} /> {t('common.back')}
           </button>
 
           <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>{t('authPage.continueEmail')}</h2>
           <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
-            We&apos;ll send a 6-digit code to verify your email.
+            {t('authPage.sendCodeDesc')}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '0.85rem' }}>
@@ -178,15 +178,15 @@ export default function AuthPage() {
 
           <button onClick={sendOtp} disabled={loading} style={primaryBtn}>
             {loading
-              ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Sending...</>
-              : <>Send Code <ArrowRight size={14} /></>}
+              ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> {t('authPage.sending')}</>
+              : <>{t('authPage.sendCode')} <ArrowRight size={14} /></>}
           </button>
         </>}
 
         {/* ── VERIFY CODE ───────────────────────────────────── */}
         {screen === 'verify' && <>
           <button onClick={() => go('email')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.78rem', fontFamily: "'Inter',sans-serif", marginBottom: '1.25rem', padding: 0 }}>
-            <ArrowLeft size={14} /> Back
+            <ArrowLeft size={14} /> {t('common.back')}
           </button>
 
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
@@ -195,7 +195,7 @@ export default function AuthPage() {
             </div>
             <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: 6 }}>{t('authPage.checkEmail')}</h2>
             <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
-              6-digit code sent to<br />
+              {t('authPage.codeSentTo')}<br />
               <span style={{ color: '#F97316', fontWeight: 700 }}>{email}</span>
             </p>
           </div>
@@ -215,14 +215,14 @@ export default function AuthPage() {
           <button onClick={verifyOtp} disabled={loading || otp.length < 6}
             style={{ ...primaryBtn, opacity: otp.length < 6 ? 0.45 : 1 }}>
             {loading
-              ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Verifying...</>
-              : <>Verify & Enter <ArrowRight size={14} /></>}
+              ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> {t('authPage.verifying')}</>
+              : <>{t('authPage.verifyEnter')} <ArrowRight size={14} /></>}
           </button>
 
           <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
-            Didn&apos;t receive it?{' '}
+            {t('authPage.didntReceive')}{' '}
             <button onClick={sendOtp} style={{ background: 'none', border: 'none', color: '#F97316', fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif", fontSize: '0.75rem' }}>
-              Resend
+              {t('authPage.resend')}
             </button>
           </p>
         </>}

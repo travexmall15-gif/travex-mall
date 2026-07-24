@@ -736,7 +736,8 @@
     "rejected": "Rejected",
     "delivered": "Delivered",
     "cancelled": "Cancelled",
-    "refunded": "Refunded"
+    "refunded": "Refunded",
+    "back2": "Back"
   },
   "join": {
     "title": "Join ShopNekt",
@@ -956,7 +957,8 @@
     "processing": "Processing...",
     "successTitle": "Payment Confirmed!",
     "successDesc": "Seller will contact you on WhatsApp to arrange delivery.",
-    "rejected": "Order Rejected"
+    "rejected": "Order Rejected",
+    "useMyLocation": "Use My Live Location"
   },
   "messages": {
     "title": "Messages",
@@ -1096,7 +1098,15 @@
     "createAccount": "Create Account",
     "creating": "Creating...",
     "alreadyHave": "Already have an account?",
-    "loginHere": "Log in here"
+    "loginHere": "Log in here",
+    "sendCodeDesc": "We'll send a 6-digit code to verify your email.",
+    "codeSentTo": "6-digit code sent to",
+    "verifyEnter": "Verify & Enter",
+    "didntReceive": "Didn't receive it?",
+    "enterCodeError": "Enter the 6-digit code.",
+    "verifying": "Verifying...",
+    "saving": "Saving...",
+    "loginHere2": "Log in here"
   },
   "subscription": {
     "title": "Choose Your Plan",
@@ -1165,7 +1175,17 @@
     "submit": "Submit Application",
     "submitting": "Submitting...",
     "success": "Application Submitted!",
-    "successDesc": "We'll review and contact you within 24 hours."
+    "successDesc": "We'll review and contact you within 24 hours.",
+    "shopNameLabel": "Shop Name",
+    "categoryLabel": "Category",
+    "descLabel": "Shop Description",
+    "yearLabel": "Year of Study",
+    "nameLabel": "Full Name",
+    "phoneLabel": "WhatsApp Number",
+    "reviewSubmit": "Review & Submit",
+    "loginHere": "Already have a shop?",
+    "savedIdCard": "Student ID Card (optional)",
+    "minChars": "minimum characters"
   },
   "notFound": {
     "title": "Page Not Found",
