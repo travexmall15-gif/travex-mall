@@ -330,24 +330,13 @@ async function init() {
 init()
 
 // ── Screen transitions ─────────────────────────────────────────
-async function goToPinScreen() {
+function goToPinScreen() {
   const email = document.getElementById('emailInput').value.trim()
-  if (!email) { showError(tr('enterEmail')); return }
+  if (!email || !email.includes('@')) { showError(tr('enterEmail')); return }
   clearMessages()
-  const btn = document.querySelector('#screenFirst .btn-login')
-  btn.disabled = true; btn.textContent = tr('loading')
-  try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?email=eq.${encodeURIComponent(email)}&status=eq.approved&select=id,shop_name,email`,
-      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-    )
-    const data = await res.json()
-    if (!data || !data.length) { showError(tr('shopNotFound')); btn.disabled=false; btn.textContent=tr('continue'); return }
-    localStorage.setItem(EMAIL_KEY, email)
-    showPinScreen(email, data[0])
-  } catch(e) {
-    showError(tr('networkErr')); btn.disabled=false; btn.textContent=tr('continue')
-  }
+  currentEmail = email
+  localStorage.setItem(EMAIL_KEY, email)
+  showPinScreen(email, null)
 }
 
 function showPinScreen(email, shopData) {
@@ -387,11 +376,17 @@ async function submitPin() {
   const btn = document.querySelectorAll('#screenPin .key')
   btn.forEach(b=>b.disabled=true)
   try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?email=eq.${encodeURIComponent(currentEmail)}&status=eq.approved&select=id,shop_name,login_password`,
-      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-    )
-    const data = await res.json()
+    // Try auth_email first, then fall back to email column
+    let data = null
+    const headers = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    const enc = encodeURIComponent(currentEmail)
+    const sel = 'select=id,shop_name,login_password'
+    let res = await fetch(`${SB_URL}/rest/v1/pending_payments?auth_email=eq.${enc}&status=eq.approved&${sel}`, { headers })
+    data = await res.json()
+    if (!data || !data.length) {
+      res = await fetch(`${SB_URL}/rest/v1/pending_payments?email=eq.${enc}&status=eq.approved&${sel}`, { headers })
+      data = await res.json()
+    }
     const shop = data?.[0]
     if (!shop) { showError(tr('shopNotFound')); pinValue=''; updateDots(); btn.forEach(b=>b.disabled=false); return }
 
