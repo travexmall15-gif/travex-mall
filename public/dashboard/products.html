@@ -115,6 +115,12 @@
 <script src="aria-widget.js"></script>
 <script src="i18n.js"></script>
 <script>
+// Safety: hide overlay after 8s regardless (prevents stuck loading)
+setTimeout(function() {
+  var ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none';
+}, 8000);
+
 window.addEventListener("unhandledrejection",()=>{var o=document.getElementById("loadingOverlay");if(o)o.style.display="none"});
 let allProducts = []
 let editingId = null
@@ -122,6 +128,7 @@ const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
 
 async function loadData() {
   const ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none'; // ── Hide IMMEDIATELY (sync) ──
   try {
   Auth.requireAuth()
   const session = JSON.parse(localStorage.getItem('travex_session') || '{}')

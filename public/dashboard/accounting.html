@@ -128,6 +128,12 @@
 <script src="dashboard.js"></script>
 <script src="i18n.js"></script>
 <script>
+// Safety: hide overlay after 8s regardless (prevents stuck loading)
+setTimeout(function() {
+  var ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none';
+}, 8000);
+
 window.addEventListener('error', function() {
   var ov = document.getElementById('loadingOverlay');
   if (ov) ov.style.display = 'none';

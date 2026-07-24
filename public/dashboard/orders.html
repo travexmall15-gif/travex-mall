@@ -68,6 +68,12 @@
 <script src="aria-widget.js"></script>
 <script src="i18n.js"></script>
 <script>
+// Safety: hide overlay after 8s regardless (prevents stuck loading)
+setTimeout(function() {
+  var ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none';
+}, 8000);
+
 window.addEventListener("unhandledrejection",()=>{var o=document.getElementById("loadingOverlay");if(o)o.style.display="none"});
 let allOrders = []
 const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
@@ -75,6 +81,9 @@ const STATUS_COLORS = { pending:'#F97316', confirmed:'#3B82F6', delivered:'#22C5
 const STATUS_BG = { pending:'rgba(249,115,22,.1)', confirmed:'rgba(59,130,246,.1)', delivered:'rgba(34,197,94,.1)', cancelled:'rgba(239,68,68,.1)' }
 
 async function loadData() {
+  // ── Hide overlay IMMEDIATELY (sync) — never block navigation ──
+  const _ov = document.getElementById('loadingOverlay');
+  if (_ov) _ov.style.display = 'none';
   Auth.requireAuth()
   const session = JSON.parse(localStorage.getItem('travex_session')||'{}')
   const isCampus = session.market === 'campus'
