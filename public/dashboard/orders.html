@@ -150,6 +150,10 @@ function renderOrders(orders) {
           <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
         </select>
       </td>
+      <td style="padding:12px 14px">
+        <div style="font-size:12px;color:var(--text-primary);font-weight:500">${o.delivery_location||'—'}</div>
+        ${o.notes?`<div style="font-size:11px;color:var(--text-muted);margin-top:2px">${o.notes}</div>`:''}
+      </td>
       <td style="padding:12px 14px;font-size:11px;color:var(--text-muted)">${new Date(o.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</td>
       <td style="padding:12px 14px">
         <div style="display:flex;gap:5px">
@@ -162,7 +166,9 @@ function renderOrders(orders) {
 }
 
 async function updateStatus(id, status) {
-  const { error } = await sb.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id)
+  const _sess = JSON.parse(localStorage.getItem('travex_session')||'{}')
+  const _tbl  = _sess.market==='campus' ? 'campus_orders' : 'orders'
+  const { error } = await sb.from(_tbl).update({ status, updated_at: new Date().toISOString() }).eq('id', id)
   if (error) { showToast('Error updating status'); return }
   showToast(`Order marked as ${status}`)
   const order = allOrders.find(o=>o.id===id)
@@ -183,6 +189,38 @@ function showToast(msg) {
 }
 
 document.addEventListener('DOMContentLoaded', loadData)
+</script>
+
+<!-- Mobile More Menu Backdrop -->
+<div class="mobile-more-menu-backdrop" id="mmmBackdrop" onclick="closeMobileMenu()"></div>
+<!-- Mobile More Menu Sheet -->
+<div class="mobile-more-menu" id="mobileMoreMenu">
+  <div class="mmm-handle"></div>
+  <div class="mmm-grid">
+    <a href="accounting.html" class="mmm-item"><i class="ti ti-cash"></i><span data-i18n="Accounting">Accounting</span></a>
+    <a href="debts.html" class="mmm-item"><i class="ti ti-credit-card"></i><span data-i18n="Debts">Debts</span></a>
+    <a href="invoice.html" class="mmm-item"><i class="ti ti-file-invoice"></i><span data-i18n="Invoice">Invoice</span></a>
+    <a href="reports.html" class="mmm-item"><i class="ti ti-chart-bar"></i><span data-i18n="Reports">Reports</span></a>
+    <a href="vybe.html" class="mmm-item"><i class="ti ti-bolt"></i><span>Social Vybe</span></a>
+    <a href="flash-deals.html" class="mmm-item"><i class="ti ti-flame"></i><span data-i18n="Flash Deals">Flash Deals</span></a>
+    <a href="group-buy.html" class="mmm-item"><i class="ti ti-users-group"></i><span data-i18n="Group Buying">Group Buy</span></a>
+    <a href="ai-tools.html" class="mmm-item"><i class="ti ti-robot"></i><span data-i18n="AI Tools">AI Tools</span></a>
+    <a href="ai-marketing.html" class="mmm-item"><i class="ti ti-speakerphone"></i><span data-i18n="AI Marketing">AI Marketing</span></a>
+    <a href="ai-finance.html" class="mmm-item"><i class="ti ti-chart-arrows"></i><span data-i18n="AI Finance">AI Finance</span></a>
+    <a href="marketing.html" class="mmm-item"><i class="ti ti-ad"></i><span data-i18n="Marketing">Marketing</span></a>
+    <a href="subscription.html" class="mmm-item"><i class="ti ti-crown"></i><span data-i18n="Subscription">Subscription</span></a>
+  </div>
+</div>
+
+<script>
+function openMobileMenu() {
+  document.getElementById('mobileMoreMenu').classList.add('open');
+  document.getElementById('mmmBackdrop').classList.add('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMoreMenu').classList.remove('open');
+  document.getElementById('mmmBackdrop').classList.remove('open');
+}
 </script>
 </body>
 </html>
