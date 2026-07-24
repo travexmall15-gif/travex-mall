@@ -82,8 +82,8 @@ export default function AuthPage() {
   const inp: React.CSSProperties = {
     width: '100%', boxSizing: 'border-box',
     padding: '0.82rem 1rem 0.82rem 2.75rem',
-    background: 'rgba(255,255,255,0.06)',
-    border: '1.5px solid rgba(255,255,255,0.10)',
+    background: 'rgba(255,255,255,0.16)',
+    border: '1.5px solid rgba(255,255,255,0.22)',
     borderRadius: 14, color: '#fff', fontSize: '0.9rem',
     fontFamily: "'Inter',sans-serif", outline: 'none',
     transition: 'border-color 0.2s',
@@ -106,18 +106,10 @@ export default function AuthPage() {
         @keyframes spin   { to { transform: rotate(360deg) } }
          to{opacity:1;transform:translateY(0)} }
         .a-card { animation: fadeIn 0.3s ease; }
-        input:focus { border-color: #F97316 !important; }
+        input { caret-color: #F97316; }
+        input::placeholder { color: rgba(255,255,255,0.45) !important; }
+        input:focus { border-color: #F97316 !important; box-shadow: 0 0 0 3px rgba(249,115,22,0.15); }
       `}</style>
-
-      {/* Logo */}
-      <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-        <img src="/icon-192.png" alt="ShopNekt" style={{ width: 60, height: 60, borderRadius: 15, objectFit: 'cover', marginBottom: 12 }}  loading="lazy" />
-        <div>
-          <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.03em' }}>shop</span>
-          <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#F97316', letterSpacing: '-0.03em' }}>nekt</span>
-        </div>
-        <p style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.22)', marginTop: 3, letterSpacing: '0.15em', textTransform: 'uppercase' }}>from qnex360</p>
-      </div>
 
       {/* Card */}
       <div className="a-card" key={screen} style={{ width: '100%', maxWidth: 380, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)' }}>
