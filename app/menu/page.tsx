@@ -49,7 +49,7 @@ export default function MenuPage() {
     {
       label: t('menuPage.storeSelling'),
       items: [
-        { icon: Store,          label: t('menuPage.openYourShop'),  href: '/open-store',              color: '#C9A84C' },
+        { icon: Store,          label: t('menuPage.openShop'),     href: '/open-store',              color: '#C9A84C' },
         { icon: LayoutDashboard,label: t('menuPage.dashboardLogin'),href: '/dashboard/login.html',    color: '#3B82F6' },
         { icon: ShoppingCart,   label: t('menuPage.shoppingPrefs'), href: '/settings/shopping',       color: '#F59E0B' },
       ],
