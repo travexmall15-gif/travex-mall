@@ -41,18 +41,18 @@ export default function HomePage() {
         * { box-sizing: border-box; }
 
         /* ── Sell chip ────────────────────────────────────── */
-        .sell-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .sell-chip-wrap { background:#F0F4FF; padding:1.2rem 5%; border-bottom:1px solid #E2E8F0; }
         .sell-chip-inner { max-width:1100px; margin:0 auto; }
-        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(201,168,76,0.25); border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; }
-        .sell-chip-card:hover { border-color:rgba(201,168,76,0.50); background:rgba(201,168,76,0.06); }
-        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#C9A84C; color:#0F172A; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#B8973B; transform:translateY(-1px); box-shadow:0 6px 18px rgba(201,168,76,0.40); }
+        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1.5px solid #DBEAFE; border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; box-shadow:0 2px 8px rgba(59,130,246,0.06); }
+        .sell-chip-card:hover { border-color:#93C5FD; background:#F0F7FF; }
+        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#2563EB; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+        .sell-cta:hover { background:#1D4ED8; transform:translateY(-1px); box-shadow:0 6px 18px rgba(37,99,235,0.35); }
 
         /* ── AI chip ──────────────────────────────────────── */
-        .ai-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .ai-chip-wrap { background:#F0F4FF; padding:1.2rem 5%; border-bottom:1px solid #E2E8F0; }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
-        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(201,168,76,0.25); border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; }
-        .ai-chip-link:hover { background:rgba(201,168,76,0.08); border-color:rgba(201,168,76,0.5); }
+        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1.5px solid #DBEAFE; border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; box-shadow:0 2px 8px rgba(59,130,246,0.06); }
+        .ai-chip-link:hover { background:#F0F7FF; border-color:#93C5FD; }
 
         /* ── Three Markets ────────────────────────────────── */
         .market-cards { display:flex; gap:1.5rem; align-items:stretch; min-height:420px; }
@@ -85,10 +85,12 @@ export default function HomePage() {
         <div className="sell-chip-inner">
           <div className="sell-chip-card">
             <div style={{ display:'flex',alignItems:'center',gap:12 }}>
-              <span style={{ fontSize:'1.3rem' }}>🏪</span>
+              <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#2563EB,#3B82F6)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+                <Store size={20} color="#fff" />
+              </div>
               <div>
-                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
-                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.40)',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
+                <div style={{ fontWeight:700,color:'#0F172A',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
+                <div style={{ fontSize:'0.72rem',color:'#64748B',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
               </div>
             </div>
             <Link href="/open-store" className="sell-cta">
@@ -103,13 +105,15 @@ export default function HomePage() {
         <div className="ai-chip-inner">
           <a href="/ai" className="ai-chip-link">
             <div style={{ display:'flex',alignItems:'center',gap:12 }}>
-              <span style={{ fontSize:'1.3rem' }}>✨</span>
+              <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#7C3AED,#A855F7)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+                <Sparkles size={20} color="#fff" />
+              </div>
               <div>
-                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>Chat with 360 AI</div>
-                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.40)',marginTop:1 }}>{t('home.aiChipSub')}</div>
+                <div style={{ fontWeight:700,color:'#0F172A',fontSize:'0.9rem' }}>Chat with 360 AI</div>
+                <div style={{ fontSize:'0.72rem',color:'#64748B',marginTop:1 }}>{t('home.aiChipSub')}</div>
               </div>
             </div>
-            <span style={{ color:'#C9A84C',fontSize:'1.2rem',fontWeight:700 }}>›</span>
+            <ArrowRight size={18} color="#2563EB" />
           </a>
         </div>
       </div>
