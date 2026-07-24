@@ -68,7 +68,7 @@ async function loadReports(){
 
   const[{data:sales},{data:orders}]=await Promise.all([
     sb.from('seller_sales').select('*').eq('store_id',shopData?.id).gte('created_at',since.toISOString()),
-    sb.from('campus_orders').select('*').eq('store_id',shopData?.id).gte('created_at',since.toISOString()),
+    sb.from(shopData?.market==='campus'?'campus_orders':'orders').select('*').eq(shopData?.market==='campus'?'store_id':'shop_id',shopData?.id).gte('created_at',since.toISOString()),
   ]);
 
   const revenue  =(sales||[]).filter(s=>s.category!=='expense'&&s.category!=='invoice').reduce((a,s)=>a+Number(s.amount),0);

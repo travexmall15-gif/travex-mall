@@ -100,30 +100,32 @@ const Shop = {
 //  DATABASE 
 const DB = {
   products: {
+    _tbl() { const s=JSON.parse(localStorage.getItem('travex_session')||'{}'); return s.market==='campus' ? {t:'campus_products',c:'store_id'} : {t:'products',c:'shop_id'}; },
     async getAll(shopId) {
-      const { data } = await sb.from('campus_products')
-        .select('*').eq('store_id', shopId).order('created_at',{ascending:false});
+      const {t,c}=this._tbl();
+      const { data } = await sb.from(t).select('*').eq(c, shopId).order('created_at',{ascending:false});
       return data || [];
     },
     async save(item) {
-      if (item.id) {
-        const {id,...rest}=item;
-        return sb.from('campus_products').update(rest).eq('id',id);
-      }
-      return sb.from('campus_products').insert(item);
+      const {t}=this._tbl();
+      if (item.id) { const {id,...rest}=item; return sb.from(t).update(rest).eq('id',id); }
+      return sb.from(t).insert(item);
     },
     async delete(id) {
-      return sb.from('campus_products').delete().eq('id',id);
+      const {t}=this._tbl();
+      return sb.from(t).delete().eq('id',id);
     },
   },
   orders: {
+    _tbl() { const s=JSON.parse(localStorage.getItem('travex_session')||'{}'); return s.market==='campus' ? {t:'campus_orders',c:'store_id'} : {t:'orders',c:'shop_id'}; },
     async getAll(shopId) {
-      const { data } = await sb.from('campus_orders')
-        .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
+      const {t,c}=this._tbl();
+      const { data } = await sb.from(t).select('*').eq(c, shopId).order('created_at',{ascending:false});
       return data || [];
     },
     async updateStatus(id, status) {
-      return sb.from('campus_orders').update({status}).eq('id',id);
+      const {t}=this._tbl();
+      return sb.from(t).update({status}).eq('id',id);
     },
   },
   sales: {
