@@ -23,16 +23,22 @@ const Auth = {
     let session;
     try { session = JSON.parse(raw); } catch { window.location.href = 'login.html'; return null; }
 
-    // Re-validate against DB so suspended/deleted sellers are kicked out immediately
-    const table  = session.market === 'campus' ? 'campus_stores' : 'pending_payments';
-    const { data } = await sb.from(table).select('id,status,is_active').eq('id', session.id).maybeSingle();
-    const stillValid = data && (session.market === 'campus' ? data.is_active === true : data.status === 'approved');
-    if (!stillValid) {
-      localStorage.removeItem('travex_session');
-      window.location.href = 'login.html';
-      return null;
-    }
-    // Fake session.user shape so existing dashboard pages calling session.user.email keep working
+    // Re-validate: only kick out if explicitly suspended. Trust session on any DB/network error.
+    try {
+      const isCampus = session.market === 'campus';
+      const table = isCampus ? 'campus_stores' : 'pending_payments';
+      const cols  = isCampus ? 'id,is_active' : 'id,status';
+      const { data, error } = await sb.from(table).select(cols).eq('id', session.id).maybeSingle();
+      if (!error && data) {
+        const ok = isCampus ? data.is_active === true : data.status === 'approved';
+        if (!ok) {
+          localStorage.removeItem('travex_session');
+          window.location.href = 'login.html';
+          return null;
+        }
+      }
+      // error or data===null => trust local session (DB unavailable or column mismatch)
+    } catch(e) { /* network error — trust local session */ }
     return { user: { id: session.id, email: session.id } };
   },
   async signOut() {
