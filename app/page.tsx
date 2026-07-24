@@ -53,10 +53,10 @@ export default function SplashPage() {
         <Image
           src="/sn-logo.png"
           alt="ShopNekt"
-          width={148}
-          height={148}
+          width={96}
+          height={96}
           priority
-          style={{ borderRadius:30, objectFit:'contain', display:'block' }}
+          style={{ borderRadius:22, objectFit:'contain', display:'block' }}
         />
       </div>
 
@@ -79,31 +79,26 @@ export default function SplashPage() {
         The Global Digital Marketplace
       </p>
 
-      {/* ── QNEX360 Button ── */}
-      <button
+      {/* ── QNEX360 — plain white text at very bottom ── */}
+      <div
         className="sp-btn"
         onClick={handleEnter}
         style={{
-          position:'absolute', bottom:'clamp(40px,8vh,72px)',
-          background:'linear-gradient(135deg,#C9A84C,#E8BF6A)',
-          color:'#05091E',
-          border:'none',
-          borderRadius:999,
-          padding:'0 clamp(44px,10vw,72px)',
-          height:52,
-          fontSize:'1rem',
-          fontWeight:900,
-          fontFamily:"'Inter',sans-serif",
-          letterSpacing:'0.12em',
+          position:'absolute', bottom:'clamp(24px,5vh,40px)',
           cursor:'pointer',
-          boxShadow:'0 8px 32px rgba(201,168,76,0.45)',
-          transition:'box-shadow 0.2s, transform 0.15s',
+          userSelect:'none',
         }}
-        onMouseOver={e=>(e.currentTarget as HTMLElement).style.boxShadow='0 12px 40px rgba(201,168,76,0.65)'}
-        onMouseOut={e=>(e.currentTarget as HTMLElement).style.boxShadow='0 8px 32px rgba(201,168,76,0.45)'}
       >
-        QNEX360
-      </button>
+        <span style={{
+          fontFamily:"'Inter',sans-serif",
+          fontSize:'0.85rem',
+          fontWeight:700,
+          color:'rgba(255,255,255,0.85)',
+          letterSpacing:'0.20em',
+        }}>
+          QNEX360
+        </span>
+      </div>
     </div>
   )
 }
