@@ -569,7 +569,31 @@
     "step1Title": "Taarifa Zako",
     "step2Title": "Taarifa za Duka",
     "submitBtn": "Wasilisha Ombi",
-    "contactWA": "Wasiliana Nasi kwa WhatsApp"
+    "contactWA": "Wasiliana Nasi kwa WhatsApp",
+    "heroChip": "Fungua Duka Lako Leo",
+    "heroH1": "Fungua",
+    "heroH1Store": "Duka",
+    "selectMarket": "Chagua soko linalofaa biashara yako. Chagua mpango wako na uanze.",
+    "premiumAvail": "Premium Inapatikana",
+    "basicAvail": "Msingi Inapatikana",
+    "bizDescFull": "Kwa wajasiriamali, biashara ndogo, wauzaji wa rejareja na jumla. Fikia wateja katika mikoa 5 mikubwa. Nafasi 500 jumla.",
+    "bizF1": "Ufikio wa kitaifa, mikoa 5",
+    "bizF2": "Msingi TZS 25K/mwezi · Premium TZS 45K/mwezi",
+    "bizF3": "Zana za AI za muuzaji (Premium)",
+    "bizF4": "Mfumo wa maagizo wa WhatsApp",
+    "bizF5": "Orodha ya juu kwa maduka ya Premium",
+    "joinLabel": "JIUNGE",
+    "applyNow": "Omba Sasa",
+    "campusDescFull": "Kwa wanafunzi wa chuo kikuu peke yao. Uza moja kwa moja kwa wanafunzi wenzako kambasi. Nafasi 60 kwa chuo, upatikanaji mdogo.",
+    "campusF1": "UDSM, UDOM, ARU, TIA, NIT",
+    "campusF2": "TZS 10,000/mwezi tu",
+    "campusF3": "Beji ya uthibitisho wa mwanafunzi",
+    "campusF4": "Hadhira inayolenga chuo",
+    "campusF5": "Nafasi 60 kwa kila chuo",
+    "notSure": "Hujui ni lipi la kuchagua?",
+    "browseFirst": "Vinjari",
+    "browseOr": "au",
+    "browseFirst2": "kwanza."
   },
   "login": {
     "title": "Karibu Tena",
@@ -788,7 +812,19 @@
     "privacy": "Sera ya Faragha",
     "terms": "Masharti ya Huduma",
     "about": "Kuhusu ShopNekt",
-    "version": "Toleo"
+    "version": "Toleo",
+    "sectionAccount": "Akaunti",
+    "sectionPrefs": "Mapendeleo ya Programu",
+    "sectionLegal": "Kisheria & Msaada",
+    "labelProfileSub": "Jina, jina la mtumiaji, picha",
+    "labelSecuritySub": "Nenosiri, vikao",
+    "labelNotificationsSub": "Ofa, maagizo, masasisho",
+    "labelHelp": "Msaada & Usaidizi",
+    "labelHelpSub": "Wasiliana nasi, Maswali",
+    "labelPrivacySub": "Jinsi tunavyotumia data yako",
+    "labelTerms": "Masharti ya Huduma",
+    "labelTermsSub": "Masharti na hali za matumizi",
+    "deleteBtn": "Futa"
   },
   "profile": {
     "title": "Hariri Wasifu",
@@ -1020,7 +1056,18 @@
     "messages": "Ujumbe",
     "help": "Msaada",
     "about": "Kuhusu",
-    "privacy": "Sera ya Faragha"
+    "privacy": "Sera ya Faragha",
+    "quickNav": "Urambazaji wa Haraka",
+    "storeSelling": "Duka & Mauzo",
+    "communication": "Mawasiliano",
+    "accountApp": "Akaunti & Programu",
+    "guest": "Mgeni",
+    "signInToContinue": "Ingia ili uendelee",
+    "shoppingPrefs": "Mapendeleo ya Ununuzi",
+    "editProfile": "Hariri Wasifu",
+    "privacyPolicyItem": "Sera ya Faragha",
+    "aiAssistant": "360 AI — Msaidizi",
+    "aboutApp": "Kuhusu ShopNekt"
   },
   "authPage": {
     "welcome": "Karibu ShopNekt",
@@ -1085,7 +1132,22 @@
   "privacy": {
     "title": "Sera ya Faragha",
     "lastUpdated": "Imesasishwa mwisho",
-    "intro": "ShopNekt inachukua faragha yako kwa uzito."
+    "intro": "ShopNekt inachukua faragha yako kwa uzito.",
+    "back": "Rudi",
+    "lastUpdatedDate": "Julai 2026",
+    "copyright": "© 2026 QNEX360 · ShopNekt",
+    "s1Title": "Taarifa Tunazokusanya",
+    "s1Body": "Tunakusanya taarifa unazotoa moja kwa moja, kama vile jina lako, anwani ya barua pepe na jina la mtumiaji unapounda akaunti. Tunakusanya pia data ya matumizi kuboresha uzoefu wako.",
+    "s2Title": "Jinsi Tunavyotumia Data Yako",
+    "s2Body": "Data yako hutumiwa kutoa na kuboresha huduma za ShopNekt, kushughulikia miamala, kutuma arifa, na kudumisha usalama wa akaunti. Hatuuzi kamwe data yako ya kibinafsi.",
+    "s3Title": "Kushiriki Data",
+    "s3Body": "Tunashiriki data yako na wauzaji tu inapohitajika kukamilisha ununuzi. Hatushirikiani taarifa za kibinafsi na watu wa tatu kwa madhumuni ya utangazaji.",
+    "s4Title": "Usalama wa Data",
+    "s4Body": "Tunatumia usimbaji fiche wa viwango vya sekta na hatua za usalama kulinda data yako. Malipo yote yanashughulikiwa kwa usalama kupitia watoa huduma wa malipo walioidhinishwa.",
+    "s5Title": "Haki Zako",
+    "s5Body": "Unaweza kufikia, kusasisha au kufuta data ya akaunti yako wakati wowote kupitia Mipangilio. Unaweza pia kuomba usafirishaji kamili wa data yako kwa kuwasiliana na timu yetu ya msaada.",
+    "s6Title": "Wasiliana Nasi",
+    "s6Body": "Kwa maswala ya faragha, wasiliana nasi kwa support@shopnekt.com au kupitia WhatsApp kwa +255 651 919 915."
   },
   "about": {
     "title": "Kuhusu ShopNekt",
@@ -1095,6 +1157,12 @@
     "website": "Tembelea Tovuti",
     "contact": "Wasiliana Nasi",
     "termsLink": "Masharti ya Huduma",
-    "privacyLink": "Sera ya Faragha"
+    "privacyLink": "Sera ya Faragha",
+    "back": "Rudi",
+    "contactSupport": "Wasiliana & Msaada",
+    "emailSupport": "Msaada wa Barua Pepe",
+    "phone": "WhatsApp",
+    "rateApp": "Kadiria ShopNekt",
+    "copyright": "© 2026 QNEX360. Haki zote zimehifadhiwa."
   }
 }

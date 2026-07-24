@@ -1,22 +1,17 @@
 'use client'
-import { useTranslation } from "@/hooks/useTranslation"
-
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { useState, useEffect } from 'react'
-import {
-  Bell, Lock, Info, LogOut,
-  ChevronRight, Shield, FileText, HelpCircle, Trash2, User
-} from 'lucide-react'
+import { Bell, Lock, Info, LogOut, ChevronRight, Shield, FileText, HelpCircle, Trash2, User } from 'lucide-react'
 
 export default function SettingsPage() {
   const { t } = useTranslation()
   const router = useRouter()
-  const [user, setUser] = useState<{name:string, email:string} | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<{name:string; email:string} | null>(null)
   const [showDelete, setShowDelete] = useState(false)
 
   useEffect(() => {
@@ -24,36 +19,32 @@ export default function SettingsPage() {
       if (!session?.user) { router.replace('/auth'); return }
       const m = session.user.user_metadata
       setUser({ name: m?.display_name || m?.username || 'User', email: session.user.email || '' })
-      setLoading(false)
     })
   }, [router])
 
-  const handleLogout = async () => {
-    await sb.auth.signOut()
-    router.replace('/auth')
-  }
+  const handleLogout = async () => { await sb.auth.signOut(); router.replace('/auth') }
 
   const SECTIONS = [
     {
-      title: 'Account',
+      title: t('settings.sectionAccount'),
       items: [
-        { icon: User,       label: 'Edit Profile',    sub: 'Name, username, photo',   href: '/settings/profile',       color: '#3B82F6' },
-        { icon: Lock,       label: 'Security',         sub: 'Password, sessions',      href: '/settings/security',      color: '#8B5CF6' },
-      ]
+        { icon: User,       label: t('menuPage.editProfile'),      sub: t('settings.labelProfileSub'),       href: '/settings/profile',       color: '#3B82F6' },
+        { icon: Lock,       label: t('settings.security'),          sub: t('settings.labelSecuritySub'),      href: '/settings/security',      color: '#8B5CF6' },
+      ],
     },
     {
-      title: 'App Preferences',
+      title: t('settings.sectionPrefs'),
       items: [
-        { icon: Bell,       label: 'Notifications',    sub: 'Deals, orders, updates',  href: '/settings/notifications', color: '#F59E0B' },
-      ]
+        { icon: Bell,       label: t('settings.notifications'),     sub: t('settings.labelNotificationsSub'), href: '/settings/notifications', color: '#F59E0B' },
+      ],
     },
     {
-      title: 'Legal & Support',
+      title: t('settings.sectionLegal'),
       items: [
-        { icon: HelpCircle, label: 'Help & Support',   sub: 'Contact us, FAQs',        href: '/settings/about',         color: '#10B981' },
-        { icon: Shield,     label: 'Privacy Policy',   sub: 'How we use your data',    href: '/privacy',                color: '#64748B' },
-        { icon: FileText,   label: 'Terms of Service', sub: 'Usage terms & conditions',href: '/privacy',                color: '#64748B' },
-      ]
+        { icon: HelpCircle, label: t('settings.labelHelp'),         sub: t('settings.labelHelpSub'),          href: '/settings/about',         color: '#10B981' },
+        { icon: Shield,     label: t('settings.privacyPolicy'),     sub: t('settings.labelPrivacySub'),       href: '/privacy',                color: '#64748B' },
+        { icon: FileText,   label: t('settings.labelTerms'),        sub: t('settings.labelTermsSub'),         href: '/privacy',                color: '#64748B' },
+      ],
     },
   ]
 
@@ -73,7 +64,7 @@ export default function SettingsPage() {
               {user ? user.name.slice(0,2).toUpperCase() : '?'}
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontSize:'1rem', fontWeight:700, color:'#fff', marginBottom:3 }}>{user?.name || 'Loading...'}</div>
+              <div style={{ fontSize:'1rem', fontWeight:700, color:'#fff', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
               <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.5)' }}>{user?.email || ''}</div>
             </div>
             <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
@@ -109,7 +100,9 @@ export default function SettingsPage() {
 
         {/* Danger zone */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>{t('settings.dangerZone')}</div>
+          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
+            {t('settings.dangerZone')}
+          </div>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden' }}>
             <button onClick={() => setShowDelete(true)}
               style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'13px 16px', background:'none', border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
@@ -140,27 +133,27 @@ export default function SettingsPage() {
         </div>
 
         <p style={{ textAlign:'center', fontSize:'0.65rem', color:'#CBD5E1', letterSpacing:'0.05em' }}>
-          ShopNekt v1.0.0 · from QNEX360
+          ShopNekt v1.0.0 &middot; from QNEX360
         </p>
       </div>
 
-      {/* Delete confirmation modal */}
+      {/* Delete modal */}
       {showDelete && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:999, display:'flex', alignItems:'center', justifyContent:'center', padding:'1rem' }}>
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', maxWidth:340, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ fontSize:'1.5rem', textAlign:'center', marginBottom:12 }}>⚠️</div>
             <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('settings.deleteConfirmTitle')}</h3>
             <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
-              This will permanently delete your account and all your data. This cannot be undone.
+              {t('settings.deleteConfirmDesc')}
             </p>
             <div style={{ display:'flex', gap:8 }}>
               <button onClick={() => setShowDelete(false)}
                 style={{ flex:1, padding:'11px', background:'#F1F5F9', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem' }}>
-                Cancel
+                {t('common.cancel')}
               </button>
               <button onClick={async () => { await sb.auth.signOut(); router.replace('/auth') }}
                 style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#fff' }}>
-                Delete
+                {t('settings.deleteBtn')}
               </button>
             </div>
           </div>
