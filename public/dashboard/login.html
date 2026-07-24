@@ -330,7 +330,10 @@ async function submit(){
 
     showOk(t('loading'))
     document.getElementById('wn').textContent = shop.shop_name || 'Seller'
-    localStorage.setItem(SESS_K, JSON.stringify({id:shop.id, shop_name:shop.shop_name, email:email}))
+    // Clear email key — so if auth fails later, user sees email screen (not PIN loop)
+    localStorage.removeItem(MAIL_K)
+    // Session format dashboard.js expects: {id, market}
+    localStorage.setItem(SESS_K, JSON.stringify({id:shop.id, market:'business', shop_name:shop.shop_name}))
     setTimeout(function(){ location.href='dashboard.html' }, 700)
 
   } catch(e){
@@ -363,16 +366,12 @@ window.onload = function(){
 
 function checkEmail(){
   var saved = localStorage.getItem(MAIL_K)
+  // Always show email screen — pre-fill if saved
+  // (prevents PIN-loop when session is invalidated)
+  document.getElementById('s1').classList.remove('hide')
   if(saved){
-    email = saved
     document.getElementById('eml').value = saved
-    document.getElementById('s1').classList.add('hide')
-    document.getElementById('s2').classList.remove('hide')
-    document.getElementById('av').textContent = saved.slice(0,2).toUpperCase()
-    document.getElementById('we').textContent = saved
-    pin=''; dots()
-  } else {
-    document.getElementById('s1').classList.remove('hide')
+    email = saved
   }
 }
 </script>
