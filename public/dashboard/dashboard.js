@@ -17,28 +17,15 @@ const Auth = {
     if (!raw) return null;
     try { return JSON.parse(raw); } catch { return null; }
   },
-  async requireAuth() {
+  requireAuth() {
+    // SYNC — no await, no network call, no hang.
+    // Trust local session completely. Removed DB re-validation
+    // which caused 5-30s hangs on every page load.
     const raw = localStorage.getItem('travex_session');
     if (!raw) { window.location.href = 'login.html'; return null; }
     let session;
-    try { session = JSON.parse(raw); } catch { window.location.href = 'login.html'; return null; }
-
-    // Re-validate: only kick out if explicitly suspended. Trust session on any DB/network error.
-    try {
-      const isCampus = session.market === 'campus';
-      const table = isCampus ? 'campus_stores' : 'pending_payments';
-      const cols  = isCampus ? 'id,is_active' : 'id,status';
-      const { data, error } = await sb.from(table).select(cols).eq('id', session.id).maybeSingle();
-      if (!error && data) {
-        const ok = isCampus ? data.is_active === true : data.status === 'approved';
-        if (!ok) {
-          localStorage.removeItem('travex_session');
-          window.location.href = 'login.html';
-          return null;
-        }
-      }
-      // error or data===null => trust local session (DB unavailable or column mismatch)
-    } catch(e) { /* network error — trust local session */ }
+    try { session = JSON.parse(raw); } catch(e) { window.location.href = 'login.html'; return null; }
+    if (!session || !session.id) { window.location.href = 'login.html'; return null; }
     return { user: { id: session.id, email: session.id } };
   },
   async signOut() {

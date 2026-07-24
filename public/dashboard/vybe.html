@@ -82,10 +82,13 @@
 <script src="dashboard.js"></script>
 <script src="i18n.js"></script>
 <script>
+// Safety: hide overlay after 3s max
+setTimeout(function(){var o=document.getElementById('loadingOverlay');if(o)o.style.display='none'},3000);
+
 let posts = [], shopData = null;
 
 (async () => {
-  const session = await Auth.requireAuth();
+  const session = Auth.requireAuth();
     document.getElementById(\'loadingOverlay\').style.display = \'none\';
   if (!session) return;
   shopData = await Shop.get(session.user.email);

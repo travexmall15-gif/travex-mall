@@ -90,6 +90,9 @@
 <script src="aria-engine.js"></script>
 <script src="aria-widget.js"></script>
 <script>
+// Safety: hide overlay after 3s max
+setTimeout(function(){var o=document.getElementById('loadingOverlay');if(o)o.style.display='none'},3000);
+
 const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
 
 function renderText(id, text) {

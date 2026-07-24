@@ -483,6 +483,9 @@
 <script src="aria-engine.js"></script>
 <script src="i18n.js"></script>
 <script>
+// Safety: hide overlay after 3s max
+setTimeout(function(){var o=document.getElementById('loadingOverlay');if(o)o.style.display='none'},3000);
+
 // ═══════════════════════════════════════════════════════════════
 // ARIA HOME — Main Controller
 // ═══════════════════════════════════════════════════════════════

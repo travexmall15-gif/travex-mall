@@ -146,8 +146,11 @@ setTimeout(function() {
 }, 8000);
 
 (async () => {
-  const session = await Auth.requireAuth();
-    document.getElementById('loadingOverlay').style.display = 'none';
+  // Hide overlay IMMEDIATELY — never let it block navigation
+  const _ov = document.getElementById('loadingOverlay');
+  if (_ov) _ov.style.display = 'none';
+
+  const session = Auth.requireAuth(); // sync now
   if (!session) return;
 
   // Date + greeting
@@ -157,7 +160,11 @@ setTimeout(function() {
   const greet = hr < 12 ? 'Good Morning' : hr < 17 ? 'Good Afternoon' : 'Good Evening';
 
   // Get shop data
-  const shopData = await Shop.get(session.user.email);
+  let shopData = null;
+  try { shopData = await Promise.race([
+    Shop.get(session.user.email),
+    new Promise((_,rej) => setTimeout(() => rej(new Error('timeout')), 6000))
+  ]); } catch(e) { console.warn('Shop.get timeout:', e.message); }
   if (shopData) {
     localStorage.setItem('travex_plan', shopData.plan || 'basic');
     localStorage.setItem('travex_shop_name', shopData.shop_name || '');

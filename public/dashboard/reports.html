@@ -67,7 +67,7 @@ window.addEventListener('unhandledrejection', function() {
 
 let shopData=null;
 (async()=>{
-  const session=await Auth.requireAuth();
+  const session=Auth.requireAuth();
     document.getElementById(\'loadingOverlay\').style.display = \'none\';
   if(!session)return;
   shopData=await Shop.get(session.user.email);
