@@ -1067,7 +1067,14 @@
     "editProfile": "Edit Profile",
     "privacyPolicyItem": "Privacy Policy",
     "aiAssistant": "360 AI — Assistant",
-    "aboutApp": "About ShopNekt"
+    "aboutApp": "About ShopNekt",
+    "home": "Home",
+    "vybe": "Social Vybe",
+    "market": "Business Market",
+    "campus": "Campus",
+    "flashDeals": "Flash Deals",
+    "groupBuy": "Group Buy",
+    "goBack": "Back"
   },
   "authPage": {
     "welcome": "Welcome to ShopNekt",
