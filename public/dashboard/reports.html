@@ -50,6 +50,15 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
+window.addEventListener('error', function() {
+  var ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none';
+});
+window.addEventListener('unhandledrejection', function() {
+  var ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none';
+});
+
 let shopData=null;
 (async()=>{
   const session=await Auth.requireAuth();

@@ -115,28 +115,37 @@
 <script src="aria-widget.js"></script>
 <script src="i18n.js"></script>
 <script>
+window.addEventListener("unhandledrejection",()=>{var o=document.getElementById("loadingOverlay");if(o)o.style.display="none"});
 let allProducts = []
 let editingId = null
 const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
 
 async function loadData() {
+  const ov = document.getElementById('loadingOverlay');
+  try {
   Auth.requireAuth()
   const session = JSON.parse(localStorage.getItem('travex_session') || '{}')
   const storeId = session?.id
-  if (!storeId) return
+  if (!storeId) { document.getElementById('loadingOverlay').style.display='none'; return }
 
   const isCampus = session.market === 'campus'
   const table  = isCampus ? 'campus_products' : 'products'
   const idCol  = isCampus ? 'store_id'        : 'shop_id'
 
-  const { data, error } = await sb.from(table)
-    .select('*').eq(idCol, storeId).order('created_at', { ascending: false })
-
-  if (error) { showToast('Error loading products: ' + error.message); return }
-  allProducts = data || []
-  renderProducts(allProducts)
-  updateStats(allProducts)
-  document.getElementById('loadingOverlay').style.display = 'none'
+  try {
+    const { data, error } = await sb.from(table)
+      .select('*').eq(idCol, storeId).order('created_at', { ascending: false })
+    if (error) throw new Error(error.message)
+    allProducts = data || []
+    renderProducts(allProducts)
+    updateStats(allProducts)
+  } catch(e) {
+    showToast('Error loading products: ' + e.message)
+    allProducts = []
+    renderProducts([])
+  } finally {
+    document.getElementById('loadingOverlay').style.display = 'none'
+  }
 }
 
 function updateStats(products) {

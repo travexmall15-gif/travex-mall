@@ -68,6 +68,7 @@
 <script src="aria-widget.js"></script>
 <script src="i18n.js"></script>
 <script>
+window.addEventListener("unhandledrejection",()=>{var o=document.getElementById("loadingOverlay");if(o)o.style.display="none"});
 let allOrders = []
 const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
 const STATUS_COLORS = { pending:'#F97316', confirmed:'#3B82F6', delivered:'#22C55E', cancelled:'#EF4444' }
@@ -79,13 +80,20 @@ async function loadData() {
   const isCampus = session.market === 'campus'
   const table  = isCampus ? 'campus_orders' : 'orders'
   const idCol  = isCampus ? 'store_id'      : 'shop_id'
-  const { data, error } = await sb.from(table)
-    .select('*').eq(idCol, session.id).order('created_at', { ascending: false })
-  if (error) { showToast('Error loading orders'); document.getElementById('loadingOverlay').style.display='none'; return }
-  allOrders = data || []
-  renderOrders(allOrders)
-  updateStats(allOrders)
-  document.getElementById('loadingOverlay').style.display = 'none'
+  try {
+    const { data, error } = await sb.from(table)
+      .select('*').eq(idCol, session.id).order('created_at', { ascending: false })
+    if (error) throw new Error(error.message)
+    allOrders = data || []
+    renderOrders(allOrders)
+    updateStats(allOrders)
+  } catch(e) {
+    showToast('Error loading orders: ' + e.message)
+    allOrders = []
+    renderOrders([])
+  } finally {
+    document.getElementById('loadingOverlay').style.display = 'none'
+  }
 }
 
 function updateStats(orders) {
