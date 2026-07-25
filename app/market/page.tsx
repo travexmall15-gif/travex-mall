@@ -8,7 +8,7 @@ import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS, formatTZS } from '@/lib/data'
-import { Search, Store, Loader2 } from 'lucide-react'
+import { Search, Store, Loader2, MapPin, Navigation, Heart, ExternalLink } from 'lucide-react'
 
 // ── Region + Category data (proper nouns stay the same in both languages) ──
 // All 31 Tanzania regions (mainland + Zanzibar islands)
@@ -344,7 +344,7 @@ export default function MarketPage() {
               <button
                 className={`mk-chip${district ? ' active' : ''}`}
                 onClick={() => { setShowDistrictDrop(v=>!v); setShowRegionDrop(false); setShowCatDrop(false) }}>
-                <Map size={12} style={{flexShrink:0}}/> {district || 'Wilaya'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
+                <Navigation size={12} style={{flexShrink:0}}/> {district || 'Wilaya'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
               </button>
               {showDistrictDrop && (
                 <div className="mk-drop-card" style={{ maxHeight:320, overflow:'hidden', display:'flex', flexDirection:'column' }}>
