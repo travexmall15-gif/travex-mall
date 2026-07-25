@@ -302,7 +302,7 @@ export default function MarketPage() {
               <button
                 className={`mk-chip${region && !district ? ' active' : ''}`}
                 onClick={() => { setShowRegionDrop(v=>!v); setShowDistrictDrop(false); setShowCatDrop(false) }}>
-                📍 {region || 'Regions'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
+                <MapPin size={12} style={{flexShrink:0}}/> {region || 'Regions'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
               </button>
               {showRegionDrop && (
                 <div className="mk-drop-card" style={{ maxHeight:320, overflow:'hidden', display:'flex', flexDirection:'column' }}>
@@ -344,7 +344,7 @@ export default function MarketPage() {
               <button
                 className={`mk-chip${district ? ' active' : ''}`}
                 onClick={() => { setShowDistrictDrop(v=>!v); setShowRegionDrop(false); setShowCatDrop(false) }}>
-                🗺 {district || 'Wilaya'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
+                <Map size={12} style={{flexShrink:0}}/> {district || 'Wilaya'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
               </button>
               {showDistrictDrop && (
                 <div className="mk-drop-card" style={{ maxHeight:320, overflow:'hidden', display:'flex', flexDirection:'column' }}>
@@ -418,7 +418,7 @@ export default function MarketPage() {
         {/* Empty — no shops at all */}
         {!loading && shops.length === 0 && (
           <div style={{ textAlign: 'center', padding: '6rem 0' }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🏪</div>
+            <div style={{ width:72, height:72, borderRadius:20, background:'#EEF2FF', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 1rem' }}><Store size={36} color="#6366F1" /></div>
             <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>
               {t('market.emptyTitle')}
             </h3>
@@ -433,7 +433,7 @@ export default function MarketPage() {
 
         {/* Shops grid */}
         {!loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))', gap: '1.1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(240px,1fr))', gap: '1.1rem' }}>
             {filtered.length === 0 && shops.length > 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
                 <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>
@@ -456,75 +456,125 @@ export default function MarketPage() {
   )
 }
 
-// ── SHOP CARD ────────────────────────────────────────────────
-// Uses useTranslation() directly — no need to pass t as prop
+// ── SHOP CARD ─────────────────────────────────────────────────
 function ShopCard({ shop }: { shop: MarketShop }) {
   const { t } = useTranslation()
-  const init      = shop.shop_name.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
-  const isPremium = shop.plan === 'premium'
-  const color     = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
+  const init       = (shop.shop_name || 'SH').split(' ').map((w: string) => w[0]).join('').substring(0,2).toUpperCase()
+  const isPremium  = shop.plan === 'premium'
+  const accentColor = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
+
+  const [isSaved, setIsSaved] = useState(false)
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('sn_saved_shops') || '[]')
+      setIsSaved(saved.some((s: any) => s.id === shop.id))
+    } catch {}
+  }, [shop.id])
+
+  const toggleSave = (e: React.MouseEvent) => {
+    e.preventDefault(); e.stopPropagation()
+    try {
+      const saved = JSON.parse(localStorage.getItem('sn_saved_shops') || '[]')
+      if (isSaved) {
+        localStorage.setItem('sn_saved_shops', JSON.stringify(saved.filter((s: any) => s.id !== shop.id)))
+        setIsSaved(false)
+      } else {
+        saved.push({ id: shop.id, shop_name: shop.shop_name, shop_category: shop.shop_category, shop_region: shop.shop_region, plan: shop.plan, saved_at: new Date().toISOString() })
+        localStorage.setItem('sn_saved_shops', JSON.stringify(saved))
+        setIsSaved(true)
+      }
+    } catch {}
+  }
 
   return (
-    <div
-      style={{ background: '#fff', border: `1.5px solid ${isPremium ? 'rgba(201,168,76,0.20)' : '#EEF0F6'}`, borderRadius: '16px', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer', boxShadow: '0 1px 6px rgba(15,23,42,0.06)' }}
-      onMouseOver={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(-3px)'; el.style.boxShadow = '0 10px 28px rgba(15,23,42,0.10)' }}
-      onMouseOut={e  => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(0)';   el.style.boxShadow = '0 1px 6px rgba(15,23,42,0.06)'  }}
-    >
-      {/* Banner */}
-      <div style={{ height: '70px', position: 'relative', overflow: 'hidden' }}>
+    <div style={{
+      background:'#fff',
+      border: isPremium ? '1.5px solid rgba(201,168,76,0.30)' : '1.5px solid #E8EDF4',
+      borderRadius:20,
+      overflow:'hidden',
+      transition:'transform .22s, box-shadow .22s',
+      boxShadow: isPremium ? '0 2px 12px rgba(201,168,76,0.10)' : '0 2px 8px rgba(15,23,42,0.06)',
+    }}
+    onMouseOver={e => { const el=e.currentTarget as HTMLElement; el.style.transform='translateY(-4px)'; el.style.boxShadow='0 14px 36px rgba(15,23,42,0.12)' }}
+    onMouseOut={e  => { const el=e.currentTarget as HTMLElement; el.style.transform='translateY(0)';   el.style.boxShadow= isPremium ? '0 2px 12px rgba(201,168,76,0.10)' : '0 2px 8px rgba(15,23,42,0.06)' }}>
+
+      {/* ── Banner ─────────────────────────────────────────── */}
+      <div style={{ height:88, position:'relative', overflow:'hidden' }}>
         {shop.shop_banner
-          ? <img src={shop.shop_banner} alt={`${shop.shop_name || 'Shop'} banner`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
-          : <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}99 50%, #050B2E 100%)` }} />
+          ? <img src={shop.shop_banner} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} loading="lazy" />
+          : <div style={{ width:'100%', height:'100%', background:`linear-gradient(135deg, ${accentColor}40 0%, ${accentColor}88 50%, #050B2E 100%)` }} />
         }
-        {/* Plan badge — translated */}
-        <div style={{ position: 'absolute', top: '6px', right: '8px', background: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.85)', color: isPremium ? '#0F172A' : '#64748B', fontSize: '0.52rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px', letterSpacing: '0.04em' }}>
-          {isPremium ? t('market.premiumBadge') : t('market.basicBadge')}
+        {/* Gradient overlay */}
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.35) 100%)' }} />
+
+        {/* Plan badge */}
+        <div style={{ position:'absolute', top:8, left:8, background: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.92)', color: isPremium ? '#0F172A' : '#475569', fontSize:'0.55rem', fontWeight:800, padding:'3px 8px', borderRadius:999, letterSpacing:'0.06em', boxShadow:'0 2px 6px rgba(0,0,0,0.12)' }}>
+          {isPremium ? '⭐ ' + t('market.premiumBadge') : t('market.basicBadge')}
+        </div>
+
+        {/* Save heart button */}
+        <button onClick={toggleSave}
+          style={{ position:'absolute', top:6, right:8, width:28, height:28, borderRadius:'50%', background:'rgba(255,255,255,0.92)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 2px 6px rgba(0,0,0,0.15)', transition:'all .18s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.transform='scale(1.15)'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.transform='scale(1)'}>
+          <Heart size={14} color={isSaved ? '#EF4444' : '#94A3B8'} fill={isSaved ? '#EF4444' : 'none'} />
+        </button>
+
+        {/* Logo floating on banner bottom */}
+        <div style={{ position:'absolute', bottom:-16, left:12, width:36, height:36, borderRadius:10, border:'2px solid #fff', overflow:'hidden', background:`linear-gradient(135deg,${accentColor},#050B2E)`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 2px 8px rgba(0,0,0,0.18)' }}>
+          {shop.shop_logo
+            ? <img src={shop.shop_logo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} loading="lazy" />
+            : <span style={{ fontSize:'0.7rem', fontWeight:900, color:'#fff' }}>{init}</span>
+          }
         </div>
       </div>
 
-      {/* Body */}
-      <div style={{ padding: '0.45rem 0.7rem 0.6rem' }}>
-        {/* Logo + shop name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '7px', border: '1.5px solid #E8ECF4', overflow: 'hidden', flexShrink: 0, background: `linear-gradient(135deg, ${color}, #050B2E)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {shop.shop_logo
-              ? <img src={shop.shop_logo} alt={`${shop.shop_name || 'Shop'} logo`} style={{ width: '100%', height: '100%', objectFit: 'cover' }}  loading="lazy" />
-              : <span style={{ fontSize: '0.62rem', fontWeight: 900, color: '#fff' }}>{init}</span>
-            }
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#0F172A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{shop.shop_name}</div>
-            {shop.shop_region && (
-              <div style={{ fontSize: '0.58rem', color: '#94A3B8', marginTop: '1px' }}>{shop.shop_region}</div>
-            )}
-          </div>
+      {/* ── Body ───────────────────────────────────────────── */}
+      <div style={{ padding:'24px 12px 12px' }}>
+
+        {/* Shop name */}
+        <div style={{ fontWeight:800, fontSize:'0.88rem', color:'#0F172A', lineHeight:1.2, marginBottom:4, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+          {shop.shop_name}
         </div>
 
-        {/* Category tag */}
-        {shop.shop_category && (
-          <div style={{ marginBottom: '0.3rem' }}>
-            <span style={{ fontSize: '0.58rem', background: 'rgba(201,168,76,0.10)', color: '#92741a', padding: '2px 7px', borderRadius: '999px', fontWeight: 700 }}>
+        {/* Region + Category row */}
+        <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap', marginBottom:6 }}>
+          {shop.shop_region && (
+            <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.62rem', color:'#64748B' }}>
+              <MapPin size={9} /> {shop.shop_region}
+            </span>
+          )}
+          {shop.shop_category && (
+            <span style={{ fontSize:'0.6rem', background:`${accentColor}18`, color: isPremium ? '#92741a' : '#1E40AF', padding:'2px 8px', borderRadius:999, fontWeight:700 }}>
               {shop.shop_category}
             </span>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Description */}
         {shop.shop_desc && (
-          <p style={{ fontSize: '0.65rem', color: '#94A3B8', lineHeight: 1.45, marginBottom: '0.3rem', display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>
+          <p style={{ fontSize:'0.72rem', color:'#94A3B8', lineHeight:1.5, marginBottom:10, display:'-webkit-box', WebkitLineClamp:2 as any, WebkitBoxOrient:'vertical' as any, overflow:'hidden', margin:'0 0 10px' }}>
             {shop.shop_desc}
           </p>
         )}
 
-        {/* Visit Shop button — translated */}
-        <a
-          href={`/store/${shop.id}`}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 12px', background: isPremium ? '#C9A84C' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius: '7px', fontSize: '0.65rem', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity = '0.82'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity = '1'}
-        >
-          <Store size={10} /> {t('market.visitShop')}
-        </a>
+        {/* Actions */}
+        <div style={{ display:'flex', gap:6, marginTop: shop.shop_desc ? 0 : 10 }}>
+          <a href={`/store/${shop.id}`}
+            style={{ flex:1, display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5, padding:'8px 10px', background: isPremium ? 'linear-gradient(135deg,#C9A84C,#E0B85A)' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius:10, fontSize:'0.74rem', fontWeight:700, textDecoration:'none', transition:'opacity .2s' }}
+            onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity='0.85'}
+            onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity='1'}>
+            <Store size={12} /> {t('market.visitShop')}
+          </a>
+          {shop.shop_whatsapp && (
+            <a href={`https://wa.me/${shop.shop_whatsapp.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+              style={{ width:36, height:36, display:'inline-flex', alignItems:'center', justifyContent:'center', background:'#DCFCE7', borderRadius:10, textDecoration:'none', fontSize:16, transition:'background .2s', flexShrink:0 }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#BBF7D0'}
+              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#DCFCE7'}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#16A34A"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            </a>
+          )}
+        </div>
       </div>
     </div>
   )
