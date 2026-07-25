@@ -56,21 +56,36 @@ export default function MarketPage() {
   useEffect(() => {
     async function load() {
       setLoading(true)
-      const { data } = await sb
-        .from('pending_payments')
-        .select('*')
-        .eq('status', 'approved')
-        .order('plan', { ascending: false })
-        .order('created_at', { ascending: false })
+      try {
+        const { data, error } = await sb
+          .from('pending_payments')
+          .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_banner,shop_logo,plan,status,created_at')
+          .eq('status', 'approved')
+          .order('plan', { ascending: false })
+          .order('created_at', { ascending: false })
 
-      if (data) {
-        setShops(data)
-        setTotalApproved(data.length)
-        const dbCats = [...new Set(
-          data.map((s: MarketShop) => s.shop_category).filter(Boolean)
-        )] as string[]
-        const allCats = [...new Set([...SHOP_CATEGORIES, ...dbCats])]
-        setCategories(allCats)
+        if (error) {
+          // RLS or permission error — try without ordering by plan
+          console.error('Market load error:', error.message)
+          const { data: fallback, error: fallbackErr } = await sb
+            .from('pending_payments')
+            .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,plan,status,created_at')
+            .eq('status', 'approved')
+          if (fallback && !fallbackErr) {
+            setShops(fallback)
+            setTotalApproved(fallback.length)
+          }
+        } else if (data) {
+          setShops(data)
+          setTotalApproved(data.length)
+          const dbCats = [...new Set(
+            data.map((s: MarketShop) => s.shop_category).filter(Boolean)
+          )] as string[]
+          const allCats = [...new Set([...SHOP_CATEGORIES, ...dbCats])]
+          setCategories(allCats)
+        }
+      } catch (e) {
+        console.error('Market fetch exception:', e)
       }
       setLoading(false)
     }
