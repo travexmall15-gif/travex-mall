@@ -8,7 +8,7 @@ import { use, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
-import { ArrowLeft, MessageCircle, Package, ShoppingCart, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Package, ShoppingCart, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 
 type Store = {
@@ -364,8 +364,7 @@ export default function StorePage({
         {/* Search + Filter */}
         <div style={{ marginBottom: '1.5rem' }}>
           <div style={{ position: 'relative', marginBottom: '1rem' }}>
-            <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-              color: 'rgba(255,255,255,0.35)', fontSize: 16 }}>🔍</span>
+            <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.35)' }} />
             <input className="search-inp" value={searchQ}
               onChange={e => setSearchQ(e.target.value)}
               placeholder={t('store.searchProducts')} />
@@ -397,7 +396,9 @@ export default function StorePage({
                   {p.image_url ? (
                     <Image src={p.image_url} alt={p.name} fill className="object-cover" />
                   ) : (
-                    <span style={{ fontSize: 36 }}>🛍️</span>
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', width:'100%', height:'100%' }}>
+                      <ShoppingBag size={40} color="rgba(255,255,255,0.20)" />
+                    </div>
                   )}
                   {p.stock <= 5 && p.stock > 0 && (
                     <div style={{ position: 'absolute', top: 8, right: 8, background: '#EF4444',
@@ -505,7 +506,7 @@ export default function StorePage({
                   display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                   <div style={{ width: 44, height: 44, borderRadius: 10, background: `${accentColor}22`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    fontSize: 20 }}>🛍️</div>
+                    fontSize: 20 }}><ShoppingBag size={20} color={accentColor} /></div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{cartItem.name}</div>
                     <div style={{ fontSize: 13, color: accentColor, fontWeight: 700 }}>{fmt(cartItem.price)}</div>
