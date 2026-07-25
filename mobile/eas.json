@@ -8,18 +8,41 @@
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
       },
-      "channel": "preview"
+      "channel": "preview",
+      "ios": {
+        "resourceClass": "m-medium"
+      }
     },
     "production": {
       "android": {
         "buildType": "app-bundle"
       },
-      "ios": {},
+      "ios": {
+        "resourceClass": "m-medium"
+      },
       "channel": "production"
+    },
+    "simulator": {
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./google-service-account.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "YOUR_APPLE_ID",
+        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID",
+        "appleTeamId": "YOUR_APPLE_TEAM_ID"
+      }
+    }
   },
   "update": {
     "production": {
