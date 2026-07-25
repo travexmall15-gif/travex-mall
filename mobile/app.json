@@ -38,7 +38,17 @@
       ]
     },
     "plugins": [
-      "expo-splash-screen"
-    ]
+      "expo-splash-screen",
+      "expo-updates"
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/YOUR_EAS_PROJECT_ID",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 3000
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }
