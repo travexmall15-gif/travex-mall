@@ -31,6 +31,8 @@
 <script src="/lang.js"></script>
 </head>
 <body>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
 
 <div class="loading-overlay" id="loadingOverlay">
   <i class="ti ti-loader-2" style="font-size:32px;color:var(--navy);animation:spin 0.8s linear infinite"></i>
@@ -132,7 +134,7 @@
   <a href="products.html"><i class="ti ti-package"></i><span data-i18n="Products">Products</span></a>
   <a href="orders.html"><i class="ti ti-shopping-cart"></i><span data-i18n="Orders">Orders</span></a>
   <a href="accounting.html"><i class="ti ti-cash"></i><span data-i18n="Finance">Finance</span></a>
-  <a href="#" onclick="openMobileMenu();return false"><i class="ti ti-grid-dots"></i><span data-i18n="More">More</span></a>
+  <a href="#" onclick="toggleSidebar();return false"><i class="ti ti-layout-sidebar"></i><span data-i18n="More">Menu</span></a>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
