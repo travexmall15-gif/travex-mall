@@ -169,7 +169,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="preload"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap"
           as="style"
-          onLoad="this.onload=null;this.rel='stylesheet'"
+          onLoad={(e) => { const el = e.currentTarget as HTMLLinkElement; el.onload = null; el.rel = "stylesheet" }}
         />
         <noscript>
           <link

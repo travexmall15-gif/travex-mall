@@ -26,13 +26,14 @@ type Form = {
   university: string
   storeName: string
   category: string
+  yearOfStudy: string
   description: string
   idFile: File | null
 }
 
 const EMPTY: Form = {
   ownerName: '', phone: '', email: '', university: '',
-  storeName: '', category: '', description: '', idFile: null,
+  storeName: '', category: '', description: '', idFile: null, yearOfStudy: '',
 }
 
 export default function CampusApplyPage() {

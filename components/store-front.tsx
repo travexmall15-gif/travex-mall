@@ -36,7 +36,7 @@ function imgFor(p: Product) {
 }
 
 export function StoreFront({ shop }: { shop: Shop }) {
-  const toast = useToast()
+  const { toast } = useToast()
   const allProducts = productsByShop[shop.slug] || productsByShop.default
   const [cart, setCart] = useState<CartItem[]>([])
   const [cartOpen, setCartOpen] = useState(false)
