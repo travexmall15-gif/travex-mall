@@ -123,6 +123,8 @@ export default function StorePage({
           shop_region: campusShop.university_abbr,
           shop_desc: campusShop.description,
           shop_color: null,
+          shop_banner: campusShop.banner || null,
+          shop_logo: campusShop.logo || null,
           plan: 'campus',
           status: 'approved',
           auth_email: null,
@@ -724,7 +726,7 @@ export default function StorePage({
                   <button
                     onClick={async () => {
                       if (!msgName.trim() || !msgText.trim()) return
-                      await sb.from('store_messages').insert({ store_id: store.id, sender_name: msgName, message: msgText, created_at: new Date().toISOString() }).catch(() => {})
+                      await sb.from('store_messages').insert({ store_id: store.id, sender_name: msgName, message: msgText, created_at: new Date().toISOString() })
                       setMsgSent(true)
                     }}
                     disabled={!msgName.trim() || !msgText.trim()}
