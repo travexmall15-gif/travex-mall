@@ -266,7 +266,7 @@ function loadMemory() {
 }
 
 function clearMemory() {
-  if (!confirm('Clear all of Aria\'s memory? This cannot be undone.')) return
+  if (!confirm("Clear all of Aria's memory? This cannot be undone.")) return
   localStorage.removeItem('aria_memory')
   loadMemory()
   showToast('Memory cleared.')

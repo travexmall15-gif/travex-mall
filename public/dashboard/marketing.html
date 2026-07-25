@@ -82,7 +82,7 @@ setTimeout(function(){var o=document.getElementById('loadingOverlay');if(o)o.sty
 let shopData=null;
 (async()=>{
   const session=Auth.requireAuth();
-    document.getElementById(\'loadingOverlay\').style.display = \'none\';
+    document.getElementById('loadingOverlay').style.display = 'none';
   if(!session)return;
   shopData=await Shop.get(session.user.email);
   await loadSidebar('marketing',shopData);

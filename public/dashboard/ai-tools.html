@@ -342,7 +342,7 @@ let shopData = null, products = [], sales = [], orders = [];
 
 (async () => {
   const session = Auth.requireAuth();
-    document.getElementById(\'loadingOverlay\').style.display = \'none\';
+    document.getElementById('loadingOverlay').style.display = 'none';
   if (!session) return;
   shopData = await Shop.get(session.user.email);
   await loadSidebar('ai-tools', shopData);
@@ -542,12 +542,13 @@ Shop: ${shopData?.shop_name || 'My Shop'}
 Shop Link: https://travex-mall.vercel.app/store/${shopData?.id || ''}
 
 Create:
-${platform === 'all' ? '1. Instagram post (with emojis, hashtags)
-2. WhatsApp Status (short, catchy)
-3. Facebook post (slightly longer, engaging)' :
-  platform === 'instagram' ? 'Instagram post with emojis, call to action, and 10 relevant hashtags' :
-  platform === 'whatsapp' ? 'WhatsApp Status message, short, catchy, with emojis. Max 2 lines.' :
-  'Facebook post, engaging, with call to action and emojis'}
+${platform === 'all'
+      ? '1. Instagram post (with emojis and hashtags). 2. WhatsApp Status (short, catchy). 3. Facebook post (engaging).'
+      : platform === 'instagram'
+        ? 'Instagram post with emojis, call to action, and 10 relevant hashtags'
+        : platform === 'whatsapp'
+          ? 'WhatsApp Status message, short, catchy, with emojis. Max 2 lines.'
+          : 'Facebook post, engaging, with call to action and emojis'}
 
 Include the shop link. Make it natural for Tanzanian audience (can mix English and Swahili naturally).`;
 

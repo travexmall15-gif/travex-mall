@@ -130,32 +130,29 @@ let editingId = null
 const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
 
 async function loadData() {
+  // Hide overlay immediately — never block UI
   const ov = document.getElementById('loadingOverlay');
-  if (ov) ov.style.display = 'none'; // ── Hide IMMEDIATELY (sync) ──
-  try {
-  Auth.requireAuth()
+  if (ov) ov.style.display = 'none';
+
   const session = JSON.parse(localStorage.getItem('travex_session') || '{}')
   const storeId = session?.id
-  if (!storeId) { document.getElementById('loadingOverlay').style.display='none'; return }
+  if (!storeId) return
 
   const isCampus = session.market === 'campus'
-  const table  = isCampus ? 'campus_products' : 'products'
-  const idCol  = isCampus ? 'store_id'        : 'shop_id'
+  const table    = isCampus ? 'campus_products' : 'products'
+  const idCol    = isCampus ? 'store_id' : 'shop_id'
 
   try {
     const { data, error } = await sb.from(table)
       .select('*').eq(idCol, storeId).order('created_at', { ascending: false })
-    if (error) throw new Error(error.message)
+    if (error) throw error
     allProducts = data || []
-    renderProducts(allProducts)
-    updateStats(allProducts)
   } catch(e) {
-    showToast('Error loading products: ' + e.message)
+    console.warn('Products load error:', e.message)
     allProducts = []
-    renderProducts([])
-  } finally {
-    document.getElementById('loadingOverlay').style.display = 'none'
   }
+  renderProducts(allProducts)
+  updateStats(allProducts)
 }
 
 function updateStats(products) {

@@ -126,7 +126,7 @@ let shopData = null, deals = [];
 
 (async () => {
   const session = Auth.requireAuth();
-    document.getElementById(\'loadingOverlay\').style.display = \'none\';
+    document.getElementById('loadingOverlay').style.display = 'none';
   if (!session) return;
   shopData = await Shop.get(session.user.email);
   await loadSidebar('flash-deals', shopData);
