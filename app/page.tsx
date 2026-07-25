@@ -51,10 +51,10 @@ export default function SplashPage() {
         <Image
           src="/sn-logo.png"
           alt="ShopNekt"
-          width={110}
-          height={110}
+          width={96}
+          height={96}
           priority
-          style={{ borderRadius:24, objectFit:'contain', display:'block', boxShadow:'0 8px 32px rgba(0,0,0,0.18)' }}
+          style={{ borderRadius:22, objectFit:'contain', display:'block' }}
         />
       </div>
 
