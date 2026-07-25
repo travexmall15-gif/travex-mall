@@ -16,18 +16,47 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    // Check Supabase Auth (sellers/Google)
     sb.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         const m = session.user.user_metadata
         setName(m?.display_name || m?.username || '')
         setEmail(session.user.email || '')
+        return
       }
-    }).catch(console.error)
+      // Check customer session (OTP flow)
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.name) { setName(sess.name); setEmail(sess.email || '') }
+        }
+      } catch {}
+    }).catch(() => {
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.name) { setName(sess.name); setEmail(sess.email || '') }
+        }
+      } catch {}
+    })
   }, [])
 
   const save = async () => {
     setLoading(true)
-    await sb.auth.updateUser({ data: { display_name: name } })
+    // Update Supabase Auth (sellers)
+    await sb.auth.updateUser({ data: { display_name: name } }).catch(() => {})
+    // Update customer session in localStorage
+    try {
+      const raw = localStorage.getItem('sn_customer_session')
+      if (raw) {
+        const sess = JSON.parse(raw)
+        sess.name = name
+        sess.email = email
+        localStorage.setItem('sn_customer_session', JSON.stringify(sess))
+      }
+    } catch {}
     setLoading(false); setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }

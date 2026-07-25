@@ -61,14 +61,38 @@ export default function AuthPage() {
     if (entered.length < 6) { setError('Please enter the full 6-digit code.'); return }
     if (entered !== code) { setError('Incorrect code. Please check and try again.'); return }
     setLoading(true)
-    setTimeout(() => {
+    setTimeout(async () => {
+      const id = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()
       const session = {
-        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+        id,
         name: name.trim(),
         email: email.trim().toLowerCase(),
         created_at: new Date().toISOString(),
       }
+      // Save to localStorage first (instant)
       localStorage.setItem('sn_customer_session', JSON.stringify(session))
+
+      // Save to Supabase customers table (background — non-blocking)
+      try {
+        await fetch('https://bscecjbgnjitlfmgwcic.supabase.co/rest/v1/customers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
+            'Authorization': 'Bearer sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
+            'Prefer': 'resolution=merge-duplicates',
+            'on-conflict': 'email',
+          },
+          body: JSON.stringify({
+            id,
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            created_at: new Date().toISOString(),
+            last_seen: new Date().toISOString(),
+          })
+        })
+      } catch { /* non-critical — session already saved locally */ }
+
       router.replace('/home')
     }, 500)
   }

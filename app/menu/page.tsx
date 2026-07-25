@@ -18,6 +18,7 @@ export default function MenuPage() {
   const [showLogout, setShowLogout] = useState(false)
 
   useEffect(() => {
+    // 1. Check Supabase Auth (sellers / Google users)
     sb.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         const m = session.user.user_metadata
@@ -25,12 +26,38 @@ export default function MenuPage() {
           email: session.user.email || '',
           name: m?.display_name || m?.username || session.user.email?.split('@')[0] || 'User',
         })
+        return
       }
-    }).catch(console.error)
+      // 2. Check customer session (localStorage — our OTP flow)
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id && sess?.name) {
+            setUser({ name: sess.name, email: sess.email || '' })
+          }
+        }
+      } catch {}
+    }).catch(() => {
+      // Supabase failed — still try localStorage
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id && sess?.name) {
+            setUser({ name: sess.name, email: sess.email || '' })
+          }
+        }
+      } catch {}
+    })
   }, [])
 
   const handleLogout = async () => {
-    await sb.auth.signOut()
+    // Clear customer session (OTP flow)
+    localStorage.removeItem('sn_customer_session')
+    localStorage.removeItem('sn_welcomed')
+    // Clear Supabase Auth session (sellers/Google)
+    await sb.auth.signOut().catch(() => {})
     router.replace('/auth')
   }
 
