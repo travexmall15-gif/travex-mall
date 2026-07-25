@@ -1,174 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Open Your Shop, ShopNekt</title>
-<!-- v1784490523 -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<title>Open Your Shop — ShopNekt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&family=Montserrat:wght@700;800;900&family=Raleway:wght@700;800;900&family=Dancing+Script:wght@700&family=Oswald:wght@600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--offwhite:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--green:#059669;--red:#DC2626}
-body{font-family:'Inter',sans-serif;background:#F8FAFF;color:var(--navy);-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:'Inter',sans-serif;font-weight:700}
-
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,27,62,0.97);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 5%;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08)}
-.nav-logo{font-family:'Inter',sans-serif;font-weight:700;font-weight:800;font-size:1rem;color:#fff;text-decoration:none}
-.nav-logo span{color:var(--gold)}
-.nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none;display:flex;align-items:center;gap:0.35rem}
-
-/* HERO */
-.page-hero{background:var(--navy);padding:6rem 5% 3rem;text-align:center;color:#fff;position:relative;overflow:hidden}
-.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08),transparent 60%)}
-.page-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:0.75rem;position:relative}
-.page-hero h1 span{color:var(--gold)}
-.page-hero p{font-size:0.95rem;color:rgba(255,255,255,0.55);max-width:480px;margin:0 auto;line-height:1.75;position:relative}
-
-/* PROGRESS */
-.progress-wrap{max-width:680px;margin:0 auto;padding:2.5rem 5% 0}
-.progress-bar{display:flex;align-items:center;margin-bottom:2.5rem}
-.prog-step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;transition:all 0.3s;border:2px solid var(--lgray);background:#fff;color:var(--gray)}
-.prog-step.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.prog-step.done{background:var(--green);color:#fff;border-color:var(--green)}
-.prog-line{flex:1;height:2px;background:var(--lgray);transition:background 0.3s;margin:0 4px}
-.prog-line.done{background:var(--green)}
-.prog-labels{display:flex;justify-content:space-between;margin-top:0.5rem;margin-bottom:2rem}
-.prog-label{font-size:0.62rem;font-weight:600;color:var(--gray);text-align:center;flex:1;text-transform:uppercase;letter-spacing:0.05em}
-.prog-label.active{color:var(--navy)}
-.prog-label.done{color:var(--green)}
-
-/* FORM */
-.form-wrap{max-width:680px;margin:0 auto;padding:0 5% 5rem}
-.step{display:none}
-.step.active{display:block}
-.step-title{font-family:'Inter',sans-serif;font-weight:700;font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:0.3rem}
-.step-sub{font-size:0.85rem;color:var(--gray);margin-bottom:1.75rem;line-height:1.65}
-
-/* FORM ELEMENTS */
-.form-card{background:#fff;border:1px solid var(--lgray);border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
-.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--lgray);background:#F8FAFF}
-.card-head-title{font-size:0.82rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.06em}
-.card-body{padding:1.25rem}
-.form-group{margin-bottom:1.1rem}
-.form-group:last-child{margin-bottom:0}
-.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--navy);margin-bottom:0.4rem}
-.form-label span{color:var(--red)}
-.form-input{width:100%;padding:0.65rem 0.85rem;border:1.5px solid var(--lgray);border-radius:8px;font-size:0.85rem;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:border-color 0.2s;background:#fff}
-.form-input:focus{border-color:var(--navy)}
-.form-input.error{border-color:var(--red)}
-textarea.form-input{resize:vertical;min-height:90px}
-.form-hint{font-size:0.7rem;color:var(--gray);margin-top:0.3rem}
-.input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:500px){.input-row{grid-template-columns:1fr}}
-
-/* PLAN CARDS */
-.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
-@media(max-width:500px){.plan-grid{grid-template-columns:1fr}}
-.plan-card{border:2px solid var(--lgray);border-radius:14px;padding:1.5rem;cursor:pointer;transition:all 0.2s;position:relative;background:#fff}
-.plan-card:hover{border-color:#aaa}
-.plan-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.04)}
-.plan-card.selected.premium-card{border-color:var(--navy);background:rgba(13,27,62,0.03)}
-.plan-badge{font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem}
-.plan-name{font-family:'Inter',sans-serif;font-weight:700;font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:0.25rem}
-.plan-price{font-family:'Inter',sans-serif;font-weight:700;font-size:1.5rem;font-weight:900;color:var(--navy);margin-bottom:0.1rem}
-.plan-period{font-size:0.72rem;color:var(--gray);margin-bottom:1rem}
-.plan-features{list-style:none;display:flex;flex-direction:column;gap:0.35rem}
-.plan-features li{font-size:0.78rem;color:var(--gray);display:flex;align-items:center;gap:0.4rem}
-.plan-features li::before{content:'';color:var(--gold);font-weight:700;flex-shrink:0}
-.plan-check{position:absolute;top:0.75rem;right:0.75rem;width:20px;height:20px;border-radius:50%;border:2px solid var(--lgray);display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all 0.2s}
-.plan-card.selected .plan-check{background:var(--gold);border-color:var(--gold);color:var(--navy)}
-.plan-card.selected.premium-card .plan-check{background:var(--navy);border-color:var(--navy);color:#fff}
-.popular-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:0.6rem;font-weight:700;padding:0.2rem 0.75rem;border-radius:20px;white-space:nowrap}
-
-/* COLOR PICKER */
-.color-grid{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem}
-.color-swatch{width:32px;height:32px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all 0.15s}
-.color-swatch.selected{border-color:var(--navy);transform:scale(1.15)}
-
-/* FONT PICKER */
-.font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.6rem;margin-top:0.5rem}
-.font-opt{padding:0.6rem 0.75rem;border:1.5px solid var(--lgray);border-radius:8px;cursor:pointer;font-size:0.8rem;text-align:center;transition:all 0.15s}
-.font-opt.selected{border-color:var(--navy);background:rgba(13,27,62,0.04);font-weight:600}
-
-/* REVIEW */
-.review-section{background:#fff;border:1px solid var(--lgray);border-radius:12px;overflow:hidden;margin-bottom:1rem}
-.review-head{padding:0.75rem 1rem;background:#F8FAFF;border-bottom:1px solid var(--lgray);font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em}
-.review-row{display:flex;justify-content:space-between;padding:0.65rem 1rem;border-bottom:1px solid #f3f4f6;font-size:0.82rem}
+:root{--navy:#050B2E;--blue:#0A1858;--gold:#C9A84C;--gold2:#F0C96B;--white:#fff;--off:#F8FAFF;--gray:#64748B;--lgray:#E2E8F0;--green:#059669;--red:#DC2626}
+body{font-family:'Inter',sans-serif;background:var(--off);color:var(--navy);-webkit-font-smoothing:antialiased}
+.nav{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(5,11,46,0.97);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 5%;z-index:100;border-bottom:1px solid rgba(255,255,255,0.07)}
+.nav-logo{font-weight:900;font-size:1rem;color:#fff;text-decoration:none;letter-spacing:-0.03em}
+.nav-logo span{color:#C9A84C}
+.nav-back{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s}
+.nav-back:hover{color:rgba(255,255,255,0.85)}
+.page-hero{background:linear-gradient(160deg,#010510,#030920 35%,#050E2E 65%,#071540);padding:5.5rem 5% 2.5rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 0%,rgba(56,120,255,0.22),transparent 65%);pointer-events:none}
+.page-hero h1{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:900;letter-spacing:-0.03em;position:relative;z-index:1;margin-bottom:0.6rem}
+.page-hero h1 span{color:#C9A84C}
+.page-hero p{font-size:0.9rem;color:rgba(255,255,255,0.5);position:relative;z-index:1;line-height:1.7;max-width:440px;margin:0 auto}
+.progress-wrap{max-width:660px;margin:0 auto;padding:2rem 5% 0}
+.progress-bar{display:flex;align-items:center}
+.prog-step{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;transition:all .3s;border:2px solid #E2E8F0;background:#fff;color:#64748B}
+.prog-step.active{background:#050B2E;color:#fff;border-color:#050B2E;box-shadow:0 4px 12px rgba(5,11,46,0.2)}
+.prog-step.done{background:#059669;color:#fff;border-color:#059669}
+.prog-step.done::after{content:'\2713'}
+.prog-line{flex:1;height:2px;background:#E2E8F0;transition:background .3s;margin:0 3px}
+.prog-line.done{background:#059669}
+.prog-labels{display:flex;justify-content:space-between;margin-top:6px;margin-bottom:1.75rem}
+.prog-label{font-size:0.58rem;font-weight:600;color:#64748B;text-align:center;flex:1;text-transform:uppercase;letter-spacing:0.05em}
+.prog-label.active{color:#050B2E;font-weight:700}
+.prog-label.done{color:#059669}
+.form-wrap{max-width:660px;margin:0 auto;padding:0 5% 5rem}
+.step{display:none}.step.active{display:block}
+.step-title{font-size:1.2rem;font-weight:800;color:#050B2E;margin-bottom:0.25rem}
+.step-sub{font-size:0.82rem;color:#64748B;margin-bottom:1.5rem;line-height:1.65}
+.card{background:#fff;border:1.5px solid #E2E8F0;border-radius:18px;overflow:hidden;margin-bottom:1.1rem;box-shadow:0 2px 12px rgba(5,11,46,0.04)}
+.card-head{padding:0.75rem 1.1rem;border-bottom:1.5px solid #E2E8F0;background:#F8FAFF}
+.card-title{font-size:0.72rem;font-weight:700;color:#050B2E;text-transform:uppercase;letter-spacing:0.07em}
+.card-body{padding:1.1rem}
+.fg{margin-bottom:1rem}.fg:last-child{margin-bottom:0}
+.lbl{display:block;font-size:0.76rem;font-weight:600;color:#050B2E;margin-bottom:5px}
+.lbl em{color:#DC2626;font-style:normal}
+.inp{width:100%;padding:0.62rem 0.85rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.85rem;font-family:'Inter',sans-serif;color:#050B2E;outline:none;transition:border-color .2s,box-shadow .2s;background:#fff}
+.inp:focus{border-color:#050B2E;box-shadow:0 0 0 3px rgba(5,11,46,0.08)}
+textarea.inp{resize:vertical;min-height:88px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem}
+@media(max-width:500px){.row2{grid-template-columns:1fr}}
+.hint{font-size:0.7rem;color:#64748B;margin-top:4px;line-height:1.5}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.1rem}
+@media(max-width:480px){.plan-grid{grid-template-columns:1fr}}
+.plan-card{border:2px solid #E2E8F0;border-radius:16px;padding:1.4rem;cursor:pointer;transition:all .2s;position:relative;background:#fff}
+.plan-card:hover{border-color:#bbb;transform:translateY(-1px)}
+.plan-card.selected{border-color:#C9A84C;background:rgba(201,168,76,0.03)}
+.plan-card.selected.premium{border-color:#050B2E;background:rgba(5,11,46,0.03)}
+.plan-badge{font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;color:#64748B}
+.plan-name{font-size:1.1rem;font-weight:800;color:#050B2E;margin-bottom:3px}
+.plan-price{font-size:1.4rem;font-weight:900;color:#050B2E}
+.plan-period{font-size:0.7rem;color:#64748B;margin-bottom:1rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:5px}
+.plan-features li{font-size:0.77rem;color:#64748B;display:flex;align-items:center;gap:6px}
+.plan-features li::before{content:'\2713';color:#C9A84C;font-weight:700}
+.plan-check{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all .2s}
+.plan-card.selected .plan-check{background:#C9A84C;border-color:#C9A84C;color:#0F172A}
+.plan-card.selected.premium .plan-check{background:#050B2E;border-color:#050B2E;color:#fff}
+.plan-check::after{content:'\2713'}
+.pop-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#050B2E;color:#fff;font-size:0.58rem;font-weight:700;padding:2px 10px;border-radius:20px;white-space:nowrap}
+.upload-zone{border:2px dashed #E2E8F0;border-radius:12px;padding:1.4rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.upload-zone:hover{border-color:#050B2E;background:rgba(5,11,46,0.02)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{width:40px;height:40px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.upload-text{font-size:0.8rem;font-weight:600;color:#050B2E}
+.upload-sub{font-size:0.68rem;color:#64748B;margin-top:2px}
+.logo-preview{width:80px;height:80px;border-radius:14px;overflow:hidden;border:2px solid #E2E8F0;display:none;margin:0 auto 10px}
+.logo-preview img{width:100%;height:100%;object-fit:cover}
+.has-logo .logo-preview{display:block}
+.has-logo .upload-icon{display:none}
+.prod-slot{background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px;display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.prod-num{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#050B2E,#0A1858);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.7rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.prod-fields{flex:1;display:flex;flex-direction:column;gap:7px}
+.prod-img-zone{width:60px;height:60px;border-radius:9px;border:2px dashed #E2E8F0;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer;background:#fff;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+.prod-img-zone:hover{border-color:#050B2E}
+.prod-img-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.prod-img-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.prod-img-zone.has-img img{display:block}
+.prod-img-zone.has-img svg{display:none}
+.prod-inp{width:100%;padding:6px 9px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:0.8rem;font-family:'Inter',sans-serif;color:#050B2E;outline:none;background:#fff;transition:border-color .2s}
+.prod-inp:focus{border-color:#050B2E}
+.prod-inp-row{display:flex;gap:6px}
+.color-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.swatch{width:30px;height:30px;border-radius:8px;cursor:pointer;border:2.5px solid transparent;transition:all .15s;flex-shrink:0}
+.swatch.sel{border-color:#050B2E;transform:scale(1.2);box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.custom-color{margin-top:8px;width:100%;height:36px;border:1.5px solid #E2E8F0;border-radius:8px;cursor:pointer;padding:2px}
+.color-preview{display:inline-flex;align-items:center;gap:8px;margin-top:10px;font-size:0.78rem;color:#64748B}
+.color-dot{width:16px;height:16px;border-radius:4px}
+.font-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.font-opt{padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s}
+.font-opt:hover{border-color:#bbb}
+.font-opt.sel{border-color:#050B2E;background:rgba(5,11,46,0.04)}
+.font-name{font-size:15px;color:#050B2E;font-weight:800}
+.font-label{font-size:10px;color:#64748B;margin-top:2px}
+.review-card{background:#fff;border:1.5px solid #E2E8F0;border-radius:14px;overflow:hidden;margin-bottom:10px}
+.review-head{padding:0.65rem 1rem;background:#F8FAFF;border-bottom:1.5px solid #E2E8F0;font-size:0.7rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.07em}
+.review-row{display:flex;justify-content:space-between;padding:0.6rem 1rem;border-bottom:1px solid #f3f4f6;font-size:0.82rem;gap:12px}
 .review-row:last-child{border-bottom:none}
-.review-label{color:var(--gray)}
-.review-val{font-weight:600;color:var(--navy);text-align:right;max-width:60%}
-
-/* PAYMENT */
-.payment-box{background:#fff;border:1px solid var(--lgray);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem}
-.pay-method{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;border:1.5px solid var(--lgray);border-radius:10px;cursor:pointer;transition:all 0.15s;margin-bottom:0.6rem}
-.pay-method.selected{border-color:var(--navy);background:rgba(13,27,62,0.03)}
-.pay-method-icon{font-size:1.3rem;flex-shrink:0}
-.pay-method-info{flex:1}
-.pay-method-name{font-size:0.85rem;font-weight:700;color:var(--navy)}
-.pay-method-detail{font-size:0.75rem;color:var(--gray)}
-.copy-btn{font-size:0.68rem;background:#F8FAFF;border:1px solid var(--lgray);border-radius: 10px;padding:0.25rem 0.6rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--navy);transition:all 0.15s}
-.copy-btn:hover{background:var(--lgray)}
-
-/* BUTTONS */
-.btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--lgray)}
-.btn{padding:0.75rem 1.75rem;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.4rem}
-.btn-primary{background:var(--navy);color:#fff}
-.btn-primary:hover{background:var(--blue)}
-.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
-.btn-secondary{background:#fff;color:var(--navy);border:1.5px solid var(--lgray)}
-.btn-secondary:hover{border-color:#aaa}
-.btn-gold{background:var(--gold);color:var(--navy)}
-.btn-gold:hover{background:var(--gold2)}
-
-/* TOAST */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.25rem;border-radius:10px;font-size:0.82rem;font-weight:600;z-index:9999;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
-.toast.success{background:var(--green);color:#fff}
-.toast.error{background:var(--red);color:#fff}
-@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-/* ALERT */
-.alert{padding:0.75rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:500;margin-bottom:1rem;display:none}
+.review-key{color:#64748B;flex-shrink:0}
+.review-val{font-weight:600;color:#050B2E;text-align:right}
+.alert{padding:0.7rem 1rem;border-radius:10px;font-size:0.8rem;font-weight:500;margin-bottom:1rem;display:none;line-height:1.5}
 .alert.show{display:block}
-.alert-error{background:rgba(220,38,38,0.08);color:var(--red);border:1px solid rgba(220,38,38,0.2)}
-
-/* SUCCESS */
-.success-page{text-align:center;padding:4rem 2rem;display:none}
+.alert-err{background:rgba(220,38,38,0.07);color:#DC2626;border:1px solid rgba(220,38,38,0.18)}
+.alert-info{background:rgba(5,11,46,0.06);color:#050B2E;border:1px solid rgba(5,11,46,0.12)}
+.btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.1rem;border-top:1px solid #E2E8F0}
+.btn{padding:0.7rem 1.6rem;border-radius:999px;font-size:0.85rem;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-primary{background:#050B2E;color:#fff;box-shadow:0 6px 18px rgba(5,11,46,0.22)}
+.btn-primary:hover:not(:disabled){background:#0A1858}
+.btn-secondary{background:#fff;color:#050B2E;border:1.5px solid #E2E8F0}
+.btn-secondary:hover:not(:disabled){border-color:#aaa}
+.btn-gold{background:#C9A84C;color:#0F172A;box-shadow:0 6px 18px rgba(201,168,76,0.28)}
+.btn-gold:hover:not(:disabled){background:#D4B55A}
+.success-page{text-align:center;padding:3.5rem 1.5rem;display:none}
 .success-page.show{display:block}
-.success-icon{width:80px;height:80px;border-radius:50%;background:rgba(5,150,105,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem}
-.success-page h2{font-size:1.75rem;font-weight:800;color:var(--navy);margin-bottom:0.75rem}
-.success-page p{font-size:0.9rem;color:var(--gray);line-height:1.75;max-width:420px;margin:0 auto 2rem}
-.detail-box{background:#F8FAFF;border:1px solid var(--lgray);border-radius:12px;padding:1.25rem;text-align:left;max-width:380px;margin:0 auto 1.75rem}
-.detail-row{display:flex;justify-content:space-between;font-size:0.82rem;padding:0.4rem 0;border-bottom:1px solid var(--lgray)}
-.detail-row:last-child{border-bottom:none}
-.detail-key{color:var(--gray)}
-.detail-val{font-weight:700;color:var(--navy)}
-.lbl{font-size:0.65rem;font-weight:600;color:var(--gray);text-align:center;flex:1;padding-top:6px}.lbl.active{color:var(--navy);font-weight:700}.lbl.done{color:var(--navy)}
+.success-icon{width:72px;height:72px;border-radius:50%;background:rgba(5,150,105,0.1);border:2px solid rgba(5,150,105,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
+.success-page h2{font-size:1.6rem;font-weight:800;color:#050B2E;margin-bottom:0.6rem}
+.success-page p{font-size:0.88rem;color:#64748B;line-height:1.75;max-width:420px;margin:0 auto 1.5rem}
+.next-steps{background:#fff;border:1.5px solid #E2E8F0;border-radius:14px;padding:1.1rem;text-align:left;max-width:420px;margin:0 auto 1.5rem}
+.next-step{display:flex;align-items:flex-start;gap:10px;font-size:0.8rem;color:#050B2E;padding:7px 0;border-bottom:1px solid #E2E8F0}
+.next-step:last-child{border-bottom:none;padding-bottom:0}
+.step-num{width:22px;height:22px;border-radius:50%;background:#050B2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.success-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .7s linear infinite;display:inline-block}
+.upload-progress{height:3px;background:#E2E8F0;border-radius:2px;overflow:hidden;margin-top:4px;display:none}
+.upload-progress.show{display:block}
+.upload-bar{height:100%;background:#050B2E;border-radius:2px;transition:width .3s;width:0}
+.rv-prods{display:flex;gap:8px;flex-wrap:wrap;padding:0.75rem 1rem}
+.rv-prod{background:#F8FAFF;border:1px solid #E2E8F0;border-radius:10px;overflow:hidden;width:calc(25% - 6px);min-width:68px}
+.rv-prod-img{height:52px;display:flex;align-items:center;justify-content:center;background:#E2E8F0;overflow:hidden}
+.rv-prod-img img{width:100%;height:100%;object-fit:cover}
+.rv-prod-body{padding:5px 6px}
+.rv-prod-name{font-size:0.64rem;font-weight:700;color:#050B2E;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-prod-price{font-size:0.6rem;color:#64748B;margin-top:1px}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.8rem 1.2rem;border-radius:12px;font-size:0.82rem;font-weight:600;z-index:9999;max-width:300px;box-shadow:0 8px 28px rgba(0,0,0,0.15);animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast.success{background:#059669;color:#fff}
+.toast.error{background:#DC2626;color:#fff}
+@media(max-width:520px){.progress-wrap,.form-wrap{padding-left:4%;padding-right:4%}.font-grid{grid-template-columns:1fr}.rv-prod{width:calc(50% - 4px)}}
 </style>
-<script src="/lang.js"></script>
 </head>
 <body>
-<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
 
-
-<!-- NAV -->
 <nav class="nav">
-  <a href="/" class="nav-logo">SHOP<span>NEKT</span></a>
-  <a href="/market" class="nav-back"> Back to Market</a>
+  <a href="/home" class="nav-logo">SHOP<span>NEKT</span></a>
+  <a href="/market" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Market
+  </a>
 </nav>
 
-<!-- HERO -->
 <div class="page-hero">
-  <h1>Open Your <span>ShopNekt Shop</span></h1>
-  <p>Join Tanzania's unified business marketplace. Choose Basic or Premium, start selling in minutes.</p>
+  <h1>Open Your <span>ShopNekt</span> Shop</h1>
+  <p>Join Tanzania's digital marketplace. Set up your shop in minutes — no technical skills required.</p>
 </div>
 
-<!-- PROGRESS -->
 <div class="progress-wrap" id="progressWrap">
   <div class="progress-bar">
     <div class="prog-step active" id="prog1">1</div>
@@ -184,96 +182,83 @@ textarea.form-input{resize:vertical;min-height:90px}
   <div class="prog-labels">
     <div class="prog-label active" id="lbl1">Account</div>
     <div class="prog-label" id="lbl2">Plan</div>
-    <div class="prog-label" id="lbl3">Shop</div>
-    <div class="prog-label" id="lbl4">Review</div>
-    <div class="prog-label" id="lbl5">Submit</div>
+    <div class="prog-label" id="lbl3">Shop Info</div>
+    <div class="prog-label" id="lbl4">Branding</div>
+    <div class="prog-label" id="lbl5">Review</div>
   </div>
 </div>
 
-<!-- FORM -->
 <div class="form-wrap">
 
   <!-- STEP 1: Account -->
   <div class="step active" id="step1">
     <div class="step-title">Create Your Account</div>
-    <div class="step-sub">Enter your details to create your ShopNekt seller account.</div>
-    <div class="alert alert-error" id="err1"></div>
-    <div class="form-card">
-      <div class="card-head"><div class="card-head-title">Owner Information</div></div>
+    <div class="step-sub">Enter your personal details to get started. All fields are required.</div>
+    <div class="alert alert-err" id="err1"></div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Owner Information</div></div>
       <div class="card-body">
-        <div class="input-row">
-          <div class="form-group">
-            <label class="form-label">Full Name <span>*</span></label>
-            <input class="form-input" id="ownerName" type="text" placeholder="John Mwanza" />
+        <div class="row2">
+          <div class="fg">
+            <label class="lbl">Full Name <em>*</em></label>
+            <input class="inp" id="ownerName" type="text" placeholder="e.g. Amina Hassan"/>
           </div>
-          <div class="form-group">
-            <label class="form-label">WhatsApp Number <span>*</span></label>
-            <input class="form-input" id="ownerPhone" type="tel" placeholder="+255 7XX XXX XXX" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email Address <span>*</span></label>
-          <input class="form-input" id="ownerEmail" type="email" placeholder="you@email.com" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">PIN ya Kuingia (namba 4) <span>*</span></label>
-          <input class="form-input" id="ownerPin" type="number" 
-            placeholder="Chagua PIN yako e.g. 8842" 
-            maxlength="4" min="1000" max="9999" 
-            oninput="if(this.value.length>4)this.value=this.value.slice(0,4)" />
-          <div class="form-hint" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;padding:8px 12px;border-radius:8px;margin-top:6px;font-size:0.78rem">
-            🔑 PIN hii utaitumia kuingia dashboard yako. Baada ya kuidhinishwa utapata: <strong>PIN-NambaYaDuka</strong> (mfano: 8842-003)
+          <div class="fg">
+            <label class="lbl">WhatsApp Number <em>*</em></label>
+            <input class="inp" id="ownerPhone" type="tel" placeholder="+255 7XX XXX XXX"/>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">PIN ya Siri (namba 4) <span>*</span></label>
-          <input class="form-input" id="ownerPin" type="number" placeholder="e.g. 8842" maxlength="4" min="1000" max="9999" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)" />
-          <div class="form-hint" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;padding:8px 12px;border-radius:8px;margin-top:6px">
-            ⚠️ <strong>Muhimu:</strong> PIN hii itakuwa sehemu ya password yako ya kuingia dashboard. <strong>Usimwambie mtu yeyote.</strong> Baada ya kuidhinishwa utapata: PIN-NambaYaDuka (mfano: 8842-048)
-          </div>
+        <div class="fg">
+          <label class="lbl">Email Address <em>*</em></label>
+          <input class="inp" id="ownerEmail" type="email" placeholder="you@email.com"/>
+        </div>
+        <div class="fg">
+          <label class="lbl">Login PIN — 4 digits <em>*</em></label>
+          <input class="inp" id="ownerPin" type="password" inputmode="numeric" maxlength="4" placeholder="Choose a 4-digit PIN e.g. 5821"/>
+          <div class="hint">Your PIN will be combined with your assigned shop number to form your dashboard password — e.g. 5821-003. Keep it private.</div>
         </div>
       </div>
     </div>
     <div class="btn-row">
       <div></div>
-      <button class="btn btn-primary" onclick="goStep(2)">Continue </button>
+      <button class="btn btn-primary" onclick="goStep(2)">Continue
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- STEP 2: Plan Selection -->
+  <!-- STEP 2: Plan -->
   <div class="step" id="step2">
     <div class="step-title">Choose Your Plan</div>
-    <div class="step-sub">Both plans give you a full shop on ShopNekt. Upgrade or downgrade anytime.</div>
-    <div class="alert alert-error" id="err2"></div>
+    <div class="step-sub">Both plans include a full shop page and customer messaging. You can upgrade at any time.</div>
+    <div class="alert alert-err" id="err2"></div>
     <div class="plan-grid">
-      <!-- BASIC -->
       <div class="plan-card" id="cardBasic" onclick="selectPlan('basic')">
-        <div class="plan-check" id="checkBasic"></div>
-        <div class="plan-badge" style="color:#64748B"> Silver  Basic</div>
+        <div class="plan-check"></div>
+        <div class="plan-badge">Silver</div>
         <div class="plan-name">Basic</div>
         <div class="plan-price">TZS 25,000</div>
         <div class="plan-period">per month</div>
         <ul class="plan-features">
           <li>Your own shop page</li>
           <li>Unlimited products</li>
-          <li>WhatsApp orders</li>
-          <li>AI Customer Care</li>
+          <li>WhatsApp order button</li>
+          <li>AI Customer Support</li>
           <li>Social Vybe posting</li>
           <li>Basic analytics</li>
         </ul>
       </div>
-      <!-- PREMIUM -->
-      <div class="plan-card premium-card" id="cardPremium" onclick="selectPlan('premium')">
-        <div class="popular-tag"> Most Popular</div>
-        <div class="plan-check" id="checkPremium"></div>
-        <div class="plan-badge" style="color:#C9A84C"> Gold  Premium</div>
+      <div class="plan-card premium" id="cardPremium" onclick="selectPlan('premium')">
+        <div class="pop-tag">Most Popular</div>
+        <div class="plan-check"></div>
+        <div class="plan-badge">Gold</div>
         <div class="plan-name">Premium</div>
         <div class="plan-price">TZS 45,000</div>
         <div class="plan-period">per month</div>
         <ul class="plan-features">
           <li>Everything in Basic</li>
-          <li> Gold badge + top listing</li>
-          <li>Marketing AI tools</li>
+          <li>Gold badge + top listing</li>
+          <li>AI Marketing tools</li>
           <li>Accounting dashboard</li>
           <li>Priority support</li>
           <li>Featured on homepage</li>
@@ -281,629 +266,526 @@ textarea.form-input{resize:vertical;min-height:90px}
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(1)"> Back</button>
-      <button class="btn btn-primary" onclick="goStep(3)">Continue </button>
+      <button class="btn btn-secondary" onclick="goStep(1)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" onclick="goStep(3)">Continue
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- STEP 3: Shop Details -->
+  <!-- STEP 3: Shop Info -->
   <div class="step" id="step3">
-    <div class="step-title">Set Up Your Shop</div>
-    <div class="step-sub">Tell customers about your shop, name, category and what you sell.</div>
-    <div class="alert alert-error" id="err3"></div>
-    <div class="form-card">
-      <div class="card-head"><div class="card-head-title">Shop Identity</div></div>
+    <div class="step-title">Shop Details</div>
+    <div class="step-sub">Help customers find and understand your shop.</div>
+    <div class="alert alert-err" id="err3"></div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Shop Identity</div></div>
       <div class="card-body">
-        <div class="input-row">
-          <div class="form-group">
-            <label class="form-label">Shop Name <span>*</span></label>
-            <input class="form-input" id="shopName" type="text" placeholder="e.g. Amina Fashion House" />
+        <div class="row2">
+          <div class="fg">
+            <label class="lbl">Shop Name <em>*</em></label>
+            <input class="inp" id="shopName" type="text" placeholder="e.g. Amina Fashion House"/>
           </div>
-          <div class="form-group">
-            <label class="form-label">Category <span>*</span></label>
-            <select class="form-input" id="shopCategory">
+          <div class="fg">
+            <label class="lbl">Category <em>*</em></label>
+            <select class="inp" id="shopCategory">
               <option value="">Select category...</option>
-              <option>Fashion & Clothing</option>
+              <option>Fashion &amp; Clothing</option>
               <option>Electronics</option>
-              <option>Food & Groceries</option>
-              <option>Beauty & Health</option>
+              <option>Food &amp; Groceries</option>
+              <option>Beauty &amp; Health</option>
               <option>Services</option>
               <option>Agriculture</option>
-              <option>Books & Stationery</option>
+              <option>Furniture</option>
+              <option>Home &amp; Living</option>
+              <option>Sports &amp; Fitness</option>
+              <option>Books &amp; Stationery</option>
+              <option>Automotive</option>
+              <option>Arts &amp; Crafts</option>
               <option>Other</option>
             </select>
           </div>
         </div>
-        <div class="input-row">
-          <div class="form-group">
-            <label class="form-label">Region <span>*</span></label>
-            <select class="form-input" id="shopRegion">
+        <div class="row2">
+          <div class="fg">
+            <label class="lbl">Region <em>*</em></label>
+            <select class="inp" id="shopRegion">
               <option value="">Select region...</option>
-              <option>Dar es Salaam</option>
-              <option>Arusha</option>
-              <option>Dodoma</option>
-              <option>Mwanza</option>
-              <option>Mbeya</option>
-              <option>Morogoro</option>
-              <option>Tanga</option>
-              <option>Zanzibar</option>
-              <option>Other</option>
+              <option>Dar es Salaam</option><option>Arusha</option><option>Dodoma</option>
+              <option>Mwanza</option><option>Mbeya</option><option>Morogoro</option>
+              <option>Tanga</option><option>Kilimanjaro</option><option>Kagera</option>
+              <option>Kigoma</option><option>Lindi</option><option>Mara</option>
+              <option>Mtwara</option><option>Pwani</option><option>Ruvuma</option>
+              <option>Shinyanga</option><option>Singida</option><option>Tabora</option>
+              <option>Zanzibar</option><option>Other</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Business WhatsApp <span>*</span></label>
-            <input class="form-input" id="shopWhatsapp" type="tel" placeholder="+255 7XX XXX XXX" />
+          <div class="fg">
+            <label class="lbl">Business WhatsApp <em>*</em></label>
+            <input class="inp" id="shopWhatsapp" type="tel" placeholder="+255 7XX XXX XXX"/>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Shop Description <span>*</span></label>
-          <textarea class="form-input" id="shopDesc" placeholder="Describe what you sell, your target customers, and what makes your shop unique..."></textarea>
-          <div class="form-hint">Min. 30 characters. Be clear, this appears on your shop page.</div>
+        <div class="fg">
+          <label class="lbl">Shop Description <em>*</em></label>
+          <textarea class="inp" id="shopDesc" placeholder="Describe what you sell, your target customers, and what makes your shop unique..."></textarea>
+          <div class="hint">Minimum 20 characters. This appears on your public shop page.</div>
         </div>
       </div>
     </div>
-
-    <div class="form-card">
-      <div class="card-head"><div class="card-head-title">Brand Color</div></div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Shop Logo (Optional)</div></div>
       <div class="card-body">
-        <div class="form-hint" style="margin-bottom:0.75rem">Choose the primary color for your shop banner and theme.</div>
-        <div class="color-grid" id="colorGrid">
-          <div class="color-swatch selected" style="background:#050B2E" data-color="#050B2E" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#C9A84C" data-color="#C9A84C" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#059669" data-color="#059669" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#DC2626" data-color="#DC2626" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#7C3AED" data-color="#7C3AED" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#0A1858" data-color="#0A1858" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
-          <div class="color-swatch" style="background:#0F172A" data-color="#0F172A" onclick="pickColor(this)"></div>
+        <div id="logoWrap">
+          <div class="logo-preview" id="logoPreview"><img id="logoImg" src="" alt="logo"/></div>
+          <div class="upload-zone" id="logoZone">
+            <input type="file" accept="image/*" id="logoFile" onchange="handleLogoUpload(this)"/>
+            <div class="upload-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <div class="upload-text">Click to upload your logo</div>
+            <div class="upload-sub">JPG, PNG or WEBP &middot; Max 2 MB</div>
+          </div>
+          <div class="upload-progress" id="logoProg"><div class="upload-bar" id="logoBar"></div></div>
         </div>
-        <input type="color" id="customColor" style="margin-top:0.75rem;width:100%;height:36px;border:1.5px solid var(--lgray);border-radius:8px;cursor:pointer;padding:2px" onchange="pickCustomColor(this.value)" />
+        <div class="hint" style="margin-top:8px;text-align:center">A logo helps customers recognise your brand. You can also add it later from your dashboard.</div>
       </div>
     </div>
-
-
-    <!-- ── FONT SELECTOR ───────────────────────────── -->
-    <div class="form-card">
-      <div class="card-head"><div class="card-head-title">🔤 Shop Name Font</div></div>
-      <div class="card-body">
-        <div class="form-hint" style="margin-bottom:0.75rem">Choose a font style for your shop name on the marketplace card.</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="fontGrid">
-          <div class="font-option selected" data-font="Inter" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid var(--navy);border-radius:10px;cursor:pointer;background:#EEF2FF;transition:all .15s">
-            <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
-            <div style="font-size:10px;color:#64748B;margin-top:2px">Inter (Default)</div>
-          </div>
-          <div class="font-option" data-font="Playfair Display" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
-            <div style="font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
-            <div style="font-size:10px;color:#64748B;margin-top:2px">Playfair (Elegant)</div>
-          </div>
-          <div class="font-option" data-font="Montserrat" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
-            <div style="font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
-            <div style="font-size:10px;color:#64748B;margin-top:2px">Montserrat (Bold)</div>
-          </div>
-          <div class="font-option" data-font="Raleway" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
-            <div style="font-family:'Raleway','Inter',sans-serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
-            <div style="font-size:10px;color:#64748B;margin-top:2px">Raleway (Sleek)</div>
-          </div>
-          <div class="font-option" data-font="Dancing Script" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
-            <div style="font-family:'Dancing Script',cursive;font-weight:700;font-size:18px;color:#0D1B3E">ShopNekt</div>
-            <div style="font-size:10px;color:#64748B;margin-top:2px">Dancing Script (Friendly)</div>
-          </div>
-          <div class="font-option" data-font="Oswald" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
-            <div style="font-family:'Oswald','Inter',sans-serif;font-weight:700;font-size:15px;color:#0D1B3E;letter-spacing:0.04em">SHOPNEKT</div>
-            <div style="font-size:10px;color:#64748B;margin-top:2px">Oswald (Strong)</div>
-          </div>
-        </div>
-        <input type="hidden" id="shopFont" value="Inter" />
-      </div>
-    </div>
-
-    <!-- ── WINDOW PRODUCTS — 4 product slots ───────── -->
-    <div class="form-card">
-      <div class="card-head">
-        <div class="card-head-title">🛒 Shop Window Products</div>
-        <div class="card-head-sub">These 4 products appear on your marketplace card so customers can see what you sell</div>
-      </div>
-      <div class="card-body">
-        <div style="display:flex;flex-direction:column;gap:10px" id="productSlots">
-          <!-- Product 1 -->
-          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
-            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">1</div>
-            <input class="form-input" id="prod1name" type="text" placeholder="Product name e.g. Black Dress" style="flex:1;margin:0;min-width:0" />
-            <input class="form-input" id="prod1price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
-          </div>
-          <!-- Product 2 -->
-          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
-            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">2</div>
-            <input class="form-input" id="prod2name" type="text" placeholder="Product name" style="flex:1;margin:0;min-width:0" />
-            <input class="form-input" id="prod2price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
-          </div>
-          <!-- Product 3 -->
-          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
-            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">3</div>
-            <input class="form-input" id="prod3name" type="text" placeholder="Product name" style="flex:1;margin:0;min-width:0" />
-            <input class="form-input" id="prod3price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
-          </div>
-          <!-- Product 4 -->
-          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
-            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">4</div>
-            <input class="form-input" id="prod4name" type="text" placeholder="Product name" style="flex:1;margin:0;min-width:0" />
-            <input class="form-input" id="prod4price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
-          </div>
-        </div>
-        <div class="form-hint" style="margin-top:8px">Optional but recommended — customers see these products on your marketplace card.</div>
-      </div>
-    </div>
-
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(2)"> Back</button>
-      <button class="btn btn-primary" onclick="goStep(4)">Continue </button>
+      <button class="btn btn-secondary" onclick="goStep(2)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" onclick="goStep(4)">Continue
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- STEP 4: Almost done, no payment needed -->
+  <!-- STEP 4: Branding & Products -->
   <div class="step" id="step4">
-    <div class="step-title">Almost Done! </div>
-    <div class="step-sub">Your details are complete. No payment required, registration is free this month!</div>
-    <div class="alert alert-error" id="err4"></div>
+    <div class="step-title">Branding &amp; Products</div>
+    <div class="step-sub">Customise your shop card appearance and add up to 4 showcase products.</div>
+    <div class="alert alert-err" id="err4"></div>
 
-    <div style="background:linear-gradient(135deg,#040C32,#071545);border-radius:20px;padding:2rem;margin-bottom:1.5rem;text-align:center">
-      <div style="font-size:3rem;margin-bottom:1rem"></div>
-      <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:0.5rem">Free Registration</div>
-      <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);margin-bottom:1.25rem;line-height:1.7">
-        This month, opening your shop is <strong style="color:#C9A84C">completely FREE</strong>.<br>
-        After approval, you will receive your login password via WhatsApp.
-      </div>
-      <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.30);color:#C9A84C;padding:0.5rem 1.25rem;border-radius:999px;font-size:0.78rem;font-weight:700">
-         Hakuna receipt  No payment required
+    <div class="card">
+      <div class="card-head"><div class="card-title">Brand Color</div></div>
+      <div class="card-body">
+        <div class="hint">This color appears on your shop card header in the marketplace.</div>
+        <div class="color-grid" id="colorGrid">
+          <div class="swatch sel" style="background:#050B2E" data-color="#050B2E" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#C9A84C" data-color="#C9A84C" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#059669" data-color="#059669" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#DC2626" data-color="#DC2626" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#7C3AED" data-color="#7C3AED" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#0891B2" data-color="#0891B2" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#EA580C" data-color="#EA580C" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#BE185D" data-color="#BE185D" onclick="pickColor(this)"></div>
+          <div class="swatch" style="background:#0F172A" data-color="#0F172A" onclick="pickColor(this)"></div>
+        </div>
+        <input type="color" class="custom-color" value="#050B2E" id="customColorPicker" oninput="pickCustomColor(this.value)" title="Custom color"/>
+        <input type="hidden" id="shopColor" value="#050B2E"/>
+        <div class="color-preview">
+          <div class="color-dot" id="colorDot" style="background:#050B2E"></div>
+          <span id="colorHex">#050B2E selected</span>
+        </div>
       </div>
     </div>
 
-    <div class="form-card">
-      <div class="card-head"><div class="card-head-title"> Your Plan Summary</div></div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Shop Name Font</div></div>
       <div class="card-body">
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
-          <span style="color:var(--gray)">Selected Plan</span>
-          <span style="font-weight:700;color:var(--navy)" id="step4PlanLabel">-</span>
+        <div class="hint">Choose the font style for your shop name on the marketplace card.</div>
+        <div class="font-grid">
+          <div class="font-opt sel" data-font="Inter" onclick="pickFont(this)">
+            <div class="font-name" style="font-family:'Inter',sans-serif">ShopNekt</div>
+            <div class="font-label">Inter &mdash; Default</div>
+          </div>
+          <div class="font-opt" data-font="Playfair Display" onclick="pickFont(this)">
+            <div class="font-name" style="font-family:'Playfair Display',serif">ShopNekt</div>
+            <div class="font-label">Playfair &mdash; Elegant</div>
+          </div>
+          <div class="font-opt" data-font="Montserrat" onclick="pickFont(this)">
+            <div class="font-name" style="font-family:'Montserrat',sans-serif">ShopNekt</div>
+            <div class="font-label">Montserrat &mdash; Bold</div>
+          </div>
+          <div class="font-opt" data-font="Raleway" onclick="pickFont(this)">
+            <div class="font-name" style="font-family:'Raleway',sans-serif">ShopNekt</div>
+            <div class="font-label">Raleway &mdash; Sleek</div>
+          </div>
+          <div class="font-opt" data-font="Dancing Script" onclick="pickFont(this)">
+            <div class="font-name" style="font-family:'Dancing Script',cursive;font-size:18px">ShopNekt</div>
+            <div class="font-label">Dancing Script &mdash; Friendly</div>
+          </div>
+          <div class="font-opt" data-font="Oswald" onclick="pickFont(this)">
+            <div class="font-name" style="font-family:'Oswald',sans-serif;letter-spacing:.05em">SHOPNEKT</div>
+            <div class="font-label">Oswald &mdash; Strong</div>
+          </div>
         </div>
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--lgray);font-size:0.85rem">
-          <span style="color:var(--gray)">Regular Price</span>
-          <span style="font-weight:700;color:var(--navy)" id="step4PriceLabel">-</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;font-size:0.85rem">
-          <span style="color:var(--gray)">This Month</span>
-          <span style="font-weight:700;color:#059669"> FREE, This Month</span>
-        </div>
+        <input type="hidden" id="shopFont" value="Inter"/>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title">Shop Window Products (up to 4)</div></div>
+      <div class="card-body">
+        <div class="hint" style="margin-bottom:12px">These products appear on your marketplace card. All fields are optional but we recommend adding at least one.</div>
+        <div id="productSlots"></div>
       </div>
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(3)"> Back</button>
-      <button class="btn btn-primary" onclick="goStep(5)">Review Application </button>
+      <button class="btn btn-secondary" onclick="goStep(3)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" onclick="goStep(5)">Review &amp; Submit
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- STEP 5: Review + Submit -->
+  <!-- STEP 5: Review -->
   <div class="step" id="step5">
-    <div class="step-title">Review & Submit</div>
-    <div class="step-sub">Review your information carefully before submitting your application.</div>
-    <div class="alert alert-error" id="err5"></div>
+    <div class="step-title">Review &amp; Submit</div>
+    <div class="step-sub">Check your details before submitting. Your application will be reviewed within 30 minutes.</div>
+    <div class="alert alert-err" id="err5"></div>
 
-    <div class="review-section">
+    <div class="review-card">
       <div class="review-head">Account</div>
-      <div class="review-row"><span class="review-label">Name</span><span class="review-val" id="rv-name">-</span></div>
-      <div class="review-row"><span class="review-label">WhatsApp</span><span class="review-val" id="rv-phone">-</span></div>
-      <div class="review-row"><span class="review-label">Email</span><span class="review-val" id="rv-email">-</span></div>
+      <div class="review-row"><span class="review-key">Name</span><span class="review-val" id="rv-name">-</span></div>
+      <div class="review-row"><span class="review-key">WhatsApp</span><span class="review-val" id="rv-phone">-</span></div>
+      <div class="review-row"><span class="review-key">Email</span><span class="review-val" id="rv-email">-</span></div>
     </div>
-    <div class="review-section">
+    <div class="review-card">
       <div class="review-head">Plan</div>
-      <div class="review-row"><span class="review-label">Selected Plan</span><span class="review-val" id="rv-plan">-</span></div>
-      <div class="review-row"><span class="review-label">Monthly Price</span><span class="review-val" id="rv-price">-</span></div>
+      <div class="review-row"><span class="review-key">Selected</span><span class="review-val" id="rv-plan">-</span></div>
+      <div class="review-row"><span class="review-key">Monthly Price</span><span class="review-val" id="rv-price">-</span></div>
     </div>
-    <div class="review-section">
+    <div class="review-card">
       <div class="review-head">Shop</div>
-      <div class="review-row"><span class="review-label">Shop Name</span><span class="review-val" id="rv-shop">-</span></div>
-      <div class="review-row"><span class="review-label">Category</span><span class="review-val" id="rv-cat">-</span></div>
-      <div class="review-row"><span class="review-label">Region</span><span class="review-val" id="rv-region">-</span></div>
+      <div class="review-row"><span class="review-key">Shop Name</span><span class="review-val" id="rv-shop">-</span></div>
+      <div class="review-row"><span class="review-key">Category</span><span class="review-val" id="rv-cat">-</span></div>
+      <div class="review-row"><span class="review-key">Region</span><span class="review-val" id="rv-region">-</span></div>
+      <div class="review-row"><span class="review-key">Description</span><span class="review-val" id="rv-desc" style="font-size:.76rem">-</span></div>
     </div>
-    <div style="background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.20);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem">
-      <span style="font-size:1.5rem"></span>
-      <div>
-        <div style="font-size:0.82rem;font-weight:700;color:#059669">Free Registration, Hakuna Malipo</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">Baada ya kuidhinishwa utapata PIN kamili yako kwa WhatsApp. Itakuwa: <strong>PIN-NambaYaDuka</strong></div>
+    <div class="review-card">
+      <div class="review-head">Branding</div>
+      <div class="review-row">
+        <span class="review-key">Brand Color</span>
+        <span class="review-val" style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <span id="rv-cdot" style="display:inline-block;width:13px;height:13px;border-radius:3px;flex-shrink:0"></span>
+          <span id="rv-color">-</span>
+        </span>
       </div>
+      <div class="review-row"><span class="review-key">Font</span><span class="review-val" id="rv-font">-</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-head">Shop Window Products</div>
+      <div id="rv-products" class="rv-prods"></div>
+    </div>
+
+    <div class="alert alert-info show" style="margin-top:1rem">
+      Registration is <strong>free this month</strong>. After approval you will receive your shop login details via WhatsApp.
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goStep(4)"> Back</button>
-      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()"> Submit Application</button>
+      <button class="btn btn-secondary" onclick="goStep(4)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn btn-gold" id="submitBtn" onclick="submitApplication()">Submit Application
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 
   <!-- SUCCESS -->
   <div class="success-page" id="successPage">
-    <div class="success-icon"></div>
-    <h2 style="font-family:'Inter',sans-serif;font-weight:700;font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem">Application Submitted! </h2>
-    <p style="font-size:0.92rem;color:var(--gray);line-height:1.75;margin-bottom:1rem">
-      Your shop application has been received successfully.<br>
-      It will be <strong style="color:var(--navy)">reviewed within 30 minutes</strong>, you will receive your dashboard login details via WhatsApp.
-    </p>
-    <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#15803D">
-      <strong>What happens next?</strong><br>
-      1. Admin reviews your application<br>
-      2. You receive WhatsApp with login details<br>
-      3. Login at <a href="/login" style="color:var(--navy);font-weight:700">travex-mall.vercel.app/login</a><br>
-      4. Start adding products to your shop!
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
     </div>
-    <div style="background:#F8FAFF;border:1px solid var(--lgray);border-radius:14px;padding:1.25rem;margin-bottom:1.5rem;text-align:left">
-      <div style="font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Hatua Zifuatazo</div>
-      <div style="display:flex;flex-direction:column;gap:0.6rem">
-        <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
-          <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">1</span>
-          Admin atakagua maombi yako (ndani ya dakika 30)
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
-          <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">2</span>
-          Utapata WhatsApp na password yako ya dashboard
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--navy)">
-          <span style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0">3</span>
-          Login to dashboard, your shop will appear on the marketplace
-        </div>
-      </div>
+    <h2>Application Submitted!</h2>
+    <p>Your shop application has been received. It will be reviewed within <strong>30 minutes</strong> and you will receive your login details via WhatsApp.</p>
+    <div class="next-steps">
+      <div class="next-step"><div class="step-num">1</div><span>Admin reviews your application</span></div>
+      <div class="next-step"><div class="step-num">2</div><span>You receive your PIN and shop number via WhatsApp</span></div>
+      <div class="next-step"><div class="step-num">3</div><span>Log in at <strong>travex-mall.vercel.app/login</strong></span></div>
+      <div class="next-step"><div class="step-num">4</div><span>Your shop goes live on the marketplace</span></div>
     </div>
-    <div class="detail-box" id="successDetail"></div>
-    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center">
-      <a href="/market" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--navy);color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none"> Rudi Market</a>
-      <a href="https://wa.me/255651919915" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:#25D366;color:#fff;padding:0.85rem 2rem;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none"> WhatsApp Support</a>
+    <div class="success-actions">
+      <a href="/market" style="display:inline-flex;align-items:center;gap:6px;background:#050B2E;color:#fff;padding:.8rem 1.8rem;border-radius:999px;font-weight:700;font-size:.85rem;text-decoration:none">View Marketplace</a>
+      <a href="https://wa.me/255651919915" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:.8rem 1.8rem;border-radius:999px;font-weight:700;font-size:.85rem;text-decoration:none">WhatsApp Support</a>
     </div>
   </div>
 
-</div><!-- /form-wrap -->
+</div>
 
 <script>
 const sb = supabase.createClient(
   'https://bscecjbgnjitlfmgwcic.supabase.co',
   'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 )
-
-// State
+const BUCKET = 'shop-assets'
 let selectedPlan = 'basic'
 let selectedColor = '#050B2E'
-let selectedPayMethod = 'crdb'
+let selectedFont = 'Inter'
+let logoUrl = ''
 let currentStep = 1
-const PRICES = { basic: 25000, premium: 45000 }
-const fmt = n => 'TZS ' + Number(n).toLocaleString('en-US')
+let prodData = [{name:'',price:'',imageUrl:''},{name:'',price:'',imageUrl:''},{name:'',price:'',imageUrl:''},{name:'',price:'',imageUrl:''}]
 
-//  HELPER: safe get element 
-function $id(id) { return document.getElementById(id) }
+// Render product slots
+function renderProductSlots(){
+  const wrap = document.getElementById('productSlots')
+  wrap.innerHTML = prodData.map((_,i) => `
+    <div class="prod-slot">
+      <div class="prod-num">${i+1}</div>
+      <div class="prod-img-zone" id="piz${i}" onclick="document.getElementById('pf${i}').click()">
+        <input type="file" accept="image/*" id="pf${i}" onchange="handleProdImg(this,${i})" style="display:none"/>
+        <img id="pimg${i}" src="" alt=""/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.6" id="picon${i}"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <div class="prod-fields">
+        <div class="prod-inp-row">
+          <input class="prod-inp" id="pname${i}" type="text" placeholder="Product name" oninput="prodData[${i}].name=this.value" style="flex:1"/>
+          <input class="prod-inp" id="pprice${i}" type="number" placeholder="Price (TZS)" oninput="prodData[${i}].price=this.value" style="width:115px"/>
+        </div>
+        <div class="upload-progress" id="pprog${i}"><div class="upload-bar" id="pbar${i}"></div></div>
+      </div>
+    </div>`).join('')
+}
+renderProductSlots()
 
-//  SHOW ERROR 
-function showErr(el, msg) {
-  if (!el) return false
-  el.textContent = msg
-  el.classList.add('show')
-  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  return false
+function validateFile(file){
+  if(!file) return 'No file selected'
+  if(!['image/jpeg','image/png','image/webp'].includes(file.type)) return 'Please upload a JPG, PNG or WEBP image'
+  if(file.size > 2.5*1024*1024) return 'Image must be under 2.5 MB'
+  return null
 }
 
-//  VALIDATION 
-function validateStep(n) {
-  // Clear all errors for this step
-  const err = $id('err' + n)
-  if (err) { err.textContent = ''; err.classList.remove('show') }
+async function uploadFile(file, folder){
+  const ext = file.name.split('.').pop().toLowerCase() || 'jpg'
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  const {error} = await sb.storage.from(BUCKET).upload(path, file, {cacheControl:'3600',upsert:false})
+  if(error) throw new Error(error.message)
+  return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+}
 
-  if (n === 1) {
-    const name  = ($id('ownerName')?.value || '').trim()
-    const phone = ($id('ownerPhone')?.value || '').trim()
-    const email = ($id('ownerEmail')?.value || '').trim()
-    const pass  = ($id('ownerPin')?.value || '')
-    if (!name)  return showErr(err, ' Enter your full name')
-    if (!phone) return showErr(err, ' Enter your WhatsApp number')
-    if (!email || !email.includes('@')) return showErr(err, ' Enter a valid email')
-    const pinCheck = (document.getElementById('ownerPin')?.value||'').trim()
-    if (!pinCheck || pinCheck.length !== 4 || isNaN(Number(pinCheck))) return showErr(err, ' Weka PIN ya namba 4 (mfano: 8842)')
+async function handleLogoUpload(input){
+  const file = input.files[0]; if(!file) return
+  const err = validateFile(file); if(err){toast(err,'error');return}
+  const reader = new FileReader()
+  reader.onload = e => {
+    document.getElementById('logoImg').src = e.target.result
+    document.getElementById('logoPreview').style.display = 'block'
+    document.getElementById('logoZone').style.borderColor = '#059669'
+  }
+  reader.readAsDataURL(file)
+  const prog = document.getElementById('logoProg')
+  const bar = document.getElementById('logoBar')
+  prog.classList.add('show'); bar.style.width = '40%'
+  try {
+    logoUrl = await uploadFile(file, 'logos')
+    bar.style.width = '100%'
+    setTimeout(()=>prog.classList.remove('show'),700)
+    toast('Logo uploaded','success')
+  } catch(e) {
+    prog.classList.remove('show')
+    toast('Logo upload failed: '+e.message,'error')
+    logoUrl = ''
+  }
+}
+
+async function handleProdImg(input, idx){
+  const file = input.files[0]; if(!file) return
+  const err = validateFile(file); if(err){toast(err,'error');return}
+  const reader = new FileReader()
+  reader.onload = e => {
+    const img = document.getElementById('pimg'+idx)
+    img.src = e.target.result
+    document.getElementById('piz'+idx).classList.add('has-img')
+  }
+  reader.readAsDataURL(file)
+  const prog = document.getElementById('pprog'+idx)
+  const bar = document.getElementById('pbar'+idx)
+  prog.classList.add('show'); bar.style.width = '40%'
+  try {
+    prodData[idx].imageUrl = await uploadFile(file,'products')
+    bar.style.width = '100%'
+    setTimeout(()=>prog.classList.remove('show'),700)
+  } catch(e) {
+    prog.classList.remove('show')
+    toast('Image upload failed: '+e.message,'error')
+    prodData[idx].imageUrl = ''
+  }
+}
+
+function selectPlan(p){
+  selectedPlan=p
+  document.getElementById('cardBasic').classList.toggle('selected',p==='basic')
+  document.getElementById('cardPremium').classList.toggle('selected',p==='premium')
+}
+selectPlan('basic')
+
+function pickColor(el){
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel'))
+  el.classList.add('sel')
+  selectedColor=el.dataset.color
+  document.getElementById('shopColor').value=selectedColor
+  document.getElementById('customColorPicker').value=selectedColor
+  document.getElementById('colorDot').style.background=selectedColor
+  document.getElementById('colorHex').textContent=selectedColor+' selected'
+}
+function pickCustomColor(v){
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel'))
+  selectedColor=v
+  document.getElementById('shopColor').value=v
+  document.getElementById('colorDot').style.background=v
+  document.getElementById('colorHex').textContent=v+' selected'
+}
+function pickFont(el){
+  document.querySelectorAll('.font-opt').forEach(f=>f.classList.remove('sel'))
+  el.classList.add('sel')
+  selectedFont=el.dataset.font
+  document.getElementById('shopFont').value=selectedFont
+}
+
+function showErr(id,msg){
+  const el=document.getElementById(id); if(!el) return false
+  el.textContent=msg; el.classList.add('show')
+  el.scrollIntoView({behavior:'smooth',block:'center'}); return false
+}
+function clearErr(id){const el=document.getElementById(id);if(el){el.textContent='';el.classList.remove('show')}}
+
+function validateStep(n){
+  clearErr('err'+n)
+  if(n===1){
+    const name=(document.getElementById('ownerName').value||'').trim()
+    const phone=(document.getElementById('ownerPhone').value||'').trim()
+    const email=(document.getElementById('ownerEmail').value||'').trim()
+    const pin=(document.getElementById('ownerPin').value||'').trim()
+    if(!name) return showErr('err1','Please enter your full name.')
+    if(!phone) return showErr('err1','Please enter your WhatsApp number.')
+    if(!email||!email.includes('@')) return showErr('err1','Please enter a valid email address.')
+    if(!pin||pin.length!==4||!/^\d{4}$/.test(pin)) return showErr('err1','Please enter a 4-digit numeric PIN.')
     return true
   }
-
-  if (n === 2) {
-    if (!selectedPlan) return showErr($id('err2'), ' Please select a plan')
+  if(n===2){if(!selectedPlan) return showErr('err2','Please select a plan.'); return true}
+  if(n===3){
+    const shop=(document.getElementById('shopName').value||'').trim()
+    const cat=document.getElementById('shopCategory').value||''
+    const reg=document.getElementById('shopRegion').value||''
+    const wa=(document.getElementById('shopWhatsapp').value||'').trim()
+    const desc=(document.getElementById('shopDesc').value||'').trim()
+    if(!shop) return showErr('err3','Please enter your shop name.')
+    if(!cat) return showErr('err3','Please select a category.')
+    if(!reg) return showErr('err3','Please select your region.')
+    if(!wa) return showErr('err3','Please enter your business WhatsApp number.')
+    if(desc.length<20) return showErr('err3','Shop description must be at least 20 characters.')
     return true
   }
-
-  if (n === 3) {
-    const shop = ($id('shopName')?.value || '').trim()
-    const cat  = $id('shopCategory')?.value || ''
-    const reg  = $id('shopRegion')?.value || ''
-    const wa   = ($id('shopWhatsapp')?.value || '').trim()
-    const desc = ($id('shopDesc')?.value || '').trim()
-    const e3   = $id('err3')
-    if (!shop) return showErr(e3, ' Enter your shop name')
-    if (!cat)  return showErr(e3, ' Select a category')
-    if (!reg)  return showErr(e3, ' Select your region')
-    if (!wa)   return showErr(e3, ' Enter your shop WhatsApp number')
-    if (desc.length < 20) return showErr(e3, ' Description must be at least 20 characters')
-    return true
-  }
-
-  if (n === 4) {
-    // Free registration, no validation needed
-    return true
-  }
-
   return true
 }
 
-//  NAVIGATION 
-function goStep(n) {
-  // Validate before moving forward
-  if (n > currentStep) {
-    if (!validateStep(currentStep)) return
+function goStep(n){
+  if(n>currentStep&&!validateStep(currentStep)) return
+  const c=currentStep
+  document.getElementById('step'+c).classList.remove('active')
+  const ps=document.getElementById('prog'+c)
+  ps.classList.remove('active'); ps.classList.add('done'); ps.textContent=''
+  const pl=document.getElementById('lbl'+c)
+  pl.classList.remove('active'); pl.classList.add('done')
+  if(n>c){const ln=document.getElementById('line'+c);if(ln)ln.classList.add('done')}
+  currentStep=n
+  document.getElementById('step'+n).classList.add('active')
+  const ns=document.getElementById('prog'+n)
+  ns.classList.remove('done'); ns.classList.add('active'); ns.textContent=n
+  const nl=document.getElementById('lbl'+n)
+  nl.classList.remove('done'); nl.classList.add('active')
+  if(n===5) buildReview()
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+
+function buildReview(){
+  document.getElementById('rv-name').textContent=document.getElementById('ownerName').value
+  document.getElementById('rv-phone').textContent=document.getElementById('ownerPhone').value
+  document.getElementById('rv-email').textContent=document.getElementById('ownerEmail').value
+  document.getElementById('rv-plan').textContent=selectedPlan==='premium'?'Gold Premium':'Silver Basic'
+  document.getElementById('rv-price').textContent='TZS '+(selectedPlan==='premium'?'45,000':'25,000')+'/month'
+  document.getElementById('rv-shop').textContent=document.getElementById('shopName').value
+  document.getElementById('rv-cat').textContent=document.getElementById('shopCategory').value
+  document.getElementById('rv-region').textContent=document.getElementById('shopRegion').value
+  const desc=document.getElementById('shopDesc').value
+  document.getElementById('rv-desc').textContent=desc.length>90?desc.slice(0,90)+'...':desc
+  document.getElementById('rv-cdot').style.background=selectedColor
+  document.getElementById('rv-color').textContent=selectedColor
+  document.getElementById('rv-font').textContent=selectedFont
+  const wrap=document.getElementById('rv-products')
+  const filled=prodData.filter(p=>p.name||p.imageUrl)
+  if(!filled.length){
+    wrap.innerHTML='<div style="font-size:.78rem;color:#64748B;padding:.75rem 1rem">No products added. You can add them from your dashboard after approval.</div>'
+    return
   }
-
-  // Hide current step
-  const curStep = $id('step' + currentStep)
-  const curProg = $id('prog' + currentStep)
-  const curLbl  = $id('lbl'  + currentStep)
-  const curLine = $id('line' + currentStep)
-
-  if (curStep) curStep.classList.remove('active')
-  if (curProg) { curProg.classList.remove('active'); curProg.classList.add('done'); curProg.innerHTML = '' }
-  if (curLbl)  { curLbl.classList.remove('active');  curLbl.classList.add('done') }
-  if (curLine && n > currentStep) curLine.classList.add('done')
-
-  // Update current step
-  currentStep = n
-
-  // Show new step
-  const newStep = $id('step' + currentStep)
-  const newProg = $id('prog' + currentStep)
-  const newLbl  = $id('lbl'  + currentStep)
-
-  if (newStep) newStep.classList.add('active')
-  if (newProg) { newProg.classList.remove('done'); newProg.classList.add('active') }
-  if (newLbl)  { newLbl.classList.remove('done');  newLbl.classList.add('active') }
-
-  // Step-specific actions
-  if (n === 4) {
-    const planLabel  = selectedPlan === 'premium' ? ' Premium Plan' : ' Basic Plan'
-    const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
-    const pl = $id('step4PlanLabel');  if (pl)  pl.textContent  = planLabel
-    const pr = $id('step4PriceLabel'); if (pr)  pr.textContent  = priceLabel
-  }
-  if (n === 5) buildReview()
-
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  wrap.innerHTML=prodData.filter(p=>p.name||p.imageUrl).map(p=>`
+    <div class="rv-prod">
+      <div class="rv-prod-img">${p.imageUrl?`<img src="${p.imageUrl}" alt=""/>`:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>'}</div>
+      <div class="rv-prod-body">
+        <div class="rv-prod-name">${p.name||'—'}</div>
+        ${p.price?`<div class="rv-prod-price">TZS ${Number(p.price).toLocaleString('en-US')}</div>`:''}
+      </div>
+    </div>`).join('')
 }
 
-//  PLAN SELECTION 
-function selectPlan(plan) {
-  selectedPlan = plan
-  document.getElementById('cardBasic').classList.toggle('selected', plan === 'basic')
-  document.getElementById('cardPremium').classList.toggle('selected', plan === 'premium')
-}
-// Default select basic on load
-selectPlan('basic')
-
-//  COLOR PICKER 
-function pickColor(el) {
-  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'))
-  el.classList.add('selected')
-  selectedColor = el.dataset.color
-}
-function pickCustomColor(val) {
-  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'))
-  selectedColor = val
-}
-
-//  PAYMENT 
-function selectPayMethod(m) {
-  selectedPayMethod = m
-  const pc=document.getElementById('payCredit'); if(pc) pc.classList.toggle('selected', m === 'crdb')
-  const pm=document.getElementById('payMpesa'); if(pm) pm.classList.toggle('selected', m === 'mpesa')
-}
-function updatePaymentDisplay() {
-  const price = PRICES[selectedPlan]
-  // Update step4 summary labels (step 4 uses step4PlanLabel / step4PriceLabel)
-  const pl4 = document.getElementById('step4PlanLabel')
-  const pr4 = document.getElementById('step4PriceLabel')
-  if (pl4) pl4.textContent = (selectedPlan === 'premium' ? ' Premium' : ' Basic') + ' Plan'
-  if (pr4) pr4.textContent = 'TZS ' + Number(price).toLocaleString() + '/mo (Free this month)'
-  // Legacy elements, safe no-ops if not present
-  const ad=document.getElementById('amountDue'); if(ad) ad.textContent = fmt(price)
-  const pl=document.getElementById('planLabel'); if(pl) pl.textContent = (selectedPlan === 'premium' ? 'Premium' : 'Basic') + ' Plan'
-  const pb=document.getElementById('planBadgePay'); if(pb) pb.textContent = selectedPlan === 'premium' ? ' Gold Premium' : ' Silver Basic'
-}
-
-//  REVIEW 
-function buildReview() {
-  document.getElementById('rv-name').textContent    = document.getElementById('ownerName').value
-  document.getElementById('rv-phone').textContent   = document.getElementById('ownerPhone').value
-  document.getElementById('rv-email').textContent   = document.getElementById('ownerEmail').value
-  document.getElementById('rv-plan').textContent    = selectedPlan === 'premium' ? ' Gold Premium' : ' Silver Basic'
-  document.getElementById('rv-price').textContent   = fmt(PRICES[selectedPlan]) + '/month'
-  document.getElementById('rv-shop').textContent    = document.getElementById('shopName').value
-  document.getElementById('rv-cat').textContent     = document.getElementById('shopCategory').value
-  document.getElementById('rv-region').textContent  = document.getElementById('shopRegion').value
-  // No payment review, free registration
-  // Update step4 plan summary too
-  const planLabel = selectedPlan === 'premium' ? ' Premium Plan' : ' Basic Plan'
-  const priceLabel = selectedPlan === 'premium' ? 'TZS 45,000/mo' : 'TZS 25,000/mo'
-  try { document.getElementById('step4PlanLabel').textContent = planLabel } catch(e){}
-  try { document.getElementById('step4PriceLabel').textContent = priceLabel } catch(e){}
-}
-
-//  SUBMIT 
-async function submitApplication() {
-  const btn = document.getElementById('submitBtn')
-  btn.textContent = 'Submitting...'
-  btn.disabled = true
-
-  try {
-    const name     = document.getElementById('ownerName').value.trim()
-    const phone    = document.getElementById('ownerPhone').value.trim()
-    const email    = document.getElementById('ownerEmail').value.trim()
-    const pinVal   = document.getElementById('ownerPin').value
-    const shopName = document.getElementById('shopName').value.trim()
-    const category = document.getElementById('shopCategory').value
-    const region   = document.getElementById('shopRegion').value
-    const waNum    = document.getElementById('shopWhatsapp').value.trim()
-    const desc     = document.getElementById('shopDesc').value.trim()
-    const price    = PRICES[selectedPlan]
-
-    // Free registration, no receipt needed
-
-    // Create auth account
-    // Save application directly to Supabase via REST
-    const SUPA_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-    const SUPA_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-
-    const res = await fetch(`${SUPA_URL}/rest/v1/pending_payments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPA_KEY,
-        'Authorization': `Bearer ${SUPA_KEY}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-      owner_name:    name,
-      owner_phone:   phone,
-      owner_email:   email,
-      auth_email:    email,
-        shop_name:     shopName,
-        shop_category: category,
-        shop_region:   region,
-        shop_whatsapp: waNum,
-        shop_desc:     desc,
-        plan:          selectedPlan,
-        login_password: pinVal,
-        shop_color:    document.getElementById('shopColor')?.value || '#050B2E',
-        shop_font:     document.getElementById('shopFont')?.value || 'Inter',
-        shop_products: JSON.stringify(
-          [1,2,3,4].map(i => ({
-            name:  (document.getElementById('prod'+i+'name')?.value || '').trim(),
-            price: Number(document.getElementById('prod'+i+'price')?.value) || 0
-          })).filter(p => p.name && p.price > 0)
-        ),
-        status:        'pending',
-        created_at:    new Date().toISOString()
+async function submitApplication(){
+  const btn=document.getElementById('submitBtn')
+  btn.innerHTML='<span class="spin">&#8635;</span> Submitting...'
+  btn.disabled=true
+  try{
+    const products=prodData.filter(p=>p.name&&p.name.trim()).map(p=>({name:p.name.trim(),price:Number(p.price)||0,image:p.imageUrl||''}))
+    const res=await fetch('https://bscecjbgnjitlfmgwcic.supabase.co/rest/v1/pending_payments',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos','Authorization':'Bearer sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos','Prefer':'return=minimal'},
+      body:JSON.stringify({
+        owner_name:document.getElementById('ownerName').value.trim(),
+        owner_phone:document.getElementById('ownerPhone').value.trim(),
+        owner_email:document.getElementById('ownerEmail').value.trim(),
+        auth_email:document.getElementById('ownerEmail').value.trim(),
+        shop_name:document.getElementById('shopName').value.trim(),
+        shop_category:document.getElementById('shopCategory').value,
+        shop_region:document.getElementById('shopRegion').value,
+        shop_whatsapp:document.getElementById('shopWhatsapp').value.trim(),
+        shop_desc:document.getElementById('shopDesc').value.trim(),
+        plan:selectedPlan,
+        login_password:document.getElementById('ownerPin').value.trim(),
+        shop_color:selectedColor,
+        shop_font:selectedFont,
+        shop_logo:logoUrl||null,
+        shop_products:JSON.stringify(products),
+        status:'pending',
+        created_at:new Date().toISOString()
       })
     })
-    if (!res.ok) {
-      const errText = await res.text()
-      throw new Error(`Failed (${res.status}): ${errText}`)
-    }
-
-    // Notify admin (optional)
-    try { await sb.from('feed_posts').insert({
-      type:     'new_market_application',
-      title:    ` New Shop Application, ${shopName}`,
-      body:     `${name} applied for a ${selectedPlan === 'premium' ? ' Premium' : ' Basic'} shop in ${category} (${region}). Amount: ${fmt(price)}`,
-      is_read:  false,
-    }) } catch(notifyErr) { console.warn('Notify skipped:', notifyErr) }
-
-    // Show success
-    document.getElementById(`step${currentStep}`).classList.remove('active')
-    const pw = document.getElementById('progressWrap')
-    if (pw) pw.style.display = 'none'
-    const successPage = document.getElementById('successPage')
-    successPage.classList.add('show')
-    document.getElementById('successDetail').innerHTML = `
-      <div class="detail-row"><span class="detail-key">Shop Name</span><span class="detail-val">${shopName}</span></div>
-      <div class="detail-row"><span class="detail-key">Plan</span><span class="detail-val">${selectedPlan === 'premium' ? ' Premium' : ' Basic'}</span></div>
-      <div class="detail-row"><span class="detail-key">Amount Paid</span><span class="detail-val">${fmt(price)}/mo</span></div>
-      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" style="color:var(--green)"> Under Review</span></div>
-    `
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    toast(' Application submitted! You will receive a WhatsApp confirmation within 30 minutes.', 'success')
-
-  } catch (e) {
-    console.error('Submit error:', e)
-    const errEl = document.getElementById('err5')
-    if (errEl) {
-      errEl.textContent = ' ' + (e.message || 'Submission failed. Please try again.')
-      errEl.classList.add('show')
-      errEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-    alert('Error: ' + (e.message || 'Submission failed'))
-    btn.textContent = ' Submit Application'
-    btn.disabled = false
+    if(!res.ok){const t=await res.text();throw new Error(`(${res.status}) ${t}`)}
+    document.getElementById('step5').classList.remove('active')
+    document.getElementById('progressWrap').style.display='none'
+    document.getElementById('successPage').classList.add('show')
+    window.scrollTo({top:0,behavior:'smooth'})
+    toast('Application submitted!','success')
+  }catch(e){
+    showErr('err5',e.message||'Submission failed. Please try again.')
+    btn.innerHTML='Submit Application <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+    btn.disabled=false
   }
 }
 
-//  HELPERS 
-function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => toast('Copied!', 'success'))
-}
-function toast(msg, type = 'success') {
-  const t = document.createElement('div')
-  t.className = `toast ${type}`
-  t.textContent = msg
+function toast(msg,type){
+  const t=document.createElement('div')
+  t.className='toast '+(type||'success')
+  t.textContent=msg
   document.body.appendChild(t)
-  setTimeout(() => t.remove(), 3000)
-}
-</script>
-<style id="shopnekt-polish-v2">
-/*  SHOPNEKT POLISH V2, FinTrack design layer (visual only, no logic)  */
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:#F8FAFF!important}
-
-.page-hero{background:linear-gradient(160deg, #010510 0%, #030920 30%, #050E2E 60%, #071540 100%)!important}
-.page-hero::after{content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;
-  background:linear-gradient(112deg,transparent 30%,rgba(56,120,255,0.38) 46%,rgba(201,168,76,0.15) 56%,transparent 72%);
-  filter:blur(42px)}
-.page-hero>*{position:relative;z-index:1}
-
-.nav{background:rgba(2,5,16,0.92)!important;backdrop-filter:blur(14px)}
-.form-card{border-radius:18px!important;border-color:#E2E8F0!important;box-shadow:0 6px 22px rgba(13,27,62,0.05)}
-.form-input{border-radius:12px!important;background:#F8FAFF!important}
-.form-input:focus{background:#fff!important;box-shadow:0 0 0 3px rgba(13,27,62,0.10)}
-.btn{border-radius:999px!important;transition:all 0.2s}
-.btn:hover{transform:translateY(-1px)}
-.btn-primary{box-shadow:0 8px 20px rgba(13,27,62,0.25)}
-.btn-gold{box-shadow:0 8px 20px rgba(201,168,76,0.28)}
-.plan-card{border-radius:18px!important;transition:all 0.25s}
-.plan-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(13,27,62,0.10)}
-.plan-badge,.popular-tag,.copy-btn{border-radius:999px!important}
-.pay-method{border-radius:14px!important}
-.review-section{border-radius:16px!important}
-.payment-box{border-radius:16px!important}
-.toast{border-radius:14px!important;box-shadow:0 16px 40px rgba(4,10,30,0.30)}
-.prog-step{box-shadow:0 4px 12px rgba(13,27,62,0.12)}
-.lbl{font-size:0.65rem;font-weight:600;color:var(--gray);text-align:center;flex:1;padding-top:6px}.lbl.active{color:var(--navy);font-weight:700}.lbl.done{color:var(--navy)}
-</style>
-  <script src="aria-engine.js"></script>
-  <script src="aria-widget.js"></script>
-
-<!-- Mobile More Menu Backdrop -->
-<div class="mobile-more-menu-backdrop" id="mmmBackdrop" onclick="closeMobileMenu()"></div>
-<!-- Mobile More Menu Sheet -->
-<div class="mobile-more-menu" id="mobileMoreMenu">
-  <div class="mmm-handle"></div>
-  <div class="mmm-grid">
-    <a href="accounting.html" class="mmm-item"><i class="ti ti-cash"></i><span data-i18n="Accounting">Accounting</span></a>
-    <a href="debts.html" class="mmm-item"><i class="ti ti-credit-card"></i><span data-i18n="Debts">Debts</span></a>
-    <a href="invoice.html" class="mmm-item"><i class="ti ti-file-invoice"></i><span data-i18n="Invoice">Invoice</span></a>
-    <a href="reports.html" class="mmm-item"><i class="ti ti-chart-bar"></i><span data-i18n="Reports">Reports</span></a>
-    <a href="vybe.html" class="mmm-item"><i class="ti ti-bolt"></i><span>Social Vybe</span></a>
-    <a href="flash-deals.html" class="mmm-item"><i class="ti ti-flame"></i><span data-i18n="Flash Deals">Flash Deals</span></a>
-    <a href="group-buy.html" class="mmm-item"><i class="ti ti-users-group"></i><span data-i18n="Group Buying">Group Buy</span></a>
-    <a href="ai-tools.html" class="mmm-item"><i class="ti ti-robot"></i><span data-i18n="AI Tools">AI Tools</span></a>
-    <a href="ai-marketing.html" class="mmm-item"><i class="ti ti-speakerphone"></i><span data-i18n="AI Marketing">AI Marketing</span></a>
-    <a href="ai-finance.html" class="mmm-item"><i class="ti ti-chart-arrows"></i><span data-i18n="AI Finance">AI Finance</span></a>
-    <a href="marketing.html" class="mmm-item"><i class="ti ti-ad"></i><span data-i18n="Marketing">Marketing</span></a>
-    <a href="subscription.html" class="mmm-item"><i class="ti ti-crown"></i><span data-i18n="Subscription">Subscription</span></a>
-  </div>
-</div>
-
-<script>
-function openMobileMenu() {
-  document.getElementById('mobileMoreMenu').classList.add('open');
-  document.getElementById('mmmBackdrop').classList.add('open');
-}
-function closeMobileMenu() {
-  document.getElementById('mobileMoreMenu').classList.remove('open');
-  document.getElementById('mmmBackdrop').classList.remove('open');
+  setTimeout(()=>t.remove(),3200)
 }
 </script>
 </body>

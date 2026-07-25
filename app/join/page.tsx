@@ -120,40 +120,11 @@ export default function JoinPage() {
                 </div>
               </div>
               <Link href="/open-store-b2b" style={{ display: 'block', textAlign: 'center', background: '#C9A84C', color: '#0D1B3E', fontWeight: 800, padding: '0.875rem', borderRadius: 12, textDecoration: 'none', fontSize: '0.9rem' }}>
-                Fungua Duka la Biashara 
+                Open a Business Shop
               </Link>
             </div>
 
-            {/* Campus Market */}
-            <div style={{ background: 'rgba(59,130,246,0.08)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(59,130,246,0.25)' }}>
-              <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: '#93C5FD', marginBottom: 12 }}> CAMPUS MARKET</div>
-              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>{t('join.campusTitle2')}</h3>
-              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wanafunzi wa vyuo duniani kote. Uza bidhaa kwa wanafunzi wenzako. Salama, rahisi na ya bei nafuu.</p>
 
-              <div style={{ background: 'rgba(59,130,246,0.12)', borderRadius: 12, padding: '1.25rem', border: '1px solid rgba(59,130,246,0.2)', marginBottom: '1.5rem' }}>
-                <div style={{ fontWeight: 800, color: '#93C5FD', marginBottom: 8 }}>{t('join.campusPlanLabel')}</div>
-                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#93C5FD', marginBottom: 8 }}>TZS 10,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.4)' }}>/mwezi</span></div>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  {['Duka lako kwenye chuo chako', 'Bidhaa bila kikomo', 'Maagizo kwa WhatsApp', 'AI tools za biashara', 'Social Vybe posts'].map(f => (
-                    <li key={f} style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', gap: 6 }}>
-                      <span style={{ color: '#86EFAC' }}></span> {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '0.75rem 1rem', marginBottom: '1.5rem' }}>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>Vyuo vinavyohusika:</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {['ARU', 'UDSM', 'UDOM', 'TIA', 'NIT'].map(u => (
-                    <span key={u} style={{ fontSize: '0.7rem', fontWeight: 700, background: 'rgba(59,130,246,0.2)', color: '#93C5FD', padding: '2px 8px', borderRadius: 999 }}>{u}</span>
-                  ))}
-                </div>
-              </div>
-              <Link href="/campus-apply" style={{ display: 'block', textAlign: 'center', background: '#3B82F6', color: '#fff', fontWeight: 800, padding: '0.875rem', borderRadius: 12, textDecoration: 'none', fontSize: '0.9rem' }}>
-                Omba Duka la Campus 
-              </Link>
-            </div>
           </div>
         </div>
       </section>

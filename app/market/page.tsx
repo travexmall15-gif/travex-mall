@@ -72,7 +72,7 @@ type MarketShop = {
   created_at: string
 }
 
-type ShopProduct = { name: string; price: number }
+type ShopProduct = { name: string; price: number; image?: string }
 
 const PAGE_SIZE = 20
 
@@ -515,8 +515,11 @@ function ShopCard({ shop }: { shop: MarketShop }) {
             <div key={i} style={{ flex: 1, background: '#F8FAFF', border: '1.5px solid #E8EDF4', borderRadius: 11, overflow: 'hidden', transition: 'border-color .15s, transform .15s' }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = accentColor; (e.currentTarget as HTMLElement).style.transform = 'scale(1.04)' }}
               onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = '#E8EDF4'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}>
-              <div style={{ height: 56, background: `linear-gradient(135deg,${accentColor}14,${accentColor}30)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Store size={22} color={accentColor} strokeWidth={1.5} />
+              <div style={{ height: 56, background: p.image ? 'transparent' : `linear-gradient(135deg,${accentColor}14,${accentColor}30)`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                {p.image
+                  ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                  : <Store size={22} color={accentColor} strokeWidth={1.5} />
+                }
               </div>
               <div style={{ padding: '4px 5px 5px' }}>
                 <div style={{ fontSize: 8, fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.3 }}>{p.name}</div>
