@@ -4,6 +4,7 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { SiteNav } from '@/components/site-nav'
+import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, Send, Store, Loader2 } from 'lucide-react'
 
@@ -33,8 +34,9 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
 
   useEffect(() => {
     sb.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session?.user) { router.replace('/auth'); return }
-      setUserId(session.user.id)
+      // Don't redirect — let custom auth users see the chat
+      const uid = session?.user?.id || null
+      setUserId(uid)
 
       // Load conversation info
       const { data: convo } = await sb
@@ -76,7 +78,8 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   }, [id, router])
 
   const send = async () => {
-    if (!text.trim() || !userId || sending) return
+    if (!text.trim() || sending) return
+    // Allow sending even without Supabase auth (custom auth users)
     const content = text.trim()
     setText('')
     setSending(true)
@@ -85,7 +88,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
     const temp: Message = {
       id: 'temp-' + Date.now(),
       conversation_id: id,
-      sender_id: userId,
+      sender_id: userId || 'anon',
       content,
       created_at: new Date().toISOString(),
     }
@@ -93,7 +96,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
 
     await sb.from('messages').insert({
       conversation_id: id,
-      sender_id: userId,
+      sender_id: userId || 'anon',
       content,
     })
     await sb.from('conversations').update({
@@ -123,7 +126,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         </div>
         <div>
           <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0D1B3E' }}>{storeName}</div>
-          <div style={{ fontSize: '0.65rem', color: '#22C55E', fontWeight: 600 }}>● Online</div>
+          <div style={{ fontSize: '0.65rem', color: '#22C55E', fontWeight: 600 }}>● {t('messages.online')}</div>
         </div>
       </div>
 
@@ -138,7 +141,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
 
         {!loading && messages.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0', color: '#94A3B8', fontSize: '0.85rem' }}>
-            Start the conversation! 👋
+            {t('messages.noConversations') || 'Start the conversation! 👋'}
           </div>
         )}
 
