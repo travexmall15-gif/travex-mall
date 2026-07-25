@@ -11,9 +11,38 @@ import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS, formatTZS
 import { Search, Store, Loader2 } from 'lucide-react'
 
 // ── Region + Category data (proper nouns stay the same in both languages) ──
+// All 31 Tanzania regions (mainland + Zanzibar islands)
 const TANZANIAN_REGIONS = [
-  'Dar es Salaam', 'Mwanza', 'Arusha', 'Dodoma', 'Mbeya',
-  'Morogoro', 'Tanga', 'Zanzibar', 'Kigoma', 'Tabora',
+  // Mainland
+  'Arusha','Dar es Salaam','Dodoma','Geita','Iringa','Kagera',
+  'Katavi','Kigoma','Kilimanjaro','Lindi','Manyara','Mara',
+  'Mbeya','Morogoro','Mtwara','Mwanza','Njombe','Pwani',
+  'Rukwa','Ruvuma','Shinyanga','Simiyu','Singida','Songwe',
+  'Tabora','Tanga',
+  // Zanzibar — Unguja
+  'Kaskazini Unguja','Kusini Unguja','Mjini Magharibi (Unguja)',
+  // Zanzibar — Pemba
+  'Kaskazini Pemba','Kusini Pemba',
+]
+
+// Districts by major region
+const TANZANIAN_DISTRICTS: Record<string, string[]> = {
+  'Dar es Salaam': ['Ilala','Kinondoni','Temeke','Ubungo','Kigamboni'],
+  'Dodoma':    ['Dodoma Manispaa','Bahi','Chamwino','Chilonwa','Kondoa','Kongwa','Mpwapwa'],
+  'Arusha':    ['Arusha Manispaa','Arumeru','Karatu','Longido','Meru','Monduli','Ngorongoro'],
+  'Mwanza':    ['Ilemela','Nyamagana','Buchosa','Kwimba','Magu','Misungwi','Sengerema','Ukerewe'],
+  'Tanga':     ['Tanga Manispaa','Handeni','Kilindi','Korogwe','Lushoto','Mkinga','Muheza','Pangani','Siha'],
+  'Kilimanjaro':['Moshi Manispaa','Hai','Moshi Vijijini','Mwanga','Rombo','Same','Siha'],
+  'Mbeya':     ['Mbeya Manispaa','Chunya','Kyela','Mbarali','Mbeya Vijijini','Mbozi','Momba','Rungwe'],
+  'Morogoro':  ['Morogoro Manispaa','Gairo','Kilombero','Kilosa','Malinyi','Mvomero','Ulanga'],
+  'Kagera':    ['Bukoba Manispaa','Biharamulo','Bukoba Vijijini','Karagwe','Kyerwa','Misenyi','Muleba','Ngara'],
+  'Mtwara':    ['Mtwara Manispaa','Masasi','Nanyumbu','Newala','Tandahimba'],
+}
+
+const SHOP_CATEGORIES_EXTENDED = [
+  'Fashion & Clothing','Electronics','Furniture','Electrical','Food & Groceries',
+  'Beauty & Health','Agriculture','Services','Home & Living','Sports & Fitness',
+  'Books & Stationery','Technology','Automotive','Arts & Crafts','Education','Other',
 ]
 
 const SHOP_CATEGORIES = [
@@ -48,8 +77,13 @@ export default function MarketPage() {
   const [shops, setShops]         = useState<MarketShop[]>([])
   const [loading, setLoading]     = useState(true)
   const [search, setSearch]       = useState('')
-  const [category, setCategory]   = useState('')   // '' = All
-  const [region, setRegion]       = useState('')    // '' = All
+  const [category,       setCategory]       = useState('')
+  const [region,         setRegion]         = useState('')
+  const [district,       setDistrict]       = useState('')
+  const [showRegionDrop, setShowRegionDrop] = useState(false)
+  const [showDistrictDrop, setShowDistrictDrop] = useState(false)
+  const [showCatDrop,    setShowCatDrop]    = useState(false)
+  const [regionSearch,   setRegionSearch]   = useState('')
   const [categories, setCategories] = useState<string[]>([])
   const [totalApproved, setTotalApproved] = useState(0)
 
@@ -72,16 +106,16 @@ export default function MarketPage() {
             .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,plan,status,created_at')
             .eq('status', 'approved')
           if (fallback && !fallbackErr) {
-            setShops(fallback)
+            setShops(fallback as MarketShop[])
             setTotalApproved(fallback.length)
           }
         } else if (data) {
-          setShops(data)
+          setShops(data as MarketShop[])
           setTotalApproved(data.length)
           const dbCats = [...new Set(
-            data.map((s: MarketShop) => s.shop_category).filter(Boolean)
+            (data as MarketShop[]).map((s: MarketShop) => s.shop_category).filter(Boolean)
           )] as string[]
-          const allCats = [...new Set([...SHOP_CATEGORIES, ...dbCats])]
+          const allCats = [...new Set([...SHOP_CATEGORIES_EXTENDED, ...dbCats])]
           setCategories(allCats)
         }
       } catch (e) {
@@ -106,6 +140,7 @@ export default function MarketPage() {
       (s.owner_name || '').toLowerCase().includes(q)
     const matchCat    = !category || s.shop_category === category
     const matchRegion = !region   || s.shop_region   === region
+    const matchDist   = !district || (s.shop_region === region && s.shop_name?.toLowerCase().includes(district.toLowerCase())) || !district
     return matchSearch && matchCat && matchRegion
   })
 
@@ -240,55 +275,129 @@ export default function MarketPage() {
           />
         </div>
 
-        {/* Filters */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.25rem' }}>
+        {/* ── NEW FILTER SYSTEM: horizontal chips + dropdown cards ── */}
+        <div style={{ display:'flex', flexDirection:'column', gap:'10px', marginBottom:'1.25rem' }}>
+          <style>{`
+            .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:999px;border:1.5px solid #E2E8F0;background:#fff;color:#475569;font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'Inter',sans-serif}
+            .mk-chip.active{background:#0D1B3E;border-color:#0D1B3E;color:#fff}
+            .mk-chip:hover:not(.active){background:#F8FAFF;border-color:#CBD5E1}
+            .mk-cat-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;border:1.5px solid #E2E8F0;background:#fff;color:#475569;font-size:0.75rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'Inter',sans-serif}
+            .mk-cat-chip.active{background:#C9A84C;border-color:#C9A84C;color:#0F172A;font-weight:800}
+            .mk-cat-chip:hover:not(.active){background:#FFFBEB;border-color:#F59E0B}
+            .mk-drop-card{position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1.5px solid #E2E8F0;border-radius:18px;box-shadow:0 12px 40px rgba(13,27,62,0.14);z-index:500;padding:12px;min-width:220px}
+          `}</style>
 
-          {/* Region filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>
-              {t('market.region')}
-            </span>
-            {/* All regions button */}
+          {/* ROW 1: All | Regions | Districts — horizontal */}
+          <div style={{ display:'flex', gap:'8px', overflowX:'auto', scrollbarWidth:'none' as const, paddingBottom:'2px', alignItems:'center' }}>
+
+            {/* ALL button */}
             <button
-              onClick={() => setRegion('')}
-              style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: region === '' ? '#0D1B3E' : '#E2E8F0', background: region === '' ? '#0D1B3E' : '#fff', color: region === '' ? '#fff' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s', fontFamily: "'Inter',sans-serif" }}
-            >
-              {t('market.allRegions')}
+              className={`mk-chip${!region && !district ? ' active' : ''}`}
+              onClick={() => { setRegion(''); setDistrict(''); setShowRegionDrop(false); setShowDistrictDrop(false) }}>
+              {t('market.allRegions') || 'All'}
             </button>
-            {regions.map(r => (
+
+            {/* REGIONS button + dropdown */}
+            <div style={{ position:'relative', flexShrink:0 }}>
               <button
-                key={r}
-                onClick={() => setRegion(r === region ? '' : r)}
-                style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: region === r ? '#0D1B3E' : '#E2E8F0', background: region === r ? '#0D1B3E' : '#fff', color: region === r ? '#fff' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s', fontFamily: "'Inter',sans-serif" }}
-              >
-                {r}
+                className={`mk-chip${region && !district ? ' active' : ''}`}
+                onClick={() => { setShowRegionDrop(v=>!v); setShowDistrictDrop(false); setShowCatDrop(false) }}>
+                📍 {region || 'Regions'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
               </button>
-            ))}
+              {showRegionDrop && (
+                <div className="mk-drop-card" style={{ maxHeight:320, overflow:'hidden', display:'flex', flexDirection:'column' }}>
+                  {/* Region search mini-input */}
+                  <input
+                    value={regionSearch}
+                    onChange={e => setRegionSearch(e.target.value)}
+                    placeholder="Search region..."
+                    style={{ width:'100%', padding:'7px 12px', border:'1.5px solid #E2E8F0', borderRadius:10, fontSize:'0.8rem', fontFamily:"'Inter',sans-serif", outline:'none', marginBottom:6, boxSizing:'border-box' as const }}
+                    autoFocus
+                  />
+                  {/* Clear */}
+                  {region && (
+                    <button onClick={() => { setRegion(''); setRegionSearch('') }}
+                      style={{ textAlign:'left', padding:'6px 8px', border:'none', background:'#F1F5F9', borderRadius:8, fontSize:'0.75rem', color:'#64748B', cursor:'pointer', fontFamily:"'Inter',sans-serif", marginBottom:4 }}>
+                      ✕ Clear region
+                    </button>
+                  )}
+                  {/* Scrollable region list */}
+                  <div style={{ overflowY:'auto', maxHeight:230, display:'flex', flexDirection:'column', gap:2 }}>
+                    {TANZANIAN_REGIONS
+                      .filter(r => !regionSearch || r.toLowerCase().includes(regionSearch.toLowerCase()))
+                      .map(r => (
+                        <button key={r}
+                          onClick={() => { setRegion(r); setDistrict(''); setShowRegionDrop(false); setRegionSearch('') }}
+                          style={{ textAlign:'left', padding:'8px 10px', border:'none', borderRadius:10, background: region===r ? '#0D1B3E' : 'transparent', color: region===r ? '#fff' : '#0F172A', fontSize:'0.82rem', fontWeight: region===r ? 700 : 500, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .12s' }}
+                          onMouseOver={e => { if(region!==r)(e.currentTarget as HTMLElement).style.background='#F8FAFF' }}
+                          onMouseOut={e  => { if(region!==r)(e.currentTarget as HTMLElement).style.background='transparent' }}>
+                          {r}
+                        </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* DISTRICT button + dropdown */}
+            <div style={{ position:'relative', flexShrink:0 }}>
+              <button
+                className={`mk-chip${district ? ' active' : ''}`}
+                onClick={() => { setShowDistrictDrop(v=>!v); setShowRegionDrop(false); setShowCatDrop(false) }}>
+                🗺 {district || 'Wilaya'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
+              </button>
+              {showDistrictDrop && (
+                <div className="mk-drop-card" style={{ maxHeight:320, overflow:'hidden', display:'flex', flexDirection:'column' }}>
+                  {/* Show districts for selected region, or major cities */}
+                  {district && (
+                    <button onClick={() => { setDistrict(''); setShowDistrictDrop(false) }}
+                      style={{ textAlign:'left', padding:'6px 8px', border:'none', background:'#F1F5F9', borderRadius:8, fontSize:'0.75rem', color:'#64748B', cursor:'pointer', fontFamily:"'Inter',sans-serif", marginBottom:6 }}>
+                      ✕ Clear wilaya
+                    </button>
+                  )}
+                  <div style={{ overflowY:'auto', maxHeight:260, display:'flex', flexDirection:'column', gap:2 }}>
+                    {(region && TANZANIAN_DISTRICTS[region]
+                      ? TANZANIAN_DISTRICTS[region]
+                      : [
+                        // Major districts shown when no region selected
+                        ...TANZANIAN_DISTRICTS['Dar es Salaam'],
+                        ...TANZANIAN_DISTRICTS['Dodoma'],
+                        ...TANZANIAN_DISTRICTS['Arusha'],
+                      ]
+                    ).map(d => (
+                      <button key={d}
+                        onClick={() => { setDistrict(d); if(!region) setRegion(Object.entries(TANZANIAN_DISTRICTS).find(([,ds])=>ds.includes(d))?.[0]||''); setShowDistrictDrop(false) }}
+                        style={{ textAlign:'left', padding:'8px 10px', border:'none', borderRadius:10, background: district===d ? '#0D1B3E' : 'transparent', color: district===d ? '#fff' : '#0F172A', fontSize:'0.82rem', fontWeight: district===d ? 700 : 500, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .12s' }}
+                        onMouseOver={e => { if(district!==d)(e.currentTarget as HTMLElement).style.background='#F8FAFF' }}
+                        onMouseOut={e  => { if(district!==d)(e.currentTarget as HTMLElement).style.background='transparent' }}>
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Category filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' as const, paddingBottom: '2px' }}>
-            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', whiteSpace: 'nowrap' as const, flexShrink: 0, minWidth: '52px' }}>
-              {t('market.category')}
-            </span>
-            {/* All categories button */}
-            <button
-              onClick={() => setCategory('')}
-              style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === '' ? '#C9A84C' : '#E2E8F0', background: category === '' ? '#C9A84C' : '#fff', color: category === '' ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s', fontFamily: "'Inter',sans-serif" }}
-            >
-              {t('market.allCategories')}
+          {/* ROW 2: Category chips — horizontal scrollable */}
+          <div style={{ display:'flex', gap:'6px', overflowX:'auto', scrollbarWidth:'none' as const, paddingBottom:'2px', alignItems:'center' }}>
+            <button className={`mk-cat-chip${!category ? ' active' : ''}`} onClick={() => setCategory('')}>
+              All
             </button>
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat === category ? '' : cat)}
-                style={{ padding: '5px 14px', borderRadius: '8px', border: '1.5px solid', borderColor: category === cat ? '#C9A84C' : '#E2E8F0', background: category === cat ? '#C9A84C' : '#fff', color: category === cat ? '#0F172A' : '#475569', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0, transition: 'all 0.15s', fontFamily: "'Inter',sans-serif" }}
-              >
+            {SHOP_CATEGORIES_EXTENDED.map(cat => (
+              <button key={cat} className={`mk-cat-chip${category===cat ? ' active' : ''}`}
+                onClick={() => setCategory(cat === category ? '' : cat)}>
                 {cat}
               </button>
             ))}
           </div>
         </div>
+
+        {/* Close dropdowns on outside click */}
+        {(showRegionDrop || showDistrictDrop || showCatDrop) && (
+          <div style={{ position:'fixed', inset:0, zIndex:499 }}
+            onClick={() => { setShowRegionDrop(false); setShowDistrictDrop(false); setShowCatDrop(false) }} />
+        )}
 
         {/* Results count */}
         <div style={{ fontSize: '0.76rem', color: '#94A3B8', fontWeight: 500, marginBottom: '1.25rem' }}>
