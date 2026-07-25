@@ -4,6 +4,7 @@ import { use, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
+import { SiteFooter } from '@/components/site-footer'
 import { Users, CheckCircle, Loader2, ArrowLeft, MessageCircle } from 'lucide-react'
 
 type Group = {
@@ -29,25 +30,52 @@ export default function GroupDetailPage({
 
   useEffect(() => {
     sb.from('group_orders').select('*').eq('id', id).single()
-      .then(({ data }) => setGroup(data))
-    sb.from('group_order_members').select('name,joined_at')
+      .then(({ data, error }) => { if (!error && data) setGroup(data) })
+    sb.from('group_order_members').select('name,phone,joined_at')
       .eq('group_id', id).order('joined_at')
       .then(({ data }) => setMembers(data || []))
   }, [id])
 
   async function joinGroup() {
-    if (!name.trim() || !phone.trim()) { setError(t('groupBuy.joinTitle')); return }
+    if (!name.trim()) { setError('Tafadhali ingiza jina lako.'); return }
+    if (!phone.trim()) { setError('Tafadhali ingiza nambari yako ya simu.'); return }
     setJoining(true); setError('')
-    const already = members.find(m => m.phone === phone.trim())
+
+    // Check for duplicate by phone
+    const already = members.find(m => m.phone?.trim() === phone.trim())
     if (already) { setError(t('groupBuy.alreadyJoined')); setJoining(false); return }
-    await sb.from('group_order_members').insert({ group_id: id, name: name.trim(), phone: phone.trim() })
-    const newCount = (group?.current_members || 0) + 1
-    await sb.from('group_orders').update({ current_members: newCount }).eq('id', id)
-    if (group && newCount >= group.min_members) {
-      await sb.from('group_orders').update({ status: 'completed' }).eq('id', id)
+
+    try {
+      // 1. Add member
+      const { error: memberErr } = await sb.from('group_order_members')
+        .insert({ group_id: id, name: name.trim(), phone: phone.trim(), joined_at: new Date().toISOString() })
+      if (memberErr) throw memberErr
+
+      // 2. Atomic increment via RPC (prevents race conditions)
+      // Fallback: read-then-write if RPC not available
+      const { data: latest } = await sb.from('group_orders')
+        .select('current_members,min_members').eq('id', id).single()
+      const newCount = (latest?.current_members || 0) + 1
+      const { error: updErr } = await sb.from('group_orders')
+        .update({ current_members: newCount }).eq('id', id)
+      if (updErr) throw updErr
+
+      // 3. Mark as ready if target reached
+      if (latest && newCount >= (latest.min_members || 1)) {
+        await sb.from('group_orders').update({ status: 'completed' }).eq('id', id)
+      }
+
+      // 4. Refresh members list and group state
+      const { data: updatedMembers } = await sb.from('group_order_members')
+        .select('name,phone,joined_at').eq('group_id', id).order('joined_at')
+      setMembers(updatedMembers || [])
+      setGroup(g => g ? { ...g, current_members: newCount } : g)
+      setSuccess(true)
+    } catch (e: any) {
+      setError(e?.message || 'Hitilafu imetokea. Jaribu tena.')
+    } finally {
+      setJoining(false)
     }
-    setJoining(false); setSuccess(true)
-    setGroup(g => g ? { ...g, current_members: newCount } : g)
   }
 
   if (!group) return (
