@@ -43,9 +43,32 @@
 <div class="modal-bg" id="postModal" onclick="if(event.target===this)closeModal('postModal')">
   <div class="modal">
     <div class="modal-header"><div class="modal-title"> New Vybe Post</div><button class="modal-close" onclick="closeModal('postModal')"></button></div>
-    <div class="modal-body">
+    <div class="modal-body" style="max-height:70vh;overflow-y:auto">
       <div class="form-group"><label class="form-label">Post Content *</label>
-        <textarea class="form-textarea" id="pContent" placeholder="Tell your customers about a product, offer or update..." style="min-height:100px"></textarea>
+        <textarea class="form-textarea" id="pContent" placeholder="Tell your customers about a product, offer or update..." style="min-height:90px"></textarea>
+      </div>      <!-- Image / Video URL -->
+      <div class="form-group">
+        <label class="form-label"><i class="ti ti-photo"></i> Image / Video URL <span style="color:var(--muted);font-weight:400;font-size:11px">(optional)</span></label>
+        <div style="display:flex;gap:8px;align-items:stretch">
+          <input class="form-input" id="pMedia" type="url" placeholder="https://... paste image or video link" style="flex:1;margin:0" />
+          <label for="pMediaFile" style="display:flex;align-items:center;gap:5px;padding:0 14px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:12px;font-weight:600;color:var(--navy);white-space:nowrap">
+            <i class="ti ti-upload"></i> Upload
+          </label>
+          <input type="file" id="pMediaFile" accept="image/*,video/*" style="display:none" onchange="handleMediaUpload(this)" />
+        </div>
+        <div id="pMediaPreview" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden;max-height:180px;border:1.5px solid var(--border)">
+          <img id="pMediaPreviewImg" style="width:100%;max-height:180px;object-fit:cover;display:none" />
+          <video id="pMediaPreviewVid" style="width:100%;max-height:180px;display:none" controls muted></video>
+        </div>
+      </div>
+      <!-- Media type selector -->
+      <div class="form-group">
+        <label class="form-label">Media Type</label>
+        <select class="form-select" id="pMediaType">
+          <option value="image">🖼️ Image</option>
+          <option value="video">🎬 Video / Reel</option>
+          <option value="">Text only</option>
+        </select>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Category Tag</label>
@@ -67,7 +90,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('postModal')" data-i18n="Cancel">Cancel</button>
-      <button class="btn btn-gold" onclick="submitPost()"><i class="ti ti-send"></i> Post to Vybe</button>
+      <button class="btn btn-gold" id="postBtn" onclick="submitPost()"><i class="ti ti-send"></i> Post to Vybe</button>
     </div>
   </div>
 </div>
@@ -91,11 +114,18 @@ let posts = [], shopData = null;
 
 (async () => {
   const session = Auth.requireAuth();
-    document.getElementById(\'loadingOverlay\').style.display = \'none\';
+    document.getElementById('loadingOverlay').style.display = 'none';
   if (!session) return;
   shopData = await Shop.get(session.user.email);
   await loadSidebar('vybe', shopData);
-  posts = await DB.vybe.getPosts(shopData?.id);
+  // If shopData is null (RLS blocks pending_payments), load all recent posts
+  if (shopData?.id) {
+    posts = await DB.vybe.getPosts(shopData.id);
+  } else {
+    // Fallback: load all posts
+    const { data } = await sb.from('feed_posts').select('*').order('created_at',{ascending:false}).limit(50);
+    posts = data || [];
+  }
   renderPosts();
   showLoading(false);
 })();
@@ -111,13 +141,14 @@ function renderPosts() {
   document.getElementById('vLikes').textContent = total_likes;
   document.getElementById('vMonth').textContent = month_posts.length;
 
-  const el = document.getElementById('postsContainer');
+    const el = document.getElementById('postsContainer');
   if (!posts.length) {
     el.innerHTML = `<div class="empty-state"><i class="ti ti-bolt"></i><h4>No posts yet</h4><p>Post your first product or update to reach customers.</p><button class="btn btn-gold" onclick="openModal('postModal')"><i class="ti ti-plus"></i> Create Post</button></div>`;
     return;
   }
   el.innerHTML = posts.map(p=>`
     <div class="post-card">
+      ${p.media_url ? `<div style="margin:-18px -18px 12px;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;max-height:220px">${p.media_type==='video'?`<video src="${p.media_url}" style="width:100%;max-height:220px;object-fit:cover" controls muted playsinline></video>`:`<img src="${p.media_url}" style="width:100%;max-height:220px;object-fit:cover" loading="lazy" onerror="this.style.display='none'" />`}</div>` : ''}
       <div class="post-header">
         <div class="post-avatar">${initials}</div>
         <div>
@@ -138,9 +169,57 @@ function renderPosts() {
     </div>`).join('');
 }
 
+// Handle file upload → convert to base64 data URL for preview
+function handleMediaUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const url = e.target.result;
+    document.getElementById('pMedia').value = ''; // can't upload, use URL
+    // Show preview
+    const isVideo = file.type.startsWith('video/');
+    document.getElementById('pMediaPreview').style.display = 'block';
+    document.getElementById('pMediaPreviewImg').style.display = isVideo ? 'none' : 'block';
+    document.getElementById('pMediaPreviewVid').style.display = isVideo ? 'block' : 'none';
+    if (isVideo) { document.getElementById('pMediaPreviewVid').src = url; }
+    else { document.getElementById('pMediaPreviewImg').src = url; }
+    document.getElementById('pMediaType').value = isVideo ? 'video' : 'image';
+    // Store as base64 temporarily (small images only — ideally upload to storage)
+    document.getElementById('pMedia').dataset.base64 = url;
+    showToast('Preview ready. Note: paste a public URL for best results.','info');
+  };
+  reader.readAsDataURL(file);
+}
+
+// Watch URL input for preview
+document.addEventListener('DOMContentLoaded', () => {
+  const mediaInput = document.getElementById('pMedia');
+  if (mediaInput) {
+    mediaInput.addEventListener('input', function() {
+      const url = this.value.trim();
+      if (!url) { document.getElementById('pMediaPreview').style.display='none'; return; }
+      const isVideo = url.match(/\.(mp4|webm|ogg|mov)$/i);
+      document.getElementById('pMediaPreview').style.display = 'block';
+      document.getElementById('pMediaPreviewImg').style.display = isVideo ? 'none' : 'block';
+      document.getElementById('pMediaPreviewVid').style.display = isVideo ? 'block' : 'none';
+      if (isVideo) { document.getElementById('pMediaPreviewVid').src = url; }
+      else { document.getElementById('pMediaPreviewImg').src = url; }
+    });
+  }
+});
+
 async function submitPost() {
   const content = document.getElementById('pContent').value.trim();
   if (!content) { showToast('Write something first!','error'); return; }
+  if (!shopData?.id) { showToast('Session error. Please refresh the page.','error'); return; }
+  const btn = document.getElementById('postBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Posting...'; }
+
+  const mediaEl   = document.getElementById('pMedia');
+  const mediaUrl  = mediaEl?.value.trim() || mediaEl?.dataset.base64 || null;
+  const mediaType = document.getElementById('pMediaType')?.value || (mediaUrl ? 'image' : null);
+
   const item = {
     store_id: shopData?.id,
     shop_name: shopData?.shop_name || shopData?.store_name,
@@ -148,19 +227,25 @@ async function submitPost() {
     tag: document.getElementById('pTag').value,
     category: document.getElementById('pTag').value,
     price: Number(document.getElementById('pPrice').value)||null,
+    media_url: mediaUrl,
+    media_type: mediaType,
     likes: 0, likes_count: 0, comments: 0,
     university_abbr: shopData?.university_abbr || shopData?.shop_region || null,
   };
   const { error } = await DB.vybe.post(item);
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-send"></i> Post to Vybe'; }
   if (error) { showToast('Error: '+error.message,'error'); return; }
-  showToast(' Posted to Vybe!','success');
+  showToast('Posted to Vybe!','success');
   closeModal('postModal');
+  // Reset form
   document.getElementById('pContent').value='';
+  if (mediaEl) { mediaEl.value=''; delete mediaEl.dataset.base64; }
+  document.getElementById('pMediaPreview').style.display='none';
   posts = await DB.vybe.getPosts(shopData?.id);
   renderPosts();
 }
 
-async async function deletePost(id) {
+async function deletePost(id) {
   if (!confirm('Delete this post?')) return;
   await DB.vybe.delete(id);
   posts = posts.filter(p=>p.id!==id);

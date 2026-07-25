@@ -201,8 +201,23 @@ function showToast(msg, type='default') {
 }
 
 //  MODAL 
-function openModal(id)  { const m=document.getElementById(id); if(m) m.classList.add('show'); }
-function closeModal(id) { const m=document.getElementById(id); if(m) m.classList.remove('show'); }
+function openModal(id) {
+  const m = document.getElementById(id);
+  if (!m) return;
+  // Support both .modal-bg (class-based) and .modal-overlay (style-based)
+  if (m.classList.contains('modal-overlay') || m.style.display !== undefined) {
+    m.style.display = 'flex';
+  }
+  m.classList.add('show');
+}
+function closeModal(id) {
+  const m = document.getElementById(id);
+  if (!m) return;
+  m.classList.remove('show');
+  if (m.classList.contains('modal-overlay')) {
+    m.style.display = 'none';
+  }
+}
 
 //  SIDEBAR 
 async function loadSidebar(activePage, shopData) {
