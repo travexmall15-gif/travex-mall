@@ -1,14 +1,14 @@
 'use client'
 import NextImage from "next/image"
 
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS, formatTZS } from '@/lib/data'
-import { Search, Store, Loader2, MapPin, Navigation, Heart, ExternalLink } from 'lucide-react'
+import { Search, Store, Loader2, MapPin, Navigation, Heart, ExternalLink, MessageCircle } from 'lucide-react'
 
 // ── Region + Category data (proper nouns stay the same in both languages) ──
 // All 31 Tanzania regions (mainland + Zanzibar islands)
@@ -64,11 +64,15 @@ type MarketShop = {
   shop_color: string | null
   shop_banner: string | null
   shop_logo: string | null
+  shop_font: string | null       // ← new: custom font for shop name
+  shop_products: string | null   // ← new: JSON array of {name,price}
   plan: 'premium' | 'basic'
   status: string
   slug: string | null
   created_at: string
 }
+
+type ShopProduct = { name: string; price: number }
 
 const PAGE_SIZE = 20
 
@@ -93,7 +97,7 @@ export default function MarketPage() {
       try {
         const { data, error } = await sb
           .from('pending_payments')
-          .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_banner,shop_logo,plan,status,created_at')
+          .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_banner,shop_logo,shop_font,shop_products,plan,status,created_at')
           .eq('status', 'approved')
           .order('plan', { ascending: false })
           .order('created_at', { ascending: false })
@@ -103,7 +107,7 @@ export default function MarketPage() {
           console.error('Market load error:', error.message)
           const { data: fallback, error: fallbackErr } = await sb
             .from('pending_payments')
-            .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,plan,status,created_at')
+            .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_font,shop_products,plan,status,created_at')
             .eq('status', 'approved')
           if (fallback && !fallbackErr) {
             setShops(fallback as MarketShop[])
@@ -456,14 +460,21 @@ export default function MarketPage() {
   )
 }
 
-// ── SHOP CARD ─────────────────────────────────────────────────
+// ── SHOP WINDOW CARD ─────────────────────────────────────
+// Shows products inside the card like a shop window display
+const SHOP_FONTS: Record<string, string> = {
+  'Inter':           "'Inter', sans-serif",
+  'Playfair Display':"'Playfair Display', Georgia, serif",
+  'Montserrat':      "'Montserrat', 'Inter', sans-serif",
+  'Dancing Script':  "'Dancing Script', cursive",
+  'Raleway':         "'Raleway', 'Inter', sans-serif",
+}
+
 function ShopCard({ shop }: { shop: MarketShop }) {
   const { t } = useTranslation()
-  const init       = (shop.shop_name || 'SH').split(' ').map((w: string) => w[0]).join('').substring(0,2).toUpperCase()
-  const isPremium  = shop.plan === 'premium'
-  const accentColor = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
-
   const [isSaved, setIsSaved] = useState(false)
+  const [hovered, setHovered] = useState(false)
+
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('sn_saved_shops') || '[]')
@@ -486,95 +497,128 @@ function ShopCard({ shop }: { shop: MarketShop }) {
     } catch {}
   }
 
+  const isPremium   = shop.plan === 'premium'
+  const accentColor = shop.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
+  const nameFont    = SHOP_FONTS[shop.shop_font || ''] || SHOP_FONTS['Inter']
+  const init        = (shop.shop_name || 'SH').split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()
+
+  // Parse products from JSON string
+  let products: ShopProduct[] = []
+  try { products = JSON.parse(shop.shop_products || '[]') } catch {}
+  const visibleProds = products.slice(0, 3)
+  const extraProds   = Math.max(products.length - 3, 0)
+
   return (
-    <div style={{
-      background:'#fff',
-      border: isPremium ? '1.5px solid rgba(201,168,76,0.30)' : '1.5px solid #E8EDF4',
-      borderRadius:20,
-      overflow:'hidden',
-      transition:'transform .22s, box-shadow .22s',
-      boxShadow: isPremium ? '0 2px 12px rgba(201,168,76,0.10)' : '0 2px 8px rgba(15,23,42,0.06)',
-    }}
-    onMouseOver={e => { const el=e.currentTarget as HTMLElement; el.style.transform='translateY(-4px)'; el.style.boxShadow='0 14px 36px rgba(15,23,42,0.12)' }}
-    onMouseOut={e  => { const el=e.currentTarget as HTMLElement; el.style.transform='translateY(0)';   el.style.boxShadow= isPremium ? '0 2px 12px rgba(201,168,76,0.10)' : '0 2px 8px rgba(15,23,42,0.06)' }}>
+    <div
+      onMouseOver={() => setHovered(true)}
+      onMouseOut={() => setHovered(false)}
+      style={{
+        background: '#fff',
+        borderRadius: 20,
+        overflow: 'hidden',
+        border: isPremium ? '2px solid rgba(201,168,76,0.30)' : '1.5px solid #E2E8F0',
+        boxShadow: hovered
+          ? '0 20px 50px rgba(13,27,62,0.16)'
+          : isPremium ? '0 4px 20px rgba(201,168,76,0.12)' : '0 2px 10px rgba(15,23,42,0.06)',
+        transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
+        transition: 'all 0.25s cubic-bezier(0.34,1.2,0.64,1)',
+        cursor: 'pointer',
+      }}>
 
-      {/* ── Banner ─────────────────────────────────────────── */}
-      <div style={{ height:88, position:'relative', overflow:'hidden' }}>
-        {shop.shop_banner
-          ? <img src={shop.shop_banner} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} loading="lazy" />
-          : <div style={{ width:'100%', height:'100%', background:`linear-gradient(135deg, ${accentColor}40 0%, ${accentColor}88 50%, #050B2E 100%)` }} />
-        }
-        {/* Gradient overlay */}
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.35) 100%)' }} />
-
-        {/* Plan badge */}
-        <div style={{ position:'absolute', top:8, left:8, background: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.92)', color: isPremium ? '#0F172A' : '#475569', fontSize:'0.55rem', fontWeight:800, padding:'3px 8px', borderRadius:999, letterSpacing:'0.06em', boxShadow:'0 2px 6px rgba(0,0,0,0.12)' }}>
-          {isPremium ? '⭐ ' + t('market.premiumBadge') : t('market.basicBadge')}
+      {/* ── Header — shop identity ─────────────────── */}
+      <div style={{ background: `linear-gradient(135deg,${accentColor}40 0%,${accentColor}80 50%,#050B2E 100%)`, padding: '13px 13px 10px', position: 'relative' }}>
+        {/* Badges */}
+        <div style={{ display: 'flex', gap: 5, marginBottom: 8 }}>
+          {isPremium && (
+            <span style={{ background: 'linear-gradient(135deg,#C9A84C,#E0B85A)', color: '#0F172A', fontSize: 9, fontWeight: 900, padding: '3px 10px', borderRadius: 999, letterSpacing: '0.06em' }}>
+              ★ PREMIUM
+            </span>
+          )}
         </div>
 
-        {/* Save heart button */}
-        <button onClick={toggleSave}
-          style={{ position:'absolute', top:6, right:8, width:28, height:28, borderRadius:'50%', background:'rgba(255,255,255,0.92)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 2px 6px rgba(0,0,0,0.15)', transition:'all .18s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.transform='scale(1.15)'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.transform='scale(1)'}>
-          <Heart size={14} color={isSaved ? '#EF4444' : '#94A3B8'} fill={isSaved ? '#EF4444' : 'none'} />
-        </button>
-
-        {/* Logo floating on banner bottom */}
-        <div style={{ position:'absolute', bottom:-16, left:12, width:36, height:36, borderRadius:10, border:'2px solid #fff', overflow:'hidden', background:`linear-gradient(135deg,${accentColor},#050B2E)`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 2px 8px rgba(0,0,0,0.18)' }}>
-          {shop.shop_logo
-            ? <img src={shop.shop_logo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} loading="lazy" />
-            : <span style={{ fontSize:'0.7rem', fontWeight:900, color:'#fff' }}>{init}</span>
-          }
+        {/* Logo + Name row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 0 }}>
+          <div style={{ width: 38, height: 38, borderRadius: 11, background: 'rgba(255,255,255,0.16)', border: '2px solid rgba(255,255,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 900, color: '#fff', flexShrink: 0, backdropFilter: 'blur(8px)' }}>
+            {shop.shop_logo ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 9 }} loading="lazy" /> : init}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: nameFont, fontWeight: 800, fontSize: 14, color: '#fff', letterSpacing: '-0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {shop.shop_name}
+            </div>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.50)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <MapPin size={8} /> {shop.shop_region}
+              {shop.shop_category && <> &middot; {shop.shop_category}</>}
+            </div>
+          </div>
+          {/* Save heart */}
+          <button onClick={toggleSave}
+            style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'transform .15s' }}
+            onMouseOver={e => (e.currentTarget as HTMLElement).style.transform = 'scale(1.18)'}
+            onMouseOut={e  => (e.currentTarget as HTMLElement).style.transform = 'scale(1)'}>
+            <Heart size={13} color={isSaved ? '#EF4444' : 'rgba(255,255,255,0.7)'} fill={isSaved ? '#EF4444' : 'none'} />
+          </button>
         </div>
       </div>
 
-      {/* ── Body ───────────────────────────────────────────── */}
-      <div style={{ padding:'24px 12px 12px' }}>
-
-        {/* Shop name */}
-        <div style={{ fontWeight:800, fontSize:'0.88rem', color:'#0F172A', lineHeight:1.2, marginBottom:4, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
-          {shop.shop_name}
+      {/* ── SHOP WINDOW — product display ──────────── */}
+      <div style={{ padding: '10px 12px 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <div style={{ flex: 1, height: 1, background: '#F1F5F9' }} />
+          <span style={{ fontSize: 8, fontWeight: 700, color: '#94A3B8', letterSpacing: '0.12em', textTransform: 'uppercase' as const }}>
+            Products
+          </span>
+          <div style={{ flex: 1, height: 1, background: '#F1F5F9' }} />
         </div>
 
-        {/* Region + Category row */}
-        <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap', marginBottom:6 }}>
-          {shop.shop_region && (
-            <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.62rem', color:'#64748B' }}>
-              <MapPin size={9} /> {shop.shop_region}
-            </span>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
+          {visibleProds.length > 0 ? visibleProds.map((p, i) => (
+            <div key={i} style={{ flex: 1, background: '#F8FAFF', border: '1.5px solid #E8EDF4', borderRadius: 11, overflow: 'hidden', transition: 'border-color .15s, transform .15s' }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = accentColor; (e.currentTarget as HTMLElement).style.transform = 'scale(1.04)' }}
+              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = '#E8EDF4'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}>
+              <div style={{ height: 56, background: `linear-gradient(135deg,${accentColor}14,${accentColor}30)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Store size={22} color={accentColor} strokeWidth={1.5} />
+              </div>
+              <div style={{ padding: '4px 5px 5px' }}>
+                <div style={{ fontSize: 8, fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.3 }}>{p.name}</div>
+                <div style={{ fontSize: 8, fontWeight: 800, color: isPremium ? '#A07830' : '#2563EB', marginTop: 2 }}>
+                  TZS {Number(p.price).toLocaleString('en-US')}
+                </div>
+              </div>
+            </div>
+          )) : (
+            // Placeholder tiles when no products registered
+            [1,2,3].map(i => (
+              <div key={i} style={{ flex: 1, height: 80, background: '#F8FAFF', border: '1.5px dashed #E2E8F0', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Store size={18} color="#CBD5E1" strokeWidth={1.2} />
+              </div>
+            ))
           )}
-          {shop.shop_category && (
-            <span style={{ fontSize:'0.6rem', background:`${accentColor}18`, color: isPremium ? '#92741a' : '#1E40AF', padding:'2px 8px', borderRadius:999, fontWeight:700 }}>
-              {shop.shop_category}
-            </span>
+
+          {extraProds > 0 && (
+            <div style={{ flex: 1, background: `${accentColor}12`, border: `1.5px dashed ${accentColor}50`, borderRadius: 11, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: accentColor }}>+{extraProds}</div>
+              <div style={{ fontSize: 7, color: accentColor, fontWeight: 700, opacity: 0.7 }}>more</div>
+            </div>
           )}
         </div>
+      </div>
 
-        {/* Description */}
-        {shop.shop_desc && (
-          <p style={{ fontSize:'0.72rem', color:'#94A3B8', lineHeight:1.5, marginBottom:10, display:'-webkit-box', WebkitLineClamp:2 as any, WebkitBoxOrient:'vertical' as any, overflow:'hidden', margin:'0 0 10px' }}>
-            {shop.shop_desc}
-          </p>
-        )}
-
-        {/* Actions */}
-        <div style={{ display:'flex', gap:6, marginTop: shop.shop_desc ? 0 : 10 }}>
-          <a href={`/store/${shop.id}`}
-            style={{ flex:1, display:'inline-flex', alignItems:'center', justifyContent:'center', gap:5, padding:'8px 10px', background: isPremium ? 'linear-gradient(135deg,#C9A84C,#E0B85A)' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius:10, fontSize:'0.74rem', fontWeight:700, textDecoration:'none', transition:'opacity .2s' }}
-            onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity='0.85'}
-            onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity='1'}>
-            <Store size={12} /> {t('market.visitShop')}
-          </a>
-          {shop.shop_whatsapp && (
-            <a href={`https://wa.me/${shop.shop_whatsapp.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
-              style={{ width:36, height:36, display:'inline-flex', alignItems:'center', justifyContent:'center', background:'#DCFCE7', borderRadius:10, textDecoration:'none', fontSize:16, transition:'background .2s', flexShrink:0 }}
-              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#BBF7D0'}
-              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#DCFCE7'}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#16A34A"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-            </a>
-          )}
-        </div>
+      {/* ── Actions ─────────────────────────────────── */}
+      <div style={{ padding: '0 12px 13px', display: 'flex', gap: 7 }}>
+        <a href={`/store/${shop.id}`}
+          style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, padding: '9px 10px', background: isPremium ? 'linear-gradient(135deg,#C9A84C,#E0B85A)' : '#0D1B3E', color: isPremium ? '#0F172A' : '#fff', borderRadius: 10, fontSize: 12, fontWeight: 800, textDecoration: 'none', transition: 'opacity .2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity = '0.87'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity = '1'}>
+          <Store size={12} /> {t('market.visitShop')}
+        </a>
+        {/* Internal message button — NOT WhatsApp */}
+        <a href={`/store/${shop.id}#contact`}
+          style={{ width: 38, height: 38, background: '#EEF2FF', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', transition: 'background .15s', flexShrink: 0 }}
+          title={t('messages.messageSeller')}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background = '#E0E7FF'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background = '#EEF2FF'}>
+          <MessageCircle size={16} color="#4F46E5" />
+        </a>
       </div>
     </div>
   )

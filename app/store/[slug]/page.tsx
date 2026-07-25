@@ -66,6 +66,14 @@ export default function StorePage({
   const [msgName, setMsgName]     = useState('')
   const [msgSent, setMsgSent]     = useState(false)
 
+  // Auto-open message modal when navigated from market card with #contact
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#contact') {
+      setTimeout(() => setShowMsg(true), 300)
+      history.replaceState(null, '', window.location.pathname)
+    }
+  }, [])
+
   useEffect(() => {
     async function load() {
       // Track store view

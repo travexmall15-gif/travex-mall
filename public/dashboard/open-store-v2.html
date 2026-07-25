@@ -359,6 +359,79 @@ textarea.form-input{resize:vertical;min-height:90px}
       </div>
     </div>
 
+
+    <!-- ── FONT SELECTOR ───────────────────────────── -->
+    <div class="form-card">
+      <div class="card-head"><div class="card-head-title">🔤 Shop Name Font</div></div>
+      <div class="card-body">
+        <div class="form-hint" style="margin-bottom:0.75rem">Choose a font style for your shop name on the marketplace card.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="fontGrid">
+          <div class="font-option selected" data-font="Inter" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid var(--navy);border-radius:10px;cursor:pointer;background:#EEF2FF;transition:all .15s">
+            <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
+            <div style="font-size:10px;color:#64748B;margin-top:2px">Inter (Default)</div>
+          </div>
+          <div class="font-option" data-font="Playfair Display" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
+            <div style="font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
+            <div style="font-size:10px;color:#64748B;margin-top:2px">Playfair (Elegant)</div>
+          </div>
+          <div class="font-option" data-font="Montserrat" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
+            <div style="font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
+            <div style="font-size:10px;color:#64748B;margin-top:2px">Montserrat (Bold)</div>
+          </div>
+          <div class="font-option" data-font="Raleway" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
+            <div style="font-family:'Raleway','Inter',sans-serif;font-weight:800;font-size:15px;color:#0D1B3E">ShopNekt</div>
+            <div style="font-size:10px;color:#64748B;margin-top:2px">Raleway (Sleek)</div>
+          </div>
+          <div class="font-option" data-font="Dancing Script" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
+            <div style="font-family:'Dancing Script',cursive;font-weight:700;font-size:18px;color:#0D1B3E">ShopNekt</div>
+            <div style="font-size:10px;color:#64748B;margin-top:2px">Dancing Script (Friendly)</div>
+          </div>
+          <div class="font-option" data-font="Oswald" onclick="pickFont(this)" style="padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer;transition:all .15s">
+            <div style="font-family:'Oswald','Inter',sans-serif;font-weight:700;font-size:15px;color:#0D1B3E;letter-spacing:0.04em">SHOPNEKT</div>
+            <div style="font-size:10px;color:#64748B;margin-top:2px">Oswald (Strong)</div>
+          </div>
+        </div>
+        <input type="hidden" id="shopFont" value="Inter" />
+      </div>
+    </div>
+
+    <!-- ── WINDOW PRODUCTS — 4 product slots ───────── -->
+    <div class="form-card">
+      <div class="card-head">
+        <div class="card-head-title">🛒 Shop Window Products</div>
+        <div class="card-head-sub">These 4 products appear on your marketplace card so customers can see what you sell</div>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:10px" id="productSlots">
+          <!-- Product 1 -->
+          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">1</div>
+            <input class="form-input" id="prod1name" type="text" placeholder="Product name e.g. Black Dress" style="flex:1;margin:0;min-width:0" />
+            <input class="form-input" id="prod1price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
+          </div>
+          <!-- Product 2 -->
+          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">2</div>
+            <input class="form-input" id="prod2name" type="text" placeholder="Product name" style="flex:1;margin:0;min-width:0" />
+            <input class="form-input" id="prod2price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
+          </div>
+          <!-- Product 3 -->
+          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">3</div>
+            <input class="form-input" id="prod3name" type="text" placeholder="Product name" style="flex:1;margin:0;min-width:0" />
+            <input class="form-input" id="prod3price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
+          </div>
+          <!-- Product 4 -->
+          <div style="display:flex;gap:10px;align-items:center;background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:12px;padding:10px 12px">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0D1B3E,#1B3A8A);display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:0.75rem;font-weight:700;flex-shrink:0">4</div>
+            <input class="form-input" id="prod4name" type="text" placeholder="Product name" style="flex:1;margin:0;min-width:0" />
+            <input class="form-input" id="prod4price" type="number" placeholder="Price (TZS)" style="width:110px;margin:0;flex-shrink:0" />
+          </div>
+        </div>
+        <div class="form-hint" style="margin-top:8px">Optional but recommended — customers see these products on your marketplace card.</div>
+      </div>
+    </div>
+
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(2)"> Back</button>
       <button class="btn btn-primary" onclick="goStep(4)">Continue </button>
@@ -702,6 +775,14 @@ async function submitApplication() {
         shop_desc:     desc,
         plan:          selectedPlan,
         login_password: pinVal,
+        shop_color:    document.getElementById('shopColor')?.value || '#050B2E',
+        shop_font:     document.getElementById('shopFont')?.value || 'Inter',
+        shop_products: JSON.stringify(
+          [1,2,3,4].map(i => ({
+            name:  (document.getElementById('prod'+i+'name')?.value || '').trim(),
+            price: Number(document.getElementById('prod'+i+'price')?.value) || 0
+          })).filter(p => p.name && p.price > 0)
+        ),
         status:        'pending',
         created_at:    new Date().toISOString()
       })
