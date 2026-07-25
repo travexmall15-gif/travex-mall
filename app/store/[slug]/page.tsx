@@ -8,7 +8,7 @@ import { use, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
-import { ArrowLeft, MessageCircle, Package, ShoppingCart, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Package, ShoppingCart, ShoppingBag, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 
 type Store = {
