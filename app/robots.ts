@@ -16,7 +16,6 @@ export default function robots(): MetadataRoute.Robots {
           '/orders/',
           '/messages/',
           '/auth/',
-          '/campus-dashboard/',
           '/dashboard/',
         ],
       },

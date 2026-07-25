@@ -7,8 +7,8 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
-import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, MARKET_TOTAL_SLOTS, formatTZS } from '@/lib/data'
-import { Search, Store, Loader2, MapPin, Navigation, Heart, ExternalLink, MessageCircle } from 'lucide-react'
+import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, formatTZS } from '@/lib/data'
+import { Search, Store, MapPin, Navigation, Heart, ExternalLink, MessageCircle } from 'lucide-react'
 
 // ── Region + Category data (proper nouns stay the same in both languages) ──
 // All 31 Tanzania regions (mainland + Zanzibar islands)
@@ -148,117 +148,47 @@ export default function MarketPage() {
     return matchSearch && matchCat && matchRegion
   })
 
-  // ── Stats ticker data (translated on every render) ──────────
-  const STATS = [
-    { val: loading ? '...' : String(shops.filter(s => s.plan === 'premium').length), label: t('market.premiumShops'), color: '#C9A84C' },
-    { val: loading ? '...' : String(shops.filter(s => s.plan === 'basic').length),   label: t('market.basicShops'),   color: 'rgba(255,255,255,0.6)' },
-    { val: '5',                                                                        label: t('home.regions'),         color: 'rgba(255,255,255,0.6)' },
-    { val: t('market.open'),                                                           label: t('market.registration'),  color: '#86EFAC' },
-    { val: loading ? '...' : String(totalApproved),                                   label: t('market.activeSellersStat'), color: 'rgba(255,255,255,0.6)' },
-    { val: String(MARKET_TOTAL_SLOTS),                                                 label: t('market.totalSlots'),    color: 'rgba(255,255,255,0.6)' },
-  ]
-
-  // ── Quick chips ticker (translated on every render) ──────────
+  // ── Quick chips (translated on every render) ──────────
   const QUICK_CHIPS = [
     { href: '/flash-deals', label: t('market.flashDealsLabel'), sub: t('market.flashDealsSub'), bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
     { href: '/group-buy',   label: t('market.groupBuyLabel'),   sub: t('market.groupBuySub'),   bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
     { href: '/vybe',        label: 'Social Vybe',               sub: t('market.communityFeed'), bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
-    { href: '/campus',      label: t('market.campusMarketLabel'), sub: t('market.studentsOnly'), bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
   ]
 
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", background: '#F8FAFF', paddingTop: '108px', minHeight: '100vh' }}>
       <SiteNav />
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
-      <section style={{
-        position: 'relative', overflow: 'hidden', paddingTop: '64px',
-        color: '#fff',
-        background: 'linear-gradient(160deg, #010510 0%, #030920 35%, #050E2E 65%, #071540 100%)',
-      }}>
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
-          background: 'radial-gradient(ellipse 60% 80% at 90% 20%, rgba(56,120,255,0.35) 0%, transparent 65%)' }} />
-
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '3rem 5% 0' }}>
-
-          {/* Top row — badge + CTA */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)', padding: '0.3rem 0.9rem', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.06em' }}>
-              <Store size={11} /> {t('market.heroBadge')}
-            </div>
-            <Link href="/open-store" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#C9A84C', color: '#0F172A', padding: '0.6rem 1.4rem', borderRadius: '999px', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none', boxShadow: '0 4px 16px rgba(201,168,76,0.30)' }}>
-              <Store size={13} /> {t('nav.openShop')}
-            </Link>
-          </div>
-
-          {/* Headline + description */}
-          <div style={{ maxWidth: '600px', marginBottom: '2rem' }}>
-            <h1 style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', fontWeight: 800, color: '#fff', lineHeight: 1.08, marginBottom: '0.85rem', letterSpacing: '-0.03em' }}>
-              {t('market.headline')}
-            </h1>
-            <p style={{ fontSize: 'clamp(0.82rem, 1.5vw, 0.92rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '440px' }}>
-              {t('market.subtitle')}{' '}
-              <span style={{ color: 'rgba(255,255,255,0.65)' }}>
-                {t('market.joinCount', { count: loading ? '...' : String(totalApproved) })}
-              </span>
-            </p>
-          </div>
-
-          {/* Plan pills */}
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2rem' }}>
-            {[
-              { dot: '#94A3B8', name: t('market.basicPlan'),   price: formatTZS(MARKET_BASIC_PRICE) },
-              { dot: '#C9A84C', name: t('market.premiumPlan'), price: formatTZS(MARKET_PREMIUM_PRICE) },
-              { dot: '#C9A84C', name: t('market.topEstate'),   price: 'TZS 200,000' },
-            ].map((p, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fff', borderRadius: '12px', padding: '10px 18px', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: p.dot, flexShrink: 0 }} />
-                <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A', lineHeight: 1 }}>{p.name}</div>
-                  <div style={{ fontSize: '0.63rem', color: '#64748B', marginTop: '2px' }}>{p.price} {t('market.perMonth')}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Stats ticker */}
-          <div style={{ overflow: 'hidden', paddingBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginLeft: '-5%', marginRight: '-5%' }}>
-            <style>{`
-              @keyframes tickerRTL { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-              .stats-ticker { animation: tickerRTL 22s linear infinite; will-change: transform; }
-              .stats-ticker:hover { animation-play-state: paused; }
-            `}</style>
-            <div className="stats-ticker" style={{ display: 'flex', gap: '0', width: 'max-content' }}>
-              {[...STATS, ...STATS].map((s, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', paddingRight: '2.5rem' }}>
-                  <div style={{ paddingRight: '2.5rem', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ fontSize: 'clamp(0.9rem,2vw,1.1rem)', fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: '3px' }}>{s.val}</div>
-                    <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>{s.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── QUICK ACCESS TICKER ────────────────────────────────── */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', overflow: 'hidden' }}>
+      {/* ── SLIM PAGE HEADER ─────────────────────────────────── */}
+      <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderBottom:'1px solid rgba(255,255,255,0.08)' }}>
         <style>{`
           @keyframes quickScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-          .quick-ticker { animation: quickScroll 18s linear infinite; will-change: transform; }
+          .quick-ticker { animation: quickScroll 20s linear infinite; will-change: transform; }
           .quick-ticker:hover { animation-play-state: paused; }
-          .quick-chip { transition: all 0.2s; }
-          .quick-chip:hover { opacity: 0.8; transform: scale(0.97); }
+          .quick-chip { transition: opacity .15s; }
+          .quick-chip:hover { opacity: .78; }
+          @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+          .sk { background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 50%,#F1F5F9 75%); background-size:800px 100%; animation:shimmer 1.4s infinite; border-radius:8px; }
         `}</style>
-        <div style={{ padding: '10px 0' }}>
-          <div className="quick-ticker" style={{ display: 'flex', gap: '8px', width: 'max-content', paddingLeft: '24px' }}>
-            {[...QUICK_CHIPS, ...QUICK_CHIPS].map((c, i) => (
-              <a key={i} href={c.href} className="quick-chip" style={{ display: 'inline-flex', flexDirection: 'column', gap: '1px', background: c.bg, border: `1px solid ${c.border}`, color: c.color, padding: '6px 14px', borderRadius: '10px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{c.label}</span>
-                <span style={{ fontSize: '0.58rem', opacity: 0.7 }}>{c.sub}</span>
-              </a>
-            ))}
+        <div style={{ maxWidth:'1200px', margin:'0 auto', padding:'1rem 5%', display:'flex', alignItems:'center', justifyContent:'space-between', gap:16 }}>
+          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#fff', margin:0, letterSpacing:'-0.02em' }}>
+            Business Marketplace
+          </h1>
+          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:'0.4rem', background:'#C9A84C', color:'#0F172A', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
+            <Store size={13} /> {t('nav.openShop')}
+          </Link>
+        </div>
+        {/* Quick nav chips */}
+        <div style={{ overflow:'hidden', borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ padding:'8px 0' }}>
+            <div className="quick-ticker" style={{ display:'flex', gap:8, width:'max-content', paddingLeft:24 }}>
+              {[...QUICK_CHIPS, ...QUICK_CHIPS].map((c, i) => (
+                <a key={i} href={c.href} className="quick-chip" style={{ display:'inline-flex', flexDirection:'column', gap:1, background:c.bg, border:`1px solid ${c.border}`, color:c.color, padding:'5px 13px', borderRadius:9, textDecoration:'none', whiteSpace:'nowrap', flexShrink:0 }}>
+                  <span style={{ fontSize:'0.73rem', fontWeight:700 }}>{c.label}</span>
+                  <span style={{ fontSize:'0.57rem', opacity:0.7 }}>{c.sub}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -410,12 +340,22 @@ export default function MarketPage() {
             : t('market.resultsFound', { count: String(filtered.length) })}
         </div>
 
-        {/* Loading spinner */}
+        {/* Skeleton cards — show immediately while data loads */}
         {loading && (
-          <div style={{ textAlign: 'center', padding: '5rem 0' }}>
-            <Loader2 style={{ width: '32px', height: '32px', color: '#3B82F6', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }} />
-            <p style={{ color: '#64748B', fontSize: '0.88rem' }}>{t('market.loadingShops')}</p>
-            <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(240px,1fr))', gap: '1.1rem' }}>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} style={{ background:'#fff', borderRadius:20, overflow:'hidden', border:'1.5px solid #E2E8F0', boxShadow:'0 2px 10px rgba(15,23,42,0.05)' }}>
+                <div className="sk" style={{ height:72 }} />
+                <div style={{ padding:'12px 13px' }}>
+                  <div className="sk" style={{ height:10, width:'70%', marginBottom:8 }} />
+                  <div className="sk" style={{ height:8, width:'45%', marginBottom:16 }} />
+                  <div style={{ display:'flex', gap:6, marginBottom:10 }}>
+                    {[1,2,3].map(j => <div key={j} className="sk" style={{ flex:1, height:80, borderRadius:11 }} />)}
+                  </div>
+                  <div className="sk" style={{ height:36, borderRadius:10 }} />
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
@@ -437,7 +377,7 @@ export default function MarketPage() {
 
         {/* Shops grid */}
         {!loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(240px,1fr))', gap: '1.1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(240px,1fr))', gap: '1.1rem', animation:'fadeIn .3s ease' }}>
             {filtered.length === 0 && shops.length > 0 ? (
               <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '5rem 0' }}>
                 <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>

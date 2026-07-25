@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
-  Home, Store, GraduationCap, MessageCircle, Zap,
+  Home, Store, MessageCircle, Zap,
   Users, Truck, Search, Menu, Loader2, MessageSquare, X
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -14,14 +14,12 @@ type ShopResult = {
   id: string
   shop_name: string
   shop_city?: string
-  source: 'business' | 'campus'
 }
 
 const NAV_ICON_DATA = [
   { href: '/home',        Icon: Home,          labelKey: 'nav.homeLabel'       },
   { href: '/vybe',        Icon: MessageCircle, labelKey: 'nav.vybeLabel'       },
   { href: '/market',      Icon: Store,         labelKey: 'nav.businessLabel'   },
-  { href: '/campus',      Icon: GraduationCap, labelKey: 'nav.campusLabel'     },
   { href: '/flash-deals', Icon: Zap,           labelKey: 'nav.flashDealsLabel' },
   { href: '/group-buy',   Icon: Users,         labelKey: 'nav.groupBuyLabel'   },
   { href: '/messages',    Icon: MessageSquare, labelKey: 'nav.messagesLabel'   },
@@ -33,14 +31,14 @@ export function SiteNav() {
   const router   = useRouter()
   const { lang, setLang } = useLang()
 
-  const [query,     setQuery]     = useState('')
-  const [results,   setResults]   = useState<ShopResult[]>([])
-  const [searching, setSearching] = useState(false)
-  const [showDrop,  setShowDrop]  = useState(false)
+  const [query,      setQuery]      = useState('')
+  const [results,    setResults]    = useState<ShopResult[]>([])
+  const [searching,  setSearching]  = useState(false)
+  const [showDrop,   setShowDrop]   = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [user, setUser] = useState<{email:string, name:string} | null>(null)
+
   useEffect(() => {
-    // Fast path: check custom session first (no network)
     try {
       const raw = localStorage.getItem('travex_session')
       if (raw) {
@@ -50,7 +48,6 @@ export function SiteNav() {
         }
       }
     } catch {}
-    // Supabase Auth check (background, non-blocking)
     sb.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         const m = session.user.user_metadata
@@ -66,11 +63,9 @@ export function SiteNav() {
     return () => subscription.unsubscribe()
   }, [])
 
-
-  const searchRef = useRef<HTMLDivElement>(null)
+  const searchRef   = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Close on outside click
   useEffect(() => {
     const fn = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
@@ -81,7 +76,6 @@ export function SiteNav() {
     return () => document.removeEventListener('mousedown', fn)
   }, [])
 
-  // Search
   const handleSearch = useCallback((val: string) => {
     setQuery(val)
     if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -90,22 +84,15 @@ export function SiteNav() {
     debounceRef.current = setTimeout(async () => {
       setSearching(true)
       try {
-        const [{ data: biz }, { data: campus }] = await Promise.all([
-          sb.from('pending_payments')
-            .select('id,shop_name,shop_city')
-            .ilike('shop_name', `%${val}%`)
-            .eq('status', 'approved')
-            .limit(5),
-          sb.from('campus_stores')
-            .select('id,shop_name,university_abbr')
-            .ilike('shop_name', `%${val}%`)
-            .eq('is_active', true)
-            .limit(4),
-        ])
-        const combined: ShopResult[] = [
-          ...(biz    || []).map((s: any) => ({ id: s.id, shop_name: s.shop_name, shop_city: s.shop_city, source: 'business' as const })),
-          ...(campus || []).map((s: any) => ({ id: s.id, shop_name: s.shop_name, shop_city: s.university_abbr, source: 'campus' as const })),
-        ]
+        const { data: biz } = await sb
+          .from('pending_payments')
+          .select('id,shop_name,shop_city')
+          .ilike('shop_name', `%${val}%`)
+          .eq('status', 'approved')
+          .limit(8)
+        const combined: ShopResult[] = (biz || []).map((s: any) => ({
+          id: s.id, shop_name: s.shop_name, shop_city: s.shop_city,
+        }))
         setResults(combined)
         setShowDrop(true)
       } catch {}
@@ -132,32 +119,20 @@ export function SiteNav() {
       fontFamily: "'Inter', sans-serif",
     }}>
 
-      {/* ── ROW 1: Brand | [spacer] | Search | Menu ── */}
-      <div style={{
-        display: 'flex', alignItems: 'center',
-        padding: '10px 5%', gap: '14px',
-      }}>
+      {/* ROW 1: Brand | Search | Move | Menu */}
+      <div style={{ display: 'flex', alignItems: 'center', padding: '10px 5%', gap: '14px' }}>
 
         {/* Brand */}
         <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
-          <img
-            src="/icon-192.png" alt="ShopNekt"
-            style={{ height: '52px', width: '52px', objectFit: 'contain', borderRadius: '12px' }}
-          />
-          <span style={{
-            fontFamily: "'Inter',sans-serif",
-            fontSize: '1.35rem', fontWeight: 900,
-            color: '#0D1B3E', letterSpacing: '-0.04em',
-            lineHeight: 1,
-          }}>
+          <img src="/icon-192.png" alt="ShopNekt" style={{ height: '52px', width: '52px', objectFit: 'contain', borderRadius: '12px' }} />
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.35rem', fontWeight: 900, color: '#0D1B3E', letterSpacing: '-0.04em', lineHeight: 1 }}>
             Shop<span style={{ color: '#F97316' }}>Nekt</span>
           </span>
         </Link>
 
-        {/* Spacer */}
         <div style={{ flex: 1 }} />
 
-        {/* Search bar — expands from button */}
+        {/* Search */}
         <div ref={searchRef} style={{ position:'relative', display:'flex', alignItems:'center', flex: searchOpen ? 1 : 'none', transition:'all .25s', maxWidth: searchOpen ? 360 : 38 }}>
           {searchOpen ? (
             <div style={{ display:'flex', alignItems:'center', width:'100%', background:'#F8FAFF', border:'1.5px solid #E2E8F0', borderRadius:999, padding:'0 12px', gap:8 }}>
@@ -194,7 +169,7 @@ export function SiteNav() {
             </button>
           )}
 
-          {/* Search dropdown results */}
+          {/* Search dropdown */}
           {showDrop && results.length > 0 && (
             <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden' }}>
               {results.map(r => (
@@ -202,12 +177,12 @@ export function SiteNav() {
                   style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily:"'Inter',sans-serif" }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                  <div style={{ width:32, height:32, borderRadius:8, background: r.source==='campus' ? '#EEF2FF' : '#F0FDF4', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <Store size={14} color={r.source==='campus' ? '#4F46E5' : '#16A34A'} />
+                  <div style={{ width:32, height:32, borderRadius:8, background:'#F0FDF4', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                    <Store size={14} color="#16A34A" />
                   </div>
                   <div>
                     <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#0F172A' }}>{r.shop_name}</div>
-                    <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:1 }}>{r.shop_city || ''} · {r.source === 'campus' ? 'Campus' : 'Business'}</div>
+                    <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:1 }}>{r.shop_city || ''}</div>
                   </div>
                 </button>
               ))}
@@ -226,7 +201,7 @@ export function SiteNav() {
           )}
         </div>
 
-        {/* Move / Truck icon */}
+        {/* Move */}
         <Link href="/move"
           style={{ width: 38, height: 38, borderRadius: '50%', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
@@ -234,7 +209,7 @@ export function SiteNav() {
           <Truck size={16} color="#475569" />
         </Link>
 
-        {/* Menu button — direct navigation to /menu */}
+        {/* Menu */}
         <button onClick={() => { window.location.href = '/menu' }}
           style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'none', cursor:'pointer', transition:'background .2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
@@ -243,12 +218,8 @@ export function SiteNav() {
         </button>
       </div>
 
-      {/* ── ROW 2: Icon Nav ─── */}
-      <div style={{
-        display: 'flex', alignItems: 'stretch',
-        borderTop: '1px solid #F1F5F9',
-        padding: '0 5%',
-      }}>
+      {/* ROW 2: Icon Nav */}
+      <div style={{ display: 'flex', alignItems: 'stretch', borderTop: '1px solid #F1F5F9', padding: '0 5%' }}>
         {NAV_ICON_DATA.map(({ href, Icon, labelKey }) => {
           const active = isActive(href)
           return (
@@ -267,17 +238,13 @@ export function SiteNav() {
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = '#F8FAFF' }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
-              <Icon
-                size={22}
-                color={active ? '#0D1B3E' : '#94A3B8'}
-                strokeWidth={active ? 2.2 : 1.8}
-              />
+              <Icon size={22} color={active ? '#0D1B3E' : '#94A3B8'} strokeWidth={active ? 2.2 : 1.8} />
             </Link>
           )
         })}
       </div>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg) } } @keyframes slideIn { from { transform: translateX(100%) } to { transform: translateX(0) } } @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }`}</style>
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </header>
   )
 }

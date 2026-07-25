@@ -3,7 +3,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
-import { ArrowRight, GraduationCap, Store, CheckCircle } from 'lucide-react'
+import { ArrowRight, Store, CheckCircle } from 'lucide-react'
 
 export default function OpenStorePage() {
   const { t } = useTranslation()
@@ -12,23 +12,12 @@ export default function OpenStorePage() {
     t('openStore.bizF1'), t('openStore.bizF2'), t('openStore.bizF3'),
     t('openStore.bizF4'), t('openStore.bizF5'),
   ]
-  const CAMPUS_FEATURES = [
-    t('openStore.campusF1'), t('openStore.campusF2'), t('openStore.campusF3'),
-    t('openStore.campusF4'), t('openStore.campusF5'),
-  ]
 
   return (
     <main style={{ fontFamily:"'Inter', sans-serif", background:'#F8FAFF', minHeight:'100vh' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
-        .choice-card { display:flex; flex-direction:column; background:#FFFFFF; border:2px solid #E2E8F0; border-radius:24px; padding:2.5rem 2rem; text-decoration:none; transition:all 0.28s; cursor:pointer; position:relative; overflow:hidden; }
-        .choice-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(15,23,42,0.12); }
-        .choice-card.business:hover { border-color:rgba(201,168,76,0.50); }
-        .choice-card.campus:hover   { border-color:rgba(56,120,255,0.40); }
-        .choice-card.business { border-color:rgba(201,168,76,0.22); }
-        .choice-card.campus   { border-color:rgba(56,120,255,0.18); }
-        @media (max-width: 640px) { .cards-wrap { flex-direction:column !important; } .choice-card { padding:2rem 1.5rem; } }
       `}</style>
 
       <SiteNav />
@@ -44,89 +33,51 @@ export default function OpenStorePage() {
             {t('openStore.heroH1')} <span style={{ color:'#C9A84C' }}>{t('openStore.heroH1Store')}</span>
           </h1>
           <p style={{ fontSize:'clamp(0.88rem,1.6vw,1rem)', color:'rgba(255,255,255,0.50)', lineHeight:1.65, maxWidth:'420px', margin:'0 auto' }}>
-            {t('openStore.selectMarket')}
+            {t('openStore.bizDescFull')}
           </p>
         </div>
       </section>
 
-      {/* Choice cards */}
-      <section style={{ maxWidth:'900px', margin:'0 auto', padding:'4rem 5% 5rem' }}>
-        <div className="cards-wrap" style={{ display:'flex', gap:'1.5rem', alignItems:'stretch' }}>
-
-          {/* Business Market */}
-          <Link href="/open-store-b2b" className="choice-card business" style={{ flex:1, color:'inherit' }}>
-            <div style={{ position:'absolute', top:0, left:0, right:0, height:'3px', background:'linear-gradient(90deg,#C9A84C,#F0C96B)', borderRadius:'24px 24px 0 0' }} />
-            <div style={{ width:'60px', height:'60px', borderRadius:'18px', background:'linear-gradient(135deg,#040C32,#071545)', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:'1.5rem', boxShadow:'0 8px 24px rgba(5,11,46,0.18)' }}>
-              <Store style={{ width:'28px', height:'28px', color:'#C9A84C' }} />
+      {/* Business card — centered, max 540px */}
+      <section style={{ maxWidth:'540px', margin:'0 auto', padding:'4rem 5% 5rem' }}>
+        <Link href="/open-store-b2b" style={{ display:'flex', flexDirection:'column', background:'#FFFFFF', border:'2px solid rgba(201,168,76,0.22)', borderRadius:24, padding:'2.5rem 2rem', textDecoration:'none', color:'inherit', transition:'all 0.28s', position:'relative', overflow:'hidden' }}
+          onMouseOver={e => { const el = e.currentTarget as HTMLElement; el.style.transform='translateY(-4px)'; el.style.boxShadow='0 20px 50px rgba(15,23,42,0.12)'; el.style.borderColor='rgba(201,168,76,0.50)' }}
+          onMouseOut={e  => { const el = e.currentTarget as HTMLElement; el.style.transform=''; el.style.boxShadow=''; el.style.borderColor='rgba(201,168,76,0.22)' }}>
+          <div style={{ position:'absolute', top:0, left:0, right:0, height:'3px', background:'linear-gradient(90deg,#C9A84C,#F0C96B)', borderRadius:'24px 24px 0 0' }} />
+          <div style={{ width:'60px', height:'60px', borderRadius:'18px', background:'linear-gradient(135deg,#040C32,#071545)', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:'1.5rem', boxShadow:'0 8px 24px rgba(5,11,46,0.18)' }}>
+            <Store style={{ width:'28px', height:'28px', color:'#C9A84C' }} />
+          </div>
+          <div style={{ display:'flex', gap:'0.4rem', marginBottom:'1rem', flexWrap:'wrap' }}>
+            <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(201,168,76,0.10)', color:'#A07830', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>{t('openStore.premiumAvail')}</span>
+            <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(15,23,42,0.06)', color:'#64748B', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>{t('openStore.basicAvail')}</span>
+          </div>
+          <h2 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.55rem', fontWeight:900, color:'#0F172A', marginBottom:'0.6rem', lineHeight:1.15 }}>
+            {t('openStore.businessMarket')}
+          </h2>
+          <p style={{ fontSize:'0.86rem', color:'#64748B', lineHeight:1.70, marginBottom:'1.5rem' }}>
+            {t('openStore.bizDescFull')}
+          </p>
+          <ul style={{ listStyle:'none', padding:0, margin:'0 0 1.75rem', display:'flex', flexDirection:'column', gap:'0.55rem' }}>
+            {BIZ_FEATURES.map(f => (
+              <li key={f} style={{ display:'flex', alignItems:'flex-start', gap:'0.5rem', fontSize:'0.80rem', color:'#334155' }}>
+                <CheckCircle style={{ width:'15px', height:'15px', color:'#C9A84C', flexShrink:0, marginTop:'1px' }} />{f}
+              </li>
+            ))}
+          </ul>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#040C32,#071545)', borderRadius:'14px', padding:'1rem 1.25rem' }}>
+            <div>
+              <div style={{ fontSize:'0.68rem', fontWeight:700, color:'rgba(255,255,255,0.42)', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.monthly')}</div>
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.3rem', fontWeight:900, color:'#C9A84C', lineHeight:1 }}>{t('openStore.joinLabel')}</div>
             </div>
-            <div style={{ display:'flex', gap:'0.4rem', marginBottom:'1rem', flexWrap:'wrap' }}>
-              <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(201,168,76,0.10)', color:'#A07830', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>🥇 {t('openStore.premiumAvail')}</span>
-              <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(15,23,42,0.06)', color:'#64748B', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>🥈 {t('openStore.basicAvail')}</span>
+            <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#C9A84C', color:'#0F172A', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
+              {t('openStore.applyNow')} <ArrowRight style={{ width:'14px', height:'14px' }} />
             </div>
-            <h2 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.55rem', fontWeight:900, color:'#0F172A', marginBottom:'0.6rem', lineHeight:1.15 }}>
-              {t('openStore.businessMarket')}
-            </h2>
-            <p style={{ fontSize:'0.86rem', color:'#64748B', lineHeight:1.70, marginBottom:'1.5rem', flexGrow:1 }}>
-              {t('openStore.bizDescFull')}
-            </p>
-            <ul style={{ listStyle:'none', padding:0, margin:'0 0 1.75rem', display:'flex', flexDirection:'column', gap:'0.55rem' }}>
-              {BIZ_FEATURES.map(f => (
-                <li key={f} style={{ display:'flex', alignItems:'flex-start', gap:'0.5rem', fontSize:'0.80rem', color:'#334155' }}>
-                  <CheckCircle style={{ width:'15px', height:'15px', color:'#C9A84C', flexShrink:0, marginTop:'1px' }} />{f}
-                </li>
-              ))}
-            </ul>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#040C32,#071545)', borderRadius:'14px', padding:'1rem 1.25rem' }}>
-              <div>
-                <div style={{ fontSize:'0.68rem', fontWeight:700, color:'rgba(255,255,255,0.42)', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.monthly')}</div>
-                <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.3rem', fontWeight:900, color:'#C9A84C', lineHeight:1 }}>{t('openStore.joinLabel')}</div>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#C9A84C', color:'#0F172A', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
-                {t('openStore.applyNow')} <ArrowRight style={{ width:'14px', height:'14px' }} />
-              </div>
-            </div>
-          </Link>
-
-          {/* Campus Market */}
-          <Link href="/campus-apply" className="choice-card campus" style={{ flex:1, color:'inherit' }}>
-            <div style={{ position:'absolute', top:0, left:0, right:0, height:'3px', background:'linear-gradient(90deg,#3B82F6,#93C5FD)', borderRadius:'24px 24px 0 0' }} />
-            <div style={{ width:'60px', height:'60px', borderRadius:'18px', background:'linear-gradient(135deg,#040C32,#0A1858)', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:'1.5rem', boxShadow:'0 8px 24px rgba(5,11,46,0.18)' }}>
-              <GraduationCap style={{ width:'28px', height:'28px', color:'#93C5FD' }} />
-            </div>
-            <div style={{ display:'flex', gap:'0.4rem', marginBottom:'1rem', flexWrap:'wrap' }}>
-              <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(59,130,246,0.10)', color:'#1E40AF', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>🎓 {t('openStore.campusF3')}</span>
-              <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(5,150,105,0.10)', color:'#065F46', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>✅ 5 {t('common.universities') || t('home.uniCount')}</span>
-            </div>
-            <h2 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.55rem', fontWeight:900, color:'#0F172A', marginBottom:'0.6rem', lineHeight:1.15 }}>
-              {t('openStore.campusMarket')}
-            </h2>
-            <p style={{ fontSize:'0.86rem', color:'#64748B', lineHeight:1.70, marginBottom:'1.5rem', flexGrow:1 }}>
-              {t('openStore.campusDescFull')}
-            </p>
-            <ul style={{ listStyle:'none', padding:0, margin:'0 0 1.75rem', display:'flex', flexDirection:'column', gap:'0.55rem' }}>
-              {CAMPUS_FEATURES.map(f => (
-                <li key={f} style={{ display:'flex', alignItems:'flex-start', gap:'0.5rem', fontSize:'0.80rem', color:'#334155' }}>
-                  <CheckCircle style={{ width:'15px', height:'15px', color:'#3B82F6', flexShrink:0, marginTop:'1px' }} />{f}
-                </li>
-              ))}
-            </ul>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#040C32,#0A1858)', borderRadius:'14px', padding:'1rem 1.25rem' }}>
-              <div>
-                <div style={{ fontSize:'0.68rem', fontWeight:700, color:'rgba(255,255,255,0.42)', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.perMonth')}</div>
-                <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.3rem', fontWeight:900, color:'#93C5FD', lineHeight:1 }}>TZS 10K</div>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#3B82F6', color:'#fff', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
-                {t('openStore.applyNow')} <ArrowRight style={{ width:'14px', height:'14px' }} />
-              </div>
-            </div>
-          </Link>
-        </div>
+          </div>
+        </Link>
 
         <p style={{ textAlign:'center', fontSize:'0.78rem', color:'#94A3B8', marginTop:'2rem', lineHeight:1.65 }}>
           {t('openStore.notSure')}{' '}
-          <Link href="/market" style={{ color:'#3B82F6', fontWeight:600, textDecoration:'none' }}>{t('join.browseBusiness')}</Link>
-          {' '}{t('common.or')}{' '}
-          <Link href="/campus" style={{ color:'#3B82F6', fontWeight:600, textDecoration:'none' }}>{t('join.browseCampus')}</Link>
+          <Link href="/market" style={{ color:'#C9A84C', fontWeight:600, textDecoration:'none' }}>{t('join.browseBusiness')}</Link>
           {' '}{t('openStore.browseFirst2')}
         </p>
       </section>

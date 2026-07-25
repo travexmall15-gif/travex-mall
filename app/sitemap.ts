@@ -11,7 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // ── Marketplaces ──────────────────────────────────────
     { url: `${BASE}/market`,      lastModified: NOW, changeFrequency: 'daily',  priority: 0.95 },
-    { url: `${BASE}/campus`,      lastModified: NOW, changeFrequency: 'daily',  priority: 0.90 },
     { url: `${BASE}/vybe`,        lastModified: NOW, changeFrequency: 'daily',  priority: 0.85 },
     { url: `${BASE}/flash-deals`, lastModified: NOW, changeFrequency: 'hourly', priority: 0.90 },
     { url: `${BASE}/group-buy`,   lastModified: NOW, changeFrequency: 'daily',  priority: 0.80 },

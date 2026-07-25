@@ -7,7 +7,7 @@ import { sb } from '@/lib/supabase'
 import {
   ArrowLeft, ChevronRight, Store, LayoutDashboard, ShoppingCart,
   MessageSquare, Settings, Shield, Info, LogOut, User, Globe,
-  Zap, Users, Home, GraduationCap, Sparkles,
+  Zap, Users, Home, Sparkles,
 } from 'lucide-react'
 
 export default function MenuPage() {
@@ -41,7 +41,6 @@ export default function MenuPage() {
         { icon: Home,           label: t('menuPage.home'),          href: '/home',               color: '#0D1B3E' },
         { icon: Sparkles,       label: t('menuPage.vybe'),          href: '/vybe',               color: '#7C3AED' },
         { icon: Store,          label: t('menuPage.market'),        href: '/market',             color: '#3B82F6' },
-        { icon: GraduationCap,  label: t('menuPage.campus'),        href: '/campus',             color: '#8B5CF6' },
         { icon: Zap,            label: t('menuPage.flashDeals'),    href: '/flash-deals',        color: '#EF4444' },
         { icon: Users,          label: t('menuPage.groupBuy'),      href: '/group-buy',          color: '#10B981' },
       ],
@@ -111,7 +110,7 @@ export default function MenuPage() {
           {(['en','sw','fr','de','pt','ar'] as const).map(code => (
             <button key={code} onClick={() => setLang(code)}
               style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? '#C9A84C' : '#64748B' }}>
-              {meta[code].flag} {code.toUpperCase()}
+              {code.toUpperCase()}
             </button>
           ))}
         </div>

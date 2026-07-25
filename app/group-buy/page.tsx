@@ -329,7 +329,6 @@ export default function GroupBuyPage() {
     { href:'/market',      label: t('groupBuy.businessChip'), sub: t('groupBuy.businessChipSub'), bg:'#FEF3C7', border:'#FCD34D', color:'#92400E' },
     { href:'/flash-deals', label: t('groupBuy.flashChip'),    sub: t('groupBuy.flashChipSub'),    bg:'#DBEAFE', border:'#93C5FD', color:'#1E40AF' },
     { href:'/vybe',        label: 'Social Vybe',              sub: t('groupBuy.vybeChipSub'),     bg:'#EDE9FE', border:'#C4B5FD', color:'#5B21B6' },
-    { href:'/campus',      label: t('groupBuy.campusChip'),   sub: t('groupBuy.campusChipSub'),   bg:'#ECFDF5', border:'#6EE7B7', color:'#065F46' },
   ]
 
   return (
@@ -352,81 +351,27 @@ export default function GroupBuyPage() {
       <SiteNav />
 
       {/* ── HERO ──────────────────────────────────────────────── */}
-      <section style={{ paddingTop:64, position:'relative', overflow:'hidden', color:'#fff',
-        background:'linear-gradient(160deg,#010510 0%,#030920 35%,#050E2E 65%,#071540 100%)' }}>
-        <div style={{ position:'absolute', inset:0, pointerEvents:'none', zIndex:0,
-          background:'radial-gradient(ellipse 60% 80% at 85% 20%,rgba(56,120,255,0.28) 0%,transparent 65%)' }} />
-
-        <div style={{ position:'relative', zIndex:1, maxWidth:1200, margin:'0 auto', padding:'3rem 5% 0' }}>
-          {/* Top row */}
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'1rem', marginBottom:'2rem' }}>
-            <div style={{ display:'inline-flex', alignItems:'center', gap:7,
-              background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.12)',
-              color:'rgba(255,255,255,0.7)', padding:'5px 14px', borderRadius:999,
-              fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.05em' }}>
-              <Users size={11} /> {t('groupBuy.heroBadge')}
-            </div>
-            <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5,
-              background:'#C9A84C', color:'#0F172A', padding:'8px 18px', borderRadius:999,
-              fontWeight:700, fontSize:'0.8rem', textDecoration:'none',
-              boxShadow:'0 4px 14px rgba(201,168,76,0.28)' }}>
-              <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
-            </Link>
-          </div>
-
-          {/* Headline */}
-          <div style={{ maxWidth:560, marginBottom:'2rem' }}>
-            <h1 style={{ fontSize:'clamp(2rem,4.5vw,3.4rem)', fontWeight:900, color:'#fff',
-              lineHeight:1.08, letterSpacing:'-0.03em', marginBottom:'0.85rem' }}>
-              {t('groupBuy.heroTitle')}{' '}
-              <span style={{ color:'#C9A84C' }}>{t('groupBuy.heroTitle2')}</span>
-            </h1>
-            <p style={{ fontSize:'clamp(0.82rem,1.5vw,0.92rem)', color:'rgba(255,255,255,0.45)', lineHeight:1.65, maxWidth:440 }}>
-              {t('groupBuy.heroSubtitle')}
-            </p>
-
-            {/* Journey steps */}
-            <div style={{ display:'flex', alignItems:'center', gap:4, marginTop:'1.25rem', flexWrap:'wrap' }}>
-              {['step1','step2','step3','step4','step5'].map((key, i) => (
-                <div key={key} style={{ display:'flex', alignItems:'center', gap:4 }}>
-                  <span style={{ fontSize:'0.65rem', fontWeight:600, color:'rgba(255,255,255,0.4)',
-                    background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.08)',
-                    padding:'3px 9px', borderRadius:999, whiteSpace:'nowrap' as const }}>
-                    {t(`groupBuy.${key}`)}
-                  </span>
-                  {i < 4 && <ArrowRight size={10} color="rgba(255,255,255,0.2)" />}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Stats ticker */}
-          <div style={{ overflow:'hidden', paddingBottom:'1.75rem', borderBottom:'1px solid rgba(255,255,255,0.06)', marginLeft:'-5%', marginRight:'-5%' }}>
-            <div className="gb-ticker" style={{ display:'flex', gap:0, width:'max-content', paddingLeft:'5%' }}>
-              {[...STATS,...STATS].map((s,i) => (
-                <div key={i} style={{ display:'flex', alignItems:'center', paddingRight:'2.5rem' }}>
-                  <div style={{ paddingRight:'2.5rem', borderRight:'1px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ fontSize:'clamp(0.9rem,2vw,1.1rem)', fontWeight:800, color:s.color, lineHeight:1, marginBottom:3 }}>{s.val}</div>
-                    <div style={{ fontSize:'0.6rem', color:'rgba(255,255,255,0.28)', textTransform:'uppercase' as const, letterSpacing:'0.08em', whiteSpace:'nowrap' as const }}>{s.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* ── SLIM PAGE HEADER ─────────────────────────────────── */}
+      <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderBottom:'1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ maxWidth:1200, margin:'0 auto', padding:'1rem 5%', display:'flex', alignItems:'center', justifyContent:'space-between', gap:16 }}>
+          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#fff', margin:0, letterSpacing:'-0.02em' }}>
+            Group Buying
+          </h1>
+          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#C9A84C', color:'#0F172A', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
+            <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
+          </Link>
         </div>
-      </section>
-
-      {/* ── QUICK CHIPS ───────────────────────────────────────── */}
-      <div style={{ background:'#fff', borderBottom:'1px solid #E2E8F0', overflow:'hidden' }}>
-        <div style={{ padding:'10px 0' }}>
-          <div className="gb-chips" style={{ display:'flex', gap:8, width:'max-content', paddingLeft:'5%' }}>
-            {[...CHIPS,...CHIPS].map((c,i) => (
-              <a key={i} href={c.href} className="chip-link"
-                style={{ background:c.bg, border:`1px solid ${c.border}`, color:c.color }}>
-                <span style={{ fontSize:'0.75rem', fontWeight:700 }}>{c.label}</span>
-                <span style={{ fontSize:'0.58rem', opacity:0.7 }}>{c.sub}</span>
-              </a>
-            ))}
+        <div style={{ overflow:'hidden', borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ padding:'8px 0' }}>
+            <div className="gb-chips" style={{ display:'flex', gap:8, width:'max-content', paddingLeft:24 }}>
+              {[...CHIPS,...CHIPS].map((c,i) => (
+                <a key={i} href={c.href} className="chip-link"
+                  style={{ background:c.bg, border:`1px solid ${c.border}`, color:c.color }}>
+                  <span style={{ fontSize:'0.73rem', fontWeight:700 }}>{c.label}</span>
+                  <span style={{ fontSize:'0.57rem', opacity:0.7 }}>{c.sub}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

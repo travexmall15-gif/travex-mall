@@ -73,7 +73,7 @@ export default function UsernamePage() {
         </div>
 
         <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>
-          {name ? `Hi, ${name.split(' ')[0]}! 👋` : 'One Last Step'}
+          {name ? `Hi, ${name.split(' ')[0]}!` : 'One Last Step'}
         </h2>
         <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', marginBottom: '1.5rem', lineHeight: 1.55 }}>
           Choose a username for your ShopNekt profile.

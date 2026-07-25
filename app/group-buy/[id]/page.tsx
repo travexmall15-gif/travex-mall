@@ -89,7 +89,7 @@ export default function GroupDetailPage({
   const discount = group.unit_price * (1 - group.discount_pct / 100)
   const remaining = group.min_members - group.current_members
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
-  const shareMsg = encodeURIComponent(`👥 Jiunge nami kwenye group buy!\n\nBidhaa: ${group.product_name}\nBei ya kawaida: ${fmt(group.unit_price)}\nBei ya group: ${fmt(discount)} (-${group.discount_pct}%)\n\nTunahitaji watu ${remaining} zaidi!\n\nJiunge hapa: ${shareUrl}`)
+  const shareMsg = encodeURIComponent(`Jiunge nami kwenye group buy!\n\nBidhaa: ${group.product_name}\nBei ya kawaida: ${fmt(group.unit_price)}\nBei ya group: ${fmt(discount)} (-${group.discount_pct}%)\n\nTunahitaji watu ${remaining} zaidi!\n\nJiunge hapa: ${shareUrl}`)
 
   return (
     <main style={{ minHeight:'100vh', background:'#EFF6FF', fontFamily:"'Inter',sans-serif" }}>
@@ -163,7 +163,7 @@ export default function GroupDetailPage({
             boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
             <CheckCircle size={48} style={{ color:'#22C55E', margin:'0 auto 12px' }} />
             <h2 style={{ fontFamily:"'Inter',sans-serif", color:'#0F172A', marginBottom:8 }}>
-              You&apos;re In! 🎉
+              You&apos;re In!
             </h2>
             <p style={{ color:'#64748B', fontSize:13, marginBottom:16 }}>
               You joined the group. Share the link to invite more friends and activate the discount!

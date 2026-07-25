@@ -17,12 +17,12 @@ export const DEFAULT_LANG: Lang = 'en'
 export const RTL_LANGS: Lang[] = ['ar']
 
 export const LANG_META: Record<Lang, { label: string; flag: string; dir: 'ltr' | 'rtl' }> = {
-  en: { label: 'English',    flag: '🇬🇧', dir: 'ltr' },
-  sw: { label: 'Kiswahili',  flag: '🇹🇿', dir: 'ltr' },
-  fr: { label: 'Français',   flag: '🇫🇷', dir: 'ltr' },
-  de: { label: 'Deutsch',    flag: '🇩🇪', dir: 'ltr' },
-  pt: { label: 'Português',  flag: '🇵🇹', dir: 'ltr' },
-  ar: { label: 'العربية',    flag: '🇸🇦', dir: 'rtl' },
+  en: { label: 'English',    flag: 'EN', dir: 'ltr' },
+  sw: { label: 'Kiswahili',  flag: 'SW', dir: 'ltr' },
+  fr: { label: 'Français',   flag: 'FR', dir: 'ltr' },
+  de: { label: 'Deutsch',    flag: 'DE', dir: 'ltr' },
+  pt: { label: 'Português',  flag: 'PT', dir: 'ltr' },
+  ar: { label: 'العربية',    flag: 'AR', dir: 'rtl' },
 }
 
 export function isRTL(lang: Lang): boolean {

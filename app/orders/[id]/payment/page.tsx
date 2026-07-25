@@ -298,7 +298,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               style={{ width:'100%', padding:'0.9rem', background:'#0D1B3E', color:'#C9A84C', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: submitting?'not-allowed':'pointer', fontFamily:"'Inter',sans-serif", display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
               {submitting
                 ? <><Loader2 size={16} style={{ animation:'spin 1s linear infinite' }}/> Processing...</>
-                : '✅ Confirm & Submit Payment'}
+                : 'Confirm & Submit Payment'}
             </button>
           </>
         )}

@@ -45,7 +45,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
         onMouseOver={e => (e.currentTarget as HTMLElement).style.background = compact ? '#E2E8F0' : 'rgba(255,255,255,0.14)'}
         onMouseOut={e => (e.currentTarget as HTMLElement).style.background = compact ? '#F1F5F9' : 'rgba(255,255,255,0.08)'}
       >
-        <span style={{ fontSize: compact ? '1.1rem' : '1rem', lineHeight: 1 }}>{current.flag}</span>
+        <span style={{ fontSize: compact ? '0.7rem' : '0.72rem', fontWeight: 800, lineHeight: 1, letterSpacing: '0.04em' }}>{current.flag}</span>
         {!compact && <span>{current.label}</span>}
         {!compact && <span style={{ fontSize: '0.6rem', opacity: 0.6 }}>▾</span>}
       </button>
@@ -76,7 +76,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
               onMouseOver={e => { if (lang !== code) (e.currentTarget as HTMLElement).style.background = '#F8FAFC' }}
               onMouseOut={e => { if (lang !== code) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
-              <span style={{ fontSize: '1.1rem' }}>{m.flag}</span>
+              <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#F1F5F9', color: '#0D1B3E', padding: '2px 7px', borderRadius: 5, letterSpacing: '0.04em', flexShrink: 0 }}>{m.flag}</span>
               <span>{m.label}</span>
               {lang === code && <span style={{ marginLeft: 'auto', color: '#C9A84C', fontSize: '0.7rem' }}>✓</span>}
               {m.dir === 'rtl' && <span style={{ fontSize: '0.6rem', color: '#94A3B8', marginLeft: 'auto' }}>RTL</span>}
@@ -115,7 +115,7 @@ export function LangSwitcherLight() {
           fontFamily: 'Inter, sans-serif',
         }}
       >
-        <span>{meta[lang].flag}</span>
+        <span style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.04em' }}>{meta[lang].flag}</span>
         <span>{meta[lang].label}</span>
         <span style={{ fontSize: '0.6rem', opacity: 0.5 }}>▾</span>
       </button>
@@ -140,7 +140,7 @@ export function LangSwitcherLight() {
                 fontWeight: lang === code ? 700 : 400,
                 fontFamily: 'Inter, sans-serif',
               }}>
-              <span>{m.flag}</span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#F1F5F9', color: '#0D1B3E', padding: '2px 6px', borderRadius: 4, letterSpacing: '0.04em', flexShrink: 0 }}>{m.flag}</span>
               <span>{m.label}</span>
               {lang === code && <span style={{ marginLeft: 'auto', color: '#C9A84C' }}>✓</span>}
             </button>
