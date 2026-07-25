@@ -1,232 +1,314 @@
 'use client'
-import { useTranslation } from "@/hooks/useTranslation"
-
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { sb } from '@/lib/supabase'
-import { Mail, User, ArrowRight, ArrowLeft, Loader2, ShieldCheck } from 'lucide-react'
+import { Mail, User, ArrowRight, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react'
 
-type Screen = 'main' | 'email' | 'verify'
+type Screen = 'form' | 'code'
+
+function generateCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString()
+}
 
 export default function AuthPage() {
-  const { t } = useTranslation()
-  const router  = useRouter()
-  const [screen,   setScreen]   = useState<Screen>('main')
-  const [email,    setEmail]    = useState('')
-  const [username, setUsername] = useState('')
-  const [otp,      setOtp]      = useState('')
-  const [loading,  setLoading]  = useState(false)
-  const [error,    setError]    = useState('')
-  const [agreed,   setAgreed]   = useState(false)
+  const router = useRouter()
+  const [screen,    setScreen]    = useState<Screen>('form')
+  const [name,      setName]      = useState('')
+  const [email,     setEmail]     = useState('')
+  const [code,      setCode]      = useState('')
+  const [entered,   setEntered]   = useState('')
+  const [error,     setError]     = useState('')
+  const [loading,   setLoading]   = useState(false)
+  const [showCode,  setShowCode]  = useState(false)
+  const [timer,     setTimer]     = useState(60)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const go = (s: Screen) => { setScreen(s); setError('') }
-
-  // ── On mount: check if already logged in ─────────────────
+  // Redirect if already logged in
   useEffect(() => {
-    sb.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) router.replace('/home')
-    })
-
-    // Handle Google OAuth callback — check if username set
-    sb.auth.onAuthStateChange(async (_e, session) => {
-      if (session?.user) {
-        const meta = session.user.user_metadata
-        // If username already set → /home
-        if (meta?.username || meta?.display_name) {
-          router.replace('/home')
-        } else {
-          // First time Google user → ask for username
-          router.replace('/auth/username')
-        }
-      }
-    })
+    const c = localStorage.getItem('sn_customer_session')
+    const s = localStorage.getItem('travex_session')
+    if (c) { try { if (JSON.parse(c)?.id) { router.replace('/home'); return } } catch {} }
+    if (s) { try { if (JSON.parse(s)?.id) { router.replace('/home'); return } } catch {} }
   }, [router])
 
-  // ── Google OAuth ─────────────────────────────────────────
-  const handleGoogle = async () => {
+  // Countdown timer on code screen
+  useEffect(() => {
+    if (screen === 'code') {
+      setTimer(60)
+      timerRef.current = setInterval(() => {
+        setTimer(t => { if (t <= 1) { clearInterval(timerRef.current!); return 0 } return t - 1 })
+      }, 1000)
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [screen])
+
+  const handleGetCode = () => {
+    setError('')
+    if (!name.trim()) { setError('Please enter your full name.'); return }
+    if (!email.trim() || !email.includes('@')) { setError('Please enter a valid email address.'); return }
     setLoading(true)
-    const { error } = await sb.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/username` },
-    })
-    if (error) { setError(error.message || 'Something went wrong. Please try again.'); setLoading(false) }
+    setTimeout(() => {
+      const newCode = generateCode()
+      setCode(newCode)
+      setEntered('')
+      setShowCode(false)
+      setScreen('code')
+      setLoading(false)
+    }, 600)
   }
 
-  // ── Email: send OTP ───────────────────────────────────────
-  const sendOtp = async () => {
-    if (!email || !username) { setError('Fill in all fields.'); return }
-    setLoading(true); setError('')
-    const { error } = await sb.auth.signInWithOtp({
-      email,
-      options: {
-        shouldCreateUser: true,
-        data: { username, display_name: username },
-      },
-    })
-    setLoading(false)
-    if (error) setError(error.message || 'Something went wrong. Please try again.')
-    else go('verify')
+  const handleVerify = () => {
+    setError('')
+    if (entered.length < 6) { setError('Please enter the full 6-digit code.'); return }
+    if (entered !== code) { setError('Incorrect code. Please check and try again.'); return }
+    setLoading(true)
+    setTimeout(() => {
+      const session = {
+        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        created_at: new Date().toISOString(),
+      }
+      localStorage.setItem('sn_customer_session', JSON.stringify(session))
+      router.replace('/home')
+    }, 500)
   }
 
-  // ── Verify OTP ────────────────────────────────────────────
-  const verifyOtp = async () => {
-    if (otp.length < 6) { setError(t('authPage.enterCodeError')); return }
-    setLoading(true); setError('')
-    const { error } = await sb.auth.verifyOtp({ email, token: otp, type: 'email' })
-    setLoading(false)
-    if (error) setError('Wrong code. Try again.')
-    else router.replace('/home')
+  const handleResend = () => {
+    const newCode = generateCode()
+    setCode(newCode)
+    setEntered('')
+    setShowCode(false)
+    setError('')
+    setTimer(60)
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setTimer(t => { if (t <= 1) { clearInterval(timerRef.current!); return 0 } return t - 1 })
+    }, 1000)
   }
 
-  // ── Styles ────────────────────────────────────────────────
   const inp: React.CSSProperties = {
-    width: '100%', boxSizing: 'border-box',
-    padding: '0.82rem 1rem 0.82rem 2.75rem',
-    background: 'rgba(255,255,255,0.16)',
-    border: '1.5px solid rgba(255,255,255,0.22)',
-    borderRadius: 14, color: '#fff', fontSize: '0.9rem',
-    fontFamily: "'Inter',sans-serif", outline: 'none',
-    transition: 'border-color 0.2s',
+    width:'100%', boxSizing:'border-box' as const,
+    padding:'0.82rem 1rem 0.82rem 2.75rem',
+    background:'#fff',
+    border:'1.5px solid #E2E8F0',
+    borderRadius:12, color:'#0D1B3E', fontSize:'0.9rem',
+    fontFamily:"'Inter',sans-serif", outline:'none',
+    transition:'border-color 0.2s, box-shadow 0.2s',
   }
 
-  const primaryBtn: React.CSSProperties = {
-    width: '100%', padding: '0.875rem',
-    background: '#F97316', color: '#fff', border: 'none',
-    borderRadius: 14, fontFamily: "'Inter',sans-serif",
-    fontWeight: 700, fontSize: '0.9rem',
-    cursor: loading ? 'not-allowed' : 'pointer',
-    opacity: loading ? 0.6 : 1,
-    display: 'flex', alignItems: 'center',
-    justifyContent: 'center', gap: 8, transition: 'all 0.2s',
+  const iconStyle: React.CSSProperties = {
+    position:'absolute', left:13, top:'50%',
+    transform:'translateY(-50%)', color:'#94A3B8', pointerEvents:'none',
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080F37', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
+    <div style={{
+      minHeight:'100dvh',
+      background:'#F8FAFF',
+      display:'flex', flexDirection:'column',
+      alignItems:'center', justifyContent:'center',
+      padding:'1.5rem', fontFamily:"'Inter',sans-serif",
+    }}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         @keyframes spin   { to { transform: rotate(360deg) } }
-         to{opacity:1;transform:translateY(0)} }
-        .a-card { animation: fadeIn 0.3s ease; }
-        input { caret-color: #F97316; }
-        input::placeholder { color: rgba(255,255,255,0.45) !important; }
-        input:focus { border-color: #F97316 !important; box-shadow: 0 0 0 3px rgba(249,115,22,0.15); }
+        .auth-card { animation: fadeIn 0.32s ease both; }
+        input:focus { border-color: #0D1B3E !important; box-shadow: 0 0 0 3px rgba(13,27,62,0.08) !important; }
+        input::placeholder { color: #CBD5E1 !important; }
+        .code-digit { animation: fadeIn 0.2s ease both; }
       `}</style>
 
+      {/* Logo */}
+      <div style={{ textAlign:'center', marginBottom:'1.5rem', animation:'fadeIn 0.4s ease 0.05s both' }}>
+        <div style={{ display:'flex', alignItems:'baseline', justifyContent:'center', gap:1, marginBottom:4 }}>
+          <span style={{ fontSize:'1.4rem', fontWeight:900, color:'#0D1B3E', letterSpacing:'-0.04em' }}>Shop</span>
+          <span style={{ fontSize:'1.4rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.04em' }}>Nekt</span>
+        </div>
+        <div style={{ fontSize:'0.62rem', color:'#94A3B8', letterSpacing:'0.15em', textTransform:'uppercase' }}>QNEX360</div>
+      </div>
+
       {/* Card */}
-      <div className="a-card" key={screen} style={{ width: '100%', maxWidth: 380, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)' }}>
+      <div className="auth-card" key={screen} style={{
+        width:'100%', maxWidth:380,
+        background:'#fff',
+        border:'1.5px solid #E2E8F0',
+        borderRadius:22, padding:'1.75rem',
+        boxShadow:'0 4px 24px rgba(13,27,62,0.08)',
+      }}>
 
-        {/* ── MAIN ─────────────────────────────────────────── */}
-        {screen === 'main' && <>
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>{t('authPage.welcome')}</h2>
-          <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', textAlign: 'center', marginBottom: '1.75rem', lineHeight: 1.5 }}>{t('authPage.subtitle')}</p>
-
-          {/* Google */}
-          <button onClick={handleGoogle} disabled={loading}
-            style={{ ...primaryBtn, background: '#fff', color: '#1a1a1a', marginBottom: '0.75rem' }}>
-            {loading
-              ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
-              : <svg width="18" height="18" viewBox="0 0 48 48">
-                  <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/>
-                  <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-                  <path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.8 13.5-4.8L31 33.7C29 35.1 26.6 36 24 36c-5.2 0-9.6-3-11.3-7.4l-6.5 5C9.7 39.7 16.3 44 24 44z"/>
-                  <path fill="#1565C0" d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.5l6.5 5.1C41.3 35.3 44 30 44 24c0-1.3-.1-2.7-.4-4z"/>
-                </svg>
-            }
-            Continue with Google
-          </button>
-
-          {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '0.5rem 0 0.75rem' }}>
-            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
-            <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)', fontWeight: 600 }}>OR</span>
-            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
-          </div>
-
-          {/* Email */}
-          <button onClick={() => agreed && go('email')} style={{ ...primaryBtn, opacity: !agreed ? 0.45 : 1, cursor: !agreed ? 'not-allowed' : 'pointer' }}>
-            <Mail size={16} /> Continue with Email
-          </button>
-
-          {error && <p style={{ fontSize: '0.75rem', color: '#FCA5A5', marginTop: '1rem', textAlign: 'center' }}>{error}</p>}
-        </>}
-
-        {/* ── EMAIL + USERNAME ──────────────────────────────── */}
-        {screen === 'email' && <>
-          <button onClick={() => go('main')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.78rem', fontFamily: "'Inter',sans-serif", marginBottom: '1.25rem', padding: 0 }}>
-            <ArrowLeft size={14} /> {t('common.back')}
-          </button>
-
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>{t('authPage.continueEmail')}</h2>
-          <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
-            {t('authPage.sendCodeDesc')}
+        {/* ── FORM SCREEN ────────────────────────────── */}
+        {screen === 'form' && <>
+          <h2 style={{ fontSize:'1.2rem', fontWeight:800, color:'#0D1B3E', marginBottom:4, letterSpacing:'-0.02em' }}>
+            Welcome to ShopNekt
+          </h2>
+          <p style={{ fontSize:'0.78rem', color:'#94A3B8', marginBottom:'1.5rem', lineHeight:1.6 }}>
+            Enter your details to get started. We'll generate a code for you instantly.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '0.85rem' }}>
-            <div style={{ position: 'relative' }}>
-              <Mail size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="Email address" style={inp} />
+          <div style={{ display:'flex', flexDirection:'column', gap:'0.75rem', marginBottom:'1rem' }}>
+            <div style={{ position:'relative' }}>
+              <User size={15} style={iconStyle} />
+              <input
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                placeholder="Full name"
+                style={inp}
+                onKeyDown={e => e.key === 'Enter' && handleGetCode()}
+              />
             </div>
-            <div style={{ position: 'relative' }}>
-              <User size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
-              <input value={username} onChange={e => setUsername(e.target.value)}
-                placeholder="Choose a username" style={inp}
-                onKeyDown={e => e.key === 'Enter' && sendOtp()} />
+            <div style={{ position:'relative' }}>
+              <Mail size={15} style={iconStyle} />
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Email address"
+                style={inp}
+                onKeyDown={e => e.key === 'Enter' && handleGetCode()}
+              />
             </div>
           </div>
 
-          {error && <p style={{ fontSize: '0.75rem', color: '#FCA5A5', marginBottom: '0.75rem', textAlign: 'center' }}>{error}</p>}
+          {error && (
+            <div style={{ fontSize:'0.76rem', color:'#DC2626', background:'rgba(220,38,38,0.06)', border:'1px solid rgba(220,38,38,0.15)', borderRadius:8, padding:'0.6rem 0.85rem', marginBottom:'0.85rem' }}>
+              {error}
+            </div>
+          )}
 
-          <button onClick={sendOtp} disabled={loading} style={primaryBtn}>
+          <button
+            onClick={handleGetCode}
+            disabled={loading}
+            style={{
+              width:'100%', padding:'0.875rem',
+              background: loading ? '#94A3B8' : '#0D1B3E',
+              color:'#fff', border:'none', borderRadius:12,
+              fontFamily:"'Inter',sans-serif", fontWeight:700,
+              fontSize:'0.9rem', cursor: loading ? 'not-allowed' : 'pointer',
+              display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              transition:'all 0.2s',
+            }}
+          >
             {loading
-              ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> {t('authPage.sending')}</>
-              : <>{t('authPage.sendCode')} <ArrowRight size={14} /></>}
+              ? <><span style={{ width:16,height:16,border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block' }}/> Generating...</>
+              : <>Get My Code <ArrowRight size={15}/></>
+            }
           </button>
+
+          <p style={{ textAlign:'center', marginTop:'1.25rem', fontSize:'0.73rem', color:'#94A3B8', lineHeight:1.6 }}>
+            Already have a seller account?{' '}
+            <a href="/login" style={{ color:'#0D1B3E', fontWeight:700, textDecoration:'none' }}>Seller Login</a>
+          </p>
         </>}
 
-        {/* ── VERIFY CODE ───────────────────────────────────── */}
-        {screen === 'verify' && <>
-          <button onClick={() => go('email')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.78rem', fontFamily: "'Inter',sans-serif", marginBottom: '1.25rem', padding: 0 }}>
-            <ArrowLeft size={14} /> {t('common.back')}
+        {/* ── CODE SCREEN ────────────────────────────── */}
+        {screen === 'code' && <>
+          <button
+            onClick={() => { setScreen('form'); setError('') }}
+            style={{ background:'none', border:'none', cursor:'pointer', color:'#94A3B8', display:'flex', alignItems:'center', gap:5, fontSize:'0.78rem', fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}
+          >
+            <ArrowLeft size={14}/> Back
           </button>
 
-          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(249,115,22,0.12)', border: '1.5px solid rgba(249,115,22,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-              <ShieldCheck size={26} color="#F97316" />
+          <div style={{ textAlign:'center', marginBottom:'1.5rem' }}>
+            <div style={{ width:56,height:56,borderRadius:16,background:'rgba(13,27,62,0.06)',border:'1.5px solid rgba(13,27,62,0.10)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px' }}>
+              <ShieldCheck size={26} color="#0D1B3E"/>
             </div>
-            <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: 6 }}>{t('authPage.checkEmail')}</h2>
-            <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
-              {t('authPage.codeSentTo')}<br />
-              <span style={{ color: '#F97316', fontWeight: 700 }}>{email}</span>
+            <h2 style={{ fontSize:'1.05rem', fontWeight:800, color:'#0D1B3E', letterSpacing:'-0.02em', marginBottom:6 }}>
+              Your code is ready
+            </h2>
+            <p style={{ fontSize:'0.76rem', color:'#94A3B8', lineHeight:1.6 }}>
+              Hi <strong style={{ color:'#0D1B3E' }}>{name.split(' ')[0]}</strong> — here is your one-time login code.
             </p>
           </div>
 
-          <input
-            value={otp}
-            onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            placeholder="000000"
-            maxLength={6}
-            inputMode="numeric"
-            style={{ ...inp, paddingLeft: '1rem', letterSpacing: '0.4em', textAlign: 'center', fontSize: '1.5rem', fontWeight: 900, marginBottom: '0.85rem' }}
-            onKeyDown={e => e.key === 'Enter' && verifyOtp()}
-          />
+          {/* Code display box */}
+          <div style={{
+            background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)',
+            borderRadius:14, padding:'1.25rem',
+            textAlign:'center', marginBottom:'1.25rem',
+            position:'relative',
+          }}>
+            <div style={{ fontSize:'0.62rem', color:'rgba(255,255,255,0.45)', textTransform:'uppercase', letterSpacing:'0.12em', marginBottom:10 }}>
+              Your login code
+            </div>
+            <div style={{
+              fontSize: showCode ? '2.2rem' : '2rem',
+              fontWeight:900, letterSpacing:'0.35em',
+              color: showCode ? '#C9A84C' : 'rgba(255,255,255,0.15)',
+              fontFamily:"'Inter',sans-serif",
+              filter: showCode ? 'none' : 'blur(8px)',
+              transition:'all 0.3s', userSelect: showCode ? 'text' : 'none',
+              marginBottom:10, lineHeight:1.2,
+            }}>
+              {showCode ? code : '● ● ● ● ● ●'}
+            </div>
+            <button
+              onClick={() => setShowCode(v => !v)}
+              style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'4px 14px', color:'rgba(255,255,255,0.7)', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
+            >
+              {showCode ? <><EyeOff size={12}/> Hide</> : <><Eye size={12}/> Reveal Code</>}
+            </button>
+          </div>
 
-          {error && <p style={{ fontSize: '0.75rem', color: '#FCA5A5', marginBottom: '0.75rem', textAlign: 'center' }}>{error}</p>}
+          {/* Code input */}
+          <div style={{ marginBottom:'0.85rem' }}>
+            <label style={{ display:'block', fontSize:'0.72rem', fontWeight:600, color:'#64748B', marginBottom:6, textTransform:'uppercase', letterSpacing:'0.06em' }}>
+              Enter the code above
+            </label>
+            <input
+              value={entered}
+              onChange={e => setEntered(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              placeholder="000000"
+              maxLength={6}
+              inputMode="numeric"
+              autoFocus
+              style={{
+                ...inp,
+                paddingLeft:'1rem', letterSpacing:'0.4em',
+                textAlign:'center', fontSize:'1.4rem',
+                fontWeight:900,
+              }}
+              onKeyDown={e => e.key === 'Enter' && handleVerify()}
+            />
+          </div>
 
-          <button onClick={verifyOtp} disabled={loading || otp.length < 6}
-            style={{ ...primaryBtn, opacity: otp.length < 6 ? 0.45 : 1 }}>
+          {error && (
+            <div style={{ fontSize:'0.76rem', color:'#DC2626', background:'rgba(220,38,38,0.06)', border:'1px solid rgba(220,38,38,0.15)', borderRadius:8, padding:'0.6rem 0.85rem', marginBottom:'0.85rem' }}>
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={handleVerify}
+            disabled={loading || entered.length < 6}
+            style={{
+              width:'100%', padding:'0.875rem',
+              background: entered.length < 6 ? '#94A3B8' : '#0D1B3E',
+              color:'#fff', border:'none', borderRadius:12,
+              fontFamily:"'Inter',sans-serif", fontWeight:700,
+              fontSize:'0.9rem',
+              cursor: entered.length < 6 ? 'not-allowed' : 'pointer',
+              display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              transition:'all 0.2s', marginBottom:'1rem',
+            }}
+          >
             {loading
-              ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> {t('authPage.verifying')}</>
-              : <>{t('authPage.verifyEnter')} <ArrowRight size={14} /></>}
+              ? <span style={{ width:16,height:16,border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block' }}/>
+              : <>Verify & Enter <ArrowRight size={15}/></>
+            }
           </button>
 
-          <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
-            {t('authPage.didntReceive')}{' '}
-            <button onClick={sendOtp} style={{ background: 'none', border: 'none', color: '#F97316', fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif", fontSize: '0.75rem' }}>
-              {t('authPage.resend')}
-            </button>
+          <p style={{ textAlign:'center', fontSize:'0.73rem', color:'#94A3B8' }}>
+            {timer > 0
+              ? <>Code expires in <strong style={{ color:'#0D1B3E' }}>{timer}s</strong></>
+              : <button onClick={handleResend} style={{ background:'none', border:'none', color:'#0D1B3E', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.73rem', padding:0 }}>
+                  Get a new code
+                </button>
+            }
           </p>
         </>}
-
       </div>
     </div>
   )
