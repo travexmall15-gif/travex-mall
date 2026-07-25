@@ -513,7 +513,10 @@
     "all": "All",
     "openShopHint": "Open a Shop",
     "onlineBadge": "Online",
-    "aria": "AI Assistant"
+    "aria": "AI Assistant",
+    "saveShop": "Save Shop",
+    "shopSaved": "Saved!",
+    "unsaveShop": "Unsave"
   },
   "openStore": {
     "title": "Open Your Store on ShopNekt",
@@ -903,7 +906,24 @@
     "priceDrops": "Price Drops",
     "clearHistory": "Clear Search History",
     "currency": "Currency",
-    "region": "Preferred Region"
+    "region": "Preferred Region",
+    "flashDealsAlerts": "Flash Deals",
+    "flashDealsSub": "Limited time offers",
+    "groupBuyAlerts": "Group Buy Targets",
+    "groupBuySub": "When group reaches target",
+    "priceDropAlerts": "Price Drop Alerts",
+    "priceDropSub": "Saved items price changes",
+    "newArrivalsAlerts": "New Arrivals",
+    "newArrivalsSub": "New products in your categories",
+    "savedShops": "Saved Shops",
+    "savedShopsDesc": "Shops you've saved for quick access",
+    "noSavedShops": "No saved shops yet",
+    "noSavedShopsDesc": "Visit a shop and tap the heart to save it here.",
+    "removeShop": "Remove",
+    "visitShop": "Visit Shop",
+    "ordersTotal": "total",
+    "ordersPending": "pending",
+    "myOrders": "My Orders"
   },
   "orders": {
     "title": "My Orders",

@@ -513,7 +513,10 @@
     "settingUpShop": "Loja em configuração",
     "openShopHint": "Abrir uma loja",
     "onlineBadge": "Online",
-    "aria": "Assistente IA"
+    "aria": "Assistente IA",
+    "saveShop": "Salvar loja",
+    "shopSaved": "Salva!",
+    "unsaveShop": "Remover"
   },
   "common": {
     "loading": "Carregando...",
@@ -954,7 +957,24 @@
     "flashDeals": "Alertas de ofertas relâmpago",
     "groupBuy": "Notificações de compra em grupo",
     "newArrivals": "Novidades",
-    "priceDrops": "Quedas de preço"
+    "priceDrops": "Quedas de preço",
+    "flashDealsAlerts": "Ofertas relâmpago",
+    "flashDealsSub": "Ofertas por tempo limitado",
+    "groupBuyAlerts": "Metas de compra em grupo",
+    "groupBuySub": "Quando o grupo atinge a meta",
+    "priceDropAlerts": "Alertas de queda de preço",
+    "priceDropSub": "Mudanças de preço em itens salvos",
+    "newArrivalsAlerts": "Novidades",
+    "newArrivalsSub": "Novos produtos nas suas categorias",
+    "savedShops": "Lojas salvas",
+    "savedShopsDesc": "Lojas salvas para acesso rápido",
+    "noSavedShops": "Nenhuma loja salva ainda",
+    "noSavedShopsDesc": "Visite uma loja e toque no coração para salvá-la.",
+    "removeShop": "Remover",
+    "visitShop": "Visitar loja",
+    "ordersTotal": "total",
+    "ordersPending": "pendente",
+    "myOrders": "Meus pedidos"
   },
   "orders": {
     "title": "Meus Pedidos",

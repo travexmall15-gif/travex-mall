@@ -8,7 +8,7 @@ import { use, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
-import { ArrowLeft, MessageCircle, Package, ShoppingCart, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2 } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Package, ShoppingCart, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 
 type Store = {
@@ -300,13 +300,33 @@ export default function StorePage({
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6, marginBottom: 8, maxWidth: 480, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{store.shop_desc}</p>
               )}
               {/* Message Seller button in hero */}
-              <button
-                onClick={() => setShowMsg(true)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
-                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
-                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
-                <MessageCircle size={13} /> {t('store.messageSeller')}
-              </button>
+              <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+                <button
+                  onClick={() => setShowMsg(true)}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
+                  onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
+                  <MessageCircle size={13} /> {t('store.messageSeller')}
+                </button>
+                {/* Save Shop toggle */}
+                <button
+                  onClick={() => {
+                    const saved = JSON.parse(localStorage.getItem('sn_saved_shops') || '[]')
+                    const alreadySaved = saved.some((s: any) => s.id === store!.id)
+                    if (alreadySaved) {
+                      const updated = saved.filter((s: any) => s.id !== store!.id)
+                      localStorage.setItem('sn_saved_shops', JSON.stringify(updated))
+                    } else {
+                      saved.push({ id: store!.id, shop_name: store!.shop_name, shop_category: store!.shop_category, shop_region: store!.shop_region, plan: store!.plan, saved_at: new Date().toISOString() })
+                      localStorage.setItem('sn_saved_shops', JSON.stringify(saved))
+                    }
+                    // Force re-render by toggling state
+                    setShowMsg(v => v)
+                  }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: (() => { try { const s = JSON.parse(localStorage.getItem('sn_saved_shops')||'[]'); return s.some((x:any)=>x.id===store!.id) ? 'rgba(239,68,68,0.25)':'rgba(255,255,255,0.10)' } catch{return 'rgba(255,255,255,0.10)'} })(), border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}>
+                  <Heart size={12} /> {t('store.saveShop')}
+                </button>
+              </div>
             </div>
           </div>
 

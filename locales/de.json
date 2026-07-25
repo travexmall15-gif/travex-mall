@@ -513,7 +513,10 @@
     "settingUpShop": "Shop wird eingerichtet",
     "openShopHint": "Einen Shop eröffnen",
     "onlineBadge": "Online",
-    "aria": "KI-Assistent"
+    "aria": "KI-Assistent",
+    "saveShop": "Shop speichern",
+    "shopSaved": "Gespeichert!",
+    "unsaveShop": "Entfernen"
   },
   "common": {
     "loading": "Laden...",
@@ -954,7 +957,24 @@
     "flashDeals": "Flash-Deal-Benachrichtigungen",
     "groupBuy": "Gruppenkauf-Benachrichtigungen",
     "newArrivals": "Neuheiten",
-    "priceDrops": "Preissenkungen"
+    "priceDrops": "Preissenkungen",
+    "flashDealsAlerts": "Flash-Deals",
+    "flashDealsSub": "Zeitlich begrenzte Angebote",
+    "groupBuyAlerts": "Gruppenkauf-Ziele",
+    "groupBuySub": "Wenn Gruppe Ziel erreicht",
+    "priceDropAlerts": "Preissenkungsbenachrichtigungen",
+    "priceDropSub": "Preisänderungen gespeicherter Artikel",
+    "newArrivalsAlerts": "Neuheiten",
+    "newArrivalsSub": "Neue Produkte in Ihren Kategorien",
+    "savedShops": "Gespeicherte Shops",
+    "savedShopsDesc": "Für schnellen Zugriff gespeicherte Shops",
+    "noSavedShops": "Noch keine gespeicherten Shops",
+    "noSavedShopsDesc": "Besuchen Sie einen Shop und tippen Sie auf das Herz zum Speichern.",
+    "removeShop": "Entfernen",
+    "visitShop": "Shop besuchen",
+    "ordersTotal": "gesamt",
+    "ordersPending": "ausstehend",
+    "myOrders": "Meine Bestellungen"
   },
   "orders": {
     "title": "Meine Bestellungen",

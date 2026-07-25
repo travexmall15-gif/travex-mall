@@ -513,7 +513,10 @@
     "settingUpShop": "يتم إعداد المتجر",
     "openShopHint": "فتح متجر",
     "onlineBadge": "متصل",
-    "aria": "مساعد ذكي"
+    "aria": "مساعد ذكي",
+    "saveShop": "حفظ المتجر",
+    "shopSaved": "تم الحفظ!",
+    "unsaveShop": "إلغاء الحفظ"
   },
   "common": {
     "loading": "جاري التحميل...",
@@ -954,7 +957,24 @@
     "flashDeals": "تنبيهات العروض الخاطفة",
     "groupBuy": "إشعارات الشراء الجماعي",
     "newArrivals": "الوافدون الجدد",
-    "priceDrops": "انخفاضات الأسعار"
+    "priceDrops": "انخفاضات الأسعار",
+    "flashDealsAlerts": "عروض خاطفة",
+    "flashDealsSub": "عروض لوقت محدود",
+    "groupBuyAlerts": "أهداف الشراء الجماعي",
+    "groupBuySub": "عندما تصل المجموعة للهدف",
+    "priceDropAlerts": "تنبيهات انخفاض السعر",
+    "priceDropSub": "تغييرات أسعار العناصر المحفوظة",
+    "newArrivalsAlerts": "الوافدون الجدد",
+    "newArrivalsSub": "منتجات جديدة في فئاتك",
+    "savedShops": "المتاجر المحفوظة",
+    "savedShopsDesc": "المتاجر المحفوظة للوصول السريع",
+    "noSavedShops": "لا توجد متاجر محفوظة بعد",
+    "noSavedShopsDesc": "قم بزيارة متجر واضغط على القلب لحفظه هنا.",
+    "removeShop": "إزالة",
+    "visitShop": "زيارة المتجر",
+    "ordersTotal": "إجمالي",
+    "ordersPending": "معلّق",
+    "myOrders": "طلباتي"
   },
   "orders": {
     "title": "طلباتي",

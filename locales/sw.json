@@ -513,7 +513,10 @@
     "all": "Zote",
     "openShopHint": "Fungua Duka",
     "onlineBadge": "Mtandaoni",
-    "aria": "Msaidizi wa AI"
+    "aria": "Msaidizi wa AI",
+    "saveShop": "Hifadhi Duka",
+    "shopSaved": "Imehifadhiwa!",
+    "unsaveShop": "Toa Hifadhi"
   },
   "openStore": {
     "title": "Fungua Duka Lako kwenye ShopNekt",
@@ -903,7 +906,24 @@
     "priceDrops": "Punguzo la Bei",
     "clearHistory": "Futa Historia ya Utafutaji",
     "currency": "Sarafu",
-    "region": "Eneo Linalopendelewa"
+    "region": "Eneo Linalopendelewa",
+    "flashDealsAlerts": "Ofa za Haraka",
+    "flashDealsSub": "Ofa za muda mfupi",
+    "groupBuyAlerts": "Malengo ya Nunua Pamoja",
+    "groupBuySub": "Wakati kikundi kinafikia lengo",
+    "priceDropAlerts": "Tahadhari za Bei Kupungua",
+    "priceDropSub": "Mabadiliko ya bei ya bidhaa zilizohifadhiwa",
+    "newArrivalsAlerts": "Bidhaa Mpya",
+    "newArrivalsSub": "Bidhaa mpya katika aina zako",
+    "savedShops": "Maduka Yaliyohifadhiwa",
+    "savedShopsDesc": "Maduka uliyohifadhi kwa ufikiaji wa haraka",
+    "noSavedShops": "Hakuna maduka yaliyohifadhiwa bado",
+    "noSavedShopsDesc": "Tembelea duka na bonyeza moyo kulifanya hapa.",
+    "removeShop": "Ondoa",
+    "visitShop": "Tembelea Duka",
+    "ordersTotal": "jumla",
+    "ordersPending": "zinasubiri",
+    "myOrders": "Maagizo Yangu"
   },
   "orders": {
     "title": "Maagizo Yangu",
