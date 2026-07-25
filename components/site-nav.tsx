@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Home, Store, GraduationCap, MessageCircle, Zap,
-  Users, Truck, Search, Menu, Loader2, MessageSquare
+  Users, Truck, Search, Menu, Loader2, MessageSquare, X
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
@@ -37,6 +37,7 @@ export function SiteNav() {
   const [results,   setResults]   = useState<ShopResult[]>([])
   const [searching, setSearching] = useState(false)
   const [showDrop,  setShowDrop]  = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const [user, setUser] = useState<{email:string, name:string} | null>(null)
   useEffect(() => {
     // Fast path: check custom session first (no network)
@@ -67,7 +68,7 @@ export function SiteNav() {
 
 
   const searchRef = useRef<HTMLDivElement>(null)
-  const debounceRef = useRef<NodeJS.Timeout>()
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Close on outside click
   useEffect(() => {
@@ -156,16 +157,74 @@ export function SiteNav() {
         {/* Spacer */}
         <div style={{ flex: 1 }} />
 
-        {/* Search icon — circle button */}
-        <button
-          onClick={() => { const el = document.getElementById('nav-search-input'); el ? (el as HTMLInputElement).focus() : null }}
-          style={{ width: 38, height: 38, borderRadius: '50%', background: '#F1F5F9', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
-          {searching
-            ? <Loader2 size={16} color="#64748B" style={{ animation: 'spin .8s linear infinite' }} />
-            : <Search size={16} color="#475569" />}
-        </button>
+        {/* Search bar — expands from button */}
+        <div ref={searchRef} style={{ position:'relative', display:'flex', alignItems:'center', flex: searchOpen ? 1 : 'none', transition:'all .25s', maxWidth: searchOpen ? 360 : 38 }}>
+          {searchOpen ? (
+            <div style={{ display:'flex', alignItems:'center', width:'100%', background:'#F8FAFF', border:'1.5px solid #E2E8F0', borderRadius:999, padding:'0 12px', gap:8 }}>
+              {searching
+                ? <Loader2 size={15} color="#64748B" style={{ animation:'spin .8s linear infinite', flexShrink:0 }} />
+                : <Search size={15} color="#94A3B8" style={{ flexShrink:0 }} />}
+              <input
+                id="nav-search-input"
+                autoFocus
+                value={query}
+                onChange={e => handleSearch(e.target.value)}
+                onKeyDown={e => { if (e.key==='Escape') { setSearchOpen(false); setQuery(''); setShowDrop(false) } }}
+                placeholder={t('common.search') + '...'}
+                style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'#0F172A', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
+              />
+              {query && (
+                <button onClick={() => { setQuery(''); setResults([]); setShowDrop(false) }}
+                  style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#94A3B8', flexShrink:0 }}>
+                  <X size={14} />
+                </button>
+              )}
+              <button onClick={() => { setSearchOpen(false); setQuery(''); setShowDrop(false) }}
+                style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#94A3B8', flexShrink:0 }}>
+                <X size={15} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setSearchOpen(true)}
+              style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'background .2s' }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
+              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+              <Search size={16} color="#475569" />
+            </button>
+          )}
+
+          {/* Search dropdown results */}
+          {showDrop && results.length > 0 && (
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden' }}>
+              {results.map(r => (
+                <button key={r.id} onClick={() => { goToShop(r.id); setSearchOpen(false) }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily:"'Inter',sans-serif" }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
+                  <div style={{ width:32, height:32, borderRadius:8, background: r.source==='campus' ? '#EEF2FF' : '#F0FDF4', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                    <Store size={14} color={r.source==='campus' ? '#4F46E5' : '#16A34A'} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#0F172A' }}>{r.shop_name}</div>
+                    <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:1 }}>{r.shop_city || ''} · {r.source === 'campus' ? 'Campus' : 'Business'}</div>
+                  </div>
+                </button>
+              ))}
+              <div style={{ padding:'8px 14px', borderTop:'1px solid #F1F5F9' }}>
+                <button onClick={() => { router.push(`/market?q=${encodeURIComponent(query)}`); setSearchOpen(false) }}
+                  style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'#2563EB', fontWeight:600, textAlign:'left', fontFamily:"'Inter',sans-serif" }}>
+                  {t('nav.searchAll')} "{query}" →
+                </button>
+              </div>
+            </div>
+          )}
+          {showDrop && results.length === 0 && query.trim() && !searching && (
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
+              <div style={{ fontSize:'0.82rem', color:'#94A3B8' }}>{t('common.noResults')}</div>
+            </div>
+          )}
+        </div>
 
         {/* Move / Truck icon */}
         <Link href="/move"
