@@ -202,7 +202,7 @@ export function SiteNav() {
         </div>
 
         {/* Move */}
-        <Link href="/move"
+        <Link href="/move/index.html"
           style={{ width: 38, height: 38, borderRadius: '50%', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
