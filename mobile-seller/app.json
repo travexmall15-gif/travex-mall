@@ -17,7 +17,9 @@
       "bundleIdentifier": "com.qnex360.shopnektseller",
       "infoPlist": {
         "NSCameraUsageDescription": "ShopNekt Seller uses camera for product photos",
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -26,25 +28,18 @@
         "backgroundColor": "#080F37"
       },
       "package": "com.qnex360.shopnektseller",
-      "permissions": ["RECEIVE_BOOT_COMPLETED", "VIBRATE", "CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "INTERNET"]
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET"
+      ]
     },
     "plugins": [
-      "expo-splash-screen",
-      ["expo-notifications", {
-        "icon": "./assets/icon.png",
-        "color": "#0D1B3E",
-        "sounds": [],
-        "mode": "production"
-      }]
+      "expo-splash-screen"
     ],
-    "updates": {
-      "url": "https://u.expo.dev/YOUR_EAS_PROJECT_ID",
-      "enabled": true,
-      "checkAutomatically": "ON_LOAD"
-    },
-    "runtimeVersion": { "policy": "sdkVersion" },
-    "extra": {
-      "eas": { "projectId": "YOUR_EAS_PROJECT_ID" }
-    }
+    "extra": {}
   }
 }
