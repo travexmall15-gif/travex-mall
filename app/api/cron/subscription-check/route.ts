@@ -45,9 +45,9 @@ export async function GET(req: Request) {
 
   // Auto-expire flash deals
   await sb.from('flash_deals')
-    .update({ status: 'expired' })
+    .update({ is_active: false })
     .lt('ends_at', now.toISOString())
-    .eq('status', 'active')
+    .eq('is_active', true)
 
   // Auto-expire group orders
   await sb.from('group_orders')
