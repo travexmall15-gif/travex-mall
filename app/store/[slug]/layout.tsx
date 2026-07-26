@@ -11,13 +11,42 @@ type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const { data: shop } = await sb
-    .from('shops')
-    .select('shop_name,shop_description,shop_category,shop_city,shop_logo,shop_banner')
-    .eq('shop_slug', slug)
+
+  // Try business market first (pending_payments table, id = slug)
+  let name = '', description = '', image = '', city = '', category = ''
+
+  const { data: biz } = await sb
+    .from('pending_payments')
+    .select('shop_name,shop_desc,shop_category,shop_city,shop_logo,shop_banner')
+    .eq('id', slug)
+    .eq('status', 'approved')
     .single()
 
-  if (!shop) {
+  if (biz) {
+    name        = biz.shop_name || ''
+    description = biz.shop_desc || ''
+    category    = biz.shop_category || ''
+    city        = biz.shop_city || ''
+    image       = biz.shop_banner || biz.shop_logo || ''
+  } else {
+    // Try campus stores
+    const { data: campus } = await sb
+      .from('campus_stores')
+      .select('store_name,description,category,university_abbr,logo,banner')
+      .eq('id', slug)
+      .eq('is_active', true)
+      .single()
+
+    if (campus) {
+      name        = campus.store_name || ''
+      description = campus.description || ''
+      category    = campus.category || ''
+      city        = campus.university_abbr || ''
+      image       = campus.banner || campus.logo || ''
+    }
+  }
+
+  if (!name) {
     return {
       title: 'Store Not Found',
       description: 'This store could not be found on ShopNekt.',
@@ -25,30 +54,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const title       = `${shop.shop_name} — Official Store`
-  const description = shop.shop_description
-    || `Shop at ${shop.shop_name} on ShopNekt. ${shop.shop_category || ''} ${shop.shop_city ? `based in ${shop.shop_city}` : ''}. Verified seller on ShopNekt marketplace.`
-  const image       = shop.shop_banner || shop.shop_logo || `${BASE}/og-image.png`
-  const url         = `${BASE}/store/${slug}`
+  const title = `${name} — Official Store`
+  const desc  = description || `Shop at ${name} on ShopNekt. ${category} ${city ? `based in ${city}` : ''}. Verified seller on ShopNekt marketplace.`
+  const img   = image || `${BASE}/og-image.png`
+  const url   = `${BASE}/store/${slug}`
 
   return {
     title,
-    description,
+    description: desc,
     alternates: { canonical: url },
     openGraph: {
       type: 'profile',
       url,
       siteName: 'ShopNekt',
       title: `${title} | ShopNekt`,
-      description,
-      images: [{ url: image, width: 1200, height: 630, alt: shop.shop_name }],
+      description: desc,
+      images: [{ url: img, width: 1200, height: 630, alt: name }],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@shopnekt',
       title: `${title} | ShopNekt`,
-      description,
-      images: [image],
+      description: desc,
+      images: [img],
     },
   }
 }
