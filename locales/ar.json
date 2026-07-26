@@ -1071,7 +1071,8 @@
     "messageSeller": "مراسلة البائع",
     "noConversations": "لا توجد محادثات بعد",
     "seen": "مرئي",
-    "startConversation": "بدء محادثة"
+    "startConversation": "بدء محادثة",
+    "unread": "غير مقروء"
   },
   "ai": {
     "title": "360 AI",

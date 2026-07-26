@@ -828,7 +828,8 @@
     "labelPrivacySub": "Jinsi tunavyotumia data yako",
     "labelTerms": "Masharti ya Huduma",
     "labelTermsSub": "Masharti na hali za matumizi",
-    "deleteBtn": "Futa"
+    "deleteBtn": "Futa",
+    "privacyPolicy": "Sera ya Faragha"
   },
   "profile": {
     "title": "Hariri Wasifu",
@@ -996,7 +997,8 @@
     "lastSeen": "Mara ya mwisho kuonwa",
     "messageSeller": "Tuma Ujumbe kwa Muuzaji",
     "startConversation": "Anza mazungumzo",
-    "noConversations": "Hakuna mazungumzo bado"
+    "noConversations": "Hakuna mazungumzo bado",
+    "unread": "ambayo hayajasomwa"
   },
   "ai": {
     "title": "360 AI",
@@ -1061,7 +1063,8 @@
       "Nguo za watoto bajeti 30k",
       "Vifaa vya simu mtandaoni",
       "Bidhaa za urembo bei nafuu"
-    ]
+    ],
+    "send": "Tuma"
   },
   "menuPage": {
     "language": "Lugha",

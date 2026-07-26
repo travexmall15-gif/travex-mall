@@ -92,7 +92,7 @@ export default function OrdersPage() {
 
         {/* Filter pills */}
         <div style={{ display:'flex', gap:6, marginBottom:'1.25rem', overflowX:'auto', paddingBottom:4 }}>
-          {(['all','pending','confirmed','rejected'] as Filter[]).map(f => (
+          {(['all','pending','confirmed','rejected'] as OrderFilter[]).map(f => (
             <button key={f} onClick={() => setFilter(f)}
               style={{ padding:'7px 14px', borderRadius:999, border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.78rem', fontWeight:700, whiteSpace:'nowrap', flexShrink:0, transition:'all .15s',
                 background: filter===f ? '#0D1B3E' : '#fff',

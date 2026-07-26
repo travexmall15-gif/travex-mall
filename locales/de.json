@@ -1071,7 +1071,8 @@
     "messageSeller": "Verkäufer kontaktieren",
     "noConversations": "Noch keine Gespräche",
     "seen": "Gesehen",
-    "startConversation": "Gespräch beginnen"
+    "startConversation": "Gespräch beginnen",
+    "unread": "ungelesen"
   },
   "ai": {
     "title": "360 AI",

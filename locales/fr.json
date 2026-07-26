@@ -1072,7 +1072,8 @@
     "messageSeller": "Contacter le vendeur",
     "noConversations": "Pas encore de conversations",
     "seen": "Lu",
-    "startConversation": "Démarrer une conversation"
+    "startConversation": "Démarrer une conversation",
+    "unread": "non lus"
   },
   "ai": {
     "title": "360 AI",

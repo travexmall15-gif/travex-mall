@@ -196,14 +196,28 @@ let shopData = null;
 })();
 
 async function saveShop() {
-  const updates = {
-    shop_name: document.getElementById('sShopName').value,
-    shop_category: document.getElementById('sCategory').value,
-    shop_region: document.getElementById('sRegion').value,
-    shop_whatsapp: document.getElementById('sWhatsapp').value,
-    shop_desc: document.getElementById('sDesc').value,
-  };
-  const { error } = await sb.from('pending_payments').update(updates).eq('id', shopData?.id);
+  const session = JSON.parse(localStorage.getItem('travex_session')||'{}');
+  const isCampus = session.market === 'campus';
+  let error;
+  if (isCampus) {
+    // Campus store: different table + column names
+    const updates = {
+      store_name:  document.getElementById('sShopName').value,
+      category:    document.getElementById('sCategory').value,
+      description: document.getElementById('sDesc').value,
+      whatsapp:    document.getElementById('sWhatsapp').value,
+    };
+    ({ error } = await sb.from('campus_stores').update(updates).eq('id', shopData?.id));
+  } else {
+    const updates = {
+      shop_name:     document.getElementById('sShopName').value,
+      shop_category: document.getElementById('sCategory').value,
+      shop_region:   document.getElementById('sRegion').value,
+      shop_whatsapp: document.getElementById('sWhatsapp').value,
+      shop_desc:     document.getElementById('sDesc').value,
+    };
+    ({ error } = await sb.from('pending_payments').update(updates).eq('id', shopData?.id));
+  }
   if (error) { showToast('Error: '+error.message,'error'); return; }
   showToast(' Shop info saved!','success');
 }

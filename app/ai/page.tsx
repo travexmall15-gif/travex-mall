@@ -116,9 +116,9 @@ export default function AiPage() {
     }
     if (!enriched.length) {
       const { data: fb } = await sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan').eq('status','approved').or(`shop_name.ilike.%${query}%,shop_desc.ilike.%${query}%,shop_category.ilike.%${query}%`).limit(6)
-      for (const s of (fb||[])) enriched.push({...s,match_reason:'Matches search',products:[],rating:s.rating||0})
+      for (const s of (fb||[])) enriched.push({...s,match_reason:'Matches search',products:[]})
     }
-    return enriched.sort((a,b)=>b.products.length-a.products.length).slice(0,8)
+    return enriched.sort((a,b)=>(b.products?.length||0)-(a.products?.length||0)).slice(0,8)
   }
 
   async function send(override?: string) {
@@ -359,7 +359,7 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
           <div style={{flex:1,minWidth:0}}>
             <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
               <span style={{fontWeight:700,color:'#0F172A',fontSize:'0.88rem',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{store.shop_name}</span>
-              {(store.plan === 'premium' ? '★' : '')>0&&<span style={{fontSize:'0.67rem',color:'#C9A84C',flexShrink:0}}>\u2B50 {(store.plan === 'premium' ? '★' : '').toFixed(1)}</span>}
+              {store.plan === 'premium' && <span style={{fontSize:'0.67rem',color:'#C9A84C',flexShrink:0}}>★ Premium</span>}
             </div>
             <div style={{fontSize:'0.7rem',color:'#94A3B8',marginBottom:4,display:'flex',gap:6,flexWrap:'wrap'}}>
               {store.shop_category&&<span>{store.shop_category}</span>}
@@ -368,9 +368,9 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
             <span style={{display:'inline-flex',alignItems:'center',gap:3,fontSize:'0.66rem',color:'#059669',background:'rgba(5,150,105,0.08)',border:'1px solid rgba(5,150,105,0.15)',borderRadius:999,padding:'2px 7px'}}>
               \u2713 {store.match_reason}
             </span>
-            {store.products.length>0&&(
+            {(store.products?.length||0)>0&&(
               <div style={{marginTop:5,display:'flex',gap:4,flexWrap:'wrap'}}>
-                {store.products.slice(0,3).map((p,j)=>(
+                {(store.products || []).slice(0,3).map((p,j)=>(
                   <span key={j} style={{fontSize:'0.67rem',background:'#F8FAFC',border:'1px solid #E2E8F0',borderRadius:5,padding:'2px 7px',color:'#475569'}}>
                     {p.name} \u00B7 <strong>TZS {p.price?.toLocaleString()}</strong>
                   </span>

@@ -1,7 +1,7 @@
 'use client'
 import NextImage from "next/image"
 
-import { Suspense, useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'

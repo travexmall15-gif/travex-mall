@@ -269,7 +269,7 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   // ── VYBE ───────────────────────────────────────────────
   if (intent === 'vybe') {
-    const { data } = await sb.from('feed_posts').select('caption,store_name,likes').order('likes_count',{ascending:false}).limit(3)
+    const { data } = await sb.from('feed_posts').select('caption,store_name,likes,likes_count').order('likes_count',{ascending:false}).limit(3)
     const list = data?.map(p => `• "${(p.caption||'').slice(0,40)}" — ${p.store_name} (❤️${p.likes_count||0})`).join('\n') || ''
     return sw
       ? `✨ **Social Vybe:**\n\nGundua bidhaa kupitia picha na videos!\n\n${list ? `🔥 **Trending sasa:**\n${list}\n\n` : ''}👉 Nenda /vybe!`

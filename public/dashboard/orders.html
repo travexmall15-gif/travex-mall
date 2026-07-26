@@ -90,7 +90,7 @@ async function loadData() {
   Auth.requireAuth()
   const session = JSON.parse(localStorage.getItem('travex_session')||'{}')
   const isCampus = session.market === 'campus'
-  const table  = isCampus ? 'campus_orders' : 'orders'
+  const table  = 'orders'  // Unified: both market types write to 'orders' table
   const idCol  = isCampus ? 'store_id'      : 'shop_id'
   try {
     const { data, error } = await sb.from(table)
@@ -169,7 +169,7 @@ function renderOrders(orders) {
 
 async function updateStatus(id, status) {
   const _sess = JSON.parse(localStorage.getItem('travex_session')||'{}')
-  const _tbl  = _sess.market==='campus' ? 'campus_orders' : 'orders'
+  const _tbl  = 'orders'  // Unified orders table
   const { error } = await sb.from(_tbl).update({ status, updated_at: new Date().toISOString() }).eq('id', id)
   if (error) { showToast('Error updating status'); return }
   showToast(`Order marked as ${status}`)

@@ -98,7 +98,6 @@ export default function StorePage({
           .from('products')
           .select('*')
           .eq('shop_id', shopData.id)
-          .eq('is_available', true)
           .gt('stock', 0)
           .order('created_at', { ascending: false })
         setProducts(prods || [])

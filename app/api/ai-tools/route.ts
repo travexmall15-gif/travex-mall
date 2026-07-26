@@ -150,14 +150,16 @@ export async function POST(req: Request) {
   const { tool, store_id, ...params } = await req.json()
 
   const [
-    {data:storeRow},{data:products},{data:sales},{data:orders},{data:vybes},
+    {data:storeRow},{data:bizProds},{data:campusProds},{data:sales},{data:orders},{data:vybes},
   ] = await Promise.all([
     sb.from('pending_payments').select('shop_name,shop_category,plan').eq('id',store_id).maybeSingle(),
+    sb.from('products').select('name,price,category').eq('shop_id',store_id),
     sb.from('campus_products').select('name,price,category').eq('store_id',store_id),
     sb.from('seller_sales').select('amount,category,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(200),
     sb.from('orders').select('id,total_amount,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(100),
     sb.from('feed_posts').select('id').eq('store_id',store_id),
   ])
+  const products = [...(bizProds||[]), ...(campusProds||[])]
 
   const shopName=storeRow?.shop_name||'My Shop'
   const shopCat=storeRow?.shop_category||'General'

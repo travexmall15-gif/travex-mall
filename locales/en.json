@@ -828,7 +828,8 @@
     "labelPrivacySub": "How we use your data",
     "labelTerms": "Terms of Service",
     "labelTermsSub": "Usage terms & conditions",
-    "deleteBtn": "Delete"
+    "deleteBtn": "Delete",
+    "privacyPolicy": "Privacy Policy"
   },
   "profile": {
     "title": "Edit Profile",
@@ -996,7 +997,8 @@
     "lastSeen": "Last seen",
     "messageSeller": "Message Seller",
     "startConversation": "Start a conversation",
-    "noConversations": "No conversations yet"
+    "noConversations": "No conversations yet",
+    "unread": "unread"
   },
   "ai": {
     "title": "360 AI",
@@ -1061,7 +1063,8 @@
     "qa3": "Become a Seller",
     "qa4": "Trending",
     "qa5": "Nearby",
-    "qa6": "Track Order"
+    "qa6": "Track Order",
+    "send": "Send"
   },
   "menuPage": {
     "language": "Language",

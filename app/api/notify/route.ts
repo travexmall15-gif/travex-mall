@@ -8,13 +8,17 @@ const sb = createClient(
 
 // Save push subscription
 export async function POST(req: Request) {
-  const { store_id, subscription } = await req.json()
-  await sb.from('push_subscriptions').upsert({
-    store_id,
-    endpoint:  subscription.endpoint,
-    p256dh:    subscription.keys?.p256dh,
-    auth_key:  subscription.keys?.auth,
-  }, { onConflict: 'endpoint' })
+  try {
+    const { store_id, subscription } = await req.json()
+    await sb.from('push_subscriptions').upsert({
+      store_id,
+      endpoint:  subscription.endpoint,
+      p256dh:    subscription.keys?.p256dh,
+      auth_key:  subscription.keys?.auth,
+    }, { onConflict: 'endpoint' })
+  } catch {
+    // Non-critical — push subscription failure should not break app
+  }
   return NextResponse.json({ success: true })
 }
 
