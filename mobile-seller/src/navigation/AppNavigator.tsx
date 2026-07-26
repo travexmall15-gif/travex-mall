@@ -1,53 +1,51 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Text } from 'react-native'
-import SplashScreen   from '../screens/SplashScreen'
-import LoginScreen    from '../screens/LoginScreen'
-import HomeScreen     from '../screens/HomeScreen'
-import OrdersScreen   from '../screens/OrdersScreen'
-import FinanceScreen  from '../screens/FinanceScreen'
+import { Text, View } from 'react-native'
+import { C } from '../lib/supabase'
+import SplashScreen from '../screens/SplashScreen'
+import LoginScreen from '../screens/LoginScreen'
+import HomeScreen from '../screens/HomeScreen'
+import OrdersScreen from '../screens/OrdersScreen'
+import FinanceScreen from '../screens/FinanceScreen'
 import MessagesScreen from '../screens/MessagesScreen'
-import MoreScreen     from '../screens/MoreScreen'
-import ProductsScreen from '../screens/ProductsScreen'
+import MoreScreen from '../screens/MoreScreen'
 
 const Stack = createNativeStackNavigator()
-const Tab   = createBottomTabNavigator()
+const Tab = createBottomTabNavigator()
 
-const NAVY = '#0D1B3E'
-const GRAY = '#94A3B8'
+const TABS = [
+  { name: 'Home',     icon: '🏠' },
+  { name: 'Orders',   icon: '📦' },
+  { name: 'Finance',  icon: '💰' },
+  { name: 'Messages', icon: '💬' },
+  { name: 'More',     icon: '☰'  },
+]
 
-function MainTabs() {
+const SCREENS: Record<string, React.ComponentType<any>> = {
+  Home: HomeScreen, Orders: OrdersScreen,
+  Finance: FinanceScreen, Messages: MessagesScreen, More: MoreScreen,
+}
+
+function Tabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
-          const icons: Record<string,string> = {
-            Home:'🏠', Orders:'📦', Finance:'💰', Messages:'💬', More:'⋯'
-          }
-          return (
-            <Text style={{ fontSize:22, color: focused ? NAVY : GRAY }}>
-              {icons[route.name] || '•'}
-            </Text>
-          )
-        },
+        headerShown: false,
+        tabBarIcon: ({ focused }) => (
+          <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.4 }}>
+            {TABS.find(t => t.name === route.name)?.icon || '●'}
+          </Text>
+        ),
         tabBarLabel: ({ focused }) => (
-          <Text style={{ fontSize:10, color: focused ? NAVY : GRAY, fontWeight: focused ? '700' : '500', marginBottom:2 }}>
+          <Text style={{ fontSize: 10, color: focused ? C.NAVY : C.GRAY, fontWeight: focused ? '700' : '400', marginBottom: 2 }}>
             {route.name}
           </Text>
         ),
-        tabBarStyle: {
-          height:62, paddingBottom:8, paddingTop:6,
-          borderTopWidth:1, borderTopColor:'#E2E8F0', backgroundColor:'#fff'
-        },
-        headerShown: false,
+        tabBarStyle: { height: 62, paddingBottom: 8, paddingTop: 6, backgroundColor: C.WHITE, borderTopColor: C.LGRAY },
       })}
     >
-      <Tab.Screen name="Home"     component={HomeScreen}/>
-      <Tab.Screen name="Orders"   component={OrdersScreen}/>
-      <Tab.Screen name="Finance"  component={FinanceScreen}/>
-      <Tab.Screen name="Messages" component={MessagesScreen}/>
-      <Tab.Screen name="More"     component={MoreScreen}/>
+      {TABS.map(t => <Tab.Screen key={t.name} name={t.name} component={SCREENS[t.name]} />)}
     </Tab.Navigator>
   )
 }
@@ -55,12 +53,9 @@ function MainTabs() {
 export default function AppNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Splash"   component={SplashScreen}/>
-      <Stack.Screen name="Login"    component={LoginScreen}/>
-      <Stack.Screen name="Main"     component={MainTabs}/>
-      <Stack.Screen name="Products" component={ProductsScreen}
-        options={{ headerShown:true, title:'Products', headerStyle:{ backgroundColor:'#fff' }, headerTintColor:NAVY }}
-      />
+      <Stack.Screen name="Splash" component={SplashScreen} />
+      <Stack.Screen name="Login"  component={LoginScreen} />
+      <Stack.Screen name="Main"   component={Tabs} />
     </Stack.Navigator>
   )
 }

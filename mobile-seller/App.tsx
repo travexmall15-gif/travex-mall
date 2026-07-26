@@ -8,10 +8,7 @@ import AppNavigator from './src/navigation/AppNavigator'
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {
-  useEffect(() => {
-    SplashScreen.hideAsync()
-  }, [])
-
+  useEffect(() => { SplashScreen.hideAsync() }, [])
   return (
     <NavigationContainer>
       <StatusBar style="light" />

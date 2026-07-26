@@ -5,41 +5,27 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "shopnektseller",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#080F37"
+      "backgroundColor": "#0D1B3E"
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.qnex360.shopnektseller",
-      "infoPlist": {
-        "NSCameraUsageDescription": "ShopNekt Seller uses camera for product photos",
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
-      }
+      "bundleIdentifier": "com.qnex360.shopnektseller"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#080F37"
+        "backgroundColor": "#0D1B3E"
       },
-      "package": "com.qnex360.shopnektseller",
-      "permissions": [
-        "RECEIVE_BOOT_COMPLETED",
-        "VIBRATE",
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "INTERNET"
-      ]
+      "package": "com.qnex360.shopnektseller"
     },
-    "plugins": [
-      "expo-splash-screen"
-    ],
-    "extra": {}
+    "plugins": ["expo-splash-screen"],
+    "extra": {
+      "eas": { "projectId": "487861b1-6e2e-4e2e-b8c0-76f90eedbf0c" }
+    }
   }
 }
