@@ -46,10 +46,16 @@ export default function SettingsPage() {
   }, [router])
 
   const handleLogout = async () => {
-    localStorage.removeItem('sn_customer_session')
-    localStorage.removeItem('sn_welcomed')
+    const CLEAR_KEYS = [
+      'sn_customer_session', 'sn_welcomed', 'sn_saved_shops',
+      'sn_notif', 'sn_shopping_prefs',
+      'travex_session', 'travex_plan', 'travex_shop_name',
+      'travex_owner_name', 'travex_category', 'travex_region',
+      'travex_user_id', 'travex_email',
+    ]
+    CLEAR_KEYS.forEach(k => localStorage.removeItem(k))
     await sb.auth.signOut().catch(() => {})
-    router.replace('/auth')
+    window.location.replace('/welcome')
   }
 
   const SECTIONS = [
@@ -179,7 +185,7 @@ export default function SettingsPage() {
                 style={{ flex:1, padding:'11px', background:'#F1F5F9', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem' }}>
                 {t('common.cancel')}
               </button>
-              <button onClick={async () => { await sb.auth.signOut(); router.replace('/auth') }}
+              <button onClick={async () => { await sb.auth.signOut(); window.location.replace('/welcome') }}
                 style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#fff' }}>
                 {t('settings.deleteBtn')}
               </button>

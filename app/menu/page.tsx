@@ -53,12 +53,26 @@ export default function MenuPage() {
   }, [])
 
   const handleLogout = async () => {
-    // Clear all session types
-    localStorage.removeItem('sn_customer_session')
-    localStorage.removeItem('sn_welcomed')
+    // Futa session zote za mtumiaji
+    const CLEAR_KEYS = [
+      'sn_customer_session',
+      'sn_welcomed',
+      'sn_saved_shops',
+      'sn_notif',
+      'sn_shopping_prefs',
+      'travex_session',
+      'travex_plan',
+      'travex_shop_name',
+      'travex_owner_name',
+      'travex_category',
+      'travex_region',
+      'travex_user_id',
+      'travex_email',
+    ]
+    CLEAR_KEYS.forEach(k => localStorage.removeItem(k))
     await sb.auth.signOut().catch(() => {})
-    // Full page reload — clears Next.js router cache so redirect is clean
-    window.location.href = '/auth'
+    // Rudisha kwenye mwanzo — welcome page (kuchagua lugha → kujaza taarifa upya)
+    window.location.replace('/welcome')
   }
 
   const SECTIONS = [
