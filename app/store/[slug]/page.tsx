@@ -245,7 +245,7 @@ export default function StorePage({
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
         @keyframes spin{to{transform:rotate(360deg)}}
-        to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
         .cat-btn{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;transition:all 0.15s;font-family:'Inter',sans-serif}
         .cat-btn.active{background:#0D1B3E;border-color:#0D1B3E;color:#fff}
@@ -607,8 +607,8 @@ export default function StorePage({
       {showWelcome && store && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }}
           onClick={e => { if(e.target === e.currentTarget) setShowWelcome(false) }}>
-          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '1.75rem 1.5rem 2rem', width: '100%', maxWidth: 440, boxShadow: '0 -12px 48px rgba(0,0,0,0.18)', }}>
-            <style>{`to{transform:translateY(0);opacity:1}}`}</style>
+          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '1.75rem 1.5rem 2rem', width: '100%', maxWidth: 440, boxShadow: '0 -12px 48px rgba(0,0,0,0.18)', animation: 'slideUp 0.35s ease', }}>
+            <style>{`@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
 
             {/* Drag handle */}
             <div style={{ width: 36, height: 4, borderRadius: 999, background: '#E2E8F0', margin: '0 auto 1.25rem' }} />
