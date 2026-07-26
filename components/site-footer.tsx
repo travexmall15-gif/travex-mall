@@ -22,8 +22,8 @@ export function SiteFooter() {
         }}>
           {[
             { label: 'ShopNekt Move',    href: '/move/index.html' },
-            { label: 'ShopNekt Stay',    href: '#'                },
-            { label: 'QNEX360', href: 'https://travex-mall.vercel.app' },
+            { label: 'ShopNekt Stay',    href: '/home'            },
+            { label: 'QNEX360', href: 'https://shopnekt.vercel.app' },
           ].map(({ label, href }) => (
             <Link key={label} href={href} style={{
               display: 'inline-flex', alignItems: 'center',
