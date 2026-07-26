@@ -16,9 +16,32 @@ export default function SettingsPage() {
 
   useEffect(() => {
     sb.auth.getSession().then(({ data: { session } }) => {
-      if (!session?.user) { router.replace('/auth'); return }
-      const m = session.user.user_metadata
-      setUser({ name: m?.display_name || m?.username || 'User', email: session.user.email || '' })
+      if (session?.user) {
+        const m = session.user.user_metadata
+        setUser({ name: m?.display_name || m?.username || 'User', email: session.user.email || '' })
+        return
+      }
+      // Fallback: OTP customer session (localStorage)
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id && sess?.name) {
+            setUser({ name: sess.name, email: sess.email || '' })
+            return
+          }
+        }
+      } catch {}
+      router.replace('/auth')
+    }).catch(() => {
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id && sess?.name) { setUser({ name: sess.name, email: sess.email || '' }); return }
+        }
+      } catch {}
+      router.replace('/auth')
     })
   }, [router])
 
