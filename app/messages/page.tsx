@@ -30,25 +30,63 @@ export default function MessagesPage() {
   const [userId,   setUserId]   = useState<string | null>(null)
 
   useEffect(() => {
-    // Try Supabase Auth first (for email-registered buyers)
+    // Try Supabase Auth first (email-registered buyers/sellers)
     sb.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUserId(session.user.id)
         setAuthState('loggedIn')
-
         const { data, error } = await sb
           .from('conversations')
           .select('*')
           .or(`buyer_id.eq.${session.user.id},seller_id.eq.${session.user.id}`)
           .order('updated_at', { ascending: false })
-
         if (!error) setConvos(data || [])
         setLoading(false)
-      } else {
-        // Custom session (PIN auth sellers/buyers) — show guest state
-        setAuthState('guest')
-        setLoading(false)
+        return
       }
+
+      // Fallback: OTP customer session (localStorage)
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id) {
+            setUserId(sess.id)
+            setAuthState('loggedIn')
+            const { data, error } = await sb
+              .from('conversations')
+              .select('*')
+              .or(`buyer_id.eq.${sess.id},seller_id.eq.${sess.id}`)
+              .order('updated_at', { ascending: false })
+            if (!error) setConvos(data || [])
+            setLoading(false)
+            return
+          }
+        }
+      } catch {}
+
+      // Check seller session (PIN auth)
+      try {
+        const raw = localStorage.getItem('travex_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id) {
+            setUserId(sess.id)
+            setAuthState('loggedIn')
+            const { data } = await sb
+              .from('conversations')
+              .select('*')
+              .or(`buyer_id.eq.${sess.id},seller_id.eq.${sess.id}`)
+              .order('updated_at', { ascending: false })
+            setConvos(data || [])
+            setLoading(false)
+            return
+          }
+        }
+      } catch {}
+
+      setAuthState('guest')
+      setLoading(false)
     }).catch(() => {
       setAuthState('guest')
       setLoading(false)
