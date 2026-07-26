@@ -8,36 +8,16 @@ import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { MARKET_BASIC_PRICE, MARKET_PREMIUM_PRICE, formatTZS } from '@/lib/data'
-import { Search, Store, MapPin, Navigation, Heart, ExternalLink, MessageCircle } from 'lucide-react'
+import { Search, Store, MapPin, Heart, ExternalLink, MessageCircle } from 'lucide-react'
 
-// ── Region + Category data (proper nouns stay the same in both languages) ──
-// All 31 Tanzania regions (mainland + Zanzibar islands)
+// Mikoa 5 kuu ya ShopNekt Business Market
 const TANZANIAN_REGIONS = [
-  // Mainland
-  'Arusha','Dar es Salaam','Dodoma','Geita','Iringa','Kagera',
-  'Katavi','Kigoma','Kilimanjaro','Lindi','Manyara','Mara',
-  'Mbeya','Morogoro','Mtwara','Mwanza','Njombe','Pwani',
-  'Rukwa','Ruvuma','Shinyanga','Simiyu','Singida','Songwe',
-  'Tabora','Tanga',
-  // Zanzibar — Unguja
-  'Kaskazini Unguja','Kusini Unguja','Mjini Magharibi (Unguja)',
-  // Zanzibar — Pemba
-  'Kaskazini Pemba','Kusini Pemba',
+  'Dar es Salaam',
+  'Arusha',
+  'Mwanza',
+  'Dodoma',
+  'Tanga',
 ]
-
-// Districts by major region
-const TANZANIAN_DISTRICTS: Record<string, string[]> = {
-  'Dar es Salaam': ['Ilala','Kinondoni','Temeke','Ubungo','Kigamboni'],
-  'Dodoma':    ['Dodoma Manispaa','Bahi','Chamwino','Chilonwa','Kondoa','Kongwa','Mpwapwa'],
-  'Arusha':    ['Arusha Manispaa','Arumeru','Karatu','Longido','Meru','Monduli','Ngorongoro'],
-  'Mwanza':    ['Ilemela','Nyamagana','Buchosa','Kwimba','Magu','Misungwi','Sengerema','Ukerewe'],
-  'Tanga':     ['Tanga Manispaa','Handeni','Kilindi','Korogwe','Lushoto','Mkinga','Muheza','Pangani','Siha'],
-  'Kilimanjaro':['Moshi Manispaa','Hai','Moshi Vijijini','Mwanga','Rombo','Same','Siha'],
-  'Mbeya':     ['Mbeya Manispaa','Chunya','Kyela','Mbarali','Mbeya Vijijini','Mbozi','Momba','Rungwe'],
-  'Morogoro':  ['Morogoro Manispaa','Gairo','Kilombero','Kilosa','Malinyi','Mvomero','Ulanga'],
-  'Kagera':    ['Bukoba Manispaa','Biharamulo','Bukoba Vijijini','Karagwe','Kyerwa','Misenyi','Muleba','Ngara'],
-  'Mtwara':    ['Mtwara Manispaa','Masasi','Nanyumbu','Newala','Tandahimba'],
-}
 
 const SHOP_CATEGORIES_EXTENDED = [
   'Fashion & Clothing','Electronics','Furniture','Electrical','Food & Groceries',
@@ -83,9 +63,7 @@ export default function MarketPage() {
   const [search, setSearch]       = useState('')
   const [category,       setCategory]       = useState('')
   const [region,         setRegion]         = useState('')
-  const [district,       setDistrict]       = useState('')
   const [showRegionDrop, setShowRegionDrop] = useState(false)
-  const [showDistrictDrop, setShowDistrictDrop] = useState(false)
   const [showCatDrop,    setShowCatDrop]    = useState(false)
   const [regionSearch,   setRegionSearch]   = useState('')
   const [categories, setCategories] = useState<string[]>([])
@@ -130,11 +108,7 @@ export default function MarketPage() {
     load()
   }, [])
 
-  // Merge DB regions with static list
-  const dbRegions = Array.from(
-    new Set(shops.map(s => s.shop_region).filter(Boolean))
-  ) as string[]
-  const regions = [...new Set([...TANZANIAN_REGIONS, ...dbRegions])]
+  const regions = TANZANIAN_REGIONS
 
   const filtered = shops.filter(s => {
     const q = search.toLowerCase()
@@ -144,7 +118,6 @@ export default function MarketPage() {
       (s.owner_name || '').toLowerCase().includes(q)
     const matchCat    = !category || s.shop_category === category
     const matchRegion = !region   || s.shop_region   === region
-    const matchDist   = !district || s.shop_region === region
     return matchSearch && matchCat && matchRegion
   })
 
@@ -221,21 +194,21 @@ export default function MarketPage() {
             .mk-drop-card{position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1.5px solid #E2E8F0;border-radius:18px;box-shadow:0 12px 40px rgba(13,27,62,0.14);z-index:500;padding:12px;min-width:220px}
           `}</style>
 
-          {/* ROW 1: All | Regions | Districts — horizontal */}
+          {/* ROW 1: All | Regions — horizontal */}
           <div style={{ display:'flex', gap:'8px', overflowX:'auto', scrollbarWidth:'none' as const, paddingBottom:'2px', alignItems:'center' }}>
 
             {/* ALL button */}
             <button
-              className={`mk-chip${!region && !district ? ' active' : ''}`}
-              onClick={() => { setRegion(''); setDistrict(''); setShowRegionDrop(false); setShowDistrictDrop(false) }}>
+              className={`mk-chip${!region ? ' active' : ''}`}
+              onClick={() => { setRegion(''); setShowRegionDrop(false) }}>
               {t('market.allRegions') || 'All'}
             </button>
 
             {/* REGIONS button + dropdown */}
             <div style={{ position:'relative', flexShrink:0 }}>
               <button
-                className={`mk-chip${region && !district ? ' active' : ''}`}
-                onClick={() => { setShowRegionDrop(v=>!v); setShowDistrictDrop(false); setShowCatDrop(false) }}>
+                className={`mk-chip${region ? ' active' : ''}`}
+                onClick={() => { setShowRegionDrop(v=>!v); setShowCatDrop(false) }}>
                 <MapPin size={12} style={{flexShrink:0}}/> {region || 'Regions'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
               </button>
               {showRegionDrop && (
@@ -261,51 +234,12 @@ export default function MarketPage() {
                       .filter(r => !regionSearch || r.toLowerCase().includes(regionSearch.toLowerCase()))
                       .map(r => (
                         <button key={r}
-                          onClick={() => { setRegion(r); setDistrict(''); setShowRegionDrop(false); setRegionSearch('') }}
+                          onClick={() => { setRegion(r); setShowRegionDrop(false); setRegionSearch('') }}
                           style={{ textAlign:'left', padding:'8px 10px', border:'none', borderRadius:10, background: region===r ? '#0D1B3E' : 'transparent', color: region===r ? '#fff' : '#0F172A', fontSize:'0.82rem', fontWeight: region===r ? 700 : 500, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .12s' }}
                           onMouseOver={e => { if(region!==r)(e.currentTarget as HTMLElement).style.background='#F8FAFF' }}
                           onMouseOut={e  => { if(region!==r)(e.currentTarget as HTMLElement).style.background='transparent' }}>
                           {r}
                         </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* DISTRICT button + dropdown */}
-            <div style={{ position:'relative', flexShrink:0 }}>
-              <button
-                className={`mk-chip${district ? ' active' : ''}`}
-                onClick={() => { setShowDistrictDrop(v=>!v); setShowRegionDrop(false); setShowCatDrop(false) }}>
-                <Navigation size={12} style={{flexShrink:0}}/> {district || 'Wilaya'} <span style={{ fontSize:'0.6rem', opacity:.6 }}>▾</span>
-              </button>
-              {showDistrictDrop && (
-                <div className="mk-drop-card" style={{ maxHeight:320, overflow:'hidden', display:'flex', flexDirection:'column' }}>
-                  {/* Show districts for selected region, or major cities */}
-                  {district && (
-                    <button onClick={() => { setDistrict(''); setShowDistrictDrop(false) }}
-                      style={{ textAlign:'left', padding:'6px 8px', border:'none', background:'#F1F5F9', borderRadius:8, fontSize:'0.75rem', color:'#64748B', cursor:'pointer', fontFamily:"'Inter',sans-serif", marginBottom:6 }}>
-                      ✕ Clear wilaya
-                    </button>
-                  )}
-                  <div style={{ overflowY:'auto', maxHeight:260, display:'flex', flexDirection:'column', gap:2 }}>
-                    {(region && TANZANIAN_DISTRICTS[region]
-                      ? TANZANIAN_DISTRICTS[region]
-                      : [
-                        // Major districts shown when no region selected
-                        ...TANZANIAN_DISTRICTS['Dar es Salaam'],
-                        ...TANZANIAN_DISTRICTS['Dodoma'],
-                        ...TANZANIAN_DISTRICTS['Arusha'],
-                      ]
-                    ).map(d => (
-                      <button key={d}
-                        onClick={() => { setDistrict(d); if(!region) setRegion(Object.entries(TANZANIAN_DISTRICTS).find(([,ds])=>ds.includes(d))?.[0]||''); setShowDistrictDrop(false) }}
-                        style={{ textAlign:'left', padding:'8px 10px', border:'none', borderRadius:10, background: district===d ? '#0D1B3E' : 'transparent', color: district===d ? '#fff' : '#0F172A', fontSize:'0.82rem', fontWeight: district===d ? 700 : 500, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .12s' }}
-                        onMouseOver={e => { if(district!==d)(e.currentTarget as HTMLElement).style.background='#F8FAFF' }}
-                        onMouseOut={e  => { if(district!==d)(e.currentTarget as HTMLElement).style.background='transparent' }}>
-                        {d}
-                      </button>
                     ))}
                   </div>
                 </div>
@@ -328,9 +262,9 @@ export default function MarketPage() {
         </div>
 
         {/* Close dropdowns on outside click */}
-        {(showRegionDrop || showDistrictDrop || showCatDrop) && (
+        {(showRegionDrop || showCatDrop) && (
           <div style={{ position:'fixed', inset:0, zIndex:499 }}
-            onClick={() => { setShowRegionDrop(false); setShowDistrictDrop(false); setShowCatDrop(false) }} />
+            onClick={() => { setShowRegionDrop(false); setShowCatDrop(false) }} />
         )}
 
         {/* Results count */}

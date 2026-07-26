@@ -5,7 +5,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
 import { sb } from '@/lib/supabase'
 import {
-  ArrowLeft, ChevronRight, Store, LayoutDashboard, ShoppingCart,
+  ArrowLeft, ChevronRight, Store, ShoppingCart,
   MessageSquare, Settings, Shield, Info, LogOut, User, Globe,
   Zap, Users, Home, Sparkles,
 } from 'lucide-react'
@@ -53,12 +53,12 @@ export default function MenuPage() {
   }, [])
 
   const handleLogout = async () => {
-    // Clear customer session (OTP flow)
+    // Clear all session types
     localStorage.removeItem('sn_customer_session')
     localStorage.removeItem('sn_welcomed')
-    // Clear Supabase Auth session (sellers/Google)
     await sb.auth.signOut().catch(() => {})
-    router.replace('/auth')
+    // Full page reload — clears Next.js router cache so redirect is clean
+    window.location.href = '/auth'
   }
 
   const SECTIONS = [
@@ -76,7 +76,6 @@ export default function MenuPage() {
       label: t('menuPage.storeSelling'),
       items: [
         { icon: Store,          label: t('menuPage.openShop'),     href: '/open-store',              color: '#C9A84C' },
-        { icon: LayoutDashboard,label: t('menuPage.dashboardLogin'),href: '/dashboard/login.html',    color: '#3B82F6' },
         { icon: ShoppingCart,   label: t('menuPage.shoppingPrefs'), href: '/settings/shopping',       color: '#F59E0B' },
       ],
     },
