@@ -7,7 +7,16 @@ import { createClient } from '@supabase/supabase-js'
 
 const sb = createClient(
   'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
+  {
+    global: {
+      fetch: (url, options = {}) => fetch(url, {
+        ...options,
+        cache: 'no-store',
+        headers: { ...((options as any).headers || {}), 'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache' },
+      }),
+    },
+  }
 )
 
 // ── Shops (ISR: 60s revalidate) ──────────────────────────
