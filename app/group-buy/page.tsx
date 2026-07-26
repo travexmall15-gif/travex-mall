@@ -334,8 +334,8 @@ export default function GroupBuyPage() {
   return (
     <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
-         100%{transform:translateX(-50%)} }
-         to{opacity:1;transform:translateY(0)} }
+        @keyframes gbTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes fadeIn   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         @keyframes spin      { to{transform:rotate(360deg)} }
         .gb-ticker      { animation:gbTicker 36s linear infinite; will-change:transform; }
         .gb-ticker:hover{ animation-play-state:paused; }

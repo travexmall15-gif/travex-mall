@@ -1,6 +1,4 @@
 'use client'
-import { usePathname } from 'next/navigation'
-
 import { Suspense, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -259,7 +257,6 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
 // ── Main Page ─────────────────────────────────────────────────
 export default function FlashDealsPage() {
-  const pathname = usePathname()
   const { t } = useTranslation()
   const [deals, setDeals]     = useState<Deal[]>([])
   const [loading, setLoading] = useState(true)
@@ -271,7 +268,8 @@ export default function FlashDealsPage() {
       .gt('ends_at', new Date().toISOString())
       .order('ends_at', { ascending: true })
       .then(({ data }) => { setDeals(data || []); setLoading(false) })
-  }, [pathname])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const featured     = deals[0] || null
   const rest         = deals.slice(1)
@@ -282,10 +280,10 @@ export default function FlashDealsPage() {
   return (
     <main style={{ minHeight:'100vh', background:'#FFFBEB', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
-         100%{background-position:-200%} }
-         50%{opacity:.5} }
-         to{opacity:1;transform:translateY(0)} }
-         50%{transform:scale(1.15)} }
+        @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+        @keyframes pulse   { 50%{opacity:.5} }
+        @keyframes fadeIn  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes zap     { 50%{transform:scale(1.15)} }
         * { box-sizing: border-box; }
         .deal-grid { display:grid; gap:1.1rem; }
         @media (min-width:640px)  { .deal-grid { grid-template-columns:repeat(2,1fr); } }

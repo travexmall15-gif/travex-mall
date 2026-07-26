@@ -59,7 +59,7 @@ export default function StorePage({
   const [placing, setPlacing]   = useState(false)
   const [success, setSuccess]   = useState(false)
   const [searchQ, setSearchQ]     = useState('')
-  const [selCat, setSelCat]       = useState(t('store.allCategories'))
+  const [selCat, setSelCat]       = useState('')  // '' = All categories
   const [showWelcome, setShowWelcome] = useState(false)
   const [showMsg, setShowMsg]     = useState(false)
   const [msgText, setMsgText]     = useState('')
@@ -206,7 +206,7 @@ export default function StorePage({
 
   const filtered = products.filter(p => {
     const matchQ = !searchQ || p.name.toLowerCase().includes(searchQ.toLowerCase())
-    const matchC = selCat === t('store.allCategories') || p.category === selCat
+    const matchC = !selCat || p.category === selCat
     return matchQ && matchC
   })
 

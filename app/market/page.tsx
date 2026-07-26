@@ -144,7 +144,7 @@ export default function MarketPage() {
       (s.owner_name || '').toLowerCase().includes(q)
     const matchCat    = !category || s.shop_category === category
     const matchRegion = !region   || s.shop_region   === region
-    const matchDist   = !district || (s.shop_region === region && s.shop_name?.toLowerCase().includes(district.toLowerCase())) || !district
+    const matchDist   = !district || s.shop_region === region
     return matchSearch && matchCat && matchRegion
   })
 

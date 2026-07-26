@@ -320,7 +320,7 @@ async function submit(){
 
     // Check PIN against login_password
     var stored = (shop.login_password||'').toString()
-    var match  = stored===pin || stored.endsWith('-'+pin) || stored.startsWith(pin+'-') || stored.includes(pin)
+    var match  = stored===pin || stored.endsWith('-'+pin) || stored.startsWith(pin+'-') || stored.split('-').pop()===pin
     if(!match){
       showErr(t('errPin'))
       pin=''; dots()

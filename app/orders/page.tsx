@@ -6,7 +6,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
-import { ArrowLeft, Package, Filter, Loader2, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Package, Filter as FilterIcon, Loader2, AlertCircle } from 'lucide-react'
 
 type Order = {
   id: string
@@ -18,7 +18,7 @@ type Order = {
   image_url?: string
 }
 
-type Filter = 'all' | 'pending' | 'confirmed' | 'rejected'
+type OrderFilter = 'all' | 'pending' | 'confirmed' | 'rejected'
 
 const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
   pending:   { bg:'#FEF3C7', color:'#92400E', label:'Pending'   },
@@ -30,21 +30,45 @@ export default function OrdersPage() {
   const { t } = useTranslation()
   const router = useRouter()
   const [orders,  setOrders]  = useState<Order[]>([])
-  const [filter,  setFilter]  = useState<Filter>('all')
+  const [filter,  setFilter]  = useState<OrderFilter>('all')
   const pathname = usePathname()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    sb.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session?.user) { router.replace('/auth'); return }
-      const { data } = await sb
-        .from('orders')
-        .select('id,product_name,store_name,status,total_amount,created_at,image_url')
-        .eq('buyer_id', session.user.id)
-        .order('created_at', { ascending: false })
-      setOrders(data || [])
-      setLoading(false)
-    })
+    async function loadOrders() {
+      // Try Supabase Auth session first
+      const { data: { session } } = await sb.auth.getSession()
+      if (session?.user) {
+        const { data } = await sb
+          .from('orders')
+          .select('id,product_name,store_name,status,total_amount,created_at,image_url')
+          .eq('buyer_id', session.user.id)
+          .order('created_at', { ascending: false })
+        setOrders(data || [])
+        setLoading(false)
+        return
+      }
+      // Fallback: OTP customer session (localStorage)
+      try {
+        const raw = localStorage.getItem('sn_customer_session')
+        if (raw) {
+          const sess = JSON.parse(raw)
+          if (sess?.id) {
+            const { data } = await sb
+              .from('orders')
+              .select('id,product_name,store_name,status,total_amount,created_at,image_url')
+              .eq('buyer_id', sess.id)
+              .order('created_at', { ascending: false })
+            setOrders(data || [])
+            setLoading(false)
+            return
+          }
+        }
+      } catch {}
+      // No session — redirect to auth
+      router.replace('/auth')
+    }
+    loadOrders()
   }, [router])
 
   const filtered = filter === 'all' ? orders : orders.filter(o => o.status === filter)

@@ -153,9 +153,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
+        {/* Cache-Control is set via next.config.mjs HTTP headers — meta tags removed to avoid conflicts */}
         <link rel="dns-prefetch" href="https://bscecjbgnjitlfmgwcic.supabase.co" />
         <link rel="preconnect" href="https://bscecjbgnjitlfmgwcic.supabase.co" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />

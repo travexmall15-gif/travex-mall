@@ -90,6 +90,7 @@ export default function VybePage() {
     }
   }, [t])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { loadPosts() }, [])
 
   const toggleLike = async (post: FeedPost) => {
@@ -124,8 +125,8 @@ export default function VybePage() {
     <main style={{ minHeight: '100vh', background: '#060B18', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
-         to { opacity:1; transform:translateY(0) } }
-         50% { opacity:.5 } }
+        @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
+        @keyframes pulse   { 0%,100% { opacity:.5 } 50% { opacity:1 } }
 
         .vybe-card {
           background: rgba(255,255,255,0.035);

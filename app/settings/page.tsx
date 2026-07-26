@@ -45,7 +45,12 @@ export default function SettingsPage() {
     })
   }, [router])
 
-  const handleLogout = async () => { await sb.auth.signOut(); router.replace('/auth') }
+  const handleLogout = async () => {
+    localStorage.removeItem('sn_customer_session')
+    localStorage.removeItem('sn_welcomed')
+    await sb.auth.signOut().catch(() => {})
+    router.replace('/auth')
+  }
 
   const SECTIONS = [
     {

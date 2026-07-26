@@ -39,6 +39,7 @@ const Auth = {
 const Shop = {
   _cache: null,
   _type: null, // 'business' | 'campus'
+  clearCache() { this._cache = null; this._type = null; },
 
   async get() {
     if (this._cache) return this._cache;

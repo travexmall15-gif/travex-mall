@@ -9,10 +9,10 @@ import {
 } from 'lucide-react'
 
 type Result = {
-  id: string; shop_name: string; shop_slug: string
-  shop_category: string; shop_city: string; logo_url: string
-  rating: number; match_reason: string
-  products: { name: string; price: number }[]
+  id: string; shop_name: string; shop_slug: string | null
+  shop_category: string | null; shop_region: string | null; shop_logo: string | null
+  plan: string; match_reason: string
+  products?: { name: string; price: number }[]
 }
 type TFn = (key: string, vars?: Record<string, string | number>) => string
 type ChatMsg = {
@@ -91,9 +91,9 @@ export default function AiPage() {
     if (!cat) { for (const [c,kws] of Object.entries(CAT_MAP)) { if(kws.some(k=>lq.includes(k))){cat=c;break} } }
     let loc = city
     if (!loc) { for (const [c,kws] of Object.entries(CITY_KW)) { if(kws.some(k=>lq.includes(k))){loc=c;break} } }
-    let q: any = sb.from('shops').select('id,shop_name,shop_slug,shop_category,shop_city,logo_url,rating,is_verified,shop_description').eq('is_verified',true).limit(30)
+    let q: any = sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan,shop_desc').eq('status','approved').limit(30)
     if (cat) q = q.ilike('shop_category',`%${cat}%`)
-    if (loc) q = q.ilike('shop_city',`%${loc}%`)
+    if (loc) q = q.ilike('shop_region',`%${loc}%`)
     const { data: shops } = await q
     const enriched: Result[] = []
     for (const shop of (shops||[]).slice(0,15)) {
@@ -115,7 +115,7 @@ export default function AiPage() {
       }
     }
     if (!enriched.length) {
-      const { data: fb } = await sb.from('shops').select('id,shop_name,shop_slug,shop_category,shop_city,logo_url,rating').or(`shop_name.ilike.%${query}%,shop_description.ilike.%${query}%,shop_category.ilike.%${query}%`).limit(6)
+      const { data: fb } = await sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan').eq('status','approved').or(`shop_name.ilike.%${query}%,shop_desc.ilike.%${query}%,shop_category.ilike.%${query}%`).limit(6)
       for (const s of (fb||[])) enriched.push({...s,match_reason:'Matches search',products:[],rating:s.rating||0})
     }
     return enriched.sort((a,b)=>b.products.length-a.products.length).slice(0,8)
@@ -351,19 +351,19 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
       {results.map(store=>(
         <a key={store.id} href={`/store/${store.shop_slug}`} className="rc">
           <div className="rl-logo">
-            {store.logo_url
-              ? <img src={store.logo_url} alt={store.shop_name} style={{width:'100%',height:'100%',objectFit:'cover'}} loading="lazy"/>
+            {store.shop_logo
+              ? <img src={store.shop_logo} alt={store.shop_name} style={{width:'100%',height:'100%',objectFit:'cover'}} loading="lazy"/>
               : <span>{store.shop_name?.[0]?.toUpperCase()||'\uD83C\uDFEA'}</span>
             }
           </div>
           <div style={{flex:1,minWidth:0}}>
             <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
               <span style={{fontWeight:700,color:'#0F172A',fontSize:'0.88rem',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{store.shop_name}</span>
-              {store.rating>0&&<span style={{fontSize:'0.67rem',color:'#C9A84C',flexShrink:0}}>\u2B50 {store.rating.toFixed(1)}</span>}
+              {(store.plan === 'premium' ? '★' : '')>0&&<span style={{fontSize:'0.67rem',color:'#C9A84C',flexShrink:0}}>\u2B50 {(store.plan === 'premium' ? '★' : '').toFixed(1)}</span>}
             </div>
             <div style={{fontSize:'0.7rem',color:'#94A3B8',marginBottom:4,display:'flex',gap:6,flexWrap:'wrap'}}>
               {store.shop_category&&<span>{store.shop_category}</span>}
-              {store.shop_city&&<span>\uD83D\uDCCD {store.shop_city}</span>}
+              {store.shop_region&&<span>\uD83D\uDCCD {store.shop_region}</span>}
             </div>
             <span style={{display:'inline-flex',alignItems:'center',gap:3,fontSize:'0.66rem',color:'#059669',background:'rgba(5,150,105,0.08)',border:'1px solid rgba(5,150,105,0.15)',borderRadius:999,padding:'2px 7px'}}>
               \u2713 {store.match_reason}

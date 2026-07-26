@@ -8,8 +8,12 @@ const sb = createClient(
 
 // Track event
 export async function POST(req: Request) {
-  const { store_id, event, product_id, source } = await req.json()
-  await sb.from('store_analytics').insert({ store_id, event, product_id, source })
+  try {
+    const { store_id, event, product_id, source } = await req.json()
+    await sb.from('store_analytics').insert({ store_id, event, product_id, source })
+  } catch {
+    // Analytics failure is non-critical — never surface errors to client
+  }
   return NextResponse.json({ success: true })
 }
 
