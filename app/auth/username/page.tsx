@@ -46,7 +46,7 @@ export default function UsernamePage() {
     <div style={{ minHeight: '100vh', background: '#080F37', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg) } }
-         to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         input:focus { border-color: #F97316 !important; }
       `}</style>
 
