@@ -224,7 +224,7 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   // ── SELLER ANALYTICS ───────────────────────────────────
   if (intent === 'seller_analytics') {
     if (userId) {
-      const { data } = await sb.from('orders').select('status,total_amount').eq('store_owner_id',userId)
+      const { data } = await sb.from('orders').select('status,total_amount').eq('buyer_id',userId)
       if (data?.length) {
         const total = data.reduce((s,o)=>s+(o.total_amount||0),0)
         const confirmed = data.filter(o=>o.status==='confirmed').length
@@ -269,8 +269,8 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   // ── VYBE ───────────────────────────────────────────────
   if (intent === 'vybe') {
-    const { data } = await sb.from('feed_posts').select('caption,store_name,likes').order('likes',{ascending:false}).limit(3)
-    const list = data?.map(p => `• "${(p.caption||'').slice(0,40)}" — ${p.store_name} (❤️${p.likes||0})`).join('\n') || ''
+    const { data } = await sb.from('feed_posts').select('caption,store_name,likes').order('likes_count',{ascending:false}).limit(3)
+    const list = data?.map(p => `• "${(p.caption||'').slice(0,40)}" — ${p.store_name} (❤️${p.likes_count||0})`).join('\n') || ''
     return sw
       ? `✨ **Social Vybe:**\n\nGundua bidhaa kupitia picha na videos!\n\n${list ? `🔥 **Trending sasa:**\n${list}\n\n` : ''}👉 Nenda /vybe!`
       : `✨ **Social Vybe:**\n\nDiscover products through photos and videos!\n\n${list ? `🔥 **Trending now:**\n${list}\n\n` : ''}👉 Go to /vybe!`
