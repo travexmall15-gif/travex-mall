@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       .select('id,store_name,description,category,university_abbr,whatsapp,phone,created_at')
       .eq('id', store_id).maybeSingle(),
     sb.from('campus_products').select('id,name,price,stock,description,category,image_url').eq('store_id', store_id).gt('stock', 0).order('name'),
-    sb.from('products').select('id,name,price,stock,description,category,image_url').eq('store_id', store_id).gt('stock', 0).order('name'),
+    sb.from('products').select('id,name,price,stock,description,category,image_url').eq('shop_id', store_id).gt('stock', 0).order('name'),
     sb.from('orders').select('id,product_name,total_amount,status,created_at').eq('store_id', store_id).order('created_at', { ascending: false }).limit(10),
     sb.from('feed_posts').select('content,post_text,caption,price,tag,created_at').eq('store_id', store_id).order('created_at', { ascending: false }).limit(5),
   ])
