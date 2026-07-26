@@ -93,10 +93,12 @@ export default function StorePage({
       if (shopData) {
         setStore(shopData)
         setTimeout(() => setShowWelcome(true), 800)
+        // Business market stores use the 'products' table with shop_id
         const { data: prods } = await sb
-          .from('campus_products')
+          .from('products')
           .select('*')
-          .eq('store_id', shopData.id)
+          .eq('shop_id', shopData.id)
+          .eq('is_available', true)
           .gt('stock', 0)
           .order('created_at', { ascending: false })
         setProducts(prods || [])
@@ -162,8 +164,11 @@ export default function StorePage({
 
     const total = cartItem.price * qty
 
-    await sb.from('campus_orders').insert({
+    // Route to correct orders table based on store type
+    const ordersTable = store!.plan === 'campus' ? 'campus_orders' : 'orders'
+    await sb.from(ordersTable).insert({
       store_id: store!.id,
+      ...(store!.plan === 'campus' ? {} : { shop_id: store!.id }),
       product_id: cartItem.id,
       product_name: cartItem.name,
       customer_name: orderName.trim(),
