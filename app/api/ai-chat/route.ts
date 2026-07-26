@@ -58,6 +58,7 @@ const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
 // ── Main handler ─────────────────────────────────────────────────
 export async function POST(req: Request) {
+  try {
   const { store_id, message, session_id, history, conv_state } = await req.json()
   const state: ConvState = conv_state || {}
   const msg = message.trim()
@@ -313,4 +314,7 @@ export async function POST(req: Request) {
   }, { onConflict: 'session_id' })
 
   return NextResponse.json({ reply, session_id, conv_state: newState })
+  } catch (err) {
+    return NextResponse.json({ reply: 'Samahani, kuna tatizo la kiufundi. Tafadhali jaribu tena.', session_id: '', conv_state: {} }, { status: 500 })
+  }
 }

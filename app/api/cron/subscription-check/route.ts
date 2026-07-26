@@ -7,6 +7,7 @@ const sb = createClient(
 )
 
 export async function GET(req: Request) {
+  try {
   const now    = new Date()
   const results = { reminded: 0, suspended: 0, reactivated: 0 }
 
@@ -56,4 +57,7 @@ export async function GET(req: Request) {
     .eq('status', 'open')
 
   return NextResponse.json({ success: true, ...results })
+  } catch (err) {
+    return NextResponse.json({ error: 'Cron job failed', detail: String(err) }, { status: 500 })
+  }
 }

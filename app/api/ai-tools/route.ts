@@ -147,6 +147,7 @@ function coachTool(q:string,ctx:any){
 }
 
 export async function POST(req: Request) {
+  try {
   const { tool, store_id, ...params } = await req.json()
 
   const [
@@ -199,4 +200,7 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json({result})
+  } catch (err) {
+    return NextResponse.json({ result: 'Error processing request. Please try again.' }, { status: 500 })
+  }
 }

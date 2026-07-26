@@ -347,7 +347,7 @@ export default function StorePage({
           {/* Animated chips — Flash Deals + Group Buy */}
           <div style={{ overflow: 'hidden', marginTop: '1rem', paddingBottom: '1rem', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1rem' }}>
             <style>{`
-              100%{transform:translateX(-50%)}}
+              @keyframes slideChips { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
               .store-chips{animation:storeChips 24s linear infinite; will-change: transform; }
               .store-chips:hover{animation-play-state:paused}
             `}</style>
