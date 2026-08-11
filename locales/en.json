@@ -178,7 +178,8 @@
     "flashDealsSub": "Limited Time",
     "groupBuyLabel": "Group Buy",
     "groupBuySub": "Save Together",
-    "campusMarketLabel": "Campus Market"
+    "campusMarketLabel": "Campus Market",
+    "gatewayDesc": "Select a marketplace to discover verified stores"
   },
   "campus": {
     "badge": "Campus Market",

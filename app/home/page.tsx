@@ -136,7 +136,7 @@ export default function HomePage() {
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(201,168,76,0.10)',color:'#A07830',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.premium')}</span>
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(15,23,42,0.06)',color:'#64748B',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.basic')}</span>
               </div>
-              <h3 style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#0F172A',marginBottom:'0.6rem',lineHeight:1.15 }}>{t('home.marketBadge')}</h3>
+              <h3 style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#0F172A',marginBottom:'0.6rem',lineHeight:1.15 }}>Business Marketplaces</h3>
               <p style={{ fontSize:'0.85rem',color:'#64748B',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.businessCardDesc')}</p>
               <div style={{ display:'flex',gap:'1.5rem',marginBottom:'1.75rem',paddingBottom:'1.5rem',borderBottom:'1px solid #F1F5F9' }}>
                 {([['5',t('home.regions')],['TZS 25K',t('home.basicMo')]] as [string,string][]).map(([v,l]) => (

@@ -178,7 +178,8 @@
     "community": "خلاصة المجتمع",
     "students": "للطلاب فقط",
     "whatsapp": "واتساب",
-    "location": "الموقع"
+    "location": "الموقع",
+    "gatewayDesc": "اختر سوقاً لاكتشاف المتاجر الموثقة"
   },
   "campus": {
     "badge": "سوق الجامعة",

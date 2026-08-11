@@ -178,7 +178,8 @@
     "community": "Feed da comunidade",
     "students": "Apenas estudantes",
     "whatsapp": "WhatsApp",
-    "location": "Localização"
+    "location": "Localização",
+    "gatewayDesc": "Selecione um mercado para descobrir lojas verificadas"
   },
   "campus": {
     "badge": "Mercado Campus",

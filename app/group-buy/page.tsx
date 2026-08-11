@@ -334,12 +334,10 @@ export default function GroupBuyPage() {
   return (
     <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
-        @keyframes gbTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes fadeIn   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes spin      { to{transform:rotate(360deg)} }
-        .gb-ticker      { animation:gbTicker 36s linear infinite; will-change:transform; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .gb-ticker      { /* ticker animation removed */ }
         .gb-ticker:hover{ animation-play-state:paused; }
-        .gb-chips       { animation:gbTicker 22s linear infinite; will-change:transform; }
+        .gb-chips       { /* ticker animation removed */ }
         .gb-chips:hover { animation-play-state:paused; }
         .chip-link      { display:inline-flex; flex-direction:column; gap:1px; padding:6px 14px; border-radius:10px; text-decoration:none; white-space:nowrap; flex-shrink:0; transition:opacity .15s; }
         .chip-link:hover{ opacity:.8; }

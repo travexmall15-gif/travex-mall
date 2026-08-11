@@ -290,22 +290,19 @@ textarea.inp{resize:vertical;min-height:88px}
             <input class="inp" id="shopName" type="text" placeholder="e.g. Amina Fashion House"/>
           </div>
           <div class="fg">
+            <label class="lbl">Business Marketplace <em>*</em></label>
+            <select class="inp" id="shopMarket" onchange="updateCategories(this.value)">
+              <option value="">Select marketplace...</option>
+              <option value="fashion">👗 Fashion Market</option>
+              <option value="vehicle">🚗 Vehicle Market</option>
+              <option value="electronics">📱 Electronics Market</option>
+            </select>
+            <div class="hint">Choose the marketplace your store belongs to.</div>
+          </div>
+          <div class="fg" id="categoryWrap" style="display:none">
             <label class="lbl">Category <em>*</em></label>
             <select class="inp" id="shopCategory">
               <option value="">Select category...</option>
-              <option>Fashion &amp; Clothing</option>
-              <option>Electronics</option>
-              <option>Food &amp; Groceries</option>
-              <option>Beauty &amp; Health</option>
-              <option>Services</option>
-              <option>Agriculture</option>
-              <option>Furniture</option>
-              <option>Home &amp; Living</option>
-              <option>Sports &amp; Fitness</option>
-              <option>Books &amp; Stationery</option>
-              <option>Automotive</option>
-              <option>Arts &amp; Crafts</option>
-              <option>Other</option>
             </select>
           </div>
         </div>
@@ -314,13 +311,11 @@ textarea.inp{resize:vertical;min-height:88px}
             <label class="lbl">Region <em>*</em></label>
             <select class="inp" id="shopRegion">
               <option value="">Select region...</option>
-              <option>Dar es Salaam</option><option>Arusha</option><option>Dodoma</option>
-              <option>Mwanza</option><option>Mbeya</option><option>Morogoro</option>
-              <option>Tanga</option><option>Kilimanjaro</option><option>Kagera</option>
-              <option>Kigoma</option><option>Lindi</option><option>Mara</option>
-              <option>Mtwara</option><option>Pwani</option><option>Ruvuma</option>
-              <option>Shinyanga</option><option>Singida</option><option>Tabora</option>
-              <option>Zanzibar</option><option>Other</option>
+              <option>Dar es Salaam</option>
+              <option>Arusha</option>
+              <option>Mwanza</option>
+              <option>Dodoma</option>
+              <option>Tanga</option>
             </select>
           </div>
           <div class="fg">
@@ -680,6 +675,8 @@ function validateStep(n){
     const wa=(document.getElementById('shopWhatsapp').value||'').trim()
     const desc=(document.getElementById('shopDesc').value||'').trim()
     if(!shop) return showErr('err3','Please enter your shop name.')
+    var mkt=document.getElementById('shopMarket')&&document.getElementById('shopMarket').value||''
+    if(!mkt) return showErr('err3','Please select a Business Marketplace.')
     if(!cat) return showErr('err3','Please select a category.')
     if(!reg) return showErr('err3','Please select your region.')
     if(!wa) return showErr('err3','Please enter your business WhatsApp number.')
@@ -715,6 +712,9 @@ function buildReview(){
   document.getElementById('rv-plan').textContent=selectedPlan==='premium'?'Gold Premium':'Silver Basic'
   document.getElementById('rv-price').textContent='TZS '+(selectedPlan==='premium'?'45,000':'25,000')+'/month'
   document.getElementById('rv-shop').textContent=document.getElementById('shopName').value
+  var mktNames={fashion:'Fashion Market',vehicle:'Vehicle Market',electronics:'Electronics Market'}
+  var mktEl=document.getElementById('rv-market')
+  if(mktEl) mktEl.textContent=mktNames[document.getElementById('shopMarket').value]||''
   document.getElementById('rv-cat').textContent=document.getElementById('shopCategory').value
   document.getElementById('rv-region').textContent=document.getElementById('shopRegion').value
   const desc=document.getElementById('shopDesc').value
@@ -738,6 +738,23 @@ function buildReview(){
     </div>`).join('')
 }
 
+
+// ── Market categories ─────────────────────────────────────────
+var MARKET_CATS = {
+  fashion:     ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts'],
+  vehicle:     ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories'],
+  electronics: ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics'],
+}
+
+function updateCategories(market) {
+  var wrap = document.getElementById('categoryWrap')
+  var sel  = document.getElementById('shopCategory')
+  if (!market) { wrap.style.display='none'; sel.innerHTML='<option value="">Select category...</option>'; return }
+  wrap.style.display = 'block'
+  var cats = MARKET_CATS[market] || []
+  sel.innerHTML = '<option value="">Select category...</option>' + cats.map(function(c){ return '<option>'+c+'</option>' }).join('')
+}
+
 async function submitApplication(){
   const btn=document.getElementById('submitBtn')
   btn.innerHTML='<span class="spin">&#8635;</span> Submitting...'
@@ -752,6 +769,7 @@ async function submitApplication(){
         owner_phone:document.getElementById('ownerPhone').value.trim(),
         owner_email:document.getElementById('ownerEmail').value.trim(),
         auth_email:document.getElementById('ownerEmail').value.trim(),
+        shop_market:document.getElementById('shopMarket')&&document.getElementById('shopMarket').value||null,
         shop_name:document.getElementById('shopName').value.trim(),
         shop_category:document.getElementById('shopCategory').value,
         shop_region:document.getElementById('shopRegion').value,

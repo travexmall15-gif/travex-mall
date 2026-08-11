@@ -178,7 +178,8 @@
     "flashDealsSub": "Muda Mfupi",
     "groupBuyLabel": "Nunua Pamoja",
     "groupBuySub": "Okoa Pamoja",
-    "campusMarketLabel": "Soko la Vyuo"
+    "campusMarketLabel": "Soko la Vyuo",
+    "gatewayDesc": "Chagua soko kupata maduka yaliyothibitishwa"
   },
   "campus": {
     "badge": "Soko la Vyuo",
