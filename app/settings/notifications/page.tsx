@@ -11,7 +11,7 @@ const DEFAULTS = { push:true, orders:true, deals:true, messages:true, flashDeals
 
 const Toggle = ({ on, onToggle }: { on:boolean; onToggle:()=>void }) => (
   <button onClick={onToggle} style={{ width:46, height:26, borderRadius:999, background: on ? '#0D1B3E' : '#E2E8F0', border:'none', cursor:'pointer', position:'relative', transition:'all .25s', flexShrink:0 }}>
-    <div style={{ width:20, height:20, borderRadius:'50%', background: on ? '#C9A84C' : '#fff', position:'absolute', top:3, left: on ? 23 : 3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
+    <div style={{ width:20, height:20, borderRadius:'50%', background: on ? '#1D4ED8' : '#fff', position:'absolute', top:3, left: on ? 23 : 3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
   </button>
 )
 

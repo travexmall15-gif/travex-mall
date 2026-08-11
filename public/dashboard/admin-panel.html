@@ -13,7 +13,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
 :root{--bg:#F8FAFF;--sidebar:#0D1B3E;--card:#fff;--card-b:#E2E8F0;
   --text:#0F172A;--muted:#64748B;--light:#94A3B8;--border:#E2E8F0;
-  --gold:#C9A84C;--gold2:#F97316;--blue:#3B82F6;--green:#059669;--red:#EF4444;--r:12px;--pill:999px}
+  --gold:#1D4ED8;--gold2:#F97316;--blue:#3B82F6;--green:#059669;--red:#EF4444;--r:12px;--pill:999px}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:9px}
 
@@ -25,7 +25,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .lc{position:relative;z-index:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);
   border-radius:24px;padding:2.5rem 2rem;width:380px;max-width:90vw;backdrop-filter:blur(20px);
   box-shadow:0 30px 80px rgba(1,4,14,0.55),inset 0 1px 0 rgba(255,255,255,0.06)}
-.lc-badge{display:inline-flex;align-items:center;gap:.45rem;background:rgba(201,168,76,0.10);border:1px solid rgba(201,168,76,0.25);
+.lc-badge{display:inline-flex;align-items:center;gap:.45rem;background:rgba(29,78,216,0.10);border:1px solid rgba(29,78,216,0.25);
   color:var(--gold);padding:.3rem .85rem;border-radius:var(--pill);font-size:.65rem;font-weight:700;margin-bottom:1.25rem}
 .lc h2{font-family:'Inter',sans-serif;font-weight:700;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:.4rem}
 .lc p{font-size:.82rem;color:rgba(255,255,255,0.40);margin-bottom:1.75rem;line-height:1.6}
@@ -35,7 +35,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .lc input::placeholder{color:rgba(255,255,255,0.25)}
 .lc button{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0F172A;
   font-weight:700;font-size:.88rem;border:none;border-radius:var(--pill);cursor:pointer;font-family:'Inter',sans-serif;
-  box-shadow:0 6px 20px rgba(201,168,76,0.35)}
+  box-shadow:0 6px 20px rgba(29,78,216,0.35)}
 .lc-err{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.30);color:#FCA5A5;
   padding:.65rem .85rem;border-radius:var(--r);font-size:.78rem;margin-bottom:1rem;display:none}
 
@@ -100,7 +100,7 @@ tr:last-child td{border-bottom:none}
 /* Badges */
 .bd{display:inline-block;padding:.15rem .55rem;border-radius:var(--pill);font-size:.6rem;font-weight:700}
 .bd-p{background:rgba(234,179,8,0.12);color:#FACC15}.bd-a{background:rgba(16,185,129,0.12);color:#34D399}
-.bd-r{background:rgba(239,68,68,0.12);color:#FCA5A5}.bd-pr{background:rgba(201,168,76,0.15);color:var(--gold)}
+.bd-r{background:rgba(239,68,68,0.12);color:#FCA5A5}.bd-pr{background:rgba(29,78,216,0.15);color:var(--gold)}
 .bd-ba{background:rgba(255,255,255,0.08);color:var(--light)}.bd-fr{background:rgba(16,185,129,0.12);color:#34D399}
 
 /* Actions */
@@ -131,7 +131,7 @@ tr:last-child td{border-bottom:none}
 .empty-i{font-size:2.5rem;margin-bottom:.75rem}
 
 /* Value card */
-.vc{background:linear-gradient(135deg,#0C1535,#0A1858);border:1px solid rgba(201,168,76,0.20);border-radius:20px;padding:2rem;margin-bottom:1.5rem}
+.vc{background:linear-gradient(135deg,#0C1535,#0A1858);border:1px solid rgba(29,78,216,0.20);border-radius:20px;padding:2rem;margin-bottom:1.5rem}
 .vc h4{font-family:'Inter',sans-serif;font-weight:700;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:1rem}
 .vc-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:.82rem}
 .vc-row:last-child{border:none;padding-top:.75rem}
@@ -143,7 +143,7 @@ tr:last-child td{border-bottom:none}
 .sel-filter-btn:hover{opacity:.8}
 .plan-badge{display:inline-block;padding:2px 8px;border-radius:var(--pill);font-size:10px;font-weight:700}
 .plan-basic{background:rgba(15,23,42,0.08);color:var(--navy)}
-.plan-premium{background:rgba(201,168,76,0.15);color:#A0721F}
+.plan-premium{background:rgba(29,78,216,0.15);color:#A0721F}
 .plan-campus{background:rgba(99,102,241,0.15);color:#4338CA}
 .days-ok{color:#22C55E;font-weight:700}
 .days-warn{color:#EAB308;font-weight:700}
@@ -960,7 +960,7 @@ function rSellers() {
             ${s.status==='approved' ? `<button class="action-btn" style="background:rgba(234,179,8,0.12);color:#A16207" onclick="suspendSeller('${s.id}','${s.type}')"> Suspend</button>` : ''}
             ${s.status==='suspended' ? `<button class="action-btn" style="background:rgba(34,197,94,0.12);color:#166534" onclick="reinstSeller('${s.id}','${s.type}')"> Reinstate</button>` : ''}
             <button class="action-btn" style="background:rgba(99,102,241,0.12);color:#4338CA" onclick="upgradeSeller('${s.id}','${s.type}')"> Plan</button>
-            <button class="action-btn" style="background:rgba(201,168,76,0.12);color:#A0721F" onclick="renewSeller('${s.id}','${s.type}')"> Renew</button>
+            <button class="action-btn" style="background:rgba(29,78,216,0.12);color:#A0721F" onclick="renewSeller('${s.id}','${s.type}')"> Renew</button>
             <button class="action-btn" style="background:rgba(239,68,68,0.12);color:#991B1B" onclick="deleteSeller('${s.id}','${s.type}','${E(s.shop_name)}')"> Delete</button>
           </div>
         </td>
@@ -1059,7 +1059,7 @@ async function upgradeSeller(id, type) {
       ${['basic','premium','campus'].map(p => `
         <button onclick="confirmUpgrade('${id}','${type}','${p}')"
           class="action-btn" style="padding:12px;font-size:13px;text-align:left;
-          background:${p===s.plan?'rgba(201,168,76,0.15)':'var(--bg)'};
+          background:${p===s.plan?'rgba(29,78,216,0.15)':'var(--bg)'};
           border:${p===s.plan?'2px solid var(--gold)':'1px solid var(--border)'};
           border-radius:10px;color:var(--text)">
           ${p==='premium'?' Premium, TZS 45,000/mo':p==='campus'?' Campus, TZS 10,000/mo':' Basic, TZS 25,000/mo'}

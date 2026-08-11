@@ -188,7 +188,7 @@ export default function AiSearchBox() {
               transition: 'border-color 0.2s',
               fontFamily: 'Inter, sans-serif',
             }}
-            onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.6)'}
+            onFocus={e => e.target.style.borderColor = 'rgba(29,78,216,0.6)'}
             onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.15)'}
           />
         </div>
@@ -197,7 +197,7 @@ export default function AiSearchBox() {
           disabled={loading || !query.trim()}
           style={{
             padding: '14px 24px', borderRadius: '16px',
-            background: query.trim() ? '#C9A84C' : 'rgba(201,168,76,0.3)',
+            background: query.trim() ? '#1D4ED8' : 'rgba(29,78,216,0.3)',
             border: 'none', color: query.trim() ? '#111' : 'rgba(255,255,255,0.4)',
             fontWeight: 700, fontSize: '0.85rem', cursor: query.trim() ? 'pointer' : 'default',
             transition: 'all 0.2s', whiteSpace: 'nowrap',
@@ -258,7 +258,7 @@ export default function AiSearchBox() {
       {!loading && searched && results.length === 0 && !error && (
         <div style={{ marginTop: '20px', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', padding: '24px' }}>
           Hakuna maduka yaliyopatikana kwa &quot;{query}&quot;.<br/>
-          <span style={{ fontSize: '0.8rem' }}>{t('ai.noResultsDesc')} <a href="/market" style={{ color: '#C9A84C', textDecoration: 'none' }}>{t('ai.browseAll')}</a></span>
+          <span style={{ fontSize: '0.8rem' }}>{t('ai.noResultsDesc')} <a href="/market" style={{ color: '#1D4ED8', textDecoration: 'none' }}>{t('ai.browseAll')}</a></span>
         </div>
       )}
 
@@ -282,7 +282,7 @@ export default function AiSearchBox() {
                 transition: 'all 0.2s',
                 animationDelay: `${i * 80}ms`,
               }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.3)' }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)' }}
             >
               {/* Logo */}
@@ -290,7 +290,7 @@ export default function AiSearchBox() {
                 width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
                 background: store.logo_url ? `url(${store.logo_url}) center/cover` : 'linear-gradient(135deg,#1a2a5e,#0D1B3E)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.2rem', color: '#C9A84C', fontWeight: 800,
+                fontSize: '1.2rem', color: '#1D4ED8', fontWeight: 800,
                 border: '1px solid rgba(255,255,255,0.1)',
               }}>
                 {!store.logo_url && (store.shop_name?.[0] || '🏪')}
@@ -303,7 +303,7 @@ export default function AiSearchBox() {
                     {store.shop_name}
                   </span>
                   {store.rating > 0 && (
-                    <span style={{ fontSize: '0.68rem', color: '#C9A84C', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>
+                    <span style={{ fontSize: '0.68rem', color: '#1D4ED8', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>
                   )}
                 </div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginBottom: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -334,7 +334,7 @@ export default function AiSearchBox() {
           {/* See all */}
           <a
             href={`/market?q=${encodeURIComponent(query)}`}
-            style={{ display: 'block', textAlign: 'center', padding: '12px', color: '#C9A84C', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginTop: '4px' }}
+            style={{ display: 'block', textAlign: 'center', padding: '12px', color: '#1D4ED8', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginTop: '4px' }}
           >
             Angalia maduka yote kwenye Market →
           </a>

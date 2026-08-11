@@ -38,9 +38,9 @@ export function SiteFooter() {
               whiteSpace: 'nowrap' as const,
             }}
             onMouseOver={e => {
-              (e.currentTarget as HTMLElement).style.background = 'rgba(201,168,76,0.12)'
-              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.30)'
-              ;(e.currentTarget as HTMLElement).style.color = '#C9A84C'
+              (e.currentTarget as HTMLElement).style.background = 'rgba(29,78,216,0.12)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.30)'
+              ;(e.currentTarget as HTMLElement).style.color = '#1D4ED8'
             }}
             onMouseOut={e => {
               (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)'

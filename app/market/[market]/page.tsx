@@ -179,7 +179,7 @@ export default function MarketInnerPage() {
         {/* Results */}
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem 0', color: '#64748B' }}>
-            <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', margin: '0 auto 12px', display: 'block', color: '#C9A84C' }} />
+            <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', margin: '0 auto 12px', display: 'block', color: '#1D4ED8' }} />
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
             <p style={{ fontSize: '0.85rem' }}>Loading stores...</p>
           </div>
@@ -233,7 +233,7 @@ function ShopCard({ shop, accentColor }: { shop: Shop; accentColor: string }) {
   }
 
   const isPremium  = shop.plan === 'premium'
-  const color      = shop.shop_color || (isPremium ? '#C9A84C' : accentColor)
+  const color      = shop.shop_color || (isPremium ? '#1D4ED8' : accentColor)
   const nameFont   = SHOP_FONTS[shop.shop_font || ''] || SHOP_FONTS['Inter']
   const init       = (shop.shop_name || 'SH').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   let products: { name: string; price: number; image?: string }[] = []
@@ -245,8 +245,8 @@ function ShopCard({ shop, accentColor }: { shop: Shop; accentColor: string }) {
         onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered(false)}
         style={{
           background: '#fff', borderRadius: 20, overflow: 'hidden',
-          border: isPremium ? '2px solid rgba(201,168,76,0.30)' : '1.5px solid #E2E8F0',
-          boxShadow: hovered ? '0 16px 40px rgba(13,27,62,0.14)' : isPremium ? '0 4px 20px rgba(201,168,76,0.10)' : '0 2px 10px rgba(15,23,42,0.06)',
+          border: isPremium ? '2px solid rgba(29,78,216,0.30)' : '1.5px solid #E2E8F0',
+          boxShadow: hovered ? '0 16px 40px rgba(13,27,62,0.14)' : isPremium ? '0 4px 20px rgba(29,78,216,0.10)' : '0 2px 10px rgba(15,23,42,0.06)',
           transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
           transition: 'box-shadow 0.22s ease, transform 0.22s ease',
           cursor: 'pointer',
@@ -256,7 +256,7 @@ function ShopCard({ shop, accentColor }: { shop: Shop; accentColor: string }) {
         <div style={{ background: `linear-gradient(135deg,${color}40 0%,${color}90 60%,#050B2E 100%)`, padding: '13px 13px 10px', position: 'relative' }}>
           <div style={{ display: 'flex', gap: 5, marginBottom: 8 }}>
             {isPremium && (
-              <span style={{ background: 'linear-gradient(135deg,#C9A84C,#E0B85A)', color: '#0F172A', fontSize: 9, fontWeight: 900, padding: '3px 10px', borderRadius: 999, letterSpacing: '0.06em' }}>
+              <span style={{ background: 'linear-gradient(135deg,#1D4ED8,#2563EB)', color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 10px', borderRadius: 999, letterSpacing: '0.06em' }}>
                 ★ PREMIUM
               </span>
             )}

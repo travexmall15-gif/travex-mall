@@ -122,7 +122,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
           <ArrowLeft size={20} />
         </button>
         <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Store size={16} color="#C9A84C" />
+          <Store size={16} color="#1D4ED8" />
         </div>
         <div>
           <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0D1B3E' }}>{storeName}</div>
@@ -191,7 +191,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         />
         <button onClick={send} disabled={!text.trim() || sending}
           style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? '#0D1B3E' : '#E2E8F0', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-          <Send size={16} color={text.trim() ? '#C9A84C' : '#94A3B8'} />
+          <Send size={16} color={text.trim() ? '#1D4ED8' : '#94A3B8'} />
         </button>
       </div>
     </main>

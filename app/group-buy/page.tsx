@@ -63,14 +63,14 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
     <article style={{
       background: featured ? 'linear-gradient(160deg,#0D1B3E,#1B3A8A,#0D1B3E)' : '#fff',
       border: featured
-        ? '2px solid rgba(201,168,76,0.30)'
+        ? '2px solid rgba(29,78,216,0.30)'
         : isReady
           ? '1.5px solid rgba(5,150,105,0.30)'
           : '1.5px solid #E2E8F0',
       borderRadius: featured ? 24 : 18,
       overflow: 'hidden',
       boxShadow: featured
-        ? '0 24px 56px rgba(13,27,62,0.28), 0 0 0 1px rgba(201,168,76,0.12)'
+        ? '0 24px 56px rgba(13,27,62,0.28), 0 0 0 1px rgba(29,78,216,0.12)'
         : '0 2px 10px rgba(15,23,42,0.06)',
       transition: 'all .25s',
     }}
@@ -96,10 +96,10 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-          <ShoppingBag size={10} color="rgba(201,168,76,0.7)" />
+          <ShoppingBag size={10} color="rgba(29,78,216,0.7)" />
           <span style={{
             fontSize: 11, fontWeight: 700, letterSpacing: '0.06em',
-            color: featured ? '#C9A84C' : 'rgba(255,255,255,0.6)',
+            color: featured ? '#1D4ED8' : 'rgba(255,255,255,0.6)',
             textTransform: 'uppercase' as const,
             whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
@@ -159,7 +159,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 <div style={{ fontSize: 9, fontWeight: 700, color: featured ? 'rgba(255,255,255,0.4)' : '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 1 }}>
                   {t('groupBuy.groupPrice')}
                 </div>
-                <span style={{ fontSize: featured ? 20 : 17, fontWeight: 900, color: isReady ? '#059669' : featured ? '#C9A84C' : '#0D1B3E', letterSpacing: '-0.02em' }}>
+                <span style={{ fontSize: featured ? 20 : 17, fontWeight: 900, color: isReady ? '#059669' : featured ? '#1D4ED8' : '#0D1B3E', letterSpacing: '-0.02em' }}>
                   {fmtTZS(grpPrice)}
                 </span>
               </div>
@@ -231,7 +231,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 : isReady
                   ? 'linear-gradient(135deg,#059669,#10B981)'
                   : featured
-                    ? 'linear-gradient(135deg,#C9A84C,#F0C96B)'
+                    ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
                     : '#0D1B3E',
               color: isExpired
                 ? (featured ? 'rgba(255,255,255,0.35)' : '#94A3B8')
@@ -259,7 +259,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 textDecoration: 'none', transition: 'all .2s', flexShrink: 0,
               }}
               title={t('groupBuy.visitShop')}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#C9A84C'; (e.currentTarget as HTMLElement).style.color = '#C9A84C' }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#1D4ED8'; (e.currentTarget as HTMLElement).style.color = '#1D4ED8' }}
               onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? 'rgba(255,255,255,0.12)' : '#E2E8F0'; (e.currentTarget as HTMLElement).style.color = featured ? 'rgba(255,255,255,0.6)' : '#64748B' }}>
               <ShoppingBag size={14} />
             </Link>
@@ -318,7 +318,7 @@ export default function GroupBuyPage() {
 
   // Stats ticker data — translated on every render
   const STATS = [
-    { val: loading ? '...' : String(groups.length),       label: t('groupBuy.activeGroupsStat'), color: '#C9A84C' },
+    { val: loading ? '...' : String(groups.length),       label: t('groupBuy.activeGroupsStat'), color: '#1D4ED8' },
     { val: loading ? '...' : String(readyGroups.length),  label: t('groupBuy.groupsReadyStat'),  color: '#86EFAC' },
     { val: `${t('groupBuy.upTo')} 20%`,                   label: t('groupBuy.maxDiscountStat'),  color: 'rgba(255,255,255,0.6)' },
     { val: t('groupBuy.openLabel'),                        label: t('groupBuy.registration'),     color: '#86EFAC' },
@@ -355,7 +355,7 @@ export default function GroupBuyPage() {
           <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#fff', margin:0, letterSpacing:'-0.02em' }}>
             Group Buying
           </h1>
-          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#C9A84C', color:'#0F172A', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
+          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#1D4ED8', color:'#0F172A', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
             <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
           </Link>
         </div>
@@ -476,13 +476,13 @@ export default function GroupBuyPage() {
             {featured && filter === 'all' && !search && (
               <div style={{ marginBottom:'2rem' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
-                  <TrendingUp size={13} color="#C9A84C" />
+                  <TrendingUp size={13} color="#1D4ED8" />
                   <span style={{ fontSize:12, fontWeight:800, color:'#0D1B3E', textTransform:'uppercase' as const, letterSpacing:'0.08em' }}>
                     {featured.current_members! >= featured.min_members!
                       ? t('groupBuy.readyToBuy')
                       : t('groupBuy.allDeals')}
                   </span>
-                  <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(201,168,76,0.4),transparent)' }} />
+                  <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(29,78,216,0.4),transparent)' }} />
                 </div>
                 <GroupCard group={featured} featured={true} />
               </div>

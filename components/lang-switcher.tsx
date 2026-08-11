@@ -78,7 +78,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
             >
               <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#F1F5F9', color: '#0D1B3E', padding: '2px 7px', borderRadius: 5, letterSpacing: '0.04em', flexShrink: 0 }}>{m.flag}</span>
               <span>{m.label}</span>
-              {lang === code && <span style={{ marginLeft: 'auto', color: '#C9A84C', fontSize: '0.7rem' }}>✓</span>}
+              {lang === code && <span style={{ marginLeft: 'auto', color: '#1D4ED8', fontSize: '0.7rem' }}>✓</span>}
               {m.dir === 'rtl' && <span style={{ fontSize: '0.6rem', color: '#94A3B8', marginLeft: 'auto' }}>RTL</span>}
             </button>
           ))}
@@ -142,7 +142,7 @@ export function LangSwitcherLight() {
               }}>
               <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#F1F5F9', color: '#0D1B3E', padding: '2px 6px', borderRadius: 4, letterSpacing: '0.04em', flexShrink: 0 }}>{m.flag}</span>
               <span>{m.label}</span>
-              {lang === code && <span style={{ marginLeft: 'auto', color: '#C9A84C' }}>✓</span>}
+              {lang === code && <span style={{ marginLeft: 'auto', color: '#1D4ED8' }}>✓</span>}
             </button>
           ))}
         </div>

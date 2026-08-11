@@ -70,7 +70,7 @@ export default function SplashPage() {
         .sp-sub  { animation: fadeUp2 0.5s ease 1.1s both }
         .sp-btn  { animation: btnIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 1.3s both }
         .sp-btn:active { transform: scale(0.97) !important }
-        .dot { width:10px;height:10px;border-radius:50%;background:#C9A84C;display:inline-block;margin:0 5px; }
+        .dot { width:10px;height:10px;border-radius:50%;background:#1D4ED8;display:inline-block;margin:0 5px; }
         .dot:nth-child(1){animation:dotPulse 1.2s ease-in-out 0s infinite}
         .dot:nth-child(2){animation:dotPulse 1.2s ease-in-out 0.2s infinite}
         .dot:nth-child(3){animation:dotPulse 1.2s ease-in-out 0.4s infinite}

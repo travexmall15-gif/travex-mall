@@ -156,7 +156,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
         <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderRadius:16, padding:'14px 18px', marginBottom:'1.5rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <div>
             <div style={{ fontSize:'0.75rem', color:'rgba(255,255,255,0.45)', marginBottom:3 }}>{t('orders.orderTotal')}</div>
-            <div style={{ fontSize:'1.2rem', fontWeight:900, color:'#C9A84C' }}>TZS {order?.total_amount?.toLocaleString() || '—'}</div>
+            <div style={{ fontSize:'1.2rem', fontWeight:900, color:'#1D4ED8' }}>TZS {order?.total_amount?.toLocaleString() || '—'}</div>
             <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.5)', marginTop:2 }}>{order?.product_name}</div>
           </div>
           <div style={{ background:'rgba(239,68,68,0.15)', border:'1px solid rgba(239,68,68,0.3)', borderRadius:10, padding:'5px 12px' }}>
@@ -181,7 +181,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               ))}
             </div>
             <button onClick={() => selMethod && setStep('option')} disabled={!selMethod}
-              style={{ width:'100%', padding:'0.9rem', background: selMethod?'#0D1B3E':'#E2E8F0', color: selMethod?'#C9A84C':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selMethod?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
+              style={{ width:'100%', padding:'0.9rem', background: selMethod?'#0D1B3E':'#E2E8F0', color: selMethod?'#1D4ED8':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selMethod?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
               Continue →
             </button>
           </>
@@ -200,7 +200,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
                 <button key={opt.id} onClick={() => setSelOption(opt.id)}
                   style={{ display:'flex', alignItems:'flex-start', gap:14, padding:'16px', background:'#fff', border:`2px solid ${selOption===opt.id?'#0D1B3E':'#E2E8F0'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', textAlign:'left' }}>
                   <div style={{ width:42, height:42, borderRadius:12, background: selOption===opt.id?'#0D1B3E':'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
-                    <opt.icon size={20} color={selOption===opt.id?'#C9A84C':'#64748B'} />
+                    <opt.icon size={20} color={selOption===opt.id?'#1D4ED8':'#64748B'} />
                   </div>
                   <div style={{ flex:1 }}>
                     <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
@@ -215,7 +215,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               ))}
             </div>
             <button onClick={() => selOption && setStep('location')} disabled={!selOption}
-              style={{ width:'100%', padding:'0.9rem', background: selOption?'#0D1B3E':'#E2E8F0', color: selOption?'#C9A84C':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selOption?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'0.9rem', background: selOption?'#0D1B3E':'#E2E8F0', color: selOption?'#1D4ED8':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selOption?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif" }}>
               Continue →
             </button>
           </>
@@ -258,7 +258,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               onBlur={e  => (e.target.style.borderColor='#E2E8F0')} />
 
             <button onClick={() => location.trim() && setStep('confirm')} disabled={!location.trim()}
-              style={{ width:'100%', padding:'0.9rem', background: location.trim()?'#0D1B3E':'#E2E8F0', color: location.trim()?'#C9A84C':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: location.trim()?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'0.9rem', background: location.trim()?'#0D1B3E':'#E2E8F0', color: location.trim()?'#1D4ED8':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: location.trim()?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif" }}>
               Continue →
             </button>
           </>
@@ -295,7 +295,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             </div>
 
             <button onClick={submitPayment} disabled={submitting}
-              style={{ width:'100%', padding:'0.9rem', background:'#0D1B3E', color:'#C9A84C', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: submitting?'not-allowed':'pointer', fontFamily:"'Inter',sans-serif", display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+              style={{ width:'100%', padding:'0.9rem', background:'#0D1B3E', color:'#1D4ED8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: submitting?'not-allowed':'pointer', fontFamily:"'Inter',sans-serif", display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
               {submitting
                 ? <><Loader2 size={16} style={{ animation:'spin 1s linear infinite' }}/> Processing...</>
                 : 'Confirm & Submit Payment'}
@@ -318,7 +318,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
                 : 'Seller has been notified. Pay on delivery when rider arrives.'}
             </p>
             <button onClick={() => router.push('/orders')}
-              style={{ padding:'12px 32px', background:'#0D1B3E', color:'#C9A84C', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+              style={{ padding:'12px 32px', background:'#0D1B3E', color:'#1D4ED8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
               View My Orders
             </button>
           </div>

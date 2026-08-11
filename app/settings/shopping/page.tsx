@@ -30,7 +30,7 @@ type SavedShop = {
 const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
   <button onClick={onToggle}
     style={{ width:46, height:26, borderRadius:999, background: on?'#0D1B3E':'#E2E8F0', border:'none', cursor:'pointer', position:'relative', transition:'all .25s', flexShrink:0 }}>
-    <div style={{ width:20, height:20, borderRadius:'50%', background: on?'#C9A84C':'#fff', position:'absolute', top:3, left: on?23:3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
+    <div style={{ width:20, height:20, borderRadius:'50%', background: on?'#1D4ED8':'#fff', position:'absolute', top:3, left: on?23:3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
   </button>
 )
 
@@ -110,7 +110,7 @@ export default function ShoppingPage() {
         <button onClick={() => router.push('/orders')}
           style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'16px 18px', background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderRadius:16, border:'none', cursor:'pointer', marginBottom:'1.1rem', fontFamily:"'Inter',sans-serif", textAlign:'left' }}>
           <div style={{ width:44, height:44, borderRadius:12, background:'rgba(255,255,255,0.12)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <Package size={22} color="#C9A84C" />
+            <Package size={22} color="#1D4ED8" />
           </div>
           <div style={{ flex:1 }}>
             <div style={{ fontSize:'1rem', fontWeight:800, color:'#fff' }}>{t('shopping.myOrders')}</div>
@@ -162,7 +162,7 @@ export default function ShoppingPage() {
                   
                   {/* Shop avatar */}
                   <div style={{ width:44, height:44, borderRadius:12, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <Store size={18} color="#C9A84C" />
+                    <Store size={18} color="#1D4ED8" />
                   </div>
 
                   {/* Info */}
@@ -173,7 +173,7 @@ export default function ShoppingPage() {
                     <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>
                       {[shop.shop_category, shop.shop_region].filter(Boolean).join(' · ')}
                       {shop.plan && (
-                        <span style={{ marginLeft:6, background: shop.plan==='premium'?'rgba(201,168,76,0.15)':'rgba(59,130,246,0.1)', color: shop.plan==='premium'?'#A07830':'#1D4ED8', padding:'1px 6px', borderRadius:999, fontWeight:700, fontSize:'0.6rem', textTransform:'uppercase' as const }}>
+                        <span style={{ marginLeft:6, background: shop.plan==='premium'?'rgba(29,78,216,0.15)':'rgba(59,130,246,0.1)', color: shop.plan==='premium'?'#A07830':'#1D4ED8', padding:'1px 6px', borderRadius:999, fontWeight:700, fontSize:'0.6rem', textTransform:'uppercase' as const }}>
                           {shop.plan}
                         </span>
                       )}
@@ -222,7 +222,7 @@ export default function ShoppingPage() {
               const sel = categories.includes(cat)
               return (
                 <button key={cat} onClick={() => toggleCat(cat)}
-                  style={{ padding:'7px 14px', borderRadius:999, border:`1.5px solid ${sel?'#0D1B3E':'#E2E8F0'}`, background: sel?'#0D1B3E':'#fff', color: sel?'#C9A84C':'#64748B', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
+                  style={{ padding:'7px 14px', borderRadius:999, border:`1.5px solid ${sel?'#0D1B3E':'#E2E8F0'}`, background: sel?'#0D1B3E':'#fff', color: sel?'#1D4ED8':'#64748B', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
                   {sel && <Check size={11}/>} {cat}
                 </button>
               )

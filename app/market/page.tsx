@@ -86,7 +86,7 @@ export default function MarketPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
-          <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#C9A84C', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+          <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#1D4ED8', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
             ShopNekt
           </div>
           <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>

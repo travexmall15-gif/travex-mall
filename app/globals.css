@@ -34,8 +34,8 @@
   /* ── ShopNekt Brand Colors ── */
   --color-navy: #0D1B3E;
   --color-blue: #1B3A6B;
-  --color-gold: #C9A84C;
-  --color-gold-light: #F0C96B;
+  --color-gold: #1D4ED8;
+  --color-gold-light: #BFDBFE;
   --color-offwhite: #EEF1F8;
   --color-green: #059669;
 
@@ -85,8 +85,8 @@
   /* Brand */
   --navy: #0D1B3E;
   --blue: #1B3A6B;
-  --gold: #C9A84C;
-  --gold-light: #F0C96B;
+  --gold: #1D4ED8;
+  --gold-light: #BFDBFE;
   --offwhite: #EEF1F8;
   --green: #059669;
 
@@ -161,12 +161,12 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Tailwind color aliases ── */
 .text-navy   { color: #0D1B3E; }
 .bg-navy     { background-color: #0D1B3E; }
-.text-gold   { color: #C9A84C; }
-.bg-gold     { background-color: #C9A84C; }
+.text-gold   { color: #1D4ED8; }
+.bg-gold     { background-color: #1D4ED8; }
 .bg-offwhite { background-color: #EEF1F8; }
-.border-gold { border-color: #C9A84C; }
+.border-gold { border-color: #1D4ED8; }
 .bg-secondary{ background-color: #1B3A6B; }
-.hover\:bg-gold-light:hover { background-color: #F0C96B; }
+.hover\:bg-gold-light:hover { background-color: #1E40AF; }
 
 /* ════ NAV ════ */
 header[class*="fixed"] {
@@ -206,7 +206,7 @@ section[style*="background:'#070D22'"]::after {
     112deg,
     transparent 30%,
     rgba(110, 150, 235, 0.20) 46%,
-    rgba(201, 168, 76, 0.13) 56%,
+    rgba(29, 78, 216, 0.13) 56%,
     transparent 72%
   );
   filter: blur(48px);
@@ -253,18 +253,18 @@ a[style*="borderRadius:'10px'"]:hover,
 button[style*="borderRadius:'10px'"]:hover {
   transform: translateY(-1px) !important;
 }
-/* Gold buttons */
-a[style*="background:'#C9A84C'"],
-a[style*='background:"#C9A84C"'],
-a[style*="background:#C9A84C"] {
+/* Primary blue buttons */
+a[style*="background:'#1D4ED8'"],
+a[style*='background:"#1D4ED8"'],
+a[style*="background:#1D4ED8"] {
   border-radius: 999px !important;
-  box-shadow: 0 8px 22px rgba(201,168,76,0.30) !important;
+  box-shadow: 0 8px 22px rgba(29,78,216,0.30) !important;
   transition: transform 0.15s, box-shadow 0.2s !important;
 }
-a[style*="background:'#C9A84C'"]:hover,
-a[style*="background:#C9A84C"]:hover {
+a[style*="background:'#1D4ED8'"]:hover,
+a[style*="background:#1D4ED8"]:hover {
   transform: translateY(-1px) !important;
-  box-shadow: 0 12px 28px rgba(201,168,76,0.40) !important;
+  box-shadow: 0 12px 28px rgba(29,78,216,0.40) !important;
 }
 /* Navy buttons */
 a[style*="background:'#0D1B3E'"],
@@ -321,11 +321,11 @@ div[style*="border-radius:20px"] {
   border-radius: 999px !important;
 }
 
-/* ════ STAT NUMBERS (polished gold) ════ */
-div[style*="color:'#C9A84C'"],
-div[style*='color:"#C9A84C"'],
-div[style*="color:#C9A84C"] {
-  text-shadow: 0 2px 12px rgba(201,168,76,0.15);
+/* ════ STAT NUMBERS ════ */
+div[style*="color:'#1D4ED8'"],
+div[style*='color:"#1D4ED8"'],
+div[style*="color:#1D4ED8"] {
+  text-shadow: 0 2px 12px rgba(29,78,216,0.15);
 }
 
 /* ════ FOOTER ════ */
@@ -334,7 +334,7 @@ footer.bg-navy {
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 footer a:hover {
-  color: #C9A84C !important;
+  color: #1D4ED8 !important;
 }
 /* Social icon circles */
 footer a.rounded-lg {
@@ -380,7 +380,7 @@ div[style*='minWidth:"280px"'] {
 ::-webkit-scrollbar-thumb:hover { background: rgba(13,27,62,0.32); }
 
 /* ════ SELECTION ════ */
-::selection { background: rgba(201,168,76,0.25); color: #0D1B3E; }
+::selection { background: rgba(29,78,216,0.25); color: #0D1B3E; }
 
 
 /* ══ PWA / NATIVE APP FEEL ══ */
@@ -467,7 +467,7 @@ body { overscroll-behavior: none; }
 
 /* Better focus states */
 a:focus-visible, button:focus-visible {
-  outline: 2px solid #C9A84C;
+  outline: 2px solid #1D4ED8;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -571,7 +571,7 @@ input, textarea, select {
 
 a { font-family: 'Inter', system-ui, sans-serif; text-decoration: none; }
 
-::selection { background: rgba(201,168,76,0.2); color: #0D1B3E; }
+::selection { background: rgba(29,78,216,0.2); color: #0D1B3E; }
 
 @media (max-width: 768px) {
   body { font-size: 0.9375rem; }

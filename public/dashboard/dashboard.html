@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--navy:#0D1B3E;--gold:#C9A84C;--green:#059669;--red:#DC2626;--off:#F8FAFF;--lgray:#E2E8F0;--gray:#64748B;--radius:14px;--nav-h:64px}
+:root{--navy:#0D1B3E;--gold:#1D4ED8;--green:#059669;--red:#DC2626;--off:#F8FAFF;--lgray:#E2E8F0;--gray:#64748B;--radius:14px;--nav-h:64px}
 body{font-family:"Inter",sans-serif;background:var(--off);color:var(--navy);min-height:100vh;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom))}
 button,input,select,textarea{font-family:inherit}
 
@@ -25,7 +25,7 @@ button,input,select,textarea{font-family:inherit}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .plan-badge{font-size:0.6rem;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:0.08em}
 .plan-badge.basic{background:rgba(100,116,139,0.12);color:var(--gray)}
-.plan-badge.premium{background:rgba(201,168,76,0.15);color:#8B6914}
+.plan-badge.premium{background:rgba(29,78,216,0.15);color:#8B6914}
 .notif-btn{width:36px;height:36px;border-radius:50%;background:var(--off);border:1.5px solid var(--lgray);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
 .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid #fff;display:none}
 .notif-dot.show{display:block}
@@ -430,7 +430,7 @@ button,input,select,textarea{font-family:inherit}
     <!-- Premium lock overlay -->
     <div class="lock-overlay" id="aiLockOverlay">
       <div class="lock-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
       <div class="lock-title">AI Assistant</div>
       <div class="lock-desc">Upgrade to Premium to access your AI business assistant</div>
@@ -531,7 +531,7 @@ button,input,select,textarea{font-family:inherit}
       <div class="drawer-lock" id="aiLock" style="display:none">
         <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#0D1B3E" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
-      <div class="drawer-icon" style="background:rgba(201,168,76,0.12)">
+      <div class="drawer-icon" style="background:rgba(29,78,216,0.12)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6914" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
       </div>
       <span class="drawer-label">AI Assistant</span>
@@ -628,7 +628,7 @@ button,input,select,textarea{font-family:inherit}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div style="text-align:center;padding:8px 0 16px">
-      <div style="width:56px;height:56px;border-radius:16px;background:rgba(201,168,76,0.12);border:2px solid rgba(201,168,76,0.25);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+      <div style="width:56px;height:56px;border-radius:16px;background:rgba(29,78,216,0.12);border:2px solid rgba(29,78,216,0.25);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B6914" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
       <div style="font-size:1.1rem;font-weight:800;color:#0D1B3E;margin-bottom:6px" id="upgradeTitle">Premium Feature</div>

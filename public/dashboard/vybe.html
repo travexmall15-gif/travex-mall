@@ -160,7 +160,7 @@ function renderPosts() {
       <div class="post-content">${p.content||p.post_text||''}</div>
       <div style="margin-bottom:10px">
         ${p.tag||p.category?`<span class="post-tag">${p.tag||p.category}</span>`:''}
-        ${p.price?`<span class="post-tag" style="background:rgba(201,168,76,0.15);color:var(--gold)">${formatTZS(p.price)}</span>`:''}
+        ${p.price?`<span class="post-tag" style="background:rgba(29,78,216,0.15);color:var(--gold)">${formatTZS(p.price)}</span>`:''}
       </div>
       <div class="post-meta">
         <span><i class="ti ti-heart"></i> ${p.likes||0} likes</span>

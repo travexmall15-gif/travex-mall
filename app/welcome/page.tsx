@@ -88,7 +88,7 @@ export default function WelcomePage() {
             }}>
               <span style={{
                 fontSize:'0.72rem', fontWeight:800,
-                color: lang === l.code ? '#C9A84C' : '#64748B',
+                color: lang === l.code ? '#1D4ED8' : '#64748B',
                 letterSpacing:'0.08em',
               }}>{l.sub}</span>
             </div>
@@ -98,7 +98,7 @@ export default function WelcomePage() {
               lineHeight:1.2,
             }}>{l.label}</div>
             {lang === l.code && (
-              <div style={{ width:5, height:5, borderRadius:'50%', background:'#C9A84C' }} />
+              <div style={{ width:5, height:5, borderRadius:'50%', background:'#1D4ED8' }} />
             )}
           </button>
         ))}

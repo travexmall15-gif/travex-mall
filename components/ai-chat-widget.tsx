@@ -58,7 +58,7 @@ export function AIChatWidget({
           style={{ position:'fixed', bottom:80, right:16, width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', boxShadow:'0 6px 20px rgba(13,27,62,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', zIndex:200, transition:'transform .2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.transform='scale(1.1)'}
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.transform='scale(1)'}>
-          <Sparkles size={22} color="#C9A84C" />
+          <Sparkles size={22} color="#1D4ED8" />
           <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#F97316', borderRadius:'50%', border:'2.5px solid #fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
             <span style={{ fontSize:'7px', fontWeight:900, color:'#fff' }}>AI</span>
           </div>
@@ -72,7 +72,7 @@ export function AIChatWidget({
           {/* Header */}
           <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', padding:'12px 14px', display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
             <div style={{ width:34, height:34, borderRadius:10, background:'rgba(255,255,255,0.12)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-              <Sparkles size={17} color="#C9A84C" />
+              <Sparkles size={17} color="#1D4ED8" />
             </div>
             <div style={{ flex:1 }}>
               <div style={{ fontSize:'0.82rem', fontWeight:800, color:'#fff' }}>360 AI</div>
@@ -90,7 +90,7 @@ export function AIChatWidget({
               <div key={i} style={{ display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
                 {m.role === 'bot' && (
                   <div style={{ width:26, height:26, borderRadius:8, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginRight:6, marginTop:2 }}>
-                    <Sparkles size={12} color="#C9A84C" />
+                    <Sparkles size={12} color="#1D4ED8" />
                   </div>
                 )}
                 <div style={{ maxWidth:'78%', padding:'8px 11px', borderRadius: m.role==='user' ? '14px 14px 3px 14px' : '3px 14px 14px 14px', background: m.role==='user' ? '#0D1B3E' : '#fff', color: m.role==='user' ? '#fff' : '#0F172A', fontSize:'0.8rem', lineHeight:1.55, boxShadow:'0 1px 3px rgba(15,23,42,0.07)', border: m.role==='bot' ? '1px solid #E2E8F0' : 'none', whiteSpace:'pre-wrap' }}>
@@ -101,7 +101,7 @@ export function AIChatWidget({
             {loading && (
               <div style={{ display:'flex', gap:6, alignItems:'center' }}>
                 <div style={{ width:26, height:26, borderRadius:8, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <Sparkles size={12} color="#C9A84C" />
+                  <Sparkles size={12} color="#1D4ED8" />
                 </div>
                 <div style={{ background:'#fff', border:'1px solid #E2E8F0', borderRadius:'3px 14px 14px 14px', padding:'8px 12px', display:'flex', gap:4 }}>
                   {[0,1,2].map(i => <div key={i} style={{ width:6, height:6, borderRadius:'50%', background:'#CBD5E1', animation:`bounce .8s ease ${i*.15}s infinite` }} />)}
@@ -135,7 +135,7 @@ export function AIChatWidget({
               onBlur={e  => (e.target.style.borderColor='#E2E8F0')} />
             <button onClick={() => send()} disabled={!input.trim() || loading}
               style={{ width:34, height:34, borderRadius:'50%', background: input.trim() ? '#0D1B3E' : '#E2E8F0', border:'none', cursor: input.trim() ? 'pointer':'not-allowed', display:'flex', alignItems:'center', justifyContent:'center', transition:'all .2s', flexShrink:0 }}>
-              <Send size={14} color={input.trim() ? '#C9A84C' : '#94A3B8'} />
+              <Send size={14} color={input.trim() ? '#1D4ED8' : '#94A3B8'} />
             </button>
           </div>
           <style>{`@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`}</style>

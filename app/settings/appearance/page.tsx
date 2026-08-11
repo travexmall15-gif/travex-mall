@@ -71,7 +71,7 @@ export default function AppearancePage() {
                 </div>
                 {lang === l.code && (
                   <div style={{ width:22, height:22, borderRadius:'50%', background:'#0D1B3E', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <Check size={13} color="#C9A84C" strokeWidth={3} />
+                    <Check size={13} color="#1D4ED8" strokeWidth={3} />
                   </div>
                 )}
               </button>
@@ -92,11 +92,11 @@ export default function AppearancePage() {
                 onClick={() => { setTheme(t.v as any); save() }}
                 style={{ padding:'16px 8px', background: theme===t.v?'#0D1B3E':'#fff', border:`2px solid ${theme===t.v?'#0D1B3E':'#E2E8F0'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
                 {theme===t.v && (
-                  <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'#C9A84C', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'#1D4ED8', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={10} color="#0D1B3E" strokeWidth={3} />
                   </div>
                 )}
-                <t.icon size={22} color={theme===t.v?'#C9A84C':'#64748B'} />
+                <t.icon size={22} color={theme===t.v?'#1D4ED8':'#64748B'} />
                 <span style={{ fontSize:'0.82rem', fontWeight:700, color: theme===t.v?'#fff':'#0F172A' }}>{t.label}</span>
                 <span style={{ fontSize:'0.65rem', color: theme===t.v?'rgba(255,255,255,0.5)':'#94A3B8' }}>{t.sub}</span>
               </button>
@@ -119,7 +119,7 @@ export default function AppearancePage() {
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
                 <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#0D1B3E':'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
-                  <Type size={16} color={fontSize===f.v?'#C9A84C':'#64748B'} />
+                  <Type size={16} color={fontSize===f.v?'#1D4ED8':'#64748B'} />
                 </div>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize: f.size, fontWeight:700, color:'#0F172A' }}>{f.label}</div>
@@ -127,7 +127,7 @@ export default function AppearancePage() {
                 </div>
                 {fontSize===f.v && (
                   <div style={{ width:22, height:22, borderRadius:'50%', background:'#0D1B3E', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <Check size={13} color="#C9A84C" strokeWidth={3} />
+                    <Check size={13} color="#1D4ED8" strokeWidth={3} />
                   </div>
                 )}
               </button>
@@ -162,7 +162,7 @@ export default function AppearancePage() {
 
         {/* Save feedback */}
         {saved && (
-          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#0D1B3E', color:'#C9A84C', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, animation:'toastIn 0.3s ease', }}>
+          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#0D1B3E', color:'#1D4ED8', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, animation:'toastIn 0.3s ease', }}>
             <Check size={14}/> Preference Saved
           </div>
         )}

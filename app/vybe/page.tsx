@@ -137,8 +137,8 @@ export default function VybePage() {
           animation: fadeUp .35s ease;
         }
         .vybe-card:hover {
-          border-color: rgba(201,168,76,.3);
-          box-shadow: 0 8px 40px rgba(201,168,76,.08);
+          border-color: rgba(29,78,216,.3);
+          box-shadow: 0 8px 40px rgba(29,78,216,.08);
           transform: translateY(-2px);
         }
 
@@ -159,8 +159,8 @@ export default function VybePage() {
         .visit-btn {
           display:inline-flex; align-items:center; gap:6px;
           background: linear-gradient(135deg, #0D1B3E, #1B3A8A);
-          border: 1px solid rgba(201,168,76,.30);
-          color: #C9A84C;
+          border: 1px solid rgba(29,78,216,.30);
+          color: #1D4ED8;
           border-radius: 999px;
           padding: 7px 18px;
           font-size:13px; font-weight:700;
@@ -168,10 +168,10 @@ export default function VybePage() {
           transition: all .18s;
         }
         .visit-btn:hover {
-          background: #C9A84C;
+          background: #1D4ED8;
           color: #0F172A;
-          border-color: #C9A84C;
-          box-shadow: 0 4px 16px rgba(201,168,76,.35);
+          border-color: #1D4ED8;
+          box-shadow: 0 4px 16px rgba(29,78,216,.35);
         }
 
         .filter-pill {
@@ -186,7 +186,7 @@ export default function VybePage() {
           white-space: nowrap;
         }
         .filter-pill:hover  { border-color:rgba(255,255,255,.25); color:rgba(255,255,255,.75); }
-        .filter-pill.active { background:#C9A84C; border-color:#C9A84C; color:#0F172A; }
+        .filter-pill.active { background:#1D4ED8; border-color:#1D4ED8; color:#0F172A; }
 
         .cat-chip {
           display:inline-flex; align-items:center; gap:4px;
@@ -199,7 +199,7 @@ export default function VybePage() {
           transition:all .15s;
           white-space:nowrap;
         }
-        .cat-chip:hover { border-color:rgba(201,168,76,.4); color:#C9A84C; background:rgba(201,168,76,.08); }
+        .cat-chip:hover { border-color:rgba(29,78,216,.4); color:#1D4ED8; background:rgba(29,78,216,.08); }
 
         .search-input {
           width:100%; padding:11px 16px 11px 42px;
@@ -211,10 +211,10 @@ export default function VybePage() {
           transition:all .2s; box-sizing:border-box;
         }
         .search-input::placeholder { color:rgba(255,255,255,0.28); }
-        .search-input:focus { border-color:rgba(201,168,76,.45); background:rgba(255,255,255,0.08); }
+        .search-input:focus { border-color:rgba(29,78,216,.45); background:rgba(255,255,255,0.08); }
 
         .live-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; animation:pulse 1.8s ease-in-out infinite; }
-        .price-badge { background:rgba(201,168,76,.12); color:#C9A84C; padding:3px 11px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid rgba(201,168,76,.2); }
+        .price-badge { background:rgba(29,78,216,.12); color:#1D4ED8; padding:3px 11px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid rgba(29,78,216,.2); }
 
         @media (max-width:480px) {
           .vybe-actions { flex-wrap:wrap; gap:8px !important; }
@@ -230,7 +230,7 @@ export default function VybePage() {
         {/* Glow */}
         <div style={{ position:'absolute', top:'-30%', left:'50%', transform:'translateX(-50%)',
           width:'70%', height:'200%', pointerEvents:'none',
-          background:'radial-gradient(ellipse at center, rgba(201,168,76,.18) 0%, transparent 60%)',
+          background:'radial-gradient(ellipse at center, rgba(29,78,216,.18) 0%, transparent 60%)',
           filter:'blur(60px)' }} />
         {/* Grid */}
         <div style={{ position:'absolute', inset:0, pointerEvents:'none', opacity:.025,
@@ -241,8 +241,8 @@ export default function VybePage() {
 
           {/* Live badge */}
           <div style={{ display:'inline-flex', alignItems:'center', gap:8, marginBottom:16,
-            background:'rgba(201,168,76,0.10)', border:'1px solid rgba(201,168,76,0.28)',
-            color:'#C9A84C', padding:'5px 16px', borderRadius:999, fontSize:11, fontWeight:700,
+            background:'rgba(29,78,216,0.10)', border:'1px solid rgba(29,78,216,0.28)',
+            color:'#1D4ED8', padding:'5px 16px', borderRadius:999, fontSize:11, fontWeight:700,
             letterSpacing:'0.06em' }}>
             <div className="live-dot" />
             {t('vybe.heroBadge')}
@@ -266,7 +266,7 @@ export default function VybePage() {
                 { val: totalLikes > 999 ? `${(totalLikes/1000).toFixed(1)}k` : String(totalLikes), label: t('vybe.totalLikes') },
               ].map((s,i) => (
                 <div key={i} style={{ textAlign:'center' }}>
-                  <div style={{ fontSize:'1.4rem', fontWeight:900, color:'#C9A84C', lineHeight:1 }}>{s.val}</div>
+                  <div style={{ fontSize:'1.4rem', fontWeight:900, color:'#1D4ED8', lineHeight:1 }}>{s.val}</div>
                   <div style={{ fontSize:'0.6rem', color:'rgba(255,255,255,0.3)', textTransform:'uppercase', letterSpacing:'0.09em', marginTop:3 }}>{s.label}</div>
                 </div>
               ))}
@@ -316,7 +316,7 @@ export default function VybePage() {
         {/* Loading */}
         {loading && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <Loader2 style={{ width:32, height:32, margin:'0 auto 12px', animation:'spin 1s linear infinite', color:'#C9A84C' }} />
+            <Loader2 style={{ width:32, height:32, margin:'0 auto 12px', animation:'spin 1s linear infinite', color:'#1D4ED8' }} />
             <p style={{ color:'rgba(255,255,255,0.3)', fontSize:14 }}>{t('vybe.loading')}</p>
           </div>
         )}
@@ -328,7 +328,7 @@ export default function VybePage() {
               <RefreshCw size={22} color="#EF4444" />
             </div>
             <p style={{ color:'rgba(255,255,255,0.40)', fontSize:14, marginBottom:16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#C9A84C', color:'#0F172A', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#0F172A', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
           </div>
@@ -337,8 +337,8 @@ export default function VybePage() {
         {/* Empty */}
         {!loading && !error && filtered.length === 0 && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(201,168,76,0.08)', border:'1px solid rgba(201,168,76,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
-              <Star size={28} color="rgba(201,168,76,0.4)" />
+            <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(29,78,216,0.08)', border:'1px solid rgba(29,78,216,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
+              <Star size={28} color="rgba(29,78,216,0.4)" />
             </div>
             <p style={{ color:'rgba(255,255,255,0.35)', fontSize:14 }}>
               {search ? t('vybe.noResults') : t('vybe.noPosts')}
@@ -365,7 +365,7 @@ export default function VybePage() {
               <div style={{ textAlign:'center', marginTop:'1.5rem' }}>
                 <button onClick={() => setVisible(v => v + 12)}
                   style={{ padding:'11px 32px', background:'rgba(255,255,255,0.06)', border:'1.5px solid rgba(255,255,255,0.12)', color:'rgba(255,255,255,0.65)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
-                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(201,168,76,.4)'; (e.currentTarget as HTMLElement).style.color='#C9A84C' }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(29,78,216,.4)'; (e.currentTarget as HTMLElement).style.color='#1D4ED8' }}
                   onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color='rgba(255,255,255,0.65)' }}>
                   {t('vybe.loadMore')} · {filtered.length - visible} {t('vybe.totalPosts').toLowerCase()}
                 </button>
@@ -405,12 +405,12 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
         {/* Logo */}
         <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
           background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)',
-          border:'1.5px solid rgba(201,168,76,0.2)',
+          border:'1.5px solid rgba(29,78,216,0.2)',
           display:'flex', alignItems:'center', justifyContent:'center' }}>
           {post.shop_logo ? (
             <Image src={post.shop_logo} alt={initials} width={42} height={42} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
           ) : (
-            <span style={{ fontSize:13, fontWeight:800, color:'#C9A84C', letterSpacing:'-0.02em' }}>{initials}</span>
+            <span style={{ fontSize:13, fontWeight:800, color:'#1D4ED8', letterSpacing:'-0.02em' }}>{initials}</span>
           )}
         </div>
 
@@ -428,7 +428,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
             )}
             {/* New badge */}
             {isNew && (
-              <span style={{ background:'rgba(201,168,76,0.15)', color:'#C9A84C', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(201,168,76,0.2)' }}>
+              <span style={{ background:'rgba(29,78,216,0.15)', color:'#1D4ED8', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(29,78,216,0.2)' }}>
                 {t('vybe.newPost')}
               </span>
             )}
@@ -445,7 +445,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
 
         {/* Tag */}
         {post.tag && (
-          <span style={{ fontSize:10, fontWeight:700, color:'#C9A84C', background:'rgba(201,168,76,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(201,168,76,0.15)', letterSpacing:'0.02em' }}>
+          <span style={{ fontSize:10, fontWeight:700, color:'#1D4ED8', background:'rgba(29,78,216,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(29,78,216,0.15)', letterSpacing:'0.02em' }}>
             #{post.tag}
           </span>
         )}

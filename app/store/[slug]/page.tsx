@@ -210,7 +210,7 @@ export default function StorePage({
   })
 
   const isPremium = store?.plan === 'premium'
-  const accentColor = store?.shop_color || (isPremium ? '#C9A84C' : '#3B82F6')
+  const accentColor = store?.shop_color || (isPremium ? '#1D4ED8' : '#3B82F6')
   const initials = (store?.shop_name || '').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   const wa = (store?.shop_whatsapp || store?.owner_phone || '').replace(/\D/g, '')
 
@@ -218,7 +218,7 @@ export default function StorePage({
   if (loading) return (
     <main style={{ minHeight: '100vh', background: '#060C1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', color: '#fff' }}>
-        <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#C9A84C' }} />
+        <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#1D4ED8' }} />
         <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>Loading store...</p>
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
@@ -232,7 +232,7 @@ export default function StorePage({
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
         <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
         <p style={{ color: '#94A3B8', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
-        <Link href="/market" style={{ background: '#C9A84C', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
+        <Link href="/market" style={{ background: '#1D4ED8', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
         </Link>
       </div>
@@ -298,7 +298,7 @@ export default function StorePage({
                 <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.06)', color: isPremium ? '#C9A84C' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(29,78,216,0.15)' : 'rgba(255,255,255,0.06)', color: isPremium ? '#1D4ED8' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(29,78,216,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>

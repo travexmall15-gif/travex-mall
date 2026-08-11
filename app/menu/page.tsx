@@ -89,14 +89,14 @@ export default function MenuPage() {
     {
       label: t('menuPage.storeSelling'),
       items: [
-        { icon: Store,          label: t('menuPage.openShop'),     href: '/open-store',              color: '#C9A84C' },
+        { icon: Store,          label: t('menuPage.openShop'),     href: '/open-store',              color: '#1D4ED8' },
         { icon: ShoppingCart,   label: t('menuPage.shoppingPrefs'), href: '/settings/shopping',       color: '#F59E0B' },
       ],
     },
     {
       label: t('menuPage.communication'),
       items: [
-        { icon: Sparkles,       label: t('menuPage.aiAssistant'), href: '/ai',       color: '#C9A84C' },
+        { icon: Sparkles,       label: t('menuPage.aiAssistant'), href: '/ai',       color: '#1D4ED8' },
         { icon: MessageSquare,  label: t('menuPage.messages'),    href: '/messages', color: '#6366F1' },
       ],
     },
@@ -149,7 +149,7 @@ export default function MenuPage() {
         <div style={{ display:'flex', background:'#F1F5F9', borderRadius:10, padding:3, gap:3, flexWrap:'wrap' }}>
           {(['en','sw','fr','de','pt','ar'] as const).map(code => (
             <button key={code} onClick={() => setLang(code)}
-              style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? '#C9A84C' : '#64748B' }}>
+              style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? '#1D4ED8' : '#64748B' }}>
               {code.toUpperCase()}
             </button>
           ))}

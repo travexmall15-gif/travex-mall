@@ -74,11 +74,11 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
   return (
     <article style={{
       background: featured ? 'linear-gradient(135deg,#0D1B3E,#1B3A8A)' : '#fff',
-      border: featured ? '2px solid rgba(201,168,76,0.35)' : '1.5px solid #FEF3C7',
+      border: featured ? '2px solid rgba(29,78,216,0.35)' : '1.5px solid #FEF3C7',
       borderRadius: featured ? 24 : 20,
       overflow: 'hidden',
       boxShadow: featured
-        ? '0 20px 60px rgba(13,27,62,0.35), 0 0 0 1px rgba(201,168,76,0.15)'
+        ? '0 20px 60px rgba(13,27,62,0.35), 0 0 0 1px rgba(29,78,216,0.15)'
         : '0 4px 20px rgba(234,179,8,0.10)',
       transition: 'all .25s',
       position: 'relative',
@@ -115,7 +115,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
             style={{ objectFit:'cover', transition:'transform .4s' }} />
         ) : (
           <div style={{ height:'100%', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <ShoppingBag size={featured ? 56 : 44} color={featured ? 'rgba(201,168,76,0.3)' : 'rgba(245,158,11,0.3)'} />
+            <ShoppingBag size={featured ? 56 : 44} color={featured ? 'rgba(29,78,216,0.3)' : 'rgba(245,158,11,0.3)'} />
           </div>
         )}
 
@@ -185,7 +185,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
         {/* Shop name */}
         <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.06em', marginBottom:5,
-          color: featured ? '#C9A84C' : '#92400E',
+          color: featured ? '#1D4ED8' : '#92400E',
           textTransform:'uppercase' as const, display:'flex', alignItems:'center', gap:4 }}>
           <Store size={9} /> {deal.shop_name}
         </div>
@@ -235,14 +235,14 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         <Link href={`/store/${deal.store_id}`}
           style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7,
             background: featured
-              ? 'linear-gradient(135deg,#C9A84C,#F0C96B)'
+              ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
               : 'linear-gradient(135deg,#F59E0B,#EF4444)',
             color: featured ? '#0F172A' : '#fff',
             borderRadius:999, padding:'12px 20px',
             fontWeight:800, fontSize:14,
             textDecoration:'none',
             boxShadow: featured
-              ? '0 8px 24px rgba(201,168,76,0.35)'
+              ? '0 8px 24px rgba(29,78,216,0.35)'
               : '0 4px 16px rgba(245,158,11,0.40)',
             letterSpacing:'-0.01em',
             transition:'all .2s' }}
