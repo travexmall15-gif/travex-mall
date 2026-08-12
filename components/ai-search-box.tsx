@@ -183,7 +183,7 @@ export default function AiSearchBox() {
               width: '100%', padding: '14px 16px 14px 44px',
               background: 'rgba(255,255,255,0.07)',
               border: '1.5px solid rgba(255,255,255,0.15)',
-              borderRadius: '16px', color: '#0F172A',
+              borderRadius: '16px', color: '#111827',
               fontSize: '0.9rem', outline: 'none',
               transition: 'border-color 0.2s',
               fontFamily: 'Inter, sans-serif',
@@ -237,9 +237,9 @@ export default function AiSearchBox() {
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {[1,2,3].map(i => (
             <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #F1F5F9', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F1F5F9', flexShrink: 0 }} />
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fff', flexShrink: 0 }} />
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div style={{ height: '12px', width: '40%', background: '#F1F5F9', borderRadius: '6px' }} />
+                <div style={{ height: '12px', width: '40%', background: '#fff', borderRadius: '6px' }} />
                 <div style={{ height: '10px', width: '60%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px' }} />
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function AiSearchBox() {
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <span style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {store.shop_name}
                   </span>
                   {store.rating > 0 && (

@@ -60,7 +60,7 @@ export default function UsernamePage() {
       </div>
 
       {/* Card */}
-      <div style={{ width: '100%', maxWidth: 380, background: '#F8FAFC', border: '1px solid #F1F5F9', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)', }}>
+      <div style={{ width: '100%', maxWidth: 380, background: '#fff', border: '1px solid #F1F5F9', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)', }}>
 
         {/* Google icon */}
         <div style={{ width: 52, height: 52, borderRadius: 14, background: '#fff', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>

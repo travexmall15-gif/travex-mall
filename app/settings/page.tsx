@@ -76,8 +76,8 @@ export default function SettingsPage() {
       title: t('settings.sectionLegal'),
       items: [
         { icon: HelpCircle, label: t('settings.labelHelp'),         sub: t('settings.labelHelpSub'),          href: '/settings/about',         color: '#10B981' },
-        { icon: Shield,     label: t('settings.privacyPolicy'),     sub: t('settings.labelPrivacySub'),       href: '/privacy',                color: '#64748B' },
-        { icon: FileText,   label: t('settings.labelTerms'),        sub: t('settings.labelTermsSub'),         href: '/privacy',                color: '#64748B' },
+        { icon: Shield,     label: t('settings.privacyPolicy'),     sub: t('settings.labelPrivacySub'),       href: '/privacy',                color: '#6B7280' },
+        { icon: FileText,   label: t('settings.labelTerms'),        sub: t('settings.labelTermsSub'),         href: '/privacy',                color: '#6B7280' },
       ],
     },
   ]
@@ -91,15 +91,15 @@ export default function SettingsPage() {
 
         {/* Profile card */}
         <Link href="/settings/profile" style={{ textDecoration:'none', display:'block', marginBottom:'1.25rem' }}>
-          <div style={{ background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
+          <div style={{ background:'#fff', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
             onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity='0.9'}
             onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity='1'}>
-            <div style={{ width:50, height:50, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid rgba(255,255,255,0.2)', fontSize:'1.05rem', fontWeight:900, color:'#0F172A' }}>
+            <div style={{ width:50, height:50, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid rgba(255,255,255,0.2)', fontSize:'1.05rem', fontWeight:900, color:'#111827' }}>
               {user ? user.name.slice(0,2).toUpperCase() : '?'}
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontSize:'1rem', fontWeight:700, color:'#0F172A', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
-              <div style={{ fontSize:'0.72rem', color:'#94A3B8' }}>{user?.email || ''}</div>
+              <div style={{ fontSize:'1rem', fontWeight:700, color:'#111827', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
+              <div style={{ fontSize:'0.72rem', color:'#9CA3AF' }}>{user?.email || ''}</div>
             </div>
             <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
           </div>
@@ -108,7 +108,7 @@ export default function SettingsPage() {
         {/* Sections */}
         {SECTIONS.map((section, si) => (
           <div key={si} style={{ marginBottom:'1.1rem' }}>
-            <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
+            <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
               {section.title}
             </div>
             <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', boxShadow:'0 1px 4px rgba(15,23,42,0.04)' }}>
@@ -121,8 +121,8 @@ export default function SettingsPage() {
                       <item.icon size={17} color={item.color} />
                     </div>
                     <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#0F172A', lineHeight:1.2 }}>{item.label}</div>
-                      <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{item.sub}</div>
+                      <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#111827', lineHeight:1.2 }}>{item.label}</div>
+                      <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{item.sub}</div>
                     </div>
                     <ChevronRight size={14} color="#CBD5E1" />
                   </div>
@@ -134,7 +134,7 @@ export default function SettingsPage() {
 
         {/* Danger zone */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
+          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
             {t('settings.dangerZone')}
           </div>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden' }}>
@@ -147,7 +147,7 @@ export default function SettingsPage() {
               </div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#EF4444' }}>{t('settings.deleteAccount')}</div>
-                <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{t('settings.deleteAccountDesc')}</div>
+                <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{t('settings.deleteAccountDesc')}</div>
               </div>
             </button>
           </div>
@@ -177,16 +177,16 @@ export default function SettingsPage() {
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', maxWidth:340, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ fontSize:'1.5rem', textAlign:'center', marginBottom:12 }}>⚠️</div>
             <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('settings.deleteConfirmTitle')}</h3>
-            <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
+            <p style={{ fontSize:'0.82rem', color:'#6B7280', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
               {t('settings.deleteConfirmDesc')}
             </p>
             <div style={{ display:'flex', gap:8 }}>
               <button onClick={() => setShowDelete(false)}
-                style={{ flex:1, padding:'11px', background:'#F1F5F9', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem' }}>
+                style={{ flex:1, padding:'11px', background:'#fff', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem' }}>
                 {t('common.cancel')}
               </button>
               <button onClick={async () => { await sb.auth.signOut(); window.location.replace('/welcome') }}
-                style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#0F172A' }}>
+                style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#111827' }}>
                 {t('settings.deleteBtn')}
               </button>
             </div>

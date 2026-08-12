@@ -49,7 +49,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
       <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
         <button onClick={() => router.back()}
-          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
+          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
           <ArrowLeft size={15}/> Back
         </button>
 
@@ -67,12 +67,12 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
         {/* Order info */}
         <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', marginBottom:'1.1rem' }}>
           <div style={{ padding:'14px 16px', borderBottom:'1px solid #F1F5F9', display:'flex', gap:12 }}>
-            <div style={{ width:56, height:56, borderRadius:12, background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
+            <div style={{ width:56, height:56, borderRadius:12, background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
               {order?.image_url ? <img src={order.image_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }}  loading="lazy" /> : <Package size={24} color="#94A3B8" />}
             </div>
             <div style={{ flex:1 }}>
-              <div style={{ fontSize:'0.95rem', fontWeight:700, color:'#0F172A' }}>{order?.product_name}</div>
-              <div style={{ fontSize:'0.75rem', color:'#64748B', marginTop:3, display:'flex', alignItems:'center', gap:5 }}>
+              <div style={{ fontSize:'0.95rem', fontWeight:700, color:'#111827' }}>{order?.product_name}</div>
+              <div style={{ fontSize:'0.75rem', color:'#6B7280', marginTop:3, display:'flex', alignItems:'center', gap:5 }}>
                 <Store size={12}/> {order?.store_name}
               </div>
             </div>
@@ -85,8 +85,8 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
             { label:'Date',        value: new Date(order?.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) },
           ].map((row, i) => (
             <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'11px 16px', borderBottom: i<3?'1px solid #F1F5F9':'none' }}>
-              <span style={{ fontSize:'0.78rem', color:'#94A3B8', fontWeight:600 }}>{row.label}</span>
-              <span style={{ fontSize:'0.82rem', color:'#0F172A', fontWeight:700 }}>{row.value}</span>
+              <span style={{ fontSize:'0.78rem', color:'#9CA3AF', fontWeight:600 }}>{row.label}</span>
+              <span style={{ fontSize:'0.82rem', color:'#111827', fontWeight:700 }}>{row.value}</span>
             </div>
           ))}
         </div>
@@ -109,7 +109,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
 
         {/* Confirm delivery (for confirmed/delivered) */}
         {order?.status === 'payment_pending' && (
-          <div style={{ background:'#EFF6FF', border:'1.5px solid #BFDBFE', borderRadius:14, padding:'14px 16px' }}>
+          <div style={{ background:'#fff', border:'1.5px solid #BFDBFE', borderRadius:14, padding:'14px 16px' }}>
             <p style={{ fontSize:'0.78rem', color:'#1D4ED8', marginBottom:12, lineHeight:1.5 }}>
               Payment submitted. When you receive your item, confirm delivery to release payment to seller.
             </p>
@@ -118,7 +118,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
                 await sb.from('orders').update({ status:'delivered' }).eq('id', id)
                 setOrder((o: any) => ({ ...o, status:'delivered' }))
               }}
-              style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color:'#0F172A', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color:'#111827', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
               ✅ Confirm I Received My Item
             </button>
           </div>

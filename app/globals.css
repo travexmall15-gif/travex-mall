@@ -160,7 +160,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Tailwind color aliases ── */
 .text-navy   { color: #0D1B3E; }
-.bg-navy     { background-color: #F8FAFC; }
+.bg-navy     { background-color: #fff; }
 .text-gold   { color: #1D4ED8; }
 .bg-gold     { background-color: #1D4ED8; }
 .bg-offwhite { background-color: #EEF1F8; }
@@ -186,7 +186,7 @@ section[style*='background:"#1D4ED8"'],
 section[style*="background: '#1D4ED8'"],
 section[style*='background: "#0D1B3E"'],
 section[style*="background:#1D4ED8"],
-section[style*='background: #F8FAFC'],
+section[style*='background: #fff'],
 section[style*="background:'#070D22'"],
 section[style*='background:"#070D22"'],
 section[style*="background:#070D22"] {
@@ -521,7 +521,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.65;
-  color: #0F172A;
+  color: #111827;
   letter-spacing: -0.005em;
 }
 
@@ -638,11 +638,11 @@ html {
 }
 
 /* Text colors */
-[data-theme="dark"] span[style*="color: #0F172A"],
+[data-theme="dark"] span[style*="color: #111827"],
 [data-theme="dark"] span[style*="color:#0F172A"],
-[data-theme="dark"] div[style*="color: #0F172A"],
+[data-theme="dark"] div[style*="color: #111827"],
 [data-theme="dark"] div[style*="color:#0F172A"],
-[data-theme="dark"] p[style*="color: #0F172A"] {
+[data-theme="dark"] p[style*="color: #111827"] {
   color: #F1F5F9 !important;
 }
 
@@ -674,7 +674,7 @@ html {
 
 [data-theme="dark"] input::placeholder,
 [data-theme="dark"] textarea::placeholder {
-  color: #475569 !important;
+  color: #374151 !important;
 }
 
 /* ── FONT SIZE CLASSES ── */

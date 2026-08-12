@@ -19,7 +19,7 @@ export default function AboutPage() {
       <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
-        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
+        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
           <ArrowLeft size={15} /> {t('about.back')}
         </button>
 
@@ -30,12 +30,12 @@ export default function AboutPage() {
             <span style={{ fontSize:'1.25rem', fontWeight:900, color:'#0D1B3E' }}>shop</span>
             <span style={{ fontSize:'1.25rem', fontWeight:900, color:'#F97316' }}>nekt</span>
           </div>
-          <p style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:4 }}>{t('about.version')} 1.0.0 &middot; {t('about.builtBy')}</p>
+          <p style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:4 }}>{t('about.version')} 1.0.0 &middot; {t('about.builtBy')}</p>
         </div>
 
         {/* Contact */}
         <div style={{ marginBottom:'1.25rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>
+          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>
             {t('about.contactSupport')}
           </p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
@@ -48,8 +48,8 @@ export default function AboutPage() {
                   <item.icon size={16} color="#0D1B3E" />
                 </div>
                 <div>
-                  <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#0F172A' }}>{item.label}</div>
-                  <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{item.val}</div>
+                  <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#111827' }}>{item.label}</div>
+                  <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{item.val}</div>
                 </div>
               </a>
             ))}

@@ -110,7 +110,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
           {disc > 0 && (
             <span style={{
               background: 'linear-gradient(135deg,#EF4444,#DC2626)',
-              color: '#0F172A', fontSize: 10, fontWeight: 900,
+              color: '#111827', fontSize: 10, fontWeight: 900,
               padding: '2px 8px', borderRadius: 999,
               boxShadow: '0 2px 8px rgba(239,68,68,0.35)',
               letterSpacing: '-0.01em',
@@ -202,7 +202,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 : t('groupBuy.moreNeeded', { count: String(remaining) })}
             </div>
           </div>
-          <div style={{ height: 7, background: featured ? 'rgba(255,255,255,0.08)' : '#F1F5F9', borderRadius: 999, overflow: 'hidden' }}>
+          <div style={{ height: 7, background: featured ? 'rgba(255,255,255,0.08)' : '#F3F4F6', borderRadius: 999, overflow: 'hidden' }}>
             <div style={{
               height: '100%', width: `${pct}%`,
               background: isReady
@@ -227,7 +227,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               flex: 1,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               background: isExpired
-                ? (featured ? 'rgba(255,255,255,0.06)' : '#F1F5F9')
+                ? (featured ? 'rgba(255,255,255,0.06)' : '#F3F4F6')
                 : isReady
                   ? 'linear-gradient(135deg,#059669,#10B981)'
                   : featured
@@ -260,7 +260,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               }}
               title={t('groupBuy.visitShop')}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#1D4ED8'; (e.currentTarget as HTMLElement).style.color = '#1D4ED8' }}
-              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? 'rgba(255,255,255,0.12)' : '#E2E8F0'; (e.currentTarget as HTMLElement).style.color = featured ? 'rgba(255,255,255,0.6)' : '#64748B' }}>
+              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? 'rgba(255,255,255,0.12)' : '#E5E7EB'; (e.currentTarget as HTMLElement).style.color = featured ? 'rgba(255,255,255,0.6)' : '#64748B' }}>
               <ShoppingBag size={14} />
             </Link>
           )}
@@ -320,7 +320,7 @@ export default function GroupBuyPage() {
   const STATS = [
     { val: loading ? '...' : String(groups.length),       label: t('groupBuy.activeGroupsStat'), color: '#1D4ED8' },
     { val: loading ? '...' : String(readyGroups.length),  label: t('groupBuy.groupsReadyStat'),  color: '#86EFAC' },
-    { val: `${t('groupBuy.upTo')} 20%`,                   label: t('groupBuy.maxDiscountStat'),  color: '#64748B' },
+    { val: `${t('groupBuy.upTo')} 20%`,                   label: t('groupBuy.maxDiscountStat'),  color: '#6B7280' },
     { val: t('groupBuy.openLabel'),                        label: t('groupBuy.registration'),     color: '#86EFAC' },
   ]
 
@@ -350,9 +350,9 @@ export default function GroupBuyPage() {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       {/* ── SLIM PAGE HEADER ─────────────────────────────────── */}
-      <div style={{ background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', borderBottom:'1px solid #F1F5F9' }}>
+      <div style={{ background:'#fff', borderBottom:'1px solid #F1F5F9' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'1rem 5%', display:'flex', alignItems:'center', justifyContent:'space-between', gap:16 }}>
-          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#0F172A', margin:0, letterSpacing:'-0.02em' }}>
+          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#111827', margin:0, letterSpacing:'-0.02em' }}>
             Group Buying
           </h1>
           <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#1D4ED8', color:'#fff', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
@@ -380,7 +380,7 @@ export default function GroupBuyPage() {
         {/* Search + filter */}
         <div style={{ display:'flex', gap:10, marginBottom:'1rem', flexWrap:'wrap' }}>
           <div style={{ position:'relative', flex:1, minWidth:220 }}>
-            <Search size={15} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'#94A3B8' }} />
+            <Search size={15} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'#9CA3AF' }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -390,7 +390,7 @@ export default function GroupBuyPage() {
                 fontFamily:"'Inter',sans-serif", background:'#fff',
                 boxShadow:'0 1px 4px rgba(15,23,42,0.05)', transition:'border-color .2s', boxSizing:'border-box' as const }}
               onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
-              onBlur={e  => (e.target.style.borderColor = '#E2E8F0')}
+              onBlur={e  => (e.target.style.borderColor = '#E5E7EB')}
             />
           </div>
           {/* Filter pills */}
@@ -415,7 +415,7 @@ export default function GroupBuyPage() {
 
         {/* Results count */}
         {!loading && !error && filtered.length > 0 && (
-          <div style={{ fontSize:'0.76rem', color:'#94A3B8', marginBottom:'1.25rem' }}>
+          <div style={{ fontSize:'0.76rem', color:'#9CA3AF', marginBottom:'1.25rem' }}>
             {filtered.length === 1
               ? t('groupBuy.dealFound',  { count: '1' })
               : t('groupBuy.dealsFound', { count: String(filtered.length) })}
@@ -426,7 +426,7 @@ export default function GroupBuyPage() {
         {loading && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
             <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'#0D1B3E', margin:'0 auto 12px', display:'block' }} />
-            <p style={{ color:'#94A3B8', fontSize:14 }}>{t('groupBuy.loadingGroups')}</p>
+            <p style={{ color:'#9CA3AF', fontSize:14 }}>{t('groupBuy.loadingGroups')}</p>
           </div>
         )}
 
@@ -436,9 +436,9 @@ export default function GroupBuyPage() {
             <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <RefreshCw size={22} color="#EF4444" />
             </div>
-            <p style={{ color:'#94A3B8', fontSize:14, marginBottom:16 }}>{error}</p>
+            <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:16 }}>{error}</p>
             <button onClick={loadGroups}
-              style={{ padding:'10px 24px', background:'#fff', color:'#0F172A', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:13 }}>
+              style={{ padding:'10px 24px', background:'#fff', color:'#111827', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:13 }}>
               {t('groupBuy.tryAgain')}
             </button>
           </div>
@@ -450,19 +450,19 @@ export default function GroupBuyPage() {
             <div style={{ width:72, height:72, borderRadius:'20px', background:'linear-gradient(135deg,#EEF2FF,#E0E7FF)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px', boxShadow:'0 8px 24px rgba(59,130,246,0.12)' }}>
               <Users size={32} color="#6366F1" />
             </div>
-            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'#0F172A', marginBottom:8, letterSpacing:'-0.025em' }}>
+            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'#111827', marginBottom:8, letterSpacing:'-0.025em' }}>
               {search ? t('groupBuy.noMatching') : t('groupBuy.noGroups')}
             </h3>
-            <p style={{ color:'#94A3B8', fontSize:14, marginBottom:24 }}>
+            <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:24 }}>
               {search ? t('groupBuy.noMatchingDesc') : t('groupBuy.noGroupsDesc')}
             </p>
             {search
               ? <button onClick={() => setSearch('')}
-                  style={{ padding:'11px 28px', background:'#fff', color:'#0F172A', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:14 }}>
+                  style={{ padding:'11px 28px', background:'#fff', color:'#111827', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:14 }}>
                   {t('groupBuy.allGroups')}
                 </button>
               : <Link href="/market"
-                  style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#0F172A', padding:'11px 28px', borderRadius:999, fontWeight:700, textDecoration:'none', fontSize:14 }}>
+                  style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#111827', padding:'11px 28px', borderRadius:999, fontWeight:700, textDecoration:'none', fontSize:14 }}>
                   <ShoppingBag size={14} /> {t('groupBuy.browseMarket')}
                 </Link>
             }

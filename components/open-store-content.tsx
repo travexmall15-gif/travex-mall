@@ -7,7 +7,7 @@ export function OpenStoreContent() {
   const { t } = useTranslation()
   return (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px' }}>
-      <Link href="/open-store/b2b" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fff', color: '#0F172A', padding: '10px 20px', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+      <Link href="/open-store/b2b" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fff', color: '#111827', padding: '10px 20px', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
         <Store size={15} /> {t('openStore.businessTitle')}
       </Link>
       <Link href="/open-store/b2c" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1D4ED8', color: '#fff', padding: '10px 20px', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>

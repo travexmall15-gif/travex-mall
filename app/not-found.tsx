@@ -9,8 +9,8 @@ export default function NotFound() {
       <div style={{ width:80, height:80, borderRadius:24, background:'#EEF2FF', display:'flex', alignItems:'center', justifyContent:'center' }}>
         <Search size={40} color="#6366F1" />
       </div>
-      <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0F172A' }}>{t('notFound.title')}</h1>
-      <p style={{ color: '#64748B' }}>{t('notFound.desc')}</p>
+      <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#111827' }}>{t('notFound.title')}</h1>
+      <p style={{ color: '#6B7280' }}>{t('notFound.desc')}</p>
       <a href="/home" style={{ background: '#fff', color: '#1D4ED8', padding: '12px 28px', borderRadius: '12px', textDecoration: 'none', fontWeight: 700 }}>{t('notFound.goHome')}</a>
     </div>
   )

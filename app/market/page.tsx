@@ -13,9 +13,9 @@ const MARKETS = [
     key: 'fashion',
     label: 'Fashion Market',
     icon: Shirt,
-    bg: '#FDF2F8',
-    iconColor: '#BE185D',
-    borderColor: '#FBCFE8',
+    bg: '#fff',
+    iconColor: '#1D4ED8',
+    borderColor: '#E5E7EB',
     categories: ['Fashion & Clothing','Beauty & Health','Sports & Fitness','Arts & Crafts'],
     desc: 'Clothing, shoes, accessories, beauty & more',
   },
@@ -23,9 +23,9 @@ const MARKETS = [
     key: 'vehicle',
     label: 'Vehicle Market',
     icon: Car,
-    bg: '#EFF6FF',
+    bg: '#fff',
     iconColor: '#1D4ED8',
-    borderColor: '#BFDBFE',
+    borderColor: '#E5E7EB',
     categories: ['Automotive'],
     desc: 'Cars, motorcycles, spare parts & accessories',
   },
@@ -33,9 +33,9 @@ const MARKETS = [
     key: 'electronics',
     label: 'Electronics Market',
     icon: Smartphone,
-    bg: '#FFFBEB',
-    iconColor: '#D97706',
-    borderColor: '#FDE68A',
+    bg: '#fff',
+    iconColor: '#1D4ED8',
+    borderColor: '#E5E7EB',
     categories: ['Electronics','Technology','Books & Stationery'],
     desc: 'Phones, laptops, TVs, audio & appliances',
   },
@@ -79,7 +79,7 @@ export default function MarketPage() {
   }, [])
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F8FAFC' }}>
+    <main style={{ minHeight: '100vh', background: '#fff' }}>
       <SiteNav />
 
       <section style={{ maxWidth: 860, margin: '0 auto', padding: '2.5rem 1rem 5rem' }}>
@@ -89,10 +89,10 @@ export default function MarketPage() {
           <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#1D4ED8', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
             ShopNekt
           </div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#111827', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
             Business Marketplaces
           </h1>
-          <p style={{ color: '#64748B', fontSize: '0.88rem', maxWidth: 380, margin: '0 auto', lineHeight: 1.6 }}>
+          <p style={{ color: '#6B7280', fontSize: '0.88rem', maxWidth: 380, margin: '0 auto', lineHeight: 1.6 }}>
             {t('market.gatewayDesc') || 'Select a marketplace to discover verified stores'}
           </p>
         </div>
@@ -127,12 +127,12 @@ export default function MarketPage() {
                   </div>
 
                   {/* Title */}
-                  <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.4rem', letterSpacing: '-0.01em' }}>
+                  <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#111827', marginBottom: '0.4rem', letterSpacing: '-0.01em' }}>
                     {market.label}
                   </h2>
 
                   {/* Description */}
-                  <p style={{ fontSize: '0.8rem', color: '#64748B', marginBottom: '1.5rem', lineHeight: 1.55 }}>
+                  <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '1.5rem', lineHeight: 1.55 }}>
                     {market.desc}
                   </p>
 
@@ -141,7 +141,7 @@ export default function MarketPage() {
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: market.iconColor }}>
                       {loading ? '—' : `${count} ${count === 1 ? 'store' : 'stores'}`}
                     </span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0F172A' }}>
+                    <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#111827' }}>
                       Explore →
                     </span>
                   </div>

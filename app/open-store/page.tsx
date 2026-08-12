@@ -49,12 +49,12 @@ export default function OpenStorePage() {
           </div>
           <div style={{ display:'flex', gap:'0.4rem', marginBottom:'1rem', flexWrap:'wrap' }}>
             <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(29,78,216,0.10)', color:'#A07830', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>{t('openStore.premiumAvail')}</span>
-            <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(15,23,42,0.06)', color:'#64748B', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>{t('openStore.basicAvail')}</span>
+            <span style={{ fontSize:'0.62rem', fontWeight:800, background:'rgba(15,23,42,0.06)', color:'#6B7280', padding:'0.2rem 0.65rem', borderRadius:'999px' }}>{t('openStore.basicAvail')}</span>
           </div>
-          <h2 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.55rem', fontWeight:900, color:'#0F172A', marginBottom:'0.6rem', lineHeight:1.15 }}>
+          <h2 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.55rem', fontWeight:900, color:'#111827', marginBottom:'0.6rem', lineHeight:1.15 }}>
             {t('openStore.businessMarket')}
           </h2>
-          <p style={{ fontSize:'0.86rem', color:'#64748B', lineHeight:1.70, marginBottom:'1.5rem' }}>
+          <p style={{ fontSize:'0.86rem', color:'#6B7280', lineHeight:1.70, marginBottom:'1.5rem' }}>
             {t('openStore.bizDescFull')}
           </p>
           <ul style={{ listStyle:'none', padding:0, margin:'0 0 1.75rem', display:'flex', flexDirection:'column', gap:'0.55rem' }}>
@@ -75,7 +75,7 @@ export default function OpenStorePage() {
           </div>
         </Link>
 
-        <p style={{ textAlign:'center', fontSize:'0.78rem', color:'#94A3B8', marginTop:'2rem', lineHeight:1.65 }}>
+        <p style={{ textAlign:'center', fontSize:'0.78rem', color:'#9CA3AF', marginTop:'2rem', lineHeight:1.65 }}>
           {t('openStore.notSure')}{' '}
           <Link href="/market" style={{ color:'#1D4ED8', fontWeight:600, textDecoration:'none' }}>{t('join.browseBusiness')}</Link>
           {' '}{t('openStore.browseFirst2')}

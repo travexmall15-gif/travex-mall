@@ -119,7 +119,7 @@ export default function HomePage() {
             <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#3B82F6',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
               // {t('home.marketsLabel')}
             </div>
-            <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.5rem,3vw,2.2rem)',fontWeight:800,color:'#0F172A',margin:0 }}>
+            <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.5rem,3vw,2.2rem)',fontWeight:800,color:'#111827',margin:0 }}>
               {t('home.marketsThree')} <span style={{ color:'#1D4ED8' }}>{t('home.platform')}</span>
             </h2>
           </div>
@@ -134,15 +134,15 @@ export default function HomePage() {
               </div>
               <div style={{ display:'flex',gap:'0.4rem',marginBottom:'1rem',flexWrap:'wrap' }}>
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(29,78,216,0.10)',color:'#A07830',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.premium')}</span>
-                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(15,23,42,0.06)',color:'#64748B',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.basic')}</span>
+                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(15,23,42,0.06)',color:'#6B7280',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.basic')}</span>
               </div>
-              <h3 style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#0F172A',marginBottom:'0.6rem',lineHeight:1.15 }}>Business Marketplaces</h3>
-              <p style={{ fontSize:'0.85rem',color:'#64748B',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.businessCardDesc')}</p>
+              <h3 style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#111827',marginBottom:'0.6rem',lineHeight:1.15 }}>Business Marketplaces</h3>
+              <p style={{ fontSize:'0.85rem',color:'#6B7280',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.businessCardDesc')}</p>
               <div style={{ display:'flex',gap:'1.5rem',marginBottom:'1.75rem',paddingBottom:'1.5rem',borderBottom:'1px solid #F1F5F9' }}>
                 {([['5',t('home.regions')],['TZS 25K',t('home.basicMo')]] as [string,string][]).map(([v,l]) => (
                   <div key={l}>
-                    <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.2rem',fontWeight:900,color:'#0F172A',lineHeight:1 }}>{v}</div>
-                    <div style={{ fontSize:'0.65rem',color:'#94A3B8',marginTop:2 }}>{l}</div>
+                    <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.2rem',fontWeight:900,color:'#111827',lineHeight:1 }}>{v}</div>
+                    <div style={{ fontSize:'0.65rem',color:'#9CA3AF',marginTop:2 }}>{l}</div>
                   </div>
                 ))}
               </div>
@@ -199,7 +199,7 @@ export default function HomePage() {
               <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#1D4ED8',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
                 // {t('home.sponsoredLabel')}
               </div>
-              <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.4rem,3vw,2rem)',fontWeight:800,color:'#0F172A',margin:0 }}>
+              <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.4rem,3vw,2rem)',fontWeight:800,color:'#111827',margin:0 }}>
                 {t('home.sponsoredTitle')}
               </h2>
             </div>
@@ -216,9 +216,9 @@ export default function HomePage() {
                     <BadgeCheck size={11} style={{ color:'#1D4ED8' }} />
                     <span style={{ fontSize:'0.6rem',fontWeight:700,color:'#A07830' }}>{t('home.sponsoredBadge')}</span>
                   </div>
-                  <div style={{ fontWeight:700,fontSize:'0.92rem',color:'#0F172A',marginBottom:'0.2rem',lineHeight:1.3 }}>{shop.shop_name}</div>
+                  <div style={{ fontWeight:700,fontSize:'0.92rem',color:'#111827',marginBottom:'0.2rem',lineHeight:1.3 }}>{shop.shop_name}</div>
                   {shop.shop_category && (
-                    <div style={{ fontSize:'0.7rem',color:'#94A3B8',marginBottom:'1rem' }}>{shop.shop_category}</div>
+                    <div style={{ fontSize:'0.7rem',color:'#9CA3AF',marginBottom:'1rem' }}>{shop.shop_category}</div>
                   )}
                   <div style={{ display:'inline-flex',alignItems:'center',gap:'0.3rem',background:'#0F172A',color:'#fff',padding:'0.5rem 1rem',borderRadius:999,fontWeight:600,fontSize:'0.76rem',marginTop:'auto' }}>
                     {t('home.visitShop')} <ExternalLink size={11} />

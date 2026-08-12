@@ -118,10 +118,10 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
       {/* Chat header */}
       <div style={{ paddingTop: 108, background: '#fff', borderBottom: '1px solid #F1F5F9', padding: '108px 5% 12px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => router.back()}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4, color: '#64748B' }}>
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4, color: '#6B7280' }}>
           <ArrowLeft size={20} />
         </button>
-        <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 38, height: 38, borderRadius: 10, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Store size={16} color="#1D4ED8" />
         </div>
         <div>
@@ -140,7 +140,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         )}
 
         {!loading && messages.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#94A3B8', fontSize: '0.85rem' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#9CA3AF', fontSize: '0.85rem' }}>
             {t('messages.noConversations') || 'Start the conversation! 👋'}
           </div>
         )}
@@ -187,10 +187,10 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
           rows={1}
           style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: '#F8FAFF' }}
           onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
-          onBlur={e  => (e.target.style.borderColor = '#E2E8F0')}
+          onBlur={e  => (e.target.style.borderColor = '#E5E7EB')}
         />
         <button onClick={send} disabled={!text.trim() || sending}
-          style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? '#0D1B3E' : '#E2E8F0', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+          style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? '#0D1B3E' : '#E5E7EB', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
           <Send size={16} color={text.trim() ? '#1D4ED8' : '#94A3B8'} />
         </button>
       </div>

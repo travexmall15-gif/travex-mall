@@ -249,7 +249,7 @@ export default function VybePage() {
           </div>
 
           {/* Brand — NEVER translated */}
-          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#0F172A',
+          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#111827',
             lineHeight:1.1, marginBottom:'0.6rem', letterSpacing:'-0.03em' }}>
             Social Vybe
           </h1>
@@ -344,7 +344,7 @@ export default function VybePage() {
               {search ? t('vybe.noResults') : t('vybe.noPosts')}
             </p>
             {search && (
-              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'#fff', border:'1px solid rgba(255,255,255,0.1)', color:'#64748B', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
+              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'#fff', border:'1px solid rgba(255,255,255,0.1)', color:'#6B7280', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
                 {t('vybe.allPosts')}
               </button>
             )}
@@ -404,7 +404,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
 
         {/* Logo */}
         <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
-          background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
+          background:'#fff',
           border:'1.5px solid rgba(29,78,216,0.2)',
           display:'flex', alignItems:'center', justifyContent:'center' }}>
           {post.shop_logo ? (
@@ -417,7 +417,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
         {/* Name + meta */}
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
-            <span style={{ fontSize:14, fontWeight:700, color:'#0F172A', letterSpacing:'-0.01em' }}>
+            <span style={{ fontSize:14, fontWeight:700, color:'#111827', letterSpacing:'-0.01em' }}>
               {post.shop_name || t('vybe.seller')}
             </span>
             {/* Verified badge */}

@@ -41,7 +41,7 @@ export default function AppearancePage() {
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         <button onClick={() => router.back()}
-          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#64748B', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
+          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
           <ArrowLeft size={15}/> Back
         </button>
 
@@ -51,7 +51,7 @@ export default function AppearancePage() {
 
         {/* ── Language ─────────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.language')}</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.language')}</p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { code:'en', flag:'🇬🇧', label:'English',   sub:'App displayed in English'  },
@@ -62,12 +62,12 @@ export default function AppearancePage() {
                 style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i===0?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:38, height:38, borderRadius:10, background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.3rem' }}>
+                <div style={{ width:38, height:38, borderRadius:10, background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.3rem' }}>
                   {l.flag}
                 </div>
                 <div style={{ flex:1, textAlign:'left' }}>
-                  <div style={{ fontSize:'0.9rem', fontWeight:600, color:'#0F172A' }}>{l.label}</div>
-                  <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{l.sub}</div>
+                  <div style={{ fontSize:'0.9rem', fontWeight:600, color:'#111827' }}>{l.label}</div>
+                  <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{l.sub}</div>
                 </div>
                 {lang === l.code && (
                   <div style={{ width:22, height:22, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -81,7 +81,7 @@ export default function AppearancePage() {
 
         {/* ── Theme ────────────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.theme')}</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.theme')}</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
             {[
               { v:'light',  icon:Sun,     label:'Light',  sub:'Clean white' },
@@ -90,7 +90,7 @@ export default function AppearancePage() {
             ].map(t => (
               <button key={t.v}
                 onClick={() => { setTheme(t.v as any); save() }}
-                style={{ padding:'16px 8px', background: theme===t.v?'#1D4ED8':'#fff', border:`2px solid ${theme===t.v?'#1D4ED8':'#E2E8F0'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
+                style={{ padding:'16px 8px', background: theme===t.v?'#1D4ED8':'#fff', border:`2px solid ${theme===t.v?'#1D4ED8':'#E5E7EB'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
                 {theme===t.v && (
                   <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'#1D4ED8', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={10} color="#0D1B3E" strokeWidth={3} />
@@ -106,7 +106,7 @@ export default function AppearancePage() {
 
         {/* ── Font Size ────────────────────────────────── */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.fontSize')}</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.fontSize')}</p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { v:'small',  label:'Small',  size:'0.82rem', desc:'Compact, fits more content' },
@@ -118,12 +118,12 @@ export default function AppearancePage() {
                 style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i<2?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#1D4ED8':'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
+                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#1D4ED8':'#F3F4F6', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
                   <Type size={16} color={fontSize===f.v?'#1D4ED8':'#64748B'} />
                 </div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize: f.size, fontWeight:700, color:'#0F172A' }}>{f.label}</div>
-                  <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:2 }}>{f.desc}</div>
+                  <div style={{ fontSize: f.size, fontWeight:700, color:'#111827' }}>{f.label}</div>
+                  <div style={{ fontSize:'0.68rem', color:'#9CA3AF', marginTop:2 }}>{f.desc}</div>
                 </div>
                 {fontSize===f.v && (
                   <div style={{ width:22, height:22, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -137,7 +137,7 @@ export default function AppearancePage() {
 
         {/* ── Other Links ──────────────────────────────── */}
         <div style={{ marginBottom:'1.5rem' }}>
-          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.moreSettings')}</p>
+          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.moreSettings')}</p>
           <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
               { label:'Notifications',     sub:'Manage alerts',      href:'/settings/notifications', icon:'🔔' },
@@ -150,8 +150,8 @@ export default function AppearancePage() {
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
                   <span style={{ fontSize:'1.1rem', width:38, textAlign:'center' }}>{item.icon}</span>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#0F172A' }}>{item.label}</div>
-                    <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{item.sub}</div>
+                    <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#111827' }}>{item.label}</div>
+                    <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{item.sub}</div>
                   </div>
                   <ChevronRight size={14} color="#CBD5E1" />
                 </div>

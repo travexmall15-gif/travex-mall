@@ -48,7 +48,7 @@ export default function WelcomePage() {
         <h1 style={{ fontSize:'1.35rem', fontWeight:800, color:'#0D1B3E', margin:'0 0 6px', letterSpacing:'-0.02em' }}>
           Choose your language
         </h1>
-        <p style={{ fontSize:'0.8rem', color:'#94A3B8', margin:0 }}>
+        <p style={{ fontSize:'0.8rem', color:'#9CA3AF', margin:0 }}>
           Select to continue
         </p>
       </div>
@@ -83,7 +83,7 @@ export default function WelcomePage() {
           >
             <div style={{
               width:36, height:36, borderRadius:10,
-              background: lang === l.code ? 'rgba(255,255,255,0.12)' : '#F1F5F9',
+              background: lang === l.code ? 'rgba(255,255,255,0.12)' : '#F3F4F6',
               display:'flex', alignItems:'center', justifyContent:'center',
             }}>
               <span style={{
@@ -110,7 +110,7 @@ export default function WelcomePage() {
         style={{
           width:'100%', maxWidth:360,
           background:'#fff',
-          color:'#0F172A',
+          color:'#111827',
           border:'none',
           borderRadius:999,
           padding:'0.875rem',

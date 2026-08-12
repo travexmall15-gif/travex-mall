@@ -113,15 +113,15 @@ export default function MarketInnerPage() {
       <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
-          <p style={{ color: '#64748B' }}>Market not found</p>
-          <Link href="/market" style={{ color: '#0F172A', fontWeight: 700, fontSize: '0.85rem' }}>← Back to Marketplaces</Link>
+          <p style={{ color: '#6B7280' }}>Market not found</p>
+          <Link href="/market" style={{ color: '#111827', fontWeight: 700, fontSize: '0.85rem' }}>← Back to Marketplaces</Link>
         </div>
       </main>
     )
   }
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F8FAFC' }}>
+    <main style={{ minHeight: '100vh', background: '#fff' }}>
       <SiteNav />
       <style>{`
         .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;white-space:nowrap;transition:border-color 0.15s,background 0.15s,color 0.15s}
@@ -135,24 +135,24 @@ export default function MarketInnerPage() {
 
         {/* Back + Header */}
         <div style={{ marginBottom: '1.5rem' }}>
-          <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#64748B', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginBottom: '1rem' }}>
+          <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#6B7280', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginBottom: '1rem' }}>
             <ArrowLeft size={13} /> Business Marketplaces
           </Link>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
             {cfg.label}
           </h1>
-          <p style={{ color: '#64748B', fontSize: '0.83rem', marginTop: '0.25rem' }}>
+          <p style={{ color: '#6B7280', fontSize: '0.83rem', marginTop: '0.25rem' }}>
             {loading ? '...' : `${shops.length} verified ${shops.length === 1 ? 'store' : 'stores'}`}
           </p>
         </div>
 
         {/* Search */}
         <div style={{ position: 'relative', marginBottom: '1rem' }}>
-          <Search size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+          <Search size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
           <input
             value={search} onChange={e => setSearch(e.target.value)}
             placeholder={`Search ${cfg.label.toLowerCase()}...`}
-            style={{ width: '100%', boxSizing: 'border-box', paddingLeft: 38, paddingRight: 16, paddingTop: 11, paddingBottom: 11, border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.85rem', outline: 'none', background: '#fff', color: '#0F172A' }}
+            style={{ width: '100%', boxSizing: 'border-box', paddingLeft: 38, paddingRight: 16, paddingTop: 11, paddingBottom: 11, border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.85rem', outline: 'none', background: '#fff', color: '#111827' }}
           />
         </div>
 
@@ -178,15 +178,15 @@ export default function MarketInnerPage() {
 
         {/* Results */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#64748B' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#6B7280' }}>
             <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', margin: '0 auto 12px', display: 'block', color: '#1D4ED8' }} />
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
             <p style={{ fontSize: '0.85rem' }}>Loading stores...</p>
           </div>
         ) : visible.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#64748B' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#6B7280' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🏪</div>
-            <p style={{ fontWeight: 700, color: '#0F172A', marginBottom: '0.4rem' }}>No stores found</p>
+            <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.4rem' }}>No stores found</p>
             <p style={{ fontSize: '0.83rem' }}>Try adjusting your filters</p>
             <button onClick={() => { setSearch(''); setRegion(''); setCategory('') }}
               style={{ marginTop: '1rem', padding: '8px 20px', borderRadius: 999, border: '1.5px solid #E2E8F0', background: '#fff', fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer' }}>
@@ -260,22 +260,22 @@ function ShopCard({ shop, accentColor }: { shop: Shop; accentColor: string }) {
             </span>
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 42, height: 42, borderRadius: 12, background: `${color}18`, border: `1.5px solid ${color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: color, flexShrink: 0, overflow: 'hidden' }}>
+            <div style={{ width: 42, height: 42, borderRadius: 12, background: '#EEF2FF', border: '1.5px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: color, flexShrink: 0, overflow: 'hidden' }}>
               {shop.shop_logo
                 ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                 : init}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: nameFont, fontWeight: 800, fontSize: 14, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontFamily: nameFont, fontWeight: 800, fontSize: 14, color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {shop.shop_name}
               </div>
-              <div style={{ fontSize: 10, color: '#94A3B8', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 10, color: '#9CA3AF', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
                 <MapPin size={8} color="#1D4ED8" /> {shop.shop_region}
                 {shop.shop_category && <> · {shop.shop_category}</>}
               </div>
             </div>
             <button onClick={toggleSave}
-              style={{ width: 28, height: 28, borderRadius: '50%', background: '#F8FAFC', border: '1.5px solid #E2E8F0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              style={{ width: 28, height: 28, borderRadius: '50%', background: '#fff', border: '1.5px solid #E2E8F0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               title={saved ? 'Unsave' : 'Save store'}>
               <Heart size={12} fill={saved ? '#FF4D6D' : 'none'} color={saved ? '#FF4D6D' : '#94A3B8'} />
             </button>
@@ -285,24 +285,24 @@ function ShopCard({ shop, accentColor }: { shop: Shop; accentColor: string }) {
         {/* Body */}
         <div style={{ padding: '12px 13px' }}>
           {shop.shop_desc && (
-            <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, marginBottom: 10, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: 10, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {shop.shop_desc}
             </p>
           )}
           {products.length > 0 && (
             <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
               {products.slice(0, 3).map((p, i) => (
-                <span key={i} style={{ fontSize: '0.68rem', background: '#F1F5F9', color: '#475569', padding: '3px 9px', borderRadius: 999, fontWeight: 600 }}>
+                <span key={i} style={{ fontSize: '0.68rem', background: '#fff', color: '#374151', padding: '3px 9px', borderRadius: 999, fontWeight: 600 }}>
                   {p.name} {p.price ? `· TZS ${Number(p.price).toLocaleString()}` : ''}
                 </span>
               ))}
             </div>
           )}
           <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.7rem', color: '#94A3B8', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: 600 }}>
               {isPremium ? '★ Premium' : 'Basic'}
             </span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0F172A' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#111827' }}>
               Visit store →
             </span>
           </div>

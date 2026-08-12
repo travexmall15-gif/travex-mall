@@ -104,9 +104,9 @@ export default function MenuPage() {
       label: t('menuPage.accountApp'),
       items: [
         { icon: User,     label: t('menuPage.editProfile'),       href: '/settings/profile', color: '#3B82F6' },
-        { icon: Settings, label: t('menuPage.settings'),          href: '/settings',         color: '#475569' },
-        { icon: Shield,   label: t('menuPage.privacyPolicyItem'), href: '/privacy',          color: '#64748B' },
-        { icon: Info,     label: t('menuPage.aboutApp'),          href: '/settings/about',   color: '#64748B' },
+        { icon: Settings, label: t('menuPage.settings'),          href: '/settings',         color: '#374151' },
+        { icon: Shield,   label: t('menuPage.privacyPolicyItem'), href: '/privacy',          color: '#6B7280' },
+        { icon: Info,     label: t('menuPage.aboutApp'),          href: '/settings/about',   color: '#6B7280' },
       ],
     },
   ]
@@ -119,21 +119,21 @@ export default function MenuPage() {
       <div style={{ background:'linear-gradient(160deg,#0D1B3E,#1B3A8A)', padding:'52px 20px 24px', position:'sticky', top:0, zIndex:10 }}>
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
           <button onClick={() => window.history.length > 1 ? router.back() : (window.location.href='/home')}
-            style={{ background:'#F1F5F9', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#0F172A' }}>
+            style={{ background:'#fff', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#111827' }}>
             <ArrowLeft size={17} color="#fff" />
           </button>
           <div style={{ display:'flex', alignItems:'center', gap:0 }}>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'#0F172A', letterSpacing:'-0.03em' }}>Shop</span>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'#111827', letterSpacing:'-0.03em' }}>Shop</span>
             <span style={{ fontSize:'1rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.03em' }}>Nekt</span>
           </div>
           <div style={{ width:36 }} />
         </div>
-        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'#F1F5F9', borderRadius:18, padding:'14px 16px', border:'1px solid #E2E8F0' }}>
-          <div style={{ width:52, height:52, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', fontSize:'1.1rem', fontWeight:900, color:'#0F172A' }}>
+        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'#fff', borderRadius:18, padding:'14px 16px', border:'1px solid #E2E8F0' }}>
+          <div style={{ width:52, height:52, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', fontSize:'1.1rem', fontWeight:900, color:'#111827' }}>
             {user ? user.name.slice(0,2).toUpperCase() : '?'}
           </div>
           <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ fontSize:'1rem', fontWeight:800, color:'#0F172A', letterSpacing:'-0.01em' }}>{user ? user.name : t('menuPage.guest')}</div>
+            <div style={{ fontSize:'1rem', fontWeight:800, color:'#111827', letterSpacing:'-0.01em' }}>{user ? user.name : t('menuPage.guest')}</div>
             <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.45)', marginTop:2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
               {user ? user.email : t('menuPage.signInToContinue')}
             </div>
@@ -145,8 +145,8 @@ export default function MenuPage() {
       {/* Language toggle */}
       <div style={{ padding:'14px 16px', background:'#fff', borderBottom:'1px solid #F1F5F9', display:'flex', alignItems:'center', gap:12 }}>
         <Globe size={16} color="#64748B" />
-        <span style={{ fontSize:'0.82rem', fontWeight:600, color:'#475569', flex:1 }}>{t('menuPage.language')}</span>
-        <div style={{ display:'flex', background:'#F1F5F9', borderRadius:10, padding:3, gap:3, flexWrap:'wrap' }}>
+        <span style={{ fontSize:'0.82rem', fontWeight:600, color:'#374151', flex:1 }}>{t('menuPage.language')}</span>
+        <div style={{ display:'flex', background:'#fff', borderRadius:10, padding:3, gap:3, flexWrap:'wrap' }}>
           {(['en','sw','fr','de','pt','ar'] as const).map(code => (
             <button key={code} onClick={() => setLang(code)}
               style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? '#1D4ED8' : '#64748B' }}>
@@ -160,7 +160,7 @@ export default function MenuPage() {
       <div style={{ padding:'10px 16px' }}>
         {SECTIONS.map((section, si) => (
           <div key={si} style={{ marginBottom:'1.1rem' }}>
-            <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#94A3B8', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:6, paddingLeft:4 }}>
+            <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:6, paddingLeft:4 }}>
               {section.label}
             </p>
             <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', boxShadow:'0 1px 4px rgba(15,23,42,0.04)' }}>
@@ -170,7 +170,7 @@ export default function MenuPage() {
                     <div style={{ width:38, height:38, borderRadius:11, background:`${item.color}15`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                       <item.icon size={18} color={item.color} strokeWidth={1.8} />
                     </div>
-                    <span style={{ fontSize:'0.9rem', fontWeight:600, color:'#0F172A', flex:1 }}>{item.label}</span>
+                    <span style={{ fontSize:'0.9rem', fontWeight:600, color:'#111827', flex:1 }}>{item.label}</span>
                     <ChevronRight size={15} color="#CBD5E1" />
                   </div>
                 </a>
@@ -202,14 +202,14 @@ export default function MenuPage() {
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', zIndex:999, display:'flex', alignItems:'flex-end', justifyContent:'center', padding:16 }}>
           <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', width:'100%', maxWidth:400, boxShadow:'0 -8px 40px rgba(0,0,0,0.15)' }}>
             <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('menuPage.logOutConfirm')}</h3>
-            <p style={{ fontSize:'0.82rem', color:'#64748B', textAlign:'center', marginBottom:'1.25rem' }}>{t('menuPage.logOutDesc')}</p>
+            <p style={{ fontSize:'0.82rem', color:'#6B7280', textAlign:'center', marginBottom:'1.25rem' }}>{t('menuPage.logOutDesc')}</p>
             <div style={{ display:'flex', gap:8 }}>
               <button onClick={() => setShowLogout(false)}
-                style={{ flex:1, padding:'12px', background:'#F1F5F9', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#475569' }}>
+                style={{ flex:1, padding:'12px', background:'#fff', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#374151' }}>
                 {t('common.cancel')}
               </button>
               <button onClick={handleLogout}
-                style={{ flex:1, padding:'12px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#0F172A' }}>
+                style={{ flex:1, padding:'12px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#111827' }}>
                 {t('menuPage.logOutBtn')}
               </button>
             </div>

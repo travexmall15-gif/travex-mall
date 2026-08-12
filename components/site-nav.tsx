@@ -146,25 +146,25 @@ export function SiteNav() {
                 onChange={e => handleSearch(e.target.value)}
                 onKeyDown={e => { if (e.key==='Escape') { setSearchOpen(false); setQuery(''); setShowDrop(false) } }}
                 placeholder={t('common.search') + '...'}
-                style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'#0F172A', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
+                style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'#111827', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
               />
               {query && (
                 <button onClick={() => { setQuery(''); setResults([]); setShowDrop(false) }}
-                  style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#94A3B8', flexShrink:0 }}>
+                  style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#9CA3AF', flexShrink:0 }}>
                   <X size={14} />
                 </button>
               )}
               <button onClick={() => { setSearchOpen(false); setQuery(''); setShowDrop(false) }}
-                style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#94A3B8', flexShrink:0 }}>
+                style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#9CA3AF', flexShrink:0 }}>
                 <X size={15} />
               </button>
             </div>
           ) : (
             <button
               onClick={() => setSearchOpen(true)}
-              style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'background .2s' }}
-              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
-              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+              style={{ width:38, height:38, borderRadius:'50%', background:'#fff', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'background .2s' }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E5E7EB'}
+              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F3F4F6'}>
               <Search size={16} color="#475569" />
             </button>
           )}
@@ -181,8 +181,8 @@ export function SiteNav() {
                     <Store size={14} color="#16A34A" />
                   </div>
                   <div>
-                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#0F172A' }}>{r.shop_name}</div>
-                    <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:1 }}>{r.shop_city || ''}</div>
+                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#111827' }}>{r.shop_name}</div>
+                    <div style={{ fontSize:'0.68rem', color:'#9CA3AF', marginTop:1 }}>{r.shop_city || ''}</div>
                   </div>
                 </button>
               ))}
@@ -196,24 +196,24 @@ export function SiteNav() {
           )}
           {showDrop && results.length === 0 && query.trim() && !searching && (
             <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
-              <div style={{ fontSize:'0.82rem', color:'#94A3B8' }}>{t('common.noResults')}</div>
+              <div style={{ fontSize:'0.82rem', color:'#9CA3AF' }}>{t('common.noResults')}</div>
             </div>
           )}
         </div>
 
         {/* Move */}
         <Link href="/move/index.html"
-          style={{ width: 38, height: 38, borderRadius: '50%', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+          style={{ width: 38, height: 38, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E5E7EB'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F3F4F6'}>
           <Truck size={16} color="#475569" />
         </Link>
 
         {/* Menu */}
         <button onClick={() => { window.location.href = '/menu' }}
-          style={{ width:38, height:38, borderRadius:'50%', background:'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'none', cursor:'pointer', transition:'background .2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E2E8F0'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F1F5F9'}>
+          style={{ width:38, height:38, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'none', cursor:'pointer', transition:'background .2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E5E7EB'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F3F4F6'}>
           <Menu size={18} color="#475569" />
         </button>
       </div>

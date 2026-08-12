@@ -230,8 +230,8 @@ export default function StorePage({
     <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: '2rem' }}>
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
-        <p style={{ color: '#94A3B8', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
+        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
+        <p style={{ color: '#9CA3AF', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
         <Link href="/market" style={{ background: '#1D4ED8', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
         </Link>
@@ -317,7 +317,7 @@ export default function StorePage({
               <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                 <button
                   onClick={() => setShowMsg(true)}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#F1F5F9', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                   onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
                   <MessageCircle size={13} /> {t('store.messageSeller')}
@@ -397,7 +397,7 @@ export default function StorePage({
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <p style={{ color: '#94A3B8', fontSize: 14 }}>{t('store.noProducts')}</p>
+            <p style={{ color: '#9CA3AF', fontSize: 14 }}>{t('store.noProducts')}</p>
           </div>
         ) : (
           <div className="prod-grid" style={{ display: 'grid',
@@ -458,8 +458,8 @@ export default function StorePage({
         {products.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>{t('store.settingUpShop')}</h3>
-            <p style={{ color: '#94A3B8', fontSize: 14, marginBottom: 20 }}>
+            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.settingUpShop')}</h3>
+            <p style={{ color: '#9CA3AF', fontSize: 14, marginBottom: 20 }}>
               This seller is adding products soon. Check back shortly.
             </p>
 
@@ -494,7 +494,7 @@ export default function StorePage({
                     </a>
                   )}
                   <button onClick={() => setCartItem(null)}
-                    style={{ padding: '10px 20px', borderRadius: 999, background: '#F1F5F9',
+                    style={{ padding: '10px 20px', borderRadius: 999, background: '#fff',
                       color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer',
                       fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                     Continue Shopping
@@ -507,7 +507,7 @@ export default function StorePage({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
                   <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
                   <button onClick={() => setCartItem(null)}
-                    style={{ width: 32, height: 32, borderRadius: '50%', background: '#F1F5F9',
+                    style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff',
                       border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)',
                       cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
@@ -611,7 +611,7 @@ export default function StorePage({
             <style>{`@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
 
             {/* Drag handle */}
-            <div style={{ width: 36, height: 4, borderRadius: 999, background: '#E2E8F0', margin: '0 auto 1.25rem' }} />
+            <div style={{ width: 36, height: 4, borderRadius: 999, background: '#E5E7EB', margin: '0 auto 1.25rem' }} />
 
             {/* AI avatar + bubble */}
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.9rem', marginBottom: '1.5rem' }}>
@@ -642,11 +642,11 @@ export default function StorePage({
 
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0F172A' }}>Aria</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>Aria</span>
                   <span style={{ fontSize: 10, fontWeight: 600, color: '#6366F1', background: '#EEF2FF', padding: '1px 7px', borderRadius: 999, border: '1px solid #C7D2FE' }}>{t('store.aria')}</span>
                 </div>
                 <div style={{ background: '#F8FAFF', border: '1px solid #E0E7FF', borderRadius: '0 14px 14px 14px', padding: '0.8rem 1rem' }}>
-                  <p style={{ fontSize: 13, color: '#1E293B', lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontSize: 13, color: '#111827', lineHeight: 1.7, margin: 0 }}>
                     Hi there! Welcome to <strong>{store.shop_name}</strong>. I am Aria, your AI shopping assistant. I can help you find products, answer questions, and guide you through placing an order. What would you like to do?
                   </p>
                 </div>
@@ -664,7 +664,7 @@ export default function StorePage({
             <div style={{ display: 'flex', gap: 8 }}>
               <button
                 onClick={() => setShowWelcome(false)}
-                style={{ flex: 1, padding: '11px', borderRadius: 12, border: '1.5px solid #E2E8F0', background: '#fff', color: '#64748B', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: '1.5px solid #E2E8F0', background: '#fff', color: '#6B7280', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
                 Browse on my own
               </button>
               <button
@@ -698,7 +698,7 @@ export default function StorePage({
                   The seller will respond to you shortly.
                 </p>
                 <button onClick={() => { setShowMsg(false); setMsgSent(false); setMsgText(''); setMsgName('') }}
-                  style={{ padding: '10px 24px', borderRadius: 999, background: '#F1F5F9', color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                  style={{ padding: '10px 24px', borderRadius: 999, background: '#fff', color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                   Close
                 </button>
               </div>
@@ -708,7 +708,7 @@ export default function StorePage({
                   <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', color: '#fff', fontWeight: 800 }}>
                     Message {store.shop_name}
                   </h3>
-                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#F1F5F9', border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
                   </button>
                 </div>

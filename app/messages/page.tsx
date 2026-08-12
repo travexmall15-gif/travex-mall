@@ -121,7 +121,7 @@ export default function MessagesPage() {
             {t('messages.title')}
           </h1>
           {unreadCount > 0 && (
-            <span style={{ background:'#EF4444', color:'#0F172A', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
+            <span style={{ background:'#EF4444', color:'#111827', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
               {unreadCount} {t('messages.unread') || 'unread'}
             </span>
           )}
@@ -144,14 +144,14 @@ export default function MessagesPage() {
             <h3 style={{ fontSize:'1.05rem', fontWeight:700, color:'#0D1B3E', marginBottom:8 }}>
               {t('messages.title')}
             </h3>
-            <p style={{ fontSize:'0.82rem', color:'#94A3B8', marginBottom:6, lineHeight:1.65, maxWidth:280, margin:'0 auto 16px' }}>
+            <p style={{ fontSize:'0.82rem', color:'#9CA3AF', marginBottom:6, lineHeight:1.65, maxWidth:280, margin:'0 auto 16px' }}>
               {t('messages.emptyDesc')}
             </p>
-            <p style={{ fontSize:'0.78rem', color:'#64748B', marginBottom:20, lineHeight:1.6 }}>
+            <p style={{ fontSize:'0.78rem', color:'#6B7280', marginBottom:20, lineHeight:1.6 }}>
               To message a seller, visit their store page and use the contact form. Sellers can be reached directly via WhatsApp.
             </p>
             <div style={{ display:'flex', gap:10, justifyContent:'center', flexWrap:'wrap' }}>
-              <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#0F172A', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.82rem', textDecoration:'none' }}>
+              <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#111827', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.82rem', textDecoration:'none' }}>
                 <Store size={14} /> {t('messages.startShopping')}
               </Link>
               <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#F8FAFF', color:'#0D1B3E', border:'1.5px solid #E2E8F0', padding:'10px 22px', borderRadius:999, fontWeight:600, fontSize:'0.82rem', textDecoration:'none' }}>
@@ -166,12 +166,12 @@ export default function MessagesPage() {
           <>
             {/* Search */}
             <div style={{ position:'relative', marginBottom:'1rem' }}>
-              <Search size={14} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'#94A3B8' }} />
+              <Search size={14} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'#9CA3AF' }} />
               <input value={search} onChange={e => setSearch(e.target.value)}
                 placeholder={t('common.search') + ' conversations...'}
                 style={{ width:'100%', boxSizing:'border-box', padding:'0.7rem 1rem 0.7rem 2.5rem', border:'1.5px solid #E2E8F0', borderRadius:12, fontSize:'0.85rem', fontFamily:"'Inter',sans-serif", outline:'none', background:'#fff', transition:'border-color 0.2s' }}
                 onFocus={e => (e.target.style.borderColor='#0D1B3E')}
-                onBlur={e  => (e.target.style.borderColor='#E2E8F0')} />
+                onBlur={e  => (e.target.style.borderColor='#E5E7EB')} />
             </div>
 
             {/* Empty conversations */}
@@ -183,11 +183,11 @@ export default function MessagesPage() {
                 <h3 style={{ fontSize:'1.1rem', fontWeight:700, color:'#0D1B3E', marginBottom:8 }}>
                   {search ? t('common.noResults') : t('messages.empty')}
                 </h3>
-                <p style={{ fontSize:'0.82rem', color:'#94A3B8', marginBottom:20, lineHeight:1.6 }}>
+                <p style={{ fontSize:'0.82rem', color:'#9CA3AF', marginBottom:20, lineHeight:1.6 }}>
                   {t('messages.emptyDesc')}
                 </p>
                 {!search && (
-                  <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#0F172A', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', textDecoration:'none' }}>
+                  <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#111827', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', textDecoration:'none' }}>
                     <Store size={14} /> {t('messages.startShopping')}
                   </Link>
                 )}
@@ -199,12 +199,12 @@ export default function MessagesPage() {
               <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
                 {filtered.map(convo => (
                   <Link key={convo.id} href={`/messages/${convo.id}`} style={{ textDecoration:'none' }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 14px', background:'#fff', borderRadius:14, border:`1.5px solid ${convo.unread > 0 ? '#DBEAFE' : '#F1F5F9'}`, transition:'all 0.15s', cursor:'pointer' }}
+                    <div style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 14px', background:'#fff', borderRadius:14, border:`1.5px solid ${convo.unread > 0 ? '#DBEAFE' : '#F3F4F6'}`, transition:'all 0.15s', cursor:'pointer' }}
                       onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                       onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#fff'}>
 
                       {/* Store avatar */}
-                      <div style={{ width:46, height:46, borderRadius:12, background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
+                      <div style={{ width:46, height:46, borderRadius:12, background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
                         {convo.store_logo
                           ? <img src={convo.store_logo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} loading="lazy" />
                           : <span style={{ fontSize:'0.85rem', fontWeight:800, color:'#1D4ED8' }}>
@@ -216,10 +216,10 @@ export default function MessagesPage() {
                       {/* Content */}
                       <div style={{ flex:1, minWidth:0 }}>
                         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:3 }}>
-                          <span style={{ fontSize:'0.875rem', fontWeight:convo.unread>0?700:600, color:'#0F172A' }}>
+                          <span style={{ fontSize:'0.875rem', fontWeight:convo.unread>0?700:600, color:'#111827' }}>
                             {convo.store_name || 'Shop'}
                           </span>
-                          <span style={{ fontSize:'0.68rem', color:'#94A3B8' }}>
+                          <span style={{ fontSize:'0.68rem', color:'#9CA3AF' }}>
                             {convo.last_time ? timeAgo(convo.last_time) : ''}
                           </span>
                         </div>
@@ -228,7 +228,7 @@ export default function MessagesPage() {
                             {convo.last_message || t('messages.typeMessage')}
                           </span>
                           {convo.unread > 0 && (
-                            <span style={{ background:'#fff', color:'#0F172A', fontSize:'0.6rem', fontWeight:800, padding:'2px 7px', borderRadius:999, flexShrink:0 }}>
+                            <span style={{ background:'#fff', color:'#111827', fontSize:'0.6rem', fontWeight:800, padding:'2px 7px', borderRadius:999, flexShrink:0 }}>
                               {convo.unread}
                             </span>
                           )}
