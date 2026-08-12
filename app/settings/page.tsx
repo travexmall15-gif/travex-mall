@@ -101,7 +101,7 @@ export default function SettingsPage() {
               <div style={{ fontSize:'1rem', fontWeight:700, color:'#111827', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
               <div style={{ fontSize:'0.72rem', color:'#9CA3AF' }}>{user?.email || ''}</div>
             </div>
-            <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
+            <ChevronRight size={18} color="#9CA3AF" />
           </div>
         </Link>
 

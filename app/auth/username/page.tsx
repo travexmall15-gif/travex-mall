@@ -54,7 +54,7 @@ export default function UsernamePage() {
       <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
         <img src="/icon-192.png" alt="ShopNekt" style={{ width: 56, height: 56, borderRadius: 14, objectFit: 'cover', marginBottom: 10 }}  loading="lazy" />
         <div>
-          <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.03em' }}>shop</span>
+          <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.03em' }}>shop</span>
           <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#F97316', letterSpacing: '-0.03em' }}>nekt</span>
         </div>
       </div>
@@ -72,32 +72,32 @@ export default function UsernamePage() {
           </svg>
         </div>
 
-        <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#111827', marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>
           {name ? `Hi, ${name.split(' ')[0]}!` : 'One Last Step'}
         </h2>
-        <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', marginBottom: '1.5rem', lineHeight: 1.55 }}>
+        <p style={{ fontSize: '0.78rem', color: '#9CA3AF', marginBottom: '1.5rem', lineHeight: 1.55 }}>
           Choose a username for your ShopNekt profile.
         </p>
 
         <div style={{ position: 'relative', marginBottom: '0.85rem' }}>
-          <User size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
+          <User size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
           <input
             value={username}
             onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
             placeholder="e.g. jumanne_m"
             maxLength={20}
-            style={{ width: '100%', boxSizing: 'border-box', padding: '0.82rem 1rem 0.82rem 2.75rem', background: '#fff', border: '1.5px solid #E2E8F0', borderRadius: 14, color: '#fff', fontSize: '0.9rem', fontFamily: "'Inter',sans-serif", outline: 'none', transition: 'border-color 0.2s' }}
+            style={{ width: '100%', boxSizing: 'border-box', padding: '0.82rem 1rem 0.82rem 2.75rem', background: '#fff', border: '1.5px solid #E2E8F0', borderRadius: 14, color: '#111827', fontSize: '0.9rem', fontFamily: "'Inter',sans-serif", outline: 'none', transition: 'border-color 0.2s' }}
             onKeyDown={e => e.key === 'Enter' && save()}
           />
         </div>
-        <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.22)', marginBottom: '1.25rem', paddingLeft: 2 }}>
+        <p style={{ fontSize: '0.65rem', color: '#D1D5DB', marginBottom: '1.25rem', paddingLeft: 2 }}>
           Letters, numbers, underscores only · Max 20 chars
         </p>
 
         {error && <p style={{ fontSize: '0.75rem', color: '#FCA5A5', marginBottom: '0.85rem', textAlign: 'center' }}>{error}</p>}
 
         <button onClick={save} disabled={loading || username.length < 3}
-          style={{ width: '100%', padding: '0.875rem', background: '#F97316', color: '#fff', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
+          style={{ width: '100%', padding: '0.875rem', background: '#F97316', color: '#111827', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading
             ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
             : <>{t('authPage.continueUsername')} <ArrowRight size={14} /></>}

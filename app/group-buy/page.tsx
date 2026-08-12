@@ -99,7 +99,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
           <ShoppingBag size={10} color="rgba(29,78,216,0.7)" />
           <span style={{
             fontSize: 11, fontWeight: 700, letterSpacing: '0.06em',
-            color: featured ? '#1D4ED8' : 'rgba(255,255,255,0.6)',
+            color: featured ? '#1D4ED8' : '#6B7280',
             textTransform: 'uppercase' as const,
             whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
@@ -142,7 +142,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
 
         {group.description && (
           <p style={{
-            fontSize: 12, color: featured ? 'rgba(255,255,255,0.5)' : '#64748B',
+            fontSize: 12, color: featured ? '#6B7280' : '#6B7280',
             lineHeight: 1.5, marginBottom: 10,
             display: '-webkit-box', WebkitLineClamp: 2 as any,
             WebkitBoxOrient: 'vertical' as any, overflow: 'hidden',
@@ -156,7 +156,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
           <>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
               <div>
-                <div style={{ fontSize: 9, fontWeight: 700, color: featured ? 'rgba(255,255,255,0.4)' : '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 1 }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: featured ? '#9CA3AF' : '#9CA3AF', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 1 }}>
                   {t('groupBuy.groupPrice')}
                 </div>
                 <span style={{ fontSize: featured ? 20 : 17, fontWeight: 900, color: isReady ? '#059669' : featured ? '#1D4ED8' : '#0D1B3E', letterSpacing: '-0.02em' }}>
@@ -165,10 +165,10 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               </div>
               {disc > 0 && (
                 <div>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: featured ? 'rgba(255,255,255,0.4)' : '#94A3B8', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 1 }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: featured ? '#9CA3AF' : '#9CA3AF', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 1 }}>
                     {t('groupBuy.originalPrice')}
                   </div>
-                  <span style={{ fontSize: 13, textDecoration: 'line-through', color: featured ? 'rgba(255,255,255,0.3)' : '#94A3B8' }}>
+                  <span style={{ fontSize: 13, textDecoration: 'line-through', color: featured ? '#9CA3AF' : '#9CA3AF' }}>
                     {fmtTZS(price)}
                   </span>
                 </div>
@@ -190,12 +190,12 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
         {/* Progress */}
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: featured ? 'rgba(255,255,255,0.55)' : '#64748B', fontWeight: 500 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: featured ? '#6B7280' : '#6B7280', fontWeight: 500 }}>
               <Users size={11} />
               {t('groupBuy.joined', { curr: String(curr), min: String(min) })}
             </div>
             <div style={{ fontSize: 11, fontWeight: 700,
-              color: isReady ? '#059669' : remaining <= 2 ? '#EF4444' : featured ? 'rgba(255,255,255,0.55)' : '#64748B',
+              color: isReady ? '#059669' : remaining <= 2 ? '#EF4444' : featured ? '#6B7280' : '#6B7280',
             }}>
               {isReady
                 ? t('groupBuy.readyLabel')
@@ -255,12 +255,12 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 padding: '0.65rem 0.75rem',
                 background: featured ? 'rgba(255,255,255,0.08)' : '#F8FAFF',
                 border: featured ? '1px solid rgba(255,255,255,0.12)' : '1.5px solid #E2E8F0',
-                borderRadius: 10, color: featured ? 'rgba(255,255,255,0.6)' : '#64748B',
+                borderRadius: 10, color: featured ? '#6B7280' : '#64748B',
                 textDecoration: 'none', transition: 'all .2s', flexShrink: 0,
               }}
               title={t('groupBuy.visitShop')}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#1D4ED8'; (e.currentTarget as HTMLElement).style.color = '#1D4ED8' }}
-              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? 'rgba(255,255,255,0.12)' : '#E5E7EB'; (e.currentTarget as HTMLElement).style.color = featured ? 'rgba(255,255,255,0.6)' : '#64748B' }}>
+              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? '#E5E7EB' : '#E5E7EB'; (e.currentTarget as HTMLElement).style.color = featured ? '#6B7280' : '#64748B' }}>
               <ShoppingBag size={14} />
             </Link>
           )}

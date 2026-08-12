@@ -134,11 +134,11 @@ export default function MenuPage() {
           </div>
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ fontSize:'1rem', fontWeight:800, color:'#111827', letterSpacing:'-0.01em' }}>{user ? user.name : t('menuPage.guest')}</div>
-            <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.45)', marginTop:2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+            <div style={{ fontSize:'0.72rem', color:'#9CA3AF', marginTop:2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
               {user ? user.email : t('menuPage.signInToContinue')}
             </div>
           </div>
-          <ChevronRight size={18} color="rgba(255,255,255,0.35)" />
+          <ChevronRight size={18} color="#D1D5DB" />
         </a>
       </div>
 

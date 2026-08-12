@@ -23,16 +23,16 @@ export default function OpenStorePage() {
       <SiteNav />
 
       {/* Hero */}
-      <section style={{ position:'relative', overflow:'hidden', paddingTop:'64px', background:`radial-gradient(ellipse 70% 90% at 92% 20%,rgba(56,120,255,0.68) 0%,rgba(30,80,220,0.42) 25%,rgba(15,45,150,0.18) 50%,transparent 70%),linear-gradient(160deg,#010510 0%,#030920 30%,#050E2E 60%,#071540 100%)`, color:'#fff', padding:'4rem 5% 3.5rem', textAlign:'center' }}>
+      <section style={{ position:'relative', overflow:'hidden', paddingTop:'64px', background:`radial-gradient(ellipse 70% 90% at 92% 20%,rgba(56,120,255,0.68) 0%,rgba(30,80,220,0.42) 25%,rgba(15,45,150,0.18) 50%,transparent 70%),linear-gradient(160deg,#010510 0%,#030920 30%,#050E2E 60%,#071540 100%)`, color:'#111827', padding:'4rem 5% 3.5rem', textAlign:'center' }}>
         <div style={{ position:'absolute', top:'-25%', right:'-8%', width:'60%', height:'110%', pointerEvents:'none', zIndex:0, background:'radial-gradient(ellipse 55% 55% at 62% 28%,rgba(56,120,255,0.65) 0%,rgba(35,80,220,0.38) 28%,transparent 70%)', filter:'blur(22px)' }} />
         <div style={{ position:'relative', zIndex:1, maxWidth:'600px', margin:'0 auto' }}>
           <div style={{ display:'inline-flex', alignItems:'center', gap:'0.5rem', background:'rgba(29,78,216,0.12)', border:'1px solid rgba(29,78,216,0.30)', color:'#1D4ED8', padding:'0.35rem 1rem', borderRadius:'999px', fontSize:'0.70rem', fontWeight:700, letterSpacing:'0.05em', marginBottom:'1.4rem' }}>
             {t('openStore.heroChip')}
           </div>
-          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#fff', lineHeight:1.08, marginBottom:'1rem', letterSpacing:'-0.02em' }}>
+          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#111827', lineHeight:1.08, marginBottom:'1rem', letterSpacing:'-0.02em' }}>
             {t('openStore.heroH1')} <span style={{ color:'#1D4ED8' }}>{t('openStore.heroH1Store')}</span>
           </h1>
-          <p style={{ fontSize:'clamp(0.88rem,1.6vw,1rem)', color:'rgba(255,255,255,0.50)', lineHeight:1.65, maxWidth:'420px', margin:'0 auto' }}>
+          <p style={{ fontSize:'clamp(0.88rem,1.6vw,1rem)', color:'#6B7280', lineHeight:1.65, maxWidth:'420px', margin:'0 auto' }}>
             {t('openStore.bizDescFull')}
           </p>
         </div>
@@ -66,7 +66,7 @@ export default function OpenStorePage() {
           </ul>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'linear-gradient(135deg,#040C32,#071545)', borderRadius:'14px', padding:'1rem 1.25rem' }}>
             <div>
-              <div style={{ fontSize:'0.68rem', fontWeight:700, color:'rgba(255,255,255,0.42)', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.monthly')}</div>
+              <div style={{ fontSize:'0.68rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.monthly')}</div>
               <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.3rem', fontWeight:900, color:'#1D4ED8', lineHeight:1 }}>{t('openStore.joinLabel')}</div>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#1D4ED8', color:'#fff', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>

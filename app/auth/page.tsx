@@ -254,13 +254,13 @@ export default function AuthPage() {
             textAlign:'center', marginBottom:'1.25rem',
             position:'relative',
           }}>
-            <div style={{ fontSize:'0.62rem', color:'rgba(255,255,255,0.45)', textTransform:'uppercase', letterSpacing:'0.12em', marginBottom:10 }}>
+            <div style={{ fontSize:'0.62rem', color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.12em', marginBottom:10 }}>
               Your login code
             </div>
             <div style={{
               fontSize: showCode ? '2.2rem' : '2rem',
               fontWeight:900, letterSpacing:'0.35em',
-              color: showCode ? '#1D4ED8' : 'rgba(255,255,255,0.15)',
+              color: showCode ? '#1D4ED8' : '#E5E7EB',
               fontFamily:"'Inter',sans-serif",
               filter: showCode ? 'none' : 'blur(8px)',
               transition:'all 0.3s', userSelect: showCode ? 'text' : 'none',

@@ -198,7 +198,7 @@ export default function AiSearchBox() {
           style={{
             padding: '14px 24px', borderRadius: '16px',
             background: query.trim() ? '#1D4ED8' : 'rgba(29,78,216,0.3)',
-            border: 'none', color: query.trim() ? '#111' : 'rgba(255,255,255,0.4)',
+            border: 'none', color: query.trim() ? '#111827' : '#9CA3AF',
             fontWeight: 700, fontSize: '0.85rem', cursor: query.trim() ? 'pointer' : 'default',
             transition: 'all 0.2s', whiteSpace: 'nowrap',
             fontFamily: 'Inter, sans-serif',
@@ -219,7 +219,7 @@ export default function AiSearchBox() {
                 padding: '5px 12px', borderRadius: '999px',
                 background: '#fff',
                 border: '1px solid #E2E8F0',
-                color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem',
+                color: '#6B7280', fontSize: '0.72rem',
                 cursor: 'pointer', fontFamily: 'Inter, sans-serif',
                 transition: 'all 0.2s',
               }}
@@ -256,7 +256,7 @@ export default function AiSearchBox() {
 
       {/* Results */}
       {!loading && searched && results.length === 0 && !error && (
-        <div style={{ marginTop: '20px', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', padding: '24px' }}>
+        <div style={{ marginTop: '20px', textAlign: 'center', color: '#9CA3AF', fontSize: '0.85rem', padding: '24px' }}>
           Hakuna maduka yaliyopatikana kwa &quot;{query}&quot;.<br/>
           <span style={{ fontSize: '0.8rem' }}>{t('ai.noResultsDesc')} <a href="/market" style={{ color: '#1D4ED8', textDecoration: 'none' }}>{t('ai.browseAll')}</a></span>
         </div>
@@ -264,7 +264,7 @@ export default function AiSearchBox() {
 
       {!loading && results.length > 0 && (
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>
+          <div style={{ fontSize: '0.7rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>
             {results.length} store{results.length > 1 ? 's' : ''} found for &quot;{query}&quot;
           </div>
 
@@ -306,7 +306,7 @@ export default function AiSearchBox() {
                     <span style={{ fontSize: '0.68rem', color: '#1D4ED8', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>
                   )}
                 </div>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginBottom: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ fontSize: '0.72rem', color: '#9CA3AF', marginBottom: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {store.shop_category && <span>{store.shop_category}</span>}
                   {store.shop_city && <span>📍 {store.shop_city}</span>}
                 </div>
@@ -318,7 +318,7 @@ export default function AiSearchBox() {
                 {store.products && store.products.length > 0 && (
                   <div style={{ marginTop: '6px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {store.products.slice(0,3).map((p,j) => (
-                      <span key={j} style={{ fontSize: '0.68rem', background: '#fff', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '6px', padding: '2px 8px', color: 'rgba(255,255,255,0.55)' }}>
+                      <span key={j} style={{ fontSize: '0.68rem', background: '#fff', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '6px', padding: '2px 8px', color: '#6B7280' }}>
                         {p.name} · TZS {p.price?.toLocaleString()}
                       </span>
                     ))}
@@ -327,7 +327,7 @@ export default function AiSearchBox() {
               </div>
 
               {/* Arrow */}
-              <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '1rem', flexShrink: 0 }}>›</span>
+              <span style={{ color: '#D1D5DB', fontSize: '1rem', flexShrink: 0 }}>›</span>
             </a>
           ))}
 

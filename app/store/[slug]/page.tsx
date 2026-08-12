@@ -217,9 +217,9 @@ export default function StorePage({
   // ── Loading ──
   if (loading) return (
     <main style={{ minHeight: '100vh', background: '#060C1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ textAlign: 'center', color: '#fff' }}>
+      <div style={{ textAlign: 'center', color: '#6B7280' }}>
         <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#1D4ED8' }} />
-        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>Loading store...</p>
+        <p style={{ color: '#9CA3AF', fontSize: 14 }}>Loading store...</p>
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
@@ -255,7 +255,7 @@ export default function StorePage({
         @media(min-width:600px){.modal{border-radius:20px}}
         .form-inp{width:100%;padding:10px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:all 0.15s}
         .form-inp:focus{border-color:${accentColor};background:rgba(255,255,255,0.10)}
-        .form-inp::placeholder{color:rgba(255,255,255,0.30)}
+        .form-inp::placeholder{color:#9CA3AF}
         .qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.20);background:rgba(255,255,255,0.07);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.15s}
         .qty-btn:hover{background:rgba(255,255,255,0.15)}
         .search-inp{width:100%;padding:10px 16px 10px 40px;background:#fff;border:1.5px solid #E2E8F0;border-radius:12px;color:#0F172A;font-size:13px;outline:none;font-family:'Inter',sans-serif;transition:border-color 0.2s}
@@ -276,7 +276,7 @@ export default function StorePage({
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: store.shop_banner ? '0 5% 1.25rem' : '1.25rem 5%' }}>
           {/* Back link */}
           <div style={{ marginBottom: '1rem', marginTop: store.shop_banner ? '-18px' : 0 }}>
-            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 999, border: '1px solid #E2E8F0', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(8px)' }}>
+            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#6B7280', textDecoration: 'none', fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 999, border: '1px solid #E2E8F0', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(8px)' }}>
               <ArrowLeft size={12} /> Market
             </Link>
           </div>
@@ -295,7 +295,7 @@ export default function StorePage({
             {/* Info */}
             <div style={{ flex: 1, minWidth: 180 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
-                <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>
+                <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#111827', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(29,78,216,0.15)' : 'rgba(255,255,255,0.06)', color: isPremium ? '#1D4ED8' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(29,78,216,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
@@ -306,18 +306,18 @@ export default function StorePage({
                 </span>
               </div>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
-                {store.shop_category && <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><Tag size={10} />{store.shop_category}</span>}
-                {store.shop_region && <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><MapPin size={10} />{store.shop_region}</span>}
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: 3 }}><Package size={10} />{products.length} products</span>
+                {store.shop_category && <span style={{ fontSize: 11, color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: 3 }}><Tag size={10} />{store.shop_category}</span>}
+                {store.shop_region && <span style={{ fontSize: 11, color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: 3 }}><MapPin size={10} />{store.shop_region}</span>}
+                <span style={{ fontSize: 11, color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: 3 }}><Package size={10} />{products.length} products</span>
               </div>
               {store.shop_desc && (
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6, marginBottom: 8, maxWidth: 480, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{store.shop_desc}</p>
+                <p style={{ fontSize: 11, color: '#9CA3AF', lineHeight: 1.6, marginBottom: 8, maxWidth: 480, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{store.shop_desc}</p>
               )}
               {/* Message Seller button in hero */}
               <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                 <button
                   onClick={() => setShowMsg(true)}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff', border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                   onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
                   <MessageCircle size={13} /> {t('store.messageSeller')}
@@ -337,7 +337,7 @@ export default function StorePage({
                     // Force re-render by toggling state
                     setShowMsg(v => v)
                   }}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: (() => { try { const s = JSON.parse(localStorage.getItem('sn_saved_shops')||'[]'); return s.some((x:any)=>x.id===store!.id) ? 'rgba(239,68,68,0.25)':'rgba(255,255,255,0.10)' } catch{return 'rgba(255,255,255,0.10)'} })(), border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: (() => { try { const s = JSON.parse(localStorage.getItem('sn_saved_shops')||'[]'); return s.some((x:any)=>x.id===store!.id) ? 'rgba(239,68,68,0.25)':'rgba(255,255,255,0.10)' } catch{return 'rgba(255,255,255,0.10)'} })(), border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}>
                   <Heart size={12} /> {t('store.saveShop')}
                 </button>
               </div>
@@ -378,7 +378,7 @@ export default function StorePage({
         {/* Search + Filter */}
         <div style={{ marginBottom: '1.5rem' }}>
           <div style={{ position: 'relative', marginBottom: '1rem' }}>
-            <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.35)' }} />
+            <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
             <input className="search-inp" value={searchQ}
               onChange={e => setSearchQ(e.target.value)}
               placeholder={t('store.searchProducts')} />
@@ -411,25 +411,25 @@ export default function StorePage({
                     <Image src={p.image_url} alt={p.name} fill className="object-cover" />
                   ) : (
                     <div style={{ display:'flex', alignItems:'center', justifyContent:'center', width:'100%', height:'100%' }}>
-                      <ShoppingBag size={40} color="rgba(255,255,255,0.20)" />
+                      <ShoppingBag size={40} color="#E5E7EB" />
                     </div>
                   )}
                   {p.stock <= 5 && p.stock > 0 && (
                     <div style={{ position: 'absolute', top: 8, right: 8, background: '#EF4444',
-                      color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999 }}>
+                      color: '#111827', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999 }}>
                       Only {p.stock} left!
                     </div>
                   )}
                 </div>
                 <div style={{ padding: '0.9rem' }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 4,
+                  <div style={{ fontWeight: 700, fontSize: 14, color: '#111827', marginBottom: 4,
                     lineHeight: 1.3 }}>{p.name}</div>
                   {p.category && (
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.40)',
+                    <div style={{ fontSize: 11, color: '#9CA3AF',
                       marginBottom: 8 }}>{p.category}</div>
                   )}
                   {p.description && (
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)', lineHeight: 1.5,
+                    <div style={{ fontSize: 12, color: '#6B7280', lineHeight: 1.5,
                       marginBottom: 10,
                       display: '-webkit-box', WebkitLineClamp: 2 as any,
                       WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>
@@ -478,24 +478,24 @@ export default function StorePage({
                   display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 30, height: 30, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', color: '#fff',
+                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', color: '#111827',
                   marginBottom: 8 }}>Order Placed! 🎉</h3>
-                <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
-                  Your order for <strong style={{ color: '#fff' }}>{cartItem.name}</strong> has been sent to the seller.
+                <p style={{ color: '#6B7280', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
+                  Your order for <strong style={{ color: '#111827' }}>{cartItem.name}</strong> has been sent to the seller.
                   They will contact you on WhatsApp shortly.
                 </p>
                 <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
                   {wa && (
                     <a href={`https://wa.me/${wa}`} target="_blank"
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#25D366',
-                        color: '#fff', padding: '10px 20px', borderRadius: 999, fontWeight: 700, fontSize: 13,
+                        color: '#111827', padding: '10px 20px', borderRadius: 999, fontWeight: 700, fontSize: 13,
                         textDecoration: 'none' }}>
                       <MessageCircle size={14} /> Chat Seller
                     </a>
                   )}
                   <button onClick={() => setCartItem(null)}
                     style={{ padding: '10px 20px', borderRadius: 999, background: '#fff',
-                      color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer',
+                      color: '#111827', border: '1px solid #E2E8F0', cursor: 'pointer',
                       fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                     Continue Shopping
                   </button>
@@ -505,10 +505,10 @@ export default function StorePage({
               // ── Order form ──
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
+                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#111827', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
                   <button onClick={() => setCartItem(null)}
                     style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff',
-                      border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)',
+                      border: '1px solid #E2E8F0', color: '#6B7280',
                       cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
                   </button>
@@ -522,27 +522,27 @@ export default function StorePage({
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                     fontSize: 20 }}><ShoppingBag size={20} color={accentColor} /></div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{cartItem.name}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>{cartItem.name}</div>
                     <div style={{ fontSize: 13, color: accentColor, fontWeight: 700 }}>{fmt(cartItem.price)}</div>
                   </div>
                 </div>
 
                 {/* Quantity */}
                 <div style={{ marginBottom: '1.25rem' }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.55)',
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7280',
                     marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('store.quantity')}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <button className="qty-btn" onClick={() => setQty(q => Math.max(1, q-1))}>
                       <Minus size={14} />
                     </button>
-                    <span style={{ fontSize: 18, fontWeight: 800, color: '#fff', minWidth: 32, textAlign: 'center' }}>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: '#111827', minWidth: 32, textAlign: 'center' }}>
                       {qty}
                     </span>
                     <button className="qty-btn"
                       onClick={() => setQty(q => Math.min(cartItem.stock, q+1))}>
                       <Plus size={14} />
                     </button>
-                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.40)' }}>
+                    <span style={{ fontSize: 13, color: '#9CA3AF' }}>
                       ({cartItem.stock} available)
                     </span>
                   </div>
@@ -552,7 +552,7 @@ export default function StorePage({
                 <div style={{ background: `${accentColor}11`, border: `1px solid ${accentColor}33`,
                   borderRadius: 10, padding: '10px 14px', marginBottom: '1.25rem',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.60)', fontWeight: 600 }}>{t('store.totalAmount')}</span>
+                  <span style={{ fontSize: 13, color: '#6B7280', fontWeight: 600 }}>{t('store.totalAmount')}</span>
                   <span style={{ fontSize: 18, fontWeight: 900, color: accentColor }}>
                     {fmt(cartItem.price * qty)}
                   </span>
@@ -576,7 +576,7 @@ export default function StorePage({
                     <a href={`https://wa.me/${wa}?text=${encodeURIComponent(`Hi! I want to order ${cartItem.name} x${qty}. Total: ${fmt(cartItem.price*qty)}`)}`}
                       target="_blank"
                       style={{ flex: 1, padding: '12px', borderRadius: 999, background: '#25D366',
-                        color: '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                        color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                         textDecoration: 'none', fontFamily: "'Inter',sans-serif" }}>
                       <MessageCircle size={15} /> WhatsApp
@@ -595,7 +595,7 @@ export default function StorePage({
                     )}
                   </button>
                 </div>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.30)', textAlign: 'center', marginTop: 8 }}>
+                <p style={{ fontSize: 11, color: '#9CA3AF', textAlign: 'center', marginTop: 8 }}>
                   Seller will confirm via WhatsApp after placing order
                 </p>
               </>
@@ -676,7 +676,7 @@ export default function StorePage({
                     if (btn) btn.click()
                   }, 300)
                 }}
-                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
                 Chat with Aria
               </button>
             </div>
@@ -693,22 +693,22 @@ export default function StorePage({
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 28, height: 28, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', marginBottom: 8 }}>{t('store.messageSent')}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
+                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#111827', marginBottom: 8 }}>{t('store.messageSent')}</h3>
+                <p style={{ color: '#6B7280', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
                   The seller will respond to you shortly.
                 </p>
                 <button onClick={() => { setShowMsg(false); setMsgSent(false); setMsgText(''); setMsgName('') }}
-                  style={{ padding: '10px 24px', borderRadius: 999, background: '#fff', color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                  style={{ padding: '10px 24px', borderRadius: 999, background: '#fff', color: '#111827', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                   Close
                 </button>
               </div>
             ) : (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', color: '#fff', fontWeight: 800 }}>
+                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', color: '#111827', fontWeight: 800 }}>
                     Message {store.shop_name}
                   </h3>
-                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '1px solid #E2E8F0', color: '#6B7280', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
                   </button>
                 </div>
@@ -723,7 +723,7 @@ export default function StorePage({
                     <a
                       href={`https://wa.me/${wa}?text=${encodeURIComponent(`Hi! I am ${msgName || 'a customer'}. ${msgText}`)}`}
                       target="_blank"
-                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: "'Inter',sans-serif" }}>
+                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: "'Inter',sans-serif" }}>
                       <MessageCircle size={14} /> WhatsApp
                     </a>
                   )}

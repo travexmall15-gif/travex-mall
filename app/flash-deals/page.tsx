@@ -168,10 +168,10 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
                 { val: time.s, label: t('flash.secs') },
               ].map((u, i) => (
                 <span key={i} style={{ display:'flex', alignItems:'flex-end', gap:1 }}>
-                  {i > 0 && <span style={{ color:isEndingSoon?'#FCA5A5':'rgba(255,255,255,0.4)', fontSize:11, fontWeight:700, margin:'0 1px' }}>:</span>}
+                  {i > 0 && <span style={{ color:isEndingSoon?'#EF4444':'#374151', fontSize:11, fontWeight:700, margin:'0 1px' }}>:</span>}
                   <span style={{ display:'flex', flexDirection:'column' as const, alignItems:'center' }}>
                     <span style={{ fontSize:13, fontWeight:900, color:isEndingSoon?'#FCA5A5':'#fff', lineHeight:1 }}>{u.val}</span>
-                    <span style={{ fontSize:8, color:'rgba(255,255,255,0.4)', textTransform:'uppercase' as const, letterSpacing:'0.04em' }}>{u.label}</span>
+                    <span style={{ fontSize:8, color:'#9CA3AF', textTransform:'uppercase' as const, letterSpacing:'0.04em' }}>{u.label}</span>
                   </span>
                 </span>
               ))}
@@ -202,7 +202,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
           <span style={{ fontSize: featured ? 22 : 18, fontWeight:900, color:'#EF4444', letterSpacing:'-0.02em' }}>
             {fmtTZS(deal.deal_price)}
           </span>
-          <span style={{ fontSize:12, textDecoration:'line-through', color: featured ? 'rgba(255,255,255,0.35)' : '#94A3B8' }}>
+          <span style={{ fontSize:12, textDecoration:'line-through', color: featured ? '#94A3B8' : '#94A3B8' }}>
             {fmtTZS(deal.original_price)}
           </span>
         </div>
@@ -216,9 +216,9 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {/* Stock progress */}
         <div style={{ marginBottom:14 }}>
           <div style={{ display:'flex', justifyContent:'space-between', fontSize:11,
-            color: featured ? 'rgba(255,255,255,0.45)' : '#64748B', marginBottom:5 }}>
+            color: featured ? '#6B7280' : '#6B7280', marginBottom:5 }}>
             <span>{t('flash.ordersCount', { count: String(deal.current_orders) })}</span>
-            <span style={{ fontWeight:700, color: left <= 5 ? '#EF4444' : featured ? 'rgba(255,255,255,0.6)' : '#475569' }}>
+            <span style={{ fontWeight:700, color: left <= 5 ? '#EF4444' : '#374151' }}>
               {t('flash.leftCount', { count: String(left) })}
             </span>
           </div>
@@ -312,7 +312,7 @@ export default function FlashDealsPage() {
               <Link href="/market"
                 style={{ display:'inline-flex', alignItems:'center', gap:6, color:'#6B7280', textDecoration:'none', fontSize:13, marginBottom:14, fontWeight:500, transition:'color .15s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.color='#fff'}
-                onMouseOut={e  => (e.currentTarget as HTMLElement).style.color='rgba(255,255,255,0.6)'}>
+                onMouseOut={e  => (e.currentTarget as HTMLElement).style.color='#6B7280'}>
                 <ArrowLeft size={14} /> {t('flash.heroBack')}
               </Link>
 
@@ -330,7 +330,7 @@ export default function FlashDealsPage() {
                 marginBottom:'0.75rem', letterSpacing:'-0.035em' }}>
                 {t('flash.heroTitle')}
               </h1>
-              <p style={{ color:'rgba(255,255,255,0.65)', fontSize:'clamp(13px,1.8vw,15px)',
+              <p style={{ color:'#6B7280', fontSize:'clamp(13px,1.8vw,15px)',
                 maxWidth:460, lineHeight:1.65 }}>
                 {t('flash.heroSubtitle')}
               </p>
@@ -346,7 +346,7 @@ export default function FlashDealsPage() {
                   <div key={i} style={{ background:'#fff', backdropFilter:'blur(12px)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:16, padding:'1rem 1.25rem', textAlign:'center', minWidth:100 }}>
                     <s.icon size={16} color={s.color} style={{ margin:'0 auto 6px', display:'block' }} />
                     <div style={{ fontSize:deals.length > 99 ? '1rem' : '1.35rem', fontWeight:900, color:'#111827', lineHeight:1, letterSpacing:'-0.02em' }}>{s.val}</div>
-                    <div style={{ fontSize:10, color:'rgba(255,255,255,0.55)', marginTop:3, letterSpacing:'0.04em' }}>{s.label}</div>
+                    <div style={{ fontSize:10, color:'#6B7280', marginTop:3, letterSpacing:'0.04em' }}>{s.label}</div>
                   </div>
                 ))}
               </div>

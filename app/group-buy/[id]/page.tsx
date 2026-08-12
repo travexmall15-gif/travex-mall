@@ -142,7 +142,7 @@ export default function GroupDetailPage({
                 <div key={i} style={{ width:32, height:32, borderRadius:'50%',
                   background:'linear-gradient(135deg,#1D4ED8,#60A5FA)',
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:11, fontWeight:800, color:'#fff' }}>
+                  fontSize:11, fontWeight:800, color:'#111827' }}>
                   {m.name[0].toUpperCase()}
                 </div>
               ))}
@@ -152,7 +152,7 @@ export default function GroupDetailPage({
           {/* Share button */}
           <a href={`https://wa.me/?text=${shareMsg}`} target="_blank"
             style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8,
-              background:'#25D366', color:'#fff', borderRadius:999, padding:'11px',
+              background:'#25D366', color:'#111827', borderRadius:999, padding:'11px',
               fontWeight:700, fontSize:13, textDecoration:'none', marginBottom:8 }}>
             <MessageCircle size={15} /> Share on WhatsApp, Invite Friends
           </a>
@@ -170,7 +170,7 @@ export default function GroupDetailPage({
             </p>
             <a href={`https://wa.me/?text=${shareMsg}`} target="_blank"
               style={{ display:'inline-flex', alignItems:'center', gap:6,
-                background:'#25D366', color:'#fff', borderRadius:999, padding:'11px 24px',
+                background:'#25D366', color:'#111827', borderRadius:999, padding:'11px 24px',
                 fontWeight:700, fontSize:13, textDecoration:'none' }}>
               <MessageCircle size={14} /> Share Now
             </a>

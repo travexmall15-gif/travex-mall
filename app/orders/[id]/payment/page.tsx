@@ -155,7 +155,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
         {/* Order summary card */}
         <div style={{ background:'#fff', borderRadius:16, padding:'14px 18px', marginBottom:'1.5rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <div>
-            <div style={{ fontSize:'0.75rem', color:'rgba(255,255,255,0.45)', marginBottom:3 }}>{t('orders.orderTotal')}</div>
+            <div style={{ fontSize:'0.75rem', color:'#9CA3AF', marginBottom:3 }}>{t('orders.orderTotal')}</div>
             <div style={{ fontSize:'1.2rem', fontWeight:900, color:'#1D4ED8' }}>TZS {order?.total_amount?.toLocaleString() || '—'}</div>
             <div style={{ fontSize:'0.72rem', color:'#9CA3AF', marginTop:2 }}>{order?.product_name}</div>
           </div>

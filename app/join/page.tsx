@@ -15,7 +15,7 @@ export default function JoinPage() {
           <img src="/icon-192.png" alt="ShopNekt" width={36} height={36} style={{ borderRadius: 8 }}  loading="lazy" />
           <span style={{ color: '#1D4ED8', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>SHOPNEKT</span>
         </div>
-        <Link href="/" style={{ color: '#6B7280', fontSize: '0.8rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 999 }}>
+        <Link href="/" style={{ color: '#6B7280', fontSize: '0.8rem', textDecoration: 'none', border: '1px solid #E5E7EB', padding: '6px 14px', borderRadius: 999 }}>
          {t('join.browseMarket')} 
         </Link>
       </header>
@@ -36,7 +36,7 @@ export default function JoinPage() {
           <Link href="/open-store" style={{ background: '#1D4ED8', color: '#0D1B3E', fontWeight: 800, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
              {t('join.openStoreNow')}
           </Link>
-          <Link href="/" style={{ background: 'rgba(255,255,255,0.1)', color: '#111827', fontWeight: 700, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', border: '1px solid rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <Link href="/" style={{ background: 'rgba(255,255,255,0.1)', color: '#111827', fontWeight: 700, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', border: '1px solid #E5E7EB', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
              {t('join.browseMarket')}
           </Link>
         </div>
@@ -46,7 +46,7 @@ export default function JoinPage() {
           {[['500+', t('join.shops')], ['5', t('join.regions')], ['5', t('join.universities')], ['3', t('join.aiProducts')]].map(([v, l]) => (
             <div key={l} style={{ textAlign: 'center' }}>
               <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.8rem', fontWeight: 900, color: '#1D4ED8' }}>{v}</div>
-              <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 2 }}>{l}</div>
+              <div style={{ fontSize: '0.7rem', color: '#9CA3AF', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 2 }}>{l}</div>
             </div>
           ))}
         </div>
@@ -92,15 +92,15 @@ export default function JoinPage() {
             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(29,78,216,0.3)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: '#1D4ED8', marginBottom: 12 }}> BIASHARA MARKET</div>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#111827', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
-              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>
+              <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ background: '#fff', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ fontWeight: 800, color: '#111827', marginBottom: 4 }}>{t('join.basicPlanLabel')}</div>
-                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 25,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.4)' }}>/mwezi</span></div>
+                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 25,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: '#9CA3AF' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {['Duka lako mtandaoni', 'Bidhaa bila kikomo', 'Ushauri wa AI', 'WhatsApp integration'].map(f => (
-                      <li key={f} style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', display: 'flex', gap: 6 }}>
+                      <li key={f} style={{ fontSize: '0.78rem', color: '#6B7280', display: 'flex', gap: 6 }}>
                         <span style={{ color: '#86EFAC' }}></span> {f}
                       </li>
                     ))}
@@ -109,7 +109,7 @@ export default function JoinPage() {
                 <div style={{ background: 'linear-gradient(135deg, rgba(29,78,216,0.15), rgba(29,78,216,0.08))', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(29,78,216,0.4)', position: 'relative' }}>
                   <div style={{ position: 'absolute', top: -10, right: 16, background: '#1D4ED8', color: '#0D1B3E', fontSize: '0.6rem', fontWeight: 900, padding: '3px 10px', borderRadius: 999 }}>{t('join.mostPopular')}</div>
                   <div style={{ fontWeight: 800, color: '#1D4ED8', marginBottom: 4 }}>{t('join.premiumPlanLabel')}</div>
-                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.4)' }}>/mwezi</span></div>
+                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: '#9CA3AF' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {['Kila kitu cha Basic', 'Duka linaonekana kwanza', 'Flash Deals &Group Buy', 'AI Marketing Manager', 'Ripoti za biashara'].map(f => (
                       <li key={f} style={{ fontSize: '0.78rem', color: '#6B7280', display: 'flex', gap: 6 }}>

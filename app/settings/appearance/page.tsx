@@ -98,7 +98,7 @@ export default function AppearancePage() {
                 )}
                 <t.icon size={22} color={theme===t.v?'#1D4ED8':'#64748B'} />
                 <span style={{ fontSize:'0.82rem', fontWeight:700, color: theme===t.v?'#fff':'#0F172A' }}>{t.label}</span>
-                <span style={{ fontSize:'0.65rem', color: theme===t.v?'rgba(255,255,255,0.5)':'#94A3B8' }}>{t.sub}</span>
+                <span style={{ fontSize:'0.65rem', color: theme===t.v?'#6B7280':'#94A3B8' }}>{t.sub}</span>
               </button>
             ))}
           </div>

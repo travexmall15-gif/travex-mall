@@ -244,7 +244,7 @@ export default function AiPage() {
             <div style={{fontWeight:800,color:'#fff',fontSize:'0.9rem',letterSpacing:'-0.01em'}}>{t('ai.title')}</div>
             <div style={{display:'flex',alignItems:'center',gap:5}}>
               <span style={{width:5,height:5,borderRadius:'50%',background:'#6ee7b7',display:'inline-block'}}/>
-              <span style={{fontSize:'0.62rem',color:'rgba(255,255,255,0.40)'}}>{t('ai.online')}</span>
+              <span style={{fontSize:'0.62rem',color:'#9CA3AF'}}>{t('ai.online')}</span>
             </div>
           </div>
           {!isEmpty && (

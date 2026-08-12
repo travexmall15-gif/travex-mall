@@ -125,8 +125,8 @@ export default function MarketInnerPage() {
       <SiteNav />
       <style>{`
         .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;white-space:nowrap;transition:border-color 0.15s,background 0.15s,color 0.15s}
-        .mk-chip.active{background:#0F172A;color:#fff;border-color:#0F172A}
-        .mk-chip:hover:not(.active){border-color:#CBD5E1;background:#F8FAFC}
+        .mk-chip.active{background:#1D4ED8;color:#fff;border-color:#1D4ED8}
+        .mk-chip:hover:not(.active){border-color:#D1D5DB;background:#F9FAFB}
         .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
         @media(max-width:600px){.shop-grid{grid-template-columns:1fr}}
       `}</style>

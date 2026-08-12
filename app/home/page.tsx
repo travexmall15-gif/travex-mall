@@ -83,8 +83,8 @@ export default function HomePage() {
                 <Store size={20} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
-                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.50)',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
+                <div style={{ fontWeight:700,color:'#374151',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
+                <div style={{ fontSize:'0.72rem',color:'#6B7280',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
               </div>
             </div>
             <Link href="/open-store" className="sell-cta">
@@ -103,11 +103,11 @@ export default function HomePage() {
                 <Sparkles size={20} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight:700,color:'#fff',fontSize:'0.9rem' }}>Chat with 360 AI</div>
-                <div style={{ fontSize:'0.72rem',color:'rgba(255,255,255,0.50)',marginTop:1 }}>{t('home.aiChipSub')}</div>
+                <div style={{ fontWeight:700,color:'#374151',fontSize:'0.9rem' }}>Chat with 360 AI</div>
+                <div style={{ fontSize:'0.72rem',color:'#6B7280',marginTop:1 }}>{t('home.aiChipSub')}</div>
               </div>
             </div>
-            <ArrowRight size={18} color="rgba(255,255,255,0.60)" />
+            <ArrowRight size={18} color="#fff" />
           </a>
         </div>
       </div>
@@ -167,21 +167,21 @@ export default function HomePage() {
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(255,0,128,0.12)',color:'#FF80B5',padding:'0.2rem 0.65rem',borderRadius:999 }}>Social</span>
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(120,0,255,0.12)',color:'#C87BFF',padding:'0.2rem 0.65rem',borderRadius:999 }}>Live</span>
               </div>
-              <h3 style={{ position:'relative',zIndex:1,fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#fff',marginBottom:'0.6rem',lineHeight:1.15 }}>Social Vybe</h3>
-              <p style={{ position:'relative',zIndex:1,fontSize:'0.85rem',color:'rgba(255,255,255,0.45)',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.vybeCardDesc')}</p>
+              <h3 style={{ position:'relative',zIndex:1,fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#111827',marginBottom:'0.6rem',lineHeight:1.15 }}>Social Vybe</h3>
+              <p style={{ position:'relative',zIndex:1,fontSize:'0.85rem',color:'#9CA3AF',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.vybeCardDesc')}</p>
               <div style={{ position:'relative',zIndex:1,display:'flex',gap:'1.5rem',marginBottom:'1.75rem',paddingBottom:'1.5rem',borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
                 {([['POST',t('home.dailyContent')],['LIKE',t('home.realEngagement')],['SELL',t('home.directToBuyers')]] as [string,string][]).map(([v,l]) => (
                   <div key={l}>
                     <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.1rem',fontWeight:900,color:'#C87BFF',lineHeight:1 }}>{v}</div>
-                    <div style={{ fontSize:'0.65rem',color:'rgba(255,255,255,0.30)',marginTop:2 }}>{l}</div>
+                    <div style={{ fontSize:'0.65rem',color:'#9CA3AF',marginTop:2 }}>{l}</div>
                   </div>
                 ))}
               </div>
               <div style={{ position:'relative',zIndex:1,display:'flex',gap:'0.75rem',flexWrap:'wrap',marginTop:'auto' }}>
-                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none' }}>
+                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#111827',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none' }}>
                   {t('home.exploreVybe')}
                 </Link>
-                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'rgba(255,255,255,0.07)',color:'#fff',border:'1px solid #E2E8F0',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:600,fontSize:'0.82rem',textDecoration:'none' }}>
+                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'rgba(255,255,255,0.07)',color:'#111827',border:'1px solid #E2E8F0',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:600,fontSize:'0.82rem',textDecoration:'none' }}>
                   {t('home.postVybe')} <ArrowRight size={13} />
                 </Link>
               </div>

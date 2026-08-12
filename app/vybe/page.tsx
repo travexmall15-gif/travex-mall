@@ -147,7 +147,7 @@ export default function VybePage() {
           background: rgba(255,255,255,0.05);
           border: 1px solid rgba(255,255,255,0.10);
           border-radius: 999px;
-          color: rgba(255,255,255,0.55);
+          color: #6B7280;
           cursor:pointer; font-size:13px; font-weight:600;
           padding: 7px 14px;
           transition: all .18s;
@@ -180,12 +180,12 @@ export default function VybePage() {
           font-size:13px; font-weight:600; cursor:pointer;
           border: 1.5px solid rgba(255,255,255,0.12);
           background: transparent;
-          color: rgba(255,255,255,0.45);
+          color: #9CA3AF;
           transition: all .18s;
           font-family: 'Inter',sans-serif;
           white-space: nowrap;
         }
-        .filter-pill:hover  { border-color:rgba(255,255,255,.25); color:rgba(255,255,255,.75); }
+        .filter-pill:hover  { border-color:#D1D5DB; color:#374151; }
         .filter-pill.active { background:#1D4ED8; border-color:#1D4ED8; color:#0F172A; }
 
         .cat-chip {
@@ -194,7 +194,7 @@ export default function VybePage() {
           font-size:12px; font-weight:600; cursor:pointer;
           border:1px solid rgba(255,255,255,0.08);
           background:rgba(255,255,255,0.04);
-          color:rgba(255,255,255,0.50);
+          color:#6B7280;
           text-decoration:none;
           transition:all .15s;
           white-space:nowrap;
@@ -210,7 +210,7 @@ export default function VybePage() {
           font-family:'Inter',sans-serif;
           transition:all .2s; box-sizing:border-box;
         }
-        .search-input::placeholder { color:rgba(255,255,255,0.28); }
+        .search-input::placeholder { color:#9CA3AF; }
         .search-input:focus { border-color:rgba(29,78,216,.45); background:rgba(255,255,255,0.08); }
 
         .live-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; animation:pulse 1.8s ease-in-out infinite; }
@@ -253,7 +253,7 @@ export default function VybePage() {
             lineHeight:1.1, marginBottom:'0.6rem', letterSpacing:'-0.03em' }}>
             Social Vybe
           </h1>
-          <p style={{ color:'rgba(255,255,255,0.42)', fontSize:'clamp(13px,2vw,15px)',
+          <p style={{ color:'#9CA3AF', fontSize:'clamp(13px,2vw,15px)',
             marginBottom:'1.75rem', lineHeight:1.6, maxWidth:480, margin:'0 auto 1.75rem' }}>
             {t('vybe.subtitle')}
           </p>
@@ -267,7 +267,7 @@ export default function VybePage() {
               ].map((s,i) => (
                 <div key={i} style={{ textAlign:'center' }}>
                   <div style={{ fontSize:'1.4rem', fontWeight:900, color:'#1D4ED8', lineHeight:1 }}>{s.val}</div>
-                  <div style={{ fontSize:'0.6rem', color:'rgba(255,255,255,0.3)', textTransform:'uppercase', letterSpacing:'0.09em', marginTop:3 }}>{s.label}</div>
+                  <div style={{ fontSize:'0.6rem', color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginTop:3 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -275,7 +275,7 @@ export default function VybePage() {
 
           {/* Search */}
           <div style={{ position:'relative', maxWidth:500, margin:'0 auto 1.5rem' }}>
-            <Search size={15} style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'rgba(255,255,255,0.3)' }} />
+            <Search size={15} style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'#9CA3AF' }} />
             <input
               className="search-input"
               value={search}
@@ -317,7 +317,7 @@ export default function VybePage() {
         {loading && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
             <Loader2 style={{ width:32, height:32, margin:'0 auto 12px', animation:'spin 1s linear infinite', color:'#1D4ED8' }} />
-            <p style={{ color:'rgba(255,255,255,0.3)', fontSize:14 }}>{t('vybe.loading')}</p>
+            <p style={{ color:'#9CA3AF', fontSize:14 }}>{t('vybe.loading')}</p>
           </div>
         )}
 
@@ -327,7 +327,7 @@ export default function VybePage() {
             <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(239,68,68,.1)', border:'1px solid rgba(239,68,68,.2)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <RefreshCw size={22} color="#EF4444" />
             </div>
-            <p style={{ color:'rgba(255,255,255,0.40)', fontSize:14, marginBottom:16 }}>{error}</p>
+            <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:16 }}>{error}</p>
             <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
@@ -340,7 +340,7 @@ export default function VybePage() {
             <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(29,78,216,0.08)', border:'1px solid rgba(29,78,216,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <Star size={28} color="rgba(29,78,216,0.4)" />
             </div>
-            <p style={{ color:'rgba(255,255,255,0.35)', fontSize:14 }}>
+            <p style={{ color:'#9CA3AF', fontSize:14 }}>
               {search ? t('vybe.noResults') : t('vybe.noPosts')}
             </p>
             {search && (
@@ -364,9 +364,9 @@ export default function VybePage() {
             {visible < filtered.length && (
               <div style={{ textAlign:'center', marginTop:'1.5rem' }}>
                 <button onClick={() => setVisible(v => v + 12)}
-                  style={{ padding:'11px 32px', background:'#fff', border:'1.5px solid #E2E8F0', color:'rgba(255,255,255,0.65)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
+                  style={{ padding:'11px 32px', background:'#fff', border:'1.5px solid #E2E8F0', color:'#6B7280', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
                   onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(29,78,216,.4)'; (e.currentTarget as HTMLElement).style.color='#1D4ED8' }}
-                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color='rgba(255,255,255,0.65)' }}>
+                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='#E5E7EB'; (e.currentTarget as HTMLElement).style.color='#6B7280' }}>
                   {t('vybe.loadMore')} · {filtered.length - visible} {t('vybe.totalPosts').toLowerCase()}
                 </button>
               </div>
@@ -434,11 +434,11 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
             )}
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:2 }}>
-            <Clock size={9} color="rgba(255,255,255,0.25)" />
-            <span style={{ fontSize:11, color:'rgba(255,255,255,0.28)' }}>{ago(post.created_at)}</span>
+            <Clock size={9} color="#9CA3AF" />
+            <span style={{ fontSize:11, color:'#9CA3AF' }}>{ago(post.created_at)}</span>
             {post.category && (
-              <><span style={{ color:'rgba(255,255,255,0.15)' }}>·</span>
-              <span style={{ fontSize:11, color:'rgba(255,255,255,0.28)' }}>{post.category}</span></>
+              <><span style={{ color:'#D1D5DB' }}>·</span>
+              <span style={{ fontSize:11, color:'#9CA3AF' }}>{post.category}</span></>
             )}
           </div>
         </div>
@@ -454,7 +454,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
       {/* ── Caption ── */}
       {content && (
         <div style={{ padding:'0.65rem 1rem 0' }}>
-          <p style={{ fontSize:14, color:'rgba(255,255,255,0.78)', lineHeight:1.65, margin:0, letterSpacing:'-0.005em' }}>
+          <p style={{ fontSize:14, color:'#374151', lineHeight:1.65, margin:0, letterSpacing:'-0.005em' }}>
             {content}
           </p>
         </div>

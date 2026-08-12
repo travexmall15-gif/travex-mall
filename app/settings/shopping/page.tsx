@@ -120,7 +120,7 @@ export default function ShoppingPage() {
                 : t('shopping.orders')}
             </div>
           </div>
-          <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
+          <ChevronRight size={18} color="#9CA3AF" />
         </button>
 
         {/* ── SAVED SHOPS ─────────────────────────────── */}
