@@ -70,7 +70,7 @@ export default function AppearancePage() {
                   <div style={{ fontSize:'0.7rem', color:'#94A3B8', marginTop:2 }}>{l.sub}</div>
                 </div>
                 {lang === l.code && (
-                  <div style={{ width:22, height:22, borderRadius:'50%', background:'#0D1B3E', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <div style={{ width:22, height:22, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={13} color="#1D4ED8" strokeWidth={3} />
                   </div>
                 )}
@@ -90,7 +90,7 @@ export default function AppearancePage() {
             ].map(t => (
               <button key={t.v}
                 onClick={() => { setTheme(t.v as any); save() }}
-                style={{ padding:'16px 8px', background: theme===t.v?'#0D1B3E':'#fff', border:`2px solid ${theme===t.v?'#0D1B3E':'#E2E8F0'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
+                style={{ padding:'16px 8px', background: theme===t.v?'#1D4ED8':'#fff', border:`2px solid ${theme===t.v?'#1D4ED8':'#E2E8F0'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
                 {theme===t.v && (
                   <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'#1D4ED8', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={10} color="#0D1B3E" strokeWidth={3} />
@@ -118,7 +118,7 @@ export default function AppearancePage() {
                 style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i<2?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#0D1B3E':'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
+                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#1D4ED8':'#F1F5F9', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
                   <Type size={16} color={fontSize===f.v?'#1D4ED8':'#64748B'} />
                 </div>
                 <div style={{ flex:1 }}>
@@ -126,7 +126,7 @@ export default function AppearancePage() {
                   <div style={{ fontSize:'0.68rem', color:'#94A3B8', marginTop:2 }}>{f.desc}</div>
                 </div>
                 {fontSize===f.v && (
-                  <div style={{ width:22, height:22, borderRadius:'50%', background:'#0D1B3E', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <div style={{ width:22, height:22, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={13} color="#1D4ED8" strokeWidth={3} />
                   </div>
                 )}
@@ -162,7 +162,7 @@ export default function AppearancePage() {
 
         {/* Save feedback */}
         {saved && (
-          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#0D1B3E', color:'#1D4ED8', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, animation:'toastIn 0.3s ease', }}>
+          <div style={{ position:'fixed', bottom:24, left:'50%', transform:'translateX(-50%)', background:'#fff', color:'#1D4ED8', padding:'10px 24px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 20px rgba(0,0,0,0.2)', zIndex:999, animation:'toastIn 0.3s ease', }}>
             <Check size={14}/> Preference Saved
           </div>
         )}

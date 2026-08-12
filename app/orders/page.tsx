@@ -95,7 +95,7 @@ export default function OrdersPage() {
           {(['all','pending','confirmed','rejected'] as OrderFilter[]).map(f => (
             <button key={f} onClick={() => setFilter(f)}
               style={{ padding:'7px 14px', borderRadius:999, border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.78rem', fontWeight:700, whiteSpace:'nowrap', flexShrink:0, transition:'all .15s',
-                background: filter===f ? '#0D1B3E' : '#fff',
+                background: filter===f ? '#1D4ED8' : '#fff',
                 color:      filter===f ? '#1D4ED8'  : '#64748B',
                 boxShadow:  filter===f ? 'none' : '0 1px 4px rgba(15,23,42,0.08)',
               }}>
@@ -161,7 +161,7 @@ export default function OrdersPage() {
 
                       {order.status === 'rejected' && (
                         <Link href={`/orders/${order.id}/payment`}
-                          style={{ padding:'7px 14px', background:'#0D1B3E', border:'none', borderRadius:10, fontSize:'0.78rem', fontWeight:700, color:'#1D4ED8', cursor:'pointer', textDecoration:'none', display:'flex', alignItems:'center', gap:5 }}>
+                          style={{ padding:'7px 14px', background:'#fff', border:'none', borderRadius:10, fontSize:'0.78rem', fontWeight:700, color:'#1D4ED8', cursor:'pointer', textDecoration:'none', display:'flex', alignItems:'center', gap:5 }}>
                           <AlertCircle size={13} /> Payment & Delivery
                         </Link>
                       )}

@@ -183,7 +183,7 @@ export default function AiSearchBox() {
               width: '100%', padding: '14px 16px 14px 44px',
               background: 'rgba(255,255,255,0.07)',
               border: '1.5px solid rgba(255,255,255,0.15)',
-              borderRadius: '16px', color: '#fff',
+              borderRadius: '16px', color: '#0F172A',
               fontSize: '0.9rem', outline: 'none',
               transition: 'border-color 0.2s',
               fontFamily: 'Inter, sans-serif',
@@ -217,8 +217,8 @@ export default function AiSearchBox() {
               onClick={() => { setQuery(s); setTimeout(search, 100) }}
               style={{
                 padding: '5px 12px', borderRadius: '999px',
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.12)',
+                background: '#fff',
+                border: '1px solid #E2E8F0',
                 color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem',
                 cursor: 'pointer', fontFamily: 'Inter, sans-serif',
                 transition: 'all 0.2s',
@@ -236,10 +236,10 @@ export default function AiSearchBox() {
       {loading && (
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {[1,2,3].map(i => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(255,255,255,0.08)', flexShrink: 0 }} />
+            <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #F1F5F9', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F1F5F9', flexShrink: 0 }} />
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div style={{ height: '12px', width: '40%', background: 'rgba(255,255,255,0.08)', borderRadius: '6px' }} />
+                <div style={{ height: '12px', width: '40%', background: '#F1F5F9', borderRadius: '6px' }} />
                 <div style={{ height: '10px', width: '60%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px' }} />
               </div>
             </div>
@@ -276,7 +276,7 @@ export default function AiSearchBox() {
               style={{
                 display: 'flex', alignItems: 'center', gap: '14px',
                 background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid #F1F5F9',
                 borderRadius: '14px', padding: '14px 16px',
                 textDecoration: 'none', color: 'inherit',
                 transition: 'all 0.2s',
@@ -299,7 +299,7 @@ export default function AiSearchBox() {
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {store.shop_name}
                   </span>
                   {store.rating > 0 && (
@@ -318,7 +318,7 @@ export default function AiSearchBox() {
                 {store.products && store.products.length > 0 && (
                   <div style={{ marginTop: '6px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {store.products.slice(0,3).map((p,j) => (
-                      <span key={j} style={{ fontSize: '0.68rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '6px', padding: '2px 8px', color: 'rgba(255,255,255,0.55)' }}>
+                      <span key={j} style={{ fontSize: '0.68rem', background: '#fff', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '6px', padding: '2px 8px', color: 'rgba(255,255,255,0.55)' }}>
                         {p.name} · TZS {p.price?.toLocaleString()}
                       </span>
                     ))}

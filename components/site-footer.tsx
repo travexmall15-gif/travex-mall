@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer style={{
       background: '#060B18',
       padding: '2rem 5%',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      borderTop: '1px solid #E2E8F0',
     }}>
       <div style={{
         maxWidth: '600px', margin: '0 auto',
@@ -27,8 +27,8 @@ export function SiteFooter() {
           ].map(({ label, href }) => (
             <Link key={label} href={href} style={{
               display: 'inline-flex', alignItems: 'center',
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.10)',
+              background: '#fff',
+              border: '1px solid #E2E8F0',
               color: 'rgba(255,255,255,0.65)',
               borderRadius: '999px',
               padding: '0.45rem 1.1rem',

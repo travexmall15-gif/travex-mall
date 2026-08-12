@@ -206,8 +206,8 @@ export default function AuthPage() {
             disabled={loading}
             style={{
               width:'100%', padding:'0.875rem',
-              background: loading ? '#94A3B8' : '#0D1B3E',
-              color:'#fff', border:'none', borderRadius:12,
+              background: loading ? '#94A3B8' : '#1D4ED8',
+              color:'#0F172A', border:'none', borderRadius:12,
               fontFamily:"'Inter',sans-serif", fontWeight:700,
               fontSize:'0.9rem', cursor: loading ? 'not-allowed' : 'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', gap:8,
@@ -222,7 +222,7 @@ export default function AuthPage() {
 
           <p style={{ textAlign:'center', marginTop:'1.25rem', fontSize:'0.73rem', color:'#94A3B8', lineHeight:1.6 }}>
             Already have a seller account?{' '}
-            <a href="/login" style={{ color:'#0D1B3E', fontWeight:700, textDecoration:'none' }}>Seller Login</a>
+            <a href="/login" style={{ color:'#1D4ED8', fontWeight:700, textDecoration:'none' }}>Seller Login</a>
           </p>
         </>}
 
@@ -249,7 +249,7 @@ export default function AuthPage() {
 
           {/* Code display box */}
           <div style={{
-            background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)',
+            background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
             borderRadius:14, padding:'1.25rem',
             textAlign:'center', marginBottom:'1.25rem',
             position:'relative',
@@ -270,7 +270,7 @@ export default function AuthPage() {
             </div>
             <button
               onClick={() => setShowCode(v => !v)}
-              style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'4px 14px', color:'rgba(255,255,255,0.7)', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
+              style={{ background:'#F1F5F9', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'4px 14px', color:'#64748B', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
             >
               {showCode ? <><EyeOff size={12}/> Hide</> : <><Eye size={12}/> Reveal Code</>}
             </button>
@@ -309,8 +309,8 @@ export default function AuthPage() {
             disabled={loading || entered.length < 6}
             style={{
               width:'100%', padding:'0.875rem',
-              background: entered.length < 6 ? '#94A3B8' : '#0D1B3E',
-              color:'#fff', border:'none', borderRadius:12,
+              background: entered.length < 6 ? '#94A3B8' : '#1D4ED8',
+              color:'#0F172A', border:'none', borderRadius:12,
               fontFamily:"'Inter',sans-serif", fontWeight:700,
               fontSize:'0.9rem',
               cursor: entered.length < 6 ? 'not-allowed' : 'pointer',
@@ -327,7 +327,7 @@ export default function AuthPage() {
           <p style={{ textAlign:'center', fontSize:'0.73rem', color:'#94A3B8' }}>
             {timer > 0
               ? <>Code expires in <strong style={{ color:'#0D1B3E' }}>{timer}s</strong></>
-              : <button onClick={handleResend} style={{ background:'none', border:'none', color:'#0D1B3E', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.73rem', padding:0 }}>
+              : <button onClick={handleResend} style={{ background:'none', border:'none', color:'#1D4ED8', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.73rem', padding:0 }}>
                   Get a new code
                 </button>
             }

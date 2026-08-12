@@ -91,15 +91,15 @@ export default function SettingsPage() {
 
         {/* Profile card */}
         <Link href="/settings/profile" style={{ textDecoration:'none', display:'block', marginBottom:'1.25rem' }}>
-          <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
+          <div style={{ background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
             onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity='0.9'}
             onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity='1'}>
-            <div style={{ width:50, height:50, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid rgba(255,255,255,0.2)', fontSize:'1.05rem', fontWeight:900, color:'#fff' }}>
+            <div style={{ width:50, height:50, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid rgba(255,255,255,0.2)', fontSize:'1.05rem', fontWeight:900, color:'#0F172A' }}>
               {user ? user.name.slice(0,2).toUpperCase() : '?'}
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontSize:'1rem', fontWeight:700, color:'#fff', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
-              <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.5)' }}>{user?.email || ''}</div>
+              <div style={{ fontSize:'1rem', fontWeight:700, color:'#0F172A', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
+              <div style={{ fontSize:'0.72rem', color:'#94A3B8' }}>{user?.email || ''}</div>
             </div>
             <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
           </div>
@@ -186,7 +186,7 @@ export default function SettingsPage() {
                 {t('common.cancel')}
               </button>
               <button onClick={async () => { await sb.auth.signOut(); window.location.replace('/welcome') }}
-                style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#fff' }}>
+                style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#0F172A' }}>
                 {t('settings.deleteBtn')}
               </button>
             </div>

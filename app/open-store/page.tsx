@@ -69,7 +69,7 @@ export default function OpenStorePage() {
               <div style={{ fontSize:'0.68rem', fontWeight:700, color:'rgba(255,255,255,0.42)', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.monthly')}</div>
               <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.3rem', fontWeight:900, color:'#1D4ED8', lineHeight:1 }}>{t('openStore.joinLabel')}</div>
             </div>
-            <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#1D4ED8', color:'#0F172A', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#1D4ED8', color:'#fff', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
               {t('openStore.applyNow')} <ArrowRight style={{ width:'14px', height:'14px' }} />
             </div>
           </div>

@@ -73,7 +73,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
   return (
     <article style={{
-      background: featured ? 'linear-gradient(135deg,#0D1B3E,#1B3A8A)' : '#fff',
+      background: featured ? 'linear-gradient(135deg,#EFF6FF,#DBEAFE)' : '#fff',
       border: featured ? '2px solid rgba(29,78,216,0.35)' : '1.5px solid #FEF3C7',
       borderRadius: featured ? 24 : 20,
       overflow: 'hidden',
@@ -126,7 +126,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {/* Discount badge */}
         <div style={{ position:'absolute', top:12, left:12,
           background:'linear-gradient(135deg,#EF4444,#DC2626)',
-          color:'#fff', fontWeight:900, fontSize: featured ? 15 : 13,
+          color:'#0F172A', fontWeight:900, fontSize: featured ? 15 : 13,
           padding:'5px 12px', borderRadius:999,
           boxShadow:'0 4px 12px rgba(239,68,68,0.4)',
           letterSpacing:'-0.02em' }}>
@@ -137,7 +137,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {urge === 'high' && (
           <div style={{ position:'absolute', top:12, right:12,
             background:'rgba(239,68,68,0.9)', backdropFilter:'blur(8px)',
-            color:'#fff', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
+            color:'#0F172A', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
             display:'flex', alignItems:'center', gap:3, letterSpacing:'0.04em' }}>
             <AlertCircle size={9} /> {t('flash.urgencyLow')}
           </div>
@@ -145,7 +145,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {urge === 'med' && isEndingSoon && (
           <div style={{ position:'absolute', top:12, right:12,
             background:'rgba(249,115,22,0.9)', backdropFilter:'blur(8px)',
-            color:'#fff', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
+            color:'#0F172A', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
             letterSpacing:'0.04em' }}>
             {t('flash.endingSoon')}
           </div>
@@ -293,7 +293,7 @@ export default function FlashDealsPage() {
       <SiteNav />
 
       {/* ── HERO ──────────────────────────────────────────────── */}
-      <div style={{ paddingTop:'108px', background:'linear-gradient(160deg,#7C2D12,#92400E,#B45309)', color:'#fff', position:'relative', overflow:'hidden' }}>
+      <div style={{ paddingTop:'108px', background:'linear-gradient(160deg,#7C2D12,#92400E,#B45309)', color:'#0F172A', position:'relative', overflow:'hidden' }}>
         {/* Shimmer bg */}
         <div style={{ position:'absolute', inset:0, opacity:.08, pointerEvents:'none',
           backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',
@@ -310,7 +310,7 @@ export default function FlashDealsPage() {
             <div>
               {/* Back link */}
               <Link href="/market"
-                style={{ display:'inline-flex', alignItems:'center', gap:6, color:'rgba(255,255,255,0.6)', textDecoration:'none', fontSize:13, marginBottom:14, fontWeight:500, transition:'color .15s' }}
+                style={{ display:'inline-flex', alignItems:'center', gap:6, color:'#64748B', textDecoration:'none', fontSize:13, marginBottom:14, fontWeight:500, transition:'color .15s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.color='#fff'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.color='rgba(255,255,255,0.6)'}>
                 <ArrowLeft size={14} /> {t('flash.heroBack')}
@@ -318,7 +318,7 @@ export default function FlashDealsPage() {
 
               {/* Badge */}
               <div style={{ display:'inline-flex', alignItems:'center', gap:7, marginBottom:12,
-                background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.20)',
+                background:'#EFF6FF', border:'1px solid rgba(255,255,255,0.20)',
                 padding:'5px 14px', borderRadius:999, fontSize:11, fontWeight:800,
                 letterSpacing:'0.06em', backdropFilter:'blur(8px)' }}>
                 <Zap size={11} style={{ }} />
@@ -343,9 +343,9 @@ export default function FlashDealsPage() {
                   { icon: Zap, val: String(deals.length), label: t('flash.activeDealsCount', { count: String(deals.length) }).replace(String(deals.length)+' ', ''), color:'#FCD34D' },
                   { icon: TrendingUp, val: `${fmtTZS(totalSavings)}`, label: t('flash.totalSavings'), color:'#86EFAC' },
                 ].map((s,i) => (
-                  <div key={i} style={{ background:'rgba(255,255,255,0.10)', backdropFilter:'blur(12px)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:16, padding:'1rem 1.25rem', textAlign:'center', minWidth:100 }}>
+                  <div key={i} style={{ background:'#F1F5F9', backdropFilter:'blur(12px)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:16, padding:'1rem 1.25rem', textAlign:'center', minWidth:100 }}>
                     <s.icon size={16} color={s.color} style={{ margin:'0 auto 6px', display:'block' }} />
-                    <div style={{ fontSize:deals.length > 99 ? '1rem' : '1.35rem', fontWeight:900, color:'#fff', lineHeight:1, letterSpacing:'-0.02em' }}>{s.val}</div>
+                    <div style={{ fontSize:deals.length > 99 ? '1rem' : '1.35rem', fontWeight:900, color:'#0F172A', lineHeight:1, letterSpacing:'-0.02em' }}>{s.val}</div>
                     <div style={{ fontSize:10, color:'rgba(255,255,255,0.55)', marginTop:3, letterSpacing:'0.04em' }}>{s.label}</div>
                   </div>
                 ))}
@@ -379,7 +379,7 @@ export default function FlashDealsPage() {
               {t('flash.noDealsDesc')}
             </p>
             <Link href="/market"
-              style={{ background:'linear-gradient(135deg,#F59E0B,#EF4444)', color:'#fff',
+              style={{ background:'linear-gradient(135deg,#F59E0B,#EF4444)', color:'#0F172A',
                 padding:'12px 28px', borderRadius:999, fontWeight:700, textDecoration:'none',
                 fontSize:14, display:'inline-flex', alignItems:'center', gap:6,
                 boxShadow:'0 8px 24px rgba(245,158,11,0.35)' }}>

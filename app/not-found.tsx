@@ -11,7 +11,7 @@ export default function NotFound() {
       </div>
       <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0F172A' }}>{t('notFound.title')}</h1>
       <p style={{ color: '#64748B' }}>{t('notFound.desc')}</p>
-      <a href="/home" style={{ background: '#0D1B3E', color: '#1D4ED8', padding: '12px 28px', borderRadius: '12px', textDecoration: 'none', fontWeight: 700 }}>{t('notFound.goHome')}</a>
+      <a href="/home" style={{ background: '#fff', color: '#1D4ED8', padding: '12px 28px', borderRadius: '12px', textDecoration: 'none', fontWeight: 700 }}>{t('notFound.goHome')}</a>
     </div>
   )
 }

@@ -101,7 +101,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
               </p>
             </div>
             <Link href={`/orders/${id}/payment`}
-              style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'12px', background:'#0D1B3E', color:'#1D4ED8', borderRadius:12, textDecoration:'none', fontWeight:700, fontSize:'0.875rem' }}>
+              style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'12px', background:'#fff', color:'#1D4ED8', borderRadius:12, textDecoration:'none', fontWeight:700, fontSize:'0.875rem' }}>
               Proceed to Payment & Delivery →
             </Link>
           </div>
@@ -118,7 +118,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
                 await sb.from('orders').update({ status:'delivered' }).eq('id', id)
                 setOrder((o: any) => ({ ...o, status:'delivered' }))
               }}
-              style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color:'#fff', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color:'#0F172A', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
               ✅ Confirm I Received My Item
             </button>
           </div>

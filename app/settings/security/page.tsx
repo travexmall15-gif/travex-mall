@@ -57,7 +57,7 @@ export default function SecurityPage() {
           {err && <p style={{ fontSize: '0.75rem', color: '#EF4444', marginTop: 8 }}>{err}</p>}
           {msg && <p style={{ fontSize: '0.75rem', color: '#059669', marginTop: 8 }}>{msg}</p>}
           <button onClick={changePassword} disabled={loading}
-            style={{ width: '100%', marginTop: '1rem', padding: '0.8rem', background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            style={{ width: '100%', marginTop: '1rem', padding: '0.8rem', background: '#fff', color: '#0F172A', border: 'none', borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             {loading ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Updating...</> : 'Update Password'}
           </button>
         </div>

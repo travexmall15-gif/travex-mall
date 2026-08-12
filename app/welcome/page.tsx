@@ -109,8 +109,8 @@ export default function WelcomePage() {
         onClick={() => choose(lang)}
         style={{
           width:'100%', maxWidth:360,
-          background:'#0D1B3E',
-          color:'#fff',
+          background:'#fff',
+          color:'#0F172A',
           border:'none',
           borderRadius:999,
           padding:'0.875rem',

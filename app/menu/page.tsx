@@ -119,21 +119,21 @@ export default function MenuPage() {
       <div style={{ background:'linear-gradient(160deg,#0D1B3E,#1B3A8A)', padding:'52px 20px 24px', position:'sticky', top:0, zIndex:10 }}>
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
           <button onClick={() => window.history.length > 1 ? router.back() : (window.location.href='/home')}
-            style={{ background:'rgba(255,255,255,0.10)', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#fff' }}>
+            style={{ background:'#F1F5F9', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#0F172A' }}>
             <ArrowLeft size={17} color="#fff" />
           </button>
           <div style={{ display:'flex', alignItems:'center', gap:0 }}>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'#fff', letterSpacing:'-0.03em' }}>Shop</span>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'#0F172A', letterSpacing:'-0.03em' }}>Shop</span>
             <span style={{ fontSize:'1rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.03em' }}>Nekt</span>
           </div>
           <div style={{ width:36 }} />
         </div>
-        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'rgba(255,255,255,0.08)', borderRadius:18, padding:'14px 16px', border:'1px solid rgba(255,255,255,0.12)' }}>
-          <div style={{ width:52, height:52, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', fontSize:'1.1rem', fontWeight:900, color:'#fff' }}>
+        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'#F1F5F9', borderRadius:18, padding:'14px 16px', border:'1px solid #E2E8F0' }}>
+          <div style={{ width:52, height:52, borderRadius:'50%', background:'#F97316', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', fontSize:'1.1rem', fontWeight:900, color:'#0F172A' }}>
             {user ? user.name.slice(0,2).toUpperCase() : '?'}
           </div>
           <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ fontSize:'1rem', fontWeight:800, color:'#fff', letterSpacing:'-0.01em' }}>{user ? user.name : t('menuPage.guest')}</div>
+            <div style={{ fontSize:'1rem', fontWeight:800, color:'#0F172A', letterSpacing:'-0.01em' }}>{user ? user.name : t('menuPage.guest')}</div>
             <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.45)', marginTop:2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
               {user ? user.email : t('menuPage.signInToContinue')}
             </div>
@@ -209,7 +209,7 @@ export default function MenuPage() {
                 {t('common.cancel')}
               </button>
               <button onClick={handleLogout}
-                style={{ flex:1, padding:'12px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#fff' }}>
+                style={{ flex:1, padding:'12px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.9rem', color:'#0F172A' }}>
                 {t('menuPage.logOutBtn')}
               </button>
             </div>

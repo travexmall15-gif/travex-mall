@@ -60,10 +60,10 @@ export default function UsernamePage() {
       </div>
 
       {/* Card */}
-      <div style={{ width: '100%', maxWidth: 380, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)', }}>
+      <div style={{ width: '100%', maxWidth: 380, background: '#F8FAFC', border: '1px solid #F1F5F9', borderRadius: 22, padding: '1.75rem', backdropFilter: 'blur(12px)', }}>
 
         {/* Google icon */}
-        <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+        <div style={{ width: 52, height: 52, borderRadius: 14, background: '#fff', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
           <svg width="24" height="24" viewBox="0 0 48 48">
             <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/>
             <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
@@ -86,7 +86,7 @@ export default function UsernamePage() {
             onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
             placeholder="e.g. jumanne_m"
             maxLength={20}
-            style={{ width: '100%', boxSizing: 'border-box', padding: '0.82rem 1rem 0.82rem 2.75rem', background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.10)', borderRadius: 14, color: '#fff', fontSize: '0.9rem', fontFamily: "'Inter',sans-serif", outline: 'none', transition: 'border-color 0.2s' }}
+            style={{ width: '100%', boxSizing: 'border-box', padding: '0.82rem 1rem 0.82rem 2.75rem', background: '#fff', border: '1.5px solid #E2E8F0', borderRadius: 14, color: '#fff', fontSize: '0.9rem', fontFamily: "'Inter',sans-serif", outline: 'none', transition: 'border-color 0.2s' }}
             onKeyDown={e => e.key === 'Enter' && save()}
           />
         </div>

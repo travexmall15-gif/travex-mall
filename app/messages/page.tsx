@@ -121,7 +121,7 @@ export default function MessagesPage() {
             {t('messages.title')}
           </h1>
           {unreadCount > 0 && (
-            <span style={{ background:'#EF4444', color:'#fff', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
+            <span style={{ background:'#EF4444', color:'#0F172A', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
               {unreadCount} {t('messages.unread') || 'unread'}
             </span>
           )}
@@ -151,7 +151,7 @@ export default function MessagesPage() {
               To message a seller, visit their store page and use the contact form. Sellers can be reached directly via WhatsApp.
             </p>
             <div style={{ display:'flex', gap:10, justifyContent:'center', flexWrap:'wrap' }}>
-              <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#0D1B3E', color:'#fff', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.82rem', textDecoration:'none' }}>
+              <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#0F172A', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.82rem', textDecoration:'none' }}>
                 <Store size={14} /> {t('messages.startShopping')}
               </Link>
               <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#F8FAFF', color:'#0D1B3E', border:'1.5px solid #E2E8F0', padding:'10px 22px', borderRadius:999, fontWeight:600, fontSize:'0.82rem', textDecoration:'none' }}>
@@ -187,7 +187,7 @@ export default function MessagesPage() {
                   {t('messages.emptyDesc')}
                 </p>
                 {!search && (
-                  <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#0D1B3E', color:'#fff', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', textDecoration:'none' }}>
+                  <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#0F172A', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.85rem', textDecoration:'none' }}>
                     <Store size={14} /> {t('messages.startShopping')}
                   </Link>
                 )}
@@ -204,7 +204,7 @@ export default function MessagesPage() {
                       onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#fff'}>
 
                       {/* Store avatar */}
-                      <div style={{ width:46, height:46, borderRadius:12, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
+                      <div style={{ width:46, height:46, borderRadius:12, background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
                         {convo.store_logo
                           ? <img src={convo.store_logo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} loading="lazy" />
                           : <span style={{ fontSize:'0.85rem', fontWeight:800, color:'#1D4ED8' }}>
@@ -228,7 +228,7 @@ export default function MessagesPage() {
                             {convo.last_message || t('messages.typeMessage')}
                           </span>
                           {convo.unread > 0 && (
-                            <span style={{ background:'#0D1B3E', color:'#fff', fontSize:'0.6rem', fontWeight:800, padding:'2px 7px', borderRadius:999, flexShrink:0 }}>
+                            <span style={{ background:'#fff', color:'#0F172A', fontSize:'0.6rem', fontWeight:800, padding:'2px 7px', borderRadius:999, flexShrink:0 }}>
                               {convo.unread}
                             </span>
                           )}

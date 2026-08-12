@@ -32,7 +32,7 @@
   --color-card: var(--card);
 
   /* ── ShopNekt Brand Colors ── */
-  --color-navy: #0D1B3E;
+  --color-navy: #1D4ED8;
   --color-blue: #1B3A6B;
   --color-gold: #1D4ED8;
   --color-gold-light: #BFDBFE;
@@ -83,7 +83,7 @@
   --ft-sidebar: #0A1128;
 
   /* Brand */
-  --navy: #0D1B3E;
+  --navy: #1D4ED8;
   --blue: #1B3A6B;
   --gold: #1D4ED8;
   --gold-light: #BFDBFE;
@@ -160,7 +160,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Tailwind color aliases ── */
 .text-navy   { color: #0D1B3E; }
-.bg-navy     { background-color: #0D1B3E; }
+.bg-navy     { background-color: #F8FAFC; }
 .text-gold   { color: #1D4ED8; }
 .bg-gold     { background-color: #1D4ED8; }
 .bg-offwhite { background-color: #EEF1F8; }
@@ -181,21 +181,21 @@ header.border-white\/10 {
 
 /* ════ HERO SECTIONS (dark navy) ════ */
 /* The homepage hero already has navy bg, we enhance it */
-section[style*="background:'#0D1B3E'"],
-section[style*='background:"#0D1B3E"'],
-section[style*="background: '#0D1B3E'"],
+section[style*="background:'#1D4ED8'"],
+section[style*='background:"#1D4ED8"'],
+section[style*="background: '#1D4ED8'"],
 section[style*='background: "#0D1B3E"'],
-section[style*="background:#0D1B3E"],
-section[style*='background: #0D1B3E'],
+section[style*="background:#1D4ED8"],
+section[style*='background: #F8FAFC'],
 section[style*="background:'#070D22'"],
 section[style*='background:"#070D22"'],
 section[style*="background:#070D22"] {
   position: relative;
   overflow: hidden;
 }
-section[style*="background:#0D1B3E"]::after,
+section[style*="background:#1D4ED8"]::after,
 section[style*="background:#070D22"]::after,
-section[style*="background:'#0D1B3E'"]::after,
+section[style*="background:'#1D4ED8'"]::after,
 section[style*="background:'#070D22'"]::after {
   content: "";
   position: absolute;
@@ -267,14 +267,14 @@ a[style*="background:#1D4ED8"]:hover {
   box-shadow: 0 12px 28px rgba(29,78,216,0.40) !important;
 }
 /* Navy buttons */
-a[style*="background:'#0D1B3E'"],
+a[style*="background:'#1D4ED8'"],
 a[style*='background:"#0D1B3E"'],
 a[style*="background:#0D1B3E"] {
   border-radius: 999px !important;
   box-shadow: 0 8px 20px rgba(13,27,62,0.28) !important;
   transition: transform 0.15s, box-shadow 0.2s !important;
 }
-a[style*="background:'#0D1B3E'"]:hover,
+a[style*="background:'#1D4ED8'"]:hover,
 a[style*="background:#0D1B3E"]:hover {
   transform: translateY(-1px) !important;
   box-shadow: 0 12px 26px rgba(13,27,62,0.35) !important;

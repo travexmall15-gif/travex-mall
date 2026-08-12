@@ -29,7 +29,7 @@ type SavedShop = {
 
 const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
   <button onClick={onToggle}
-    style={{ width:46, height:26, borderRadius:999, background: on?'#0D1B3E':'#E2E8F0', border:'none', cursor:'pointer', position:'relative', transition:'all .25s', flexShrink:0 }}>
+    style={{ width:46, height:26, borderRadius:999, background: on?'#1D4ED8':'#E2E8F0', border:'none', cursor:'pointer', position:'relative', transition:'all .25s', flexShrink:0 }}>
     <div style={{ width:20, height:20, borderRadius:'50%', background: on?'#1D4ED8':'#fff', position:'absolute', top:3, left: on?23:3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
   </button>
 )
@@ -99,7 +99,7 @@ export default function ShoppingPage() {
             <ArrowLeft size={15} /> {t('common.back')}
           </button>
           <button onClick={savePrefs}
-            style={{ display:'flex', alignItems:'center', gap:6, background: saved?'#059669':'#0D1B3E', color:'#fff', border:'none', borderRadius:999, padding:'8px 18px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
+            style={{ display:'flex', alignItems:'center', gap:6, background: saved?'#059669':'#0D1B3E', color:'#0F172A', border:'none', borderRadius:999, padding:'8px 18px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
             {saved ? <><Check size={13}/> {t('profile.saved')}</> : <><Save size={13}/> {t('common.save')}</>}
           </button>
         </div>
@@ -108,13 +108,13 @@ export default function ShoppingPage() {
 
         {/* ── Orders Button ─────────────────────────── */}
         <button onClick={() => router.push('/orders')}
-          style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'16px 18px', background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', borderRadius:16, border:'none', cursor:'pointer', marginBottom:'1.1rem', fontFamily:"'Inter',sans-serif", textAlign:'left' }}>
-          <div style={{ width:44, height:44, borderRadius:12, background:'rgba(255,255,255,0.12)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'16px 18px', background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', borderRadius:16, border:'none', cursor:'pointer', marginBottom:'1.1rem', fontFamily:"'Inter',sans-serif", textAlign:'left' }}>
+          <div style={{ width:44, height:44, borderRadius:12, background:'#EFF6FF', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
             <Package size={22} color="#1D4ED8" />
           </div>
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:'1rem', fontWeight:800, color:'#fff' }}>{t('shopping.myOrders')}</div>
-            <div style={{ fontSize:'0.72rem', color:'rgba(255,255,255,0.5)', marginTop:2 }}>
+            <div style={{ fontSize:'1rem', fontWeight:800, color:'#0F172A' }}>{t('shopping.myOrders')}</div>
+            <div style={{ fontSize:'0.72rem', color:'#94A3B8', marginTop:2 }}>
               {orderCount.total > 0
                 ? `${orderCount.total} ${t('shopping.ordersTotal')} · ${orderCount.pending} ${t('shopping.ordersPending')}`
                 : t('shopping.orders')}
@@ -148,7 +148,7 @@ export default function ShoppingPage() {
               <div style={{ fontSize:'0.74rem', color:'#94A3B8', lineHeight:1.5, marginBottom:14 }}>
                 {t('shopping.noSavedShopsDesc')}
               </div>
-              <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#0D1B3E', color:'#fff', padding:'8px 18px', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none' }}>
+              <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#0F172A', padding:'8px 18px', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none' }}>
                 <Store size={13} /> Browse Market
               </Link>
             </div>
@@ -161,7 +161,7 @@ export default function ShoppingPage() {
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.borderColor='#E2E8F0'}>
                   
                   {/* Shop avatar */}
-                  <div style={{ width:44, height:44, borderRadius:12, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <div style={{ width:44, height:44, borderRadius:12, background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                     <Store size={18} color="#1D4ED8" />
                   </div>
 
@@ -183,7 +183,7 @@ export default function ShoppingPage() {
                   {/* Actions */}
                   <div style={{ display:'flex', gap:6, flexShrink:0 }}>
                     <Link href={`/store/${shop.id}`}
-                      style={{ display:'flex', alignItems:'center', gap:4, padding:'6px 12px', background:'#0D1B3E', color:'#fff', borderRadius:8, textDecoration:'none', fontSize:'0.72rem', fontWeight:700 }}>
+                      style={{ display:'flex', alignItems:'center', gap:4, padding:'6px 12px', background:'#fff', color:'#0F172A', borderRadius:8, textDecoration:'none', fontSize:'0.72rem', fontWeight:700 }}>
                       <ExternalLink size={11} /> {t('shopping.visitShop')}
                     </Link>
                     <button onClick={() => removeShop(shop.id)}
@@ -222,7 +222,7 @@ export default function ShoppingPage() {
               const sel = categories.includes(cat)
               return (
                 <button key={cat} onClick={() => toggleCat(cat)}
-                  style={{ padding:'7px 14px', borderRadius:999, border:`1.5px solid ${sel?'#0D1B3E':'#E2E8F0'}`, background: sel?'#0D1B3E':'#fff', color: sel?'#1D4ED8':'#64748B', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
+                  style={{ padding:'7px 14px', borderRadius:999, border:`1.5px solid ${sel?'#1D4ED8':'#E2E8F0'}`, background: sel?'#1D4ED8':'#fff', color: sel?'#1D4ED8':'#64748B', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
                   {sel && <Check size={11}/>} {cat}
                 </button>
               )

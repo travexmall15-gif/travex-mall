@@ -150,7 +150,7 @@ export default function HomePage() {
                 <Link href="/market" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#0F172A',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(15,23,42,0.22)' }}>
                   <Store size={14} /> {t('home.browseMarket')}
                 </Link>
-                <Link href="/login" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#1D4ED8',color:'#0F172A',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(29,78,216,0.28)' }}>
+                <Link href="/login" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#1D4ED8',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(29,78,216,0.28)' }}>
                   {t('nav.login')} <ArrowRight size={13} />
                 </Link>
               </div>
@@ -181,7 +181,7 @@ export default function HomePage() {
                 <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none' }}>
                   {t('home.exploreVybe')}
                 </Link>
-                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'rgba(255,255,255,0.07)',color:'#fff',border:'1px solid rgba(255,255,255,0.12)',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:600,fontSize:'0.82rem',textDecoration:'none' }}>
+                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'rgba(255,255,255,0.07)',color:'#fff',border:'1px solid #E2E8F0',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:600,fontSize:'0.82rem',textDecoration:'none' }}>
                   {t('home.postVybe')} <ArrowRight size={13} />
                 </Link>
               </div>

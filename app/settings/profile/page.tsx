@@ -74,9 +74,9 @@ export default function ProfilePage() {
 
         {/* Avatar */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg,#F97316,#EF4444)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', fontSize: '1.75rem', fontWeight: 900, color: '#fff', position: 'relative' }}>
+          <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg,#F97316,#EF4444)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', fontSize: '1.75rem', fontWeight: 900, color: '#0F172A', position: 'relative' }}>
             {name ? name.slice(0,2).toUpperCase() : '?'}
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 26, height: 26, background: '#0D1B3E', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff', cursor: 'pointer' }}>
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 26, height: 26, background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff', cursor: 'pointer' }}>
               <Camera size={12} color="#fff" />
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function ProfilePage() {
         </div>
 
         <button onClick={save} disabled={loading}
-          style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : '#0D1B3E', color: '#fff', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
+          style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : '#0D1B3E', color: '#0F172A', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
            : saved   ? <><Check size={15} /> {t('profile.saved')}</>
            : 'Save Changes'}

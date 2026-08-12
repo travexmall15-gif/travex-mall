@@ -232,7 +232,7 @@ export default function StorePage({
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
         <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
         <p style={{ color: '#94A3B8', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
-        <Link href="/market" style={{ background: '#1D4ED8', color: '#0F172A', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
+        <Link href="/market" style={{ background: '#1D4ED8', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
         </Link>
       </div>
@@ -265,7 +265,7 @@ export default function StorePage({
       `}</style>
 
       {/* ── HERO — compact ── */}
-      <div style={{ background: '#0D1B3E', paddingTop: 64, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ background: '#fff', paddingTop: 64, borderBottom: '1px solid #F1F5F9' }}>
         {/* Banner */}
         {store.shop_banner && (
           <div style={{ height: 120, overflow: 'hidden', position: 'relative' }}>
@@ -276,7 +276,7 @@ export default function StorePage({
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: store.shop_banner ? '0 5% 1.25rem' : '1.25rem 5%' }}>
           {/* Back link */}
           <div style={{ marginBottom: '1rem', marginTop: store.shop_banner ? '-18px' : 0 }}>
-            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(8px)' }}>
+            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 999, border: '1px solid #E2E8F0', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(8px)' }}>
               <ArrowLeft size={12} /> Market
             </Link>
           </div>
@@ -317,7 +317,7 @@ export default function StorePage({
               <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                 <button
                   onClick={() => setShowMsg(true)}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#F1F5F9', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                   onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
                   <MessageCircle size={13} /> {t('store.messageSeller')}
@@ -494,8 +494,8 @@ export default function StorePage({
                     </a>
                   )}
                   <button onClick={() => setCartItem(null)}
-                    style={{ padding: '10px 20px', borderRadius: 999, background: 'rgba(255,255,255,0.08)',
-                      color: '#fff', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer',
+                    style={{ padding: '10px 20px', borderRadius: 999, background: '#F1F5F9',
+                      color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer',
                       fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                     Continue Shopping
                   </button>
@@ -507,15 +507,15 @@ export default function StorePage({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
                   <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
                   <button onClick={() => setCartItem(null)}
-                    style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.55)',
+                    style={{ width: 32, height: 32, borderRadius: '50%', background: '#F1F5F9',
+                      border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)',
                       cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
                   </button>
                 </div>
 
                 {/* Product summary */}
-                <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
+                <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #F1F5F9',
                   borderRadius: 12, padding: '1rem', marginBottom: '1.25rem',
                   display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                   <div style={{ width: 44, height: 44, borderRadius: 10, background: `${accentColor}22`,
@@ -698,7 +698,7 @@ export default function StorePage({
                   The seller will respond to you shortly.
                 </p>
                 <button onClick={() => { setShowMsg(false); setMsgSent(false); setMsgText(''); setMsgName('') }}
-                  style={{ padding: '10px 24px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                  style={{ padding: '10px 24px', borderRadius: 999, background: '#F1F5F9', color: '#fff', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
                   Close
                 </button>
               </div>
@@ -708,7 +708,7 @@ export default function StorePage({
                   <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', color: '#fff', fontWeight: 800 }}>
                     Message {store.shop_name}
                   </h3>
-                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#F1F5F9', border: '1px solid #E2E8F0', color: 'rgba(255,255,255,0.55)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <X size={16} />
                   </button>
                 </div>

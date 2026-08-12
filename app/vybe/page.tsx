@@ -158,7 +158,7 @@ export default function VybePage() {
 
         .visit-btn {
           display:inline-flex; align-items:center; gap:6px;
-          background: linear-gradient(135deg, #0D1B3E, #1B3A8A);
+          background: linear-gradient(135deg, #EFF6FF, #1B3A8A);
           border: 1px solid rgba(29,78,216,.30);
           color: #1D4ED8;
           border-radius: 999px;
@@ -249,7 +249,7 @@ export default function VybePage() {
           </div>
 
           {/* Brand — NEVER translated */}
-          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#fff',
+          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#0F172A',
             lineHeight:1.1, marginBottom:'0.6rem', letterSpacing:'-0.03em' }}>
             Social Vybe
           </h1>
@@ -328,7 +328,7 @@ export default function VybePage() {
               <RefreshCw size={22} color="#EF4444" />
             </div>
             <p style={{ color:'rgba(255,255,255,0.40)', fontSize:14, marginBottom:16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#0F172A', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
           </div>
@@ -344,7 +344,7 @@ export default function VybePage() {
               {search ? t('vybe.noResults') : t('vybe.noPosts')}
             </p>
             {search && (
-              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.6)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
+              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'#fff', border:'1px solid rgba(255,255,255,0.1)', color:'#64748B', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
                 {t('vybe.allPosts')}
               </button>
             )}
@@ -364,7 +364,7 @@ export default function VybePage() {
             {visible < filtered.length && (
               <div style={{ textAlign:'center', marginTop:'1.5rem' }}>
                 <button onClick={() => setVisible(v => v + 12)}
-                  style={{ padding:'11px 32px', background:'rgba(255,255,255,0.06)', border:'1.5px solid rgba(255,255,255,0.12)', color:'rgba(255,255,255,0.65)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
+                  style={{ padding:'11px 32px', background:'#fff', border:'1.5px solid #E2E8F0', color:'rgba(255,255,255,0.65)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
                   onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(29,78,216,.4)'; (e.currentTarget as HTMLElement).style.color='#1D4ED8' }}
                   onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color='rgba(255,255,255,0.65)' }}>
                   {t('vybe.loadMore')} · {filtered.length - visible} {t('vybe.totalPosts').toLowerCase()}
@@ -404,7 +404,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
 
         {/* Logo */}
         <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
-          background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)',
+          background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
           border:'1.5px solid rgba(29,78,216,0.2)',
           display:'flex', alignItems:'center', justifyContent:'center' }}>
           {post.shop_logo ? (
@@ -417,7 +417,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
         {/* Name + meta */}
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
-            <span style={{ fontSize:14, fontWeight:700, color:'#fff', letterSpacing:'-0.01em' }}>
+            <span style={{ fontSize:14, fontWeight:700, color:'#0F172A', letterSpacing:'-0.01em' }}>
               {post.shop_name || t('vybe.seller')}
             </span>
             {/* Verified badge */}

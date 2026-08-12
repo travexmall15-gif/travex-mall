@@ -121,7 +121,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4, color: '#64748B' }}>
           <ArrowLeft size={20} />
         </button>
-        <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Store size={16} color="#1D4ED8" />
         </div>
         <div>

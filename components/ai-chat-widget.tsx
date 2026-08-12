@@ -55,12 +55,12 @@ export function AIChatWidget({
       {/* Floating button */}
       {!open && (
         <button onClick={() => setOpen(true)}
-          style={{ position:'fixed', bottom:80, right:16, width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', boxShadow:'0 6px 20px rgba(13,27,62,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', zIndex:200, transition:'transform .2s' }}
+          style={{ position:'fixed', bottom:80, right:16, width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', boxShadow:'0 6px 20px rgba(13,27,62,0.4)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', zIndex:200, transition:'transform .2s' }}
           onMouseOver={e => (e.currentTarget as HTMLElement).style.transform='scale(1.1)'}
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.transform='scale(1)'}>
           <Sparkles size={22} color="#1D4ED8" />
           <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#F97316', borderRadius:'50%', border:'2.5px solid #fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <span style={{ fontSize:'7px', fontWeight:900, color:'#fff' }}>AI</span>
+            <span style={{ fontSize:'7px', fontWeight:900, color:'#0F172A' }}>AI</span>
           </div>
         </button>
       )}
@@ -70,13 +70,13 @@ export function AIChatWidget({
         <div style={{ position:'fixed', bottom:70, right:12, width:'min(340px,92vw)', height:'min(480px,75vh)', background:'#fff', borderRadius:20, boxShadow:'0 16px 48px rgba(13,27,62,0.22)', display:'flex', flexDirection:'column', zIndex:300, overflow:'hidden', border:'1.5px solid #E2E8F0' }}>
 
           {/* Header */}
-          <div style={{ background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', padding:'12px 14px', display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
-            <div style={{ width:34, height:34, borderRadius:10, background:'rgba(255,255,255,0.12)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <div style={{ background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', padding:'12px 14px', display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
+            <div style={{ width:34, height:34, borderRadius:10, background:'#EFF6FF', display:'flex', alignItems:'center', justifyContent:'center' }}>
               <Sparkles size={17} color="#1D4ED8" />
             </div>
             <div style={{ flex:1 }}>
-              <div style={{ fontSize:'0.82rem', fontWeight:800, color:'#fff' }}>360 AI</div>
-              <div style={{ fontSize:'0.62rem', color:'rgba(255,255,255,0.5)' }}>Customer Care · {shopName}</div>
+              <div style={{ fontSize:'0.82rem', fontWeight:800, color:'#0F172A' }}>360 AI</div>
+              <div style={{ fontSize:'0.62rem', color:'#94A3B8' }}>Customer Care · {shopName}</div>
             </div>
             <button onClick={() => setOpen(false)}
               style={{ background:'rgba(255,255,255,0.1)', border:'none', borderRadius:'50%', width:28, height:28, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -89,7 +89,7 @@ export function AIChatWidget({
             {msgs.map((m, i) => (
               <div key={i} style={{ display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
                 {m.role === 'bot' && (
-                  <div style={{ width:26, height:26, borderRadius:8, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginRight:6, marginTop:2 }}>
+                  <div style={{ width:26, height:26, borderRadius:8, background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginRight:6, marginTop:2 }}>
                     <Sparkles size={12} color="#1D4ED8" />
                   </div>
                 )}
@@ -100,7 +100,7 @@ export function AIChatWidget({
             ))}
             {loading && (
               <div style={{ display:'flex', gap:6, alignItems:'center' }}>
-                <div style={{ width:26, height:26, borderRadius:8, background:'linear-gradient(135deg,#0D1B3E,#1B3A8A)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div style={{ width:26, height:26, borderRadius:8, background:'linear-gradient(135deg,#EFF6FF,#DBEAFE)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <Sparkles size={12} color="#1D4ED8" />
                 </div>
                 <div style={{ background:'#fff', border:'1px solid #E2E8F0', borderRadius:'3px 14px 14px 14px', padding:'8px 12px', display:'flex', gap:4 }}>

@@ -252,34 +252,32 @@ function ShopCard({ shop, accentColor }: { shop: Shop; accentColor: string }) {
           cursor: 'pointer',
         }}>
 
-        {/* Header */}
-        <div style={{ background: `linear-gradient(135deg,${color}40 0%,${color}90 60%,#050B2E 100%)`, padding: '13px 13px 10px', position: 'relative' }}>
-          <div style={{ display: 'flex', gap: 5, marginBottom: 8 }}>
-            {isPremium && (
-              <span style={{ background: 'linear-gradient(135deg,#1D4ED8,#2563EB)', color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 10px', borderRadius: 999, letterSpacing: '0.06em' }}>
-                ★ PREMIUM
-              </span>
-            )}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 11, background: 'rgba(255,255,255,0.16)', border: '2px solid rgba(255,255,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 900, color: '#fff', flexShrink: 0 }}>
+        {/* Header — light design */}
+        <div style={{ background: '#fff', padding: '14px 14px 10px', position: 'relative', borderBottom: '1px solid #F1F5F9' }}>
+          {isPremium && (
+            <span style={{ position: 'absolute', top: 10, right: 10, background: 'linear-gradient(135deg,#1D4ED8,#2563EB)', color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 9px', borderRadius: 999, letterSpacing: '0.06em' }}>
+              ★ PREMIUM
+            </span>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 42, height: 42, borderRadius: 12, background: `${color}18`, border: `1.5px solid ${color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: color, flexShrink: 0, overflow: 'hidden' }}>
               {shop.shop_logo
-                ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 9 }} loading="lazy" />
+                ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                 : init}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: nameFont, fontWeight: 800, fontSize: 14, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontFamily: nameFont, fontWeight: 800, fontSize: 14, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {shop.shop_name}
               </div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.50)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <MapPin size={8} /> {shop.shop_region}
+              <div style={{ fontSize: 10, color: '#94A3B8', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <MapPin size={8} color="#1D4ED8" /> {shop.shop_region}
                 {shop.shop_category && <> · {shop.shop_category}</>}
               </div>
             </div>
             <button onClick={toggleSave}
-              style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.22)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              style={{ width: 28, height: 28, borderRadius: '50%', background: '#F8FAFC', border: '1.5px solid #E2E8F0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               title={saved ? 'Unsave' : 'Save store'}>
-              <Heart size={12} fill={saved ? '#FF4D6D' : 'none'} color={saved ? '#FF4D6D' : '#fff'} />
+              <Heart size={12} fill={saved ? '#FF4D6D' : 'none'} color={saved ? '#FF4D6D' : '#94A3B8'} />
             </button>
           </div>
         </div>

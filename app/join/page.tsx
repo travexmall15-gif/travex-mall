@@ -10,18 +10,18 @@ export default function JoinPage() {
     <main style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", background: '#f8f9fc', minHeight: '100vh', color: '#0D1B3E' }}>
 
       {/*  HEADER  */}
-      <header style={{ background: '#0D1B3E', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+      <header style={{ background: '#fff', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/icon-192.png" alt="ShopNekt" width={36} height={36} style={{ borderRadius: 8 }}  loading="lazy" />
           <span style={{ color: '#1D4ED8', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>SHOPNEKT</span>
         </div>
-        <Link href="/" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 999 }}>
+        <Link href="/" style={{ color: '#64748B', fontSize: '0.8rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 999 }}>
          {t('join.browseMarket')} 
         </Link>
       </header>
 
       {/*  HERO  */}
-      <section style={{ background: 'linear-gradient(135deg, #0D1B3E 0%, #1B3A8A 100%)', padding: 'clamp(3rem,8vw,5rem) 1.5rem', textAlign: 'center', color: '#fff' }}>
+      <section style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #1B3A8A 100%)', padding: 'clamp(3rem,8vw,5rem) 1.5rem', textAlign: 'center', color: '#0F172A' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(29,78,216,0.15)', border: '1px solid rgba(29,78,216,0.4)', borderRadius: 999, padding: '6px 16px', fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
            {t('join.digitalBadge')} 
         </div>
@@ -29,14 +29,14 @@ export default function JoinPage() {
           {t('join.heroTitle1')}<br />
           <span style={{ color: '#1D4ED8' }}>ShopNekt</span>
         </h1>
-        <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', color: 'rgba(255,255,255,0.7)', maxWidth: 520, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
+        <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', color: '#64748B', maxWidth: 520, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
           {t('join.heroSubtitle')}
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/open-store" style={{ background: '#1D4ED8', color: '#0D1B3E', fontWeight: 800, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
              {t('join.openStoreNow')}
           </Link>
-          <Link href="/" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', fontWeight: 700, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', border: '1px solid rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <Link href="/" style={{ background: 'rgba(255,255,255,0.1)', color: '#0F172A', fontWeight: 700, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', border: '1px solid rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
              {t('join.browseMarket')}
           </Link>
         </div>
@@ -69,7 +69,7 @@ export default function JoinPage() {
           ].map(s => (
             <div key={s.n} style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', border: '1px solid #E8ECF4', boxShadow: '0 2px 12px rgba(13,27,62,0.04)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem' }}>
-                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#0D1B3E', color: '#1D4ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.8rem', flexShrink: 0 }}>{s.n}</div>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', color: '#1D4ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.8rem', flexShrink: 0 }}>{s.n}</div>
                 <span style={{ fontSize: '1.3rem' }}>{s.icon}</span>
                 <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#0D1B3E' }}>{s.t}</span>
               </div>
@@ -80,23 +80,23 @@ export default function JoinPage() {
       </section>
 
       {/*  {t('join.marketsLabel')} MAWILI  */}
-      <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', background: '#0D1B3E' }}>
+      <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', background: '#fff' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: '#1D4ED8', marginBottom: 8 }}>{t('join.marketsLabel')}</div>
-            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: '#fff' }}>{t('join.chooseMarket')}</h2>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: '#0F172A' }}>{t('join.chooseMarket')}</h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
             {/* Business Market */}
             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(29,78,216,0.3)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: '#1D4ED8', marginBottom: 12 }}> BIASHARA MARKET</div>
-              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
               <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div style={{ fontWeight: 800, color: '#fff', marginBottom: 4 }}>{t('join.basicPlanLabel')}</div>
+                <div style={{ background: '#F1F5F9', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <div style={{ fontWeight: 800, color: '#0F172A', marginBottom: 4 }}>{t('join.basicPlanLabel')}</div>
                   <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 25,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.4)' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {['Duka lako mtandaoni', 'Bidhaa bila kikomo', 'Ushauri wa AI', 'WhatsApp integration'].map(f => (
@@ -112,7 +112,7 @@ export default function JoinPage() {
                   <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.4)' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {['Kila kitu cha Basic', 'Duka linaonekana kwanza', 'Flash Deals &Group Buy', 'AI Marketing Manager', 'Ripoti za biashara'].map(f => (
-                      <li key={f} style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', display: 'flex', gap: 6 }}>
+                      <li key={f} style={{ fontSize: '0.78rem', color: '#64748B', display: 'flex', gap: 6 }}>
                         <span style={{ color: '#1D4ED8' }}></span> {f}
                       </li>
                     ))}
@@ -156,7 +156,7 @@ export default function JoinPage() {
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
           <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.5rem' }}>Una Duka Tayari?</h2>
           <p style={{ fontSize: '0.88rem', color: '#64748B', marginBottom: '1.5rem' }}>Ingia kwenye dashboard yako na namba ya simu na password uliyopewa.</p>
-          <Link href="/login" style={{ display: 'inline-block', background: '#0D1B3E', color: '#fff', fontWeight: 800, padding: '0.875rem 2.5rem', borderRadius: 14, textDecoration: 'none', fontSize: '0.95rem' }}>
+          <Link href="/login" style={{ display: 'inline-block', background: '#fff', color: '#0F172A', fontWeight: 800, padding: '0.875rem 2.5rem', borderRadius: 14, textDecoration: 'none', fontSize: '0.95rem' }}>
              Ingia Dashboard 
           </Link>
         </div>
