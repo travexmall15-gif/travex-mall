@@ -10,10 +10,10 @@ import { ArrowLeft, Package, Store, Loader2, AlertCircle } from 'lucide-react'
 
 const STATUS_STYLE: Record<string, { bg:string; color:string; label:string; desc:string }> = {
   pending:          { bg:'#FEF3C7', color:'#92400E', label:'Pending',          desc:'Waiting for seller to confirm' },
-  confirmed:        { bg:'#DCFCE7', color:'#059669', label:'Confirmed',        desc:'Seller confirmed — preparing' },
-  rejected:         { bg:'#FEE2E2', color:'#DC2626', label:'Rejected',         desc:'Seller rejected — proceed with payment to reorder' },
-  payment_pending:  { bg:'#EFF6FF', color:'#1D4ED8', label:'Payment Pending',  desc:'Payment submitted, awaiting confirmation' },
-  delivered:        { bg:'#F0FDF4', color:'#059669', label:'Delivered',        desc:'Order delivered successfully' },
+  confirmed:        { bg:'#059669', color:'#fff', label:'Confirmed',        desc:'Seller confirmed — preparing' },
+  rejected:         { bg:'#DC2626', color:'#fff', label:'Rejected',         desc:'Seller rejected — proceed with payment to reorder' },
+  payment_pending:  { bg:'#1D4ED8', color:'#fff', label:'Payment Pending',  desc:'Payment submitted, awaiting confirmation' },
+  delivered:        { bg:'#059669', color:'#fff', label:'Delivered',        desc:'Order delivered successfully' },
 }
 
 export default function OrderDetailPage({params }: { params: Promise<{ id: string }> }) {

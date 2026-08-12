@@ -22,8 +22,8 @@ type OrderFilter = 'all' | 'pending' | 'confirmed' | 'rejected'
 
 const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
   pending:   { bg:'#FEF3C7', color:'#92400E', label:'Pending'   },
-  confirmed: { bg:'#DCFCE7', color:'#059669', label:'Confirmed' },
-  rejected:  { bg:'#FEE2E2', color:'#DC2626', label:'Rejected'  },
+  confirmed: { bg:'#059669', color:'#fff', label:'Confirmed' },
+  rejected:  { bg:'#DC2626', color:'#fff', label:'Rejected' },
 }
 
 export default function OrdersPage() {

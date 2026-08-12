@@ -99,7 +99,7 @@ export default function ShoppingPage() {
             <ArrowLeft size={15} /> {t('common.back')}
           </button>
           <button onClick={savePrefs}
-            style={{ display:'flex', alignItems:'center', gap:6, background: saved?'#059669':'#0D1B3E', color:'#111827', border:'none', borderRadius:999, padding:'8px 18px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
+            style={{ display:'flex', alignItems:'center', gap:6, background: saved?'#059669':'#1D4ED8', color:'#111827', border:'none', borderRadius:999, padding:'8px 18px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
             {saved ? <><Check size={13}/> {t('profile.saved')}</> : <><Save size={13}/> {t('common.save')}</>}
           </button>
         </div>
