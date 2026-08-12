@@ -187,7 +187,7 @@ export function SiteNav() {
                 </button>
               ))}
               <div style={{ padding:'8px 14px', borderTop:'1px solid #F1F5F9' }}>
-                <button onClick={() => { router.push(`/market?q=${encodeURIComponent(query)}`); setSearchOpen(false) }}
+                <button onClick={() => { router.push(`/market`); setSearchOpen(false) }}
                   style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'#2563EB', fontWeight:600, textAlign:'left', fontFamily:"'Inter',sans-serif" }}>
                   {t('nav.searchAll')} "{query}" →
                 </button>

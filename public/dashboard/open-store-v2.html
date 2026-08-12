@@ -563,9 +563,25 @@ function validateFile(file){
 async function uploadFile(file, folder){
   const ext = file.name.split('.').pop().toLowerCase() || 'jpg'
   const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-  const {error} = await sb.storage.from(BUCKET).upload(path, file, {cacheControl:'3600',upsert:false})
-  if(error) throw new Error(error.message)
-  return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+  
+  // Try Supabase Storage first
+  try {
+    const {error} = await sb.storage.from(BUCKET).upload(path, file, {cacheControl:'3600', upsert:true})
+    if(!error) {
+      return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+    }
+    console.warn('Storage upload error:', error.message, '— using base64 fallback')
+  } catch(e) {
+    console.warn('Storage unavailable:', e.message, '— using base64 fallback')
+  }
+  
+  // Fallback: base64 data URL (stored directly in DB)
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = e => resolve(e.target.result)
+    reader.onerror = () => reject(new Error('Failed to read file'))
+    reader.readAsDataURL(file)
+  })
 }
 
 async function handleLogoUpload(input){

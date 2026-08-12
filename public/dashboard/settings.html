@@ -22,6 +22,16 @@
       <div class="table-card">
         <div class="table-card-header"><div class="table-card-title"><i class="ti ti-store"></i> Shop Information</div></div>
         <div class="table-card-body">
+          <div class="form-group" style="text-align:center;margin-bottom:16px">
+            <label class="form-label" style="text-align:left;display:block">Shop Logo</label>
+            <img id="sLogoPreview" src="" style="display:none;width:80px;height:80px;object-fit:cover;border-radius:14px;border:2px solid #E2E8F0;margin-bottom:8px"/>
+            <br/>
+            <label style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1D4ED8;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer">
+              📷 Change Logo
+              <input type="file" accept="image/*" style="display:none" onchange="handleSettingsLogoUpload(this)"/>
+            </label>
+            <div style="font-size:0.7rem;color:#94A3B8;margin-top:4px">Square image, min 200×200px</div>
+          </div>
           <div class="form-group"><label class="form-label">Shop Name</label><input class="form-input" id="sShopName"></div>
           <div class="form-group"><label class="form-label">Category</label><input class="form-input" id="sCategory"></div>
           <div class="form-group"><label class="form-label">Region</label><input class="form-input" id="sRegion"></div>
@@ -195,6 +205,37 @@ let shopData = null;
   showLoading(false);
 })();
 
+
+const BUCKET = 'shop-assets'
+async function handleSettingsLogoUpload(input) {
+  const file = input.files[0]; if(!file) return
+  if(file.size > 2*1024*1024) { showToast('Logo must be under 2 MB','error'); return }
+  showToast('Uploading logo...','info')
+  try {
+    const ext  = file.name.split('.').pop().toLowerCase()||'jpg'
+    const path = `logos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+    let url = ''
+    try {
+      const {error} = await sb.storage.from(BUCKET).upload(path, file, {cacheControl:'3600',upsert:true})
+      if(!error) url = sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+    } catch(e) {}
+    if(!url) {
+      url = await new Promise((res,rej) => {
+        const r = new FileReader()
+        r.onload = e => res(e.target.result)
+        r.onerror = () => rej(new Error('Read failed'))
+        r.readAsDataURL(file)
+      })
+    }
+    window._newLogoUrl = url
+    const prev = document.getElementById('sLogoPreview')
+    if(prev) { prev.src = url; prev.style.display = 'block' }
+    showToast('Logo ready — click Save to apply','success')
+  } catch(e) {
+    showToast('Upload failed: '+e.message,'error')
+  }
+}
+
 async function saveShop() {
   const session = JSON.parse(localStorage.getItem('travex_session')||'{}');
   const isCampus = session.market === 'campus';
@@ -209,12 +250,14 @@ async function saveShop() {
     };
     ({ error } = await sb.from('campus_stores').update(updates).eq('id', shopData?.id));
   } else {
+    var newLogoUrl = window._newLogoUrl || null
     const updates = {
       shop_name:     document.getElementById('sShopName').value,
       shop_category: document.getElementById('sCategory').value,
       shop_region:   document.getElementById('sRegion').value,
       shop_whatsapp: document.getElementById('sWhatsapp').value,
       shop_desc:     document.getElementById('sDesc').value,
+      ...(newLogoUrl ? {shop_logo: newLogoUrl} : {}),
     };
     ({ error } = await sb.from('pending_payments').update(updates).eq('id', shopData?.id));
   }
