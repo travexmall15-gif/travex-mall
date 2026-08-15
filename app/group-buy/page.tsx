@@ -92,7 +92,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
       {/* Top banner */}
       <div style={{
         padding: featured ? '1rem 1.25rem' : '0.75rem 1rem',
-        background: featured ? 'rgba(255,255,255,0.05)' : 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
+        background: featured ? '#F3F4F6' : 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
@@ -202,7 +202,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 : t('groupBuy.moreNeeded', { count: String(remaining) })}
             </div>
           </div>
-          <div style={{ height: 7, background: featured ? 'rgba(255,255,255,0.08)' : '#F3F4F6', borderRadius: 999, overflow: 'hidden' }}>
+          <div style={{ height: 7, background: featured ? '#E5E7EB' : '#F3F4F6', borderRadius: 999, overflow: 'hidden' }}>
             <div style={{
               height: '100%', width: `${pct}%`,
               background: isReady
@@ -227,7 +227,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               flex: 1,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               background: isExpired
-                ? (featured ? 'rgba(255,255,255,0.06)' : '#F3F4F6')
+                ? (featured ? '#F3F4F6' : '#F3F4F6')
                 : isReady
                   ? 'linear-gradient(135deg,#059669,#10B981)'
                   : featured
@@ -253,7 +253,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '0.65rem 0.75rem',
-                background: featured ? 'rgba(255,255,255,0.08)' : '#F8FAFF',
+                background: featured ? '#E5E7EB' : '#F8FAFF',
                 border: featured ? '1px solid rgba(255,255,255,0.12)' : '1.5px solid #E2E8F0',
                 borderRadius: 10, color: featured ? '#6B7280' : '#64748B',
                 textDecoration: 'none', transition: 'all .2s', flexShrink: 0,
@@ -359,7 +359,7 @@ export default function GroupBuyPage() {
             <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
           </Link>
         </div>
-        <div style={{ overflow:'hidden', borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ overflow:'hidden', borderTop:'1px solid #F3F4F6' }}>
           <div style={{ padding:'8px 0' }}>
             <div className="gb-chips" style={{ display:'flex', gap:8, width:'max-content', paddingLeft:24 }}>
               {[...CHIPS,...CHIPS].map((c,i) => (

@@ -15,7 +15,7 @@ export default function Loading() {
       `}</style>
 
       {/* Sell chip skeleton */}
-      <div style={{background:'#fff',padding:'1.2rem 5%',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+      <div style={{background:'#fff',padding:'1.2rem 5%',borderBottom:'1px solid #F3F4F6'}}>
         <div style={{maxWidth:'1100px',margin:'0 auto'}}>
           <div className="sk" style={{height:50,borderRadius:14,opacity:.3}}/>
         </div>

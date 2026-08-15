@@ -15,7 +15,7 @@ export function LangToggle() {
         letterSpacing: '0.04em',
       }}
       onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.14)'}
-      onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'}
+      onMouseOut={e => (e.currentTarget as HTMLElement).style.background = '#E5E7EB'}
       title={lang === 'en' ? 'Switch to Kiswahili' : 'Switch to English'}
     >
       <span style={{ fontSize: '0.85rem' }}>{lang === 'en' ? '🇹🇿' : '🇬🇧'}</span>

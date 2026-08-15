@@ -89,7 +89,7 @@ export default function JoinPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
             {/* Business Market */}
-            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(29,78,216,0.3)' }}>
+            <div style={{ background: '#F3F4F6', borderRadius: 20, padding: '2rem', border: '1px solid rgba(29,78,216,0.3)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: '#1D4ED8', marginBottom: 12 }}> BIASHARA MARKET</div>
               <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: '#111827', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
               <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>

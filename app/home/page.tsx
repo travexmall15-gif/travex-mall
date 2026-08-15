@@ -40,17 +40,17 @@ export default function HomePage() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
 
-        .sell-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .sell-chip-wrap { background:#fff; padding:1.2rem 5%; border-bottom:1px solid #F3F4F6; }
         .sell-chip-inner { max-width:1100px; margin:0 auto; }
-        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s; }
-        .sell-chip-card:hover { border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); }
-        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#1E3A8A; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#1E40AF; transform:translateY(-1px); box-shadow:0 6px 18px rgba(30,58,138,0.50); }
+        .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1.5px solid #E5E7EB; border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s,box-shadow 0.2s; }
+        .sell-chip-card:hover { border-color:#D1D5DB; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#1D4ED8; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+        .sell-cta:hover { background:#1E40AF; transform:translateY(-1px); box-shadow:0 6px 18px rgba(29,78,216,0.30); }
 
-        .ai-chip-wrap { background:linear-gradient(135deg,#080F37,#0D1B3E); padding:1.2rem 5%; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .ai-chip-wrap { background:#fff; padding:1.2rem 5%; border-bottom:1px solid #F3F4F6; }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
-        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; }
-        .ai-chip-link:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.25); }
+        .ai-chip-link { display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1.5px solid #E5E7EB; border-radius:16px; padding:14px 20px; text-decoration:none; transition:all 0.2s; }
+        .ai-chip-link:hover { background:#F9FAFB; border-color:#D1D5DB; box-shadow:0 4px 12px rgba(0,0,0,0.05); }
 
         .market-cards { display:flex; gap:1.5rem; align-items:stretch; min-height:420px; }
         .market-card { transition:all 0.28s ease; display:flex; flex-direction:column; }
@@ -169,7 +169,7 @@ export default function HomePage() {
               </div>
               <h3 style={{ position:'relative',zIndex:1,fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#111827',marginBottom:'0.6rem',lineHeight:1.15 }}>Social Vybe</h3>
               <p style={{ position:'relative',zIndex:1,fontSize:'0.85rem',color:'#9CA3AF',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.vybeCardDesc')}</p>
-              <div style={{ position:'relative',zIndex:1,display:'flex',gap:'1.5rem',marginBottom:'1.75rem',paddingBottom:'1.5rem',borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
+              <div style={{ position:'relative',zIndex:1,display:'flex',gap:'1.5rem',marginBottom:'1.75rem',paddingBottom:'1.5rem',borderBottom:'1px solid #E5E7EB' }}>
                 {([['POST',t('home.dailyContent')],['LIKE',t('home.realEngagement')],['SELL',t('home.directToBuyers')]] as [string,string][]).map(([v,l]) => (
                   <div key={l}>
                     <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.1rem',fontWeight:900,color:'#C87BFF',lineHeight:1 }}>{v}</div>
@@ -181,7 +181,7 @@ export default function HomePage() {
                 <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#111827',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none' }}>
                   {t('home.exploreVybe')}
                 </Link>
-                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'rgba(255,255,255,0.07)',color:'#111827',border:'1px solid #E2E8F0',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:600,fontSize:'0.82rem',textDecoration:'none' }}>
+                <Link href="/vybe" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#E5E7EB',color:'#111827',border:'1px solid #E2E8F0',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:600,fontSize:'0.82rem',textDecoration:'none' }}>
                   {t('home.postVybe')} <ArrowRight size={13} />
                 </Link>
               </div>

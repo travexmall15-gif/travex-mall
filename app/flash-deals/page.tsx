@@ -73,8 +73,8 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
   return (
     <article style={{
-      background: featured ? 'linear-gradient(135deg,#EFF6FF,#DBEAFE)' : '#fff',
-      border: featured ? '2px solid rgba(29,78,216,0.35)' : '1.5px solid #FEF3C7',
+      background: '#fff',
+      border: featured ? '2px solid #1D4ED8' : '1.5px solid #E5E7EB',
       borderRadius: featured ? 24 : 20,
       overflow: 'hidden',
       boxShadow: featured
@@ -107,7 +107,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
       {/* Image */}
       <div style={{ position:'relative', height: featured ? 240 : 188,
-        background: featured ? 'rgba(255,255,255,0.04)' : 'linear-gradient(135deg,#FEF3C7,#FDE68A)',
+        background: featured ? '#F3F4F6' : 'linear-gradient(135deg,#FEF3C7,#FDE68A)',
         overflow:'hidden' }}>
 
         {deal.product_image ? (
@@ -126,7 +126,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {/* Discount badge */}
         <div style={{ position:'absolute', top:12, left:12,
           background:'linear-gradient(135deg,#EF4444,#DC2626)',
-          color:'#111827', fontWeight:900, fontSize: featured ? 15 : 13,
+          color:'#fff', fontWeight:900, fontSize: featured ? 15 : 13,
           padding:'5px 12px', borderRadius:999,
           boxShadow:'0 4px 12px rgba(239,68,68,0.4)',
           letterSpacing:'-0.02em' }}>
@@ -136,16 +136,16 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {/* Urgency badge */}
         {urge === 'high' && (
           <div style={{ position:'absolute', top:12, right:12,
-            background:'rgba(239,68,68,0.9)', backdropFilter:'blur(8px)',
-            color:'#111827', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
+            background:'#EF4444',
+            color:'#fff', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
             display:'flex', alignItems:'center', gap:3, letterSpacing:'0.04em' }}>
             <AlertCircle size={9} /> {t('flash.urgencyLow')}
           </div>
         )}
         {urge === 'med' && isEndingSoon && (
           <div style={{ position:'absolute', top:12, right:12,
-            background:'rgba(249,115,22,0.9)', backdropFilter:'blur(8px)',
-            color:'#111827', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
+            background:'#F97316',
+            color:'#fff', fontSize:10, fontWeight:800, padding:'3px 9px', borderRadius:999,
             letterSpacing:'0.04em' }}>
             {t('flash.endingSoon')}
           </div>
@@ -185,14 +185,14 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
         {/* Shop name */}
         <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.06em', marginBottom:5,
-          color: featured ? '#1D4ED8' : '#92400E',
+          color: featured ? '#1D4ED8' : '#374151',
           textTransform:'uppercase' as const, display:'flex', alignItems:'center', gap:4 }}>
           <Store size={9} /> {deal.shop_name}
         </div>
 
         {/* Product name */}
         <div style={{ fontSize: featured ? '1.1rem' : '0.95rem', fontWeight:800,
-          color: featured ? '#fff' : '#0F172A',
+          color: '#111827',
           lineHeight:1.3, marginBottom:10, letterSpacing:'-0.02em' }}>
           {deal.product_name}
         </div>
@@ -202,21 +202,21 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
           <span style={{ fontSize: featured ? 22 : 18, fontWeight:900, color:'#EF4444', letterSpacing:'-0.02em' }}>
             {fmtTZS(deal.deal_price)}
           </span>
-          <span style={{ fontSize:12, textDecoration:'line-through', color: featured ? '#94A3B8' : '#94A3B8' }}>
+          <span style={{ fontSize:12, textDecoration:'line-through', color: '#9CA3AF' }}>
             {fmtTZS(deal.original_price)}
           </span>
         </div>
 
         {/* You save */}
         <div style={{ fontSize:11, fontWeight:700, marginBottom:12,
-          color: featured ? 'rgba(134,239,172,0.9)' : '#059669' }}>
+          color: '#059669' }}>
           {t('flash.youSave')} {fmtTZS(saves)}
         </div>
 
         {/* Stock progress */}
         <div style={{ marginBottom:14 }}>
           <div style={{ display:'flex', justifyContent:'space-between', fontSize:11,
-            color: featured ? '#6B7280' : '#6B7280', marginBottom:5 }}>
+            color: '#6B7280', marginBottom:5 }}>
             <span>{t('flash.ordersCount', { count: String(deal.current_orders) })}</span>
             <span style={{ fontWeight:700, color: left <= 5 ? '#EF4444' : '#374151' }}>
               {t('flash.leftCount', { count: String(left) })}

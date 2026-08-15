@@ -181,7 +181,7 @@ export default function AiSearchBox() {
             placeholder="Describe what you need... e.g. 'shoes chini ya 50k Dar'"
             style={{
               width: '100%', padding: '14px 16px 14px 44px',
-              background: 'rgba(255,255,255,0.07)',
+              background: '#E5E7EB',
               border: '1.5px solid rgba(255,255,255,0.15)',
               borderRadius: '16px', color: '#111827',
               fontSize: '0.9rem', outline: 'none',
@@ -224,7 +224,7 @@ export default function AiSearchBox() {
                 transition: 'all 0.2s',
               }}
               onMouseOver={e => { (e.target as HTMLElement).style.background = 'rgba(255,255,255,0.12)'; (e.target as HTMLElement).style.color = '#fff' }}
-              onMouseOut={e => { (e.target as HTMLElement).style.background = 'rgba(255,255,255,0.06)'; (e.target as HTMLElement).style.color = 'rgba(255,255,255,0.55)' }}
+              onMouseOut={e => { (e.target as HTMLElement).style.background = '#F3F4F6'; (e.target as HTMLElement).style.color = 'rgba(255,255,255,0.55)' }}
             >
               {s}
             </button>
@@ -236,11 +236,11 @@ export default function AiSearchBox() {
       {loading && (
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {[1,2,3].map(i => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #F1F5F9', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <div key={i} style={{ background: '#F3F4F6', border: '1px solid #F1F5F9', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fff', flexShrink: 0 }} />
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <div style={{ height: '12px', width: '40%', background: '#fff', borderRadius: '6px' }} />
-                <div style={{ height: '10px', width: '60%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px' }} />
+                <div style={{ height: '10px', width: '60%', background: '#F3F4F6', borderRadius: '6px' }} />
               </div>
             </div>
           ))}
@@ -275,7 +275,7 @@ export default function AiSearchBox() {
               className="ai-result-item"
               style={{
                 display: 'flex', alignItems: 'center', gap: '14px',
-                background: 'rgba(255,255,255,0.05)',
+                background: '#F3F4F6',
                 border: '1px solid #F1F5F9',
                 borderRadius: '14px', padding: '14px 16px',
                 textDecoration: 'none', color: 'inherit',
@@ -283,7 +283,7 @@ export default function AiSearchBox() {
                 animationDelay: `${i * 80}ms`,
               }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
-              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)' }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#F3F4F6'; (e.currentTarget as HTMLElement).style.borderColor = '#E5E7EB' }}
             >
               {/* Logo */}
               <div style={{

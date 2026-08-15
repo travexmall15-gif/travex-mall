@@ -253,10 +253,10 @@ export default function StorePage({
         @media(min-width:600px){.modal-bg{align-items:center}}
         .modal{background:#0D1B3E;border:1px solid rgba(255,255,255,0.10);border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:fadeUp 0.3s ease}
         @media(min-width:600px){.modal{border-radius:20px}}
-        .form-inp{width:100%;padding:10px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:all 0.15s}
+        .form-inp{width:100%;padding:10px 14px;background:#E5E7EB;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:all 0.15s}
         .form-inp:focus{border-color:${accentColor};background:rgba(255,255,255,0.10)}
         .form-inp::placeholder{color:#9CA3AF}
-        .qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.20);background:rgba(255,255,255,0.07);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.15s}
+        .qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.20);background:#E5E7EB;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.15s}
         .qty-btn:hover{background:rgba(255,255,255,0.15)}
         .search-inp{width:100%;padding:10px 16px 10px 40px;background:#fff;border:1.5px solid #E2E8F0;border-radius:12px;color:#0F172A;font-size:13px;outline:none;font-family:'Inter',sans-serif;transition:border-color 0.2s}
         .search-inp::placeholder{color:#94A3B8}
@@ -298,7 +298,7 @@ export default function StorePage({
                 <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#111827', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(29,78,216,0.15)' : 'rgba(255,255,255,0.06)', color: isPremium ? '#1D4ED8' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(29,78,216,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(29,78,216,0.15)' : '#F3F4F6', color: isPremium ? '#1D4ED8' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(29,78,216,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
@@ -345,7 +345,7 @@ export default function StorePage({
           </div>
 
           {/* Animated chips — Flash Deals + Group Buy */}
-          <div style={{ overflow: 'hidden', marginTop: '1rem', paddingBottom: '1rem', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1rem' }}>
+          <div style={{ overflow: 'hidden', marginTop: '1rem', paddingBottom: '1rem', borderTop: '1px solid #E5E7EB', paddingTop: '1rem' }}>
             <style>{`
               @keyframes slideChips { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
               .store-chips{animation:storeChips 24s linear infinite; will-change: transform; }
@@ -515,7 +515,7 @@ export default function StorePage({
                 </div>
 
                 {/* Product summary */}
-                <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #F1F5F9',
+                <div style={{ background: '#F3F4F6', border: '1px solid #F1F5F9',
                   borderRadius: 12, padding: '1rem', marginBottom: '1.25rem',
                   display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                   <div style={{ width: 44, height: 44, borderRadius: 10, background: `${accentColor}22`,

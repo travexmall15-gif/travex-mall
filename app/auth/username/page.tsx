@@ -43,7 +43,7 @@ export default function UsernamePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080F37', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg) } }
         @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }

@@ -122,29 +122,28 @@ export default function VybePage() {
   const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: '#060B18', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#fff', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
         @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
         @keyframes pulse   { 0%,100% { opacity:.5 } 50% { opacity:1 } }
 
         .vybe-card {
-          background: rgba(255,255,255,0.035);
-          border: 1px solid rgba(255,255,255,0.07);
+          background: #fff;
+          border: 1px solid #E5E7EB;
           border-radius: 20px;
           overflow: hidden;
           transition: border-color .22s, box-shadow .22s, transform .22s;
-          animation: fadeUp .35s ease;
         }
         .vybe-card:hover {
-          border-color: rgba(29,78,216,.3);
-          box-shadow: 0 8px 40px rgba(29,78,216,.08);
+          border-color: #D1D5DB;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
           transform: translateY(-2px);
         }
 
         .like-btn {
           display:inline-flex; align-items:center; gap:5px;
-          background: rgba(255,255,255,0.05);
+          background: #F3F4F6;
           border: 1px solid rgba(255,255,255,0.10);
           border-radius: 999px;
           color: #6B7280;
@@ -192,8 +191,8 @@ export default function VybePage() {
           display:inline-flex; align-items:center; gap:4px;
           padding:5px 14px; border-radius:999px;
           font-size:12px; font-weight:600; cursor:pointer;
-          border:1px solid rgba(255,255,255,0.08);
-          background:rgba(255,255,255,0.04);
+          border:1px solid #E5E7EB;
+          background:#F9FAFB;
           color:#6B7280;
           text-decoration:none;
           transition:all .15s;
@@ -203,7 +202,7 @@ export default function VybePage() {
 
         .search-input {
           width:100%; padding:11px 16px 11px 42px;
-          background:rgba(255,255,255,0.06);
+          background:#F3F4F6;
           border:1.5px solid rgba(255,255,255,0.10);
           border-radius:14px; font-size:14px;
           color:#fff; outline:none;
@@ -211,7 +210,7 @@ export default function VybePage() {
           transition:all .2s; box-sizing:border-box;
         }
         .search-input::placeholder { color:#9CA3AF; }
-        .search-input:focus { border-color:rgba(29,78,216,.45); background:rgba(255,255,255,0.08); }
+        .search-input:focus { border-color:rgba(29,78,216,.45); background:#E5E7EB; }
 
         .live-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; animation:pulse 1.8s ease-in-out infinite; }
         .price-badge { background:rgba(29,78,216,.12); color:#1D4ED8; padding:3px 11px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid rgba(29,78,216,.2); }
@@ -226,7 +225,7 @@ export default function VybePage() {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <div style={{ paddingTop: '108px', position:'relative', overflow:'hidden',
-        background:'linear-gradient(160deg, #030B1A 0%, #060B18 70%)' }}>
+        background:'linear-gradient(160deg, #030B1A 0%, #fff 70%)' }}>
         {/* Glow */}
         <div style={{ position:'absolute', top:'-30%', left:'50%', transform:'translateX(-50%)',
           width:'70%', height:'200%', pointerEvents:'none',
@@ -480,7 +479,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
       )}
 
       {/* ── Actions — Like + Visit Shop ONLY ── */}
-      <div className="vybe-actions" style={{ display:'flex', alignItems:'center', gap:10, padding:'0.75rem 1rem 0.9rem', marginTop:'0.6rem', borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+      <div className="vybe-actions" style={{ display:'flex', alignItems:'center', gap:10, padding:'0.75rem 1rem 0.9rem', marginTop:'0.6rem', borderTop:'1px solid #F3F4F6' }}>
 
         {/* Like button */}
         <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={onLike} aria-label={liked ? t('vybe.liked') : t('vybe.like')}>

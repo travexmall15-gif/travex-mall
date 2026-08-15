@@ -31,7 +31,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
           width: compact ? '38px' : 'auto',
           height: compact ? '38px' : 'auto',
           justifyContent: 'center',
-          background: compact ? '#F3F4F6' : 'rgba(255,255,255,0.08)',
+          background: compact ? '#F3F4F6' : '#E5E7EB',
           border: compact ? 'none' : '1.5px solid rgba(255,255,255,0.15)',
           borderRadius: compact ? '50%' : '999px',
           cursor: 'pointer',
@@ -43,7 +43,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
           flexShrink: 0,
         }}
         onMouseOver={e => (e.currentTarget as HTMLElement).style.background = compact ? '#E5E7EB' : 'rgba(255,255,255,0.14)'}
-        onMouseOut={e => (e.currentTarget as HTMLElement).style.background = compact ? '#F3F4F6' : 'rgba(255,255,255,0.08)'}
+        onMouseOut={e => (e.currentTarget as HTMLElement).style.background = compact ? '#F3F4F6' : '#E5E7EB'}
       >
         <span style={{ fontSize: compact ? '0.7rem' : '0.72rem', fontWeight: 800, lineHeight: 1, letterSpacing: '0.04em' }}>{current.flag}</span>
         {!compact && <span>{current.label}</span>}

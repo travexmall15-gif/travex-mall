@@ -171,10 +171,10 @@ export default function AiPage() {
   const CSS = `
     html,body{margin:0;padding:0}
     .aip{display:flex;flex-direction:column;height:100dvh;min-height:100vh;background:#F8FAFC;font-family:'Inter',sans-serif;overflow:hidden}
-    .aih{flex-shrink:0;background:linear-gradient(135deg,#1D4ED8,#1E40AF);border-bottom:1px solid rgba(255,255,255,0.07)}
+    .aih{flex-shrink:0;background:linear-gradient(135deg,#1D4ED8,#1E40AF);border-bottom:1px solid #E5E7EB}
     .aih-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;height:62px;padding:0 20px}
-    .aih-av{background:linear-gradient(135deg,rgba(29,78,216,0.22),rgba(29,78,216,0.07));border:1px solid rgba(29,78,216,0.38);border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:#1D4ED8;flex-shrink:0}
-    .aih-btn{background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.70);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0}
+    .aih-av{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.25);border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:#fff;flex-shrink:0}
+    .aih-btn{background:#E5E7EB;border:none;color:rgba(255,255,255,0.70);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0}
     .aih-btn:hover{background:rgba(255,255,255,0.16)}
     .aim{flex:1;overflow-y:auto;scroll-behavior:smooth}
     .aim::-webkit-scrollbar{width:4px}
