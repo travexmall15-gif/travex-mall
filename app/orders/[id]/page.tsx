@@ -33,7 +33,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
   }, [id, router])
 
   if (loading) return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
         <Loader2 size={30} color="#0D1B3E" style={{ animation:'spin 1s linear infinite', margin:'0 auto', display:'block' }} />
@@ -45,7 +45,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
   const st = STATUS_STYLE[order?.status] || STATUS_STYLE.pending
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
         <button onClick={() => router.back()}

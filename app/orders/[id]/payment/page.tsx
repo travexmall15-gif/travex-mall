@@ -117,7 +117,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
   ]
 
   if (loading) return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
         <Loader2 size={30} color="#0D1B3E" style={{ animation:'spin 1s linear infinite', margin:'0 auto', display:'block' }} />
@@ -127,7 +127,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
   )
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
@@ -190,7 +190,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
         {/* ── STEP 2: Payment Option ── */}
         {step === 'option' && (
           <>
-            <div style={{ background:'#F8FAFF', borderRadius:12, padding:'10px 14px', marginBottom:'1rem', display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ background:'#F0F2F5', borderRadius:12, padding:'10px 14px', marginBottom:'1rem', display:'flex', alignItems:'center', gap:10 }}>
               <span style={{ fontSize:'1.2rem' }}>{method?.icon}</span>
               <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#0D1B3E' }}>{method?.name}</span>
             </div>

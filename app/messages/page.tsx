@@ -111,7 +111,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:560, margin:'0 auto', padding:'1.25rem 5% 4rem' }}>
 
@@ -121,7 +121,7 @@ export default function MessagesPage() {
             {t('messages.title')}
           </h1>
           {unreadCount > 0 && (
-            <span style={{ background:'#111827', color:'#fff', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
+            <span style={{ background:'#1D4ED8', color:'#fff', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
               {unreadCount} {t('messages.unread') || 'unread'}
             </span>
           )}
@@ -154,7 +154,7 @@ export default function MessagesPage() {
               <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#111827', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.82rem', textDecoration:'none' }}>
                 <Store size={14} /> {t('messages.startShopping')}
               </Link>
-              <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#F8FAFF', color:'#0D1B3E', border:'1.5px solid #E2E8F0', padding:'10px 22px', borderRadius:999, fontWeight:600, fontSize:'0.82rem', textDecoration:'none' }}>
+              <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#F0F2F5', color:'#0D1B3E', border:'1.5px solid #E2E8F0', padding:'10px 22px', borderRadius:999, fontWeight:600, fontSize:'0.82rem', textDecoration:'none' }}>
                 {t('authPage.signIn') || 'Sign In'}
               </Link>
             </div>

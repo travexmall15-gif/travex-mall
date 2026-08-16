@@ -112,7 +112,7 @@ export default function MenuPage() {
   ]
 
   return (
-    <div style={{ minHeight:'100vh', background:'#F8FAFF', fontFamily:"'Inter',sans-serif", paddingBottom:32 }}>
+    <div style={{ minHeight:'100vh', background:'#F0F2F5', fontFamily:"'Inter',sans-serif", paddingBottom:32 }}>
       <style>{`.menu-item:hover { background: #F1F5F9 !important; }`}</style>
 
       {/* Header */}

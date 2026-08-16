@@ -122,7 +122,7 @@ export default function VybePage() {
   const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: '#fff', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
         @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
@@ -327,7 +327,7 @@ export default function VybePage() {
               <RefreshCw size={22} color="#EF4444" />
             </div>
             <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#111827', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
           </div>

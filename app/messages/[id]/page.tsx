@@ -112,7 +112,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   }
 
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFF', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#F0F2F5', fontFamily: "'Inter',sans-serif" }}>
       <SiteNav />
 
       {/* Chat header */}
@@ -185,7 +185,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
           placeholder={t('messages.typeMessage')}
           rows={1}
-          style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: '#F8FAFF' }}
+          style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: '#F0F2F5' }}
           onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
           onBlur={e  => (e.target.style.borderColor = '#E5E7EB')}
         />

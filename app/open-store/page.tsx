@@ -14,7 +14,7 @@ export default function OpenStorePage() {
   ]
 
   return (
-    <main style={{ fontFamily:"'Inter', sans-serif", background:'#F8FAFF', minHeight:'100vh' }}>
+    <main style={{ fontFamily:"'Inter', sans-serif", background:'#F0F2F5', minHeight:'100vh' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
@@ -69,7 +69,7 @@ export default function OpenStorePage() {
               <div style={{ fontSize:'0.68rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.08em' }}>{t('openStore.monthly')}</div>
               <div style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.3rem', fontWeight:900, color:'#1D4ED8', lineHeight:1 }}>{t('openStore.joinLabel')}</div>
             </div>
-            <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#111827', color:'#fff', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', background:'#1D4ED8', color:'#fff', padding:'0.6rem 1.2rem', borderRadius:'999px', fontSize:'0.80rem', fontWeight:700 }}>
               {t('openStore.applyNow')} <ArrowRight style={{ width:'14px', height:'14px' }} />
             </div>
           </div>

@@ -25,10 +25,10 @@ export default function SecurityPage() {
     else { setMsg('Password updated successfully!'); setCurrentPw(''); setNewPw('') }
   }
 
-  const inp: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '0.75rem 1rem 0.75rem 2.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', background: '#F8FAFF', transition: 'border-color 0.2s' }
+  const inp: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '0.75rem 1rem 0.75rem 2.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', background: '#F0F2F5', transition: 'border-color 0.2s' }
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F8FAFF', paddingTop: '108px', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5', paddingTop: '108px', fontFamily: "'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', fontSize: '0.82rem', fontWeight: 600, fontFamily: "'Inter',sans-serif", marginBottom: '1.5rem', padding: 0 }}>

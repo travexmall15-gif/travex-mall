@@ -79,7 +79,7 @@ export default function GroupDetailPage({
   }
 
   if (!group) return (
-    <main style={{ minHeight:'100vh', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', display:'flex', alignItems:'center', justifyContent:'center' }}>
       <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'#1D4ED8' }} />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
@@ -92,7 +92,7 @@ export default function GroupDetailPage({
   const shareMsg = encodeURIComponent(`Jiunge nami kwenye group buy!\n\nBidhaa: ${group.product_name}\nBei ya kawaida: ${fmt(group.unit_price)}\nBei ya group: ${fmt(discount)} (-${group.discount_pct}%)\n\nTunahitaji watu ${remaining} zaidi!\n\nJiunge hapa: ${shareUrl}`)
 
   return (
-    <main style={{ minHeight:'100vh', background:'#fff', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', fontFamily:"'Inter',sans-serif" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:'Inter',sans-serif}`}</style>
       <SiteNav />

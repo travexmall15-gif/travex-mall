@@ -43,7 +43,7 @@ export default function NotificationsPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
         <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
@@ -54,7 +54,7 @@ export default function NotificationsPage() {
         <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
           {items.map((item, i) => (
             <div key={item.key} style={{ display:'flex', alignItems:'center', gap:12, padding:'14px 16px', borderBottom: i < items.length-1 ? '1px solid #F1F5F9' : 'none' }}>
-              <div style={{ width:38, height:38, borderRadius:10, background:'#F8FAFF', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <div style={{ width:38, height:38, borderRadius:10, background:'#F0F2F5', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <item.icon size={17} color="#0D1B3E" />
               </div>
               <div style={{ flex:1 }}>

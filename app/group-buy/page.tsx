@@ -332,7 +332,7 @@ export default function GroupBuyPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin { to{transform:rotate(360deg)} }
         .gb-ticker      { /* ticker animation removed */ }
@@ -355,7 +355,7 @@ export default function GroupBuyPage() {
           <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#111827', margin:0, letterSpacing:'-0.02em' }}>
             Group Buying
           </h1>
-          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#111827', color:'#fff', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
+          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#1D4ED8', color:'#fff', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
             <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
           </Link>
         </div>

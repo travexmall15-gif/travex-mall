@@ -33,7 +33,7 @@ export default function JoinPage() {
           {t('join.heroSubtitle')}
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/open-store" style={{ background: '#111827', color: '#fff', fontWeight: 800, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <Link href="/open-store" style={{ background: '#1D4ED8', color: '#fff', fontWeight: 800, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
              {t('join.openStoreNow')}
           </Link>
           <Link href="/" style={{ background: 'rgba(255,255,255,0.1)', color: '#111827', fontWeight: 700, padding: '1rem 2rem', borderRadius: 14, textDecoration: 'none', fontSize: '1rem', border: '1px solid #E5E7EB', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -107,7 +107,7 @@ export default function JoinPage() {
                   </ul>
                 </div>
                 <div style={{ background: 'linear-gradient(135deg, rgba(29,78,216,0.15), rgba(29,78,216,0.08))', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(29,78,216,0.4)', position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: -10, right: 16, background: '#111827', color: '#fff', fontSize: '0.6rem', fontWeight: 900, padding: '3px 10px', borderRadius: 999 }}>{t('join.mostPopular')}</div>
+                  <div style={{ position: 'absolute', top: -10, right: 16, background: '#1D4ED8', color: '#fff', fontSize: '0.6rem', fontWeight: 900, padding: '3px 10px', borderRadius: 999 }}>{t('join.mostPopular')}</div>
                   <div style={{ fontWeight: 800, color: '#1D4ED8', marginBottom: 4 }}>{t('join.premiumPlanLabel')}</div>
                   <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#1D4ED8', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: '#9CA3AF' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -119,7 +119,7 @@ export default function JoinPage() {
                   </ul>
                 </div>
               </div>
-              <Link href="/open-store-b2b" style={{ display: 'block', textAlign: 'center', background: '#111827', color: '#fff', fontWeight: 800, padding: '0.875rem', borderRadius: 12, textDecoration: 'none', fontSize: '0.9rem' }}>
+              <Link href="/open-store-b2b" style={{ display: 'block', textAlign: 'center', background: '#1D4ED8', color: '#fff', fontWeight: 800, padding: '0.875rem', borderRadius: 12, textDecoration: 'none', fontSize: '0.9rem' }}>
                 Open a Business Shop
               </Link>
             </div>
@@ -152,7 +152,7 @@ export default function JoinPage() {
         </div>
       </section>
       {/*  LOGIN  */}
-      <section style={{ padding: 'clamp(2rem,5vw,3rem) 1.5rem', textAlign: 'center', background: '#F0F4FF' }}>
+      <section style={{ padding: 'clamp(2rem,5vw,3rem) 1.5rem', textAlign: 'center', background: '#F0F2F5' }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
           <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.5rem' }}>Una Duka Tayari?</h2>
           <p style={{ fontSize: '0.88rem', color: '#6B7280', marginBottom: '1.5rem' }}>Ingia kwenye dashboard yako na namba ya simu na password uliyopewa.</p>

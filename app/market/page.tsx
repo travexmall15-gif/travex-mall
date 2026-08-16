@@ -79,7 +79,7 @@ export default function MarketPage() {
   }, [])
 
   return (
-    <main style={{ minHeight: '100vh', background: '#fff' }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       <SiteNav />
 
       <section style={{ maxWidth: 860, margin: '0 auto', padding: '2.5rem 1rem 5rem' }}>

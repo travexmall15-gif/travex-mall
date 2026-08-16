@@ -128,7 +128,7 @@ export default function AuthPage() {
   return (
     <div style={{
       minHeight:'100dvh',
-      background:'#F8FAFF',
+      background:'#F0F2F5',
       display:'flex', flexDirection:'column',
       alignItems:'center', justifyContent:'center',
       padding:'1.5rem', fontFamily:"'Inter',sans-serif",

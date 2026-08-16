@@ -15,7 +15,7 @@ export default function AboutPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F8FAFF', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
@@ -44,7 +44,7 @@ export default function AboutPage() {
                 style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 16px', textDecoration:'none', borderBottom: i < 2 ? '1px solid #F1F5F9' : 'none', transition:'background .15s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:36, height:36, borderRadius:10, background:'#F8FAFF', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:'#F0F2F5', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <item.icon size={16} color="#0D1B3E" />
                 </div>
                 <div>
