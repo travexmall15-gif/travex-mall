@@ -83,7 +83,7 @@ export default function WelcomePage() {
           >
             <div style={{
               width:36, height:36, borderRadius:10,
-              background: lang === l.code ? 'rgba(255,255,255,0.12)' : '#F3F4F6',
+              background: lang === l.code ? '#E5E7EB' : '#F3F4F6',
               display:'flex', alignItems:'center', justifyContent:'center',
             }}>
               <span style={{

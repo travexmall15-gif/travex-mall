@@ -144,7 +144,7 @@ export default function VybePage() {
         .like-btn {
           display:inline-flex; align-items:center; gap:5px;
           background: #F3F4F6;
-          border: 1px solid rgba(255,255,255,0.10);
+          border: 1px solid #E5E7EB;
           border-radius: 999px;
           color: #6B7280;
           cursor:pointer; font-size:13px; font-weight:600;
@@ -177,7 +177,7 @@ export default function VybePage() {
           display:inline-flex; align-items:center; gap:5px;
           padding: 7px 18px; border-radius:999px;
           font-size:13px; font-weight:600; cursor:pointer;
-          border: 1.5px solid rgba(255,255,255,0.12);
+          border: 1.5px solid #E5E7EB;
           background: transparent;
           color: #9CA3AF;
           transition: all .18s;
@@ -203,7 +203,7 @@ export default function VybePage() {
         .search-input {
           width:100%; padding:11px 16px 11px 42px;
           background:#F3F4F6;
-          border:1.5px solid rgba(255,255,255,0.10);
+          border:1.5px solid #E5E7EB;
           border-radius:14px; font-size:14px;
           color:#fff; outline:none;
           font-family:'Inter',sans-serif;
@@ -327,7 +327,7 @@ export default function VybePage() {
               <RefreshCw size={22} color="#EF4444" />
             </div>
             <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#111827', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
           </div>

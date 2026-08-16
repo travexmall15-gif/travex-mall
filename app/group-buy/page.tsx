@@ -234,7 +234,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                     ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
                     : '#0D1B3E',
               color: isExpired
-                ? (featured ? 'rgba(255,255,255,0.35)' : '#94A3B8')
+                ? (featured ? '#9CA3AF' : '#94A3B8')
                 : isReady || featured ? '#0F172A' : '#fff',
               borderRadius: 10, padding: '0.65rem 1rem',
               fontWeight: 700, fontSize: 13,
@@ -254,7 +254,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '0.65rem 0.75rem',
                 background: featured ? '#E5E7EB' : '#F8FAFF',
-                border: featured ? '1px solid rgba(255,255,255,0.12)' : '1.5px solid #E2E8F0',
+                border: featured ? '1px solid #E5E7EB' : '1.5px solid #E2E8F0',
                 borderRadius: 10, color: featured ? '#6B7280' : '#64748B',
                 textDecoration: 'none', transition: 'all .2s', flexShrink: 0,
               }}
@@ -355,7 +355,7 @@ export default function GroupBuyPage() {
           <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#111827', margin:0, letterSpacing:'-0.02em' }}>
             Group Buying
           </h1>
-          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#1D4ED8', color:'#fff', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
+          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#111827', color:'#fff', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
             <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
           </Link>
         </div>

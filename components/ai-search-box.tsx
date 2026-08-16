@@ -182,14 +182,14 @@ export default function AiSearchBox() {
             style={{
               width: '100%', padding: '14px 16px 14px 44px',
               background: '#E5E7EB',
-              border: '1.5px solid rgba(255,255,255,0.15)',
+              border: '1.5px solid #E5E7EB',
               borderRadius: '16px', color: '#111827',
               fontSize: '0.9rem', outline: 'none',
               transition: 'border-color 0.2s',
               fontFamily: 'Inter, sans-serif',
             }}
             onFocus={e => e.target.style.borderColor = 'rgba(29,78,216,0.6)'}
-            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.15)'}
+            onBlur={e => e.target.style.borderColor = '#E5E7EB'}
           />
         </div>
         <button
@@ -223,8 +223,8 @@ export default function AiSearchBox() {
                 cursor: 'pointer', fontFamily: 'Inter, sans-serif',
                 transition: 'all 0.2s',
               }}
-              onMouseOver={e => { (e.target as HTMLElement).style.background = 'rgba(255,255,255,0.12)'; (e.target as HTMLElement).style.color = '#fff' }}
-              onMouseOut={e => { (e.target as HTMLElement).style.background = '#F3F4F6'; (e.target as HTMLElement).style.color = 'rgba(255,255,255,0.55)' }}
+              onMouseOver={e => { (e.target as HTMLElement).style.background = '#E5E7EB'; (e.target as HTMLElement).style.color = '#fff' }}
+              onMouseOut={e => { (e.target as HTMLElement).style.background = '#F3F4F6'; (e.target as HTMLElement).style.color = '#6B7280' }}
             >
               {s}
             </button>
@@ -282,7 +282,7 @@ export default function AiSearchBox() {
                 transition: 'all 0.2s',
                 animationDelay: `${i * 80}ms`,
               }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = '#E5E7EB'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#F3F4F6'; (e.currentTarget as HTMLElement).style.borderColor = '#E5E7EB' }}
             >
               {/* Logo */}
@@ -318,7 +318,7 @@ export default function AiSearchBox() {
                 {store.products && store.products.length > 0 && (
                   <div style={{ marginTop: '6px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {store.products.slice(0,3).map((p,j) => (
-                      <span key={j} style={{ fontSize: '0.68rem', background: '#fff', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '6px', padding: '2px 8px', color: '#6B7280' }}>
+                      <span key={j} style={{ fontSize: '0.68rem', background: '#fff', border: '1px solid #E5E7EB', borderRadius: '6px', padding: '2px 8px', color: '#6B7280' }}>
                         {p.name} · TZS {p.price?.toLocaleString()}
                       </span>
                     ))}

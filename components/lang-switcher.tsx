@@ -32,7 +32,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
           height: compact ? '38px' : 'auto',
           justifyContent: 'center',
           background: compact ? '#F3F4F6' : '#E5E7EB',
-          border: compact ? 'none' : '1.5px solid rgba(255,255,255,0.15)',
+          border: compact ? 'none' : '1.5px solid #E5E7EB',
           borderRadius: compact ? '50%' : '999px',
           cursor: 'pointer',
           color: compact ? '#475569' : '#fff',

@@ -95,7 +95,7 @@ export default function OrdersPage() {
           {(['all','pending','confirmed','rejected'] as OrderFilter[]).map(f => (
             <button key={f} onClick={() => setFilter(f)}
               style={{ padding:'7px 14px', borderRadius:999, border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.78rem', fontWeight:700, whiteSpace:'nowrap', flexShrink:0, transition:'all .15s',
-                background: filter===f ? '#1D4ED8' : '#fff',
+                background: filter===f ? '#111827' : '#fff',
                 color:      filter===f ? '#1D4ED8'  : '#64748B',
                 boxShadow:  filter===f ? 'none' : '0 1px 4px rgba(15,23,42,0.08)',
               }}>

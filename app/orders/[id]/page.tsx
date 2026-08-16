@@ -118,7 +118,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
                 await sb.from('orders').update({ status:'delivered' }).eq('id', id)
                 setOrder((o: any) => ({ ...o, status:'delivered' }))
               }}
-              style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color:'#111827', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color: '#fff', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
               ✅ Confirm I Received My Item
             </button>
           </div>

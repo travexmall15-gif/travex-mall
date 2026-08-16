@@ -215,7 +215,7 @@ export default function AuthPage() {
             }}
           >
             {loading
-              ? <><span style={{ width:16,height:16,border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block' }}/> Generating...</>
+              ? <><span style={{ width:16,height:16,border:'2px solid #9CA3AF',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block' }}/> Generating...</>
               : <>Get My Code <ArrowRight size={15}/></>
             }
           </button>
@@ -270,7 +270,7 @@ export default function AuthPage() {
             </div>
             <button
               onClick={() => setShowCode(v => !v)}
-              style={{ background:'#fff', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'4px 14px', color:'#6B7280', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
+              style={{ background:'#fff', border:'1px solid #E5E7EB', borderRadius:999, padding:'4px 14px', color:'#6B7280', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
             >
               {showCode ? <><EyeOff size={12}/> Hide</> : <><Eye size={12}/> Reveal Code</>}
             </button>
@@ -319,7 +319,7 @@ export default function AuthPage() {
             }}
           >
             {loading
-              ? <span style={{ width:16,height:16,border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block' }}/>
+              ? <span style={{ width:16,height:16,border:'2px solid #9CA3AF',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block' }}/>
               : <>Verify & Enter <ArrowRight size={15}/></>
             }
           </button>

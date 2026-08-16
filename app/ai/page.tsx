@@ -173,7 +173,7 @@ export default function AiPage() {
     .aip{display:flex;flex-direction:column;height:100dvh;min-height:100vh;background:#F8FAFC;font-family:'Inter',sans-serif;overflow:hidden}
     .aih{flex-shrink:0;background:linear-gradient(135deg,#1D4ED8,#1E40AF);border-bottom:1px solid #E5E7EB}
     .aih-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;height:62px;padding:0 20px}
-    .aih-av{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.25);border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:#fff;flex-shrink:0}
+    .aih-av{background:#D1D5DB;border:1px solid #D1D5DB;border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:#fff;flex-shrink:0}
     .aih-btn{background:#E5E7EB;border:none;color:rgba(255,255,255,0.70);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0}
     .aih-btn:hover{background:rgba(255,255,255,0.16)}
     .aim{flex:1;overflow-y:auto;scroll-behavior:smooth}
@@ -185,9 +185,9 @@ export default function AiPage() {
     .ai-hero h1{font-size:1.5rem;font-weight:900;color:#0F172A;margin:0 0 6px;letter-spacing:-0.025em}
     .ai-hero p{font-size:0.85rem;color:#64748B;margin:0}
     .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
-    .sc{background:#fff;border:1.5px solid #E2E8F0;border-radius:14px;padding:13px 14px;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:flex-start;gap:10px;transition:all 0.2s;width:100%}
+    .sc{background:#fff;border:1.5px solid #E5E7EB;border-radius:14px;padding:13px 14px;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:flex-start;gap:10px;transition:all 0.2s;width:100%}
     .sc:hover{border-color:rgba(29,78,216,0.55);box-shadow:0 4px 16px rgba(29,78,216,0.10);transform:translateY(-1px)}
-    .sc-t{font-weight:700;font-size:0.79rem;color:#0F172A;margin-bottom:2px;line-height:1.3;text-align:left}
+    .sc-t{font-weight:700;font-size:0.79rem;color:#111827;margin-bottom:2px;line-height:1.3;text-align:left}
     .sc-s{font-size:0.68rem;color:#94A3B8;line-height:1.3;text-align:left}
     .mr{display:flex;gap:10px;margin-bottom:14px;align-items:flex-start}
     .mr.user{flex-direction:row-reverse}
@@ -262,7 +262,7 @@ export default function AiPage() {
                   <svg viewBox="0 0 52 52" width="38" height="38" fill="none" aria-hidden="true">
                     <circle cx="26" cy="26" r="20" fill="rgba(29,78,216,0.12)"/>
                     <path d="M26 10L30 22L42 26L30 30L26 42L22 30L10 26L22 22Z" fill="#1D4ED8" opacity="0.95"/>
-                    <circle cx="26" cy="26" r="4" fill="rgba(255,255,255,0.18)"/>
+                    <circle cx="26" cy="26" r="4" fill="#D1D5DB"/>
                   </svg>
                 </div>
                 <h1>{t('ai.title')}</h1>
