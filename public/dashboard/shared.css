@@ -2,21 +2,27 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+/* ════════════════════════════════════════════════════
+   ShopNekt Theme System — Light & Dark Modes
+   WHITE + BLACK + DARK BLUE (ShopNekt Blue: #1D4ED8)
+   ════════════════════════════════════════════════════ */
+
 :root {
+  /* Light Theme Colors */
   --navy: #0D1B3E;
   --navy-dark: #080F23;
   --navy-light: #1B3A8A;
   --navy-hover: #1E3060;
   --gold: #1D4ED8;
-  --gold-dark: #B8963C;
+  --gold-dark: #1E40AF;
   --gold-light: #F0D070;
   --white: #ffffff;
-  --bg: #F0F4FF;
+  --bg: #FFFFFF;
   --card-bg: #ffffff;
-  --border: #E2E8F4;
-  --text-primary: #1a2332;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
+  --border: #E5E7EB;
+  --text-primary: #000000;
+  --text-secondary: #4B5563;
+  --text-muted: #9CA3AF;
   --success: #10b981;
   --success-bg: #d1fae5;
   --success-text: #065f46;
@@ -34,6 +40,34 @@
   --radius-sm: 8px;
   --shadow: 0 1px 4px rgba(13,27,62,0.08);
   --shadow-md: 0 4px 16px rgba(13,27,62,0.12);
+}
+
+/* ── DARK THEME ─────────────────────────────────────── */
+[data-theme="dark"] {
+  --navy: #1a1a1a;
+  --navy-dark: #0a0a0a;
+  --navy-light: #272727;
+  --navy-hover: #333333;
+  --gold: #1D4ED8;
+  --gold-dark: #1E40AF;
+  --gold-light: #F0D070;
+  --white: #111111;
+  --bg: #0A0A0A;
+  --card-bg: #111111;
+  --border: #272727;
+  --text-primary: #FFFFFF;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --success-bg: #064e3b;
+  --success-text: #6ee7b7;
+  --warning-bg: #451a03;
+  --warning-text: #fcd34d;
+  --danger-bg: #450a0a;
+  --danger-text: #fca5a5;
+  --info-bg: #1e3a5f;
+  --info-text: #93c5fd;
+  --shadow: 0 1px 4px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
