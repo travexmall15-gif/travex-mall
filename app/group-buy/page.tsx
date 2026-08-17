@@ -92,7 +92,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
       {/* Top banner */}
       <div style={{
         padding: featured ? '1rem 1.25rem' : '0.75rem 1rem',
-        background: featured ? '#F3F4F6' : 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
+        background: featured ? 'var(--sn-page)' : 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
@@ -110,7 +110,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
           {disc > 0 && (
             <span style={{
               background: 'linear-gradient(135deg,#EF4444,#DC2626)',
-              color: '#111827', fontSize: 10, fontWeight: 900,
+              color: 'var(--sn-text)', fontSize: 10, fontWeight: 900,
               padding: '2px 8px', borderRadius: 999,
               boxShadow: '0 2px 8px rgba(239,68,68,0.35)',
               letterSpacing: '-0.01em',
@@ -202,7 +202,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 : t('groupBuy.moreNeeded', { count: String(remaining) })}
             </div>
           </div>
-          <div style={{ height: 7, background: featured ? '#E5E7EB' : '#F3F4F6', borderRadius: 999, overflow: 'hidden' }}>
+          <div style={{ height: 7, background: featured ? 'var(--sn-border)' : 'var(--sn-page)', borderRadius: 999, overflow: 'hidden' }}>
             <div style={{
               height: '100%', width: `${pct}%`,
               background: isReady
@@ -227,7 +227,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               flex: 1,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               background: isExpired
-                ? (featured ? '#F3F4F6' : '#F3F4F6')
+                ? (featured ? 'var(--sn-page)' : 'var(--sn-page)')
                 : isReady
                   ? 'linear-gradient(135deg,#059669,#10B981)'
                   : featured
@@ -253,14 +253,14 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '0.65rem 0.75rem',
-                background: featured ? '#E5E7EB' : '#F8FAFF',
+                background: featured ? 'var(--sn-border)' : '#F8FAFF',
                 border: featured ? '1px solid #E5E7EB' : '1.5px solid #E2E8F0',
                 borderRadius: 10, color: featured ? '#6B7280' : '#64748B',
                 textDecoration: 'none', transition: 'all .2s', flexShrink: 0,
               }}
               title={t('groupBuy.visitShop')}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#1D4ED8'; (e.currentTarget as HTMLElement).style.color = '#1D4ED8' }}
-              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? '#E5E7EB' : '#E5E7EB'; (e.currentTarget as HTMLElement).style.color = featured ? '#6B7280' : '#64748B' }}>
+              onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor = featured ? 'var(--sn-border)' : 'var(--sn-border)'; (e.currentTarget as HTMLElement).style.color = featured ? '#6B7280' : '#64748B' }}>
               <ShoppingBag size={14} />
             </Link>
           )}
@@ -318,9 +318,9 @@ export default function GroupBuyPage() {
 
   // Stats ticker data — translated on every render
   const STATS = [
-    { val: loading ? '...' : String(groups.length),       label: t('groupBuy.activeGroupsStat'), color: '#1D4ED8' },
+    { val: loading ? '...' : String(groups.length),       label: t('groupBuy.activeGroupsStat'), color: 'var(--sn-text)' },
     { val: loading ? '...' : String(readyGroups.length),  label: t('groupBuy.groupsReadyStat'),  color: '#86EFAC' },
-    { val: `${t('groupBuy.upTo')} 20%`,                   label: t('groupBuy.maxDiscountStat'),  color: '#6B7280' },
+    { val: `${t('groupBuy.upTo')} 20%`,                   label: t('groupBuy.maxDiscountStat'),  color: 'var(--sn-muted)' },
     { val: t('groupBuy.openLabel'),                        label: t('groupBuy.registration'),     color: '#86EFAC' },
   ]
 
@@ -332,7 +332,7 @@ export default function GroupBuyPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin { to{transform:rotate(360deg)} }
         .gb-ticker      { /* ticker animation removed */ }
@@ -350,12 +350,12 @@ export default function GroupBuyPage() {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       {/* ── SLIM PAGE HEADER ─────────────────────────────────── */}
-      <div style={{ background:'#fff', borderBottom:'1px solid #F1F5F9' }}>
+      <div style={{ background:'var(--sn-bg)', borderBottom:'1px solid #F1F5F9' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'1rem 5%', display:'flex', alignItems:'center', justifyContent:'space-between', gap:16 }}>
-          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'#111827', margin:0, letterSpacing:'-0.02em' }}>
+          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'var(--sn-text)', margin:0, letterSpacing:'-0.02em' }}>
             Group Buying
           </h1>
-          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'#1D4ED8', color:'#fff', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
+          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'var(--sn-primary)', color:'var(--sn-primary-fg)', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
             <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
           </Link>
         </div>
@@ -380,17 +380,17 @@ export default function GroupBuyPage() {
         {/* Search + filter */}
         <div style={{ display:'flex', gap:10, marginBottom:'1rem', flexWrap:'wrap' }}>
           <div style={{ position:'relative', flex:1, minWidth:220 }}>
-            <Search size={15} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'#9CA3AF' }} />
+            <Search size={15} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'var(--sn-subtle)' }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('groupBuy.searchPlaceholder')}
               style={{ width:'100%', paddingLeft:'2.5rem', paddingRight:'1rem', paddingTop:'0.72rem', paddingBottom:'0.72rem',
                 border:'1.5px solid #E2E8F0', borderRadius:12, fontSize:'0.87rem', outline:'none',
-                fontFamily:"'Inter',sans-serif", background:'#fff',
+                fontFamily:"'Inter',sans-serif", background:'var(--sn-bg)',
                 boxShadow:'0 1px 4px rgba(15,23,42,0.05)', transition:'border-color .2s', boxSizing:'border-box' as const }}
               onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
-              onBlur={e  => (e.target.style.borderColor = '#E5E7EB')}
+              onBlur={e  => (e.target.style.borderColor = 'var(--sn-border)')}
             />
           </div>
           {/* Filter pills */}
@@ -415,7 +415,7 @@ export default function GroupBuyPage() {
 
         {/* Results count */}
         {!loading && !error && filtered.length > 0 && (
-          <div style={{ fontSize:'0.76rem', color:'#9CA3AF', marginBottom:'1.25rem' }}>
+          <div style={{ fontSize:'0.76rem', color:'var(--sn-subtle)', marginBottom:'1.25rem' }}>
             {filtered.length === 1
               ? t('groupBuy.dealFound',  { count: '1' })
               : t('groupBuy.dealsFound', { count: String(filtered.length) })}
@@ -426,7 +426,7 @@ export default function GroupBuyPage() {
         {loading && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
             <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'#0D1B3E', margin:'0 auto 12px', display:'block' }} />
-            <p style={{ color:'#9CA3AF', fontSize:14 }}>{t('groupBuy.loadingGroups')}</p>
+            <p style={{ color:'var(--sn-subtle)', fontSize:14 }}>{t('groupBuy.loadingGroups')}</p>
           </div>
         )}
 
@@ -436,9 +436,9 @@ export default function GroupBuyPage() {
             <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <RefreshCw size={22} color="#EF4444" />
             </div>
-            <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:16 }}>{error}</p>
+            <p style={{ color:'var(--sn-subtle)', fontSize:14, marginBottom:16 }}>{error}</p>
             <button onClick={loadGroups}
-              style={{ padding:'10px 24px', background:'#fff', color:'#111827', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:13 }}>
+              style={{ padding:'10px 24px', background:'var(--sn-bg)', color:'var(--sn-text)', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:13 }}>
               {t('groupBuy.tryAgain')}
             </button>
           </div>
@@ -447,22 +447,22 @@ export default function GroupBuyPage() {
         {/* Empty */}
         {!loading && !error && filtered.length === 0 && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <div style={{ width:72, height:72, borderRadius:'20px', background:'linear-gradient(135deg,#EEF2FF,#E0E7FF)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px', boxShadow:'0 8px 24px rgba(59,130,246,0.12)' }}>
+            <div style={{ width:72, height:72, borderRadius:'20px', background: 'var(--sn-bg),#E0E7FF)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px', boxShadow:'0 8px 24px rgba(59,130,246,0.12)' }}>
               <Users size={32} color="#6366F1" />
             </div>
-            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'#111827', marginBottom:8, letterSpacing:'-0.025em' }}>
+            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'var(--sn-text)', marginBottom:8, letterSpacing:'-0.025em' }}>
               {search ? t('groupBuy.noMatching') : t('groupBuy.noGroups')}
             </h3>
-            <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:24 }}>
+            <p style={{ color:'var(--sn-subtle)', fontSize:14, marginBottom:24 }}>
               {search ? t('groupBuy.noMatchingDesc') : t('groupBuy.noGroupsDesc')}
             </p>
             {search
               ? <button onClick={() => setSearch('')}
-                  style={{ padding:'11px 28px', background:'#fff', color:'#111827', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:14 }}>
+                  style={{ padding:'11px 28px', background:'var(--sn-bg)', color:'var(--sn-text)', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:14 }}>
                   {t('groupBuy.allGroups')}
                 </button>
               : <Link href="/market"
-                  style={{ display:'inline-flex', alignItems:'center', gap:6, background:'#fff', color:'#111827', padding:'11px 28px', borderRadius:999, fontWeight:700, textDecoration:'none', fontSize:14 }}>
+                  style={{ display:'inline-flex', alignItems:'center', gap:6, background:'var(--sn-bg)', color:'var(--sn-text)', padding:'11px 28px', borderRadius:999, fontWeight:700, textDecoration:'none', fontSize:14 }}>
                   <ShoppingBag size={14} /> {t('groupBuy.browseMarket')}
                 </Link>
             }

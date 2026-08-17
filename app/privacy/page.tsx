@@ -18,24 +18,24 @@ export default function PrivacyPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:560, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
-        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
+        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
           <ArrowLeft size={15} /> {t('privacy.back')}
         </button>
 
         <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:6, letterSpacing:'-0.025em' }}>{t('privacy.title')}</h1>
-        <p style={{ fontSize:'0.72rem', color:'#9CA3AF', marginBottom:'1.75rem' }}>
+        <p style={{ fontSize:'0.72rem', color:'var(--sn-subtle)', marginBottom:'1.75rem' }}>
           {t('privacy.lastUpdated')}: {t('privacy.lastUpdatedDate')}
         </p>
 
         <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
           {sections.map((s, i) => (
-            <div key={i} style={{ background:'#fff', borderRadius:14, border:'1.5px solid #E2E8F0', padding:'1.1rem 1.25rem' }}>
+            <div key={i} style={{ background:'var(--sn-bg)', borderRadius:14, border:'1.5px solid #E2E8F0', padding:'1.1rem 1.25rem' }}>
               <h3 style={{ fontSize:'0.875rem', fontWeight:700, color:'#0D1B3E', marginBottom:8, letterSpacing:'-0.01em' }}>{s.title}</h3>
-              <p style={{ fontSize:'0.82rem', color:'#6B7280', lineHeight:1.65, margin:0 }}>{s.body}</p>
+              <p style={{ fontSize:'0.82rem', color:'var(--sn-muted)', lineHeight:1.65, margin:0 }}>{s.body}</p>
             </div>
           ))}
         </div>

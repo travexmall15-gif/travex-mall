@@ -181,15 +181,15 @@ export default function AiSearchBox() {
             placeholder="Describe what you need... e.g. 'shoes chini ya 50k Dar'"
             style={{
               width: '100%', padding: '14px 16px 14px 44px',
-              background: '#E5E7EB',
-              border: '1.5px solid #E5E7EB',
-              borderRadius: '16px', color: '#111827',
+              background: 'var(--sn-border)',
+              border: '1.5px solid var(--sn-border)',
+              borderRadius: '16px', color: 'var(--sn-text)',
               fontSize: '0.9rem', outline: 'none',
               transition: 'border-color 0.2s',
               fontFamily: 'Inter, sans-serif',
             }}
             onFocus={e => e.target.style.borderColor = 'rgba(29,78,216,0.6)'}
-            onBlur={e => e.target.style.borderColor = '#E5E7EB'}
+            onBlur={e => e.target.style.borderColor = 'var(--sn-border)'}
           />
         </div>
         <button
@@ -217,14 +217,14 @@ export default function AiSearchBox() {
               onClick={() => { setQuery(s); setTimeout(search, 100) }}
               style={{
                 padding: '5px 12px', borderRadius: '999px',
-                background: '#fff',
+                background: 'var(--sn-bg)',
                 border: '1px solid #E2E8F0',
-                color: '#6B7280', fontSize: '0.72rem',
+                color: 'var(--sn-muted)', fontSize: '0.72rem',
                 cursor: 'pointer', fontFamily: 'Inter, sans-serif',
                 transition: 'all 0.2s',
               }}
-              onMouseOver={e => { (e.target as HTMLElement).style.background = '#E5E7EB'; (e.target as HTMLElement).style.color = '#fff' }}
-              onMouseOut={e => { (e.target as HTMLElement).style.background = '#F3F4F6'; (e.target as HTMLElement).style.color = '#6B7280' }}
+              onMouseOver={e => { (e.target as HTMLElement).style.background = 'var(--sn-border)'; (e.target as HTMLElement).style.color = '#fff' }}
+              onMouseOut={e => { (e.target as HTMLElement).style.background = 'var(--sn-page)'; (e.target as HTMLElement).style.color = '#6B7280' }}
             >
               {s}
             </button>
@@ -236,11 +236,11 @@ export default function AiSearchBox() {
       {loading && (
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {[1,2,3].map(i => (
-            <div key={i} style={{ background: '#F3F4F6', border: '1px solid #F1F5F9', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fff', flexShrink: 0 }} />
+            <div key={i} style={{ background: 'var(--sn-page)', border: '1px solid #F1F5F9', borderRadius: '14px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'var(--sn-bg)', flexShrink: 0 }} />
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div style={{ height: '12px', width: '40%', background: '#fff', borderRadius: '6px' }} />
-                <div style={{ height: '10px', width: '60%', background: '#F3F4F6', borderRadius: '6px' }} />
+                <div style={{ height: '12px', width: '40%', background: 'var(--sn-bg)', borderRadius: '6px' }} />
+                <div style={{ height: '10px', width: '60%', background: 'var(--sn-page)', borderRadius: '6px' }} />
               </div>
             </div>
           ))}
@@ -256,15 +256,15 @@ export default function AiSearchBox() {
 
       {/* Results */}
       {!loading && searched && results.length === 0 && !error && (
-        <div style={{ marginTop: '20px', textAlign: 'center', color: '#9CA3AF', fontSize: '0.85rem', padding: '24px' }}>
+        <div style={{ marginTop: '20px', textAlign: 'center', color: 'var(--sn-subtle)', fontSize: '0.85rem', padding: '24px' }}>
           Hakuna maduka yaliyopatikana kwa &quot;{query}&quot;.<br/>
-          <span style={{ fontSize: '0.8rem' }}>{t('ai.noResultsDesc')} <a href="/market" style={{ color: '#1D4ED8', textDecoration: 'none' }}>{t('ai.browseAll')}</a></span>
+          <span style={{ fontSize: '0.8rem' }}>{t('ai.noResultsDesc')} <a href="/market" style={{ color: 'var(--sn-text)', textDecoration: 'none' }}>{t('ai.browseAll')}</a></span>
         </div>
       )}
 
       {!loading && results.length > 0 && (
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ fontSize: '0.7rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>
+          <div style={{ fontSize: '0.7rem', color: 'var(--sn-subtle)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>
             {results.length} store{results.length > 1 ? 's' : ''} found for &quot;{query}&quot;
           </div>
 
@@ -275,22 +275,22 @@ export default function AiSearchBox() {
               className="ai-result-item"
               style={{
                 display: 'flex', alignItems: 'center', gap: '14px',
-                background: '#F3F4F6',
+                background: 'var(--sn-page)',
                 border: '1px solid #F1F5F9',
                 borderRadius: '14px', padding: '14px 16px',
                 textDecoration: 'none', color: 'inherit',
                 transition: 'all 0.2s',
                 animationDelay: `${i * 80}ms`,
               }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = '#E5E7EB'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
-              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#F3F4F6'; (e.currentTarget as HTMLElement).style.borderColor = '#E5E7EB' }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'var(--sn-border)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'var(--sn-page)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--sn-border)' }}
             >
               {/* Logo */}
               <div style={{
                 width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
                 background: store.logo_url ? `url(${store.logo_url}) center/cover` : 'linear-gradient(135deg,#1a2a5e,#0D1B3E)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.2rem', color: '#1D4ED8', fontWeight: 800,
+                fontSize: '1.2rem', color: 'var(--sn-text)', fontWeight: 800,
                 border: '1px solid rgba(255,255,255,0.1)',
               }}>
                 {!store.logo_url && (store.shop_name?.[0] || '🏪')}
@@ -299,14 +299,14 @@ export default function AiSearchBox() {
               {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--sn-text)', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {store.shop_name}
                   </span>
                   {store.rating > 0 && (
-                    <span style={{ fontSize: '0.68rem', color: '#1D4ED8', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--sn-text)', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>
                   )}
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#9CA3AF', marginBottom: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--sn-subtle)', marginBottom: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {store.shop_category && <span>{store.shop_category}</span>}
                   {store.shop_city && <span>📍 {store.shop_city}</span>}
                 </div>
@@ -318,7 +318,7 @@ export default function AiSearchBox() {
                 {store.products && store.products.length > 0 && (
                   <div style={{ marginTop: '6px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {store.products.slice(0,3).map((p,j) => (
-                      <span key={j} style={{ fontSize: '0.68rem', background: '#fff', border: '1px solid #E5E7EB', borderRadius: '6px', padding: '2px 8px', color: '#6B7280' }}>
+                      <span key={j} style={{ fontSize: '0.68rem', background: 'var(--sn-bg)', border: '1px solid var(--sn-border)', borderRadius: '6px', padding: '2px 8px', color: 'var(--sn-muted)' }}>
                         {p.name} · TZS {p.price?.toLocaleString()}
                       </span>
                     ))}
@@ -334,7 +334,7 @@ export default function AiSearchBox() {
           {/* See all */}
           <a
             href={`/market?q=${encodeURIComponent(query)}`}
-            style={{ display: 'block', textAlign: 'center', padding: '12px', color: '#1D4ED8', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginTop: '4px' }}
+            style={{ display: 'block', textAlign: 'center', padding: '12px', color: 'var(--sn-text)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginTop: '4px' }}
           >
             Angalia maduka yote kwenye Market →
           </a>

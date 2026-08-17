@@ -8,14 +8,14 @@ export function LangToggle() {
       onClick={toggle}
       style={{
         display: 'inline-flex', alignItems: 'center', gap: '5px',
-        background: '#fff', border: '1px solid rgba(255,255,255,0.15)',
+        background: 'var(--sn-bg)', border: '1px solid rgba(255,255,255,0.15)',
         borderRadius: '999px', padding: '4px 12px',
         fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer',
-        color: '#111827', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s',
+        color: 'var(--sn-text)', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s',
         letterSpacing: '0.04em',
       }}
       onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.14)'}
-      onMouseOut={e => (e.currentTarget as HTMLElement).style.background = '#E5E7EB'}
+      onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'var(--sn-border)'}
       title={lang === 'en' ? 'Switch to Kiswahili' : 'Switch to English'}
     >
       <span style={{ fontSize: '0.85rem' }}>{lang === 'en' ? '🇹🇿' : '🇬🇧'}</span>

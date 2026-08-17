@@ -218,7 +218,7 @@ export default function StorePage({
   if (loading) return (
     <main style={{ minHeight: '100vh', background: '#060C1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', color: '#6B7280' }}>
-        <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#1D4ED8' }} />
+        <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#111827' }} />
         <p style={{ color: '#9CA3AF', fontSize: 14 }}>Loading store...</p>
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
@@ -232,7 +232,7 @@ export default function StorePage({
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
         <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
         <p style={{ color: '#9CA3AF', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
-        <Link href="/market" style={{ background: '#1D4ED8', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
+        <Link href="/market" style={{ background: '#111827', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
         </Link>
       </div>

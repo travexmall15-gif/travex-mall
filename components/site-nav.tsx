@@ -113,7 +113,7 @@ export function SiteNav() {
   return (
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 999,
-      background: '#fff',
+      background: 'var(--sn-bg)',
       borderBottom: '1px solid #E2E8F0',
       boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
       fontFamily: "'Inter', sans-serif",
@@ -126,7 +126,7 @@ export function SiteNav() {
         <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
           <img src="/icon-192.png" alt="ShopNekt" style={{ height: '52px', width: '52px', objectFit: 'contain', borderRadius: '12px' }} />
           <span style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.35rem', fontWeight: 900, color: '#0D1B3E', letterSpacing: '-0.04em', lineHeight: 1 }}>
-            Shop<span style={{ color: '#F97316' }}>Nekt</span>
+            Shop<span style={{ color: 'var(--sn-primary)' }}>Nekt</span>
           </span>
         </Link>
 
@@ -146,32 +146,32 @@ export function SiteNav() {
                 onChange={e => handleSearch(e.target.value)}
                 onKeyDown={e => { if (e.key==='Escape') { setSearchOpen(false); setQuery(''); setShowDrop(false) } }}
                 placeholder={t('common.search') + '...'}
-                style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'#111827', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
+                style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'var(--sn-text)', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
               />
               {query && (
                 <button onClick={() => { setQuery(''); setResults([]); setShowDrop(false) }}
-                  style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#9CA3AF', flexShrink:0 }}>
+                  style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'var(--sn-subtle)', flexShrink:0 }}>
                   <X size={14} />
                 </button>
               )}
               <button onClick={() => { setSearchOpen(false); setQuery(''); setShowDrop(false) }}
-                style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'#9CA3AF', flexShrink:0 }}>
+                style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'var(--sn-subtle)', flexShrink:0 }}>
                 <X size={15} />
               </button>
             </div>
           ) : (
             <button
               onClick={() => setSearchOpen(true)}
-              style={{ width:38, height:38, borderRadius:'50%', background:'#fff', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'background .2s' }}
-              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E5E7EB'}
-              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F3F4F6'}>
+              style={{ width:38, height:38, borderRadius:'50%', background:'var(--sn-bg)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'background .2s' }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-border)'}
+              onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}>
               <Search size={16} color="#475569" />
             </button>
           )}
 
           {/* Search dropdown */}
           {showDrop && results.length > 0 && (
-            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden' }}>
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden' }}>
               {results.map(r => (
                 <button key={r.id} onClick={() => { goToShop(r.id); setSearchOpen(false) }}
                   style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily:"'Inter',sans-serif" }}
@@ -181,39 +181,39 @@ export function SiteNav() {
                     <Store size={14} color="#16A34A" />
                   </div>
                   <div>
-                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#111827' }}>{r.shop_name}</div>
-                    <div style={{ fontSize:'0.68rem', color:'#9CA3AF', marginTop:1 }}>{r.shop_city || ''}</div>
+                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)' }}>{r.shop_name}</div>
+                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{r.shop_city || ''}</div>
                   </div>
                 </button>
               ))}
               <div style={{ padding:'8px 14px', borderTop:'1px solid #F1F5F9' }}>
                 <button onClick={() => { router.push(`/market`); setSearchOpen(false) }}
-                  style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'#2563EB', fontWeight:600, textAlign:'left', fontFamily:"'Inter',sans-serif" }}>
+                  style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'var(--sn-text)', fontWeight:600, textAlign:'left', fontFamily:"'Inter',sans-serif" }}>
                   {t('nav.searchAll')} "{query}" →
                 </button>
               </div>
             </div>
           )}
           {showDrop && results.length === 0 && query.trim() && !searching && (
-            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
-              <div style={{ fontSize:'0.82rem', color:'#9CA3AF' }}>{t('common.noResults')}</div>
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
+              <div style={{ fontSize:'0.82rem', color:'var(--sn-subtle)' }}>{t('common.noResults')}</div>
             </div>
           )}
         </div>
 
         {/* Move */}
         <Link href="/move/index.html"
-          style={{ width: 38, height: 38, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E5E7EB'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F3F4F6'}>
+          style={{ width: 38, height: 38, borderRadius: '50%', background: 'var(--sn-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-border)'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}>
           <Truck size={16} color="#475569" />
         </Link>
 
         {/* Menu */}
         <button onClick={() => { window.location.href = '/menu' }}
-          style={{ width:38, height:38, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'none', cursor:'pointer', transition:'background .2s' }}
-          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#E5E7EB'}
-          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#F3F4F6'}>
+          style={{ width:38, height:38, borderRadius:'50%', background:'var(--sn-bg)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'none', cursor:'pointer', transition:'background .2s' }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-border)'}
+          onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}>
           <Menu size={18} color="#475569" />
         </button>
       </div>

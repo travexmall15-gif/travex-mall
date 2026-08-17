@@ -113,7 +113,7 @@ export default function AuthPage() {
   const inp: React.CSSProperties = {
     width:'100%', boxSizing:'border-box' as const,
     padding:'0.82rem 1rem 0.82rem 2.75rem',
-    background:'#fff',
+    background:'var(--sn-bg)',
     border:'1.5px solid #E2E8F0',
     borderRadius:12, color:'#0D1B3E', fontSize:'0.9rem',
     fontFamily:"'Inter',sans-serif", outline:'none',
@@ -122,13 +122,13 @@ export default function AuthPage() {
 
   const iconStyle: React.CSSProperties = {
     position:'absolute', left:13, top:'50%',
-    transform:'translateY(-50%)', color:'#9CA3AF', pointerEvents:'none',
+    transform:'translateY(-50%)', color:'var(--sn-subtle)', pointerEvents:'none',
   }
 
   return (
     <div style={{
       minHeight:'100dvh',
-      background:'#F0F2F5',
+      background:'var(--sn-page)',
       display:'flex', flexDirection:'column',
       alignItems:'center', justifyContent:'center',
       padding:'1.5rem', fontFamily:"'Inter',sans-serif",
@@ -147,15 +147,15 @@ export default function AuthPage() {
       <div style={{ textAlign:'center', marginBottom:'1.5rem', animation:'fadeIn 0.4s ease 0.05s both' }}>
         <div style={{ display:'flex', alignItems:'baseline', justifyContent:'center', gap:1, marginBottom:4 }}>
           <span style={{ fontSize:'1.4rem', fontWeight:900, color:'#0D1B3E', letterSpacing:'-0.04em' }}>Shop</span>
-          <span style={{ fontSize:'1.4rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.04em' }}>Nekt</span>
+          <span style={{ fontSize:'1.4rem', fontWeight:900, color:'var(--sn-primary)', letterSpacing:'-0.04em' }}>Nekt</span>
         </div>
-        <div style={{ fontSize:'0.62rem', color:'#9CA3AF', letterSpacing:'0.15em', textTransform:'uppercase' }}>QNEX360</div>
+        <div style={{ fontSize:'0.62rem', color:'var(--sn-subtle)', letterSpacing:'0.15em', textTransform:'uppercase' }}>QNEX360</div>
       </div>
 
       {/* Card */}
       <div className="auth-card" key={screen} style={{
         width:'100%', maxWidth:380,
-        background:'#fff',
+        background:'var(--sn-bg)',
         border:'1.5px solid #E2E8F0',
         borderRadius:22, padding:'1.75rem',
         boxShadow:'0 4px 24px rgba(13,27,62,0.08)',
@@ -166,7 +166,7 @@ export default function AuthPage() {
           <h2 style={{ fontSize:'1.2rem', fontWeight:800, color:'#0D1B3E', marginBottom:4, letterSpacing:'-0.02em' }}>
             Welcome to ShopNekt
           </h2>
-          <p style={{ fontSize:'0.78rem', color:'#9CA3AF', marginBottom:'1.5rem', lineHeight:1.6 }}>
+          <p style={{ fontSize:'0.78rem', color:'var(--sn-subtle)', marginBottom:'1.5rem', lineHeight:1.6 }}>
             Enter your details to get started. We'll generate a code for you instantly.
           </p>
 
@@ -207,7 +207,7 @@ export default function AuthPage() {
             style={{
               width:'100%', padding:'0.875rem',
               background: loading ? '#94A3B8' : '#1D4ED8',
-              color:'#111827', border:'none', borderRadius:12,
+              color:'var(--sn-text)', border:'none', borderRadius:12,
               fontFamily:"'Inter',sans-serif", fontWeight:700,
               fontSize:'0.9rem', cursor: loading ? 'not-allowed' : 'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', gap:8,
@@ -220,9 +220,9 @@ export default function AuthPage() {
             }
           </button>
 
-          <p style={{ textAlign:'center', marginTop:'1.25rem', fontSize:'0.73rem', color:'#9CA3AF', lineHeight:1.6 }}>
+          <p style={{ textAlign:'center', marginTop:'1.25rem', fontSize:'0.73rem', color:'var(--sn-subtle)', lineHeight:1.6 }}>
             Already have a seller account?{' '}
-            <a href="/login" style={{ color:'#1D4ED8', fontWeight:700, textDecoration:'none' }}>Seller Login</a>
+            <a href="/login" style={{ color:'var(--sn-text)', fontWeight:700, textDecoration:'none' }}>Seller Login</a>
           </p>
         </>}
 
@@ -230,7 +230,7 @@ export default function AuthPage() {
         {screen === 'code' && <>
           <button
             onClick={() => { setScreen('form'); setError('') }}
-            style={{ background:'none', border:'none', cursor:'pointer', color:'#9CA3AF', display:'flex', alignItems:'center', gap:5, fontSize:'0.78rem', fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}
+            style={{ background:'none', border:'none', cursor:'pointer', color:'var(--sn-subtle)', display:'flex', alignItems:'center', gap:5, fontSize:'0.78rem', fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}
           >
             <ArrowLeft size={14}/> Back
           </button>
@@ -242,25 +242,25 @@ export default function AuthPage() {
             <h2 style={{ fontSize:'1.05rem', fontWeight:800, color:'#0D1B3E', letterSpacing:'-0.02em', marginBottom:6 }}>
               Your code is ready
             </h2>
-            <p style={{ fontSize:'0.76rem', color:'#9CA3AF', lineHeight:1.6 }}>
+            <p style={{ fontSize:'0.76rem', color:'var(--sn-subtle)', lineHeight:1.6 }}>
               Hi <strong style={{ color:'#0D1B3E' }}>{name.split(' ')[0]}</strong> — here is your one-time login code.
             </p>
           </div>
 
           {/* Code display box */}
           <div style={{
-            background:'#fff',
+            background:'var(--sn-bg)',
             borderRadius:14, padding:'1.25rem',
             textAlign:'center', marginBottom:'1.25rem',
             position:'relative',
           }}>
-            <div style={{ fontSize:'0.62rem', color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.12em', marginBottom:10 }}>
+            <div style={{ fontSize:'0.62rem', color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.12em', marginBottom:10 }}>
               Your login code
             </div>
             <div style={{
               fontSize: showCode ? '2.2rem' : '2rem',
               fontWeight:900, letterSpacing:'0.35em',
-              color: showCode ? '#1D4ED8' : '#E5E7EB',
+              color: showCode ? '#1D4ED8' : 'var(--sn-border)',
               fontFamily:"'Inter',sans-serif",
               filter: showCode ? 'none' : 'blur(8px)',
               transition:'all 0.3s', userSelect: showCode ? 'text' : 'none',
@@ -270,7 +270,7 @@ export default function AuthPage() {
             </div>
             <button
               onClick={() => setShowCode(v => !v)}
-              style={{ background:'#fff', border:'1px solid #E5E7EB', borderRadius:999, padding:'4px 14px', color:'#6B7280', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
+              style={{ background:'var(--sn-bg)', border:'1px solid var(--sn-border)', borderRadius:999, padding:'4px 14px', color:'var(--sn-muted)', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
             >
               {showCode ? <><EyeOff size={12}/> Hide</> : <><Eye size={12}/> Reveal Code</>}
             </button>
@@ -278,7 +278,7 @@ export default function AuthPage() {
 
           {/* Code input */}
           <div style={{ marginBottom:'0.85rem' }}>
-            <label style={{ display:'block', fontSize:'0.72rem', fontWeight:600, color:'#6B7280', marginBottom:6, textTransform:'uppercase', letterSpacing:'0.06em' }}>
+            <label style={{ display:'block', fontSize:'0.72rem', fontWeight:600, color:'var(--sn-muted)', marginBottom:6, textTransform:'uppercase', letterSpacing:'0.06em' }}>
               Enter the code above
             </label>
             <input
@@ -310,7 +310,7 @@ export default function AuthPage() {
             style={{
               width:'100%', padding:'0.875rem',
               background: entered.length < 6 ? '#94A3B8' : '#1D4ED8',
-              color:'#111827', border:'none', borderRadius:12,
+              color:'var(--sn-text)', border:'none', borderRadius:12,
               fontFamily:"'Inter',sans-serif", fontWeight:700,
               fontSize:'0.9rem',
               cursor: entered.length < 6 ? 'not-allowed' : 'pointer',
@@ -324,10 +324,10 @@ export default function AuthPage() {
             }
           </button>
 
-          <p style={{ textAlign:'center', fontSize:'0.73rem', color:'#9CA3AF' }}>
+          <p style={{ textAlign:'center', fontSize:'0.73rem', color:'var(--sn-subtle)' }}>
             {timer > 0
               ? <>Code expires in <strong style={{ color:'#0D1B3E' }}>{timer}s</strong></>
-              : <button onClick={handleResend} style={{ background:'none', border:'none', color:'#1D4ED8', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.73rem', padding:0 }}>
+              : <button onClick={handleResend} style={{ background:'none', border:'none', color:'var(--sn-text)', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.73rem', padding:0 }}>
                   Get a new code
                 </button>
             }

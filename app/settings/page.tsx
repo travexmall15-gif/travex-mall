@@ -63,27 +63,27 @@ export default function SettingsPage() {
       title: t('settings.sectionAccount'),
       items: [
         { icon: User,       label: t('menuPage.editProfile'),      sub: t('settings.labelProfileSub'),       href: '/settings/profile',       color: '#3B82F6' },
-        { icon: Lock,       label: t('settings.security'),          sub: t('settings.labelSecuritySub'),      href: '/settings/security',      color: '#8B5CF6' },
+        { icon: Lock,       label: t('settings.security'),          sub: t('settings.labelSecuritySub'),      href: '/settings/security',      color: 'var(--sn-primary)' },
       ],
     },
     {
       title: t('settings.sectionPrefs'),
       items: [
-        { icon: Bell,       label: t('settings.notifications'),     sub: t('settings.labelNotificationsSub'), href: '/settings/notifications', color: '#F59E0B' },
+        { icon: Bell,       label: t('settings.notifications'),     sub: t('settings.labelNotificationsSub'), href: '/settings/notifications', color: 'var(--sn-primary)' },
       ],
     },
     {
       title: t('settings.sectionLegal'),
       items: [
         { icon: HelpCircle, label: t('settings.labelHelp'),         sub: t('settings.labelHelpSub'),          href: '/settings/about',         color: '#10B981' },
-        { icon: Shield,     label: t('settings.privacyPolicy'),     sub: t('settings.labelPrivacySub'),       href: '/privacy',                color: '#6B7280' },
-        { icon: FileText,   label: t('settings.labelTerms'),        sub: t('settings.labelTermsSub'),         href: '/privacy',                color: '#6B7280' },
+        { icon: Shield,     label: t('settings.privacyPolicy'),     sub: t('settings.labelPrivacySub'),       href: '/privacy',                color: 'var(--sn-muted)' },
+        { icon: FileText,   label: t('settings.labelTerms'),        sub: t('settings.labelTermsSub'),         href: '/privacy',                color: 'var(--sn-muted)' },
       ],
     },
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
@@ -91,15 +91,15 @@ export default function SettingsPage() {
 
         {/* Profile card */}
         <Link href="/settings/profile" style={{ textDecoration:'none', display:'block', marginBottom:'1.25rem' }}>
-          <div style={{ background:'#fff', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
+          <div style={{ background:'var(--sn-bg)', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
             onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity='0.9'}
             onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity='1'}>
-            <div style={{ width:50, height:50, borderRadius:'50%', background:'#F97316', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid #E5E7EB', fontSize:'1.05rem', fontWeight:900 }}>
+            <div style={{ width:50, height:50, borderRadius:'50%', background:'var(--sn-primary)', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid #E5E7EB', fontSize:'1.05rem', fontWeight:900 }}>
               {user ? user.name.slice(0,2).toUpperCase() : '?'}
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontSize:'1rem', fontWeight:700, color:'#111827', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
-              <div style={{ fontSize:'0.72rem', color:'#9CA3AF' }}>{user?.email || ''}</div>
+              <div style={{ fontSize:'1rem', fontWeight:700, color:'var(--sn-text)', marginBottom:3 }}>{user?.name || t('common.loading')}</div>
+              <div style={{ fontSize:'0.72rem', color:'var(--sn-subtle)' }}>{user?.email || ''}</div>
             </div>
             <ChevronRight size={18} color="#9CA3AF" />
           </div>
@@ -108,10 +108,10 @@ export default function SettingsPage() {
         {/* Sections */}
         {SECTIONS.map((section, si) => (
           <div key={si} style={{ marginBottom:'1.1rem' }}>
-            <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
+            <div style={{ fontSize:'0.62rem', fontWeight:700, color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
               {section.title}
             </div>
-            <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', boxShadow:'0 1px 4px rgba(15,23,42,0.04)' }}>
+            <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', boxShadow:'0 1px 4px rgba(15,23,42,0.04)' }}>
               {section.items.map((item, i) => (
                 <Link key={i} href={item.href} style={{ textDecoration:'none' }}>
                   <div style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 16px', borderBottom: i < section.items.length-1 ? '1px solid #F1F5F9' : 'none', transition:'background .15s', cursor:'pointer' }}
@@ -121,8 +121,8 @@ export default function SettingsPage() {
                       <item.icon size={17} color={item.color} />
                     </div>
                     <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#111827', lineHeight:1.2 }}>{item.label}</div>
-                      <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{item.sub}</div>
+                      <div style={{ fontSize:'0.875rem', fontWeight:600, color:'var(--sn-text)', lineHeight:1.2 }}>{item.label}</div>
+                      <div style={{ fontSize:'0.7rem', color:'var(--sn-subtle)', marginTop:2 }}>{item.sub}</div>
                     </div>
                     <ChevronRight size={14} color="#CBD5E1" />
                   </div>
@@ -134,10 +134,10 @@ export default function SettingsPage() {
 
         {/* Danger zone */}
         <div style={{ marginBottom:'1.1rem' }}>
-          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
+          <div style={{ fontSize:'0.62rem', fontWeight:700, color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:'0.5rem', paddingLeft:4 }}>
             {t('settings.dangerZone')}
           </div>
-          <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden' }}>
+          <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden' }}>
             <button onClick={() => setShowDelete(true)}
               style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'13px 16px', background:'none', border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
               onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#FFF1F2'}
@@ -147,14 +147,14 @@ export default function SettingsPage() {
               </div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:'0.875rem', fontWeight:600, color:'#EF4444' }}>{t('settings.deleteAccount')}</div>
-                <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{t('settings.deleteAccountDesc')}</div>
+                <div style={{ fontSize:'0.7rem', color:'var(--sn-subtle)', marginTop:2 }}>{t('settings.deleteAccountDesc')}</div>
               </div>
             </button>
           </div>
         </div>
 
         {/* Log Out */}
-        <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden', marginBottom:'1.5rem' }}>
+        <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #FEE2E2', overflow:'hidden', marginBottom:'1.5rem' }}>
           <button onClick={handleLogout}
             style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'13px 16px', background:'none', border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
             onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#FFF1F2'}
@@ -174,19 +174,19 @@ export default function SettingsPage() {
       {/* Delete modal */}
       {showDelete && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:999, display:'flex', alignItems:'center', justifyContent:'center', padding:'1rem' }}>
-          <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem', maxWidth:340, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
+          <div style={{ background:'var(--sn-bg)', borderRadius:20, padding:'1.5rem', maxWidth:340, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ fontSize:'1.5rem', textAlign:'center', marginBottom:12 }}>⚠️</div>
             <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('settings.deleteConfirmTitle')}</h3>
-            <p style={{ fontSize:'0.82rem', color:'#6B7280', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
+            <p style={{ fontSize:'0.82rem', color:'var(--sn-muted)', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
               {t('settings.deleteConfirmDesc')}
             </p>
             <div style={{ display:'flex', gap:8 }}>
               <button onClick={() => setShowDelete(false)}
-                style={{ flex:1, padding:'11px', background:'#fff', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem' }}>
+                style={{ flex:1, padding:'11px', background:'var(--sn-bg)', border:'none', borderRadius:12, fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem' }}>
                 {t('common.cancel')}
               </button>
               <button onClick={async () => { await sb.auth.signOut(); window.location.replace('/welcome') }}
-                style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'#111827' }}>
+                style={{ flex:1, padding:'11px', background:'#EF4444', border:'none', borderRadius:12, fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.875rem', color:'var(--sn-text)' }}>
                 {t('settings.deleteBtn')}
               </button>
             </div>

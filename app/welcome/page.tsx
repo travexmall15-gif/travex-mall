@@ -25,7 +25,7 @@ export default function WelcomePage() {
   return (
     <div style={{
       minHeight:'100dvh',
-      background:'#F0F2F5',
+      background:'var(--sn-page)',
       display:'flex', flexDirection:'column',
       alignItems:'center', justifyContent:'center',
       fontFamily:"'Inter',sans-serif",
@@ -43,12 +43,12 @@ export default function WelcomePage() {
       <div style={{ textAlign:'center', marginBottom:'2.5rem', animation:'fadeUp 0.4s ease 0.1s both' }}>
         <div style={{ display:'flex', alignItems:'baseline', justifyContent:'center', gap:1, marginBottom:10 }}>
           <span style={{ fontSize:'1.6rem', fontWeight:900, color:'#0D1B3E', letterSpacing:'-0.04em' }}>Shop</span>
-          <span style={{ fontSize:'1.6rem', fontWeight:900, color:'#F97316', letterSpacing:'-0.04em' }}>Nekt</span>
+          <span style={{ fontSize:'1.6rem', fontWeight:900, color:'var(--sn-primary)', letterSpacing:'-0.04em' }}>Nekt</span>
         </div>
         <h1 style={{ fontSize:'1.35rem', fontWeight:800, color:'#0D1B3E', margin:'0 0 6px', letterSpacing:'-0.02em' }}>
           Choose your language
         </h1>
-        <p style={{ fontSize:'0.8rem', color:'#9CA3AF', margin:0 }}>
+        <p style={{ fontSize:'0.8rem', color:'var(--sn-subtle)', margin:0 }}>
           Select to continue
         </p>
       </div>
@@ -83,7 +83,7 @@ export default function WelcomePage() {
           >
             <div style={{
               width:36, height:36, borderRadius:10,
-              background: lang === l.code ? '#E5E7EB' : '#F3F4F6',
+              background: lang === l.code ? 'var(--sn-border)' : 'var(--sn-page)',
               display:'flex', alignItems:'center', justifyContent:'center',
             }}>
               <span style={{
@@ -109,8 +109,8 @@ export default function WelcomePage() {
         onClick={() => choose(lang)}
         style={{
           width:'100%', maxWidth:360,
-          background:'#fff',
-          color:'#111827',
+          background:'var(--sn-bg)',
+          color:'var(--sn-text)',
           border:'none',
           borderRadius:999,
           padding:'0.875rem',

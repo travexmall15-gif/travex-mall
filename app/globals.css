@@ -1,3 +1,89 @@
+/* ════════════════════════════════════════════════════
+   ShopNekt Design System — CSS Variables
+   ════════════════════════════════════════════════════ */
+:root {
+  /* Page */
+  --sn-page:    #F0F2F5;
+  --sn-bg:      #ffffff;
+  --sn-surface: #ffffff;
+  /* Text */
+  --sn-text:    #111827;
+  --sn-muted:   #6B7280;
+  --sn-subtle:  #9CA3AF;
+  /* Brand */
+  --sn-primary: #1D4ED8;
+  --sn-primary-hover: #1E40AF;
+  --sn-primary-fg: #ffffff;
+  /* Borders */
+  --sn-border:  #E5E7EB;
+  --sn-border-strong: #D1D5DB;
+  /* Input */
+  --sn-input:   #ffffff;
+  --sn-input-border: #E5E7EB;
+  /* Font */
+  --sn-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── DARK THEME ─────────────────────────────────────── */
+[data-theme="dark"] {
+  --sn-page:    #0F172A;
+  --sn-bg:      #1E293B;
+  --sn-surface: #1E293B;
+  --sn-text:    #F1F5F9;
+  --sn-muted:   #94A3B8;
+  --sn-subtle:  #64748B;
+  --sn-primary: #3B82F6;
+  --sn-primary-hover: #2563EB;
+  --sn-primary-fg: #ffffff;
+  --sn-border:  #334155;
+  --sn-border-strong: #475569;
+  --sn-input:   #1E293B;
+  --sn-input-border: #334155;
+}
+
+/* ── GLOBAL DARK OVERRIDES (override inline styles) ─── */
+[data-theme="dark"] body {
+  background: var(--sn-page) !important;
+  color: var(--sn-text) !important;
+  font-family: var(--sn-font) !important;
+}
+[data-theme="dark"] main {
+  background: var(--sn-page) !important;
+  color: var(--sn-text) !important;
+}
+[data-theme="dark"] header,
+[data-theme="dark"] nav {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-text) !important;
+}
+[data-theme="dark"] footer {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-muted) !important;
+}
+/* Cards — all divs with white/surface backgrounds */
+[data-theme="dark"] section > div,
+[data-theme="dark"] .sn-card {
+  color: var(--sn-text);
+}
+/* Inputs */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--sn-input) !important;
+  color: var(--sn-text) !important;
+  border-color: var(--sn-input-border) !important;
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--sn-subtle) !important;
+}
+/* ── FONT SYSTEM — Inter everywhere ─────────────────── */
+* {
+  font-family: var(--sn-font);
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -766,3 +852,102 @@ html {
   font-family: 'Cairo', 'Noto Sans Arabic', Arial, sans-serif;
   line-height: 1.8;
 }
+
+/* ════════════════════════════════════════════════════
+   DARK MODE — Comprehensive overrides
+   ════════════════════════════════════════════════════ */
+
+/* ── Page backgrounds ────────────────────────────── */
+[data-theme="dark"] main,
+[data-theme="dark"] .page-root {
+  background: var(--sn-page) !important;
+}
+
+/* ── Cards & surfaces ────────────────────────────── */
+[data-theme="dark"] div[style*="background: 'var(--sn-bg)'"],
+[data-theme="dark"] div[style*="background:'var(--sn-bg)'"],
+[data-theme="dark"] div[style*="background: var(--sn-bg)"],
+[data-theme="dark"] div[style*="background:var(--sn-bg)"] {
+  background: var(--sn-surface) !important;
+  color: var(--sn-text) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* ── Border colors ───────────────────────────────── */
+[data-theme="dark"] div[style*="border-color: var(--sn-border)"],
+[data-theme="dark"] div[style*="borderColor: var(--sn-border)"] {
+  border-color: var(--sn-border) !important;
+}
+
+/* ── Typography ──────────────────────────────────── */
+[data-theme="dark"] h1, [data-theme="dark"] h2,
+[data-theme="dark"] h3, [data-theme="dark"] h4,
+[data-theme="dark"] p, [data-theme="dark"] span:not([class*="badge"]),
+[data-theme="dark"] label, [data-theme="dark"] div {
+  --local-text: var(--sn-text);
+}
+
+/* ── Inputs / Forms ──────────────────────────────── */
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--sn-input) !important;
+  color: var(--sn-text) !important;
+  border-color: var(--sn-input-border) !important;
+}
+
+/* ── Nav bar ─────────────────────────────────────── */
+[data-theme="dark"] header[style],
+[data-theme="dark"] header > div[style] {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* ── Bottom nav ──────────────────────────────────── */
+[data-theme="dark"] nav[style] {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* ── Footer ──────────────────────────────────────── */
+[data-theme="dark"] footer {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+}
+[data-theme="dark"] footer * {
+  color: var(--sn-subtle) !important;
+}
+
+/* ── Light background sections → dark ───────────── */
+[data-theme="dark"] div[style*="background: 'var(--sn-page)'"],
+[data-theme="dark"] div[style*="background:'var(--sn-page)'"],
+[data-theme="dark"] section[style*="background: 'var(--sn-page)'"] {
+  background: var(--sn-page) !important;
+}
+
+/* ── Search inputs ───────────────────────────────── */
+[data-theme="dark"] div[style*="background: 'var(--sn-bg)'"] input,
+[data-theme="dark"] div[style*="background:'var(--sn-bg)'"] input {
+  background: var(--sn-input) !important;
+  color: var(--sn-text) !important;
+}
+
+/* ── Buttons: primary stays blue in dark ─────────── */
+[data-theme="dark"] button[style*="background: 'var(--sn-primary)'"],
+[data-theme="dark"] a[style*="background: 'var(--sn-primary)'"],
+[data-theme="dark"] button[style*="background:'var(--sn-primary)'"],
+[data-theme="dark"] a[style*="background:'var(--sn-primary)'"] {
+  background: var(--sn-primary) !important;
+  color: var(--sn-primary-fg) !important;
+}
+
+/* ── Hover states ────────────────────────────────── */
+[data-theme="dark"] button:not([style*="var(--sn-primary)"]):not([class*="like"]):hover {
+  background: var(--sn-surface) !important;
+}
+
+/* ── Page transition — no flash ─────────────────── */
+html {
+  color-scheme: light dark;
+}
+

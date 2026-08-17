@@ -30,7 +30,7 @@ export function CardSkeleton({ count = 6 }: { count?: number }) {
       gap: '16px', padding: '16px',
     }}>
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', background: '#F0F2F5' }}>
+        <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', background: 'var(--sn-page)' }}>
           <div className="skeleton" style={{ height: '160px', width: '100%' }} />
           <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <div className="skeleton" style={{ height: '14px', width: '70%' }} />

@@ -244,7 +244,7 @@ export default function AiPage() {
             <div style={{fontWeight:800,color:'#fff',fontSize:'0.9rem',letterSpacing:'-0.01em'}}>{t('ai.title')}</div>
             <div style={{display:'flex',alignItems:'center',gap:5}}>
               <span style={{width:5,height:5,borderRadius:'50%',background:'#6ee7b7',display:'inline-block'}}/>
-              <span style={{fontSize:'0.62rem',color:'#9CA3AF'}}>{t('ai.online')}</span>
+              <span style={{fontSize:'0.62rem',color:'var(--sn-subtle)'}}>{t('ai.online')}</span>
             </div>
           </div>
           {!isEmpty && (
@@ -358,10 +358,10 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
           </div>
           <div style={{flex:1,minWidth:0}}>
             <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
-              <span style={{fontWeight:700,color:'#111827',fontSize:'0.88rem',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{store.shop_name}</span>
-              {store.plan === 'premium' && <span style={{fontSize:'0.67rem',color:'#1D4ED8',flexShrink:0}}>★ Premium</span>}
+              <span style={{fontWeight:700,color:'var(--sn-text)',fontSize:'0.88rem',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{store.shop_name}</span>
+              {store.plan === 'premium' && <span style={{fontSize:'0.67rem',color:'var(--sn-text)',flexShrink:0}}>★ Premium</span>}
             </div>
-            <div style={{fontSize:'0.7rem',color:'#9CA3AF',marginBottom:4,display:'flex',gap:6,flexWrap:'wrap'}}>
+            <div style={{fontSize:'0.7rem',color:'var(--sn-subtle)',marginBottom:4,display:'flex',gap:6,flexWrap:'wrap'}}>
               {store.shop_category&&<span>{store.shop_category}</span>}
               {store.shop_region&&<span>\uD83D\uDCCD {store.shop_region}</span>}
             </div>
@@ -371,7 +371,7 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
             {(store.products?.length||0)>0&&(
               <div style={{marginTop:5,display:'flex',gap:4,flexWrap:'wrap'}}>
                 {(store.products || []).slice(0,3).map((p,j)=>(
-                  <span key={j} style={{fontSize:'0.67rem',background:'#fff',border:'1px solid #E2E8F0',borderRadius:5,padding:'2px 7px',color:'#374151'}}>
+                  <span key={j} style={{fontSize:'0.67rem',background:'var(--sn-bg)',border:'1px solid #E2E8F0',borderRadius:5,padding:'2px 7px',color:'var(--sn-muted)'}}>
                     {p.name} \u00B7 <strong>TZS {p.price?.toLocaleString()}</strong>
                   </span>
                 ))}

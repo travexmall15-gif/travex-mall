@@ -79,8 +79,8 @@ export default function GroupDetailPage({
   }
 
   if (!group) return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', display:'flex', alignItems:'center', justifyContent:'center' }}>
-      <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'#1D4ED8' }} />
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+      <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'var(--sn-text)' }} />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
   )
@@ -92,45 +92,45 @@ export default function GroupDetailPage({
   const shareMsg = encodeURIComponent(`Jiunge nami kwenye group buy!\n\nBidhaa: ${group.product_name}\nBei ya kawaida: ${fmt(group.unit_price)}\nBei ya group: ${fmt(discount)} (-${group.discount_pct}%)\n\nTunahitaji watu ${remaining} zaidi!\n\nJiunge hapa: ${shareUrl}`)
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', fontFamily:"'Inter',sans-serif" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:'Inter',sans-serif}`}</style>
       <SiteNav />
       <div style={{ paddingTop:80, maxWidth:560, margin:'0 auto', padding:'80px 5% 4rem' }}>
         <Link href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
-          color:'#6B7280', textDecoration:'none', fontSize:13, marginBottom:20 }}>
+          color:'var(--sn-muted)', textDecoration:'none', fontSize:13, marginBottom:20 }}>
           <ArrowLeft size={14} /> All Groups
         </Link>
 
-        <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem',
+        <div style={{ background:'var(--sn-bg)', borderRadius:20, padding:'1.5rem',
           boxShadow:'0 8px 30px rgba(29,78,216,0.1)', marginBottom:20 }}>
           <div style={{ fontSize:11, color:'#1E40AF', fontWeight:700, textTransform:'uppercase',
             letterSpacing:'.06em', marginBottom:4 }}>{group.shop_name}</div>
           <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.4rem',
-            fontWeight:900, color:'#111827', marginBottom:12 }}>{group.product_name}</h1>
+            fontWeight:900, color:'var(--sn-text)', marginBottom:12 }}>{group.product_name}</h1>
 
           <div style={{ display:'flex', alignItems:'baseline', gap:8, marginBottom:16 }}>
-            <span style={{ fontSize:24, fontWeight:900, color:'#1D4ED8' }}>{fmt(discount)}</span>
-            <span style={{ fontSize:14, color:'#9CA3AF', textDecoration:'line-through' }}>{fmt(group.unit_price)}</span>
-            <span style={{ fontSize:12, background:'#fff', color:'#1D4ED8',
+            <span style={{ fontSize:24, fontWeight:900, color:'var(--sn-text)' }}>{fmt(discount)}</span>
+            <span style={{ fontSize:14, color:'var(--sn-subtle)', textDecoration:'line-through' }}>{fmt(group.unit_price)}</span>
+            <span style={{ fontSize:12, background:'var(--sn-bg)', color:'var(--sn-text)',
               padding:'2px 8px', borderRadius:999, fontWeight:700 }}>-{group.discount_pct}%</span>
           </div>
 
           {/* Progress */}
           <div style={{ marginBottom:16 }}>
             <div style={{ display:'flex', justifyContent:'space-between', fontSize:12,
-              color:'#6B7280', marginBottom:6 }}>
+              color:'var(--sn-muted)', marginBottom:6 }}>
               <span><Users size={12} style={{marginRight:4}} />{group.current_members} joined</span>
               <span style={{ color: remaining <= 2 ? '#EF4444' : '#64748B', fontWeight:700 }}>
                 Need {remaining} more
               </span>
             </div>
-            <div style={{ height:10, background:'#fff', borderRadius:999 }}>
+            <div style={{ height:10, background:'var(--sn-bg)', borderRadius:999 }}>
               <div style={{ height:'100%', width:`${Math.min(100,pct)}%`,
                 background:'linear-gradient(90deg,#60A5FA,#1D4ED8)',
                 borderRadius:999, transition:'width .5s' }} />
             </div>
-            <div style={{ fontSize:11, color:'#6B7280', marginTop:4, textAlign:'center' }}>
+            <div style={{ fontSize:11, color:'var(--sn-muted)', marginTop:4, textAlign:'center' }}>
               {group.min_members} members needed for {group.discount_pct}% discount to activate
             </div>
           </div>
@@ -142,7 +142,7 @@ export default function GroupDetailPage({
                 <div key={i} style={{ width:32, height:32, borderRadius:'50%',
                   background:'linear-gradient(135deg,#1D4ED8,#60A5FA)',
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:11, fontWeight:800, color:'#111827' }}>
+                  fontSize:11, fontWeight:800, color:'var(--sn-text)' }}>
                   {m.name[0].toUpperCase()}
                 </div>
               ))}
@@ -152,34 +152,34 @@ export default function GroupDetailPage({
           {/* Share button */}
           <a href={`https://wa.me/?text=${shareMsg}`} target="_blank"
             style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8,
-              background:'#25D366', color:'#111827', borderRadius:999, padding:'11px',
+              background:'#25D366', color:'var(--sn-text)', borderRadius:999, padding:'11px',
               fontWeight:700, fontSize:13, textDecoration:'none', marginBottom:8 }}>
             <MessageCircle size={15} /> Share on WhatsApp, Invite Friends
           </a>
         </div>
 
         {success ? (
-          <div style={{ background:'#fff', borderRadius:20, padding:'2rem', textAlign:'center',
+          <div style={{ background:'var(--sn-bg)', borderRadius:20, padding:'2rem', textAlign:'center',
             boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
             <CheckCircle size={48} style={{ color:'#22C55E', margin:'0 auto 12px' }} />
-            <h2 style={{ fontFamily:"'Inter',sans-serif", color:'#111827', marginBottom:8 }}>
+            <h2 style={{ fontFamily:"'Inter',sans-serif", color:'var(--sn-text)', marginBottom:8 }}>
               You&apos;re In!
             </h2>
-            <p style={{ color:'#6B7280', fontSize:13, marginBottom:16 }}>
+            <p style={{ color:'var(--sn-muted)', fontSize:13, marginBottom:16 }}>
               You joined the group. Share the link to invite more friends and activate the discount!
             </p>
             <a href={`https://wa.me/?text=${shareMsg}`} target="_blank"
               style={{ display:'inline-flex', alignItems:'center', gap:6,
-                background:'#25D366', color:'#111827', borderRadius:999, padding:'11px 24px',
+                background:'#25D366', color:'var(--sn-text)', borderRadius:999, padding:'11px 24px',
                 fontWeight:700, fontSize:13, textDecoration:'none' }}>
               <MessageCircle size={14} /> Share Now
             </a>
           </div>
         ) : (
-          <div style={{ background:'#fff', borderRadius:20, padding:'1.5rem',
+          <div style={{ background:'var(--sn-bg)', borderRadius:20, padding:'1.5rem',
             boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
             <h3 style={{ fontFamily:"'Inter',sans-serif", fontSize:'1.1rem',
-              color:'#111827', fontWeight:800, marginBottom:16 }}>{t('groupBuy.joinTitle')}</h3>
+              color:'var(--sn-text)', fontWeight:800, marginBottom:16 }}>{t('groupBuy.joinTitle')}</h3>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:16 }}>
               <input value={name} onChange={e=>setName(e.target.value)}
                 placeholder="Your Full Name *"

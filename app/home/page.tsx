@@ -44,8 +44,8 @@ export default function HomePage() {
         .sell-chip-inner { max-width:1100px; margin:0 auto; }
         .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1.5px solid #E5E7EB; border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s,box-shadow 0.2s; }
         .sell-chip-card:hover { border-color:#D1D5DB; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
-        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#1D4ED8; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#1E40AF; transform:translateY(-1px); box-shadow:0 6px 18px rgba(29,78,216,0.30); }
+        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#111827; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+        .sell-cta:hover { background:#374151; transform:translateY(-1px); box-shadow:0 6px 18px rgba(29,78,216,0.30); }
 
         .ai-chip-wrap { background:#fff; padding:1.2rem 5%; border-bottom:1px solid #F3F4F6; }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
@@ -120,7 +120,7 @@ export default function HomePage() {
               // {t('home.marketsLabel')}
             </div>
             <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.5rem,3vw,2.2rem)',fontWeight:800,color:'#111827',margin:0 }}>
-              {t('home.marketsThree')} <span style={{ color:'#1D4ED8' }}>{t('home.platform')}</span>
+              {t('home.marketsThree')} <span style={{ color:'#111827' }}>{t('home.platform')}</span>
             </h2>
           </div>
 
@@ -130,7 +130,7 @@ export default function HomePage() {
             <div className="market-card business" style={{ flex:1,background:'#FFFFFF',border:'2px solid rgba(29,78,216,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(15,23,42,0.06)' }}>
               <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,#1D4ED8,#F0C96B)' }} />
               <div style={{ width:56,height:56,borderRadius:16,background:'linear-gradient(135deg,#040C32,#071545)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1.4rem',boxShadow:'0 8px 20px rgba(5,11,46,0.20)' }}>
-                <Store style={{ width:26,height:26,color:'#1D4ED8' }} />
+                <Store style={{ width:26,height:26,color:'#111827' }} />
               </div>
               <div style={{ display:'flex',gap:'0.4rem',marginBottom:'1rem',flexWrap:'wrap' }}>
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(29,78,216,0.10)',color:'#A07830',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.premium')}</span>
@@ -160,19 +160,19 @@ export default function HomePage() {
             <div className="market-card vybe" style={{ flex:1,background:'linear-gradient(160deg,#0D0015 0%,#1A0030 50%,#12001F 100%)',border:'2px solid rgba(200,123,255,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(120,0,255,0.15)' }}>
               <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,#FF0080,#7800FF,#00C8FF)' }} />
               <div style={{ position:'absolute',top:'-30%',right:'-20%',width:'70%',height:'100%',background:'radial-gradient(ellipse at center,rgba(120,0,255,0.18) 0%,transparent 65%)',filter:'blur(20px)',pointerEvents:'none' }} />
-              <div style={{ position:'relative',zIndex:1,width:56,height:56,borderRadius:16,background:'rgba(200,123,255,0.12)',border:'1px solid rgba(200,123,255,0.25)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'0.85rem' }}>
-                <Sparkles style={{ width:26,height:26,color:'#C87BFF' }} />
+              <div style={{ position:'relative',zIndex:1,width:56,height:56,borderRadius:16,background:'rgba(200,123,255,0.25)',border:'1px solid rgba(200,123,255,0.45)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'0.85rem' }}>
+                <Sparkles style={{ width:26,height:26,color:'#fff' }} />
               </div>
               <div style={{ position:'relative',zIndex:1,display:'flex',gap:'0.4rem',marginBottom:'1rem',flexWrap:'wrap' }}>
-                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(255,0,128,0.12)',color:'#FF80B5',padding:'0.2rem 0.65rem',borderRadius:999 }}>Social</span>
-                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(120,0,255,0.12)',color:'#C87BFF',padding:'0.2rem 0.65rem',borderRadius:999 }}>Live</span>
+                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(255,0,128,0.30)',color:'#fff',padding:'0.2rem 0.65rem',borderRadius:999 }}>Social</span>
+                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(120,0,255,0.30)',color:'#fff',padding:'0.2rem 0.65rem',borderRadius:999 }}>Live</span>
               </div>
               <h3 style={{ position:'relative',zIndex:1,fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#fff',marginBottom:'0.6rem',lineHeight:1.15 }}>Social Vybe</h3>
               <p style={{ position:'relative',zIndex:1,fontSize:'0.85rem',color:'rgba(255,255,255,0.72)',lineHeight:1.72,marginBottom:'1.5rem' }}>{t('home.vybeCardDesc')}</p>
               <div style={{ position:'relative',zIndex:1,display:'flex',gap:'1.5rem',marginBottom:'1.75rem',paddingBottom:'1.5rem',borderBottom:'1px solid rgba(255,255,255,0.12)' }}>
                 {([['POST',t('home.dailyContent')],['LIKE',t('home.realEngagement')],['SELL',t('home.directToBuyers')]] as [string,string][]).map(([v,l]) => (
                   <div key={l}>
-                    <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.1rem',fontWeight:900,color:'#C87BFF',lineHeight:1 }}>{v}</div>
+                    <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.1rem',fontWeight:900,color:'#fff',lineHeight:1 }}>{v}</div>
                     <div style={{ fontSize:'0.65rem',color:'rgba(255,255,255,0.55)',marginTop:2 }}>{l}</div>
                   </div>
                 ))}
@@ -196,7 +196,7 @@ export default function HomePage() {
         <section style={{ background:'#F8FAFF',padding:'3.5rem 5%',borderBottom:'1px solid #E2E8F0' }}>
           <div style={{ maxWidth:'1100px',margin:'0 auto' }}>
             <div style={{ textAlign:'center',marginBottom:'2rem' }}>
-              <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#1D4ED8',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
+              <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#111827',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
                 // {t('home.sponsoredLabel')}
               </div>
               <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.4rem,3vw,2rem)',fontWeight:800,color:'#111827',margin:0 }}>
@@ -209,11 +209,11 @@ export default function HomePage() {
                   <div style={{ width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,#040C32,#071545)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1rem',overflow:'hidden',flexShrink:0 }}>
                     {shop.logo_url
                       ? <img src={shop.logo_url} alt={shop.shop_name} style={{ width:'100%',height:'100%',objectFit:'cover' }} loading="lazy" />
-                      : <span style={{ fontSize:'1.2rem',fontWeight:900,color:'#1D4ED8' }}>{shop.shop_name.charAt(0)}</span>
+                      : <span style={{ fontSize:'1.2rem',fontWeight:900,color:'#111827' }}>{shop.shop_name.charAt(0)}</span>
                     }
                   </div>
                   <div style={{ display:'inline-flex',alignItems:'center',gap:4,background:'rgba(29,78,216,0.10)',border:'1px solid rgba(29,78,216,0.22)',borderRadius:999,padding:'0.15rem 0.55rem',marginBottom:'0.65rem' }}>
-                    <BadgeCheck size={11} style={{ color:'#1D4ED8' }} />
+                    <BadgeCheck size={11} style={{ color:'#111827' }} />
                     <span style={{ fontSize:'0.6rem',fontWeight:700,color:'#A07830' }}>{t('home.sponsoredBadge')}</span>
                   </div>
                   <div style={{ fontWeight:700,fontSize:'0.92rem',color:'#111827',marginBottom:'0.2rem',lineHeight:1.3 }}>{shop.shop_name}</div>

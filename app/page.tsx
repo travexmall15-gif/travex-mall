@@ -51,7 +51,7 @@ export default function SplashPage() {
   return (
     <div style={{
       position: 'fixed', inset: 0,
-      background: '#fff',
+      background: 'var(--sn-bg)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       fontFamily: "'Inter',sans-serif",
@@ -87,14 +87,14 @@ export default function SplashPage() {
 
       {/* Brand name */}
       <div className="sp-brand" style={{ marginTop: 20, display: 'flex', alignItems: 'baseline', gap: 1 }}>
-        <span style={{ fontSize: '2rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.04em', lineHeight: 1 }}>Shop</span>
-        <span style={{ fontSize: '2rem', fontWeight: 900, color: '#1D4ED8', letterSpacing: '-0.04em', lineHeight: 1 }}>Nekt</span>
+        <span style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--sn-text)', letterSpacing: '-0.04em', lineHeight: 1 }}>Shop</span>
+        <span style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--sn-text)', letterSpacing: '-0.04em', lineHeight: 1 }}>Nekt</span>
       </div>
 
       {/* Tagline */}
       <p className="sp-sub" style={{
         fontSize: '0.62rem',
-        color: '#9CA3AF',
+        color: 'var(--sn-subtle)',
         letterSpacing: '0.20em',
         textTransform: 'uppercase',
         marginTop: 10,

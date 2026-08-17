@@ -80,12 +80,12 @@ export default function OrdersPage() {
   }
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:540, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
         <button onClick={() => router.back()}
-          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
+          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
           <ArrowLeft size={15}/> Back
         </button>
         <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem', letterSpacing:'-0.025em' }}>{t('orders.title')}</h1>
@@ -95,7 +95,7 @@ export default function OrdersPage() {
           {(['all','pending','confirmed','rejected'] as OrderFilter[]).map(f => (
             <button key={f} onClick={() => setFilter(f)}
               style={{ padding:'7px 14px', borderRadius:999, border:'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", fontSize:'0.78rem', fontWeight:700, whiteSpace:'nowrap', flexShrink:0, transition:'all .15s',
-                background: filter===f ? '#1D4ED8' : '#fff',
+                background: filter===f ? '#111827' : '#fff',
                 color:      filter===f ? '#1D4ED8'  : '#64748B',
                 boxShadow:  filter===f ? 'none' : '0 1px 4px rgba(15,23,42,0.08)',
               }}>
@@ -116,7 +116,7 @@ export default function OrdersPage() {
         {!loading && filtered.length === 0 && (
           <div style={{ textAlign:'center', padding:'4rem 0' }}>
             <Package size={44} color="#CBD5E1" style={{ margin:'0 auto 12px', display:'block' }} />
-            <p style={{ color:'#9CA3AF', fontSize:'0.875rem' }}>
+            <p style={{ color:'var(--sn-subtle)', fontSize:'0.875rem' }}>
               {filter==='all' ? 'No orders yet' : `No ${filter} orders`}
             </p>
           </div>
@@ -128,18 +128,18 @@ export default function OrdersPage() {
             {filtered.map(order => {
               const st = STATUS_STYLE[order.status]
               return (
-                <div key={order.id} style={{ background:'#fff', borderRadius:16, border:`1.5px solid ${order.status==='rejected'?'#FEE2E2':'#E5E7EB'}`, padding:'14px 16px', boxShadow:'0 1px 4px rgba(15,23,42,0.05)' }}>
+                <div key={order.id} style={{ background:'var(--sn-bg)', borderRadius:16, border:`1.5px solid ${order.status==='rejected'?'#FEE2E2':'var(--sn-border)'}`, padding:'14px 16px', boxShadow:'0 1px 4px rgba(15,23,42,0.05)' }}>
                   <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12 }}>
                     {/* Product image / icon */}
-                    <div style={{ width:52, height:52, borderRadius:12, background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
+                    <div style={{ width:52, height:52, borderRadius:12, background:'var(--sn-bg)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow:'hidden' }}>
                       {order.image_url
                         ? <img src={order.image_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }}  loading="lazy" />
                         : <Package size={22} color="#94A3B8" />}
                     </div>
                     <div style={{ flex:1, minWidth:0 }}>
-                      <div style={{ fontSize:'0.9rem', fontWeight:700, color:'#111827', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{order.product_name}</div>
-                      <div style={{ fontSize:'0.72rem', color:'#6B7280', marginTop:2 }}>{order.store_name}</div>
-                      <div style={{ fontSize:'0.72rem', color:'#9CA3AF', marginTop:2 }}>{new Date(order.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>
+                      <div style={{ fontSize:'0.9rem', fontWeight:700, color:'var(--sn-text)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{order.product_name}</div>
+                      <div style={{ fontSize:'0.72rem', color:'var(--sn-muted)', marginTop:2 }}>{order.store_name}</div>
+                      <div style={{ fontSize:'0.72rem', color:'var(--sn-subtle)', marginTop:2 }}>{new Date(order.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>
                     </div>
                     <div>
                       <span style={{ fontSize:'0.7rem', fontWeight:700, padding:'4px 10px', borderRadius:999, background:st.bg, color:st.color }}>
@@ -155,13 +155,13 @@ export default function OrdersPage() {
 
                     <div style={{ display:'flex', gap:8 }}>
                       <Link href={`/orders/${order.id}`}
-                        style={{ padding:'7px 14px', background:'#fff', border:'none', borderRadius:10, fontSize:'0.78rem', fontWeight:600, color:'#374151', cursor:'pointer', textDecoration:'none', display:'inline-block' }}>
+                        style={{ padding:'7px 14px', background:'var(--sn-bg)', border:'none', borderRadius:10, fontSize:'0.78rem', fontWeight:600, color:'var(--sn-muted)', cursor:'pointer', textDecoration:'none', display:'inline-block' }}>
                         Details
                       </Link>
 
                       {order.status === 'rejected' && (
                         <Link href={`/orders/${order.id}/payment`}
-                          style={{ padding:'7px 14px', background:'#fff', border:'none', borderRadius:10, fontSize:'0.78rem', fontWeight:700, color:'#1D4ED8', cursor:'pointer', textDecoration:'none', display:'flex', alignItems:'center', gap:5 }}>
+                          style={{ padding:'7px 14px', background:'var(--sn-bg)', border:'none', borderRadius:10, fontSize:'0.78rem', fontWeight:700, color:'var(--sn-text)', cursor:'pointer', textDecoration:'none', display:'flex', alignItems:'center', gap:5 }}>
                           <AlertCircle size={13} /> Payment & Delivery
                         </Link>
                       )}

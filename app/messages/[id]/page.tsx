@@ -112,16 +112,16 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   }
 
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#F0F2F5', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--sn-page)', fontFamily: "'Inter',sans-serif" }}>
       <SiteNav />
 
       {/* Chat header */}
-      <div style={{ paddingTop: 108, background: '#fff', borderBottom: '1px solid #F1F5F9', padding: '108px 5% 12px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ paddingTop: 108, background: 'var(--sn-bg)', borderBottom: '1px solid #F1F5F9', padding: '108px 5% 12px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => router.back()}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4, color: '#6B7280' }}>
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4, color: 'var(--sn-muted)' }}>
           <ArrowLeft size={20} />
         </button>
-        <div style={{ width: 38, height: 38, borderRadius: 10, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--sn-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Store size={16} color="#1D4ED8" />
         </div>
         <div>
@@ -140,7 +140,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         )}
 
         {!loading && messages.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#9CA3AF', fontSize: '0.85rem' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--sn-subtle)', fontSize: '0.85rem' }}>
             {t('messages.noConversations') || 'Start the conversation! 👋'}
           </div>
         )}
@@ -178,19 +178,19 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
       </div>
 
       {/* Input */}
-      <div style={{ background: '#fff', borderTop: '1px solid #F1F5F9', padding: '12px 5%', display: 'flex', gap: 10, alignItems: 'flex-end' }}>
+      <div style={{ background: 'var(--sn-bg)', borderTop: '1px solid #F1F5F9', padding: '12px 5%', display: 'flex', gap: 10, alignItems: 'flex-end' }}>
         <textarea
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
           placeholder={t('messages.typeMessage')}
           rows={1}
-          style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: '#F0F2F5' }}
+          style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: 'var(--sn-page)' }}
           onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
-          onBlur={e  => (e.target.style.borderColor = '#E5E7EB')}
+          onBlur={e  => (e.target.style.borderColor = 'var(--sn-border)')}
         />
         <button onClick={send} disabled={!text.trim() || sending}
-          style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? '#0D1B3E' : '#E5E7EB', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+          style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? '#0D1B3E' : 'var(--sn-border)', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
           <Send size={16} color={text.trim() ? '#1D4ED8' : '#94A3B8'} />
         </button>
       </div>

@@ -15,11 +15,11 @@ export default function AboutPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'#F0F2F5', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
-        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'#6B7280', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
+        <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
           <ArrowLeft size={15} /> {t('about.back')}
         </button>
 
@@ -28,28 +28,28 @@ export default function AboutPage() {
           <img src="/icon-192.png" alt="ShopNekt" style={{ width:72, height:72, borderRadius:18, objectFit:'cover', marginBottom:12 }} loading="lazy" />
           <div>
             <span style={{ fontSize:'1.25rem', fontWeight:900, color:'#0D1B3E' }}>shop</span>
-            <span style={{ fontSize:'1.25rem', fontWeight:900, color:'#F97316' }}>nekt</span>
+            <span style={{ fontSize:'1.25rem', fontWeight:900, color:'var(--sn-primary)' }}>nekt</span>
           </div>
-          <p style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:4 }}>{t('about.version')} 1.0.0 &middot; {t('about.builtBy')}</p>
+          <p style={{ fontSize:'0.7rem', color:'var(--sn-subtle)', marginTop:4 }}>{t('about.version')} 1.0.0 &middot; {t('about.builtBy')}</p>
         </div>
 
         {/* Contact */}
         <div style={{ marginBottom:'1.25rem' }}>
-          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>
+          <p style={{ fontSize:'0.65rem', fontWeight:700, color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8 }}>
             {t('about.contactSupport')}
           </p>
-          <div style={{ background:'#fff', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
+          <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {CONTACTS.map((item, i) => (
               <a key={i} href={item.href} target="_blank" rel="noopener noreferrer"
                 style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 16px', textDecoration:'none', borderBottom: i < 2 ? '1px solid #F1F5F9' : 'none', transition:'background .15s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:36, height:36, borderRadius:10, background:'#F0F2F5', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <item.icon size={16} color="#0D1B3E" />
                 </div>
                 <div>
-                  <div style={{ fontSize:'0.82rem', fontWeight:600, color:'#111827' }}>{item.label}</div>
-                  <div style={{ fontSize:'0.7rem', color:'#9CA3AF', marginTop:2 }}>{item.val}</div>
+                  <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)' }}>{item.label}</div>
+                  <div style={{ fontSize:'0.7rem', color:'var(--sn-subtle)', marginTop:2 }}>{item.val}</div>
                 </div>
               </a>
             ))}
@@ -57,7 +57,7 @@ export default function AboutPage() {
         </div>
 
         {/* Rate */}
-        <button style={{ width:'100%', padding:'0.875rem', background:'#fff', border:'1.5px solid #E2E8F0', borderRadius:14, fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#0D1B3E', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+        <button style={{ width:'100%', padding:'0.875rem', background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#0D1B3E', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
           ⭐ {t('about.rateApp')} ⭐⭐⭐⭐⭐
         </button>
 

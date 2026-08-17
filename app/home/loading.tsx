@@ -15,14 +15,14 @@ export default function Loading() {
       `}</style>
 
       {/* Sell chip skeleton */}
-      <div style={{background:'#fff',padding:'1.2rem 5%',borderBottom:'1px solid #F3F4F6'}}>
+      <div style={{background:'var(--sn-bg)',padding:'1.2rem 5%',borderBottom:'1px solid #F3F4F6'}}>
         <div style={{maxWidth:'1100px',margin:'0 auto'}}>
           <div className="sk" style={{height:50,borderRadius:14,opacity:.3}}/>
         </div>
       </div>
 
       {/* 360 AI chip skeleton */}
-      <div style={{background:'linear-gradient(135deg,#080F37,#0D1B3E)',padding:'1.2rem 5%'}}>
+      <div style={{background: 'var(--sn-bg),#0D1B3E)',padding:'1.2rem 5%'}}>
         <div style={{maxWidth:'1100px',margin:'0 auto'}}>
           <div className="sk" style={{height:50,borderRadius:14,opacity:.2}}/>
         </div>

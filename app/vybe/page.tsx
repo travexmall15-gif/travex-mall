@@ -122,7 +122,7 @@ export default function VybePage() {
   const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F0F2F5', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
         @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
@@ -241,18 +241,18 @@ export default function VybePage() {
           {/* Live badge */}
           <div style={{ display:'inline-flex', alignItems:'center', gap:8, marginBottom:16,
             background:'rgba(29,78,216,0.10)', border:'1px solid rgba(29,78,216,0.28)',
-            color:'#1D4ED8', padding:'5px 16px', borderRadius:999, fontSize:11, fontWeight:700,
+            color:'var(--sn-text)', padding:'5px 16px', borderRadius:999, fontSize:11, fontWeight:700,
             letterSpacing:'0.06em' }}>
             <div className="live-dot" />
             {t('vybe.heroBadge')}
           </div>
 
           {/* Brand — NEVER translated */}
-          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'#111827',
+          <h1 style={{ fontSize:'clamp(2rem,5vw,3.2rem)', fontWeight:900, color:'var(--sn-text)',
             lineHeight:1.1, marginBottom:'0.6rem', letterSpacing:'-0.03em' }}>
             Social Vybe
           </h1>
-          <p style={{ color:'#9CA3AF', fontSize:'clamp(13px,2vw,15px)',
+          <p style={{ color:'var(--sn-subtle)', fontSize:'clamp(13px,2vw,15px)',
             marginBottom:'1.75rem', lineHeight:1.6, maxWidth:480, margin:'0 auto 1.75rem' }}>
             {t('vybe.subtitle')}
           </p>
@@ -265,8 +265,8 @@ export default function VybePage() {
                 { val: totalLikes > 999 ? `${(totalLikes/1000).toFixed(1)}k` : String(totalLikes), label: t('vybe.totalLikes') },
               ].map((s,i) => (
                 <div key={i} style={{ textAlign:'center' }}>
-                  <div style={{ fontSize:'1.4rem', fontWeight:900, color:'#1D4ED8', lineHeight:1 }}>{s.val}</div>
-                  <div style={{ fontSize:'0.6rem', color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.09em', marginTop:3 }}>{s.label}</div>
+                  <div style={{ fontSize:'1.4rem', fontWeight:900, color:'var(--sn-text)', lineHeight:1 }}>{s.val}</div>
+                  <div style={{ fontSize:'0.6rem', color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', marginTop:3 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -274,7 +274,7 @@ export default function VybePage() {
 
           {/* Search */}
           <div style={{ position:'relative', maxWidth:500, margin:'0 auto 1.5rem' }}>
-            <Search size={15} style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'#9CA3AF' }} />
+            <Search size={15} style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'var(--sn-subtle)' }} />
             <input
               className="search-input"
               value={search}
@@ -315,8 +315,8 @@ export default function VybePage() {
         {/* Loading */}
         {loading && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <Loader2 style={{ width:32, height:32, margin:'0 auto 12px', animation:'spin 1s linear infinite', color:'#1D4ED8' }} />
-            <p style={{ color:'#9CA3AF', fontSize:14 }}>{t('vybe.loading')}</p>
+            <Loader2 style={{ width:32, height:32, margin:'0 auto 12px', animation:'spin 1s linear infinite', color:'var(--sn-text)' }} />
+            <p style={{ color:'var(--sn-subtle)', fontSize:14 }}>{t('vybe.loading')}</p>
           </div>
         )}
 
@@ -326,8 +326,8 @@ export default function VybePage() {
             <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(239,68,68,.1)', border:'1px solid rgba(239,68,68,.2)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <RefreshCw size={22} color="#EF4444" />
             </div>
-            <p style={{ color:'#9CA3AF', fontSize:14, marginBottom:16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'#1D4ED8', color:'#fff', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+            <p style={{ color:'var(--sn-subtle)', fontSize:14, marginBottom:16 }}>{error}</p>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'var(--sn-primary)', color:'var(--sn-primary-fg)', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
           </div>
@@ -339,11 +339,11 @@ export default function VybePage() {
             <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(29,78,216,0.08)', border:'1px solid rgba(29,78,216,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
               <Star size={28} color="rgba(29,78,216,0.4)" />
             </div>
-            <p style={{ color:'#9CA3AF', fontSize:14 }}>
+            <p style={{ color:'var(--sn-subtle)', fontSize:14 }}>
               {search ? t('vybe.noResults') : t('vybe.noPosts')}
             </p>
             {search && (
-              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'#fff', border:'1px solid rgba(255,255,255,0.1)', color:'#6B7280', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
+              <button onClick={() => setSearch('')} style={{ marginTop:12, padding:'8px 20px', background:'var(--sn-bg)', border:'1px solid rgba(255,255,255,0.1)', color:'var(--sn-muted)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:13 }}>
                 {t('vybe.allPosts')}
               </button>
             )}
@@ -363,9 +363,9 @@ export default function VybePage() {
             {visible < filtered.length && (
               <div style={{ textAlign:'center', marginTop:'1.5rem' }}>
                 <button onClick={() => setVisible(v => v + 12)}
-                  style={{ padding:'11px 32px', background:'#fff', border:'1.5px solid #E2E8F0', color:'#6B7280', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
+                  style={{ padding:'11px 32px', background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', color:'var(--sn-muted)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
                   onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(29,78,216,.4)'; (e.currentTarget as HTMLElement).style.color='#1D4ED8' }}
-                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='#E5E7EB'; (e.currentTarget as HTMLElement).style.color='#6B7280' }}>
+                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='var(--sn-border)'; (e.currentTarget as HTMLElement).style.color='#6B7280' }}>
                   {t('vybe.loadMore')} · {filtered.length - visible} {t('vybe.totalPosts').toLowerCase()}
                 </button>
               </div>
@@ -403,20 +403,20 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
 
         {/* Logo */}
         <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
-          background:'#fff',
+          background:'var(--sn-bg)',
           border:'1.5px solid rgba(29,78,216,0.2)',
           display:'flex', alignItems:'center', justifyContent:'center' }}>
           {post.shop_logo ? (
             <Image src={post.shop_logo} alt={initials} width={42} height={42} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
           ) : (
-            <span style={{ fontSize:13, fontWeight:800, color:'#1D4ED8', letterSpacing:'-0.02em' }}>{initials}</span>
+            <span style={{ fontSize:13, fontWeight:800, color:'var(--sn-text)', letterSpacing:'-0.02em' }}>{initials}</span>
           )}
         </div>
 
         {/* Name + meta */}
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
-            <span style={{ fontSize:14, fontWeight:700, color:'#111827', letterSpacing:'-0.01em' }}>
+            <span style={{ fontSize:14, fontWeight:700, color:'var(--sn-text)', letterSpacing:'-0.01em' }}>
               {post.shop_name || t('vybe.seller')}
             </span>
             {/* Verified badge */}
@@ -427,24 +427,24 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
             )}
             {/* New badge */}
             {isNew && (
-              <span style={{ background:'rgba(29,78,216,0.15)', color:'#1D4ED8', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(29,78,216,0.2)' }}>
+              <span style={{ background:'rgba(29,78,216,0.15)', color:'var(--sn-text)', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(29,78,216,0.2)' }}>
                 {t('vybe.newPost')}
               </span>
             )}
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:2 }}>
             <Clock size={9} color="#9CA3AF" />
-            <span style={{ fontSize:11, color:'#9CA3AF' }}>{ago(post.created_at)}</span>
+            <span style={{ fontSize:11, color:'var(--sn-subtle)' }}>{ago(post.created_at)}</span>
             {post.category && (
               <><span style={{ color:'#D1D5DB' }}>·</span>
-              <span style={{ fontSize:11, color:'#9CA3AF' }}>{post.category}</span></>
+              <span style={{ fontSize:11, color:'var(--sn-subtle)' }}>{post.category}</span></>
             )}
           </div>
         </div>
 
         {/* Tag */}
         {post.tag && (
-          <span style={{ fontSize:10, fontWeight:700, color:'#1D4ED8', background:'rgba(29,78,216,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(29,78,216,0.15)', letterSpacing:'0.02em' }}>
+          <span style={{ fontSize:10, fontWeight:700, color:'var(--sn-text)', background:'rgba(29,78,216,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(29,78,216,0.15)', letterSpacing:'0.02em' }}>
             #{post.tag}
           </span>
         )}
@@ -453,7 +453,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
       {/* ── Caption ── */}
       {content && (
         <div style={{ padding:'0.65rem 1rem 0' }}>
-          <p style={{ fontSize:14, color:'#374151', lineHeight:1.65, margin:0, letterSpacing:'-0.005em' }}>
+          <p style={{ fontSize:14, color:'var(--sn-muted)', lineHeight:1.65, margin:0, letterSpacing:'-0.005em' }}>
             {content}
           </p>
         </div>
