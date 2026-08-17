@@ -1,44 +1,45 @@
 /* ════════════════════════════════════════════════════
    ShopNekt Design System — CSS Variables
+   WHITE + BLACK + DARK BLUE (ShopNekt Blue: #1D4ED8)
    ════════════════════════════════════════════════════ */
 :root {
-  /* Page */
-  --sn-page:    #F0F2F5;
-  --sn-bg:      #ffffff;
-  --sn-surface: #ffffff;
-  /* Text */
-  --sn-text:    #111827;
-  --sn-muted:   #6B7280;
+  /* Page - Light Theme */
+  --sn-page:    #FFFFFF;
+  --sn-bg:      #FFFFFF;
+  --sn-surface: #FFFFFF;
+  /* Text - Light Theme */
+  --sn-text:    #000000;
+  --sn-muted:   #4B5563;
   --sn-subtle:  #9CA3AF;
-  /* Brand */
+  /* Brand - ShopNekt Dark Blue */
   --sn-primary: #1D4ED8;
   --sn-primary-hover: #1E40AF;
   --sn-primary-fg: #ffffff;
-  /* Borders */
+  /* Borders - Light Theme */
   --sn-border:  #E5E7EB;
   --sn-border-strong: #D1D5DB;
-  /* Input */
-  --sn-input:   #ffffff;
+  /* Input - Light Theme */
+  --sn-input:   #FFFFFF;
   --sn-input-border: #E5E7EB;
-  /* Font */
+  /* Font - Inter everywhere */
   --sn-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ── DARK THEME ─────────────────────────────────────── */
 [data-theme="dark"] {
-  --sn-page:    #0F172A;
-  --sn-bg:      #1E293B;
-  --sn-surface: #1E293B;
-  --sn-text:    #F1F5F9;
-  --sn-muted:   #94A3B8;
-  --sn-subtle:  #64748B;
-  --sn-primary: #3B82F6;
-  --sn-primary-hover: #2563EB;
+  --sn-page:    #0A0A0A;
+  --sn-bg:      #111111;
+  --sn-surface: #111111;
+  --sn-text:    #FFFFFF;
+  --sn-muted:   #9CA3AF;
+  --sn-subtle:  #6B7280;
+  --sn-primary: #1D4ED8;
+  --sn-primary-hover: #1E40AF;
   --sn-primary-fg: #ffffff;
-  --sn-border:  #334155;
-  --sn-border-strong: #475569;
-  --sn-input:   #1E293B;
-  --sn-input-border: #334155;
+  --sn-border:  #272727;
+  --sn-border-strong: #3F3F3F;
+  --sn-input:   #111111;
+  --sn-input-border: #272727;
 }
 
 /* ── GLOBAL DARK OVERRIDES (override inline styles) ─── */
@@ -218,13 +219,13 @@
 
 html { scroll-behavior: smooth; }
 
-/* ── Body: light off-white + subtle grid ── */
+/* ── Body: Light theme default ── */
 body {
-  font-family: var(--font-sans);
+  font-family: var(--sn-font);
   font-size: 16px;
   line-height: 1.6;
-  color: #1A1D2E;
-  background: #EEF1F8;
+  color: var(--sn-text);
+  background: var(--sn-page);
   position: relative;
 }
 body::before {
@@ -235,15 +236,20 @@ body::before {
   z-index: -1;
 }
 
+/* Dark theme body override */
+[data-theme="dark"] body {
+  color: var(--sn-text);
+  background: var(--sn-page);
+}
+
 /* ── Typography ── */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans); font-weight: 700;
+  font-family: var(--sn-font);
   font-weight: 700;
   line-height: 1.2;
-  color: #0D1B3E;
+  color: var(--sn-text);
 }
-.font-heading { font-family: var(--font-sans); font-weight: 700; letter-spacing: var(--tracking-tight); }
-
+.font-heading { font-family: var(--sn-font); font-weight: 700; letter-spacing: var(--tracking-tight); }
 /* ── Tailwind color aliases ── */
 .text-navy   { color: #0D1B3E; }
 .bg-navy     { background-color: #fff; }
