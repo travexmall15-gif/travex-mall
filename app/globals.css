@@ -951,3 +951,89 @@ html {
   color-scheme: light dark;
 }
 
+
+/* ════════════════════════════════════════════════════
+   Page-specific dark mode — Vybe, Market, Flash, GroupBuy, Menu
+   ════════════════════════════════════════════════════ */
+
+/* Vybe */
+[data-theme="dark"] .vybe-card {
+  background: var(--sn-surface) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-text) !important;
+}
+[data-theme="dark"] .like-btn {
+  background: var(--sn-page) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-muted) !important;
+}
+[data-theme="dark"] .filter-pill {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-muted) !important;
+}
+[data-theme="dark"] .filter-pill.active {
+  background: var(--sn-primary) !important;
+  color: var(--sn-primary-fg) !important;
+  border-color: var(--sn-primary) !important;
+}
+[data-theme="dark"] .cat-chip {
+  background: var(--sn-page) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-muted) !important;
+}
+
+/* Market gateway cards */
+[data-theme="dark"] .market-cards-grid > a > div {
+  background: var(--sn-surface) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* Flash deals cards */
+[data-theme="dark"] .deal-grid > div {
+  background: var(--sn-surface) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* Group buy cards */
+[data-theme="dark"] .gb-card,
+[data-theme="dark"] .gb-group-card {
+  background: var(--sn-surface) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* Menu sections */
+[data-theme="dark"] .menu-section {
+  background: var(--sn-surface) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* Sticky search bars */
+[data-theme="dark"] div[style*="position:'sticky'"],
+[data-theme="dark"] div[style*="position: 'sticky'"] {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+}
+
+/* Search inputs in these pages */
+[data-theme="dark"] .search-input {
+  background: var(--sn-page) !important;
+  color: var(--sn-text) !important;
+  border-color: var(--sn-border) !important;
+}
+[data-theme="dark"] .search-input::placeholder {
+  color: var(--sn-subtle) !important;
+}
+
+/* Mk-chips (market filters) */
+[data-theme="dark"] .mk-chip {
+  background: var(--sn-bg) !important;
+  border-color: var(--sn-border) !important;
+  color: var(--sn-muted) !important;
+}
+[data-theme="dark"] .mk-chip.active {
+  background: var(--sn-primary) !important;
+  color: var(--sn-primary-fg) !important;
+  border-color: var(--sn-primary) !important;
+}
+

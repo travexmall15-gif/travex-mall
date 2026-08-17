@@ -73,7 +73,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
   return (
     <article style={{
-      background: '#fff',
+      background: 'var(--sn-bg)',
       border: featured ? '2px solid #1D4ED8' : '1.5px solid #E5E7EB',
       borderRadius: featured ? 24 : 20,
       overflow: 'hidden',
@@ -171,7 +171,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
                   {i > 0 && <span style={{ color:isEndingSoon?'#EF4444':'#374151', fontSize:11, fontWeight:700, margin:'0 1px' }}>:</span>}
                   <span style={{ display:'flex', flexDirection:'column' as const, alignItems:'center' }}>
                     <span style={{ fontSize:13, fontWeight:900, color:isEndingSoon?'#FCA5A5':'#fff', lineHeight:1 }}>{u.val}</span>
-                    <span style={{ fontSize:8, color:'#9CA3AF', textTransform:'uppercase' as const, letterSpacing:'0.04em' }}>{u.label}</span>
+                    <span style={{ fontSize:8, color:'var(--sn-subtle)', textTransform:'uppercase' as const, letterSpacing:'0.04em' }}>{u.label}</span>
                   </span>
                 </span>
               ))}
@@ -192,7 +192,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
         {/* Product name */}
         <div style={{ fontSize: featured ? '1.1rem' : '0.95rem', fontWeight:800,
-          color: '#111827',
+          color: 'var(--sn-text)',
           lineHeight:1.3, marginBottom:10, letterSpacing:'-0.02em' }}>
           {deal.product_name}
         </div>
@@ -202,7 +202,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
           <span style={{ fontSize: featured ? 22 : 18, fontWeight:900, color:'#EF4444', letterSpacing:'-0.02em' }}>
             {fmtTZS(deal.deal_price)}
           </span>
-          <span style={{ fontSize:12, textDecoration:'line-through', color: '#9CA3AF' }}>
+          <span style={{ fontSize:12, textDecoration:'line-through', color: 'var(--sn-subtle)' }}>
             {fmtTZS(deal.original_price)}
           </span>
         </div>
@@ -216,7 +216,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
         {/* Stock progress */}
         <div style={{ marginBottom:14 }}>
           <div style={{ display:'flex', justifyContent:'space-between', fontSize:11,
-            color: '#6B7280', marginBottom:5 }}>
+            color: 'var(--sn-muted)', marginBottom:5 }}>
             <span>{t('flash.ordersCount', { count: String(deal.current_orders) })}</span>
             <span style={{ fontWeight:700, color: left <= 5 ? '#EF4444' : '#374151' }}>
               {t('flash.leftCount', { count: String(left) })}
@@ -278,7 +278,7 @@ export default function FlashDealsPage() {
   const totalSavings = deals.reduce((a, d) => a + (d.original_price - d.deal_price), 0)
 
   return (
-    <main style={{ minHeight:'100vh', background:'#FFFBEB', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', fontFamily:'var(--sn-font)' }}>
       <style>{`
         @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
         @keyframes pulse   { 50%{opacity:.5} }
@@ -292,71 +292,8 @@ export default function FlashDealsPage() {
 
       <SiteNav />
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
-      <div style={{ paddingTop:'108px', background:'linear-gradient(160deg,#7C2D12,#92400E,#B45309)', color:'#111827', position:'relative', overflow:'hidden' }}>
-        {/* Shimmer bg */}
-        <div style={{ position:'absolute', inset:0, opacity:.08, pointerEvents:'none',
-          backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',
-          backgroundSize:'14px 14px' }} />
-        {/* Glow */}
-        <div style={{ position:'absolute', top:'-40%', right:'-10%', width:'50%', height:'200%',
-          background:'radial-gradient(ellipse,rgba(251,191,36,0.25) 0%,transparent 70%)',
-          pointerEvents:'none' }} />
-
-        <div style={{ position:'relative', zIndex:1, maxWidth:1100, margin:'0 auto', padding:'2.5rem 5% 2rem' }}>
-          <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:'1.5rem' }}>
-
-            {/* Left — text */}
-            <div>
-              {/* Back link */}
-              <Link href="/market"
-                style={{ display:'inline-flex', alignItems:'center', gap:6, color:'#6B7280', textDecoration:'none', fontSize:13, marginBottom:14, fontWeight:500, transition:'color .15s' }}
-                onMouseOver={e => (e.currentTarget as HTMLElement).style.color='#fff'}
-                onMouseOut={e  => (e.currentTarget as HTMLElement).style.color='#6B7280'}>
-                <ArrowLeft size={14} /> {t('flash.heroBack')}
-              </Link>
-
-              {/* Badge */}
-              <div style={{ display:'inline-flex', alignItems:'center', gap:7, marginBottom:12,
-                background:'#fff', border:'1px solid rgba(255,255,255,0.20)',
-                padding:'5px 14px', borderRadius:999, fontSize:11, fontWeight:800,
-                letterSpacing:'0.06em', backdropFilter:'blur(8px)' }}>
-                <Zap size={11} style={{ }} />
-                {t('flash.heroBadge')}
-              </div>
-
-              {/* Headline */}
-              <h1 style={{ fontSize:'clamp(2rem,5vw,3.5rem)', fontWeight:900, lineHeight:1.05,
-                marginBottom:'0.75rem', letterSpacing:'-0.035em' }}>
-                {t('flash.heroTitle')}
-              </h1>
-              <p style={{ color:'#6B7280', fontSize:'clamp(13px,1.8vw,15px)',
-                maxWidth:460, lineHeight:1.65 }}>
-                {t('flash.heroSubtitle')}
-              </p>
-            </div>
-
-            {/* Right — stats */}
-            {!loading && deals.length > 0 && (
-              <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-                {[
-                  { icon: Zap, val: String(deals.length), label: t('flash.activeDealsCount', { count: String(deals.length) }).replace(String(deals.length)+' ', ''), color:'#FCD34D' },
-                  { icon: TrendingUp, val: `${fmtTZS(totalSavings)}`, label: t('flash.totalSavings'), color:'#86EFAC' },
-                ].map((s,i) => (
-                  <div key={i} style={{ background:'#fff', backdropFilter:'blur(12px)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:16, padding:'1rem 1.25rem', textAlign:'center', minWidth:100 }}>
-                    <s.icon size={16} color={s.color} style={{ margin:'0 auto 6px', display:'block' }} />
-                    <div style={{ fontSize:deals.length > 99 ? '1rem' : '1.35rem', fontWeight:900, color:'#111827', lineHeight:1, letterSpacing:'-0.02em' }}>{s.val}</div>
-                    <div style={{ fontSize:10, color:'#6B7280', marginTop:3, letterSpacing:'0.04em' }}>{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* ── CONTENT ───────────────────────────────────────────── */}
-      <div style={{ maxWidth:1100, margin:'0 auto', padding:'2rem 5% 5rem' }}>
+      <div style={{ maxWidth:1100, margin:'0 auto', padding:'5.5rem 5% 4rem' }}>
 
         {/* Loading */}
         {loading && (
@@ -372,14 +309,14 @@ export default function FlashDealsPage() {
             <div style={{ width:80, height:80, borderRadius:'24px', background:'linear-gradient(135deg,#FEF3C7,#FDE68A)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', boxShadow:'0 8px 24px rgba(234,179,8,0.20)' }}>
               <Zap size={36} color="#F59E0B" />
             </div>
-            <h2 style={{ fontSize:'1.5rem', fontWeight:800, color:'#111827', marginBottom:8, letterSpacing:'-0.025em' }}>
+            <h2 style={{ fontSize:'1.5rem', fontWeight:800, color:'var(--sn-text)', marginBottom:8, letterSpacing:'-0.025em' }}>
               {t('flash.noDeals')}
             </h2>
-            <p style={{ color:'#6B7280', marginBottom:24, fontSize:14, lineHeight:1.6 }}>
+            <p style={{ color:'var(--sn-muted)', marginBottom:24, fontSize:14, lineHeight:1.6 }}>
               {t('flash.noDealsDesc')}
             </p>
             <Link href="/market"
-              style={{ background:'linear-gradient(135deg,#F59E0B,#EF4444)', color:'#111827',
+              style={{ background:'linear-gradient(135deg,#F59E0B,#EF4444)', color:'var(--sn-text)',
                 padding:'12px 28px', borderRadius:999, fontWeight:700, textDecoration:'none',
                 fontSize:14, display:'inline-flex', alignItems:'center', gap:6,
                 boxShadow:'0 8px 24px rgba(245,158,11,0.35)' }}>

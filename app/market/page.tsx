@@ -82,22 +82,9 @@ export default function MarketPage() {
     <main style={{ minHeight: '100vh', background: 'var(--sn-page)' }}>
       <SiteNav />
 
-      <section style={{ maxWidth: 860, margin: '0 auto', padding: '2.5rem 1rem 5rem' }}>
+      <section style={{ maxWidth: 860, margin: '0 auto', padding: '6rem 1rem 4rem' }}>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
-          <div style={{ fontSize: '0.68rem', fontWeight: 800, color: 'var(--sn-text)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
-            ShopNekt
-          </div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            Business Marketplaces
-          </h1>
-          <p style={{ color: 'var(--sn-muted)', fontSize: '0.88rem', maxWidth: 380, margin: '0 auto', lineHeight: 1.6 }}>
-            {t('market.gatewayDesc') || 'Select a marketplace to discover verified stores'}
-          </p>
-        </div>
-
-        {/* Market Cards */}
+                {/* Market Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.25rem' }}>
           {MARKETS.map((market) => {
             const Icon = market.icon
@@ -105,7 +92,7 @@ export default function MarketPage() {
             return (
               <Link key={market.key} href={`/market/${market.key}`} style={{ textDecoration: 'none' }}>
                 <div style={{
-                  background: market.bg,
+                  background: 'var(--sn-bg)',
                   border: `1.5px solid ${market.borderColor}`,
                   borderRadius: 22,
                   padding: '2rem 1.75rem 1.75rem',

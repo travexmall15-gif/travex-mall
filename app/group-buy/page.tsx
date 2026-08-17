@@ -348,34 +348,8 @@ export default function GroupBuyPage() {
 
       <SiteNav />
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
-      {/* ── SLIM PAGE HEADER ─────────────────────────────────── */}
-      <div style={{ background:'var(--sn-bg)', borderBottom:'1px solid #F1F5F9' }}>
-        <div style={{ maxWidth:1200, margin:'0 auto', padding:'1rem 5%', display:'flex', alignItems:'center', justifyContent:'space-between', gap:16 }}>
-          <h1 style={{ fontFamily:"'Inter',sans-serif", fontSize:'clamp(1.1rem,2.5vw,1.4rem)', fontWeight:900, color:'var(--sn-text)', margin:0, letterSpacing:'-0.02em' }}>
-            Group Buying
-          </h1>
-          <Link href="/open-store" style={{ display:'inline-flex', alignItems:'center', gap:5, background:'var(--sn-primary)', color:'var(--sn-primary-fg)', padding:'0.5rem 1.2rem', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none', flexShrink:0 }}>
-            <ShoppingBag size={13} /> {t('groupBuy.openShopBtn')}
-          </Link>
-        </div>
-        <div style={{ overflow:'hidden', borderTop:'1px solid #F3F4F6' }}>
-          <div style={{ padding:'8px 0' }}>
-            <div className="gb-chips" style={{ display:'flex', gap:8, width:'max-content', paddingLeft:24 }}>
-              {[...CHIPS,...CHIPS].map((c,i) => (
-                <a key={i} href={c.href} className="chip-link"
-                  style={{ background:c.bg, border:`1px solid ${c.border}`, color:c.color }}>
-                  <span style={{ fontSize:'0.73rem', fontWeight:700 }}>{c.label}</span>
-                  <span style={{ fontSize:'0.57rem', opacity:0.7 }}>{c.sub}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* ── CONTENT ───────────────────────────────────────────── */}
-      <div style={{ maxWidth:1200, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
+      <div style={{ maxWidth:1200, margin:'0 auto', padding:'6rem 5% 4rem' }}>
 
         {/* Search + filter */}
         <div style={{ display:'flex', gap:10, marginBottom:'1rem', flexWrap:'wrap' }}>

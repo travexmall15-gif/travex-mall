@@ -80,7 +80,7 @@ export default function MenuPage() {
       label: t('menuPage.quickNav'),
       items: [
         { icon: Home,           label: t('menuPage.home'),          href: '/home',               color: '#0D1B3E' },
-        { icon: Sparkles,       label: t('menuPage.vybe'),          href: '/vybe',               color: 'var(--sn-primary)' },
+        { icon: Sparkles,       label: t('menuPage.vybe'),          href: '/vybe',               color: 'var(--sn-text)' },
         { icon: Store,          label: t('menuPage.market'),        href: '/market',             color: '#3B82F6' },
         { icon: Zap,            label: t('menuPage.flashDeals'),    href: '/flash-deals',        color: '#EF4444' },
         { icon: Users,          label: t('menuPage.groupBuy'),      href: '/group-buy',          color: '#10B981' },
@@ -90,7 +90,7 @@ export default function MenuPage() {
       label: t('menuPage.storeSelling'),
       items: [
         { icon: Store,          label: t('menuPage.openShop'),     href: '/open-store',              color: 'var(--sn-text)' },
-        { icon: ShoppingCart,   label: t('menuPage.shoppingPrefs'), href: '/settings/shopping',       color: 'var(--sn-primary)' },
+        { icon: ShoppingCart,   label: t('menuPage.shoppingPrefs'), href: '/settings/shopping',       color: 'var(--sn-text)' },
       ],
     },
     {
@@ -124,7 +124,7 @@ export default function MenuPage() {
           </button>
           <div style={{ display:'flex', alignItems:'center', gap:0 }}>
             <span style={{ fontSize:'1rem', fontWeight:900, color:'var(--sn-text)', letterSpacing:'-0.03em' }}>Shop</span>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'var(--sn-primary)', letterSpacing:'-0.03em' }}>Nekt</span>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'var(--sn-text)', letterSpacing:'-0.03em' }}>Nekt</span>
           </div>
           <div style={{ width:36 }} />
         </div>
