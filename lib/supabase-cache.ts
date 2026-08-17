@@ -1,13 +1,14 @@
 // ═══════════════════════════════════════════════════════════
 // SHOPNEKT — Cached Supabase Queries
 // React cache() deduplicates requests per render pass
+// In-memory cache for client-side reuse across component renders
 // ═══════════════════════════════════════════════════════════
 import { cache } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bscecjbgnjitlfmgwcic.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
   {
     global: {
       fetch: (url, options = {}) => fetch(url, {
@@ -18,6 +19,28 @@ const sb = createClient(
     },
   }
 )
+
+// ── Client-side in-memory cache (per session) ─────────────
+// Stores recently fetched data to avoid redundant network requests
+// Keys are prefixed by query type for clarity
+const clientCache = new Map<string, { data: any; timestamp: number }>()
+const CACHE_TTL = 5 * 60 * 1000 // 5 minutes TTL for client cache
+
+function getCached<T>(key: string): T | null {
+  if (typeof window === 'undefined') return null
+  const entry = clientCache.get(key)
+  if (!entry) return null
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    clientCache.delete(key)
+    return null
+  }
+  return entry.data as T
+}
+
+function setCached(key: string, data: any) {
+  if (typeof window === 'undefined') return
+  clientCache.set(key, { data, timestamp: Date.now() })
+}
 
 // ── Shops (ISR: 60s revalidate) ──────────────────────────
 export const getShops = cache(async (region?: string, category?: string) => {
@@ -94,5 +117,39 @@ export const getStoreProducts = cache(async (shopId: string) => {
     .limit(50)
   return data || []
 })
+
+// ── MARKET: Get approved stores by market (CLIENT-SIDE OPTIMIZED) ──
+// Returns cached data if available, otherwise fetches fresh
+export async function getMarketStores(market: string): Promise<any[]> {
+  const cacheKey = `market:${market}`
+  const cached = getCached<any[]>(cacheKey)
+  if (cached) return cached
+
+  try {
+    const { data } = await sb
+      .from('pending_payments')
+      .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_logo,shop_font,shop_products,plan,status,slug,created_at,shop_market')
+      .eq('status', 'approved')
+      .order('plan', { ascending: false })
+      .order('created_at', { ascending: false })
+
+    const result = data || []
+    setCached(cacheKey, result)
+    return result
+  } catch (error) {
+    console.error('getMarketStores:', error)
+    return []
+  }
+}
+
+// ── Invalidate specific cache keys after mutations ────────
+export function invalidateCache(pattern: string) {
+  if (typeof window === 'undefined') return
+  for (const key of clientCache.keys()) {
+    if (pattern === '*' || key.startsWith(pattern)) {
+      clientCache.delete(key)
+    }
+  }
+}
 
 export { sb }

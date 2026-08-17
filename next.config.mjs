@@ -36,6 +36,8 @@ const nextConfig = {
       'lucide-react',
       '@vercel/analytics',
     ],
+    // Enable prefetch on hover for instant navigation
+    
   },
 
   // ── HTTP Cache-Control headers ───────────────────────────
