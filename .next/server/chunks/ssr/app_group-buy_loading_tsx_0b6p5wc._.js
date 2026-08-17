@@ -1,0 +1,3 @@
+module.exports=[93393,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function(){return(0,b.jsxs)("div",{style:{minHeight:"60vh",display:"flex",alignItems:"center",justifyContent:"center"},children:[(0,b.jsx)("div",{style:{width:36,height:36,border:"3px solid #E2E8F0",borderTop:"3px solid #0D1B3E",borderRadius:"50%",animation:"spin 0.8s linear infinite"}}),(0,b.jsx)("style",{children:"@keyframes spin{to{transform:rotate(360deg)}}"})]})}])},58524,a=>{a.n(a.i(93393))}];
+
+//# sourceMappingURL=app_group-buy_loading_tsx_0b6p5wc._.js.map

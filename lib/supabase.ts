@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+const SB_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bscecjbgnjitlfmgwcic.supabase.co'
+const SB_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
 export const sb = createClient(SB_URL, SB_KEY, {
   global: {
