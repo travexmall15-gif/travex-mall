@@ -1,16 +1,12 @@
-// ShopNekt — Service Worker v4
+// ShopNekt — Service Worker v5
 // Strategy: Cache ONLY static assets. HTML is always network-first.
-// v4: proper offline page fallback instead of plain text
+// v5: Do NOT redirect to offline page - keep current page visible with network status notification
 
-const CACHE_VERSION = 'shopnekt-static-v4'
-const OFFLINE_URL   = '/offline.html'
+const CACHE_VERSION = 'shopnekt-static-v5'
 const STATIC_EXTS   = ['.png','.jpg','.jpeg','.gif','.svg','.ico','.webp','.avif','.woff','.woff2','.ttf','.otf']
 
-// Install — pre-cache the offline page only
+// Install — no pre-caching needed (offline page removed)
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_VERSION).then(cache => cache.add(OFFLINE_URL))
-  )
   self.skipWaiting()
 })
 
@@ -48,18 +44,25 @@ self.addEventListener('fetch', event => {
           return fetch(event.request).then(res => {
             if (res.ok) cache.put(event.request, res.clone())
             return res
+          }).catch(() => {
+            // Return a minimal placeholder for failed static assets
+            return new Response('', { status: 404 })
           })
+        }).catch(() => {
+          return new Response('', { status: 404 })
         })
       )
     )
   } else {
-    // HTML pages: network-first, offline page on failure
+    // HTML pages: network-first, but do NOT redirect to offline page
+    // Let the app handle offline state via network status notification
     event.respondWith(
-      fetch(event.request).catch(async () => {
-        const cached = await caches.match(OFFLINE_URL)
-        return cached || new Response(
-          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Offline — ShopNekt</title><style>*{box-sizing:border-box;margin:0}body{font-family:Inter,sans-serif;background:#050B2E;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;text-align:center;padding:2rem}.logo{font-size:1.4rem;font-weight:900;letter-spacing:-.03em}span{color:#C9A84C}h1{font-size:1.2rem;font-weight:700}p{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.7;max-width:340px}.btn{background:#C9A84C;color:#050B2E;padding:.7rem 1.6rem;border-radius:999px;font-weight:700;text-decoration:none;font-size:.85rem;margin-top:.5rem}</style></head><body><div class="logo">SHOP<span>NEKT</span></div><h1>You are offline</h1><p>Check your internet connection and try again. Your data is safe.</p><a class="btn" onclick="location.reload()">Try Again</a></body></html>',
-          { status: 503, headers: { 'Content-Type': 'text/html' } }
+      fetch(event.request).catch(() => {
+        // Return a minimal response that allows the app shell to load
+        // The app will show network status notification instead of redirecting
+        return new Response(
+          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Offline</title></head><body></body></html>',
+          { status: 200, headers: { 'Content-Type': 'text/html' } }
         )
       })
     )

@@ -4,6 +4,9 @@ import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
 import { LangProvider } from '@/lib/lang-context'
 import { ThemeProvider } from '@/lib/theme-context'
+import { NetworkProvider } from '@/lib/network-context'
+import { NetworkStatus } from '@/components/network-status'
+import { NavigationProgress } from '@/components/navigation-progress'
 import Script from 'next/script'
 import './globals.css'
 
@@ -18,7 +21,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ShopNekt — The Global Digital Marketplace',
+    default: 'ShopNekt',
     template: '%s | ShopNekt',
   },
   description: 'ShopNekt is a global digital marketplace by QNEX360. Buy and sell online with verified sellers. Business Market, Campus Market, Flash Deals, Group Buy and more.',
@@ -54,13 +57,13 @@ export const metadata: Metadata = {
     alternateLocale: ['sw_TZ'],
     url: SITE_URL,
     siteName: 'ShopNekt',
-    title: 'ShopNekt — The Global Digital Marketplace',
+    title: 'ShopNekt',
     description: 'Buy and sell online on ShopNekt. Business Market, Campus Market, Flash Deals, Group Buy. Powered by QNEX360.',
     images: [{
       url: `${SITE_URL}/og-image.png`,
       width: 1200,
       height: 630,
-      alt: 'ShopNekt — The Global Digital Marketplace',
+      alt: 'ShopNekt',
       type: 'image/png',
     }],
   },
@@ -68,7 +71,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@shopnekt',
     creator: '@qnex360',
-    title: 'ShopNekt — The Global Digital Marketplace',
+    title: 'ShopNekt',
     description: 'Buy and sell online on ShopNekt. Business Market, Campus Market, Flash Deals, Group Buy.',
     images: [`${SITE_URL}/og-image.png`],
   },
@@ -173,11 +176,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         suppressHydrationWarning
         style={{ WebkitTapHighlightColor: 'transparent' as any, fontFamily: 'var(--font-body, Inter, sans-serif)' }}
       >
-        <ThemeProvider>
-          <LangProvider>
-            <ToastProvider>{children}</ToastProvider>
-          </LangProvider>
-        </ThemeProvider>
+        <NetworkProvider>
+          <ThemeProvider>
+            <LangProvider>
+              <ToastProvider>
+                <NavigationProgress />
+                {children}
+                <NetworkStatus />
+              </ToastProvider>
+            </LangProvider>
+          </ThemeProvider>
+        </NetworkProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <Script src="/pwa-init.js" strategy="afterInteractive" />
       </body>
