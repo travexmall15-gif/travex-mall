@@ -121,7 +121,7 @@ export default function MarketInnerPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)' }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68 }}>
       <SiteNav />
       <style>{`
         .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;white-space:nowrap;transition:border-color 0.15s,background 0.15s,color 0.15s}
@@ -131,10 +131,10 @@ export default function MarketInnerPage() {
         @media(max-width:600px){.shop-grid{grid-template-columns:1fr}}
       `}</style>
 
-      <section style={{ maxWidth: 1000, margin: '0 auto', padding: '1.5rem 1rem 4rem' }}>
+      <section style={{ maxWidth: 1000, margin: '0 auto', padding: '1rem 1rem 4rem' }}>
 
         {/* Back + Header */}
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div style={{ marginBottom: '1rem' }}>
           <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: 'var(--sn-muted)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginBottom: '1rem' }}>
             <ArrowLeft size={13} /> Business Marketplaces
           </Link>

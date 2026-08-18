@@ -79,10 +79,10 @@ export default function MarketPage() {
   }, [])
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)' }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68 }}>
       <SiteNav />
 
-      <section style={{ maxWidth: 860, margin: '0 auto', padding: '6rem 1rem 4rem' }}>
+      <section style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem' }}>
 
                 {/* Market Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.25rem' }}>
@@ -93,7 +93,7 @@ export default function MarketPage() {
               <Link key={market.key} href={`/market/${market.key}`} style={{ textDecoration: 'none' }}>
                 <div style={{
                   background: 'var(--sn-bg)',
-                  border: `1.5px solid ${market.borderColor}`,
+                  border: '1.5px solid var(--sn-border)',
                   borderRadius: 22,
                   padding: '2rem 1.75rem 1.75rem',
                   height: '100%',
@@ -105,7 +105,7 @@ export default function MarketPage() {
                     width: 54, height: 54,
                     borderRadius: 16,
                     background: 'var(--sn-bg)',
-                    border: `1.5px solid ${market.borderColor}`,
+                    border: '1.5px solid var(--sn-border)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     marginBottom: '1.35rem',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
@@ -124,8 +124,8 @@ export default function MarketPage() {
                   </p>
 
                   {/* Footer */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: `1px solid ${market.borderColor}`, paddingTop: '0.9rem' }}>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, color: market.iconColor }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--sn-border)', paddingTop: '0.9rem' }}>
+                    <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-primary)' }}>
                       {loading ? '—' : `${count} ${count === 1 ? 'store' : 'stores'}`}
                     </span>
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-text)' }}>

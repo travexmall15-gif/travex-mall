@@ -122,7 +122,7 @@ export default function VybePage() {
   const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68, fontFamily: "'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
         @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
@@ -228,7 +228,7 @@ export default function VybePage() {
       <SiteNav />
 
       {/* ── SEARCH + FILTER ─────────────────────────────────── */}
-      <div style={{ paddingTop:'108px', background:'var(--sn-bg)', borderBottom:'1px solid var(--sn-border)', position:'sticky', top:60, zIndex:90 }}>
+      <div style={{ background:'var(--sn-bg)', borderBottom:'1px solid var(--sn-border)', position:'sticky', top:60, zIndex:90 }}>
         <div style={{ maxWidth:680, margin:'0 auto', padding:'0.75rem 4%' }}>
 
           {/* Search */}

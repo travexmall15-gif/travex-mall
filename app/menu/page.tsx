@@ -113,22 +113,22 @@ export default function MenuPage() {
 
   return (
     <div style={{ minHeight:'100vh', background:'var(--sn-page)', fontFamily:"'Inter',sans-serif", paddingBottom:32 }}>
-      <style>{`.menu-item:hover { background: #F1F5F9 !important; }`}</style>
+      <style>{`.menu-item:hover { background: var(--sn-page) !important; }`}</style>
 
       {/* Header */}
-      <div style={{ background:'linear-gradient(160deg,#0D1B3E,#1B3A8A)', padding:'52px 20px 24px', position:'sticky', top:0, zIndex:10 }}>
+      <div style={{ background:'var(--sn-bg)', padding:'60px 20px 16px', position:'sticky', top:0, zIndex:10, borderBottom:'1px solid var(--sn-border)' }}>
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
           <button onClick={() => window.history.length > 1 ? router.back() : (window.location.href='/home')}
             style={{ background:'var(--sn-bg)', border:'none', borderRadius:'50%', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'var(--sn-text)' }}>
-            <ArrowLeft size={17} color="#fff" />
+            <ArrowLeft size={17} color="var(--sn-text)" />
           </button>
           <div style={{ display:'flex', alignItems:'center', gap:0 }}>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'var(--sn-text)', letterSpacing:'-0.03em' }}>Shop</span>
-            <span style={{ fontSize:'1rem', fontWeight:900, color:'var(--sn-text)', letterSpacing:'-0.03em' }}>Nekt</span>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'#111827', letterSpacing:'-0.03em' }}>Shop</span>
+            <span style={{ fontSize:'1rem', fontWeight:900, color:'var(--sn-primary)', letterSpacing:'-0.03em' }}>Nekt</span>
           </div>
           <div style={{ width:36 }} />
         </div>
-        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'var(--sn-bg)', borderRadius:18, padding:'14px 16px', border:'1px solid #E2E8F0' }}>
+        <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'var(--sn-bg)', borderRadius:18, padding:'14px 16px', border:'1px solid var(--sn-border)' }}>
           <div style={{ width:52, height:52, borderRadius:'50%', background:'var(--sn-primary)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid #D1D5DB', fontSize:'1.1rem', fontWeight:900, color:'var(--sn-text)' }}>
             {user ? user.name.slice(0,2).toUpperCase() : '?'}
           </div>

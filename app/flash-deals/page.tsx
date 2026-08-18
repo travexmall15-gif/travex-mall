@@ -278,7 +278,7 @@ export default function FlashDealsPage() {
   const totalSavings = deals.reduce((a, d) => a + (d.original_price - d.deal_price), 0)
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', fontFamily:'var(--sn-font)' }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:68, fontFamily:'var(--sn-font)' }}>
       <style>{`
         @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
         @keyframes pulse   { 50%{opacity:.5} }
@@ -293,7 +293,7 @@ export default function FlashDealsPage() {
       <SiteNav />
 
       {/* ── CONTENT ───────────────────────────────────────────── */}
-      <div style={{ maxWidth:1100, margin:'0 auto', padding:'5.5rem 5% 4rem' }}>
+      <div style={{ maxWidth:1100, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         {/* Loading */}
         {loading && (

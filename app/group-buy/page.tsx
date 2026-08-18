@@ -332,7 +332,7 @@ export default function GroupBuyPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:68, fontFamily:"'Inter',sans-serif" }}>
       <style>{`
         @keyframes spin { to{transform:rotate(360deg)} }
         .gb-ticker      { /* ticker animation removed */ }
@@ -349,7 +349,7 @@ export default function GroupBuyPage() {
       <SiteNav />
 
       {/* ── CONTENT ───────────────────────────────────────────── */}
-      <div style={{ maxWidth:1200, margin:'0 auto', padding:'6rem 5% 4rem' }}>
+      <div style={{ maxWidth:1200, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         {/* Search + filter */}
         <div style={{ display:'flex', gap:10, marginBottom:'1rem', flexWrap:'wrap' }}>
