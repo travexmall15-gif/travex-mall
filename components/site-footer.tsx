@@ -15,7 +15,7 @@ export function SiteFooter() {
         fontWeight: 500,
         letterSpacing: '0.02em',
       }}>
-        from QNEX360
+        QNEX360
       </p>
     </footer>
   )
