@@ -40,12 +40,17 @@ export function AIChatWidget({
           mode: 'store',
         }),
       })
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
       const data = await res.json()
       setMsgs([...newMsgs, { role: 'bot', content: data.reply || 'Samahani, jaribu tena.' }])
-    } catch {
+    } catch (err) {
+      console.error('AI Chat error:', err)
       setMsgs([...newMsgs, { role: 'bot', content: '❌ Tatizo limetokea. Jaribu tena.' }])
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const QUICK = ['Bei gani?', 'Mna delivery?', 'Niwasiliane na seller', 'Bidhaa zipi mna?']

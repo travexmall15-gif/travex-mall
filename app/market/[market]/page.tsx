@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
-import { sb } from '@/lib/supabase'
+import { getMarketStores } from '@/lib/supabase-cache'
 import { Search, MapPin, Heart, ArrowLeft, Loader2 } from 'lucide-react'
 
 // ── Config ────────────────────────────────────────────────────
@@ -68,16 +68,12 @@ export default function MarketInnerPage() {
   const [region,   setRegion]   = useState('')
   const [category, setCategory] = useState('')
 
+
   const load = useCallback(async () => {
     if (!cfg) return
     setLoading(true)
     try {
-      const { data } = await sb
-        .from('pending_payments')
-        .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_logo,shop_font,shop_products,plan,status,slug,created_at,shop_market')
-        .eq('status', 'approved')
-        .order('plan', { ascending: false })
-        .order('created_at', { ascending: false })
+      const data = await getMarketStores(market)
 
       if (!data) { setShops([]); return }
 

@@ -390,9 +390,10 @@ function sA(b){b.parentElement.querySelectorAll('.fb').forEach(x=>x.classList.re
 
 //  SECURE AUTH, signIn only, NO signUp 
 function doLogin(){
+// NOTE: For production, replace hardcoded password with environment variable validation
   const pass=document.getElementById('adminPass').value;
   if(!pass){showErr('Enter admin PIN');return}
-  if(pass!=='shopnekt2026'){showErr('Incorrect PIN');return}
+  if(pass!=='shopnekt2026' && pass!==(typeof process !== 'undefined' && process.env?.ADMIN_PASSWORD ? process.env.ADMIN_PASSWORD : 'shopnekt2026')){showErr('Incorrect PIN');return}
   sessionStorage.setItem('sn_admin','1');
   initApp();
 }

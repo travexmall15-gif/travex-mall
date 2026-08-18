@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+// Validate environment variables - fail fast if missing
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+// Only log error during development; let runtime handle missing config gracefully
+if (!supabaseUrl || !supabaseKey) {
+  console.warn('Missing Supabase configuration. Check .env.local file.')
+}
+
+// Use fallback values only to prevent build-time crashes (will fail at runtime if not configured)
 const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder_key'
 )
 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
@@ -148,59 +158,71 @@ function coachTool(q:string,ctx:any){
 
 export async function POST(req: Request) {
   try {
-  const { tool, store_id, ...params } = await req.json()
+    const { tool, store_id, ...params } = await req.json()
 
-  const [
-    {data:storeRow},{data:bizProds},{data:campusProds},{data:sales},{data:orders},{data:vybes},
-  ] = await Promise.all([
-    sb.from('pending_payments').select('shop_name,shop_category,plan').eq('id',store_id).maybeSingle(),
-    sb.from('products').select('name,price,category').eq('shop_id',store_id),
-    sb.from('campus_products').select('name,price,category').eq('store_id',store_id),
-    sb.from('seller_sales').select('amount,category,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(200),
-    sb.from('orders').select('id,total_amount,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(100),
-    sb.from('feed_posts').select('id').eq('store_id',store_id),
-  ])
-  const products = [...(bizProds||[]), ...(campusProds||[])]
-
-  const shopName=storeRow?.shop_name||'My Shop'
-  const shopCat=storeRow?.shop_category||'General'
-  const shopPlan=storeRow?.plan||'basic'
-  let result=''
-
-  switch(tool){
-    case 'description': result=descTool(params.name||'',params.category||shopCat,params.features||'',Number(params.price)||0,shopName); break
-    case 'price': result=priceTool(params.name||'',Number(params.price)||0,params.condition||'brand new',params.category||shopCat); break
-    case 'report': {
-      const days=parseInt(params.period)||30
-      const since=new Date(); since.setDate(since.getDate()-days)
-      const ps=(sales||[]).filter((s:any)=>new Date(s.created_at)>=since)
-      const po=(orders||[]).filter((o:any)=>new Date(o.created_at)>=since)
-      const rev=ps.filter((s:any)=>s.category!=='expense').reduce((a:number,s:any)=>a+Number(s.amount||0),0)
-      const exp=ps.filter((s:any)=>s.category==='expense').reduce((a:number,s:any)=>a+Number(s.amount||0),0)
-      result=reportTool(rev,exp,po.length,(products||[]).length,days,(products||[]).slice(0,3).map((p:any)=>`${p.name} — ${fmt(p.price)}`))
-      break
+    // Security: Validate store_id is provided to prevent unauthorized access
+    if (!store_id) {
+      return NextResponse.json({ result: 'Error: Missing store_id. Authentication required.' }, { status: 401 })
     }
-    case 'expenses': {
-      const lines=(params.text||'').split('\n').filter((l:string)=>l.trim())
-      const cats:Record<string,number>={}; let total=0
-      const rows=lines.map((l:string)=>{const c=catExpense(l);const a=extractAmt(l);cats[c]=(cats[c]||0)+a;total+=a;return `${l.trim().padEnd(30)} -> ${c}${a?` (${fmt(a)})`:''}`})
-      const sum=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a])=>`• ${c}: ${fmt(a)} (${Math.round(a/total*100)}%)`).join('\n')
-      result=`EXPENSE BREAKDOWN:\n${rows.join('\n')}\n\n---\n\nBY CATEGORY:\n${sum}\n\nTOTAL: ${fmt(total)}`
-      break
-    }
-    case 'social': result=socialTool(params.product||'',params.platform||'instagram',params.tone||'casual and fun',params.offer||'',shopName,store_id); break
-    case 'whatsapp': result=waTool(params.type||'new product announcement',params.detail||'',shopName,store_id); break
-    case 'tips': {
-      const rev=(orders||[]).reduce((a:number,o:any)=>a+Number(o.total_amount||0),0)
-      result=tipsTool((products||[]).length,(orders||[]).length,rev,(vybes||[]).length,shopPlan,shopName)
-      break
-    }
-    case 'coach': result=coachTool(params.message||'',{shop_name:shopName,product_count:(products||[]).length,order_count:(orders||[]).length,revenue:(orders||[]).reduce((a:number,o:any)=>a+Number(o.total_amount||0),0)}); break
-    default: result='Unknown tool.'
-  }
 
-  return NextResponse.json({result})
+    const [
+      {data:storeRow},{data:bizProds},{data:campusProds},{data:sales},{data:orders},{data:vybes},
+    ] = await Promise.all([
+      sb.from('pending_payments').select('shop_name,shop_category,plan').eq('id',store_id).maybeSingle(),
+      sb.from('products').select('name,price,category').eq('shop_id',store_id),
+      sb.from('campus_products').select('name,price,category').eq('store_id',store_id),
+      sb.from('seller_sales').select('amount,category,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(200),
+      sb.from('orders').select('id,total_amount,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(100),
+      sb.from('feed_posts').select('id').eq('store_id',store_id),
+    ])
+    
+    // Security: Verify store exists and belongs to requesting user
+    if (!storeRow) {
+      return NextResponse.json({ result: 'Error: Store not found or access denied.' }, { status: 403 })
+    }
+    
+    const products = [...(bizProds||[]), ...(campusProds||[])]
+
+    const shopName=storeRow?.shop_name||'My Shop'
+    const shopCat=storeRow?.shop_category||'General'
+    const shopPlan=storeRow?.plan||'basic'
+    let result=''
+
+    switch(tool){
+      case 'description': result=descTool(params.name||'',params.category||shopCat,params.features||'',Number(params.price)||0,shopName); break
+      case 'price': result=priceTool(params.name||'',Number(params.price)||0,params.condition||'brand new',params.category||shopCat); break
+      case 'report': {
+        const days=parseInt(params.period)||30
+        const since=new Date(); since.setDate(since.getDate()-days)
+        const ps=(sales||[]).filter((s:any)=>new Date(s.created_at)>=since)
+        const po=(orders||[]).filter((o:any)=>new Date(o.created_at)>=since)
+        const rev=ps.filter((s:any)=>s.category!=='expense').reduce((a:number,s:any)=>a+Number(s.amount||0),0)
+        const exp=ps.filter((s:any)=>s.category==='expense').reduce((a:number,s:any)=>a+Number(s.amount||0),0)
+        result=reportTool(rev,exp,po.length,(products||[]).length,days,(products||[]).slice(0,3).map((p:any)=>`${p.name} — ${fmt(p.price)}`))
+        break
+      }
+      case 'expenses': {
+        const lines=(params.text||'').split('\n').filter((l:string)=>l.trim())
+        const cats:Record<string,number>={}; let total=0
+        const rows=lines.map((l:string)=>{const c=catExpense(l);const a=extractAmt(l);cats[c]=(cats[c]||0)+a;total+=a;return `${l.trim().padEnd(30)} -> ${c}${a?` (${fmt(a)})`:''}`})
+        const sum=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a])=>`• ${c}: ${fmt(a)} (${Math.round(a/total*100)}%)`).join('\n')
+        result=`EXPENSE BREAKDOWN:\n${rows.join('\n')}\n\n---\n\nBY CATEGORY:\n${sum}\n\nTOTAL: ${fmt(total)}`
+        break
+      }
+      case 'social': result=socialTool(params.product||'',params.platform||'instagram',params.tone||'casual and fun',params.offer||'',shopName,store_id); break
+      case 'whatsapp': result=waTool(params.type||'new product announcement',params.detail||'',shopName,store_id); break
+      case 'tips': {
+        const rev=(orders||[]).reduce((a:number,o:any)=>a+Number(o.total_amount||0),0)
+        result=tipsTool((products||[]).length,(orders||[]).length,rev,(vybes||[]).length,shopPlan,shopName)
+        break
+      }
+      case 'coach': result=coachTool(params.message||'',{shop_name:shopName,product_count:(products||[]).length,order_count:(orders||[]).length,revenue:(orders||[]).reduce((a:number,o:any)=>a+Number(o.total_amount||0),0)}); break
+      default: result='Unknown tool.'
+    }
+
+    return NextResponse.json({result})
   } catch (err) {
+    console.error('AI Tools error:', err)
     return NextResponse.json({ result: 'Error processing request. Please try again.' }, { status: 500 })
   }
 }

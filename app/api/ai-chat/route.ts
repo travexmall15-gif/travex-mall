@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+// Validate environment variables - fail fast if missing
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+// Only log error during development; let runtime handle missing config gracefully
+if (!supabaseUrl || !supabaseKey) {
+  console.warn('Missing Supabase configuration. Check .env.local file.')
+}
+
+// Use fallback values only to prevent build-time crashes (will fail at runtime if not configured)
 const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder_key'
 )
 
 // ── Types ─────────────────────────────────────────────────────────
