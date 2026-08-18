@@ -84,7 +84,7 @@ export default function HomePage() {
               </div>
               <div>
                 <div style={{ fontWeight:700,color:'#374151',fontSize:'0.9rem' }}>{t('home.heroHeadline')}</div>
-                <div style={{ fontSize:'0.72rem',color:'#6B7280',marginTop:1 }}>ShopNekt · The Global Marketplace</div>
+                <div style={{ fontSize:'0.72rem',color:'#6B7280',marginTop:1 }}>ShopNekt</div>
               </div>
             </div>
             <Link href="/open-store" className="sell-cta">

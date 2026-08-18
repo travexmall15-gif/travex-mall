@@ -1,31 +1,24 @@
 {
   "name": "ShopNekt",
   "short_name": "ShopNekt",
-  "description": "Africa's Intelligent Digital Marketplace — Tanzania",
-  "start_url": "/index.html",
+  "description": "Africa's Intelligent Digital Marketplace",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0D1B3E",
   "theme_color": "#0D1B3E",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192.svg",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.svg",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshot.png",
-      "sizes": "1080x1920",
-      "type": "image/png"
     }
   ],
   "categories": [
@@ -38,11 +31,12 @@
       "name": "Browse Shops",
       "short_name": "Shops",
       "description": "Browse all stores",
-      "url": "/index.html#shops",
+      "url": "/market",
       "icons": [
         {
-          "src": "icon-192.svg",
-          "sizes": "192x192"
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     },
@@ -50,11 +44,12 @@
       "name": "My Dashboard",
       "short_name": "Dashboard",
       "description": "Go to seller dashboard",
-      "url": "/dashboard.html",
+      "url": "/dashboard",
       "icons": [
         {
-          "src": "icon-192.svg",
-          "sizes": "192x192"
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     },
@@ -62,11 +57,12 @@
       "name": "Campus Market",
       "short_name": "Campus",
       "description": "ShopNekt Campus Market",
-      "url": "/campus.html",
+      "url": "/home",
       "icons": [
         {
-          "src": "icon-192.svg",
-          "sizes": "192x192"
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     }
