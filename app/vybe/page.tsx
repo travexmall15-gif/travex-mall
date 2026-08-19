@@ -122,7 +122,7 @@ export default function VybePage() {
   const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68, fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68, fontFamily: 'var(--sn-font)' }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
         @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
@@ -150,7 +150,7 @@ export default function VybePage() {
           cursor:pointer; font-size:13px; font-weight:600;
           padding: 7px 14px;
           transition: all .18s;
-          font-family: 'Inter',sans-serif;
+          font-family: var(--sn-font);
         }
         .like-btn:hover { background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.3); color:#EF4444; }
         .like-btn.liked { background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.4); color:#EF4444; }
@@ -181,7 +181,7 @@ export default function VybePage() {
           background: transparent;
           color: #9CA3AF;
           transition: all .18s;
-          font-family: 'Inter',sans-serif;
+          font-family: var(--sn-font);
           white-space: nowrap;
         }
         .filter-pill:hover  { border-color:#D1D5DB; color:#374151; }
@@ -206,7 +206,7 @@ export default function VybePage() {
           border:1.5px solid #E5E7EB;
           border-radius:14px; font-size:14px;
           color:#fff; outline:none;
-          font-family:'Inter',sans-serif;
+          font-family: var(--sn-font);
           transition:all .2s; box-sizing:border-box;
         }
         .search-input::placeholder { color:#9CA3AF; }
@@ -419,18 +419,18 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
 
       {/* ── Media ── */}
       {post.media_url && (
-        <div style={{ marginTop:'0.75rem', position:'relative', background:'#000', borderRadius:0, overflow:'hidden', maxHeight:400 }}>
+        <div style={{ marginTop:'0.75rem', position:'relative', background:'var(--sn-page)', borderRadius:12, overflow:'hidden' }}>
           {video ? (
-            <video src={post.media_url} controls playsInline style={{ width:'100%', maxHeight:400, display:'block' }} />
+            <video src={post.media_url} controls playsInline muted style={{ width:'100%', maxHeight:520, display:'block', borderRadius:12 }} />
           ) : (
-            <Image src={post.media_url} alt={content || t('vybe.noImage')} width={680} height={400}
-              style={{ width:'100%', height:'auto', maxHeight:400, objectFit:'cover', display:'block' }} />
+            <Image src={post.media_url} alt={content || t('vybe.noImage')} width={680} height={680}
+              style={{ width:'100%', height:'auto', maxHeight:520, objectFit:'contain', display:'block', borderRadius:12 }} />
           )}
         </div>
       )}
 
       {/* ── Actions — Like + Visit Shop ONLY ── */}
-      <div className="vybe-actions" style={{ display:'flex', alignItems:'center', gap:10, padding:'0.75rem 1rem 0.9rem', marginTop:'0.6rem', borderTop:'1px solid #F3F4F6' }}>
+      <div className="vybe-actions" style={{ display:'flex', alignItems:'center', gap:10, padding:'0.75rem 1rem 0.9rem', marginTop:'0.6rem', borderTop:'1px solid var(--sn-border)' }}>
 
         {/* Like button */}
         <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={onLike} aria-label={liked ? t('vybe.liked') : t('vybe.like')}>

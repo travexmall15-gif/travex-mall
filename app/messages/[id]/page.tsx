@@ -112,7 +112,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   }
 
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--sn-page)', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--sn-page)', fontFamily: 'var(--sn-font)' }}>
       <SiteNav />
 
       {/* Chat header */}
@@ -185,7 +185,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
           placeholder={t('messages.typeMessage')}
           rows={1}
-          style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: 'var(--sn-page)' }}
+          style={{ flex: 1, padding: '10px 14px', border: '1.5px solid #E2E8F0', borderRadius: 20, fontSize: '0.875rem', fontFamily: 'var(--sn-font)', outline: 'none', resize: 'none', maxHeight: 100, lineHeight: 1.5, transition: 'border-color 0.2s', background: 'var(--sn-page)' }}
           onFocus={e => (e.target.style.borderColor = '#0D1B3E')}
           onBlur={e  => (e.target.style.borderColor = 'var(--sn-border)')}
         />

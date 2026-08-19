@@ -11,7 +11,7 @@ export function LangToggle() {
         background: 'var(--sn-bg)', border: '1px solid rgba(255,255,255,0.15)',
         borderRadius: '999px', padding: '4px 12px',
         fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer',
-        color: 'var(--sn-text)', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s',
+        color: 'var(--sn-text)', fontFamily: 'var(--sn-font)', transition: 'all 0.2s',
         letterSpacing: '0.04em',
       }}
       onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.14)'}

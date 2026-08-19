@@ -38,7 +38,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
           color: compact ? '#475569' : '#fff',
           fontSize: compact ? '1rem' : '0.78rem',
           fontWeight: 600,
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'var(--sn-font)',
           transition: 'all .2s',
           flexShrink: 0,
         }}
@@ -70,7 +70,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
                 background: lang === code ? 'var(--sn-page)' : 'transparent',
                 color: lang === code ? '#0D1B3E' : '#475569',
                 fontSize: '0.83rem', fontWeight: lang === code ? 700 : 500,
-                fontFamily: 'Inter, sans-serif', textAlign: 'left',
+                fontFamily: 'var(--sn-font)', textAlign: 'left',
                 transition: 'background .15s',
               }}
               onMouseOver={e => { if (lang !== code) (e.currentTarget as HTMLElement).style.background = '#fff' }}
@@ -112,7 +112,7 @@ export function LangSwitcherLight() {
           background: 'var(--sn-bg)', border: '1.5px solid #E2E8F0',
           borderRadius: '999px', cursor: 'pointer',
           color: 'var(--sn-muted)', fontSize: '0.78rem', fontWeight: 600,
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'var(--sn-font)',
         }}
       >
         <span style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.04em' }}>{meta[lang].flag}</span>
@@ -138,7 +138,7 @@ export function LangSwitcherLight() {
                 background: lang === code ? 'var(--sn-page)' : 'transparent',
                 color: 'var(--sn-muted)', fontSize: '0.82rem',
                 fontWeight: lang === code ? 700 : 400,
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'var(--sn-font)',
               }}>
               <span style={{ fontSize: '0.68rem', fontWeight: 800, background: 'var(--sn-bg)', color: '#0D1B3E', padding: '2px 6px', borderRadius: 4, letterSpacing: '0.04em', flexShrink: 0 }}>{m.flag}</span>
               <span>{m.label}</span>

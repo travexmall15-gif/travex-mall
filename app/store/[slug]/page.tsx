@@ -230,7 +230,7 @@ export default function StorePage({
     <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: '2rem' }}>
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
+        <h2 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
         <p style={{ color: '#9CA3AF', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
         <Link href="/market" style={{ background: '#111827', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
@@ -240,7 +240,7 @@ export default function StorePage({
   )
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: 'var(--sn-font)' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
@@ -253,12 +253,12 @@ export default function StorePage({
         @media(min-width:600px){.modal-bg{align-items:center}}
         .modal{background:#0D1B3E;border:1px solid rgba(255,255,255,0.10);border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:fadeUp 0.3s ease}
         @media(min-width:600px){.modal{border-radius:20px}}
-        .form-inp{width:100%;padding:10px 14px;background:#E5E7EB;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:all 0.15s}
+        .form-inp{width:100%;padding:10px 14px;background:#E5E7EB;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:14px;outline:none;font-family: var(--sn-font);transition:all 0.15s}
         .form-inp:focus{border-color:${accentColor};background:rgba(255,255,255,0.10)}
         .form-inp::placeholder{color:#9CA3AF}
         .qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.20);background:#E5E7EB;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.15s}
         .qty-btn:hover{background:rgba(255,255,255,0.15)}
-        .search-inp{width:100%;padding:10px 16px 10px 40px;background:#fff;border:1.5px solid #E2E8F0;border-radius:12px;color:#0F172A;font-size:13px;outline:none;font-family:'Inter',sans-serif;transition:border-color 0.2s}
+        .search-inp{width:100%;padding:10px 16px 10px 40px;background:#fff;border:1.5px solid #E2E8F0;border-radius:12px;color:#0F172A;font-size:13px;outline:none;font-family: var(--sn-font);transition:border-color 0.2s}
         .search-inp::placeholder{color:#94A3B8}
         .search-inp:focus{border-color:#0D1B3E}
         @media(max-width:640px){.prod-grid{grid-template-columns:repeat(2,1fr)!important}}
@@ -288,14 +288,14 @@ export default function StorePage({
               {store.shop_logo ? (
                 <Image src={store.shop_logo} alt={initials} width={52} height={52} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               ) : (
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, fontWeight: 900, color: '#fff' }}>{initials}</span>
+                <span style={{ fontFamily: 'var(--sn-font)', fontSize: 18, fontWeight: 900, color: '#fff' }}>{initials}</span>
               )}
             </div>
 
             {/* Info */}
             <div style={{ flex: 1, minWidth: 180 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
-                <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#111827', lineHeight: 1.1 }}>
+                <h1 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#111827', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(29,78,216,0.15)' : '#F3F4F6', color: isPremium ? '#1D4ED8' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(29,78,216,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
@@ -317,7 +317,7 @@ export default function StorePage({
               <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                 <button
                   onClick={() => setShowMsg(true)}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff', border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fff', border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)', transition: 'all 0.2s' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.18)'}
                   onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
                   <MessageCircle size={13} /> {t('store.messageSeller')}
@@ -337,7 +337,7 @@ export default function StorePage({
                     // Force re-render by toggling state
                     setShowMsg(v => v)
                   }}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: (() => { try { const s = JSON.parse(localStorage.getItem('sn_saved_shops')||'[]'); return s.some((x:any)=>x.id===store!.id) ? 'rgba(239,68,68,0.25)':'rgba(255,255,255,0.10)' } catch{return 'rgba(255,255,255,0.10)'} })(), border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif", transition: 'all 0.2s' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: (() => { try { const s = JSON.parse(localStorage.getItem('sn_saved_shops')||'[]'); return s.some((x:any)=>x.id===store!.id) ? 'rgba(239,68,68,0.25)':'rgba(255,255,255,0.10)' } catch{return 'rgba(255,255,255,0.10)'} })(), border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)', transition: 'all 0.2s' }}>
                   <Heart size={12} /> {t('store.saveShop')}
                 </button>
               </div>
@@ -437,14 +437,14 @@ export default function StorePage({
                     </div>
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 16,
+                    <div style={{ fontFamily: 'var(--sn-font)', fontSize: 16,
                       fontWeight: 900, color: accentColor }}>
                       {fmt(p.price)}
                     </div>
                     <button style={{ background: accentColor, color: isPremium ? '#0F172A' : '#fff',
                       border: 'none', borderRadius: 999, padding: '6px 14px', fontSize: 12,
                       fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-                      fontFamily: "'Inter',sans-serif" }}>
+                      fontFamily: 'var(--sn-font)' }}>
                       <ShoppingCart size={12} /> Order
                     </button>
                   </div>
@@ -458,7 +458,7 @@ export default function StorePage({
         {products.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
             <Package size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
-            <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.settingUpShop')}</h3>
+            <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.2rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.settingUpShop')}</h3>
             <p style={{ color: '#9CA3AF', fontSize: 14, marginBottom: 20 }}>
               This seller is adding products soon. Check back shortly.
             </p>
@@ -478,7 +478,7 @@ export default function StorePage({
                   display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 30, height: 30, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.3rem', color: '#111827',
+                <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.3rem', color: '#111827',
                   marginBottom: 8 }}>Order Placed! 🎉</h3>
                 <p style={{ color: '#6B7280', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
                   Your order for <strong style={{ color: '#111827' }}>{cartItem.name}</strong> has been sent to the seller.
@@ -496,7 +496,7 @@ export default function StorePage({
                   <button onClick={() => setCartItem(null)}
                     style={{ padding: '10px 20px', borderRadius: 999, background: '#fff',
                       color: '#111827', border: '1px solid #E2E8F0', cursor: 'pointer',
-                      fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                      fontSize: 13, fontWeight: 600, fontFamily: 'var(--sn-font)' }}>
                     Continue Shopping
                   </button>
                 </div>
@@ -505,7 +505,7 @@ export default function StorePage({
               // ── Order form ──
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#111827', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
+                  <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.15rem', color: '#111827', fontWeight: 800 }}>{t('store.placeOrderBtn')}</h3>
                   <button onClick={() => setCartItem(null)}
                     style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff',
                       border: '1px solid #E2E8F0', color: '#6B7280',
@@ -578,7 +578,7 @@ export default function StorePage({
                       style={{ flex: 1, padding: '12px', borderRadius: 999, background: '#25D366',
                         color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                        textDecoration: 'none', fontFamily: "'Inter',sans-serif" }}>
+                        textDecoration: 'none', fontFamily: 'var(--sn-font)' }}>
                       <MessageCircle size={15} /> WhatsApp
                     </a>
                   )}
@@ -586,7 +586,7 @@ export default function StorePage({
                     style={{ flex: 2, padding: '12px', borderRadius: 999, background: accentColor,
                       color: isPremium ? '#0F172A' : '#fff', border: 'none', fontWeight: 700, fontSize: 13,
                       cursor: placing ? 'wait' : 'pointer', display: 'flex', alignItems: 'center',
-                      justifyContent: 'center', gap: 6, fontFamily: "'Inter',sans-serif",
+                      justifyContent: 'center', gap: 6, fontFamily: 'var(--sn-font)',
                       opacity: (!orderName.trim() || !orderPhone.trim()) ? 0.55 : 1 }}>
                     {placing ? (
                       <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Placing...</>
@@ -656,7 +656,7 @@ export default function StorePage({
             {/* Quick action chips */}
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: '1.25rem' }}>
               {[t('store.findProduct'), t('store.placeOrder'), t('store.checkPrices')].map((chip, chipIdx) => (
-                <button key={chipIdx} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>{ chip }</button>
+                <button key={chipIdx} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>{ chip }</button>
               ))}
             </div>
 
@@ -664,7 +664,7 @@ export default function StorePage({
             <div style={{ display: 'flex', gap: 8 }}>
               <button
                 onClick={() => setShowWelcome(false)}
-                style={{ flex: 1, padding: '11px', borderRadius: 12, border: '1.5px solid #E2E8F0', background: '#fff', color: '#6B7280', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter',sans-serif" }}>
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: '1.5px solid #E2E8F0', background: '#fff', color: '#6B7280', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>
                 Browse on my own
               </button>
               <button
@@ -676,7 +676,7 @@ export default function StorePage({
                     if (btn) btn.click()
                   }, 300)
                 }}
-                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Inter',sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--sn-font)', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
                 Chat with Aria
               </button>
             </div>
@@ -693,19 +693,19 @@ export default function StorePage({
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                   <CheckCircle style={{ width: 28, height: 28, color: '#22C55E' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.15rem', color: '#111827', marginBottom: 8 }}>{t('store.messageSent')}</h3>
+                <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.15rem', color: '#111827', marginBottom: 8 }}>{t('store.messageSent')}</h3>
                 <p style={{ color: '#6B7280', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
                   The seller will respond to you shortly.
                 </p>
                 <button onClick={() => { setShowMsg(false); setMsgSent(false); setMsgText(''); setMsgName('') }}
-                  style={{ padding: '10px 24px', borderRadius: 999, background: '#fff', color: '#111827', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: "'Inter',sans-serif" }}>
+                  style={{ padding: '10px 24px', borderRadius: 999, background: '#fff', color: '#111827', border: '1px solid #E2E8F0', cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'var(--sn-font)' }}>
                   Close
                 </button>
               </div>
             ) : (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.1rem', color: '#111827', fontWeight: 800 }}>
+                  <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.1rem', color: '#111827', fontWeight: 800 }}>
                     Message {store.shop_name}
                   </h3>
                   <button onClick={() => setShowMsg(false)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '1px solid #E2E8F0', color: '#6B7280', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -723,7 +723,7 @@ export default function StorePage({
                     <a
                       href={`https://wa.me/${wa}?text=${encodeURIComponent(`Hi! I am ${msgName || 'a customer'}. ${msgText}`)}`}
                       target="_blank"
-                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: "'Inter',sans-serif" }}>
+                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: 'var(--sn-font)' }}>
                       <MessageCircle size={14} /> WhatsApp
                     </a>
                   )}
@@ -734,7 +734,7 @@ export default function StorePage({
                       setMsgSent(true)
                     }}
                     disabled={!msgName.trim() || !msgText.trim()}
-                    style={{ flex: 2, padding: '11px', borderRadius: 10, background: accentColor, color: isPremium ? '#0F172A' : '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: "'Inter',sans-serif", opacity: (!msgName.trim() || !msgText.trim()) ? 0.5 : 1 }}>
+                    style={{ flex: 2, padding: '11px', borderRadius: 10, background: accentColor, color: isPremium ? '#0F172A' : '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: 'var(--sn-font)', opacity: (!msgName.trim() || !msgText.trim()) ? 0.5 : 1 }}>
                     <MessageCircle size={14} /> Send Message
                   </button>
                 </div>

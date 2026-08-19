@@ -25,7 +25,7 @@ export default function JoinPage() {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(29,78,216,0.15)', border: '1px solid rgba(29,78,216,0.4)', borderRadius: 999, padding: '6px 16px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--sn-text)', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
            {t('join.digitalBadge')} 
         </div>
-        <h1 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem', maxWidth: 700, margin: '0 auto 1rem' }}>
+        <h1 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem', maxWidth: 700, margin: '0 auto 1rem' }}>
           {t('join.heroTitle1')}<br />
           <span style={{ color: 'var(--sn-text)' }}>ShopNekt</span>
         </h1>
@@ -45,7 +45,7 @@ export default function JoinPage() {
         <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', marginTop: '3rem', flexWrap: 'wrap' }}>
           {[['500+', t('join.shops')], ['5', t('join.regions')], ['5', t('join.universities')], ['3', t('join.aiProducts')]].map(([v, l]) => (
             <div key={l} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.8rem', fontWeight: 900, color: 'var(--sn-text)' }}>{v}</div>
+              <div style={{ fontFamily: 'var(--sn-font)', fontSize: '1.8rem', fontWeight: 900, color: 'var(--sn-text)' }}>{v}</div>
               <div style={{ fontSize: '0.7rem', color: 'var(--sn-subtle)', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 2 }}>{l}</div>
             </div>
           ))}
@@ -56,7 +56,7 @@ export default function JoinPage() {
       <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', maxWidth: 900, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: 'var(--sn-text)', marginBottom: 8 }}>{t('join.processLabel')}</div>
-          <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: '#0D1B3E' }}>{t('join.howItWorks')}</h2>
+          <h2 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: '#0D1B3E' }}>{t('join.howItWorks')}</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
           {[
@@ -84,20 +84,20 @@ export default function JoinPage() {
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: 'var(--sn-text)', marginBottom: 8 }}>{t('join.marketsLabel')}</div>
-            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: 'var(--sn-text)' }}>{t('join.chooseMarket')}</h2>
+            <h2 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: 'var(--sn-text)' }}>{t('join.chooseMarket')}</h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
             {/* Business Market */}
             <div style={{ background: 'var(--sn-page)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(29,78,216,0.3)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: 'var(--sn-text)', marginBottom: 12 }}> BIASHARA MARKET</div>
-              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.4rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
+              <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
               <p style={{ fontSize: '0.82rem', color: 'var(--sn-muted)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ background: 'var(--sn-bg)', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ fontWeight: 800, color: 'var(--sn-text)', marginBottom: 4 }}>{t('join.basicPlanLabel')}</div>
-                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 4 }}>TZS 25,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--sn-subtle)' }}>/mwezi</span></div>
+                  <div style={{ fontFamily: 'var(--sn-font)', fontSize: '1.6rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 4 }}>TZS 25,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--sn-subtle)' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {['Duka lako mtandaoni', 'Bidhaa bila kikomo', 'Ushauri wa AI', 'WhatsApp integration'].map(f => (
                       <li key={f} style={{ fontSize: '0.78rem', color: 'var(--sn-muted)', display: 'flex', gap: 6 }}>
@@ -109,7 +109,7 @@ export default function JoinPage() {
                 <div style={{ background: 'linear-gradient(135deg, rgba(29,78,216,0.15), rgba(29,78,216,0.08))', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(29,78,216,0.4)', position: 'relative' }}>
                   <div style={{ position: 'absolute', top: -10, right: 16, background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', fontSize: '0.6rem', fontWeight: 900, padding: '3px 10px', borderRadius: 999 }}>{t('join.mostPopular')}</div>
                   <div style={{ fontWeight: 800, color: 'var(--sn-text)', marginBottom: 4 }}>{t('join.premiumPlanLabel')}</div>
-                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--sn-subtle)' }}>/mwezi</span></div>
+                  <div style={{ fontFamily: 'var(--sn-font)', fontSize: '1.6rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--sn-subtle)' }}>/mwezi</span></div>
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {['Kila kitu cha Basic', 'Duka linaonekana kwanza', 'Flash Deals &Group Buy', 'AI Marketing Manager', 'Ripoti za biashara'].map(f => (
                       <li key={f} style={{ fontSize: '0.78rem', color: 'var(--sn-muted)', display: 'flex', gap: 6 }}>
@@ -133,7 +133,7 @@ export default function JoinPage() {
       <section style={{ padding: 'clamp(3rem,6vw,4rem) 1.5rem', maxWidth: 900, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.12em', color: 'var(--sn-text)', marginBottom: 8 }}>TEKNOLOJIA YA AI</div>
-          <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: '#0D1B3E' }}>Vifaa vya AI, Bila Malipo</h2>
+          <h2 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', fontWeight: 700, color: '#0D1B3E' }}>Vifaa vya AI, Bila Malipo</h2>
           <p style={{ fontSize: '0.9rem', color: 'var(--sn-muted)', maxWidth: 500, margin: '0.75rem auto 0' }}>Kila duka linapatia vifaa vya AI bila gharama ya ziada</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
@@ -154,7 +154,7 @@ export default function JoinPage() {
       {/*  LOGIN  */}
       <section style={{ padding: 'clamp(2rem,5vw,3rem) 1.5rem', textAlign: 'center', background: 'var(--sn-page)' }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
-          <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.6rem', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.5rem' }}>Una Duka Tayari?</h2>
+          <h2 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.6rem', fontWeight: 900, color: '#0D1B3E', marginBottom: '0.5rem' }}>Una Duka Tayari?</h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--sn-muted)', marginBottom: '1.5rem' }}>Ingia kwenye dashboard yako na namba ya simu na password uliyopewa.</p>
           <Link href="/login" style={{ display: 'inline-block', background: 'var(--sn-bg)', color: 'var(--sn-text)', fontWeight: 800, padding: '0.875rem 2.5rem', borderRadius: 14, textDecoration: 'none', fontSize: '0.95rem' }}>
              Ingia Dashboard 

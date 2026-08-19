@@ -18,7 +18,7 @@ const MARKET_CONFIG: Record<string, {
   fashion: {
     label: 'Fashion Market',
     emoji: '👗',
-    color: '#BE185D',
+    color: 'var(--sn-primary)',
     categories: ['Fashion & Clothing','Beauty & Health','Sports & Fitness','Arts & Crafts'],
     allCats: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts'],
   },

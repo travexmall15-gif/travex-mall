@@ -328,7 +328,7 @@ export default function GroupBuyPage() {
   const CHIPS = [
     { href:'/market',      label: t('groupBuy.businessChip'), sub: t('groupBuy.businessChipSub'), bg:'#FEF3C7', border:'#FCD34D', color:'#92400E' },
     { href:'/flash-deals', label: t('groupBuy.flashChip'),    sub: t('groupBuy.flashChipSub'),    bg:'#DBEAFE', border:'#93C5FD', color:'#1E40AF' },
-    { href:'/vybe',        label: 'Social Vybe',              sub: t('groupBuy.vybeChipSub'),     bg:'#EDE9FE', border:'#C4B5FD', color:'#5B21B6' },
+    { href:'/vybe',        label: 'Social Vybe',              sub: t('groupBuy.vybeChipSub'),     bg:'#EDE9FE', border:'#C4B5FD', color:'var(--sn-primary)' },
   ]
 
   return (

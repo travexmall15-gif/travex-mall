@@ -298,7 +298,27 @@ export async function POST(req: Request) {
         reply = `Nimeona bidhaa ${found.length} zinazofanana:\n\n${found.slice(0,5).map(p=>`• ${p.name} — ${fmt(p.price)} (${p.stock} left)`).join('\n')}\n\nUnataka kujua zaidi kuhusu ipi?`
       }
     } else if (allProducts.length > 0) {
-      reply = `Sijaelewa vizuri swali lako. Ninaweza kukusaidia na:\n• Bidhaa na bei\n• Kufanya order\n• Mawasiliano na seller\n\nAu tafuta bidhaa: ${allProducts.slice(0,3).map(p=>p.name).join(', ')}...`
+      // Try Anthropic for natural language understanding
+    try {
+      const apiKey = process.env.ANTHROPIC_API_KEY
+      if (apiKey) {
+        const aiRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5',
+            max_tokens: 250,
+            system: `You are Aria, a helpful AI assistant for ${shop.name} in Tanzania. The store sells: ${allProducts.slice(0,8).map(p=>p.name+' TZS '+p.price).join(', ')}. Reply naturally in the user's language (Swahili or English). Be concise and helpful. No emojis.`,
+            messages: [{ role: 'user', content: msg }]
+          })
+        })
+        if (aiRes.ok) {
+          const aiData = await aiRes.json()
+          reply = aiData.content?.[0]?.text || ''
+        }
+      }
+    } catch {}
+    if (!reply) reply = `Ninaweza kukusaidia na bidhaa na bei, kufanya order, au mawasiliano na seller. Unataka nini?`
     } else {
       reply = `Karibu ${shop.name}! Duka lina bidhaa ${allProducts.length}. Ninaweza kukusaidia na swali lolote.`
     }

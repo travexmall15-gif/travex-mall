@@ -1037,3 +1037,50 @@ html {
   border-color: var(--sn-primary) !important;
 }
 
+
+/* ════════════════════════════════════════════════════
+   Performance & Transition Optimizations
+   ════════════════════════════════════════════════════ */
+
+/* Smooth page transitions */
+main {
+  animation: fadeIn 0.18s ease-out both;
+}
+@keyframes fadeIn {
+  from { opacity: 0.7; }
+  to   { opacity: 1;   }
+}
+
+/* Prevent layout shifts from images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better tap targets on mobile */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Prevent text size adjustments on mobile */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Consistent box sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Image rendering */
+img, video {
+  display: block;
+  vertical-align: middle;
+}

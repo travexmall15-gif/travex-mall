@@ -61,13 +61,13 @@ export default function ProfilePage() {
     setTimeout(() => setSaved(false), 2000)
   }
 
-  const inp: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '0.75rem 1rem 0.75rem 2.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.875rem', fontFamily: "'Inter',sans-serif", outline: 'none', background: 'var(--sn-page)', transition: 'border-color 0.2s' }
+  const inp: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '0.75rem 1rem 0.75rem 2.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.875rem', fontFamily: 'var(--sn-font)', outline: 'none', background: 'var(--sn-page)', transition: 'border-color 0.2s' }
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: '108px', fontFamily: "'Inter',sans-serif" }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: '108px', fontFamily: 'var(--sn-font)' }}>
       <SiteNav />
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
-        <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--sn-muted)', fontSize: '0.82rem', fontWeight: 600, fontFamily: "'Inter',sans-serif", marginBottom: '1.5rem', padding: 0 }}>
+        <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--sn-muted)', fontSize: '0.82rem', fontWeight: 600, fontFamily: 'var(--sn-font)', marginBottom: '1.5rem', padding: 0 }}>
           <ArrowLeft size={15} /> {t('common.back')}
         </button>
         <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0D1B3E', marginBottom: '1.75rem', letterSpacing: '-0.025em' }}>{t('profile.title')}</h1>
@@ -102,7 +102,7 @@ export default function ProfilePage() {
         </div>
 
         <button onClick={save} disabled={loading}
-          style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : '#0D1B3E', color: 'var(--sn-text)', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
+          style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : '#0D1B3E', color: 'var(--sn-text)', border: 'none', borderRadius: 14, fontFamily: 'var(--sn-font)', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
            : saved   ? <><Check size={15} /> {t('profile.saved')}</>
            : 'Save Changes'}

@@ -43,7 +43,7 @@ export default function UsernamePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--sn-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: "'Inter',sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: 'var(--sn-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', fontFamily: 'var(--sn-font)' }}>
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg) } }
         @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
@@ -86,7 +86,7 @@ export default function UsernamePage() {
             onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
             placeholder="e.g. jumanne_m"
             maxLength={20}
-            style={{ width: '100%', boxSizing: 'border-box', padding: '0.82rem 1rem 0.82rem 2.75rem', background: 'var(--sn-bg)', border: '1.5px solid #E2E8F0', borderRadius: 14, color: 'var(--sn-text)', fontSize: '0.9rem', fontFamily: "'Inter',sans-serif", outline: 'none', transition: 'border-color 0.2s' }}
+            style={{ width: '100%', boxSizing: 'border-box', padding: '0.82rem 1rem 0.82rem 2.75rem', background: 'var(--sn-bg)', border: '1.5px solid #E2E8F0', borderRadius: 14, color: 'var(--sn-text)', fontSize: '0.9rem', fontFamily: 'var(--sn-font)', outline: 'none', transition: 'border-color 0.2s' }}
             onKeyDown={e => e.key === 'Enter' && save()}
           />
         </div>
@@ -97,7 +97,7 @@ export default function UsernamePage() {
         {error && <p style={{ fontSize: '0.75rem', color: '#FCA5A5', marginBottom: '0.85rem', textAlign: 'center' }}>{error}</p>}
 
         <button onClick={save} disabled={loading || username.length < 3}
-          style={{ width: '100%', padding: '0.875rem', background: 'var(--sn-primary)', color: '#fff', border: 'none', borderRadius: 14, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
+          style={{ width: '100%', padding: '0.875rem', background: 'var(--sn-primary)', color: '#fff', border: 'none', borderRadius: 14, fontFamily: 'var(--sn-font)', fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading
             ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
             : <>{t('authPage.continueUsername')} <ArrowRight size={14} /></>}

@@ -54,7 +54,7 @@ export default function SplashPage() {
       background: 'var(--sn-bg)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      fontFamily: "'Inter',sans-serif",
+      fontFamily: 'var(--sn-font)',
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');

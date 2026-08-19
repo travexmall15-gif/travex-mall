@@ -777,6 +777,13 @@ async function submitApplication(){
   btn.disabled=true
   try{
     const products=prodData.filter(p=>p.name&&p.name.trim()).map(p=>({name:p.name.trim(),price:Number(p.price)||0,image:p.imageUrl||''}))
+    // Check if this email already has an application
+    const emailVal=document.getElementById('ownerEmail').value.trim()
+    const KEY2='sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+    const SB2='https://bscecjbgnjitlfmgwcic.supabase.co'
+    const chk=await fetch(SB2+'/rest/v1/pending_payments?auth_email=eq.'+encodeURIComponent(emailVal)+'&select=id,status',{headers:{'apikey':KEY2,'Authorization':'Bearer '+KEY2}})
+    if(chk.ok){const existing=await chk.json();if(existing&&existing.length>0){throw new Error('An application with this email already exists (status: '+existing[0].status+'). Please use a different email or log in instead.')}}
+
     const res=await fetch('https://bscecjbgnjitlfmgwcic.supabase.co/rest/v1/pending_payments',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos','Authorization':'Bearer sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos','Prefer':'return=minimal'},
@@ -801,7 +808,16 @@ async function submitApplication(){
         created_at:new Date().toISOString()
       })
     })
-    if(!res.ok){const t=await res.text();throw new Error(`(${res.status}) ${t}`)}
+    if(!res.ok){
+      let errMsg='Submission failed'
+      try{
+        const errBody=await res.json()
+        if(errBody&&errBody.message) errMsg=errBody.message
+        else if(errBody&&errBody.error) errMsg=errBody.error+': '+(errBody.error_description||errBody.details||'')
+        else errMsg=`Server error (${res.status})`
+      }catch{ errMsg=`Server error (${res.status})` }
+      throw new Error(errMsg)
+    }
     document.getElementById('step5').classList.remove('active')
     document.getElementById('progressWrap').style.display='none'
     document.getElementById('successPage').classList.add('show')

@@ -186,7 +186,7 @@ export default function AiSearchBox() {
               borderRadius: '16px', color: 'var(--sn-text)',
               fontSize: '0.9rem', outline: 'none',
               transition: 'border-color 0.2s',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--sn-font)',
             }}
             onFocus={e => e.target.style.borderColor = 'rgba(29,78,216,0.6)'}
             onBlur={e => e.target.style.borderColor = 'var(--sn-border)'}
@@ -201,7 +201,7 @@ export default function AiSearchBox() {
             border: 'none', color: query.trim() ? '#111827' : '#9CA3AF',
             fontWeight: 700, fontSize: '0.85rem', cursor: query.trim() ? 'pointer' : 'default',
             transition: 'all 0.2s', whiteSpace: 'nowrap',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--sn-font)',
           }}
         >
           {loading ? '...' : 'Search'}
@@ -220,7 +220,7 @@ export default function AiSearchBox() {
                 background: 'var(--sn-bg)',
                 border: '1px solid #E2E8F0',
                 color: 'var(--sn-muted)', fontSize: '0.72rem',
-                cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                cursor: 'pointer', fontFamily: 'var(--sn-font)',
                 transition: 'all 0.2s',
               }}
               onMouseOver={e => { (e.target as HTMLElement).style.background = 'var(--sn-border)'; (e.target as HTMLElement).style.color = '#fff' }}

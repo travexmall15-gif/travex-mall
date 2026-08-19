@@ -170,7 +170,7 @@ export default function AiPage() {
 
   const CSS = `
     html,body{margin:0;padding:0}
-    .aip{display:flex;flex-direction:column;height:100dvh;min-height:100vh;background:#F8FAFC;font-family:'Inter',sans-serif;overflow:hidden}
+    .aip{display:flex;flex-direction:column;height:100dvh;min-height:100vh;background:#F8FAFC;font-family: var(--sn-font);overflow:hidden}
     .aih{flex-shrink:0;background:var(--sn-bg);border-bottom:1px solid var(--sn-border)}
     .aih-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;height:62px;padding:0 20px}
     .aih-av{background:#D1D5DB;border:1px solid #D1D5DB;border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:var(--sn-text);flex-shrink:0}
