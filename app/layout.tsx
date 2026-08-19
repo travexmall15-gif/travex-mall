@@ -4,6 +4,8 @@ import type { Metadata, Viewport } from 'next'
 import { ToastProvider } from '@/components/toast'
 import { LangProvider } from '@/lib/lang-context'
 import { ThemeProvider } from '@/lib/theme-context'
+import { NavigationProgress } from '@/components/navigation-progress'
+import { OfflineNotification } from '@/components/offline-notification'
 import Script from 'next/script'
 import './globals.css'
 
@@ -12,13 +14,13 @@ const SITE_URL = 'https://shopnekt.vercel.app'
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0D1B3E',
+  themeColor: '#ffffff',
 }
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ShopNekt — The Global Digital Marketplace',
+    default: 'ShopNekt',
     template: '%s | ShopNekt',
   },
   description: 'ShopNekt is a global digital marketplace by QNEX360. Buy and sell online with verified sellers. Business Market, Campus Market, Flash Deals, Group Buy and more.',
@@ -54,7 +56,7 @@ export const metadata: Metadata = {
     alternateLocale: ['sw_TZ'],
     url: SITE_URL,
     siteName: 'ShopNekt',
-    title: 'ShopNekt — The Global Digital Marketplace',
+    title: 'ShopNekt',
     description: 'Buy and sell online on ShopNekt. Business Market, Campus Market, Flash Deals, Group Buy. Powered by QNEX360.',
     images: [{
       url: `${SITE_URL}/og-image.png`,
@@ -68,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@shopnekt',
     creator: '@qnex360',
-    title: 'ShopNekt — The Global Digital Marketplace',
+    title: 'ShopNekt',
     description: 'Buy and sell online on ShopNekt. Business Market, Campus Market, Flash Deals, Group Buy.',
     images: [`${SITE_URL}/og-image.png`],
   },
@@ -174,6 +176,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         style={{ WebkitTapHighlightColor: 'transparent' as any, fontFamily: 'var(--font-body, Inter, sans-serif)' }}
       >
         <ThemeProvider>
+        <NavigationProgress />
+        <OfflineNotification />
           <LangProvider>
             <ToastProvider>{children}</ToastProvider>
           </LangProvider>

@@ -6,7 +6,7 @@ const sb = createClient(
   'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 )
 
-// ── Types ─────────────────────────────────────────────────────────
+//  Types 
 type Product = {
   id?: string; name: string; price: number; stock: number
   description: string | null; category: string | null; image_url?: string | null
@@ -21,7 +21,7 @@ type ConvState = {
   orderPlaced?: boolean
 }
 
-// ── Intent detection ─────────────────────────────────────────────
+//  Intent detection 
 function detectIntent(msg: string, state: ConvState): string {
   const m = msg.toLowerCase()
   if (state.step === 'await_name') return 'collect_name'
@@ -43,7 +43,7 @@ function detectIntent(msg: string, state: ConvState): string {
   return 'search_product'
 }
 
-// ── Find product by keyword ───────────────────────────────────────
+//  Find product by keyword 
 function findProducts(query: string, products: Product[]): Product[] {
   const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2)
   if (words.length === 0) return products.slice(0, 5)
@@ -53,17 +53,17 @@ function findProducts(query: string, products: Product[]): Product[] {
   })
 }
 
-// ── Format currency ───────────────────────────────────────────────
+//  Format currency 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
-// ── Main handler ─────────────────────────────────────────────────
+//  Main handler 
 export async function POST(req: Request) {
   try {
   const { store_id, message, session_id, history, conv_state } = await req.json()
   const state: ConvState = conv_state || {}
   const msg = message.trim()
 
-  // ── Fetch ALL store data ──────────────────────────────────────
+  //  Fetch ALL store data 
   const [
     { data: storeRow },
     { data: campusRow },
@@ -108,12 +108,12 @@ export async function POST(req: Request) {
   const allOrders = pastOrders || []
   const wa = shop.whatsapp.replace(/\D/g, '')
 
-  // ── Detect intent ─────────────────────────────────────────────
+  //  Detect intent 
   const intent = detectIntent(msg, state)
   let reply = ''
   let newState: ConvState = { ...state }
 
-  // ── Handle intents ────────────────────────────────────────────
+  //  Handle intents 
   if (intent === 'greeting') {
     const prods = allProducts.length > 0
       ? `\n\nTuna bidhaa ${allProducts.length}. Unaweza kuuliza kuhusu:\n• Bidhaa na bei\n• Kufanya order\n• Kuwasiliana na seller`
@@ -170,12 +170,12 @@ export async function POST(req: Request) {
 
   } else if (intent === 'ask_contact') {
     reply = `Unaweza kuwasiliana na mwenye ${shop.name} moja kwa moja:\n\n`
-    if (wa) reply += `📱 WhatsApp: +${wa}\n`
-    if (shop.phone) reply += `📞 Simu: ${shop.phone}\n`
+    if (wa) reply += ` WhatsApp: +${wa}\n`
+    if (shop.phone) reply += ` Simu: ${shop.phone}\n`
     reply += `\nAu niambie tatizo lako nami nitasaidia!\n\nPia unaweza kutuma message kupitia kitufe cha "Message Seller" juu.`
 
   } else if (intent === 'ask_location') {
-    reply = `${shop.name} ipo:\n📍 Mkoa: ${shop.region}\n📦 Category: ${shop.category}\n📅 Imefunguliwa: ${shop.since || 'Hivi karibuni'}\n${shop.plan === 'premium' ? '\nSeller hii ni Premium — wamethhibitishwa na ShopNekt.' : ''}`
+    reply = `${shop.name} ipo:\n Mkoa: ${shop.region}\n Category: ${shop.category}\n Imefunguliwa: ${shop.since || 'Hivi karibuni'}\n${shop.plan === 'premium' ? '\nSeller hii ni Premium — wamethhibitishwa na ShopNekt.' : ''}`
 
   } else if (intent === 'order_intent') {
     const found = findProducts(msg, allProducts)
@@ -228,7 +228,7 @@ export async function POST(req: Request) {
       newState.step = 'await_confirm'
       const p = state.selectedProduct!
       const total = fmt(p.price * (state.qty || 1))
-      reply = `Sawa! Thibitisha order yako:\n\n📦 Bidhaa: ${p.name}\n🔢 Idadi: ${state.qty || 1}\n💰 Jumla: ${total}\n👤 Jina: ${state.customerName}\n📱 Simu: ${phone}\n🏪 Duka: ${shop.name}\n\nUnathibitisha? Andika **NDIYO** kutuma order au **HAPANA** kufuta.`
+      reply = `Sawa! Thibitisha order yako:\n\n Bidhaa: ${p.name}\n Idadi: ${state.qty || 1}\n Jumla: ${total}\n Jina: ${state.customerName}\n Simu: ${phone}\n Duka: ${shop.name}\n\nUnathibitisha? Andika **NDIYO** kutuma order au **HAPANA** kufuta.`
     }
 
   } else if (intent === 'confirm_order' && state.step === 'await_confirm') {
@@ -257,16 +257,16 @@ export async function POST(req: Request) {
         reply = `Kuna tatizo kidogo la kiufundi. Tafadhali jaribu tena au wasiliana na seller moja kwa moja${wa ? ` kwa WhatsApp: +${wa}` : ''}.`
       } else {
         newState = { orderPlaced: true }
-        reply = `Order yako imepelekwa kwa ${shop.name}!\n\n✅ **Umefanikiwa!**\n\n📦 ${p.name} x${qty}\n💰 ${fmt(total)}\n👤 ${state.customerName}\n📱 ${state.customerPhone}\n\nSeller atakupigia simu au kukutumia WhatsApp hivi karibuni kukuthibitishia. Asante kwa kununua kutoka ${shop.name}!`
+        reply = `Order yako imepelekwa kwa ${shop.name}!\n\n **Umefanikiwa!**\n\n ${p.name} x${qty}\n ${fmt(total)}\n ${state.customerName}\n ${state.customerPhone}\n\nSeller atakupigia simu au kukutumia WhatsApp hivi karibuni kukuthibitishia. Asante kwa kununua kutoka ${shop.name}!`
 
         // Also send WhatsApp notification to seller (non-blocking)
         if (wa) {
           const waMsg = encodeURIComponent(
-            `🛍️ ORDER MPYA kutoka Aria AI!\n\n` +
-            `📦 Bidhaa: ${p.name} x${qty}\n` +
-            `💰 Jumla: ${fmt(total)}\n` +
-            `👤 Mteja: ${state.customerName}\n` +
-            `📱 Simu: ${state.customerPhone}\n\n` +
+            ` ORDER MPYA kutoka Aria AI!\n\n` +
+            ` Bidhaa: ${p.name} x${qty}\n` +
+            ` Jumla: ${fmt(total)}\n` +
+            ` Mteja: ${state.customerName}\n` +
+            ` Simu: ${state.customerPhone}\n\n` +
             `_Order imepelekwa kupitia Aria AI Assistant - ShopNekt_`
           )
           // Note: In production, send via server-side WhatsApp Business API

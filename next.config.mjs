@@ -28,14 +28,16 @@ const nextConfig = {
   // Without this, navigating back shows old page for up to 5 minutes
   experimental: {
     staleTimes: {
-      dynamic: 0,    // dynamic pages: never cache in router
-      static:  60,   // static pages: 1 min (they don't change mid-session)
+      dynamic: 30,   // cache dynamic pages 30s — faster back navigation
+      static:  180,  // cache static pages 3 min
     },
     optimizePackageImports: [
       '@supabase/supabase-js',
       'lucide-react',
       '@vercel/analytics',
     ],
+    // Faster page transitions
+    ppr: false,
   },
 
   // ── HTTP Cache-Control headers ───────────────────────────

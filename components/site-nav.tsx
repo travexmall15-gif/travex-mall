@@ -123,7 +123,7 @@ export function SiteNav() {
       <div style={{ display: 'flex', alignItems: 'center', padding: '10px 5%', gap: '14px' }}>
 
         {/* Brand */}
-        <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
+        <Link href="/home" prefetch={true} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
           <img src="/icon-192.png" alt="ShopNekt" style={{ height: '52px', width: '52px', objectFit: 'contain', borderRadius: '12px' }} />
           <span style={{ fontFamily: "'Inter',sans-serif", fontSize: '1.35rem', fontWeight: 900, color: '#0D1B3E', letterSpacing: '-0.04em', lineHeight: 1 }}>
             Shop<span style={{ color: 'var(--sn-primary)' }}>Nekt</span>

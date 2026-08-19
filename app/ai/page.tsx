@@ -171,9 +171,9 @@ export default function AiPage() {
   const CSS = `
     html,body{margin:0;padding:0}
     .aip{display:flex;flex-direction:column;height:100dvh;min-height:100vh;background:#F8FAFC;font-family:'Inter',sans-serif;overflow:hidden}
-    .aih{flex-shrink:0;background:linear-gradient(135deg,#1D4ED8,#1E40AF);border-bottom:1px solid #E5E7EB}
+    .aih{flex-shrink:0;background:var(--sn-bg);border-bottom:1px solid var(--sn-border)}
     .aih-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;height:62px;padding:0 20px}
-    .aih-av{background:#D1D5DB;border:1px solid #D1D5DB;border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:#fff;flex-shrink:0}
+    .aih-av{background:#D1D5DB;border:1px solid #D1D5DB;border-radius:11px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;color:var(--sn-text);flex-shrink:0}
     .aih-btn{background:#E5E7EB;border:none;color:rgba(255,255,255,0.70);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0}
     .aih-btn:hover{background:rgba(255,255,255,0.16)}
     .aim{flex:1;overflow-y:auto;scroll-behavior:smooth}
@@ -193,7 +193,7 @@ export default function AiPage() {
     .mr.user{flex-direction:row-reverse}
     .mb{max-width:83%}
     .av{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);display:flex;align-items:center;justify-content:center;color:#1D4ED8;font-weight:900;font-size:0.85rem;flex-shrink:0}
-    .ub{background:#1D4ED8;color:#fff;border-radius:20px 4px 20px 20px;padding:10px 16px;font-size:0.875rem;line-height:1.6;display:inline-block}
+    .ub{background:var(--sn-text);color:var(--sn-bg);border-radius:20px 4px 20px 20px;padding:10px 16px;font-size:0.875rem;line-height:1.6;display:inline-block}
     .ab{background:#fff;color:#1e293b;border:1px solid #E2E8F0;border-radius:4px 20px 20px 20px;padding:10px 16px;font-size:0.875rem;line-height:1.6;box-shadow:0 1px 6px rgba(0,0,0,0.04);white-space:pre-line}
     .td-wrap{display:flex;gap:4px;align-items:center;padding:14px 16px;background:#fff;border:1px solid #E2E8F0;border-radius:4px 20px 20px 20px;box-shadow:0 1px 6px rgba(0,0,0,0.04)}
     .td{width:7px;height:7px;border-radius:50%;background:#CBD5E1;animation:tdp 1.2s ease-in-out infinite}
@@ -225,7 +225,7 @@ export default function AiPage() {
     .ir{display:flex;gap:8px}
     .ci{flex:1;padding:13px 16px;border-radius:14px;border:1.5px solid #E2E8F0;font-size:0.875rem;font-family:inherit;color:#0F172A;outline:none;transition:border-color 0.15s;background:#fff}
     .ci:focus{border-color:#1D4ED8}.ci:disabled{background:#F8FAFC;cursor:not-allowed}
-    .sb{width:50px;height:50px;border-radius:14px;background:#1D4ED8;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+    .sb{width:50px;height:50px;border-radius:14px;background:var(--sn-text);border:none;color:var(--sn-bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
     .sb:disabled{background:#E2E8F0;color:#94A3B8;cursor:not-allowed}
     .sb:not(:disabled):hover{background:#162444;box-shadow:0 4px 14px rgba(13,27,62,0.25)}
     @media(max-width:480px){.sg{grid-template-columns:1fr 1fr}.mb{max-width:88%}.ai-hero h1{font-size:1.3rem}.aih-in{padding:0 12px}.aim-in{padding:16px 12px 12px}.aib{padding:8px 12px 20px}}
@@ -359,7 +359,7 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
           <div style={{flex:1,minWidth:0}}>
             <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
               <span style={{fontWeight:700,color:'var(--sn-text)',fontSize:'0.88rem',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{store.shop_name}</span>
-              {store.plan === 'premium' && <span style={{fontSize:'0.67rem',color:'var(--sn-text)',flexShrink:0}}>★ Premium</span>}
+              {store.plan === 'premium' && <span style={{fontSize:'0.67rem',color:'var(--sn-text)',flexShrink:0}}> Premium</span>}
             </div>
             <div style={{fontSize:'0.7rem',color:'var(--sn-subtle)',marginBottom:4,display:'flex',gap:6,flexWrap:'wrap'}}>
               {store.shop_category&&<span>{store.shop_category}</span>}
