@@ -16,7 +16,7 @@ const MARKETS = [
     bg: '#fff',
     iconColor: '#1D4ED8',
     borderColor: 'var(--sn-border)',
-    categories: ['Fashion & Clothing','Beauty & Health','Sports & Fitness','Arts & Crafts'],
+    categories: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts','Fashion & Clothing','Beauty & Health'],
     desc: 'Clothing, shoes, accessories, beauty & more',
   },
   {
@@ -26,7 +26,7 @@ const MARKETS = [
     bg: '#fff',
     iconColor: '#1D4ED8',
     borderColor: 'var(--sn-border)',
-    categories: ['Automotive'],
+    categories: ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories','Automotive'],
     desc: 'Cars, motorcycles, spare parts & accessories',
   },
   {
@@ -36,7 +36,7 @@ const MARKETS = [
     bg: '#fff',
     iconColor: '#1D4ED8',
     borderColor: 'var(--sn-border)',
-    categories: ['Electronics','Technology','Books & Stationery'],
+    categories: ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics','Electronics','Technology','Books & Stationery'],
     desc: 'Phones, laptops, TVs, audio & appliances',
   },
 ]

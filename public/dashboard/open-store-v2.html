@@ -777,46 +777,33 @@ async function submitApplication(){
   btn.disabled=true
   try{
     const products=prodData.filter(p=>p.name&&p.name.trim()).map(p=>({name:p.name.trim(),price:Number(p.price)||0,image:p.imageUrl||''}))
-    // Check if this email already has an application
-    const emailVal=document.getElementById('ownerEmail').value.trim()
-    const KEY2='sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-    const SB2='https://bscecjbgnjitlfmgwcic.supabase.co'
-    const chk=await fetch(SB2+'/rest/v1/pending_payments?auth_email=eq.'+encodeURIComponent(emailVal)+'&select=id,status',{headers:{'apikey':KEY2,'Authorization':'Bearer '+KEY2}})
-    if(chk.ok){const existing=await chk.json();if(existing&&existing.length>0){throw new Error('An application with this email already exists (status: '+existing[0].status+'). Please use a different email or log in instead.')}}
-
-    const res=await fetch('https://bscecjbgnjitlfmgwcic.supabase.co/rest/v1/pending_payments',{
+    const shopMarketEl=document.getElementById('shopMarket')
+    const payload={
+      owner_name:document.getElementById('ownerName').value.trim(),
+      owner_phone:document.getElementById('ownerPhone').value.trim(),
+      owner_email:document.getElementById('ownerEmail').value.trim(),
+      shop_market:shopMarketEl?shopMarketEl.value||null:null,
+      shop_name:document.getElementById('shopName').value.trim(),
+      shop_category:document.getElementById('shopCategory').value,
+      shop_region:document.getElementById('shopRegion').value,
+      shop_whatsapp:document.getElementById('shopWhatsapp').value.trim(),
+      shop_desc:document.getElementById('shopDesc').value.trim(),
+      plan:selectedPlan,
+      login_password:document.getElementById('ownerPin').value.trim(),
+      shop_color:selectedColor,
+      shop_font:selectedFont,
+      shop_logo:logoUrl||null,
+      shop_products:JSON.stringify(products)
+    }
+    // POST to Next.js API route — server-side handles RLS + validation + duplicate check
+    const res=await fetch('/api/register-store',{
       method:'POST',
-      headers:{'Content-Type':'application/json','apikey':'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos','Authorization':'Bearer sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos','Prefer':'return=minimal'},
-      body:JSON.stringify({
-        owner_name:document.getElementById('ownerName').value.trim(),
-        owner_phone:document.getElementById('ownerPhone').value.trim(),
-        owner_email:document.getElementById('ownerEmail').value.trim(),
-        auth_email:document.getElementById('ownerEmail').value.trim(),
-        shop_market:document.getElementById('shopMarket')&&document.getElementById('shopMarket').value||null,
-        shop_name:document.getElementById('shopName').value.trim(),
-        shop_category:document.getElementById('shopCategory').value,
-        shop_region:document.getElementById('shopRegion').value,
-        shop_whatsapp:document.getElementById('shopWhatsapp').value.trim(),
-        shop_desc:document.getElementById('shopDesc').value.trim(),
-        plan:selectedPlan,
-        login_password:document.getElementById('ownerPin').value.trim(),
-        shop_color:selectedColor,
-        shop_font:selectedFont,
-        shop_logo:logoUrl||null,
-        shop_products:JSON.stringify(products),
-        status:'pending',
-        created_at:new Date().toISOString()
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
     })
+    const resData=await res.json().catch(()=>({error:'Invalid server response'}))
     if(!res.ok){
-      let errMsg='Submission failed'
-      try{
-        const errBody=await res.json()
-        if(errBody&&errBody.message) errMsg=errBody.message
-        else if(errBody&&errBody.error) errMsg=errBody.error+': '+(errBody.error_description||errBody.details||'')
-        else errMsg=`Server error (${res.status})`
-      }catch{ errMsg=`Server error (${res.status})` }
-      throw new Error(errMsg)
+      throw new Error(resData.error||resData.message||`Server error (${res.status})`)
     }
     document.getElementById('step5').classList.remove('active')
     document.getElementById('progressWrap').style.display='none'

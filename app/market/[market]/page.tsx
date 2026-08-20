@@ -19,22 +19,25 @@ const MARKET_CONFIG: Record<string, {
     label: 'Fashion Market',
     emoji: '👗',
     color: 'var(--sn-primary)',
-    categories: ['Fashion & Clothing','Beauty & Health','Sports & Fitness','Arts & Crafts'],
-    allCats: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts'],
+    // Must match MARKET_CATS in open-store-v2.html exactly
+    categories: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts',
+                 'Fashion & Clothing','Beauty & Health'],
+    allCats:    ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts'],
   },
   vehicle: {
     label: 'Vehicle Market',
     emoji: '🚗',
     color: 'var(--sn-text)',
-    categories: ['Automotive'],
-    allCats: ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories'],
+    categories: ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories','Automotive'],
+    allCats:    ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories'],
   },
   electronics: {
     label: 'Electronics Market',
     emoji: '📱',
     color: 'var(--sn-primary)',
-    categories: ['Electronics','Technology','Books & Stationery'],
-    allCats: ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics'],
+    categories: ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics',
+                 'Electronics','Technology','Books & Stationery'],
+    allCats:    ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics'],
   },
 }
 

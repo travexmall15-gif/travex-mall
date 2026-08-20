@@ -701,7 +701,7 @@ async function acMA(id){
   const phone=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
 
   // No Supabase Auth, just store password directly, approve status
-  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',login_password:rawPass,shop_number:shopNumMA}).eq('id',id);
+  const {error:upErr} = await sb.from('pending_payments').update({status:'approved',login_password:rawPass,shop_number:shopNumMA,shop_market:a.shop_market||null}).eq('id',id);
   if(upErr){
     alert(' FAILED TO APPROVE, shop will NOT appear in market.\n\nError: '+upErr.message+'\n\nCode: '+(upErr.code||'unknown'));
     toast(' Approve failed: '+upErr.message,'err');
