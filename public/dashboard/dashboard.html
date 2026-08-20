@@ -720,21 +720,50 @@ function applyPlan() {
 
 // ── LOAD DATA ─────────────────────────────────────────
 async function loadOrders() {
-  const { data } = await sb.from('orders').select('*').eq('shop_id', SHOP_ID).order('created_at', {ascending:false})
-  ALL_ORDERS = data || []
+  try {
+    const sess = JSON.parse(localStorage.getItem('travex_session') || '{}')
+    const isCampus = sess.market === 'campus'
+    const idCol = isCampus ? 'store_id' : 'shop_id'
+    const { data, error } = await sb.from('orders')
+      .select('*').eq(idCol, SHOP_ID).order('created_at', {ascending:false})
+    if (error) throw new Error(error.message)
+    ALL_ORDERS = data || []
+  } catch(e) {
+    console.error('[orders]', e.message)
+    setStatError('statToday', 'statMonth', 'statPending')
+    ALL_ORDERS = []
+  }
   updateOrderBadge()
   renderHomeOrders()
   renderOrdersList('all')
 }
 
 async function loadSales() {
-  const { data } = await sb.from('seller_sales').select('*').eq('store_id', SHOP_ID).order('date', {ascending:false})
-  ALL_SALES = data || []
+  try {
+    const { data, error } = await sb.from('seller_sales')
+      .select('*').eq('store_id', SHOP_ID).order('date', {ascending:false})
+    if (error) throw new Error(error.message)
+    ALL_SALES = data || []
+  } catch(e) {
+    console.error('[sales]', e.message)
+    ALL_SALES = []
+  }
 }
 
 async function loadProducts() {
-  const { data } = await sb.from('products').select('*').eq('shop_id', SHOP_ID).order('created_at', {ascending:false})
-  ALL_PRODUCTS = data || []
+  try {
+    const sess = JSON.parse(localStorage.getItem('travex_session') || '{}')
+    const isCampus = sess.market === 'campus'
+    const tbl = isCampus ? 'campus_products' : 'products'
+    const idCol = isCampus ? 'store_id' : 'shop_id'
+    const { data, error } = await sb.from(tbl)
+      .select('*').eq(idCol, SHOP_ID).order('created_at', {ascending:false})
+    if (error) throw new Error(error.message)
+    ALL_PRODUCTS = data || []
+  } catch(e) {
+    console.error('[products]', e.message)
+    ALL_PRODUCTS = []
+  }
   document.getElementById('statProds').textContent = ALL_PRODUCTS.length
   renderProducts()
 }
@@ -768,9 +797,9 @@ function renderHome() {
   const monthRev = sumOrders(monthOrders)
 
   document.getElementById('statToday').textContent = fmtTZS(todayRev)
-  document.getElementById('statTodayOrders').textContent = todayOrders.length + ' orders'
+  document.getElementById('statTodayOrders').textContent = todayOrders.length ? todayOrders.length + ' orders' : 'No orders today'
   document.getElementById('statMonth').textContent = fmtTZS(monthRev)
-  document.getElementById('statMonthOrders').textContent = monthOrders.length + ' orders'
+  document.getElementById('statMonthOrders').textContent = monthOrders.length ? monthOrders.length + ' orders' : 'No orders this month'
   document.getElementById('statPending').textContent = pending
 
   renderWeekChart()
@@ -1191,7 +1220,11 @@ function doLogout() {
 
 // ── HELPERS ───────────────────────────────────────────
 function sumOrders(orders) {
-  return orders.reduce((a,o) => a + (Number(o.amount)||0), 0)
+  return orders.reduce((a,o) => {
+    // Handle all possible amount column names from orders table
+    const amt = Number(o.total_amount || o.amount || o.total_price || o.price || 0)
+    return a + amt
+  }, 0)
 }
 function fmtTZS(n) {
   if (n >= 1000000) return 'TZS ' + (n/1000000).toFixed(1) + 'M'

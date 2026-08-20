@@ -100,9 +100,17 @@ async function loadData() {
     renderOrders(allOrders)
     updateStats(allOrders)
   } catch(e) {
-    showToast('Error loading orders: ' + e.message)
+    const errMsg = e.message || 'Connection error'
+    // Show error state in the table — NOT silent zero
+    const tbody = document.getElementById('ordersTable')
+    if (tbody) tbody.innerHTML = `
+      <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text-secondary)">
+        <strong style="display:block;margin-bottom:8px">Failed to load orders</strong>
+        <small>${errMsg}</small><br>
+        <button onclick="loadData()" style="margin-top:12px;padding:8px 20px;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);cursor:pointer">Retry</button>
+      </td></tr>`
+    showToast('Error: ' + errMsg, 'error')
     allOrders = []
-    renderOrders([])
   } finally {
     document.getElementById('loadingOverlay').style.display = 'none'
   }

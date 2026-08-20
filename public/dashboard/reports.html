@@ -79,15 +79,18 @@ let shopData=null;
 })();
 
 async function loadReports(){
+  try{
   const days  = parseInt(document.getElementById('periodSelect').value)||30;
   const since = new Date(); since.setDate(since.getDate()-days);
   const fmt   = n=>'TZS '+Number(n).toLocaleString();
 
-  const[{data:sales},{data:orders}]=await Promise.all([
+  const[{data:sales,error:salesErr},{data:orders,error:ordersErr}]=await Promise.all([
     sb.from('seller_sales').select('*').eq('store_id',shopData?.id).gte('created_at',since.toISOString()),
-    sb.from(shopData?.market==='campus'?'campus_orders':'orders').select('*').eq(shopData?.market==='campus'?'store_id':'shop_id',shopData?.id).gte('created_at',since.toISOString()),
+    sb.from(shopData?._market==='campus'?'campus_orders':'orders').select('*').eq(shopData?._market==='campus'?'store_id':'shop_id',shopData?.id).gte('created_at',since.toISOString()),
   ]);
 
+  if(salesErr) console.warn('[reports/sales]', salesErr.message)
+  if(ordersErr) console.warn('[reports/orders]', ordersErr.message)
   const revenue  =(sales||[]).filter(s=>s.category!=='expense'&&s.category!=='invoice').reduce((a,s)=>a+Number(s.amount),0);
   const expense  =(sales||[]).filter(s=>s.category==='expense').reduce((a,s)=>a+Number(s.amount),0);
   const profit   =revenue-expense;
