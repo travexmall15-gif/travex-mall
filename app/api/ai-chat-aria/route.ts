@@ -342,5 +342,5 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   
   return sw
     ? 'Samahani, sijaelewa vizuri. Ninaweza kukusaidia na bidhaa, bei, orders, na maswali yoyote kuhusu ShopNekt. Uliza tena!'
-    : 'I didn't quite understand. I can help with products, prices, orders, Flash Deals, and anything else on ShopNekt. Please ask again!'
+    : "I didn't quite understand. I can help with products, prices, orders, and anything else on ShopNekt. Please ask again!"
 }
