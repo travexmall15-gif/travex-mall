@@ -310,24 +310,37 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
     }
   }
 
-  //  FINAL FALLBACK 
-  return sw
-    ? ` Samahani, sijaelewa vizuri. Naweza kukusaidia na:\n\n•  Bidhaa na bei\n•  Flash Deals\n•  Orders zangu\n•  Delivery\n•  Malipo\n•  Kufungua duka\n•  Maswali yoyote\n\nUliza tena! `
-    : ` I didn't quite understand. I can help with:\n\n•  Products & prices\n•  Flash Deals\n•  My orders\n•  Delivery\n•  Payments\n•  Opening a shop\n•  Any questions\n\nTry asking again! `
-}
-
-//  Main 
-export async function POST(req: NextRequest) {
+  //  FINAL FALLBACK — try Anthropic for natural language
   try {
-    const { message, userId, storeId, shopName, shopCategory, mode = 'general' } = await req.json()
-    if (!message?.trim()) return NextResponse.json({ reply: 'Send a message.' })
-
-    const l   = lang(message)
-    const it  = getIntent(message)
-    const reply = await respond(it, message, l, mode, storeId, shopName, shopCategory, userId)
-
-    return NextResponse.json({ reply })
-  } catch (e) {
-    return NextResponse.json({ reply: ' Error occurred. Please try again.' }, { status: 500 })
-  }
+    const apiKey = process.env.ANTHROPIC_API_KEY
+    if (apiKey) {
+      const context = mode === 'seller'
+        ? `You are 360 AI, a business assistant for ShopNekt sellers in Tanzania. Help with sales, orders, products, and business analytics. The seller's store: ${shopName || 'Unknown'} (${shopCategory || 'General'}).`
+        : `You are 360 AI, a helpful shopping assistant on ShopNekt marketplace in Tanzania. Help buyers find products, understand deals, track orders, and navigate the platform.`
+      
+      const aiRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 400,
+          system: context + " Respond naturally in the user's language (Swahili, English, or mixed). Be concise, helpful, and professional. No emojis.",
+          messages: [{ role: 'user', content: msg }],
+        }),
+      })
+      if (aiRes.ok) {
+        const aiData = await aiRes.json()
+        const text = aiData.content?.[0]?.text
+        if (text) return text
+      }
+    }
+  } catch {}
+  
+  return sw
+    ? 'Samahani, sijaelewa vizuri. Ninaweza kukusaidia na bidhaa, bei, orders, na maswali yoyote kuhusu ShopNekt. Uliza tena!'
+    : 'I didn't quite understand. I can help with products, prices, orders, Flash Deals, and anything else on ShopNekt. Please ask again!'
 }

@@ -617,16 +617,16 @@ export default function StorePage({
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.9rem', marginBottom: '1.5rem' }}>
               {/* AI Female avatar */}
               <div style={{ flexShrink: 0, position: 'relative' }}>
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2.5px solid #fff', boxShadow: '0 4px 14px rgba(99,102,241,0.35)', overflow: 'hidden' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'var(--sn-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2.5px solid #fff', boxShadow: '0 4px 14px rgba(29,78,216,0.2)', overflow: 'hidden' }}>
                   <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
                     {/* Body */}
                     <circle cx="26" cy="56" r="20" fill="#A5B4FC"/>
                     {/* Head */}
                     <circle cx="26" cy="21" r="11" fill="#FDE8D0"/>
                     {/* Hair */}
-                    <path d="M15 18 Q16 8 26 8 Q36 8 37 18 Q36 12 26 11 Q16 12 15 18Z" fill="#7C3AED"/>
-                    <path d="M15 21 Q13 30 16 34 Q15 26 16 22Z" fill="#7C3AED"/>
-                    <path d="M37 21 Q39 30 36 34 Q37 26 36 22Z" fill="#7C3AED"/>
+                    <path d="M15 18 Q16 8 26 8 Q36 8 37 18 Q36 12 26 11 Q16 12 15 18Z" fill="var(--sn-primary)"/>
+                    <path d="M15 21 Q13 30 16 34 Q15 26 16 22Z" fill="var(--sn-primary)"/>
+                    <path d="M37 21 Q39 30 36 34 Q37 26 36 22Z" fill="var(--sn-primary)"/>
                     {/* Eyes */}
                     <ellipse cx="22" cy="21" rx="1.4" ry="1.6" fill="#1E1B4B"/>
                     <ellipse cx="30" cy="21" rx="1.4" ry="1.6" fill="#1E1B4B"/>
@@ -676,7 +676,7 @@ export default function StorePage({
                     if (btn) btn.click()
                   }, 300)
                 }}
-                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--sn-font)', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'var(--sn-primary)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--sn-font)', boxShadow: '0 4px 14px rgba(29,78,216,0.2)' }}>
                 Chat with Aria
               </button>
             </div>

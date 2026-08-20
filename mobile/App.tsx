@@ -46,10 +46,13 @@ export default function App() {
   if (error) {
     return (
       <View style={styles.center}>
-        <StatusBar barStyle="light-content" backgroundColor="#080F37" />
-        <Text style={styles.emoji}>📵</Text>
-        <Text style={styles.title}>Hakuna Mtandao</Text>
-        <Text style={styles.sub}>Angalia connection yako na ujaribu tena</Text>
+        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+        <Text style={styles.brandErr}>
+          <Text style={styles.brandBlack}>Shop</Text>
+          <Text style={styles.brandBlue}>Nekt</Text>
+        </Text>
+        <Text style={styles.title}>No Internet Connection</Text>
+        <Text style={styles.sub}>Check your connection and try again</Text>
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
@@ -58,7 +61,7 @@ export default function App() {
             if (webRef.current) webRef.current.reload()
           }}
         >
-          <Text style={styles.btnText}>🔄  Jaribu Tena</Text>
+          <Text style={styles.btnText}>Try Again</Text>
         </TouchableOpacity>
       </View>
     )
@@ -66,16 +69,17 @@ export default function App() {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor="#0D1B3E" translucent={false} />
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" translucent={false} />
 
+      {/* ONE splash — white, minimal, no artificial delay */}
       {!ready && (
         <View style={styles.splash}>
           <Text style={styles.brand}>
-            <Text>shop</Text>
-            <Text style={styles.gold}>nekt</Text>
+            <Text style={styles.brandBlack}>Shop</Text>
+            <Text style={styles.brandBlue}>Nekt</Text>
           </Text>
-          <ActivityIndicator color="#C9A84C" size="large" style={styles.spinner} />
-          <Text style={styles.tag}>by QNEX360</Text>
+          <ActivityIndicator color="#1D4ED8" size="small" style={styles.spinner} />
+          <Text style={styles.tag}>from QNEX360</Text>
         </View>
       )}
 
@@ -101,30 +105,30 @@ export default function App() {
   )
 }
 
-const NAVY = '#080F37'
-const GOLD = '#C9A84C'
-
 const styles = StyleSheet.create({
-  root:    { flex: 1, backgroundColor: NAVY },
-  web:     { flex: 1 },
-  hide:    { flex: 0, width: 0, height: 0 },
+  root:       { flex: 1, backgroundColor: '#ffffff' },
+  web:        { flex: 1 },
+  hide:       { flex: 0, width: 0, height: 0 },
 
+  // ONE white splash
   splash: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: NAVY,
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
   },
-  brand:   { fontSize: 40, fontWeight: '900', color: '#fff', letterSpacing: -1 },
-  gold:    { color: GOLD },
-  spinner: { marginTop: 28 },
-  tag:     { color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', marginTop: 24 },
+  brand:      { fontSize: 38, fontWeight: '900', letterSpacing: -1 },
+  brandBlack: { color: '#111827' },
+  brandBlue:  { color: '#1D4ED8' },
+  spinner:    { marginTop: 24 },
+  tag:        { color: '#9CA3AF', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', marginTop: 20 },
 
-  center:  { flex: 1, backgroundColor: NAVY, alignItems: 'center', justifyContent: 'center', padding: 32 },
-  emoji:   { fontSize: 56, marginBottom: 16 },
-  title:   { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 8 },
-  sub:     { fontSize: 14, color: 'rgba(255,255,255,0.5)', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
-  btn:     { backgroundColor: GOLD, borderRadius: 999, paddingHorizontal: 32, paddingVertical: 14 },
-  btnText: { color: NAVY, fontWeight: '700', fontSize: 15 },
+  // Error screen
+  center:     { flex: 1, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  brandErr:   { fontSize: 32, fontWeight: '900', letterSpacing: -1, marginBottom: 24 },
+  title:      { fontSize: 20, fontWeight: '700', color: '#111827', marginBottom: 8 },
+  sub:        { fontSize: 14, color: '#6B7280', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
+  btn:        { backgroundColor: '#1D4ED8', borderRadius: 999, paddingHorizontal: 32, paddingVertical: 14 },
+  btnText:    { color: '#ffffff', fontWeight: '700', fontSize: 15 },
 })

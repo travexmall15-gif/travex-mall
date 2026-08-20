@@ -8,12 +8,12 @@
     "scheme": "shopnekt",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#080F37"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "com.qnex360.shopnekt",
       "infoPlist": {
         "NSCameraUsageDescription": "ShopNekt uses camera for product photos",
@@ -24,7 +24,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#080F37"
+        "backgroundColor": "#ffffff"
       },
       "package": "com.qnex360.shopnekt",
       "permissions": [
@@ -35,7 +35,8 @@
         "ACCESS_COARSE_LOCATION",
         "INTERNET",
         "VIBRATE"
-      ]
+      ],
+      "softwareKeyboardLayoutMode": "pan"
     },
     "plugins": [
       "expo-splash-screen",

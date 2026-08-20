@@ -47,7 +47,7 @@ export default function UsernamePage() {
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg) } }
         @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-        input:focus { border-color: #F97316 !important; }
+        input:focus { border-color: var(--sn-primary) !important; }
       `}</style>
 
       {/* Logo */}

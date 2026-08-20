@@ -284,7 +284,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             </div>
 
             <div style={{ background:'rgba(249,115,22,0.06)', border:'1px solid rgba(249,115,22,0.2)', borderRadius:12, padding:'12px 14px', marginBottom:'1.25rem', display:'flex', gap:10 }}>
-              <AlertCircle size={16} color="#F97316" style={{ flexShrink:0, marginTop:1 }} />
+              <AlertCircle size={16} color="var(--sn-muted)" style={{ flexShrink:0, marginTop:1 }} />
               <p style={{ fontSize:'0.75rem', color:'#92400E', lineHeight:1.55, margin:0 }}>
                 {selOption==='full'
                   ? 'Payment held in escrow. Released to seller after you confirm receipt.'

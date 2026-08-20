@@ -38,7 +38,7 @@ export default function SecurityPage() {
 
         <div style={{ background: 'var(--sn-bg)', borderRadius: 16, border: '1.5px solid #E2E8F0', padding: '1.25rem', marginBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.25rem' }}>
-            <Shield size={18} color="#8B5CF6" />
+            <Shield size={18} color="var(--sn-primary)" />
             <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0D1B3E' }}>{t('security.changePassword')}</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
