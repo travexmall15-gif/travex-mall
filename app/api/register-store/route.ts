@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     if (!/^\d{4}$/.test(String(body.login_password)))
       return NextResponse.json({ error: 'PIN must be exactly 4 digits' }, { status: 400 })
-    if (String(body.shop_desc).trim().length < 20)
-      return NextResponse.json({ error: 'Shop description must be at least 20 characters' }, { status: 400 })
+    if (String(body.shop_desc).trim().length < 10)
+      return NextResponse.json({ error: 'Shop description must be at least 10 characters' }, { status: 400 })
 
     const sb = createClient(SB_URL, SB_KEY)
 

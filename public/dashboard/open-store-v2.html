@@ -696,7 +696,7 @@ function validateStep(n){
     if(!cat) return showErr('err3','Please select a category.')
     if(!reg) return showErr('err3','Please select your region.')
     if(!wa) return showErr('err3','Please enter your business WhatsApp number.')
-    if(desc.length<20) return showErr('err3','Shop description must be at least 20 characters.')
+    if(desc.length<10) return showErr('err3','Shop description must be at least 10 characters.')
     return true
   }
   return true
@@ -775,43 +775,117 @@ async function submitApplication(){
   const btn=document.getElementById('submitBtn')
   btn.innerHTML='<span class="spin">&#8635;</span> Submitting...'
   btn.disabled=true
+  clearErr('err5')
   try{
     const products=prodData.filter(p=>p.name&&p.name.trim()).map(p=>({name:p.name.trim(),price:Number(p.price)||0,image:p.imageUrl||''}))
     const shopMarketEl=document.getElementById('shopMarket')
+    const email=document.getElementById('ownerEmail').value.trim().toLowerCase()
     const payload={
-      owner_name:document.getElementById('ownerName').value.trim(),
-      owner_phone:document.getElementById('ownerPhone').value.trim(),
-      owner_email:document.getElementById('ownerEmail').value.trim(),
-      shop_market:shopMarketEl?shopMarketEl.value||null:null,
-      shop_name:document.getElementById('shopName').value.trim(),
-      shop_category:document.getElementById('shopCategory').value,
-      shop_region:document.getElementById('shopRegion').value,
-      shop_whatsapp:document.getElementById('shopWhatsapp').value.trim(),
-      shop_desc:document.getElementById('shopDesc').value.trim(),
-      plan:selectedPlan,
+      owner_name:    document.getElementById('ownerName').value.trim(),
+      owner_phone:   document.getElementById('ownerPhone').value.trim(),
+      owner_email:   email,
+      auth_email:    email,
+      shop_market:   shopMarketEl ? (shopMarketEl.value||null) : null,
+      shop_name:     document.getElementById('shopName').value.trim(),
+      shop_category: document.getElementById('shopCategory').value,
+      shop_region:   document.getElementById('shopRegion').value,
+      shop_whatsapp: document.getElementById('shopWhatsapp').value.trim(),
+      shop_desc:     document.getElementById('shopDesc').value.trim(),
+      plan:          selectedPlan||'basic',
       login_password:document.getElementById('ownerPin').value.trim(),
-      shop_color:selectedColor,
-      shop_font:selectedFont,
-      shop_logo:logoUrl||null,
-      shop_products:JSON.stringify(products)
+      shop_color:    selectedColor||'#1D4ED8',
+      shop_font:     selectedFont||'Inter',
+      shop_logo:     logoUrl||null,
+      shop_products: JSON.stringify(products),
+      status:        'pending',
+      created_at:    new Date().toISOString()
     }
-    // POST to Next.js API route — server-side handles RLS + validation + duplicate check
-    const res=await fetch('/api/register-store',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    })
-    const resData=await res.json().catch(()=>({error:'Invalid server response'}))
-    if(!res.ok){
-      throw new Error(resData.error||resData.message||`Server error (${res.status})`)
+
+    // ── STRATEGY 1: Try Next.js API route ────────────────────
+    let submitted = false
+    let lastError = ''
+    try {
+      const apiRes = await fetch('/api/register-store', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload),
+        signal: AbortSignal.timeout(12000)
+      })
+      const apiData = await apiRes.json().catch(()=>({error:'Bad response'}))
+      if (apiRes.ok) {
+        submitted = true
+      } else {
+        lastError = apiData.error || apiData.message || 'API error ' + apiRes.status
+        // If validation error (4xx), don't try Supabase directly
+        if (apiRes.status >= 400 && apiRes.status < 500) throw new Error(lastError)
+      }
+    } catch(apiErr) {
+      // If not a validation error, try direct Supabase as fallback
+      if (apiErr.name === 'AbortError' || apiErr.message.includes('fetch')) {
+        lastError = 'API unreachable — trying direct connection...'
+      } else {
+        throw apiErr  // re-throw validation errors
+      }
     }
-    document.getElementById('step5').classList.remove('active')
-    document.getElementById('progressWrap').style.display='none'
-    document.getElementById('successPage').classList.add('show')
-    window.scrollTo({top:0,behavior:'smooth'})
-    toast('Application submitted!','success')
+
+    // ── STRATEGY 2: Direct Supabase fallback ────────────────
+    if (!submitted) {
+      const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
+      const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+
+      // Check duplicate first
+      const chkRes = await fetch(
+        SB_URL+'/rest/v1/pending_payments?or=(auth_email.eq.'+encodeURIComponent(email)+',owner_email.eq.'+encodeURIComponent(email)+')&select=id,status&limit=1',
+        { headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY} }
+      )
+      if (chkRes.ok) {
+        const existing = await chkRes.json()
+        if (existing && existing.length > 0) {
+          throw new Error('Application already exists for this email (status: '+existing[0].status+'). Please log in or use a different email.')
+        }
+      }
+
+      // Insert
+      const sbRes = await fetch(SB_URL+'/rest/v1/pending_payments', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer '+SB_KEY,
+          'Prefer':'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      })
+
+      if (!sbRes.ok) {
+        let errMsg = 'Submission failed ('+sbRes.status+')'
+        try {
+          const errBody = await sbRes.json()
+          errMsg = errBody.message || errBody.error || errMsg
+          if (errBody.code === '23505') errMsg = 'Email already registered. Please log in or use a different email.'
+          if (errBody.code === '42501') errMsg = 'Permission denied. Please contact ShopNekt support.'
+          if (errBody.code === '42703') errMsg = 'Database error: '+errMsg+'. Contact support.'
+          // Show raw details for debugging
+          if (errBody.details) errMsg += ' ('+errBody.details+')'
+        } catch{}
+        throw new Error(errMsg)
+      }
+      submitted = true
+    }
+
+    // ── SUCCESS ──────────────────────────────────────────────
+    if (submitted) {
+      document.getElementById('step5').classList.remove('active')
+      document.getElementById('progressWrap').style.display='none'
+      document.getElementById('successPage').classList.add('show')
+      window.scrollTo({top:0,behavior:'smooth'})
+      toast('Application submitted successfully!','success')
+    }
+
   }catch(e){
-    showErr('err5',e.message||'Submission failed. Please try again.')
+    const msg = e.message||'Submission failed. Please try again.'
+    showErr('err5', msg)
+    console.error('[submit]', msg)
     btn.innerHTML='Submit Application <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
     btn.disabled=false
   }
