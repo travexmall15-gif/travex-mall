@@ -181,18 +181,17 @@ tr:last-child td{border-bottom:none}
       <button class="sb-i" onclick="go('analytics',this)"> Analytics & Value</button>
     </div>
     <div class="sb-sec">
-      <div class="sb-lbl">Campus Market</div>
-      <button class="sb-i" onclick="go('c-apps',this)"> Applications <span class="sb-c" id="cAppC">0</span></button>
-      <button class="sb-i" onclick="go('c-stores',this)"> Active Stores</button>
-    </div>
-    <div class="sb-sec">
-      <div class="sb-lbl">Business Market</div>
+      <div class="sb-lbl">Marketplace</div>
+      <button class="sb-i" onclick="go('m-apps',this)"> Applications <span class="sb-c" id="mAppC">0</span></button>
+      <button class="sb-i" onclick="go('m-stores',this)"> Approved Stores</button>
       <button class="sb-i" onclick="go('sellers',this)"> All Sellers <span class="sb-c" id="sellerCount">0</span></button>
     </div>
     <div class="sb-sec">
-      <div class="sb-lbl">Business Market</div>
-      <button class="sb-i" onclick="go('m-apps',this)"> Applications <span class="sb-c" id="mAppC">0</span></button>
-      <button class="sb-i" onclick="go('m-stores',this)"> Approved Stores</button>
+      <div class="sb-lbl">By Market</div>
+      <button class="sb-i" onclick="filterByMarket('fashion',this)"> Fashion</button>
+      <button class="sb-i" onclick="filterByMarket('vehicle',this)"> Vehicle</button>
+      <button class="sb-i" onclick="filterByMarket('electronics',this)"> Electronics</button>
+      <button class="sb-i" onclick="filterByMarket('all',this)"> All Markets</button>
     </div>
     <div class="sb-sec" style="margin-top:auto;padding-bottom:1.25rem">
       <div class="sb-lbl">Quick Links</div>
@@ -253,7 +252,7 @@ tr:last-child td{border-bottom:none}
             <button class="fb" onclick="cFlt='rejected';rCA();sA(this)">Rejected</button></div>
         </div></div>
         <div style="overflow-x:auto"><table><thead><tr>
-          <th>Applicant</th><th>University</th><th>Shop</th><th>Category</th><th>WhatsApp</th><th>Status</th><th>Date</th><th>Actions</th>
+          <th>Applicant</th><th>Market</th><th>Shop</th><th>Category</th><th>Region</th><th>WhatsApp</th><th>Status</th><th>Date</th><th>Actions</th>
         </tr></thead><tbody id="caTbl"></tbody></table></div>
       </div>
     </div>
@@ -671,7 +670,8 @@ function rMA(){
   if(!l.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><div class="empty-i"></div>No applications</div></td></tr>';return}
   tb.innerHTML=l.map(a=>{
     const wa=(a.owner_phone||a.whatsapp_number||'').replace(/\D/g,'');
-    return `<tr>
+    const mkt=(a.shop_market||'').toLowerCase();
+    return `<tr data-market="${mkt}"
       <td style="font-weight:700">${E(a.shop_name||'-')}</td>
       <td>${E(a.owner_name||'-')}<div style="font-size:.64rem;color:var(--muted)">${E(a.owner_phone||'')}</div></td>
       <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?' Premium':' Basic'}</span></td>
@@ -763,7 +763,8 @@ function rMS(){
   tb.innerHTML=l.map(a=>{
     const days=a.approved_at?Math.floor((Date.now()-new Date(a.approved_at).getTime())/86400000):0;
     const subLabel=`${days} days active`;
-    return `<tr>
+        const smkt=(s.shop_market||'').toLowerCase();
+    return `<tr data-market="${smkt}"
       <td style="font-weight:700">${E(a.shop_name||'-')}</td><td>${E(a.owner_name||'-')}</td>
       <td><span class="bd ${a.plan==='premium'?'bd-pr':'bd-ba'}">${a.plan==='premium'?' Premium':' Basic'}</span></td>
       <td style="color:var(--muted)">${E(a.shop_category||'-')}</td><td style="color:var(--muted)">${E(a.shop_region||'-')}</td>

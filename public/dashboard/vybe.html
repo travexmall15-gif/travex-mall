@@ -266,7 +266,7 @@ async function deletePost(id) {
   await DB.vybe.delete(id);
   posts = posts.filter(p=>p.id!==id);
   renderPosts();
-  showToast(' Post deleted','success');
+  showToast('Post deleted','success');
 }
 </script>
   <script src="aria-engine.js"></script>

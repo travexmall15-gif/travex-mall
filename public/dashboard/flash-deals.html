@@ -129,6 +129,20 @@ let shopData = null, deals = [];
     document.getElementById('loadingOverlay').style.display = 'none';
   if (!session) return;
   shopData = await Shop.get(session.user.email);
+  // Server-side subscription check — prevents direct URL bypass
+  if (shopData?.id) {
+    try {
+      const chkRes = await fetch('/api/check-feature', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ shop_id: shopData.id, feature: 'flashDeals' })
+      })
+      const chkData = await chkRes.json()
+      if (!chkData.allowed) {
+        document.body.innerHTML = '<div style="text-align:center;padding:80px 20px;font-family:Inter,sans-serif"><svg width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#1D4ED8\" stroke-width=\"1.5\" style=\"margin:0 auto 16px\"><rect x=\"1\" y=\"4\" width=\"22\" height=\"16\" rx=\"2\"/><line x1=\"1\" y1=\"10\" x2=\"23\" y2=\"10\"/></svg><h2 style=\"color:#111827;margin:0 0 8px\">Premium Required</h2><p style=\"color:#6B7280;margin:0 0 24px\">Upgrade to Premium to access this feature.</p><a href=\"subscription.html\" style=\"background:#1D4ED8;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700\">Upgrade Plan</a><br><br><a href=\"dashboard.html\" style=\"color:#6B7280;font-size:0.85rem\">Back to Dashboard</a></div>'
+        return
+      }
+    } catch(e) { console.warn('Plan check failed, continuing client-side') }
+  }
   await loadSidebar('flash-deals', shopData);
   await loadDeals();
   showLoading(false);
