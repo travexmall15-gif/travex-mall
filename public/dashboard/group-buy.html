@@ -180,26 +180,63 @@ function renderGroups() {
 }
 
 async function createGroup() {
-  const product  = document.getElementById('gpProduct').value.trim();
-  const price    = parseFloat(document.getElementById('gpPrice').value);
-  const discount = parseInt(document.getElementById('gpDiscount').value);
-  const minM     = parseInt(document.getElementById('gpMin').value)||5;
-  const hours    = parseInt(document.getElementById('gpDuration').value);
+  const btn = document.querySelector('#addGroupModal .btn-gold');
+  if (btn && btn.disabled) return;
+  if (btn) { btn.disabled = true; btn.textContent = 'Launching...'; }
 
-  if (!product || !price) { showToast('Fill all required fields','error'); return; }
-  const expiresAt = new Date(); expiresAt.setHours(expiresAt.getHours() + hours);
+  try {
+    const product  = document.getElementById('gpProduct').value.trim();
+    const price    = parseFloat(document.getElementById('gpPrice').value);
+    const discount = parseInt(document.getElementById('gpDiscount').value) || 0;
+    const minM     = parseInt(document.getElementById('gpMin').value) || 5;
+    const hours    = parseInt(document.getElementById('gpDuration').value) || 48;
 
-  const { error } = await GroupBuys.create({
-    store_id: shopData?.id, shop_name: shopData?.shop_name || shopData?.store_name,
-    product_name: product, unit_price: price,
-    discount_pct: discount, min_members: minM, current_members: 0,
-    expires_at: expiresAt.toISOString(), status: 'open'
-  });
+    if (!product) throw new Error('Product name is required');
+    if (!price)   throw new Error('Unit price is required');
 
-  if (error) { showToast('Error: '+error.message,'error'); return; }
-  closeModal('addGroupModal');
-  showToast(' Group deal launched!','success');
-  await loadGroups();
+    const groupPrice = price * (1 - discount / 100);
+    const expiresAt  = new Date();
+    expiresAt.setHours(expiresAt.getHours() + hours);
+
+    // Upload image if selected
+    let imageUrl = null;
+    const imgInput = document.getElementById('gpImage');
+    if (imgInput && imgInput.files && imgInput.files[0]) {
+      const { url, error: upErr } = await uploadToStorage(imgInput.files[0], 'groups');
+      if (upErr) throw new Error('Image upload failed: ' + upErr.message);
+      imageUrl = url;
+    }
+
+    const { error } = await GroupBuys.create({
+      store_id:        shopData?.id,
+      shop_name:       shopData?.shop_name || shopData?.store_name,
+      shop_logo:       shopData?.shop_logo || null,
+      product_name:    product,
+      unit_price:      price,
+      group_price:     Math.round(groupPrice),
+      discount_pct:    discount,
+      min_members:     minM,
+      current_members: 0,
+      expires_at:      expiresAt.toISOString(),
+      image_url:       imageUrl,
+      status:          'open',
+    });
+
+    if (error) throw new Error(error.message);
+
+    closeModal('addGroupModal');
+    showToast('Group deal launched!', 'success');
+    document.getElementById('gpProduct').value = '';
+    document.getElementById('gpPrice').value = '';
+    document.getElementById('gpDiscount').value = '';
+    if (imgInput) imgInput.value = '';
+    await loadGroups();
+
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-users"></i> Launch Group'; }
+  }
 }
 </script>
   <script src="aria-engine.js"></script>

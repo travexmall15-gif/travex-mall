@@ -91,12 +91,12 @@ body.rtl .lt{right:auto;left:12px}
 
   <!-- ── Screen 1: Email ── -->
   <div id="s1">
-    <h1 id="i-welcome">👋 Welcome Back</h1>
+    <h1 id="i-welcome"> Welcome Back</h1>
     <p class="sub" id="i-sub">Enter your email and PIN to access your dashboard</p>
     <div class="fg">
       <label id="i-label">EMAIL ADDRESS</label>
       <div class="iw">
-        <i>✉️</i>
+        <i>️</i>
         <input type="email" id="eml" placeholder="your@email.com"
           autocomplete="email" inputmode="email"
           onkeydown="if(event.key==='Enter'){event.preventDefault();go()}"/>
@@ -107,7 +107,7 @@ body.rtl .lt{right:auto;left:12px}
     </button>
     <div class="div"><span id="i-or">or</span></div>
     <button class="btn btn-sec" onclick="location.href='reset-pin.html'">
-      <span id="i-reset">🔄 Forgot PIN? Reset here</span>
+      <span id="i-reset"> Forgot PIN? Reset here</span>
     </button>
   </div>
 
@@ -164,8 +164,8 @@ var email = ''
 
 // ── Translations ─────────────────────────────────────────────
 var TR = {
-  en:{welcome:'👋 Welcome Back',sub:'Enter your email and PIN to access your dashboard',
-      label:'EMAIL ADDRESS',go:'Continue →',or:'or',reset:'🔄 Forgot PIN? Reset here',
+  en:{welcome:' Welcome Back',sub:'Enter your email and PIN to access your dashboard',
+      label:'EMAIL ADDRESS',go:'Continue →',or:'or',reset:' Forgot PIN? Reset here',
       back2:'Not you?',pinH:'Enter Your PIN',pinS:'4-digit PIN from your registration',
       home:'← Back to ShopNekt',newShop:'Open a New Shop',
       errEmail:'Please enter your email address.',errPin:'Wrong PIN. Try again.',
@@ -174,8 +174,8 @@ var TR = {
       errPending:'Your shop is under review. We will notify you once approved (usually within 30 minutes).',
       errRejected:'Your application was not approved. Please contact ShopNekt support.',
       loading:'Verifying...'},
-  sw:{welcome:'👋 Karibu Tena',sub:'Ingiza email na PIN yako kufikia dashibodi yako',
-      label:'BARUA PEPE',go:'Endelea →',or:'au',reset:'🔄 Umesahau PIN? Reset hapa',
+  sw:{welcome:' Karibu Tena',sub:'Ingiza email na PIN yako kufikia dashibodi yako',
+      label:'BARUA PEPE',go:'Endelea →',or:'au',reset:' Umesahau PIN? Reset hapa',
       back2:'Si wewe?',pinH:'Ingiza PIN Yako',pinS:'PIN ya namba 4 kutoka usajili wako',
       home:'← Rudi ShopNekt',newShop:'Fungua Duka Jipya',
       errEmail:'Tafadhali ingiza anwani ya barua pepe.',errPin:'PIN si sahihi. Jaribu tena.',
@@ -184,8 +184,8 @@ var TR = {
       errPending:'Duka lako linapitiwa na timu yetu. Tutakuarifu ukikubaliwa (kawaida ndani ya dakika 30).',
       errRejected:'Ombi lako halijakubaliwa. Tafadhali wasiliana na msaada wa ShopNekt.',
       loading:'Inathibitisha...'},
-  fr:{welcome:'👋 Bon retour',sub:'Entrez votre e-mail et PIN pour accéder au tableau de bord',
-      label:'ADRESSE E-MAIL',go:'Continuer →',or:'ou',reset:'🔄 PIN oublié ? Réinitialiser',
+  fr:{welcome:' Bon retour',sub:'Entrez votre e-mail et PIN pour accéder au tableau de bord',
+      label:'ADRESSE E-MAIL',go:'Continuer →',or:'ou',reset:' PIN oublié ? Réinitialiser',
       back2:"Ce n'est pas vous ?",pinH:'Entrez votre PIN',pinS:"PIN à 4 chiffres de l'inscription",
       home:'← Retour à ShopNekt',newShop:'Ouvrir une nouvelle boutique',
       errEmail:'Veuillez saisir votre adresse e-mail.',errPin:'PIN incorrect. Réessayez.',
@@ -193,8 +193,8 @@ var TR = {
       errPending:"Votre boutique est en cours d'examen. Vous serez notifié à l'approbation (environ 30 min).",
       errRejected:"Votre candidature n'a pas été approuvée. Contactez ShopNekt.",
       loading:'Vérification...'},
-  de:{welcome:'👋 Willkommen zurück',sub:'E-Mail und PIN eingeben für das Dashboard',
-      label:'E-MAIL-ADRESSE',go:'Weiter →',or:'oder',reset:'🔄 PIN vergessen? Hier zurücksetzen',
+  de:{welcome:' Willkommen zurück',sub:'E-Mail und PIN eingeben für das Dashboard',
+      label:'E-MAIL-ADRESSE',go:'Weiter →',or:'oder',reset:' PIN vergessen? Hier zurücksetzen',
       back2:'Nicht Sie?',pinH:'PIN eingeben',pinS:'4-stellige PIN aus der Registrierung',
       home:'← Zurück zu ShopNekt',newShop:'Neuen Shop eröffnen',
       errEmail:'Bitte E-Mail-Adresse eingeben.',errPin:'Falscher PIN. Erneut versuchen.',
@@ -202,8 +202,8 @@ var TR = {
       errPending:'Ihr Shop wird geprüft. Wir benachrichtigen Sie bei Genehmigung (ca. 30 Minuten).',
       errRejected:'Ihre Bewerbung wurde nicht genehmigt. Bitte kontaktieren Sie ShopNekt.',
       loading:'Verifizierung...'},
-  pt:{welcome:'👋 Bem-vindo de volta',sub:'Digite seu e-mail e PIN para acessar o painel',
-      label:'ENDEREÇO DE E-MAIL',go:'Continuar →',or:'ou',reset:'🔄 Esqueceu o PIN? Redefinir',
+  pt:{welcome:' Bem-vindo de volta',sub:'Digite seu e-mail e PIN para acessar o painel',
+      label:'ENDEREÇO DE E-MAIL',go:'Continuar →',or:'ou',reset:' Esqueceu o PIN? Redefinir',
       back2:'Não é você?',pinH:'Digite seu PIN',pinS:'PIN de 4 dígitos do registro',
       home:'← Voltar ao ShopNekt',newShop:'Abrir nova loja',
       errEmail:'Por favor, insira seu e-mail.',errPin:'PIN incorreto. Tente novamente.',
@@ -211,8 +211,8 @@ var TR = {
       errPending:'Sua loja está em análise. Notificaremos você quando aprovada (geralmente em 30 min).',
       errRejected:'Seu pedido não foi aprovado. Contate o suporte ShopNekt.',
       loading:'Verificando...'},
-  ar:{welcome:'👋 أهلاً بعودتك',sub:'أدخل بريدك الإلكتروني ورمز PIN للوصول إلى لوحة التحكم',
-      label:'البريد الإلكتروني',go:'متابعة ←',or:'أو',reset:'🔄 نسيت PIN؟ أعِد التعيين',
+  ar:{welcome:' أهلاً بعودتك',sub:'أدخل بريدك الإلكتروني ورمز PIN للوصول إلى لوحة التحكم',
+      label:'البريد الإلكتروني',go:'متابعة ←',or:'أو',reset:' نسيت PIN؟ أعِد التعيين',
       back2:'لست أنت؟',pinH:'أدخل رمز PIN',pinS:'رمز PIN المكوّن من 4 أرقام',
       home:'العودة إلى ShopNekt ←',newShop:'فتح متجر جديد',
       errEmail:'الرجاء إدخال عنوان البريد الإلكتروني.',errPin:'رمز PIN غير صحيح. حاول مرة أخرى.',

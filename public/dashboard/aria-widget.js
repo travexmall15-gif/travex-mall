@@ -163,12 +163,12 @@ panel.innerHTML = `
   </div>
 
   <div class="aria-quick-btns">
-    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Nionyeshe hali ya leo')">📊 Briefing</button>
-    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Angalia stock inayokwisha')">📦 Stock</button>
-    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Nionyeshe revenue ya mwezi')">💰 Revenue</button>
-    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Nipe tips za kuboresha biashara')">💡 Tips</button>
-    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Tengeneza Instagram post')">📸 Post</button>
-    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Fanya revenue forecast')">📈 Forecast</button>
+    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Nionyeshe hali ya leo')"> Briefing</button>
+    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Angalia stock inayokwisha')"> Stock</button>
+    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Nionyeshe revenue ya mwezi')"> Revenue</button>
+    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Nipe tips za kuboresha biashara')"> Tips</button>
+    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Tengeneza Instagram post')"> Post</button>
+    <button class="aria-quick-btn" onclick="ARIA_WIDGET.send('Fanya revenue forecast')"> Forecast</button>
   </div>
 
   <div class="aria-msgs" id="ariaMsgs">
@@ -180,7 +180,7 @@ panel.innerHTML = `
 
   <div class="aria-input-row">
     <input class="aria-input" id="ariaInput" placeholder="Uliza Aria chochote..." />
-    <button class="aria-send" onclick="ARIA_WIDGET.sendFromInput()">➤</button>
+    <button class="aria-send" onclick="ARIA_WIDGET.sendFromInput()"></button>
   </div>
 `
 
@@ -280,7 +280,7 @@ setTimeout(async () => {
     const session = JSON.parse(localStorage.getItem('travex_session')||'{}')
     if (session?.id) {
       const result = await ARIA.chat('Nionyeshe hali ya leo', [])
-      ARIA_WIDGET.notify('📊 Aria ana briefing yako!')
+      ARIA_WIDGET.notify(' Aria ana briefing yako!')
       ARIA_WIDGET.history.push({ role: 'bot', content: result.reply })
     }
   }

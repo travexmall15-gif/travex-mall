@@ -65,8 +65,8 @@
       <div class="form-group">
         <label class="form-label">Media Type</label>
         <select class="form-select" id="pMediaType">
-          <option value="image">🖼️ Image</option>
-          <option value="video">🎬 Video / Reel</option>
+          <option value="image">️ Image</option>
+          <option value="video"> Video / Reel</option>
           <option value="">Text only</option>
         </select>
       </div>
@@ -173,23 +173,16 @@ function renderPosts() {
 function handleMediaUpload(input) {
   const file = input.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const url = e.target.result;
-    document.getElementById('pMedia').value = ''; // can't upload, use URL
-    // Show preview
-    const isVideo = file.type.startsWith('video/');
-    document.getElementById('pMediaPreview').style.display = 'block';
-    document.getElementById('pMediaPreviewImg').style.display = isVideo ? 'none' : 'block';
-    document.getElementById('pMediaPreviewVid').style.display = isVideo ? 'block' : 'none';
-    if (isVideo) { document.getElementById('pMediaPreviewVid').src = url; }
-    else { document.getElementById('pMediaPreviewImg').src = url; }
-    document.getElementById('pMediaType').value = isVideo ? 'video' : 'image';
-    // Store as base64 temporarily (small images only — ideally upload to storage)
-    document.getElementById('pMedia').dataset.base64 = url;
-    showToast('Preview ready. Note: paste a public URL for best results.','info');
-  };
-  reader.readAsDataURL(file);
+  window._vybeMediaFile = file;
+  const isVideo = file.type.startsWith('video/');
+  const url = URL.createObjectURL(file);
+  document.getElementById('pMediaPreview').style.display = 'block';
+  document.getElementById('pMediaPreviewImg').style.display = isVideo ? 'none' : 'block';
+  document.getElementById('pMediaPreviewVid').style.display = isVideo ? 'block' : 'none';
+  if (isVideo) document.getElementById('pMediaPreviewVid').src = url;
+  else document.getElementById('pMediaPreviewImg').src = url;
+  document.getElementById('pMediaType').value = isVideo ? 'video' : 'image';
+  document.getElementById('pMedia').value = '';
 }
 
 // Watch URL input for preview
@@ -210,39 +203,62 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function submitPost() {
-  const content = document.getElementById('pContent').value.trim();
-  if (!content) { showToast('Write something first!','error'); return; }
-  if (!shopData?.id) { showToast('Session error. Please refresh the page.','error'); return; }
+  const text = document.getElementById('pContent').value.trim();
+  if (!text) { showToast('Write something first!', 'error'); return; }
+  if (!shopData?.id) { showToast('Session error. Please refresh.', 'error'); return; }
+
   const btn = document.getElementById('postBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Posting...'; }
+  if (btn.disabled) return; // prevent duplicates
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Posting...';
 
-  const mediaEl   = document.getElementById('pMedia');
-  const mediaUrl  = mediaEl?.value.trim() || mediaEl?.dataset.base64 || null;
-  const mediaType = document.getElementById('pMediaType')?.value || (mediaUrl ? 'image' : null);
+  try {
+    let mediaUrl  = document.getElementById('pMedia').value.trim() || null;
+    let mediaType = document.getElementById('pMediaType').value || null;
 
-  const item = {
-    store_id: shopData?.id,
-    shop_name: shopData?.shop_name || shopData?.store_name,
-    content, post_text: content, caption: content,
-    tag: document.getElementById('pTag').value,
-    category: document.getElementById('pTag').value,
-    price: Number(document.getElementById('pPrice').value)||null,
-    media_url: mediaUrl,
-    media_type: mediaType,
-    likes: 0, likes_count: 0, comments: 0,
-    university_abbr: shopData?.university_abbr || shopData?.shop_region || null,
-  };
-  const { error } = await DB.vybe.post(item);
-  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-send"></i> Post to Vybe'; }
-  if (error) { showToast('Error: '+error.message,'error'); return; }
-  showToast('Posted to Vybe!','success');
-  closeModal('postModal');
-  // Reset form
-  document.getElementById('pContent').value='';
-  if (mediaEl) { mediaEl.value=''; delete mediaEl.dataset.base64; }
-  document.getElementById('pMediaPreview').style.display='none';
-  posts = await DB.vybe.getPosts(shopData?.id);
-  renderPosts();
+    // Upload file to Supabase Storage if user selected a file
+    if (window._vybeMediaFile) {
+      showToast('Uploading media...', 'info');
+      const { url, error: upErr } = await uploadToStorage(window._vybeMediaFile, 'vybe');
+      if (upErr) throw new Error('Upload failed: ' + upErr.message);
+      mediaUrl  = url;
+      mediaType = window._vybeMediaFile.type.startsWith('video/') ? 'video' : 'image';
+      window._vybeMediaFile = null;
+    }
+
+    const item = {
+      store_id:    shopData.id,
+      shop_name:   shopData.shop_name || shopData.store_name,
+      shop_logo:   shopData.shop_logo || null,
+      content:     text, post_text: text, caption: text,
+      tag:         document.getElementById('pTag').value || null,
+      category:    document.getElementById('pTag').value || null,
+      price:       Number(document.getElementById('pPrice').value) || null,
+      media_url:   mediaUrl,
+      media_type:  mediaType,
+      likes: 0, likes_count: 0,
+    };
+
+    const { error } = await DB.vybe.post(item);
+    if (error) throw new Error(error.message);
+
+    showToast('Posted to Vybe!', 'success');
+    closeModal('postModal');
+    document.getElementById('pContent').value = '';
+    document.getElementById('pTag').value = '';
+    document.getElementById('pPrice').value = '';
+    document.getElementById('pMedia').value = '';
+    document.getElementById('pMediaType').value = '';
+    document.getElementById('pMediaPreview').style.display = 'none';
+    window._vybeMediaFile = null;
+    await loadPosts();
+
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Post to Vybe';
+  }
 }
 
 async function deletePost(id) {

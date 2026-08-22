@@ -169,6 +169,34 @@ const DB = {
   },
 };
 
+
+// ── REAL STORAGE UPLOAD ──────────────────────────────────
+async function uploadToStorage(file, folder) {
+  const ext  = file.name.split('.').pop().toLowerCase();
+  const name = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  try {
+    const { data, error } = await sb.storage.from('shop-assets').upload(name, file, {
+      cacheControl: '3600', upsert: true, contentType: file.type
+    });
+    if (error) throw error;
+    const { data: pub } = sb.storage.from('shop-assets').getPublicUrl(name);
+    return { url: pub.publicUrl, error: null };
+  } catch (e) {
+    console.warn('[storage] upload failed, using base64 fallback:', e.message);
+    // Fallback: base64 (works for small images < 1MB)
+    if (file.size < 900000) {
+      return new Promise(resolve => {
+        const r = new FileReader();
+        r.onload = ev => resolve({ url: ev.target.result, error: null });
+        r.onerror = () => resolve({ url: null, error: new Error('Read failed') });
+        r.readAsDataURL(file);
+      });
+    }
+    return { url: null, error: new Error(e.message + ' (file too large for fallback)') };
+  }
+}
+// ────────────────────────────────────────────────────────
+
 //  HELPERS 
 function formatTZS(n) {
   if (!n && n !== 0) return '-';
@@ -423,21 +451,21 @@ async function trackEvent(storeId, event, productId, source) {
   const el = document.createElement('div');
   el.innerHTML = `
     <button id="ai360-btn" onclick="ai360.toggle()">
-      ✨
+      
       <div id="ai360-badge">AI</div>
     </button>
     <div id="ai360-win">
       <div id="ai360-hd">
-        <div id="ai360-hd-icon">✨</div>
+        <div id="ai360-hd-icon"></div>
         <div id="ai360-hd-title"><b>360 AI</b><span>Seller Assistant</span></div>
-        <button id="ai360-close" onclick="ai360.toggle()">✕</button>
+        <button id="ai360-close" onclick="ai360.toggle()"></button>
       </div>
       <div id="ai360-msgs">
-        <div class="ai360-msg ai360-bot">👋 Habari! Mimi ni <b>360 AI</b> — msaidizi wako wa duka.<br><br>Ninaweza kukusaidia na bidhaa, mauzo, bei, na zaidi. Unauliza nini?</div>
+        <div class="ai360-msg ai360-bot"> Habari! Mimi ni <b>360 AI</b> — msaidizi wako wa duka.<br><br>Ninaweza kukusaidia na bidhaa, mauzo, bei, na zaidi. Unauliza nini?</div>
       </div>
       <div id="ai360-inp-row">
         <input id="ai360-inp" placeholder="Uliza swali..." onkeydown="if(event.key==='Enter')ai360.send()">
-        <button id="ai360-send" onclick="ai360.send()">➤</button>
+        <button id="ai360-send" onclick="ai360.send()"></button>
       </div>
     </div>
   `;
@@ -485,7 +513,7 @@ async function trackEvent(storeId, event, productId, source) {
         this.addMsg('bot', data.reply || 'Samahani, jaribu tena.');
       } catch {
         typing.remove();
-        this.addMsg('bot', '❌ Tatizo. Jaribu tena.');
+        this.addMsg('bot', ' Tatizo. Jaribu tena.');
       }
       this.loading = false;
       document.getElementById('ai360-send').disabled = false;

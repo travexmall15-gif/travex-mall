@@ -98,7 +98,7 @@
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <input class="form-control" id="pImage" placeholder="https://image-url.com/..." style="flex:1;min-width:180px"/>
           <label style="display:inline-flex;align-items:center;gap:5px;padding:8px 14px;background:#1D4ED8;color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;white-space:nowrap">
-            📷 Upload
+             Upload
             <input type="file" accept="image/*" style="display:none" onchange="handleProductImgUpload(this)"/>
           </label>
         </div>
@@ -312,7 +312,7 @@ async function handleProductImgUpload(input) {
     const prev = document.getElementById('pImgPreview')
     const img  = document.getElementById('pImgPreviewImg')
     if(prev && img) { img.src = url; prev.style.display = 'block' }
-    showToast('Image uploaded ✓','success')
+    showToast('Image uploaded ','success')
   } catch(e) {
     showToast('Upload failed: ' + e.message, 'error')
   }

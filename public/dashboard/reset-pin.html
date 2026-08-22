@@ -49,7 +49,7 @@ input[type=number]{text-align:center;font-size:1.4rem;font-weight:800;letter-spa
     <span class="brand">shop<span>nekt</span></span>
   </div>
 
-  <h1>Reset PIN 🔄</h1>
+  <h1>Reset PIN </h1>
   <p class="sub">Thibitisha duka lako kisha weka PIN mpya</p>
 
   <!-- Error / Success -->
@@ -89,20 +89,20 @@ input[type=number]{text-align:center;font-size:1.4rem;font-weight:800;letter-spa
       <label>Rudia PIN Mpya</label>
       <input type="number" id="confirmPin" placeholder="0000" min="1000" max="9999" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)"/>
     </div>
-    <button class="btn btn-primary" onclick="doReset()">✅ Badilisha PIN</button>
+    <button class="btn btn-primary" onclick="doReset()"> Badilisha PIN</button>
     <button class="btn btn-outline" onclick="showStep(1)">← Rudi</button>
   </div>
 
   <!-- STEP 3: Done -->
   <div class="step" id="step3" style="text-align:center">
-    <div style="font-size:48px;margin-bottom:12px">✅</div>
+    <div style="font-size:48px;margin-bottom:12px"></div>
     <h1 style="font-size:1.2rem">PIN Imebadilishwa!</h1>
     <p class="sub" style="margin-bottom:20px">PIN yako mpya ya kuingia ni:</p>
     <div style="background:linear-gradient(135deg,#0D1B3E,#1B3A8A);border-radius:12px;padding:16px;margin-bottom:20px">
       <div style="font-size:1.8rem;font-weight:900;color:#1D4ED8;letter-spacing:0.1em" id="finalPin">—</div>
       <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:6px">Hii ndiyo PIN yako mpya. Ihifadhi mahali salama.</div>
     </div>
-    <button class="btn btn-primary" onclick="window.location.href='login.html'">🔐 Ingia Sasa</button>
+    <button class="btn btn-primary" onclick="window.location.href='login.html'"> Ingia Sasa</button>
   </div>
 </div>
 
@@ -187,7 +187,7 @@ async function doReset() {
   } catch {
     showError('Hitilafu imetokea. Jaribu tena.')
   }
-  btn.textContent = '✅ Badilisha PIN'; btn.disabled = false
+  btn.textContent = ' Badilisha PIN'; btn.disabled = false
 }
 </script>
 <script>

@@ -52,7 +52,7 @@ h1{font-family:'Inter',sans-serif;font-weight:700;font-size:1.3rem;font-weight:8
 
   <!-- Success state -->
   <div id="successState" style="display:none">
-    <div style="font-size:48px;margin-bottom:12px">🎉</div>
+    <div style="font-size:48px;margin-bottom:12px"></div>
     <h1>Karibu!</h1>
     <div class="shop-badge" id="shopBadge">
       <div class="name" id="shopName">Duka lako</div>
@@ -70,7 +70,7 @@ h1{font-family:'Inter',sans-serif;font-weight:700;font-size:1.3rem;font-weight:8
     <h1 id="errorTitle">Link Imekwisha</h1>
     <p class="sub" id="errorMsg">Link yako ya mara ya kwanza imekwisha (saa 24). Tumia login ya kawaida.</p>
     <button class="btn" style="display:block" onclick="window.location.href='login.html'">
-      🔐 Ingia kwa PIN
+       Ingia kwa PIN
     </button>
     <button class="btn btn-outline" style="display:block" onclick="window.location.href='/'">
       ← Rudi Nyumbani
@@ -133,7 +133,7 @@ async function checkToken() {
       return
     }
 
-    // ✅ Valid token — save session and redirect
+    //  Valid token — save session and redirect
     const session = {
       id: shop.id,
       shop_name: shop.shop_name,

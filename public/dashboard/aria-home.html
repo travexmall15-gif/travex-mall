@@ -273,7 +273,7 @@
     <div class="aria-hero">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
         <div>
-          <div class="aria-greeting" id="greeting">Good morning! 👋</div>
+          <div class="aria-greeting" id="greeting">Good morning! </div>
           <div class="aria-date" id="dateDisplay"></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" id="memoryChips"></div>
         </div>
@@ -657,7 +657,7 @@ function generateNotifications({ products, orders, revenue, expenses, profit, lo
   }
   
   if (revenue > 500000) {
-    notifs.push({ type: 'success', icon: 'ti-star', title: '🎉 Revenue Milestone!', body: `Amazing! You have earned ${fmt(revenue)} this month. Keep it up!`, time: 'Achievement' })
+    notifs.push({ type: 'success', icon: 'ti-star', title: ' Revenue Milestone!', body: `Amazing! You have earned ${fmt(revenue)} this month. Keep it up!`, time: 'Achievement' })
   }
 
   // Render
@@ -942,7 +942,7 @@ function approveAction(id) {
   document.getElementById(`approval-${id}`)?.remove()
   const idx = pendingApprovals.findIndex(a=>a.id===id)
   if (idx >= 0) { pendingApprovals.splice(idx, 1) }
-  addMessage('bot', '✅ Action approved and executed successfully!')
+  addMessage('bot', ' Action approved and executed successfully!')
   document.getElementById('approvalCount').textContent = pendingApprovals.length
   if (pendingApprovals.length === 0) document.getElementById('approvalSection').style.display = 'none'
 }
@@ -951,7 +951,7 @@ function rejectAction(id) {
   document.getElementById(`approval-${id}`)?.remove()
   const idx = pendingApprovals.findIndex(a=>a.id===id)
   if (idx >= 0) { pendingApprovals.splice(idx, 1) }
-  addMessage('bot', '❌ Action cancelled. I will not proceed without your approval.')
+  addMessage('bot', ' Action cancelled. I will not proceed without your approval.')
   if (pendingApprovals.length === 0) document.getElementById('approvalSection').style.display = 'none'
 }
 

@@ -164,29 +164,65 @@ function renderDeals() {
 }
 
 async function createDeal() {
-  const product   = document.getElementById('dealProduct').value.trim();
-  const origPrice = parseFloat(document.getElementById('dealOrigPrice').value);
-  const dealPrice = parseFloat(document.getElementById('dealPrice').value);
-  const maxOrders = parseInt(document.getElementById('dealMax').value)||50;
-  const hours     = parseInt(document.getElementById('dealDuration').value);
+  const btn = document.querySelector('#addDealModal .btn-gold');
+  if (btn && btn.disabled) return;
+  if (btn) { btn.disabled = true; btn.textContent = 'Launching...'; }
 
-  if (!product || !origPrice || !dealPrice) { showToast('Fill all required fields','error'); return; }
-  if (dealPrice >= origPrice) { showToast('Deal price must be lower than original price','error'); return; }
+  try {
+    const product   = document.getElementById('dealProduct').value.trim();
+    const origPrice = parseFloat(document.getElementById('dealOrigPrice').value);
+    const dealPrice = parseFloat(document.getElementById('dealPrice').value);
+    const maxOrders = parseInt(document.getElementById('dealMax').value) || 50;
+    const hours     = parseInt(document.getElementById('dealDuration').value) || 24;
 
-  const endsAt = new Date(); endsAt.setHours(endsAt.getHours() + hours);
-  const disc   = Math.round(((origPrice - dealPrice) / origPrice) * 100);
+    if (!product)    throw new Error('Product name is required');
+    if (!origPrice)  throw new Error('Original price is required');
+    if (!dealPrice)  throw new Error('Deal price is required');
+    if (dealPrice >= origPrice) throw new Error('Deal price must be lower than original price');
 
-  const { error } = await FlashDeals.create({
-    store_id: shopData?.id, shop_name: shopData?.shop_name || shopData?.store_name,
-    product_name: product, original_price: origPrice, deal_price: dealPrice,
-    discount_pct: disc, ends_at: endsAt.toISOString(), max_orders: maxOrders,
-    status: 'active', store_type: shopData?._market || 'business'
-  });
+    const endsAt = new Date();
+    endsAt.setHours(endsAt.getHours() + hours);
+    const disc = Math.round(((origPrice - dealPrice) / origPrice) * 100);
 
-  if (error) { showToast('Error: '+error.message,'error'); return; }
-  closeModal('addDealModal');
-  showToast(' Flash deal launched!','success');
-  await loadDeals();
+    // Upload image if selected
+    let imageUrl = null;
+    const imgInput = document.getElementById('dealImage');
+    if (imgInput && imgInput.files && imgInput.files[0]) {
+      const { url, error: upErr } = await uploadToStorage(imgInput.files[0], 'deals');
+      if (upErr) throw new Error('Image upload failed: ' + upErr.message);
+      imageUrl = url;
+    }
+
+    const { error } = await FlashDeals.create({
+      store_id:      shopData?.id,
+      shop_name:     shopData?.shop_name || shopData?.store_name,
+      shop_logo:     shopData?.shop_logo || null,
+      product_name:  product,
+      original_price: origPrice,
+      deal_price:    dealPrice,
+      discount_pct:  disc,
+      ends_at:       endsAt.toISOString(),
+      max_orders:    maxOrders,
+      image_url:     imageUrl,
+      status:        'active',
+      store_type:    shopData?._market || 'business',
+    });
+
+    if (error) throw new Error(error.message);
+
+    closeModal('addDealModal');
+    showToast('Flash deal launched!', 'success');
+    document.getElementById('dealProduct').value = '';
+    document.getElementById('dealOrigPrice').value = '';
+    document.getElementById('dealPrice').value = '';
+    if (imgInput) imgInput.value = '';
+    await loadDeals();
+
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-bolt"></i> Launch Deal'; }
+  }
 }
 
 async function deleteDeal(id) {

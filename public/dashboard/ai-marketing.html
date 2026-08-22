@@ -223,7 +223,7 @@ async function postToVybe() {
   const content = document.getElementById('mktOutput').textContent
   if (!content || content.includes('Bonyeza')) { showToast('Generate content kwanza!'); return }
   const result = await ARIA.chat(`Post kwenye Vybe: ${content.substring(0,200)}`, [])
-  showToast(result.reply.includes('✅') ? 'Post imechapishwa kwenye Vybe!' : 'Hitilafu - jaribu tena')
+  showToast(result.reply.includes('') ? 'Post imechapishwa kwenye Vybe!' : 'Hitilafu - jaribu tena')
 }
 
 async function generateCalendar() {
