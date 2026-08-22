@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
 
     // Server-side validation
-    const required = ['owner_name','owner_phone','owner_email','shop_name','shop_category','shop_region','shop_whatsapp','shop_desc','login_password']
+    const required = ['owner_name','owner_phone','owner_email','shop_name','shop_category','shop_region','login_password']
     for (const f of required) {
       if (!body[f] || !String(body[f]).trim()) {
         return NextResponse.json({ error: `Missing: ${f}` }, { status: 400 })
@@ -21,10 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     if (!/^\d{4}$/.test(String(body.login_password)))
       return NextResponse.json({ error: 'PIN must be exactly 4 digits' }, { status: 400 })
-    if (String(body.shop_desc).trim().length < 10)
-      return NextResponse.json({ error: 'Shop description must be at least 10 characters' }, { status: 400 })
-
-    const sb = createClient(SB_URL, SB_KEY)
+        const sb = createClient(SB_URL, SB_KEY)
 
     // Duplicate check
     const email = String(body.owner_email).trim().toLowerCase()
@@ -50,14 +47,10 @@ export async function POST(req: NextRequest) {
       shop_name:     String(body.shop_name).trim(),
       shop_category: body.shop_category,
       shop_region:   body.shop_region,
-      shop_whatsapp: String(body.shop_whatsapp).trim(),
-      shop_desc:     String(body.shop_desc).trim(),
+      whatsapp_number: String(body.shop_whatsapp || body.whatsapp_number || '').trim(),
       plan:          body.plan || 'basic',
       login_password:String(body.login_password).trim(),
-      shop_color:    body.shop_color || '#1D4ED8',
-      shop_font:     body.shop_font || 'Inter',
       shop_logo:     body.shop_logo || null,
-      shop_products: body.shop_products || '[]',
       status:        'pending',
       created_at:    new Date().toISOString(),
     }).select('id').single()

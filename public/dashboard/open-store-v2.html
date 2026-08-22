@@ -789,14 +789,10 @@ async function submitApplication(){
       shop_name:     document.getElementById('shopName').value.trim(),
       shop_category: document.getElementById('shopCategory').value,
       shop_region:   document.getElementById('shopRegion').value,
-      shop_whatsapp: document.getElementById('shopWhatsapp').value.trim(),
-      shop_desc:     document.getElementById('shopDesc').value.trim(),
-      plan:          selectedPlan||'basic',
+      whatsapp_number: document.getElementById('shopWhatsapp').value.trim(),
+            plan:          selectedPlan||'basic',
       login_password:document.getElementById('ownerPin').value.trim(),
-      shop_color:    selectedColor||'#1D4ED8',
-      shop_font:     selectedFont||'Inter',
       shop_logo:     logoUrl||null,
-      shop_products: JSON.stringify(products),
       status:        'pending',
       created_at:    new Date().toISOString()
     }
