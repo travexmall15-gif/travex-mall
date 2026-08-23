@@ -89,7 +89,7 @@ export default function MarketInnerPage() {
         cfg.categories.includes(s.shop_category || '')
       )
 
-      setShops(filtered as Shop[])
+      setShops(filtered as unknown as Shop[])
     } finally {
       setLoading(false)
     }
