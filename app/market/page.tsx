@@ -58,12 +58,11 @@ export default function MarketPage() {
 
         const result: Record<string, number> = { fashion: 0, vehicle: 0, electronics: 0 }
         for (const shop of data) {
-          // shop_market column not in DB — use category to determine market
+          // shop_market column not in DB — use category only
           for (const market of MARKETS) {
-              if (market.categories.includes(shop.shop_category || '')) {
-                result[market.key]++
-                break
-              }
+            if (market.categories.includes(shop.shop_category || '')) {
+              result[market.key]++
+              break
             }
           }
         }
