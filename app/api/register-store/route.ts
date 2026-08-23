@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
       owner_phone:   String(body.owner_phone).trim(),
       owner_email:   email,
       auth_email:    email,
-      shop_market:   body.shop_market || null,
       shop_name:     String(body.shop_name).trim(),
       shop_category: body.shop_category,
       shop_region:   body.shop_region,

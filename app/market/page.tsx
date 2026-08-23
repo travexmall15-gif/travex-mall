@@ -51,18 +51,15 @@ export default function MarketPage() {
       try {
         const { data } = await sb
           .from('pending_payments')
-          .select('shop_category,shop_market')
+          .select('shop_category')
           .eq('status', 'approved')
 
         if (!data) return
 
         const result: Record<string, number> = { fashion: 0, vehicle: 0, electronics: 0 }
         for (const shop of data) {
-          const m = (shop as any).shop_market
-          if (m && result[m] !== undefined) {
-            result[m]++
-          } else {
-            for (const market of MARKETS) {
+          // shop_market column not in DB — use category to determine market
+          for (const market of MARKETS) {
               if (market.categories.includes(shop.shop_category || '')) {
                 result[market.key]++
                 break

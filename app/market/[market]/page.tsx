@@ -77,18 +77,17 @@ export default function MarketInnerPage() {
     try {
       const { data } = await sb
         .from('pending_payments')
-        .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_logo,shop_font,shop_products,plan,status,slug,created_at,shop_market')
+        .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,whatsapp_number,plan,status,shop_logo,created_at')
         .eq('status', 'approved')
         .order('plan', { ascending: false })
         .order('created_at', { ascending: false })
 
       if (!data) { setShops([]); return }
 
-      // Filter by market: use shop_market if set, else derive from category
-      const filtered = data.filter((s: any) => {
-        if (s.shop_market) return s.shop_market === market
-        return cfg.categories.includes(s.shop_category || '')
-      })
+      // Filter by market using shop_category (shop_market column not in DB)
+      const filtered = data.filter((s: any) =>
+        cfg.categories.includes(s.shop_category || '')
+      )
 
       setShops(filtered as Shop[])
     } finally {
