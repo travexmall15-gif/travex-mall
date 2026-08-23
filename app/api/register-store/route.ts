@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
       whatsapp_number: String(body.shop_whatsapp || body.whatsapp_number || '').trim(),
       plan:          body.plan || 'basic',
       login_password:String(body.login_password).trim(),
-      shop_logo:     body.shop_logo || null,
+      // Only store logo if it's a real storage URL (not base64)
+      ...(body.shop_logo && String(body.shop_logo).startsWith('http') ? { shop_logo: body.shop_logo } : {}),
       status:        'pending',
       created_at:    new Date().toISOString(),
     }).select('id').single()

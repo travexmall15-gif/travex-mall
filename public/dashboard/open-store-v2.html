@@ -575,13 +575,10 @@ async function uploadFile(file, folder){
     console.warn('Storage unavailable:', e.message, '— using base64 fallback')
   }
   
-  // Fallback: base64 data URL (stored directly in DB)
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = e => resolve(e.target.result)
-    reader.onerror = () => reject(new Error('Failed to read file'))
-    reader.readAsDataURL(file)
-  })
+  // Storage failed — return null so submission still works without logo
+  // Do NOT use base64 fallback — too large for DB column
+  console.warn('Logo upload failed — continuing without logo')
+  return null
 }
 
 async function handleLogoUpload(input){
@@ -792,7 +789,8 @@ async function submitApplication(){
       whatsapp_number: document.getElementById('shopWhatsapp').value.trim(),
             plan:          selectedPlan||'basic',
       login_password:document.getElementById('ownerPin').value.trim(),
-      shop_logo:     logoUrl||null,
+      // Only include logo if it's a real storage URL (not null or base64)
+      ...(logoUrl && logoUrl.startsWith('http') ? {shop_logo: logoUrl} : {}),
       status:        'pending',
       created_at:    new Date().toISOString()
     }
@@ -816,12 +814,16 @@ async function submitApplication(){
         if (apiRes.status >= 400 && apiRes.status < 500) throw new Error(lastError)
       }
     } catch(apiErr) {
-      // If not a validation error, try direct Supabase as fallback
-      if (apiErr.name === 'AbortError' || apiErr.message.includes('fetch')) {
-        lastError = 'API unreachable — trying direct connection...'
-      } else {
-        throw apiErr  // re-throw validation errors
-      }
+      // Only re-throw explicit validation errors (not network/404 errors)
+      const isValidation = apiErr.message && (
+        apiErr.message.includes('Missing') ||
+        apiErr.message.includes('Invalid email') ||
+        apiErr.message.includes('PIN must be') ||
+        apiErr.message.includes('already exists')
+      )
+      if (isValidation) throw apiErr
+      // Network error, timeout, 404 — try Supabase directly
+      lastError = 'API unavailable — trying direct connection...'
     }
 
     // ── STRATEGY 2: Direct Supabase fallback ────────────────
@@ -850,7 +852,22 @@ async function submitApplication(){
           'Authorization': 'Bearer '+SB_KEY,
           'Prefer':'return=minimal'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          // Minimum confirmed columns only for direct Supabase fallback
+          owner_name:      payload.owner_name,
+          owner_phone:     payload.owner_phone,
+          owner_email:     payload.owner_email,
+          auth_email:      payload.auth_email,
+          shop_name:       payload.shop_name,
+          shop_category:   payload.shop_category,
+          shop_region:     payload.shop_region,
+          shop_market:     payload.shop_market || null,
+          whatsapp_number: payload.whatsapp_number,
+          plan:            payload.plan || 'basic',
+          login_password:  payload.login_password,
+          status:          'pending',
+          created_at:      new Date().toISOString()
+        })
       })
 
       if (!sbRes.ok) {
@@ -881,7 +898,9 @@ async function submitApplication(){
   }catch(e){
     const msg = e.message||'Submission failed. Please try again.'
     showErr('err5', msg)
-    console.error('[submit]', msg)
+    // Also show toast so error is visible regardless of scroll position
+    toast(msg, 'error')
+    console.error('[submit] ERROR:', msg)
     btn.innerHTML='Submit Application <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
     btn.disabled=false
   }
