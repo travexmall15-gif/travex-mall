@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export const runtime = 'edge'
-
 export async function GET() {
   const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
   const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY

@@ -36,8 +36,6 @@ const nextConfig = {
       'lucide-react',
       '@vercel/analytics',
     ],
-    // Faster page transitions
-    ppr: false,
   },
 
   // ── HTTP Cache-Control headers ───────────────────────────
