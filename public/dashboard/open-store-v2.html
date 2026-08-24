@@ -824,62 +824,15 @@ async function submitApplication(){
       lastError = 'API unavailable — trying direct connection...'
     }
 
-    // ── STRATEGY 2: Direct Supabase fallback ────────────────
+    // ── STRATEGY 2: Cannot bypass RLS with anon key ───────────
     if (!submitted) {
-      const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-      const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-
-      // Check duplicate first
-      const chkRes = await fetch(
-        SB_URL+'/rest/v1/pending_payments?or=(auth_email.eq.'+encodeURIComponent(email)+',owner_email.eq.'+encodeURIComponent(email)+')&select=id,status&limit=1',
-        { headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY} }
-      )
-      if (chkRes.ok) {
-        const existing = await chkRes.json()
-        if (existing && existing.length > 0) {
-          throw new Error('Application already exists for this email (status: '+existing[0].status+'). Please log in or use a different email.')
-        }
-      }
-
-      // Insert
-      const sbRes = await fetch(SB_URL+'/rest/v1/pending_payments', {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'apikey': SB_KEY,
-          'Authorization': 'Bearer '+SB_KEY,
-          'Prefer':'return=minimal'
-        },
-        body: JSON.stringify({
-          // Minimum confirmed columns only for direct Supabase fallback
-          owner_name:      payload.owner_name,
-          owner_phone:     payload.owner_phone,
-          owner_email:     payload.owner_email,
-          auth_email:      payload.auth_email,
-          shop_name:       payload.shop_name,
-          shop_category:   payload.shop_category,
-          shop_region:     payload.shop_region,
-              plan:            payload.plan || 'basic',
-          login_password:  payload.login_password,
-          status:          'pending',
-          created_at:      new Date().toISOString()
-        })
-      })
-
-      if (!sbRes.ok) {
-        let errMsg = 'Submission failed ('+sbRes.status+')'
-        try {
-          const errBody = await sbRes.json()
-          errMsg = errBody.message || errBody.error || errMsg
-          if (errBody.code === '23505') errMsg = 'Email already registered. Please log in or use a different email.'
-          if (errBody.code === '42501') errMsg = 'Permission denied. Please contact ShopNekt support.'
-          if (errBody.code === '42703') errMsg = 'Database error: '+errMsg+'. Contact support.'
-          // Show raw details for debugging
-          if (errBody.details) errMsg += ' ('+errBody.details+')'
-        } catch{}
-        throw new Error(errMsg)
-      }
-      submitted = true
+      // The anon/publishable key cannot bypass Supabase RLS.
+      // Fix required (choose one):
+      // A) Add SUPABASE_SERVICE_ROLE_KEY to Vercel environment variables
+      // B) Add this RLS policy in Supabase SQL editor:
+      //    CREATE POLICY "allow_anon_insert" ON pending_payments
+      //    FOR INSERT TO anon WITH CHECK (status = 'pending');
+      throw new Error('Permission denied by database security policy.\n\nTo fix this, your administrator must either:\n\nOption A: Add SUPABASE_SERVICE_ROLE_KEY to Vercel Environment Variables\n\nOption B: Run this SQL in Supabase Dashboard > SQL Editor:\nCREATE POLICY \"allow_anon_insert\" ON pending_payments FOR INSERT TO anon WITH CHECK (status = \'pending\');')
     }
 
     // ── SUCCESS ──────────────────────────────────────────────
