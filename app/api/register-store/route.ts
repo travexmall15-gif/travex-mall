@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
       shop_name:     String(body.shop_name).trim(),
       shop_category: body.shop_category,
       shop_region:   body.shop_region,
-      whatsapp_number: String(body.shop_whatsapp || body.whatsapp_number || '').trim(),
       plan:          body.plan || 'basic',
       login_password:String(body.login_password).trim(),
       // Only store logo if it's a real storage URL (not base64)

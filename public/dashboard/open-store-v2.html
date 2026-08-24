@@ -785,7 +785,6 @@ async function submitApplication(){
       shop_name:     document.getElementById('shopName').value.trim(),
       shop_category: document.getElementById('shopCategory').value,
       shop_region:   document.getElementById('shopRegion').value,
-      whatsapp_number: document.getElementById('shopWhatsapp').value.trim(),
             plan:          selectedPlan||'basic',
       login_password:document.getElementById('ownerPin').value.trim(),
       // Only include logo if it's a real storage URL (not null or base64)
@@ -860,8 +859,7 @@ async function submitApplication(){
           shop_name:       payload.shop_name,
           shop_category:   payload.shop_category,
           shop_region:     payload.shop_region,
-              whatsapp_number: payload.whatsapp_number,
-          plan:            payload.plan || 'basic',
+              plan:            payload.plan || 'basic',
           login_password:  payload.login_password,
           status:          'pending',
           created_at:      new Date().toISOString()
