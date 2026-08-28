@@ -1293,5 +1293,31 @@
     "errPin": "PIN lazima iwe namba 4.",
     "errDesc": "Maelezo lazima yawe angalau herufi 20.",
     "errGeneric": "Hitilafu imetokea. Tafadhali jaribu tena."
+  },
+  "status": {
+    "title": "Hali ya Maombi",
+    "sub": "Angalia hali ya maombi yako ya kuwa muuzaji ShopNekt.",
+    "emailLabel": "Ingiza barua pepe uliyotumia kuomba",
+    "checkBtn": "Angalia Hali",
+    "checking": "Inaangalia…",
+    "notFound": "Hakuna maombi yaliyopatikana kwa barua pepe hii.",
+    "applyInstead": "Fungua duka badala yake",
+    "pending": "Inasubiri Ukaguzi",
+    "approved": "Imeidhinishwa",
+    "rejected": "Inahitaji Marekebisho",
+    "pendingDesc": "Maombi yako yanapitiwa. Kwa kawaida huchukua chini ya dakika 30.",
+    "approvedDesc": "Hongera — duka lako limeidhinishwa na liko hai kwenye ShopNekt.",
+    "rejectedDesc": "Maombi yako yanahitaji marekebisho kidogo kabla ya kuidhinishwa. Wasiliana na msaada kwa maelezo.",
+    "marketplace": "Soko",
+    "shopInfo": "Taarifa za Duka",
+    "plan": "Mpango",
+    "appliedOn": "Uliomba tarehe",
+    "nextSteps": "Hatua Zinazofuata",
+    "shopCode": "Namba ya Duka",
+    "revealPin": "Ingiza PIN yako ya namba 4 kuona Namba ya Duka",
+    "reveal": "Onyesha",
+    "wrongPin": "PIN si sahihi.",
+    "goToDashboard": "Nenda kwenye Dashibodi ya Muuzaji",
+    "checkAnother": "Angalia barua pepe nyingine"
   }
 }

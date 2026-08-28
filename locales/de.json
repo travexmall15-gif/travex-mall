@@ -1369,5 +1369,31 @@
     "errPin": "Die PIN muss genau 4 Ziffern haben.",
     "errDesc": "Die Beschreibung muss mindestens 20 Zeichen haben.",
     "errGeneric": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "status": {
+    "title": "Antragsstatus",
+    "sub": "Prüfe den Status deines ShopNekt-Verkäuferantrags.",
+    "emailLabel": "E-Mail eingeben, mit der du dich beworben hast",
+    "checkBtn": "Status prüfen",
+    "checking": "Wird geprüft…",
+    "notFound": "Kein Antrag für diese E-Mail gefunden.",
+    "applyInstead": "Stattdessen einen Shop eröffnen",
+    "pending": "Prüfung ausstehend",
+    "approved": "Genehmigt",
+    "rejected": "Änderungen erforderlich",
+    "pendingDesc": "Dein Antrag wird geprüft. Das dauert normalerweise weniger als 30 Minuten.",
+    "approvedDesc": "Glückwunsch — dein Shop ist genehmigt und live auf ShopNekt.",
+    "rejectedDesc": "Dein Antrag benötigt einige Änderungen vor der Genehmigung. Kontaktiere den Support für Details.",
+    "marketplace": "Marktplatz",
+    "shopInfo": "Shop-Informationen",
+    "plan": "Plan",
+    "appliedOn": "Beantragt am",
+    "nextSteps": "Nächste Schritte",
+    "shopCode": "Shop-/App-Code",
+    "revealPin": "Gib deine 4-stellige PIN ein, um den Code zu sehen",
+    "reveal": "Anzeigen",
+    "wrongPin": "Falsche PIN.",
+    "goToDashboard": "Zum Verkäufer-Dashboard",
+    "checkAnother": "Andere E-Mail prüfen"
   }
 }

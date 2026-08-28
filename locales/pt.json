@@ -1369,5 +1369,31 @@
     "errPin": "O PIN deve ter exatamente 4 dígitos.",
     "errDesc": "A descrição deve ter pelo menos 20 caracteres.",
     "errGeneric": "Algo deu errado. Tente novamente."
+  },
+  "status": {
+    "title": "Status da candidatura",
+    "sub": "Verifique o status da sua candidatura de vendedor ShopNekt.",
+    "emailLabel": "Digite o e-mail usado na candidatura",
+    "checkBtn": "Verificar status",
+    "checking": "Verificando…",
+    "notFound": "Nenhuma candidatura encontrada para este e-mail.",
+    "applyInstead": "Abrir uma loja em vez disso",
+    "pending": "Aguardando revisão",
+    "approved": "Aprovado",
+    "rejected": "Requer alterações",
+    "pendingDesc": "Sua candidatura está sendo revisada. Isso geralmente leva menos de 30 minutos.",
+    "approvedDesc": "Parabéns — sua loja foi aprovada e está no ar na ShopNekt.",
+    "rejectedDesc": "Sua candidatura precisa de alguns ajustes antes da aprovação. Entre em contato com o suporte para detalhes.",
+    "marketplace": "Mercado",
+    "shopInfo": "Informações da loja",
+    "plan": "Plano",
+    "appliedOn": "Candidatura em",
+    "nextSteps": "Próximos passos",
+    "shopCode": "Código da loja",
+    "revealPin": "Digite seu PIN de 4 dígitos para ver o código",
+    "reveal": "Revelar",
+    "wrongPin": "PIN incorreto.",
+    "goToDashboard": "Ir para o Painel do Vendedor",
+    "checkAnother": "Verificar outro e-mail"
   }
 }

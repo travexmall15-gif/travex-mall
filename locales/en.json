@@ -1293,5 +1293,31 @@
     "errPin": "PIN must be exactly 4 digits.",
     "errDesc": "Description must be at least 20 characters.",
     "errGeneric": "Something went wrong. Please try again."
+  },
+  "status": {
+    "title": "Application Status",
+    "sub": "Check the status of your ShopNekt seller application.",
+    "emailLabel": "Enter the email you applied with",
+    "checkBtn": "Check Status",
+    "checking": "Checking…",
+    "notFound": "No application found for this email.",
+    "applyInstead": "Open a store instead",
+    "pending": "Pending Review",
+    "approved": "Approved",
+    "rejected": "Requires Changes",
+    "pendingDesc": "Your application is being reviewed. This usually takes under 30 minutes.",
+    "approvedDesc": "Congratulations — your shop is approved and live on ShopNekt.",
+    "rejectedDesc": "Your application needs a few changes before it can be approved. Contact support for details.",
+    "marketplace": "Marketplace",
+    "shopInfo": "Shop Information",
+    "plan": "Plan",
+    "appliedOn": "Applied on",
+    "nextSteps": "Next Steps",
+    "shopCode": "Shop / App Code",
+    "revealPin": "Enter your 4-digit PIN to view your Shop Code",
+    "reveal": "Reveal",
+    "wrongPin": "Incorrect PIN.",
+    "goToDashboard": "Go to Seller Dashboard",
+    "checkAnother": "Check another email"
   }
 }
