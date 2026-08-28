@@ -520,7 +520,17 @@
     "shopSaved": "Sauvegardée !",
     "unsaveShop": "Retirer",
     "likeShop": "Aimer la boutique",
-    "liked": "Aimé"
+    "liked": "Aimé",
+    "tabHome": "Accueil",
+    "tabProducts": "Produits",
+    "tabPosts": "Publications",
+    "tabReviews": "Avis",
+    "newArrivals": "Nouveautés",
+    "trending": "Tendance",
+    "shopAll": "Tout voir",
+    "noPosts": "Aucune publication pour le moment.",
+    "noReviews": "Aucun avis pour le moment.",
+    "share": "Partager"
   },
   "common": {
     "loading": "Chargement...",

@@ -8,7 +8,7 @@ import { use, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
-import { ArrowLeft, MessageCircle, Package, ShoppingCart, ShoppingBag, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Package, ShoppingCart, ShoppingBag, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search, Sparkles, TrendingUp, LayoutGrid, MessageSquare, Play, Share2 } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 import { getCurrentBuyerId, getShopLikeCount, isShopLikedByUser, likeShop, unlikeShop } from '@/lib/shop-likes'
 
@@ -39,6 +39,19 @@ type Product = {
   image_url: string | null
   cost_price: number | null
   store_id: string
+  created_at?: string
+}
+
+type StorePost = {
+  id: string
+  content: string | null
+  post_text: string | null
+  caption: string | null
+  media_url: string | null
+  media_type: string | null
+  likes: number | null
+  likes_count: number | null
+  created_at: string
 }
 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
@@ -69,6 +82,10 @@ export default function StorePage({
   const [liked, setLiked]         = useState(false)
   const [likeCount, setLikeCount] = useState(0)
   const [likeBusy, setLikeBusy]   = useState(false)
+  const [tab, setTab]             = useState<'home' | 'products' | 'posts' | 'reviews'>('home')
+  const [trending, setTrending]   = useState<Product[]>([])
+  const [storePosts, setStorePosts]         = useState<StorePost[]>([])
+  const [storePostsLoading, setStorePostsLoading] = useState(false)
 
   // Auto-open message modal when navigated from market card with #contact
   useEffect(() => {
@@ -189,6 +206,42 @@ export default function StorePage({
   }
 
   const fmtCount = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}K` : String(n)
+
+  // Trending = products with the most real purchases (orders) for this store.
+  // No fake/simulated signals — an empty result just means no genuine
+  // engagement data exists yet, and the section is hidden.
+  useEffect(() => {
+    if (!store || store.plan === 'campus' || products.length === 0) { setTrending([]); return }
+    let cancelled = false
+    ;(async () => {
+      const { data: ords } = await sb.from('orders').select('product_id').eq('shop_id', store.id)
+      if (cancelled || !ords || ords.length === 0) { setTrending([]); return }
+      const counts = new Map<string, number>()
+      for (const o of ords) if (o.product_id) counts.set(o.product_id, (counts.get(o.product_id) || 0) + 1)
+      const ranked = products
+        .filter(p => counts.has(p.id))
+        .sort((a, b) => (counts.get(b.id) || 0) - (counts.get(a.id) || 0))
+        .slice(0, 8)
+      if (!cancelled) setTrending(ranked)
+    })()
+    return () => { cancelled = true }
+  }, [store?.id, products])
+
+  // Store Posts — pulled from the seller's own Social Vybe posts, never
+  // duplicated/re-uploaded. Loaded lazily when the Posts tab is opened.
+  useEffect(() => {
+    if (tab !== 'posts' || !store || storePosts.length > 0 || storePostsLoading) return
+    setStorePostsLoading(true)
+    sb.from('feed_posts')
+      .select('id, content, post_text, caption, media_url, media_type, likes, likes_count, created_at')
+      .eq('store_id', store.id)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => { setStorePosts(data || []); setStorePostsLoading(false) })
+  }, [tab, store?.id])
+
+  const newArrivals = [...products]
+    .sort((a, b) => (b.created_at ? new Date(b.created_at).getTime() : 0) - (a.created_at ? new Date(a.created_at).getTime() : 0))
+    .slice(0, 8)
 
   const openOrder = (p: Product) => {
     setCartItem(p)
@@ -409,7 +462,44 @@ export default function StorePage({
         </div>
       </div>
 
-      {/* ── PRODUCTS ── */}
+      {/* ── STORE NAVIGATION ── */}
+      {store.plan !== 'campus' && (
+        <div style={{ position: 'sticky', top: 56, zIndex: 10, background: '#fff', borderBottom: '1px solid #F1F5F9' }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 5%', display: 'flex', gap: 4, overflowX: 'auto' }}>
+            {([
+              ['home', t('store.tabHome'), Sparkles],
+              ['products', t('store.tabProducts'), LayoutGrid],
+              ['posts', t('store.tabPosts'), MessageSquare],
+              ['reviews', t('store.tabReviews'), Star],
+            ] as const).map(([key, label, Icon]) => (
+              <button key={key} onClick={() => setTab(key)}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0.85rem 0.9rem', background: 'none', border: 'none', borderBottom: `2.5px solid ${tab === key ? accentColor : 'transparent'}`, color: tab === key ? '#111827' : '#9CA3AF', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'var(--sn-font)', whiteSpace: 'nowrap' }}>
+                <Icon size={14} /> {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── HOME TAB: New Arrivals + Trending ── */}
+      {tab === 'home' && store.plan !== 'campus' && (
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 5% 0' }}>
+          {newArrivals.length > 0 && (
+            <ProductRail title={t('store.newArrivals')} icon={Sparkles} products={newArrivals} accentColor={accentColor} isPremium={isPremium} onOpen={openOrder} fmt={fmt} />
+          )}
+          {trending.length > 0 && (
+            <ProductRail title={t('store.trending')} icon={TrendingUp} products={trending} accentColor={accentColor} isPremium={isPremium} onOpen={openOrder} fmt={fmt} />
+          )}
+          {(newArrivals.length > 0 || trending.length > 0) && (
+            <div style={{ fontSize: 13, fontWeight: 800, color: '#111827', margin: '1.5rem 0 0.75rem', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <LayoutGrid size={15} /> {t('store.shopAll')}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── PRODUCTS (Home: Shop All grid, or Products tab) ── */}
+      {(tab === 'home' || tab === 'products' || store.plan === 'campus') && (
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
 
         {/* Search + Filter */}
@@ -503,6 +593,66 @@ export default function StorePage({
           </div>
         )}
       </div>
+      )}
+
+      {/* ── POSTS TAB ── */}
+      {tab === 'posts' && store.plan !== 'campus' && (
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
+          {storePostsLoading ? (
+            <div style={{ textAlign: 'center', padding: '3rem 0', color: '#9CA3AF', fontSize: 13 }}>
+              <Loader2 size={22} style={{ margin: '0 auto 8px', animation: 'spin 1s linear infinite' }} />
+            </div>
+          ) : storePosts.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+              <MessageSquare size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
+              <p style={{ color: '#9CA3AF', fontSize: 14 }}>{t('store.noPosts')}</p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
+              {storePosts.map(post => {
+                const text = post.caption || post.post_text || post.content || ''
+                const likeN = post.likes_count ?? post.likes ?? 0
+                return (
+                  <div key={post.id} style={{ border: '1px solid #F1F5F9', borderRadius: 14, overflow: 'hidden', background: '#fff' }}>
+                    {post.media_url && (
+                      <div style={{ position: 'relative', height: 160, background: '#0D1B3E' }}>
+                        <Image src={post.media_url} alt="" fill style={{ objectFit: 'cover' }} />
+                        {post.media_type === 'video' && (
+                          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Play size={28} color="#fff" fill="#fff" style={{ opacity: 0.85 }} />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div style={{ padding: '0.75rem' }}>
+                      {text && <p style={{ fontSize: 12, color: '#374151', lineHeight: 1.5, marginBottom: 8, display: '-webkit-box', WebkitLineClamp: 2 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{text}</p>}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#9CA3AF' }}><Heart size={11} /> {fmtCount(likeN)}</span>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button onClick={() => { if (navigator.share) navigator.share({ url: window.location.href }).catch(() => {}) }}
+                            style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 11 }}>
+                            <Share2 size={12} /> {t('store.share')}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── REVIEWS TAB ── */}
+      {tab === 'reviews' && store.plan !== 'campus' && (
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+            <Star size={40} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
+            <p style={{ color: '#9CA3AF', fontSize: 14 }}>{t('store.noReviews')}</p>
+          </div>
+        </div>
+      )}
 
       {/* ── ORDER MODAL ── */}
       {cartItem && (
@@ -786,3 +936,40 @@ export default function StorePage({
     </main>
   )
 }
+
+// ── Horizontal product rail (New Arrivals / Trending) ─────────
+function ProductRail({ title, icon: Icon, products, accentColor, isPremium, onOpen, fmt }: {
+  title: string
+  icon: React.ComponentType<{ size?: number; color?: string }>
+  products: Product[]
+  accentColor: string
+  isPremium: boolean
+  onOpen: (p: Product) => void
+  fmt: (n: number) => string
+}) {
+  return (
+    <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ fontSize: 13, fontWeight: 800, color: '#111827', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <Icon size={15} color={accentColor} /> {title}
+      </div>
+      <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4 }}>
+        {products.map(p => (
+          <div key={p.id} onClick={() => onOpen(p)} style={{ flex: '0 0 140px', cursor: 'pointer' }}>
+            <div style={{ height: 110, borderRadius: 12, background: `linear-gradient(135deg, ${accentColor}22, #0D1B3E)`, position: 'relative', overflow: 'hidden', marginBottom: 6 }}>
+              {p.image_url ? (
+                <Image src={p.image_url} alt={p.name} fill style={{ objectFit: 'cover' }} />
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+                  <ShoppingBag size={26} color="#E5E7EB" />
+                </div>
+              )}
+            </div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#111827', lineHeight: 1.3, marginBottom: 2, display: '-webkit-box', WebkitLineClamp: 1 as any, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden' }}>{p.name}</div>
+            <div style={{ fontSize: 12, fontWeight: 900, color: accentColor }}>{fmt(p.price)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+

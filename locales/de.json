@@ -519,7 +519,17 @@
     "shopSaved": "Gespeichert!",
     "unsaveShop": "Entfernen",
     "likeShop": "Shop liken",
-    "liked": "Geliked"
+    "liked": "Geliked",
+    "tabHome": "Start",
+    "tabProducts": "Produkte",
+    "tabPosts": "Beiträge",
+    "tabReviews": "Bewertungen",
+    "newArrivals": "Neuheiten",
+    "trending": "Im Trend",
+    "shopAll": "Alle ansehen",
+    "noPosts": "Noch keine Beiträge.",
+    "noReviews": "Noch keine Bewertungen.",
+    "share": "Teilen"
   },
   "common": {
     "loading": "Laden...",

@@ -519,7 +519,17 @@
     "shopSaved": "Saved!",
     "unsaveShop": "Unsave",
     "likeShop": "Like Shop",
-    "liked": "Liked"
+    "liked": "Liked",
+    "tabHome": "Home",
+    "tabProducts": "Products",
+    "tabPosts": "Posts",
+    "tabReviews": "Reviews",
+    "newArrivals": "New Arrivals",
+    "trending": "Trending",
+    "shopAll": "Shop All",
+    "noPosts": "No posts yet.",
+    "noReviews": "No reviews yet.",
+    "share": "Share"
   },
   "openStore": {
     "title": "Open Your Store on ShopNekt",

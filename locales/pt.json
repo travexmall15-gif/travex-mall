@@ -519,7 +519,17 @@
     "shopSaved": "Salva!",
     "unsaveShop": "Remover",
     "likeShop": "Curtir loja",
-    "liked": "Curtido"
+    "liked": "Curtido",
+    "tabHome": "Início",
+    "tabProducts": "Produtos",
+    "tabPosts": "Publicações",
+    "tabReviews": "Avaliações",
+    "newArrivals": "Novidades",
+    "trending": "Em alta",
+    "shopAll": "Ver tudo",
+    "noPosts": "Ainda sem publicações.",
+    "noReviews": "Ainda sem avaliações.",
+    "share": "Compartilhar"
   },
   "common": {
     "loading": "Carregando...",

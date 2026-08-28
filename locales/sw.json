@@ -519,7 +519,17 @@
     "shopSaved": "Imehifadhiwa!",
     "unsaveShop": "Toa Hifadhi",
     "likeShop": "Penda Duka",
-    "liked": "Umependa"
+    "liked": "Umependa",
+    "tabHome": "Nyumbani",
+    "tabProducts": "Bidhaa",
+    "tabPosts": "Machapisho",
+    "tabReviews": "Maoni",
+    "newArrivals": "Bidhaa Mpya",
+    "trending": "Inayovuma",
+    "shopAll": "Bidhaa Zote",
+    "noPosts": "Bado hakuna machapisho.",
+    "noReviews": "Bado hakuna maoni.",
+    "share": "Shiriki"
   },
   "openStore": {
     "title": "Fungua Duka Lako kwenye ShopNekt",

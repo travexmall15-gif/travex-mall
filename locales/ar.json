@@ -519,7 +519,17 @@
     "shopSaved": "تم الحفظ!",
     "unsaveShop": "إلغاء الحفظ",
     "likeShop": "إعجاب بالمتجر",
-    "liked": "أُعجبت"
+    "liked": "أُعجبت",
+    "tabHome": "الرئيسية",
+    "tabProducts": "المنتجات",
+    "tabPosts": "المنشورات",
+    "tabReviews": "التقييمات",
+    "newArrivals": "وصل حديثًا",
+    "trending": "الأكثر رواجًا",
+    "shopAll": "تسوق الكل",
+    "noPosts": "لا توجد منشورات بعد.",
+    "noReviews": "لا توجد تقييمات بعد.",
+    "share": "مشاركة"
   },
   "common": {
     "loading": "جاري التحميل...",
