@@ -10,6 +10,7 @@ import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
 import { ArrowLeft, MessageCircle, Package, ShoppingCart, ShoppingBag, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
+import { getCurrentBuyerId, getShopLikeCount, isShopLikedByUser, likeShop, unlikeShop } from '@/lib/shop-likes'
 
 type Store = {
   id: string
@@ -65,6 +66,9 @@ export default function StorePage({
   const [msgText, setMsgText]     = useState('')
   const [msgName, setMsgName]     = useState('')
   const [msgSent, setMsgSent]     = useState(false)
+  const [liked, setLiked]         = useState(false)
+  const [likeCount, setLikeCount] = useState(0)
+  const [likeBusy, setLikeBusy]   = useState(false)
 
   // Auto-open message modal when navigated from market card with #contact
   useEffect(() => {
@@ -146,6 +150,45 @@ export default function StorePage({
     }
     load()
   }, [slug])
+
+  // Load Like Shop count + whether the current visitor has liked this shop
+  useEffect(() => {
+    if (!store || store.plan === 'campus') return
+    let cancelled = false
+    ;(async () => {
+      const count = await getShopLikeCount(store.id)
+      if (cancelled) return
+      setLikeCount(count)
+      const buyerId = await getCurrentBuyerId()
+      if (!buyerId || cancelled) return
+      setLiked(await isShopLikedByUser(store.id, buyerId))
+    })()
+    return () => { cancelled = true }
+  }, [store?.id])
+
+  const toggleLikeShop = async () => {
+    if (!store || likeBusy) return
+    setLikeBusy(true)
+    const buyerId = await getCurrentBuyerId()
+    if (!buyerId) {
+      setLikeBusy(false)
+      window.location.href = '/auth'
+      return
+    }
+    const wasLiked = liked
+    // Optimistic update
+    setLiked(!wasLiked)
+    setLikeCount(c => Math.max(0, c + (wasLiked ? -1 : 1)))
+    const { error } = wasLiked ? await unlikeShop(store.id, buyerId) : await likeShop(store.id, buyerId)
+    if (error) {
+      // Revert on failure
+      setLiked(wasLiked)
+      setLikeCount(c => Math.max(0, c + (wasLiked ? 1 : -1)))
+    }
+    setLikeBusy(false)
+  }
+
+  const fmtCount = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}K` : String(n)
 
   const openOrder = (p: Product) => {
     setCartItem(p)
@@ -322,24 +365,18 @@ export default function StorePage({
                   onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.10)'}>
                   <MessageCircle size={13} /> {t('store.messageSeller')}
                 </button>
-                {/* Save Shop toggle */}
-                <button
-                  onClick={() => {
-                    const saved = JSON.parse(localStorage.getItem('sn_saved_shops') || '[]')
-                    const alreadySaved = saved.some((s: any) => s.id === store!.id)
-                    if (alreadySaved) {
-                      const updated = saved.filter((s: any) => s.id !== store!.id)
-                      localStorage.setItem('sn_saved_shops', JSON.stringify(updated))
-                    } else {
-                      saved.push({ id: store!.id, shop_name: store!.shop_name, shop_category: store!.shop_category, shop_region: store!.shop_region, plan: store!.plan, saved_at: new Date().toISOString() })
-                      localStorage.setItem('sn_saved_shops', JSON.stringify(saved))
-                    }
-                    // Force re-render by toggling state
-                    setShowMsg(v => v)
-                  }}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: (() => { try { const s = JSON.parse(localStorage.getItem('sn_saved_shops')||'[]'); return s.some((x:any)=>x.id===store!.id) ? 'rgba(239,68,68,0.25)':'rgba(255,255,255,0.10)' } catch{return 'rgba(255,255,255,0.10)'} })(), border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)', transition: 'all 0.2s' }}>
-                  <Heart size={12} /> {t('store.saveShop')}
-                </button>
+                {/* Like Shop — real DB-backed count, adds to Preferred Shops */}
+                {store.plan !== 'campus' && (
+                  <button
+                    onClick={toggleLikeShop}
+                    disabled={likeBusy}
+                    aria-pressed={liked}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: liked ? 'rgba(239,68,68,0.25)' : 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', color: '#111827', borderRadius: 999, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: likeBusy ? 'default' : 'pointer', fontFamily: 'var(--sn-font)', transition: 'all 0.2s', opacity: likeBusy ? 0.7 : 1 }}>
+                    <Heart size={12} fill={liked ? 'currentColor' : 'none'} />
+                    {liked ? t('store.liked') : t('store.likeShop')}
+                    {likeCount > 0 && <span style={{ opacity: 0.75 }}>· {fmtCount(likeCount)}</span>}
+                  </button>
+                )}
               </div>
             </div>
           </div>

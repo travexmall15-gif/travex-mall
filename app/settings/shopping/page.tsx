@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
+import { getCurrentBuyerId, listPreferredShops, unlikeShop, type PreferredShop } from '@/lib/shop-likes'
 import {
   ArrowLeft, Package, Heart, Tag, Bell,
   Zap, Users, Check, ChevronRight, Save,
@@ -17,15 +18,6 @@ const CATEGORIES = [
   'Agriculture','Services','Home & Living','Sports & Fitness',
   'Education','Automotive','Arts & Crafts','Technology','Furniture','Electrical',
 ]
-
-type SavedShop = {
-  id: string
-  shop_name: string
-  shop_category: string | null
-  shop_region: string | null
-  plan: string | null
-  saved_at: string
-}
 
 const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
   <button onClick={onToggle}
@@ -40,10 +32,12 @@ export default function ShoppingPage() {
   const [categories, setCategories] = useState<string[]>([])
   const [alerts, setAlerts] = useState({ flashDeals:true, groupBuy:true, priceDrops:false, newArrivals:false })
   const [saved, setSaved] = useState(false)
-  const [savedShops, setSavedShops] = useState<SavedShop[]>([])
+  const [preferredShops, setPreferredShops] = useState<PreferredShop[]>([])
+  const [preferredLoading, setPreferredLoading] = useState(true)
+  const [buyerId, setBuyerId] = useState<string | null>(null)
   const [orderCount, setOrderCount] = useState<{pending:number,total:number}>({ pending:0, total:0 })
 
-  // Load prefs + saved shops from localStorage (no auth required)
+  // Load prefs from localStorage, and Preferred Shops (Like Shop) from Supabase
   useEffect(() => {
     try {
       const p = JSON.parse(localStorage.getItem('sn_shopping_prefs') || '{}')
@@ -51,20 +45,18 @@ export default function ShoppingPage() {
       if (p.alerts)     setAlerts(a => ({ ...a, ...p.alerts }))
     } catch {}
 
-    // Load saved shops
-    try {
-      const shops = JSON.parse(localStorage.getItem('sn_saved_shops') || '[]')
-      setSavedShops(shops)
-    } catch {}
-
-    // Try to get orders count if Supabase Auth session exists
-    sb.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session?.user) return
-      try {
-        const { data } = await sb.from('orders').select('status').eq('buyer_id', session.user.id)
-        if (data) setOrderCount({ total: data.length, pending: data.filter(o => o.status==='pending').length })
-      } catch {}
-    }).catch(() => {})
+    ;(async () => {
+      const id = await getCurrentBuyerId()
+      setBuyerId(id)
+      if (id) {
+        setPreferredShops(await listPreferredShops(id))
+        try {
+          const { data } = await sb.from('orders').select('status').eq('buyer_id', id)
+          if (data) setOrderCount({ total: data.length, pending: data.filter(o => o.status==='pending').length })
+        } catch {}
+      }
+      setPreferredLoading(false)
+    })()
   }, [])
 
   const toggleCat = (c: string) => setCategories(p => p.includes(c) ? p.filter(x=>x!==c) : [...p,c])
@@ -74,10 +66,9 @@ export default function ShoppingPage() {
     setSaved(true); setTimeout(() => setSaved(false), 1800)
   }
 
-  const removeShop = (id: string) => {
-    const updated = savedShops.filter(s => s.id !== id)
-    setSavedShops(updated)
-    localStorage.setItem('sn_saved_shops', JSON.stringify(updated))
+  const removeShop = async (storeId: string) => {
+    setPreferredShops(prev => prev.filter(s => s.store_id !== storeId))
+    if (buyerId) await unlikeShop(storeId, buyerId)
   }
 
   const ALERTS_CONFIG = [
@@ -129,14 +120,32 @@ export default function ShoppingPage() {
             <p style={{ fontSize:'0.65rem', fontWeight:700, color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', margin:0 }}>
               {t('shopping.savedShops')}
             </p>
-            {savedShops.length > 0 && (
+            {preferredShops.length > 0 && (
               <span style={{ fontSize:'0.65rem', fontWeight:700, color:'#0D1B3E', background:'#EEF2FF', padding:'2px 8px', borderRadius:999 }}>
-                {savedShops.length}
+                {preferredShops.length}
               </span>
             )}
           </div>
 
-          {savedShops.length === 0 ? (
+          {preferredLoading ? (
+            <div style={{ padding:'2rem', textAlign:'center', color:'var(--sn-subtle)', fontSize:'0.8rem' }}>…</div>
+          ) : !buyerId ? (
+            /* Not signed in */
+            <div style={{ background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, padding:'1.5rem', textAlign:'center' }}>
+              <div style={{ width:46, height:46, borderRadius:12, background:'#FFF1F2', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 10px' }}>
+                <Heart size={22} color="#EF4444" />
+              </div>
+              <div style={{ fontSize:'0.85rem', fontWeight:700, color:'var(--sn-text)', marginBottom:4 }}>
+                {t('shopping.noSavedShops')}
+              </div>
+              <div style={{ fontSize:'0.74rem', color:'var(--sn-subtle)', lineHeight:1.5, marginBottom:14 }}>
+                {t('shopping.noSavedShopsDesc')}
+              </div>
+              <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'var(--sn-bg)', color:'var(--sn-text)', padding:'8px 18px', borderRadius:999, fontWeight:700, fontSize:'0.78rem', textDecoration:'none' }}>
+                <Store size={13} /> {t('common.signIn') || 'Sign In'}
+              </Link>
+            </div>
+          ) : preferredShops.length === 0 ? (
             /* Empty state */
             <div style={{ background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, padding:'1.5rem', textAlign:'center' }}>
               <div style={{ width:46, height:46, borderRadius:12, background:'#FFF1F2', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 10px' }}>
@@ -153,10 +162,10 @@ export default function ShoppingPage() {
               </Link>
             </div>
           ) : (
-            /* Saved shops list */
+            /* Preferred shops list */
             <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
-              {savedShops.map(shop => (
-                <div key={shop.id} style={{ display:'flex', alignItems:'center', gap:12, background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, padding:'12px 14px', transition:'border-color .15s' }}
+              {preferredShops.map(shop => (
+                <div key={shop.store_id} style={{ display:'flex', alignItems:'center', gap:12, background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, padding:'12px 14px', transition:'border-color .15s' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.borderColor='#CBD5E1'}
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.borderColor='var(--sn-border)'}>
                   
@@ -182,11 +191,11 @@ export default function ShoppingPage() {
 
                   {/* Actions */}
                   <div style={{ display:'flex', gap:6, flexShrink:0 }}>
-                    <Link href={`/store/${shop.id}`}
+                    <Link href={`/store/${shop.store_id}`}
                       style={{ display:'flex', alignItems:'center', gap:4, padding:'6px 12px', background:'var(--sn-bg)', color:'var(--sn-text)', borderRadius:8, textDecoration:'none', fontSize:'0.72rem', fontWeight:700 }}>
                       <ExternalLink size={11} /> {t('shopping.visitShop')}
                     </Link>
-                    <button onClick={() => removeShop(shop.id)}
+                    <button onClick={() => removeShop(shop.store_id)}
                       style={{ width:32, height:32, borderRadius:8, background:'#FFF1F2', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'#EF4444', transition:'background .15s' }}
                       onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#FEE2E2'}
                       onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#FFF1F2'}>

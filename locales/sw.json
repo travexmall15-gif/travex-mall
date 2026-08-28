@@ -517,7 +517,9 @@
     "aria": "Msaidizi wa AI",
     "saveShop": "Hifadhi Duka",
     "shopSaved": "Imehifadhiwa!",
-    "unsaveShop": "Toa Hifadhi"
+    "unsaveShop": "Toa Hifadhi",
+    "likeShop": "Penda Duka",
+    "liked": "Umependa"
   },
   "openStore": {
     "title": "Fungua Duka Lako kwenye ShopNekt",

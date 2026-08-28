@@ -517,7 +517,9 @@
     "aria": "KI-Assistent",
     "saveShop": "Shop speichern",
     "shopSaved": "Gespeichert!",
-    "unsaveShop": "Entfernen"
+    "unsaveShop": "Entfernen",
+    "likeShop": "Shop liken",
+    "liked": "Geliked"
   },
   "common": {
     "loading": "Laden...",

@@ -518,7 +518,9 @@
     "aria": "Assistant IA",
     "saveShop": "Sauvegarder la boutique",
     "shopSaved": "Sauvegardée !",
-    "unsaveShop": "Retirer"
+    "unsaveShop": "Retirer",
+    "likeShop": "Aimer la boutique",
+    "liked": "Aimé"
   },
   "common": {
     "loading": "Chargement...",
