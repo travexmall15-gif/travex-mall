@@ -37,8 +37,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Insert
-    const { data, error } = await sb.from('pending_payments').insert({
+    // Insert — with graceful fallback if an optional column (shop_whatsapp,
+    // shop_desc, shop_color, shop_market) doesn't exist in this Supabase
+    // project yet, so a schema mismatch never blocks the applicant.
+    const basePayload: Record<string, any> = {
       owner_name:    String(body.owner_name).trim(),
       owner_phone:   String(body.owner_phone).trim(),
       owner_email:   email,
@@ -48,11 +50,29 @@ export async function POST(req: NextRequest) {
       shop_region:   body.shop_region,
       plan:          body.plan || 'basic',
       login_password:String(body.login_password).trim(),
-      // Only store logo if it's a real storage URL (not base64)
-      ...(body.shop_logo && String(body.shop_logo).startsWith('http') ? { shop_logo: body.shop_logo } : {}),
       status:        'pending',
       created_at:    new Date().toISOString(),
-    }).select('id').single()
+    }
+    if (body.shop_logo && String(body.shop_logo).startsWith('http')) basePayload.shop_logo = body.shop_logo
+    if (body.shop_whatsapp) basePayload.shop_whatsapp = String(body.shop_whatsapp).trim()
+    if (body.shop_desc)     basePayload.shop_desc = String(body.shop_desc).trim()
+    if (body.shop_color)    basePayload.shop_color = String(body.shop_color)
+    if (body.shop_market)   basePayload.shop_market = String(body.shop_market)
+
+    let insertPayload = { ...basePayload }
+    let data: any = null
+    let error: any = null
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const res = await sb.from('pending_payments').insert(insertPayload).select('id').single()
+      data = res.data; error = res.error
+      if (!error || error.code !== '42703') break
+      // Column doesn't exist — parse its name out of the error and drop it, then retry.
+      const m = /column "?([a-zA-Z0-9_]+)"?/.exec(error.message || '')
+      const badCol = m?.[1]
+      if (!badCol || !(badCol in insertPayload)) break
+      const { [badCol]: _drop, ...rest } = insertPayload
+      insertPayload = rest
+    }
 
     if (error) {
       let msg = error.message
