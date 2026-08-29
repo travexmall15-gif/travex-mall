@@ -120,7 +120,7 @@ export default function GroupDetailPage({
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', fontFamily:'var(--sn-font)' }}>
       <style>{`*{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:var(--sn-font)}`}</style>
       <SiteNav />
-      <div style={{ paddingTop:80, maxWidth:560, margin:'0 auto', padding:'80px 5% 4rem' }}>
+      <div style={{ maxWidth:560, margin:'0 auto', padding:'130px 5% 4rem' }}>
         <Link href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
           color:'var(--sn-muted)', textDecoration:'none', fontSize:13, marginBottom:20 }}>
           <ArrowLeft size={14} /> {t('groupBuy.backToGroups')}

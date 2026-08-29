@@ -137,7 +137,7 @@ export default function VybePage() {
   const categories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[]
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68, fontFamily: 'var(--sn-font)' }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 118, fontFamily: 'var(--sn-font)' }}>
       <style>{`
         @keyframes spin    { to { transform: rotate(360deg) } }
         @keyframes fadeUp  { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }

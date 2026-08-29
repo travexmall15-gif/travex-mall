@@ -154,7 +154,7 @@ export default function MarketInnerPage() {
   const marketLabel = t(cfg.labelKey)
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 68 }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 118 }}>
       <SiteNav />
       <style>{`
         .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--sn-border);background:var(--sn-bg);color:var(--sn-muted);white-space:nowrap;transition:border-color 0.15s,background 0.15s,color 0.15s}

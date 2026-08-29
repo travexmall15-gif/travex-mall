@@ -86,7 +86,7 @@ export default function OpenStoreStatusPage() {
     <main style={{ fontFamily: 'var(--sn-font)', background: 'var(--sn-page)', minHeight: '100vh' }}>
       <SiteNav />
 
-      <section style={{ maxWidth: 560, margin: '0 auto', padding: '84px 6% 5rem' }}>
+      <section style={{ maxWidth: 560, margin: '0 auto', padding: '128px 6% 5rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{ fontSize: 'clamp(1.4rem,4vw,1.9rem)', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 6 }}>{t('status.title')}</h1>
           <p style={{ fontSize: '0.85rem', color: 'var(--sn-muted)' }}>{t('status.sub')}</p>

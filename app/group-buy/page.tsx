@@ -337,7 +337,7 @@ export default function GroupBuyPage() {
   const featured      = readyGroups[0] || filtered[0] || null
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:68, fontFamily:'var(--sn-font)' }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:118, fontFamily:'var(--sn-font)' }}>
       <style>{`
         @keyframes spin { to{transform:rotate(360deg)} }
         .gb-ticker      { /* ticker animation removed */ }

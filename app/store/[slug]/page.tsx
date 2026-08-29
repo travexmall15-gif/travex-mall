@@ -475,7 +475,7 @@ export default function StorePage({
 
       {/* ── STORE NAVIGATION ── */}
       {store.plan !== 'campus' && (
-        <div style={{ position: 'sticky', top: 56, zIndex: 10, background: '#fff', borderBottom: '1px solid #F1F5F9' }}>
+        <div style={{ position: 'sticky', top: 118, zIndex: 10, background: 'var(--sn-bg)', borderBottom: '1px solid var(--sn-border)' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 5%', display: 'flex', gap: 4, overflowX: 'auto' }}>
             {([
               ['home', t('store.tabHome'), Sparkles],

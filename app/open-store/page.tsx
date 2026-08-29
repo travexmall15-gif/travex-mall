@@ -181,7 +181,7 @@ export default function OpenStorePage() {
       ) : (
         <>
           {/* Hero */}
-          <section style={{ paddingTop: 84, paddingBottom: '1.5rem', textAlign: 'center', padding: '84px 6% 1.5rem' }}>
+          <section style={{ paddingBottom: '1.5rem', textAlign: 'center', padding: '128px 6% 1.5rem' }}>
             <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2.1rem)', fontWeight: 900, color: 'var(--sn-text)', letterSpacing: '-0.02em', marginBottom: 6 }}>
               {t('openStore.heroH1')} <span style={{ color: 'var(--sn-primary)' }}>{t('openStore.heroH1Store')}</span>
             </h1>
