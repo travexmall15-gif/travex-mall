@@ -7,46 +7,33 @@ dist/
 build/
 target/
 
-# TypeScript/JavaScript specific
-*.tsbuildinfo
-*.js.map
-*.jsx.map
-*.ts.map
-
-# Logs
-*.log
-
-# Environment variables
-.env
-.env.local
-*.env.*
-
-# IDE specific
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Python (if applicable)
+# Runtime
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-venv/
-.venv/
-.env
 
-# Coverage reports
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Logs
+*.log
+
+# Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Temporary files
-*.tmp
-*.temp
+# OS
+.DS_Store
+Thumbs.db
 ```
