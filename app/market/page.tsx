@@ -11,33 +11,27 @@ import { Shirt, Car, Smartphone } from 'lucide-react'
 const MARKETS = [
   {
     key: 'fashion',
-    label: 'Fashion Market',
     icon: Shirt,
-    bg: '#fff',
     iconColor: '#1D4ED8',
-    borderColor: 'var(--sn-border)',
     categories: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts','Fashion & Clothing','Beauty & Health'],
-    desc: 'Clothing, shoes, accessories, beauty & more',
+    labelKey: 'market.marketFashionLabel',
+    descKey: 'market.marketFashionDesc',
   },
   {
     key: 'vehicle',
-    label: 'Vehicle Market',
     icon: Car,
-    bg: '#fff',
     iconColor: '#1D4ED8',
-    borderColor: 'var(--sn-border)',
     categories: ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories','Automotive'],
-    desc: 'Cars, motorcycles, spare parts & accessories',
+    labelKey: 'market.marketVehicleLabel',
+    descKey: 'market.marketVehicleDesc',
   },
   {
     key: 'electronics',
-    label: 'Electronics Market',
     icon: Smartphone,
-    bg: '#fff',
     iconColor: '#1D4ED8',
-    borderColor: 'var(--sn-border)',
     categories: ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics','Electronics','Technology','Books & Stationery'],
-    desc: 'Phones, laptops, TVs, audio & appliances',
+    labelKey: 'market.marketElectronicsLabel',
+    descKey: 'market.marketElectronicsDesc',
   },
 ]
 
@@ -51,14 +45,20 @@ export default function MarketPage() {
       try {
         const { data } = await sb
           .from('pending_payments')
-          .select('shop_category')
+          .select('shop_category, shop_market')
           .eq('status', 'approved')
 
         if (!data) return
 
         const result: Record<string, number> = { fashion: 0, vehicle: 0, electronics: 0 }
         for (const shop of data) {
-          // shop_market column not in DB — use category only
+          // Prefer the explicit shop_market column (set by every application
+          // since Batch 1). Fall back to category-inference for older shops
+          // that applied before that column existed.
+          if (shop.shop_market && result[shop.shop_market] !== undefined) {
+            result[shop.shop_market]++
+            continue
+          }
           for (const market of MARKETS) {
             if (market.categories.includes(shop.shop_category || '')) {
               result[market.key]++
@@ -80,14 +80,18 @@ export default function MarketPage() {
 
       <section style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem' }}>
 
-                {/* Market Cards */}
+        <h1 style={{ fontSize: 'clamp(1.3rem,3.5vw,1.7rem)', fontWeight: 900, color: 'var(--sn-text)', letterSpacing: '-0.02em', marginBottom: '1.5rem', textAlign: 'center' }}>
+          {t('market.gatewayTitle')}
+        </h1>
+
+        {/* Market Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.25rem' }}>
           {MARKETS.map((market) => {
             const Icon = market.icon
             const count = counts[market.key] ?? 0
             return (
               <Link key={market.key} href={`/market/${market.key}`} style={{ textDecoration: 'none' }}>
-                <div style={{
+                <div className="market-card" style={{
                   background: 'var(--sn-bg)',
                   border: '1.5px solid var(--sn-border)',
                   borderRadius: 22,
@@ -95,12 +99,13 @@ export default function MarketPage() {
                   height: '100%',
                   boxSizing: 'border-box',
                   cursor: 'pointer',
+                  transition: 'border-color .18s, transform .18s',
                 }}>
                   {/* Icon container */}
                   <div style={{
                     width: 54, height: 54,
                     borderRadius: 16,
-                    background: 'var(--sn-bg)',
+                    background: 'var(--sn-page)',
                     border: '1.5px solid var(--sn-border)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     marginBottom: '1.35rem',
@@ -111,21 +116,21 @@ export default function MarketPage() {
 
                   {/* Title */}
                   <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--sn-text)', marginBottom: '0.4rem', letterSpacing: '-0.01em' }}>
-                    {market.label}
+                    {t(market.labelKey)}
                   </h2>
 
                   {/* Description */}
                   <p style={{ fontSize: '0.8rem', color: 'var(--sn-muted)', marginBottom: '1.5rem', lineHeight: 1.55 }}>
-                    {market.desc}
+                    {t(market.descKey)}
                   </p>
 
                   {/* Footer */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--sn-border)', paddingTop: '0.9rem' }}>
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-primary)' }}>
-                      {loading ? '—' : `${count} ${count === 1 ? 'store' : 'stores'}`}
+                      {loading ? '—' : t(count === 1 ? 'market.storeCount' : 'market.storesCount', { count })}
                     </span>
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-text)' }}>
-                      Explore →
+                      {t('market.explore')} →
                     </span>
                   </div>
                 </div>
@@ -134,6 +139,8 @@ export default function MarketPage() {
           })}
         </div>
       </section>
+
+      <style>{`.market-card:hover{border-color:var(--sn-primary);transform:translateY(-2px)}`}</style>
 
       <SiteFooter />
     </main>
