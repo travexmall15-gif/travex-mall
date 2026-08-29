@@ -6,13 +6,14 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { SiteNav } from '@/components/site-nav'
 import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
-import { Zap, Clock, Store, ArrowLeft, ShoppingBag, TrendingUp, AlertCircle } from 'lucide-react'
+import { Zap, Clock, Store, ArrowLeft, ShoppingBag, TrendingUp, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 // ── Types ─────────────────────────────────────────────────────
 type Deal = {
   id: string
   store_id: string
   shop_name: string
+  product_id: string | null
   product_name: string
   product_image: string | null
   original_price: number
@@ -74,7 +75,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
   return (
     <article style={{
       background: 'var(--sn-bg)',
-      border: featured ? '2px solid #1D4ED8' : '1.5px solid #E5E7EB',
+      border: featured ? '2px solid var(--sn-primary)' : '1.5px solid var(--sn-border)',
       borderRadius: featured ? 24 : 20,
       overflow: 'hidden',
       boxShadow: featured
@@ -107,7 +108,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
 
       {/* Image */}
       <div style={{ position:'relative', height: featured ? 240 : 188,
-        background: featured ? '#F3F4F6' : 'linear-gradient(135deg,#FEF3C7,#FDE68A)',
+        background: featured ? 'var(--sn-page)' : 'linear-gradient(135deg,#FEF3C7,#FDE68A)',
         overflow:'hidden' }}>
 
         {deal.product_image ? (
@@ -183,11 +184,14 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
       {/* Body */}
       <div style={{ padding: featured ? '1.25rem 1.25rem 1.25rem' : '1rem' }}>
 
-        {/* Shop name */}
+        {/* Shop name + verified badge */}
         <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.06em', marginBottom:5,
-          color: featured ? '#1D4ED8' : '#374151',
-          textTransform:'uppercase' as const, display:'flex', alignItems:'center', gap:4 }}>
+          color: featured ? 'var(--sn-primary)' : 'var(--sn-muted)',
+          textTransform:'uppercase' as const, display:'flex', alignItems:'center', gap:5 }}>
           <Store size={9} /> {deal.shop_name}
+          <span style={{ display:'inline-flex', alignItems:'center', gap:2, background:'rgba(5,150,105,0.12)', border:'1px solid rgba(5,150,105,0.2)', color:'#10B981', fontSize:'0.55rem', fontWeight:700, padding:'1px 5px', borderRadius:999, textTransform:'none' as const, letterSpacing:'normal' }}>
+            <CheckCircle2 size={7} /> {t('flash.verified')}
+          </span>
         </div>
 
         {/* Product name */}
@@ -222,7 +226,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
               {t('flash.leftCount', { count: String(left) })}
             </span>
           </div>
-          <div style={{ height:5, background: featured ? 'rgba(255,255,255,0.10)' : '#F3F4F6', borderRadius:999, overflow:'hidden' }}>
+          <div style={{ height:5, background: featured ? 'rgba(255,255,255,0.10)' : 'var(--sn-page)', borderRadius:999, overflow:'hidden' }}>
             <div style={{ height:'100%', width:`${sold}%`, borderRadius:999,
               background: sold >= 80
                 ? 'linear-gradient(90deg,#EF4444,#DC2626)'
@@ -231,25 +235,39 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
           </div>
         </div>
 
-        {/* CTA */}
-        <Link href={`/store/${deal.store_id}`}
-          style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7,
-            background: featured
-              ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
-              : 'linear-gradient(135deg,#F59E0B,#EF4444)',
-            color: featured ? '#0F172A' : '#fff',
-            borderRadius:999, padding:'12px 20px',
-            fontWeight:800, fontSize:14,
-            textDecoration:'none',
-            boxShadow: featured
-              ? '0 8px 24px rgba(29,78,216,0.35)'
-              : '0 4px 16px rgba(245,158,11,0.40)',
-            letterSpacing:'-0.01em',
-            transition:'all .2s' }}
-          onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform='scale(1.02)' }}
-          onMouseOut={e  => { (e.currentTarget as HTMLElement).style.transform='scale(1)' }}>
-          <Zap size={14} /> {t('flash.grabDeal')}
-        </Link>
+        {/* CTAs — Visit Shop + Order Now */}
+        <div style={{ display:'flex', gap:8 }}>
+          <Link href={`/store/${deal.store_id}`}
+            style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6,
+              flex: '0 0 auto',
+              background: 'var(--sn-page)',
+              border: '1.5px solid var(--sn-border)',
+              color: 'var(--sn-text)',
+              borderRadius:999, padding:'11px 16px',
+              fontWeight:700, fontSize:13,
+              textDecoration:'none', whiteSpace:'nowrap' }}>
+            <Store size={13} /> {t('flash.visitShop')}
+          </Link>
+          <Link href={deal.product_id ? `/store/${deal.store_id}?product=${deal.product_id}` : `/store/${deal.store_id}`}
+            style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7,
+              flex: 1,
+              background: featured
+                ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
+                : 'linear-gradient(135deg,#F59E0B,#EF4444)',
+              color: featured ? '#0F172A' : '#fff',
+              borderRadius:999, padding:'11px 16px',
+              fontWeight:800, fontSize:14,
+              textDecoration:'none',
+              boxShadow: featured
+                ? '0 8px 24px rgba(29,78,216,0.35)'
+                : '0 4px 16px rgba(245,158,11,0.40)',
+              letterSpacing:'-0.01em',
+              transition:'all .2s' }}
+            onMouseOver={e => { (e.currentTarget as HTMLElement).style.transform='scale(1.02)' }}
+            onMouseOut={e  => { (e.currentTarget as HTMLElement).style.transform='scale(1)' }}>
+            <Zap size={14} /> {t('flash.orderNow')}
+          </Link>
+        </div>
       </div>
     </article>
   )
@@ -299,7 +317,7 @@ export default function FlashDealsPage() {
         {loading && (
           <div style={{ textAlign:'center', padding:'6rem 0' }}>
             <div style={{ fontSize:40, marginBottom:14 }}>⚡</div>
-            <p style={{ color:'#92400E', fontSize:15, fontWeight:500 }}>{t('flash.loading')}</p>
+            <p style={{ color:'var(--sn-muted)', fontSize:15, fontWeight:500 }}>{t('flash.loading')}</p>
           </div>
         )}
 
@@ -333,7 +351,7 @@ export default function FlashDealsPage() {
               <div style={{ marginBottom:'2rem', }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
                   <Zap size={14} color="#F59E0B" style={{ }} />
-                  <span style={{ fontSize:12, fontWeight:800, color:'#92400E', textTransform:'uppercase' as const, letterSpacing:'0.09em' }}>
+                  <span style={{ fontSize:12, fontWeight:800, color:'var(--sn-muted)', textTransform:'uppercase' as const, letterSpacing:'0.09em' }}>
                     {t('flash.featuredDeal')}
                   </span>
                   <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(234,179,8,0.4),transparent)' }} />
@@ -364,7 +382,7 @@ export default function FlashDealsPage() {
                 {(endingSoon.length > 0 || featured) && (
                   <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
                     <TrendingUp size={13} color="#F59E0B" />
-                    <span style={{ fontSize:12, fontWeight:800, color:'#92400E', textTransform:'uppercase' as const, letterSpacing:'0.09em' }}>
+                    <span style={{ fontSize:12, fontWeight:800, color:'var(--sn-muted)', textTransform:'uppercase' as const, letterSpacing:'0.09em' }}>
                       {t('flash.allDeals')}
                     </span>
                     <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(234,179,8,0.4),transparent)' }} />

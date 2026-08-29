@@ -470,7 +470,9 @@
     "urgencyNew": "Tout juste ajouté !",
     "limitedTime": "Durée limitée",
     "hotDeal": "🔥 Offre chaude",
-    "newDeal": "✨ Nouveau"
+    "newDeal": "✨ Nouveau",
+    "orderNow": "Commander maintenant",
+    "verified": "Vérifié"
   },
   "store": {
     "back": "Marché",
