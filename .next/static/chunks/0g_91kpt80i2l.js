@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,23261,t=>{"use strict";var e=t.i(71645);t.s(["default",0,function(){return(0,e.useEffect)(()=>{window.location.replace("/dashboard/admin-panel.html")},[]),null}])}]);

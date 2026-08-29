@@ -5,40 +5,81 @@ node_modules/
 # Build outputs
 dist/
 build/
-.next/
-.nuxt/
-out/
+target/
 
-# TypeScript
-*.tsbuildinfo
-*.js.map
-*.ts.map
-
-# Environment variables
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+*.py.obj
+.Python
+env/
+venv/
+.venv/
 .env
 .env.local
 .env.*
 
-# IDE files
+# Logs
+*.log
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# Logs
-*.log
-
-# Temporary files
 *.tmp
+
+# OS
 .DS_Store
 Thumbs.db
 
-# Package manager
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Coverage
-coverage/
+# Testing
+.mypy_cache/
+.pytest_cache/
 .nyc_output/
+istanbul/
+coverage/
+
+# Compressed
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# Gradle
+.gradle/
+
+# Performance/Loading specific build artifacts
+lib/loading/build/
+lib/loading/dist/
+lib/navigation/build/
+lib/navigation/dist/
+lib/performance/build/
+lib/performance/dist/
 ```

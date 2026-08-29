@@ -1,0 +1,3 @@
+module.exports=[59835,a=>{"use strict";var b=a.i(2366),c=a.i(78134);a.s(["useTranslation",0,function(){let{lang:a}=(0,b.useLang)();return{t:(b,d)=>(0,c.getMsg)(a,b,d),lang:a}}])},31154,a=>{"use strict";var b=a.i(59835),c=a.i(72131);a.s(["default",0,function(){let{t:a}=(0,b.useTranslation)();return(0,c.useEffect)(()=>{window.location.replace("/dashboard/subscription.html")},[]),null}])}];
+
+//# sourceMappingURL=_0a1bn80._.js.map
