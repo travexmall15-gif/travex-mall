@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
 
 const sb = createClient(
   'https://bscecjbgnjitlfmgwcic.supabase.co',
@@ -54,6 +55,14 @@ Reply ONLY with JSON: {"score": NUMBER, "reasons": ["reason1","reason2"]}`
 }
 
 export async function POST(req: Request) {
+  // This endpoint has no authentication (see security audit — flagged as
+  // a remaining risk pending a real admin session system) and calls a
+  // paid Gemini API per request, so rate limiting here specifically
+  // guards against quota-exhaustion abuse, not just generic spam.
+  const { allowed, retryAfterSeconds } = rateLimit(`auto-approve:${getClientIp(req)}`, 10, 60)
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
+  }
   const { app_id, app_type } = await req.json()
 
   const table = app_type === 'campus' ? 'campus_applications' : 'pending_payments'

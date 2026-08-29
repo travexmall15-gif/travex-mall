@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
 
 const sb = createClient(
   'https://bscecjbgnjitlfmgwcic.supabase.co',
@@ -147,8 +148,26 @@ function coachTool(q:string,ctx:any){
 }
 
 export async function POST(req: Request) {
+  const { allowed, retryAfterSeconds } = rateLimit(`ai-tools:${getClientIp(req)}`, 30, 60)
+  if (!allowed) {
+    return NextResponse.json({ result: 'Too many requests. Please slow down.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
+  }
   try {
-  const { tool, store_id, ...params } = await req.json()
+  const { tool, store_id, login_password, ...params } = await req.json()
+
+  // Financial/business-data tools require proof of ownership (the shop's
+  // PIN) before reading that store's private sales/orders. Content-
+  // generation-only tools (description/price/social/whatsapp/expenses,
+  // the last of which only processes text the caller supplies inline,
+  // not stored data) don't read another shop's private records, so they
+  // don't need this gate.
+  const SENSITIVE_TOOLS = new Set(['report', 'tips', 'coach'])
+  if (SENSITIVE_TOOLS.has(tool) && store_id) {
+    const { data: authRow } = await sb.from('pending_payments').select('login_password').eq('id', store_id).maybeSingle()
+    if (!authRow || String(authRow.login_password || '') !== String(login_password || '')) {
+      return NextResponse.json({ result: 'Unauthorized.' }, { status: 403 })
+    }
+  }
 
   const [
     {data:storeRow},{data:bizProds},{data:campusProds},{data:sales},{data:orders},{data:vybes},

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -15,6 +16,14 @@ export async function POST(req: NextRequest) {
     }
     if (!login_password) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // The PIN is only 4 digits (10,000 possibilities) — rate limit PIN
+    // attempts per shop_id to blunt brute-forcing (Part 37), on top of
+    // the ownership check itself.
+    const { allowed, retryAfterSeconds } = rateLimit(`dashboard-stats:${shop_id}:${getClientIp(req)}`, 10, 300)
+    if (!allowed) {
+      return NextResponse.json({ error: 'Too many attempts. Please wait before retrying.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
     }
 
     const sb = createClient(SB_URL, SB_KEY)

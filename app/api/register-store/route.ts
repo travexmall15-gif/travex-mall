@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -7,6 +8,13 @@ const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
   || 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
 export async function POST(req: NextRequest) {
+  // 5 applications / 10 min per IP — generous for a genuine applicant
+  // (who might retry after fixing a validation error), tight enough to
+  // stop scripted bulk-signup abuse (Part 37).
+  const { allowed, retryAfterSeconds } = rateLimit(`register-store:${getClientIp(req)}`, 5, 600)
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many applications submitted. Please try again later.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
+  }
   try {
     const body = await req.json()
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
 
 const sb = createClient(
   'https://bscecjbgnjitlfmgwcic.supabase.co',
@@ -58,6 +59,12 @@ const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
 //  Main handler 
 export async function POST(req: Request) {
+  // Rate limit: 20 messages / 60s per IP — generous for real conversation,
+  // tight enough to blunt scripted abuse (Part 37).
+  const { allowed, retryAfterSeconds } = rateLimit(`ai-chat:${getClientIp(req)}`, 20, 60)
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests. Please slow down.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
+  }
   try {
   const { store_id, message, session_id, history, conv_state } = await req.json()
   const state: ConvState = conv_state || {}
