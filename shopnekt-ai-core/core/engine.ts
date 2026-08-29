@@ -16,6 +16,14 @@ import type {
   ExtractedEntity,
   EvaluationTestCase,
   EvaluationReport,
+  LanguageEngine,
+  IntentEngine,
+  EntityEngine,
+  ContextEngine,
+  MemoryEngine,
+  KnowledgeEngine,
+  ReasoningEngine,
+  ResponseEngine,
 } from './ai-types.js'
 
 import { LanguageEngineImpl } from './language-engine.js'
@@ -26,17 +34,6 @@ import { KnowledgeEngineImpl } from './knowledge-engine.js'
 import { MemoryEngineImpl } from './memory-engine.js'
 import { ReasoningEngineImpl } from './reasoning-engine.js'
 import { ResponseEngineImpl } from './response-engine.js'
-
-import type {
-  LanguageEngine,
-  IntentEngine,
-  EntityEngine,
-  ContextEngine,
-  MemoryEngine,
-  KnowledgeEngine,
-  ReasoningEngine,
-  ResponseEngine,
-} from './ai-types.js'
 
 export class ShopNektAIEngineImpl implements ShopNektAIEngine {
   private config: AIEngineConfig | null = null
@@ -435,7 +432,7 @@ export class ShopNektAIEngineImpl implements ShopNektAIEngine {
   }
 
   private log(level: AIEngineConfig['logLevel'], message: string, data?: Record<string, unknown>): void {
-    if (!this.config) return
+    if (!this.config) {return}
 
     const logLevels: Record<string, number> = { debug: 0, info: 1, warn: 2, error: 3 }
     const currentLevel = logLevels[this.config.logLevel]

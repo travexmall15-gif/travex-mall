@@ -166,12 +166,10 @@ export class LanguageEngineImpl implements LanguageEngine {
 
     // Find highest score
     let maxScore = 0
-    let detectedLang: SupportedLanguage = 'en'
 
     for (const lang of SUPPORTED_LANGUAGES) {
       if (scores[lang] > maxScore) {
         maxScore = scores[lang]
-        detectedLang = lang
       }
     }
 
@@ -181,9 +179,9 @@ export class LanguageEngineImpl implements LanguageEngine {
     }
 
     // If another language has strong signal, use it
-    if (frScore >= 3) return 'fr'
-    if (deScore >= 3) return 'de'
-    if (ptScore >= 3) return 'pt'
+    if (frScore >= 3) {return 'fr'}
+    if (deScore >= 3) {return 'de'}
+    if (ptScore >= 3) {return 'pt'}
 
     // Default to English or detected Swahili
     return swScore >= 1 ? 'sw' : 'en'

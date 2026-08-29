@@ -74,7 +74,7 @@ export class ResponseEngineImpl implements ResponseEngine {
     const intentTemplates = templateSet[intent] || templateSet['GENERAL_SHOPNEKT_HELP']
 
     let message = ''
-    let actions: AIAction[] = []
+    const actions: AIAction[] = []
     let confidence = 0.7
 
     // Generate message based on intent

@@ -111,7 +111,7 @@ export class MemoryEngineImpl implements MemoryEngine {
     memory.expiresAt = now + RETENTION_PERIODS[memory.classification]
 
     // Get or create user's memory array
-    let userMemories = this.memories.get(memory.userId) || []
+    const userMemories = this.memories.get(memory.userId) || []
 
     // Check for existing memory in same category
     const existingIndex = userMemories.findIndex(m => m.category === memory.category)
@@ -248,7 +248,7 @@ export class MemoryEngineImpl implements MemoryEngine {
   /**
    * Classify memory based on content (helper for determining storage type)
    */
-  classifyMemory(data: Record<string, unknown>, category: string): MemoryClassification {
+  classifyMemory(_data: Record<string, unknown>, category: string): MemoryClassification {
     // Explicit preferences should be long-term
     if (category.includes('preferred') || category.includes('favorite')) {
       return 'PREFERENCE'

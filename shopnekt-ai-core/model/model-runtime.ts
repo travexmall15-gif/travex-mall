@@ -49,7 +49,7 @@ export abstract class BaseModelRuntime implements ModelRuntime {
    * Generate embeddings for text
    * Can return null if not supported
    */
-  async embed(request: ModelEmbedRequest): Promise<ModelEmbedResponse> {
+  async embed(_request: ModelEmbedRequest): Promise<ModelEmbedResponse> {
     throw new Error('Embeddings not supported by this runtime')
   }
 

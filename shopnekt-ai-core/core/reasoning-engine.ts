@@ -190,7 +190,7 @@ export class ReasoningEngineImpl implements ReasoningEngine {
   // Private methods
   // ───────────────────────────────────────────────────────────
 
-  private containsPrivacyViolation(input: AIRequest, context: ConversationContext): boolean {
+  private containsPrivacyViolation(_input: AIRequest, _context: ConversationContext): boolean {
     // Check if request attempts to access other users' data
     const suspiciousPatterns = [
       /other\s+users?/i,
@@ -202,7 +202,7 @@ export class ReasoningEngineImpl implements ReasoningEngine {
     ]
 
     for (const pattern of suspiciousPatterns) {
-      if (pattern.test(input.message)) {
+      if (pattern.test(_input.message)) {
         return true
       }
     }
@@ -210,7 +210,7 @@ export class ReasoningEngineImpl implements ReasoningEngine {
     return false
   }
 
-  private containsUnauthorizedAccess(input: AIRequest, context: ConversationContext): boolean {
+  private containsUnauthorizedAccess(_input: AIRequest, _context: ConversationContext): boolean {
     // Check for attempts to bypass authentication
     const bypassPatterns = [
       /skip\s+auth/i,
@@ -221,7 +221,7 @@ export class ReasoningEngineImpl implements ReasoningEngine {
     ]
 
     for (const pattern of bypassPatterns) {
-      if (pattern.test(input.message)) {
+      if (pattern.test(_input.message)) {
         return true
       }
     }
@@ -229,7 +229,7 @@ export class ReasoningEngineImpl implements ReasoningEngine {
     return false
   }
 
-  private hasHallucinationRisk(input: AIRequest): boolean {
+  private hasHallucinationRisk(_input: AIRequest): boolean {
     // Check for queries that might tempt the AI to invent information
     const riskPatterns = [
       /what\s+is\s+the\s+(exact|precise)\s+price/i,
@@ -239,7 +239,7 @@ export class ReasoningEngineImpl implements ReasoningEngine {
     ]
 
     for (const pattern of riskPatterns) {
-      if (pattern.test(input.message)) {
+      if (pattern.test(_input.message)) {
         return true
       }
     }

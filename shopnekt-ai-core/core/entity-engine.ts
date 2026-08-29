@@ -133,7 +133,7 @@ export class EntityEngineImpl implements EntityEngine {
   /**
    * Extract entities from text
    */
-  extractEntities(text: string, intent?: IntentId): ExtractedEntity[] {
+  extractEntities(text: string, _intent?: IntentId): ExtractedEntity[] {
     const entities: ExtractedEntity[] = []
     const lowerText = text.toLowerCase()
 
@@ -146,7 +146,7 @@ export class EntityEngineImpl implements EntityEngine {
     entities.push(...locationEntities)
 
     // Extract product/category entities
-    const productEntities = this.extractProductRelated(lowerText, intent)
+    const productEntities = this.extractProductRelated(lowerText)
     entities.push(...productEntities)
 
     // Extract brand entities
@@ -281,7 +281,7 @@ export class EntityEngineImpl implements EntityEngine {
     return entities
   }
 
-  private extractProductRelated(text: string, intent?: IntentId): ExtractedEntity[] {
+  private extractProductRelated(text: string): ExtractedEntity[] {
     const entities: ExtractedEntity[] = []
 
     // Common product keywords
