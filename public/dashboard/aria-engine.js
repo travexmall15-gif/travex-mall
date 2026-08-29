@@ -33,45 +33,45 @@ const ARIA = (() => {
   function detectIntent(msg) {
     const m = msg.toLowerCase()
     // COMMANDS
-    if (/(ongeza|add|weka|ingiza).*(bidhaa|product)/i.test(m)) return 'ADD_PRODUCT'
-    if (/(flash.deal|deal ya muda|discount deal)/i.test(m)) return 'CREATE_FLASH_DEAL'
-    if (/(group.buy|group deal|nunua pamoja)/i.test(m)) return 'CREATE_GROUP_BUY'
-    if (/(post.*vybe|vybe.*post|post.*social|chapisha)/i.test(m)) return 'CREATE_POST'
-    if (/(futa|delete|ondoa).*(bidhaa|product)/i.test(m)) return 'DELETE_PRODUCT'
-    if (/(hariri|edit|update|badilisha).*(bidhaa|product)/i.test(m)) return 'EDIT_PRODUCT'
+    if (/(ongeza|add|weka|ingiza).*(bidhaa|product)/i.test(m)) {return 'ADD_PRODUCT'}
+    if (/(flash.deal|deal ya muda|discount deal)/i.test(m)) {return 'CREATE_FLASH_DEAL'}
+    if (/(group.buy|group deal|nunua pamoja)/i.test(m)) {return 'CREATE_GROUP_BUY'}
+    if (/(post.*vybe|vybe.*post|post.*social|chapisha)/i.test(m)) {return 'CREATE_POST'}
+    if (/(futa|delete|ondoa).*(bidhaa|product)/i.test(m)) {return 'DELETE_PRODUCT'}
+    if (/(hariri|edit|update|badilisha).*(bidhaa|product)/i.test(m)) {return 'EDIT_PRODUCT'}
     // QUERIES
-    if (/(orders|amri|maombi).*(leo|today|wiki|week)/i.test(m)) return 'SHOW_ORDERS'
-    if (/(revenue|mauzo|mapato).*(wiki|leo|mwezi|month)/i.test(m)) return 'SHOW_REVENUE'
-    if (/(stock|bidhaa|inventory).*(chini|low|inakwisha)/i.test(m)) return 'CHECK_STOCK'
-    if (/(customers|wateja|wanunuzi)/i.test(m)) return 'SHOW_CUSTOMERS'
-    if (/(profit|faida|net)/i.test(m)) return 'SHOW_PROFIT'
-    if (/(report|ripoti|muhtasari)/i.test(m)) return 'GENERATE_REPORT'
+    if (/(orders|amri|maombi).*(leo|today|wiki|week)/i.test(m)) {return 'SHOW_ORDERS'}
+    if (/(revenue|mauzo|mapato).*(wiki|leo|mwezi|month)/i.test(m)) {return 'SHOW_REVENUE'}
+    if (/(stock|bidhaa|inventory).*(chini|low|inakwisha)/i.test(m)) {return 'CHECK_STOCK'}
+    if (/(customers|wateja|wanunuzi)/i.test(m)) {return 'SHOW_CUSTOMERS'}
+    if (/(profit|faida|net)/i.test(m)) {return 'SHOW_PROFIT'}
+    if (/(report|ripoti|muhtasari)/i.test(m)) {return 'GENERATE_REPORT'}
     // MARKETING
-    if (/(post.*instagram|instagram.*post)/i.test(m)) return 'GEN_INSTAGRAM'
-    if (/(post.*whatsapp|whatsapp.*post|status)/i.test(m)) return 'GEN_WHATSAPP'
-    if (/(post.*facebook|facebook.*post)/i.test(m)) return 'GEN_FACEBOOK'
-    if (/(marketing|tangazo|advertis)/i.test(m)) return 'MARKETING_IDEAS'
-    if (/(message.*customers|tuma.*message|broadcast)/i.test(m)) return 'BROADCAST_MSG'
+    if (/(post.*instagram|instagram.*post)/i.test(m)) {return 'GEN_INSTAGRAM'}
+    if (/(post.*whatsapp|whatsapp.*post|status)/i.test(m)) {return 'GEN_WHATSAPP'}
+    if (/(post.*facebook|facebook.*post)/i.test(m)) {return 'GEN_FACEBOOK'}
+    if (/(marketing|tangazo|advertis)/i.test(m)) {return 'MARKETING_IDEAS'}
+    if (/(message.*customers|tuma.*message|broadcast)/i.test(m)) {return 'BROADCAST_MSG'}
     // FINANCE
-    if (/(projection|forecast|utabiri|mwakani|month.ijayo)/i.test(m)) return 'REVENUE_FORECAST'
-    if (/(break.?even|faida.?kuanza|profit.?point)/i.test(m)) return 'BREAKEVEN'
-    if (/(cash.?flow|pesa.?inayoingia)/i.test(m)) return 'CASH_FLOW'
-    if (/(tax|tra|kodi|vat)/i.test(m)) return 'TAX_ESTIMATE'
-    if (/(expense.*kubwa|gharama.*nyingi|costly)/i.test(m)) return 'TOP_EXPENSES'
+    if (/(projection|forecast|utabiri|mwakani|month.ijayo)/i.test(m)) {return 'REVENUE_FORECAST'}
+    if (/(break.?even|faida.?kuanza|profit.?point)/i.test(m)) {return 'BREAKEVEN'}
+    if (/(cash.?flow|pesa.?inayoingia)/i.test(m)) {return 'CASH_FLOW'}
+    if (/(tax|tra|kodi|vat)/i.test(m)) {return 'TAX_ESTIMATE'}
+    if (/(expense.*kubwa|gharama.*nyingi|costly)/i.test(m)) {return 'TOP_EXPENSES'}
     // ADVICE
-    if (/(briefing|hali|status|vipi|leo)/i.test(m)) return 'DAILY_BRIEFING'
-    if (/(tips|advice|ushauri|nasaha|improve|boresha)/i.test(m)) return 'SMART_TIPS'
-    if (/(risk|hatari|tatizo|problem)/i.test(m)) return 'RISK_ANALYSIS'
-    if (/(washindani|competition|market)/i.test(m)) return 'MARKET_INTEL'
+    if (/(briefing|hali|status|vipi|leo)/i.test(m)) {return 'DAILY_BRIEFING'}
+    if (/(tips|advice|ushauri|nasaha|improve|boresha)/i.test(m)) {return 'SMART_TIPS'}
+    if (/(risk|hatari|tatizo|problem)/i.test(m)) {return 'RISK_ANALYSIS'}
+    if (/(washindani|competition|market)/i.test(m)) {return 'MARKET_INTEL'}
     // GREETINGS
-    if (/(hi|hello|habari|hujambo|salam|hebu|nipe)/i.test(m)) return 'GREETING'
+    if (/(hi|hello|habari|hujambo|salam|hebu|nipe)/i.test(m)) {return 'GREETING'}
     return 'GENERAL_HELP'
   }
 
   // ── Data fetchers ────────────────────────────────────────────
   async function fetchStore() {
     const id = getStoreId()
-    if (!id) return null
+    if (!id) {return null}
     const [store] = await sb('pending_payments', 'GET', null, `?id=eq.${id}`)
     return store
   }
@@ -125,7 +125,7 @@ const ARIA = (() => {
     expiry.setHours(expiry.getHours() + (Number(hours)||24))
     const products = await fetchProducts()
     const product = products.find(p => p.name?.toLowerCase().includes(productName?.toLowerCase()))
-    if (!product) return ` Sikupata bidhaa "${productName}". Tafadhali angalia jina na ujaribu tena.`
+    if (!product) {return ` Sikupata bidhaa "${productName}". Tafadhali angalia jina na ujaribu tena.`}
     const dealPrice = product.price * (1 - Number(discount)/100)
     await sb('flash_deals', 'POST', {
       store_id: id, product_id: product.id,
@@ -141,7 +141,7 @@ const ARIA = (() => {
     const id = getStoreId()
     const products = await fetchProducts()
     const product = products.find(p => p.name?.toLowerCase().includes(productName?.toLowerCase()))
-    if (!product) return ` Sikupata bidhaa "${productName}".`
+    if (!product) {return ` Sikupata bidhaa "${productName}".`}
     const dealPrice = product.price * (1 - Number(discount)/100)
     await sb('group_orders', 'POST', {
       store_id: id, product_name: product.name,
@@ -187,7 +187,7 @@ const ARIA = (() => {
 
       case 'SHOW_ORDERS':
         const recentOrders = orders.slice(0,5)
-        if (!recentOrders.length) return `Hakuna orders bado. Tengeneza Flash Deal au post kwenye Social Vybe kuvutia wateja!`
+        if (!recentOrders.length) {return `Hakuna orders bado. Tengeneza Flash Deal au post kwenye Social Vybe kuvutia wateja!`}
         return ` ORDERS (${orders.length} total):\n\n${recentOrders.map((o,i)=>
           `${i+1}. ${o.customer_name||'Customer'} — ${fmt(o.total_amount)} [${(o.status||'pending').toUpperCase()}]`
         ).join('\n')}\n\n${orders.length > 5 ? `Na orders ${orders.length-5} zaidi. Nenda Orders page kuona zote.` : ''}`
@@ -197,7 +197,7 @@ const ARIA = (() => {
         return ` REVENUE SUMMARY:\n\n• Wiki hii: ${fmt(weekly)}\n• Mwezi huu: ${fmt(revenue)}\n• Expenses: ${fmt(expenses)}\n• Profit: ${fmt(profit)}\n• Margin: ${revenue>0?Math.round(profit/revenue*100):0}%\n\n${profit > 0 ? ` Biashara ina faida ya ${Math.round(profit/revenue*100)}%` : '⚠️ Bado hujafika faida. Punguza gharama au ongeza mauzo.'}`
 
       case 'CHECK_STOCK':
-        if (!lowStock.length) return ` Stock iko sawa! Bidhaa zote zina akiba ya kutosha.\n\n${products.slice(0,5).map(p=>`• ${p.name}: ${p.stock} zimebaki`).join('\n')}`
+        if (!lowStock.length) {return ` Stock iko sawa! Bidhaa zote zina akiba ya kutosha.\n\n${products.slice(0,5).map(p=>`• ${p.name}: ${p.stock} zimebaki`).join('\n')}`}
         return `⚠️ BIDHAA ZINAZOKWISHA:\n\n${lowStock.map(p=>`• ${p.name}: ${p.stock} tu zimebaki!`).join('\n')}\n\nNakushauri uorder upya stock haraka kabla ya kukosa wateja.`
 
       case 'SHOW_PROFIT':
@@ -252,21 +252,21 @@ const ARIA = (() => {
 
       case 'RISK_ANALYSIS':
         const risks = []
-        if (lowStock.length > 2) risks.push(`⚠️ Stock chini: Bidhaa ${lowStock.length} zinakwisha`)
-        if (orders.length === 0) risks.push('⚠️ Hakuna orders: Biashara haina mauzo')
-        if (profit < 0) risks.push('⚠️ Upotevu: Expenses zinazidi revenue')
-        if (products.length < 3) risks.push('⚠️ Products chache: Ongeza bidhaa kuvutia wateja')
-        if (!risks.length) return ` RISK ASSESSMENT:\n\nHakuna hatari kubwa zilizoonekana!\nBiashara yako iko salama kwa sasa.\n\nEndelea:\n• Angalia stock kila wiki\n• Post kwenye Vybe kila siku\n• Track expenses kila transaction`
+        if (lowStock.length > 2) {risks.push(`⚠️ Stock chini: Bidhaa ${lowStock.length} zinakwisha`)}
+        if (orders.length === 0) {risks.push('⚠️ Hakuna orders: Biashara haina mauzo')}
+        if (profit < 0) {risks.push('⚠️ Upotevu: Expenses zinazidi revenue')}
+        if (products.length < 3) {risks.push('⚠️ Products chache: Ongeza bidhaa kuvutia wateja')}
+        if (!risks.length) {return ` RISK ASSESSMENT:\n\nHakuna hatari kubwa zilizoonekana!\nBiashara yako iko salama kwa sasa.\n\nEndelea:\n• Angalia stock kila wiki\n• Post kwenye Vybe kila siku\n• Track expenses kila transaction`}
         return ` RISK ASSESSMENT:\n\n${risks.join('\n')}\n\nSOLUTIONS:\n${risks.map(r => r.includes('Stock') ? '• Order stock upya haraka' : r.includes('orders') ? '• Tengeneza Flash Deal leo' : r.includes('Upotevu') ? '• Reduce expenses, panda bei' : '• Ongeza bidhaa 5+ wiki hii').join('\n')}`
 
       case 'SMART_TIPS':
         const tips = []
-        if (products.length < 5) tips.push(' Ongeza bidhaa zaidi — shops zenye 10+ bidhaa zinapata 3x views zaidi')
-        if (orders.length === 0) tips.push('⚡ Tengeneza Flash Deal leo — inakuvutia order ya kwanza haraka')
-        if (lowStock.length) tips.push(` Restock: ${lowStock.map(p=>p.name).join(', ')}`)
+        if (products.length < 5) {tips.push(' Ongeza bidhaa zaidi — shops zenye 10+ bidhaa zinapata 3x views zaidi')}
+        if (orders.length === 0) {tips.push('⚡ Tengeneza Flash Deal leo — inakuvutia order ya kwanza haraka')}
+        if (lowStock.length) {tips.push(` Restock: ${lowStock.map(p=>p.name).join(', ')}`)}
         tips.push(' Piga picha nzuri — bidhaa zenye picha nzuri zinauzwa 3x haraka')
         tips.push(' Jibu messages haraka — response < 1hr inakupa 5-star reviews')
-        if (profit > 0) tips.push(' Upgrade to Premium — Premium sellers wanaonekana juu zaidi kwenye listings')
+        if (profit > 0) {tips.push(' Upgrade to Premium — Premium sellers wanaonekana juu zaidi kwenye listings')}
         return ` SMART TIPS KWA ${(shopName||'').toUpperCase()}:\n\n${tips.slice(0,5).map((t,i)=>`${i+1}. ${t}`).join('\n\n')}`
 
       case 'MARKET_INTEL':
@@ -337,7 +337,7 @@ const ARIA = (() => {
     async chat(msg, history=[]) {
       const intent = detectIntent(msg)
       const storeId = getStoreId()
-      if (!storeId) return { reply: 'Tafadhali ingia kwanza (Login) ili Aria akusaidie.', intent }
+      if (!storeId) {return { reply: 'Tafadhali ingia kwanza (Login) ili Aria akusaidie.', intent }}
 
       const [store, products, orders, sales] = await Promise.all([
         fetchStore(), fetchProducts(), fetchOrders(), fetchSales()
@@ -345,7 +345,7 @@ const ARIA = (() => {
 
       // Try command execution first
       const commandResult = await executeCommand(intent, msg, store, products)
-      if (commandResult) return { reply: commandResult, intent, action: intent }
+      if (commandResult) {return { reply: commandResult, intent, action: intent }}
 
       // Otherwise generate response
       const reply = await generateResponse(intent, msg, store, products, orders, sales)

@@ -14,7 +14,7 @@ export default function OrdersScreen() {
 
   const load = async () => {
     const raw = await AsyncStorage.getItem('seller_session')
-    if (!raw) return
+    if (!raw) {return}
     const {id} = JSON.parse(raw); setShopId(id)
     const {data} = await sb.from('orders').select('*').eq('shop_id',id).order('created_at',{ascending:false})
     setOrders(data||[])
@@ -25,7 +25,7 @@ export default function OrdersScreen() {
   const filtered = filter==='All' ? orders : orders.filter(o=>o.status===filter.toLowerCase())
 
   const confirm = async () => {
-    if (!sel) return
+    if (!sel) {return}
     await sb.from('orders').update({status:'confirmed'}).eq('id',sel.id)
     await load(); setSel(null)
   }

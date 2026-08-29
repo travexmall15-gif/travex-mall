@@ -73,12 +73,12 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  GREET 
   if (intent === 'greet') {
-    if (mode === 'store') return sw
+    if (mode === 'store') {return sw
       ? ` Karibu duka la **${shopName}**!\n\nMimi ni 360 AI, msaidizi wako. Ninaweza kukusaidia na:\n•  Bidhaa na bei\n•  Delivery\n•  Malipo\n•  Maswali yoyote\n\nUnahitaji nini?`
-      : ` Welcome to **${shopName}**!\n\nI'm 360 AI, your shopping assistant. I can help with:\n•  Products & prices\n•  Delivery info\n•  Payment options\n•  Any questions\n\nHow can I help you?`
-    if (mode === 'seller') return sw
+      : ` Welcome to **${shopName}**!\n\nI'm 360 AI, your shopping assistant. I can help with:\n•  Products & prices\n•  Delivery info\n•  Payment options\n•  Any questions\n\nHow can I help you?`}
+    if (mode === 'seller') {return sw
       ? ` Habari! Mimi ni **360 AI** — msaidizi wako wa biashara.\n\nNinaweza kukusaidia na:\n•  Bidhaa na inventory\n•  Mauzo na mapato\n•  Masoko\n•  Wateja\n\nUnajua nini leo?`
-      : ` Hello! I'm **360 AI** — your business assistant.\n\nI can help with:\n•  Products & inventory\n•  Sales & revenue\n•  Marketing\n•  Customer issues\n\nWhat do you need today?`
+      : ` Hello! I'm **360 AI** — your business assistant.\n\nI can help with:\n•  Products & inventory\n•  Sales & revenue\n•  Marketing\n•  Customer issues\n\nWhat do you need today?`}
     return sw
       ? ` Habari! Mimi ni **360 AI** — msaidizi wako wa ShopNekt.\n\nNinaweza kukusaidia na:\n•  Bidhaa na maduka\n•  Flash Deals\n•  Orders zako\n•  Kufungua duka\n\nNiulize chochote! `
       : ` Hello! I'm **360 AI** — your ShopNekt assistant.\n\nI can help with:\n•  Products & stores\n•  Flash Deals\n•  Your orders\n•  Opening a shop\n\nAsk me anything! `
@@ -107,7 +107,7 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
       if (data?.length) {
         const list = data.map(p => {
           let r = `• ${p.name}: **${fmt(p.price)}**`
-          if (p.original_price > p.price) r += ` ~~${fmt(p.original_price)}~~`
+          if (p.original_price > p.price) {r += ` ~~${fmt(p.original_price)}~~`}
           return r
         }).join('\n')
         return sw ? ` **Bei za ${shopName}:**\n\n${list}\n\n Tuma ujumbe kwa bei maalum!`
@@ -156,15 +156,15 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  MY ORDERS 
   if (intent === 'my_orders') {
-    if (!userId) return sw ? ` Ingia kwanza kuona orders zako.\n /auth`
-                           : ` Please sign in first to view your orders.\n /auth`
+    if (!userId) {return sw ? ` Ingia kwanza kuona orders zako.\n /auth`
+                           : ` Please sign in first to view your orders.\n /auth`}
     const { data } = await sb.from('orders').select('product_name,status,total_amount,store_name,created_at').eq('buyer_id',userId).order('created_at',{ascending:false}).limit(6)
     if (data?.length) {
       const e = (s:string) => s==='confirmed'?'':s==='rejected'?'':s==='delivered'?'':'⏳'
       const list = data.map(o => `${e(o.status)} **${o.product_name}**\n   ${fmt(o.total_amount)} · ${o.store_name} · ${dt(o.created_at)}`).join('\n\n')
       const rej = data.filter(o=>o.status==='rejected').length
       let r = sw ? ` **Orders Zako:**\n\n${list}` : ` **Your Orders:**\n\n${list}`
-      if (rej) r += sw ? `\n\n ${rej} order imekataliwa — nenda /orders kufanya malipo.` : `\n\n ${rej} order(s) rejected — go to /orders to complete payment.`
+      if (rej) {r += sw ? `\n\n ${rej} order imekataliwa — nenda /orders kufanya malipo.` : `\n\n ${rej} order(s) rejected — go to /orders to complete payment.`}
       return r
     }
     return sw ? ` Huna orders bado.\n\n Anza kununua:\n• /market — Business Market\n• /flash-deals — Flash Deals\n• /group-buy — Group Buy`
@@ -173,9 +173,9 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  DELIVERY 
   if (intent === 'delivery') {
-    if (mode === 'store') return sw
+    if (mode === 'store') {return sw
       ? ` **Delivery kutoka ${shopName}:**\n\n Delivery inapatikana — bei na muda inategemea eneo lako.\n\n**Hatua:**\n1. Wasiliana na seller\n2. Toa anwani yako\n3. Kubali bei ya delivery\n\n Bonyeza "Message Seller" `
-      : ` **Delivery from ${shopName}:**\n\n Delivery available — price and time depend on your location.\n\n**Steps:**\n1. Contact the seller\n2. Share your address\n3. Agree on delivery fee\n\n Click "Message Seller" `
+      : ` **Delivery from ${shopName}:**\n\n Delivery available — price and time depend on your location.\n\n**Steps:**\n1. Contact the seller\n2. Share your address\n3. Agree on delivery fee\n\n Click "Message Seller" `}
     return sw
       ? ` **Delivery kwenye ShopNekt:**\n\n **ShopNekt Move** — delivery ya haraka\n• Tracking ya wakati halisi\n• Salama na ya kuaminika\n• Nenda /move kujua bei\n\n **Seller delivery** — seller anapanga mwenyewe\n **Cash on Delivery** — lipa ukipokea\n\n Wasiliana na seller kwa maelezo!`
       : ` **Delivery on ShopNekt:**\n\n **ShopNekt Move** — fast delivery\n• Real-time tracking\n• Safe & reliable\n• Check /move for rates\n\n **Seller delivery** — arranged directly\n **Cash on Delivery** — pay on receipt\n\n Contact seller for details!`
@@ -190,9 +190,9 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  CONTACT 
   if (intent === 'contact') {
-    if (mode === 'store') return sw
+    if (mode === 'store') {return sw
       ? ` **Kuwasiliana na ${shopName}:**\n\n Bonyeza **"Message Seller"** juu ya ukurasa huu.\n\nSeller atajibu haraka! `
-      : ` **Contact ${shopName}:**\n\n Click **"Message Seller"** at the top of this page.\n\nThe seller will respond quickly! `
+      : ` **Contact ${shopName}:**\n\n Click **"Message Seller"** at the top of this page.\n\nThe seller will respond quickly! `}
     return sw
       ? ` **Kuwasiliana na Seller:**\n\n1. Tembelea duka la seller\n2. Bonyeza "Message Seller"\n3. Andika ujumbe\n\n Inbox yako: /messages`
       : ` **Contacting a Seller:**\n\n1. Visit the seller's store\n2. Click "Message Seller"\n3. Send your message\n\n Your inbox: /messages`
@@ -335,7 +335,7 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
       if (aiRes.ok) {
         const aiData = await aiRes.json()
         const text = aiData.content?.[0]?.text
-        if (text) return text
+        if (text) {return text}
       }
     }
   } catch {}

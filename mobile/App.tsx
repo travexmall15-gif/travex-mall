@@ -32,7 +32,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (Platform.OS !== 'android') return
+    if (Platform.OS !== 'android') {return}
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
       if (canBack && webRef.current) {
         webRef.current.goBack()
@@ -58,7 +58,7 @@ export default function App() {
           onPress={() => {
             setError(false)
             setReady(false)
-            if (webRef.current) webRef.current.reload()
+            if (webRef.current) {webRef.current.reload()}
           }}
         >
           <Text style={styles.btnText}>Try Again</Text>

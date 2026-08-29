@@ -1,0 +1,21 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /settings/
+Disallow: /orders/
+Disallow: /messages/
+Disallow: /auth/
+Disallow: /dashboard/
+
+User-Agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+User-Agent: Googlebot-Image
+Allow: /
+
+Host: https://shopnekt.vercel.app
+Sitemap: https://shopnekt.vercel.app/sitemap.xml

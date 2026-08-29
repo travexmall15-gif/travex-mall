@@ -15,7 +15,7 @@ export default function ProductsScreen() {
 
   const load = useCallback(async () => {
     const raw = await AsyncStorage.getItem('seller_session')
-    if (!raw) return
+    if (!raw) {return}
     const { id } = JSON.parse(raw)
     setShopId(id)
     const { data } = await sb.from('products').select('*').eq('shop_id', id).order('created_at', { ascending: false })
@@ -42,7 +42,7 @@ export default function ProductsScreen() {
   const del = () => Alert.alert('Delete Product', 'Are you sure?', [
     { text: 'Cancel' },
     { text: 'Delete', style: 'destructive', onPress: async () => {
-      if (editing) await sb.from('products').delete().eq('id', editing.id)
+      if (editing) {await sb.from('products').delete().eq('id', editing.id)}
       setModal(false); await load()
     }}
   ])

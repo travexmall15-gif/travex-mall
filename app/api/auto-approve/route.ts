@@ -9,7 +9,7 @@ const sb = createClient(
 const GEMINI_KEY = process.env.GEMINI_API_KEY || ''
 
 async function scoreApplication(app: any) {
-  if (!GEMINI_KEY) return { score: 50, decision: 'flagged', reasons: ['No AI key'] }
+  if (!GEMINI_KEY) {return { score: 50, decision: 'flagged', reasons: ['No AI key'] }}
 
   const prompt = `You are reviewing a ShopNekt marketplace application.
 Evaluate this seller application and give a score 0-100.
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
 
   const table = app_type === 'campus' ? 'campus_applications' : 'pending_payments'
   const { data: app } = await sb.from(table).select('*').eq('id', app_id).single()
-  if (!app) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!app) {return NextResponse.json({ error: 'Not found' }, { status: 404 })}
 
   const { score, decision, reasons } = await scoreApplication(app)
 

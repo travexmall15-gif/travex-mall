@@ -44,7 +44,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         .select('*')
         .eq('id', id)
         .single()
-      if (convo) setStoreName(convo.store_name || 'Shop')
+      if (convo) {setStoreName(convo.store_name || 'Shop')}
 
       // Load messages
       const { data } = await sb
@@ -78,7 +78,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   }, [id, router])
 
   const send = async () => {
-    if (!text.trim() || sending) return
+    if (!text.trim() || sending) {return}
     // Allow sending even without Supabase auth (custom auth users)
     const content = text.trim()
     setText('')

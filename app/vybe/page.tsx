@@ -46,7 +46,7 @@ function getLikes(p: FeedPost) {
   return p.likes_count ?? p.likes ?? 0
 }
 function isVideo(p: FeedPost) {
-  if (p.media_type?.includes('video')) return true
+  if (p.media_type?.includes('video')) {return true}
   const u = (p.media_url || '').toLowerCase()
   return u.includes('.mp4') || u.includes('.mov') || u.includes('.webm') || u.includes('video')
 }
@@ -67,10 +67,10 @@ export default function VybePage() {
   const ago = useCallback((d: string) => {
     const diff = Date.now() - new Date(d).getTime()
     const m = Math.floor(diff / 60000)
-    if (m < 1)  return t('vybe.justNow')
-    if (m < 60) return t('vybe.minAgo', { n: String(m) })
+    if (m < 1)  {return t('vybe.justNow')}
+    if (m < 60) {return t('vybe.minAgo', { n: String(m) })}
     const h = Math.floor(m / 60)
-    if (h < 24) return t('vybe.hrAgo', { n: String(h) })
+    if (h < 24) {return t('vybe.hrAgo', { n: String(h) })}
     return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
   }, [t])
 
@@ -82,7 +82,7 @@ export default function VybePage() {
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100)
-      if (err) throw err
+      if (err) {throw err}
       setPosts(data || [])
     } catch {
       setError(t('vybe.couldNotLoad'))
@@ -118,8 +118,8 @@ export default function VybePage() {
 
   const filtered = useMemo(() => {
     let list = posts
-    if (filter === 'photo') list = list.filter(p => p.media_url && !isVideo(p))
-    if (filter === 'video') list = list.filter(p => p.media_url &&  isVideo(p))
+    if (filter === 'photo') {list = list.filter(p => p.media_url && !isVideo(p))}
+    if (filter === 'video') {list = list.filter(p => p.media_url &&  isVideo(p))}
     if (search.trim()) {
       const q = search.toLowerCase()
       list = list.filter(p =>

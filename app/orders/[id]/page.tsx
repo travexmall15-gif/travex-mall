@@ -32,7 +32,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
     })
   }, [id, router])
 
-  if (loading) return (
+  if (loading) {return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
@@ -40,7 +40,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
-  )
+  )}
 
   const st = STATUS_STYLE[order?.status] || STATUS_STYLE.pending
 

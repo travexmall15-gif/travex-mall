@@ -12,7 +12,7 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (ref.current && !ref.current.contains(e.target as Node)) {setOpen(false)}
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -73,8 +73,8 @@ export function LangSwitcher({ compact = false }: { compact?: boolean }) {
                 fontFamily: 'var(--sn-font)', textAlign: 'left',
                 transition: 'background .15s',
               }}
-              onMouseOver={e => { if (lang !== code) (e.currentTarget as HTMLElement).style.background = '#fff' }}
-              onMouseOut={e => { if (lang !== code) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+              onMouseOver={e => { if (lang !== code) {(e.currentTarget as HTMLElement).style.background = '#fff'} }}
+              onMouseOut={e => { if (lang !== code) {(e.currentTarget as HTMLElement).style.background = 'transparent'} }}
             >
               <span style={{ fontSize: '0.7rem', fontWeight: 800, background: 'var(--sn-bg)', color: '#0D1B3E', padding: '2px 7px', borderRadius: 5, letterSpacing: '0.04em', flexShrink: 0 }}>{m.flag}</span>
               <span>{m.label}</span>
@@ -96,7 +96,7 @@ export function LangSwitcherLight() {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (ref.current && !ref.current.contains(e.target as Node)) {setOpen(false)}
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)

@@ -13,12 +13,12 @@ import { sb } from '@/lib/supabase'
  */
 export async function getCurrentBuyerId(): Promise<string | null> {
   const { data: { session } } = await sb.auth.getSession()
-  if (session?.user) return session.user.id
+  if (session?.user) {return session.user.id}
   try {
     const raw = localStorage.getItem('sn_customer_session')
     if (raw) {
       const sess = JSON.parse(raw)
-      if (sess?.id) return sess.id as string
+      if (sess?.id) {return sess.id as string}
     }
   } catch {}
   return null
@@ -39,13 +39,13 @@ export async function getShopLikeCount(storeId: string): Promise<number> {
     .from('shop_likes')
     .select('id', { count: 'exact', head: true })
     .eq('store_id', storeId)
-  if (error) return 0
+  if (error) {return 0}
   return count ?? 0
 }
 
 /** Whether the given user has liked this store. Returns false if not signed in. */
 export async function isShopLikedByUser(storeId: string, userId: string | null | undefined): Promise<boolean> {
-  if (!userId) return false
+  if (!userId) {return false}
   const { data } = await sb
     .from('shop_likes')
     .select('id')
@@ -59,7 +59,7 @@ export async function isShopLikedByUser(storeId: string, userId: string | null |
 export async function likeShop(storeId: string, userId: string): Promise<{ error: string | null }> {
   const { error } = await sb.from('shop_likes').insert({ store_id: storeId, user_id: userId })
   // Unique constraint violation = already liked — treat as success, not an error.
-  if (error && error.code !== '23505') return { error: error.message }
+  if (error && error.code !== '23505') {return { error: error.message }}
   return { error: null }
 }
 
@@ -76,7 +76,7 @@ export async function listPreferredShops(userId: string): Promise<PreferredShop[
     .select('store_id, created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
-  if (error || !likes || likes.length === 0) return []
+  if (error || !likes || likes.length === 0) {return []}
 
   const storeIds = likes.map(l => l.store_id)
   const { data: stores } = await sb
@@ -89,7 +89,7 @@ export async function listPreferredShops(userId: string): Promise<PreferredShop[
   return likes
     .map(l => {
       const s = byId.get(l.store_id)
-      if (!s) return null
+      if (!s) {return null}
       return {
         store_id: l.store_id,
         shop_name: s.shop_name,

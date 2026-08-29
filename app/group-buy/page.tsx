@@ -34,9 +34,9 @@ const fmtTZS = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 // ── Live HH:MM:SS countdown ──────────────────────────────────
 function useCountdown(endTime: string | null) {
   const calc = useCallback(() => {
-    if (!endTime) return { h: '00', m: '00', s: '00', done: false, ongoing: true }
+    if (!endTime) {return { h: '00', m: '00', s: '00', done: false, ongoing: true }}
     const diff = new Date(endTime).getTime() - Date.now()
-    if (diff <= 0) return { h: '00', m: '00', s: '00', done: true, ongoing: false }
+    if (diff <= 0) {return { h: '00', m: '00', s: '00', done: true, ongoing: false }}
     const totalH = Math.floor(diff / 3600000)
     const m = Math.floor((diff % 3600000) / 60000)
     const s = Math.floor((diff % 60000) / 1000)
@@ -279,8 +279,8 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
               boxShadow: !isExpired && (isReady || featured)
                 ? '0 4px 14px rgba(5,150,105,0.30)' : 'none',
             }}
-            onMouseOver={e => { if (!isExpired) (e.currentTarget as HTMLElement).style.opacity = '0.88' }}
-            onMouseOut={e  => { if (!isExpired) (e.currentTarget as HTMLElement).style.opacity = '1' }}>
+            onMouseOver={e => { if (!isExpired) {(e.currentTarget as HTMLElement).style.opacity = '0.88'} }}
+            onMouseOut={e  => { if (!isExpired) {(e.currentTarget as HTMLElement).style.opacity = '1'} }}>
             <Users size={13} />
             {isExpired ? t('groupBuy.expiredLabel') : t('groupBuy.joinBtn')}
           </Link>
@@ -306,7 +306,7 @@ export default function GroupBuyPage() {
         .from('group_orders').select('*')
         .eq('status', 'open')
         .order('created_at', { ascending: false })
-      if (err) throw err
+      if (err) {throw err}
       setGroups(data || [])
     } catch {
       setError(t('groupBuy.loadError'))
@@ -327,8 +327,8 @@ export default function GroupBuyPage() {
         (g.category||'').toLowerCase().includes(q)
       )
     }
-    if (filter === 'ready')   list = list.filter(g => (g.current_members||0) >= (g.min_members||1))
-    if (filter === 'filling') list = list.filter(g => (g.current_members||0) <  (g.min_members||1))
+    if (filter === 'ready')   {list = list.filter(g => (g.current_members||0) >= (g.min_members||1))}
+    if (filter === 'filling') {list = list.filter(g => (g.current_members||0) <  (g.min_members||1))}
     return list
   }, [groups, search, filter])
 

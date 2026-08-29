@@ -28,8 +28,8 @@ export default function SplashPage() {
     }
     const t = setTimeout(() => {
       const welcomed = localStorage.getItem('sn_welcomed')
-      if (!welcomed) router.replace('/welcome')
-      else router.replace('/auth')
+      if (!welcomed) {router.replace('/welcome')}
+      else {router.replace('/auth')}
     }, 2000)
     return () => clearTimeout(t)
   }, [router])
@@ -44,8 +44,8 @@ export default function SplashPage() {
       try { if (JSON.parse(customerRaw)?.id) { router.replace('/home'); return } } catch {}
     }
     const welcomed = localStorage.getItem('sn_welcomed')
-    if (!welcomed) router.replace('/welcome')
-    else router.replace('/auth')
+    if (!welcomed) {router.replace('/welcome')}
+    else {router.replace('/auth')}
   }
 
   return (

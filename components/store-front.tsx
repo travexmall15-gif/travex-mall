@@ -13,8 +13,7 @@ import {
   MessageCircle,
 } from 'lucide-react'
 import type { Shop, Product } from '@/lib/data'
-import { productsByShop, formatTZS } from '@/lib/data'
-import { ShopAvatar } from '@/components/shop-card'
+import { productsByShop, formatTZS, ShopAvatar } from '@/lib/data'
 import { useToast } from '@/components/toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

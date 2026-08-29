@@ -24,29 +24,29 @@ type ConvState = {
 //  Intent detection 
 function detectIntent(msg: string, state: ConvState): string {
   const m = msg.toLowerCase()
-  if (state.step === 'await_name') return 'collect_name'
-  if (state.step === 'await_phone') return 'collect_phone'
-  if (state.step === 'await_qty') return 'collect_qty'
-  if (state.step === 'await_confirm') return 'confirm_order'
-  if (/(hi|hello|habari|hujambo|salam|karibu|hey|mambo|niaje|good|morning|evening)/i.test(m)) return 'greeting'
-  if (/(order|nunua|buy|pata|ninataka|nataka|need|nitaki|niambie|nipatie|niletee|nipe|peleka|deliver)/i.test(m)) return 'order_intent'
-  if (/(bei|price|cost|gharama|pesa|thamani|ngapi|kiasi|cheap|nafuu|expensive|ghali)/i.test(m)) return 'ask_price'
-  if (/(stock|available|ipo|baki|left|ina|zipo|kuna|count|kiasi)/i.test(m)) return 'ask_stock'
-  if (/(what|nini|una|mnauza|sell|products|bidhaa|items|list|orodha|all|zote|show)/i.test(m)) return 'list_products'
-  if (/(description|maelezo|info|zaidi|more|detail|about|kuhusu|eleza)/i.test(m)) return 'ask_description'
-  if (/(contact|wasiliana|phone|simu|whatsapp|owner|mwenye|seller|speak|piga)/i.test(m)) return 'ask_contact'
-  if (/(location|mahali|region|wapi|mkoa|area|where)/i.test(m)) return 'ask_location'
-  if (/(cancel|acha|hapana|no|stop|sitaki|ondoa)/i.test(m)) return 'cancel'
-  if (/(help|msaada|assist|saidia|guide|ongoza)/i.test(m)) return 'help'
-  if (/(thank|asante|shukrani|great|good|nice|nzuri|sawa|okay)/i.test(m)) return 'gratitude'
-  if (/\d/.test(m) && state.step === 'await_qty') return 'collect_qty'
+  if (state.step === 'await_name') {return 'collect_name'}
+  if (state.step === 'await_phone') {return 'collect_phone'}
+  if (state.step === 'await_qty') {return 'collect_qty'}
+  if (state.step === 'await_confirm') {return 'confirm_order'}
+  if (/(hi|hello|habari|hujambo|salam|karibu|hey|mambo|niaje|good|morning|evening)/i.test(m)) {return 'greeting'}
+  if (/(order|nunua|buy|pata|ninataka|nataka|need|nitaki|niambie|nipatie|niletee|nipe|peleka|deliver)/i.test(m)) {return 'order_intent'}
+  if (/(bei|price|cost|gharama|pesa|thamani|ngapi|kiasi|cheap|nafuu|expensive|ghali)/i.test(m)) {return 'ask_price'}
+  if (/(stock|available|ipo|baki|left|ina|zipo|kuna|count|kiasi)/i.test(m)) {return 'ask_stock'}
+  if (/(what|nini|una|mnauza|sell|products|bidhaa|items|list|orodha|all|zote|show)/i.test(m)) {return 'list_products'}
+  if (/(description|maelezo|info|zaidi|more|detail|about|kuhusu|eleza)/i.test(m)) {return 'ask_description'}
+  if (/(contact|wasiliana|phone|simu|whatsapp|owner|mwenye|seller|speak|piga)/i.test(m)) {return 'ask_contact'}
+  if (/(location|mahali|region|wapi|mkoa|area|where)/i.test(m)) {return 'ask_location'}
+  if (/(cancel|acha|hapana|no|stop|sitaki|ondoa)/i.test(m)) {return 'cancel'}
+  if (/(help|msaada|assist|saidia|guide|ongoza)/i.test(m)) {return 'help'}
+  if (/(thank|asante|shukrani|great|good|nice|nzuri|sawa|okay)/i.test(m)) {return 'gratitude'}
+  if (/\d/.test(m) && state.step === 'await_qty') {return 'collect_qty'}
   return 'search_product'
 }
 
 //  Find product by keyword 
 function findProducts(query: string, products: Product[]): Product[] {
   const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2)
-  if (words.length === 0) return products.slice(0, 5)
+  if (words.length === 0) {return products.slice(0, 5)}
   return products.filter(p => {
     const text = `${p.name} ${p.description || ''} ${p.category || ''}`.toLowerCase()
     return words.some(w => text.includes(w))
@@ -155,7 +155,7 @@ export async function POST(req: Request) {
         `• **${p.name}**: ${p.stock > 10 ? `Ipo — ${p.stock} available` : p.stock > 0 ? `Inakwisha — ${p.stock} tu zimebaki!` : 'Imeisha stock'}`
       ).join('\n')
       reply += `\n\nUnataka kuorder moja?`
-      if (found.length === 1) newState.selectedProduct = found[0]
+      if (found.length === 1) {newState.selectedProduct = found[0]}
     }
 
   } else if (intent === 'ask_description') {
@@ -170,8 +170,8 @@ export async function POST(req: Request) {
 
   } else if (intent === 'ask_contact') {
     reply = `Unaweza kuwasiliana na mwenye ${shop.name} moja kwa moja:\n\n`
-    if (wa) reply += ` WhatsApp: +${wa}\n`
-    if (shop.phone) reply += ` Simu: ${shop.phone}\n`
+    if (wa) {reply += ` WhatsApp: +${wa}\n`}
+    if (shop.phone) {reply += ` Simu: ${shop.phone}\n`}
     reply += `\nAu niambie tatizo lako nami nitasaidia!\n\nPia unaweza kutuma message kupitia kitufe cha "Message Seller" juu.`
 
   } else if (intent === 'ask_location') {
@@ -318,7 +318,7 @@ export async function POST(req: Request) {
         }
       }
     } catch {}
-    if (!reply) reply = `Ninaweza kukusaidia na bidhaa na bei, kufanya order, au mawasiliano na seller. Unataka nini?`
+    if (!reply) {reply = `Ninaweza kukusaidia na bidhaa na bei, kufanya order, au mawasiliano na seller. Unataka nini?`}
     } else {
       reply = `Karibu ${shop.name}! Duka lina bidhaa ${allProducts.length}. Ninaweza kukusaidia na swali lolote.`
     }

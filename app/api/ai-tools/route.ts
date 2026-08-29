@@ -44,7 +44,7 @@ const EXPENSE_CATS = [
 
 function catExpense(line: string): string {
   const l = line.toLowerCase()
-  for (const {cat,kw} of EXPENSE_CATS) { if (kw.some(k=>l.includes(k))) return cat }
+  for (const {cat,kw} of EXPENSE_CATS) { if (kw.some(k=>l.includes(k))) {return cat} }
   return 'Other'
 }
 
@@ -68,11 +68,11 @@ function priceTool(name:string,price:number,cond:string,category:string){
   const [mn,mx,av] = [Math.round(m.min*x),Math.round(m.max*x),Math.round(m.avg*x)]
   let note = ''
   if (price>0){
-    if (price<mn) note = `Your price ${fmt(price)} is BELOW market minimum. You can charge more.`
-    else if (price>mx) note = `Your price ${fmt(price)} is ABOVE market maximum. Consider reducing.`
-    else if (price<av*0.85) note = `Your price ${fmt(price)} is BELOW average — great for attracting buyers quickly.`
-    else if (price>av*1.15) note = `Your price ${fmt(price)} is ABOVE average. Highlight premium quality to justify it.`
-    else note = `Your price ${fmt(price)} is in the SWEET SPOT for global market!`
+    if (price<mn) {note = `Your price ${fmt(price)} is BELOW market minimum. You can charge more.`}
+    else if (price>mx) {note = `Your price ${fmt(price)} is ABOVE market maximum. Consider reducing.`}
+    else if (price<av*0.85) {note = `Your price ${fmt(price)} is BELOW average — great for attracting buyers quickly.`}
+    else if (price>av*1.15) {note = `Your price ${fmt(price)} is ABOVE average. Highlight premium quality to justify it.`}
+    else {note = `Your price ${fmt(price)} is in the SWEET SPOT for global market!`}
   }
   return `PRICE ADVICE: ${name} (${cond})\nCategory: ${category}\n\nTANZANIA MARKET RANGE:\n• Min: ${fmt(mn)}\n• Avg: ${fmt(av)}\n• Max: ${fmt(mx)}\n\n${note?`ASSESSMENT:\n${note}\n\n`:''}RECOMMENDED: ${fmt(av)}\n\nSTRATEGY:\n• Fast sales: ${fmt(Math.round(av*0.88))}\n• Normal: ${fmt(av)}\n• Premium: ${fmt(Math.round(av*1.12))}\n\nTIP: Run Flash Deals on weekends and month-end for best results.`
 }
@@ -84,11 +84,11 @@ function reportTool(rev:number,exp:number,ords:number,prods:number,days:number,t
   const score=margin>30?8:margin>15?6:margin>0?4:2
   const label=['','','Needs Attention','','Fair','','Good','','Excellent'][score]||'Fair'
   const recs=[]
-  if(prods<5) recs.push('Add more products — shops with 10+ products get 3x more views.')
-  if(ords===0) recs.push('Create a Flash Deal to attract your first orders immediately.')
-  if(margin<15&&rev>0) recs.push('Review expenses — target at least 20% profit margin.')
+  if(prods<5) {recs.push('Add more products — shops with 10+ products get 3x more views.')}
+  if(ords===0) {recs.push('Create a Flash Deal to attract your first orders immediately.')}
+  if(margin<15&&rev>0) {recs.push('Review expenses — target at least 20% profit margin.')}
   recs.push('Post on Social Vybe daily to increase store visibility.')
-  if(score<6) recs.push('Consider upgrading to Premium for top listing position in Business Market.')
+  if(score<6) {recs.push('Consider upgrading to Premium for top listing position in Business Market.')}
   return `BUSINESS REPORT — LAST ${days} DAYS\n${'='.repeat(36)}\n\nFINANCIAL SUMMARY:\n• Revenue:  ${fmt(rev)}\n• Expenses: ${fmt(exp)}\n• Profit:   ${fmt(profit)}\n• Margin:   ${margin}%\n\nORDERS:\n• Total Orders: ${ords}\n• Avg Order:    ${fmt(avg)}\n• Products:     ${prods}\n\n${top.length?`TOP PRODUCTS:\n${top.map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\n`:''}HEALTH SCORE: ${score}/10 — ${label}\n\nRECOMMENDATIONS:\n${recs.map((r,i)=>`${i+1}. ${r}`).join('\n')}`
 }
 
@@ -101,7 +101,7 @@ function socialTool(product:string,platform:string,tone:string,offer:string,shop
     whatsapp: `*${product}*${offerLine?`\n${offerLine}`:''}\n\nAvailable at ${shopName}\nOrder: ${link}`,
     facebook: `Habari friends!\n\n${shopName} tunakupa ${product}!${offerLine?`\n\n${offerLine}`:''} Quality guaranteed. Fast delivery worldwide.\n\nShop here: ${link}\n\nShare with friends!`,
   }
-  if(platform==='all') return `INSTAGRAM:\n${posts.instagram}\n\n---\n\nWHATSAPP:\n${posts.whatsapp}\n\n---\n\nFACEBOOK:\n${posts.facebook}`
+  if(platform==='all') {return `INSTAGRAM:\n${posts.instagram}\n\n---\n\nWHATSAPP:\n${posts.whatsapp}\n\n---\n\nFACEBOOK:\n${posts.facebook}`}
   return posts[platform]||posts.instagram
 }
 
@@ -120,15 +120,15 @@ function waTool(type:string,detail:string,shopName:string,storeId:string){
 
 function tipsTool(prods:number,ords:number,rev:number,vybes:number,plan:string,shopName:string){
   const tips:string[]=[]
-  if(prods===0) tips.push(`ADD PRODUCTS FIRST: ${shopName} has no products. Add at least 5 products immediately — buyers cannot order what they cannot see.`)
-  else if(prods<5) tips.push(`ADD MORE PRODUCTS: You have ${prods} product${prods===1?'':'s'}. Shops with 10+ products get 3x more views. Add 5 more this week.`)
-  if(ords===0) tips.push(`GET YOUR FIRST ORDER: Create a Flash Deal with 10-15% discount on your best product. Flash Deals appear on the homepage and attract buyers fast.`)
-  else if(ords<5) tips.push(`GROW YOUR ORDERS: You have ${ords} order${ords===1?'':'s'}. Post on Social Vybe daily with product photos to reach more buyers.`)
-  if(vybes===0) tips.push(`POST ON SOCIAL VYBE: You have not posted on Social Vybe yet. Post your top 3 products today — Vybe posts drive direct traffic to your store.`)
-  if(rev>0) tips.push(`INCREASE ORDER VALUE: Bundle 2-3 products together at a small discount. Bundles increase average order value by 40%.`)
-  if(plan==='basic') tips.push(`UPGRADE TO PREMIUM: Premium sellers appear at the TOP of Business Market. With ${prods} products and ${ords} orders, upgrading (TZS 50,000/mo) will boost your visibility.`)
+  if(prods===0) {tips.push(`ADD PRODUCTS FIRST: ${shopName} has no products. Add at least 5 products immediately — buyers cannot order what they cannot see.`)}
+  else if(prods<5) {tips.push(`ADD MORE PRODUCTS: You have ${prods} product${prods===1?'':'s'}. Shops with 10+ products get 3x more views. Add 5 more this week.`)}
+  if(ords===0) {tips.push(`GET YOUR FIRST ORDER: Create a Flash Deal with 10-15% discount on your best product. Flash Deals appear on the homepage and attract buyers fast.`)}
+  else if(ords<5) {tips.push(`GROW YOUR ORDERS: You have ${ords} order${ords===1?'':'s'}. Post on Social Vybe daily with product photos to reach more buyers.`)}
+  if(vybes===0) {tips.push(`POST ON SOCIAL VYBE: You have not posted on Social Vybe yet. Post your top 3 products today — Vybe posts drive direct traffic to your store.`)}
+  if(rev>0) {tips.push(`INCREASE ORDER VALUE: Bundle 2-3 products together at a small discount. Bundles increase average order value by 40%.`)}
+  if(plan==='basic') {tips.push(`UPGRADE TO PREMIUM: Premium sellers appear at the TOP of Business Market. With ${prods} products and ${ords} orders, upgrading (TZS 50,000/mo) will boost your visibility.`)}
   const extras=[`RESPOND QUICKLY: Reply to messages within 1 hour. Fast sellers get 5-star reviews and repeat customers.`,`USE GOOD PHOTOS: Products with clear bright photos sell 3x faster. Take photos in natural daylight.`,`CREATE GROUP BUYS: Set up Group Buy deals to move inventory fast and attract bulk buyers.`]
-  let i=0; while(tips.length<5&&i<extras.length) tips.push(extras[i++])
+  let i=0; while(tips.length<5&&i<extras.length) {tips.push(extras[i++])}
   return tips.slice(0,5).map((t,i)=>`TIP ${i+1}: ${t}`).join('\n\n')
 }
 
@@ -137,12 +137,12 @@ function coachTool(q:string,ctx:any){
   const prods=ctx?.product_count||0
   const ords=ctx?.order_count||0
   const rev=ctx?.revenue||0
-  if(/(price|bei|ngapi|cost|cheap|expensive)/i.test(q)) return `For ${name}, start by setting your price 10% below competitors to attract first buyers. Once you have 5+ reviews, raise prices. Use the Smart Price Advisor for specific product pricing.`
-  if(/(customer|wateja|buyers|attract|draw)/i.test(q)) return `To attract more customers: (1) Post daily on Social Vybe. (2) Create a Flash Deal for your top product. (3) Ask satisfied customers to share your store link. Consistency is key — daily posters get 3x more visitors.`
-  if(/(marketing|tangazo|promote|advertise)/i.test(q)) return `Best free marketing on ShopNekt: (1) WhatsApp Status — post products every morning. (2) Social Vybe — post with good photos. (3) Flash Deals — run weekend promos. (4) Group Buy — reward buyers who bring friends.`
-  if(/(profit|faida|earn|pesa|money)/i.test(q)) return `To increase profit: (1) Reduce transport and M-Pesa charges. (2) Buy stock in bulk for better supplier prices. (3) Focus on your top 3 best-selling products. Target 20-30% margin per product. Your revenue so far: ${fmt(rev)}.`
-  if(/(delivery|logistics|transport|shipping)/i.test(q)) return `Use ShopNekt Move for deliveries — connects you with verified bodaboda riders and drivers. Set clear timeframes (Dar: same day, other regions: 1-3 days). Customers appreciate predictability.`
-  if(/(review|rating|feedback)/i.test(q)) return `To get good reviews: (1) Deliver on time. (2) Package products properly. (3) Follow up after delivery. (4) Resolve complaints immediately. Good reviews improve your search ranking on ShopNekt.`
+  if(/(price|bei|ngapi|cost|cheap|expensive)/i.test(q)) {return `For ${name}, start by setting your price 10% below competitors to attract first buyers. Once you have 5+ reviews, raise prices. Use the Smart Price Advisor for specific product pricing.`}
+  if(/(customer|wateja|buyers|attract|draw)/i.test(q)) {return `To attract more customers: (1) Post daily on Social Vybe. (2) Create a Flash Deal for your top product. (3) Ask satisfied customers to share your store link. Consistency is key — daily posters get 3x more visitors.`}
+  if(/(marketing|tangazo|promote|advertise)/i.test(q)) {return `Best free marketing on ShopNekt: (1) WhatsApp Status — post products every morning. (2) Social Vybe — post with good photos. (3) Flash Deals — run weekend promos. (4) Group Buy — reward buyers who bring friends.`}
+  if(/(profit|faida|earn|pesa|money)/i.test(q)) {return `To increase profit: (1) Reduce transport and M-Pesa charges. (2) Buy stock in bulk for better supplier prices. (3) Focus on your top 3 best-selling products. Target 20-30% margin per product. Your revenue so far: ${fmt(rev)}.`}
+  if(/(delivery|logistics|transport|shipping)/i.test(q)) {return `Use ShopNekt Move for deliveries — connects you with verified bodaboda riders and drivers. Set clear timeframes (Dar: same day, other regions: 1-3 days). Customers appreciate predictability.`}
+  if(/(review|rating|feedback)/i.test(q)) {return `To get good reviews: (1) Deliver on time. (2) Package products properly. (3) Follow up after delivery. (4) Resolve complaints immediately. Good reviews improve your search ranking on ShopNekt.`}
   return `My advice for ${name}: Focus on three things this week — (1) add products if below 10, (2) post on Social Vybe daily, (3) create a Flash Deal. You have ${prods} products and ${ords} orders. ${ords===0?'Getting your first order is the most important step right now.':'Keep growing — every 10 orders builds your reputation.'} Ask me anything specific!`
 }
 

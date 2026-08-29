@@ -1,0 +1,3 @@
+module.exports=[74425,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)(b.Fragment,{children:a})},"metadata",0,{title:"My Orders | ShopNekt",description:"Track and manage your ShopNekt orders",openGraph:{title:"My Orders | ShopNekt",description:"Track and manage your ShopNekt orders",url:"https://shopnekt.vercel.app/orders",siteName:"ShopNekt",images:[{url:"https://shopnekt.vercel.app/shopnekt-logo.png"}]},twitter:{card:"summary_large_image",title:"My Orders | ShopNekt",description:"Track and manage your ShopNekt orders"}}])},78962,a=>{a.n(a.i(74425))}];
+
+//# sourceMappingURL=app_orders_layout_tsx_08.b-de._.js.map

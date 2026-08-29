@@ -23,7 +23,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem(LS_KEY) as Lang | null
     const valid: Lang[] = ['en','sw','fr','de','pt','ar']
-    if (saved && valid.includes(saved)) setLangState(saved)
+    if (saved && valid.includes(saved)) {setLangState(saved)}
   }, [])
 
   useEffect(() => {
