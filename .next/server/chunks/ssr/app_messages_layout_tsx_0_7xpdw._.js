@@ -1,3 +1,0 @@
-module.exports=[55596,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)(b.Fragment,{children:a})},"metadata",0,{title:"Messages | ShopNekt",description:"Your ShopNekt inbox — chat with sellers and buyers",openGraph:{title:"Messages | ShopNekt",description:"Your ShopNekt inbox — chat with sellers and buyers",url:"https://shopnekt.vercel.app/messages",siteName:"ShopNekt",images:[{url:"https://shopnekt.vercel.app/shopnekt-logo.png"}]},twitter:{card:"summary_large_image",title:"Messages | ShopNekt",description:"Your ShopNekt inbox — chat with sellers and buyers"}}])},27870,a=>{a.n(a.i(55596))}];
-
-//# sourceMappingURL=app_messages_layout_tsx_0_7xpdw._.js.map

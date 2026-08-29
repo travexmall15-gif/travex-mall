@@ -1,3 +1,0 @@
-:HL["/_next/static/chunks/0xr-jyeydvm-t.css","style"]
-:HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":24,"slots":{"children":{"name":"market","param":null,"prefetchHints":4,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":180,"buildId":"IIZLeD97lc0GqLJAifDkg"}
