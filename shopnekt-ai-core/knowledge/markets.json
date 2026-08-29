@@ -1,0 +1,27 @@
+{
+  "domain": "markets",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "key": "business_market",
+      "title": "Business Market (Soko la Biashara)",
+      "description": "The main marketplace for verified sellers with all product categories across multiple regions. 500+ shops available.",
+      "relationships": ["shops", "products", "sellers"],
+      "workflows": ["browse_shops", "search_products", "contact_seller"]
+    },
+    {
+      "key": "campus_market",
+      "title": "Campus Market (Soko la Vyuo)",
+      "description": "Student-only marketplace for buying and selling within university campuses. Verified student sellers.",
+      "relationships": ["shops", "students", "universities"],
+      "workflows": ["verify_student", "browse_campus_shops", "campus_delivery"]
+    },
+    {
+      "key": "vybe",
+      "title": "Social Vybe",
+      "description": "Social commerce feed where verified sellers post products and engage with buyers. Live feed of photos and reels.",
+      "relationships": ["posts", "sellers", "products"],
+      "workflows": ["post_product", "like_post", "share_post", "visit_shop"]
+    }
+  ]
+}

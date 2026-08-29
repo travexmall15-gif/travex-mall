@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "intents": [
+    {
+      "id": "PRODUCT_SEARCH",
+      "name": "Search Products",
+      "description": "User wants to find products matching criteria",
+      "keywords": ["tafuta", "nataka", "ninatafuta", "search", "find", "looking for", "need", "want", "buy", "nunua"],
+      "requiresAuth": false,
+      "tools": ["searchProducts"]
+    },
+    {
+      "id": "SHOP_SEARCH",
+      "name": "Search Shops",
+      "description": "User wants to find shops/stores",
+      "keywords": ["duka", "maduka", "shop", "store", "seller", "muuzaji"],
+      "requiresAuth": false,
+      "tools": ["searchShops"]
+    },
+    {
+      "id": "ORDER_STATUS",
+      "name": "Order Status",
+      "description": "User wants to check order status",
+      "keywords": ["oda", "order", "status", "fuatilia", "track"],
+      "requiresAuth": true,
+      "tools": ["getOrder"]
+    },
+    {
+      "id": "SELLER_HELP",
+      "name": "Seller Help",
+      "description": "User wants to become a seller or needs seller assistance",
+      "keywords": ["sell", "seller", "muuzaji", "kuwa", "fungua duka", "open store"],
+      "requiresAuth": false,
+      "tools": ["sellerOnboarding"]
+    },
+    {
+      "id": "FLASH_DEAL_SEARCH",
+      "name": "Flash Deal Search",
+      "description": "User wants to find flash deals",
+      "keywords": ["flash", "ofa", "haraka", "deal", "punguzo", "discount"],
+      "requiresAuth": false,
+      "tools": ["getFlashDeals"]
+    },
+    {
+      "id": "GROUP_BUY_SEARCH",
+      "name": "Group Buy Search",
+      "description": "User wants to find group buy deals",
+      "keywords": ["group", "kikundi", "pamoja", "together", "nunua pamoja"],
+      "requiresAuth": false,
+      "tools": ["getGroupBuys"]
+    },
+    {
+      "id": "GENERAL_SHOPNEKT_HELP",
+      "name": "General ShopNekt Help",
+      "description": "General questions about ShopNekt platform",
+      "keywords": ["shopnekt", "platform", "help", "saidia", "jinsi", "how"],
+      "requiresAuth": false,
+      "tools": ["getHelpInfo"]
+    }
+  ]
+}

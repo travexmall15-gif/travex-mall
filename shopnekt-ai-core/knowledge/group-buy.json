@@ -1,0 +1,13 @@
+{
+  "domain": "groupBuy",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "key": "what_is_group_buy",
+      "title": "Group Buy (Nunua Pamoja)",
+      "description": "Join groups with other buyers to unlock discounts up to 20%. More members = bigger discounts.",
+      "relationships": ["groups", "members", "discounts"],
+      "workflows": ["join_group", "reach_minimum", "unlock_discount", "complete_purchase"]
+    }
+  ]
+}

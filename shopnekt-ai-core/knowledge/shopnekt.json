@@ -1,0 +1,20 @@
+{
+  "domain": "shopnekt",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "key": "what_is_shopnekt",
+      "title": "What is ShopNekt",
+      "description": "ShopNekt is an AI-powered digital marketplace platform that enables entrepreneurs to open online stores in minutes and sell globally.",
+      "relationships": ["markets", "shops", "sellers", "buyers"],
+      "workflows": ["open_store", "browse_products", "place_order"]
+    },
+    {
+      "key": "qnex360",
+      "title": "QNEX360",
+      "description": "QNEX360 is the parent company behind ShopNekt, focused on empowering African entrepreneurs through technology.",
+      "relationships": ["shopnekt"],
+      "workflows": []
+    }
+  ]
+}
