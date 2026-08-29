@@ -14,7 +14,7 @@ const Auth = {
   // Session stored in localStorage as {id, market}.
   async getSession() {
     const raw = localStorage.getItem('travex_session');
-    if (!raw) return null;
+    if (!raw) {return null;}
     try { return JSON.parse(raw); } catch { return null; }
   },
   requireAuth() {
@@ -42,10 +42,10 @@ const Shop = {
   clearCache() { this._cache = null; this._type = null; },
 
   async get() {
-    if (this._cache) return this._cache;
+    if (this._cache) {return this._cache;}
 
     const raw = localStorage.getItem('travex_session');
-    if (!raw) return null;
+    if (!raw) {return null;}
     let session;
     try { session = JSON.parse(raw); } catch { return null; }
 
@@ -178,7 +178,7 @@ async function uploadToStorage(file, folder) {
     const { data, error } = await sb.storage.from('shop-assets').upload(name, file, {
       cacheControl: '3600', upsert: true, contentType: file.type
     });
-    if (error) throw error;
+    if (error) {throw error;}
     const { data: pub } = sb.storage.from('shop-assets').getPublicUrl(name);
     return { url: pub.publicUrl, error: null };
   } catch (e) {
@@ -199,29 +199,29 @@ async function uploadToStorage(file, folder) {
 
 //  HELPERS 
 function formatTZS(n) {
-  if (!n && n !== 0) return '-';
+  if (!n && n !== 0) {return '-';}
   return 'TZS ' + Number(n).toLocaleString('en-US');
 }
 function today() { return new Date().toISOString().split('T')[0]; }
 function timeAgo(d) {
-  if (!d) return '-';
+  if (!d) {return '-';}
   const diff = Date.now() - new Date(d).getTime();
   const m = Math.floor(diff/60000);
-  if (m < 1)  return 'just now';
-  if (m < 60) return m + 'm ago';
+  if (m < 1)  {return 'just now';}
+  if (m < 60) {return m + 'm ago';}
   const h = Math.floor(m/60);
-  if (h < 24) return h + 'h ago';
+  if (h < 24) {return h + 'h ago';}
   return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 }
 function truncate(s, n=40) {
-  if (!s) return '-';
+  if (!s) {return '-';}
   return s.length > n ? s.slice(0,n) + '' : s;
 }
 
 //  TOAST 
 function showToast(msg, type='default') {
   const t = document.getElementById('toast');
-  if (!t) return;
+  if (!t) {return;}
   t.textContent = msg;
   t.className = 'toast' + (type !== 'default' ? ' ' + type : '');
   t.style.display = 'flex';
@@ -232,7 +232,7 @@ function showToast(msg, type='default') {
 //  MODAL 
 function openModal(id) {
   const m = document.getElementById(id);
-  if (!m) return;
+  if (!m) {return;}
   // Support both .modal-bg (class-based) and .modal-overlay (style-based)
   if (m.classList.contains('modal-overlay') || m.style.display !== undefined) {
     m.style.display = 'flex';
@@ -241,7 +241,7 @@ function openModal(id) {
 }
 function closeModal(id) {
   const m = document.getElementById(id);
-  if (!m) return;
+  if (!m) {return;}
   m.classList.remove('show');
   if (m.classList.contains('modal-overlay')) {
     m.style.display = 'none';
@@ -251,7 +251,7 @@ function closeModal(id) {
 //  SIDEBAR 
 async function loadSidebar(activePage, shopData) {
   const el = document.getElementById('sidebar');
-  if (!el) return;
+  if (!el) {return;}
 
   const plan = shopData?.plan || localStorage.getItem('travex_plan') || 'basic';
   const shopName = shopData?.shop_name || localStorage.getItem('travex_shop_name') || 'My Shop';
@@ -316,30 +316,30 @@ async function loadSidebar(activePage, shopData) {
     </div>
   `;
   // Apply i18n after sidebar renders
-  setTimeout(() => { if (window.LANG) window.LANG.apply(); }, 100);
+  setTimeout(() => { if (window.LANG) {window.LANG.apply();} }, 100);
 }
 
 //  MOBILE MENU 
 function toggleSidebar() {
   const sidebar  = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
-  if (!sidebar) return;
+  if (!sidebar) {return;}
   const isOpen = sidebar.classList.toggle('open');
-  if (backdrop) backdrop.classList.toggle('open', isOpen);
+  if (backdrop) {backdrop.classList.toggle('open', isOpen);}
   document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 function closeSidebar() {
   const sidebar  = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
-  if (sidebar)  sidebar.classList.remove('open');
-  if (backdrop) backdrop.classList.remove('open');
+  if (sidebar)  {sidebar.classList.remove('open');}
+  if (backdrop) {backdrop.classList.remove('open');}
   document.body.style.overflow = '';
 }
 
 //  LOADING 
 function showLoading(show=true) {
   const el = document.getElementById('loadingOverlay');
-  if (el) el.style.display = show ? 'flex' : 'none';
+  if (el) {el.style.display = show ? 'flex' : 'none';}
 }
 
 //  AI CALL 
@@ -489,7 +489,7 @@ async function trackEvent(storeId, event, productId, source) {
     async send() {
       const inp = document.getElementById('ai360-inp');
       const msg = inp.value.trim();
-      if (!msg || this.loading) return;
+      if (!msg || this.loading) {return;}
       inp.value = '';
       this.addMsg('user', msg);
       this.loading = true;

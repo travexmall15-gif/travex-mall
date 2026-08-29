@@ -38,7 +38,7 @@ export default function AuthPage() {
         setTimer(t => { if (t <= 1) { clearInterval(timerRef.current!); return 0 } return t - 1 })
       }, 1000)
     }
-    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+    return () => { if (timerRef.current) {clearInterval(timerRef.current)} }
   }, [screen])
 
   const handleGetCode = () => {
@@ -104,7 +104,7 @@ export default function AuthPage() {
     setShowCode(false)
     setError('')
     setTimer(60)
-    if (timerRef.current) clearInterval(timerRef.current)
+    if (timerRef.current) {clearInterval(timerRef.current)}
     timerRef.current = setInterval(() => {
       setTimer(t => { if (t <= 1) { clearInterval(timerRef.current!); return 0 } return t - 1 })
     }, 1000)

@@ -64,7 +64,7 @@ export default function MarketInnerPage() {
   const [buyerId,  setBuyerId]  = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    if (!cfg) return
+    if (!cfg) {return}
     setLoading(true)
     try {
       const { data } = await sb
@@ -93,15 +93,15 @@ export default function MarketInnerPage() {
   // Load which of these shops the current buyer has already liked (single
   // batched query, not one-per-card) so the heart icon reflects real state.
   useEffect(() => {
-    if (shops.length === 0) return
+    if (shops.length === 0) {return}
     let cancelled = false
     ;(async () => {
       const id = await getCurrentBuyerId()
-      if (cancelled) return
+      if (cancelled) {return}
       setBuyerId(id)
-      if (!id) return
+      if (!id) {return}
       const { data } = await sb.from('shop_likes').select('store_id').eq('user_id', id).in('store_id', shops.map(s => s.id))
-      if (!cancelled && data) setLikedIds(new Set(data.map((r: any) => r.store_id)))
+      if (!cancelled && data) {setLikedIds(new Set(data.map((r: any) => r.store_id)))}
     })()
     return () => { cancelled = true }
   }, [shops])

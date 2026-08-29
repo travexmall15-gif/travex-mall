@@ -227,9 +227,9 @@ window.ARIA_WIDGET = {
   },
 
   async send(msg) {
-    if (!msg.trim()) return
+    if (!msg.trim()) {return}
     const panel = document.getElementById('aria-panel')
-    if (!panel.classList.contains('open')) panel.classList.add('open')
+    if (!panel.classList.contains('open')) {panel.classList.add('open')}
     this.addMsg('user', msg)
     this.history.push({ role: 'user', content: msg })
     this.showTyping()
@@ -252,7 +252,7 @@ window.ARIA_WIDGET = {
   sendFromInput() {
     const input = document.getElementById('ariaInput')
     const msg = input.value.trim()
-    if (!msg) return
+    if (!msg) {return}
     input.value = ''
     this.send(msg)
   },
@@ -270,7 +270,7 @@ window.ARIA_WIDGET = {
 // Event listeners
 btn.addEventListener('click', () => ARIA_WIDGET.toggle())
 document.getElementById('ariaInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') ARIA_WIDGET.sendFromInput()
+  if (e.key === 'Enter') {ARIA_WIDGET.sendFromInput()}
 })
 
 // Auto-greet after 3s on dashboard pages

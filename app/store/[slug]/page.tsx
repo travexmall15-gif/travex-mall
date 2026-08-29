@@ -172,21 +172,21 @@ export default function StorePage({
 
   // Load Like Shop count + whether the current visitor has liked this shop
   useEffect(() => {
-    if (!store || store.plan === 'campus') return
+    if (!store || store.plan === 'campus') {return}
     let cancelled = false
     ;(async () => {
       const count = await getShopLikeCount(store.id)
-      if (cancelled) return
+      if (cancelled) {return}
       setLikeCount(count)
       const buyerId = await getCurrentBuyerId()
-      if (!buyerId || cancelled) return
+      if (!buyerId || cancelled) {return}
       setLiked(await isShopLikedByUser(store.id, buyerId))
     })()
     return () => { cancelled = true }
   }, [store?.id])
 
   const toggleLikeShop = async () => {
-    if (!store || likeBusy) return
+    if (!store || likeBusy) {return}
     setLikeBusy(true)
     const buyerId = await getCurrentBuyerId()
     if (!buyerId) {
@@ -219,12 +219,12 @@ export default function StorePage({
       const { data: ords } = await sb.from('orders').select('product_id').eq('shop_id', store.id)
       if (cancelled || !ords || ords.length === 0) { setTrending([]); return }
       const counts = new Map<string, number>()
-      for (const o of ords) if (o.product_id) counts.set(o.product_id, (counts.get(o.product_id) || 0) + 1)
+      for (const o of ords) {if (o.product_id) {counts.set(o.product_id, (counts.get(o.product_id) || 0) + 1)}}
       const ranked = products
         .filter(p => counts.has(p.id))
         .sort((a, b) => (counts.get(b.id) || 0) - (counts.get(a.id) || 0))
         .slice(0, 8)
-      if (!cancelled) setTrending(ranked)
+      if (!cancelled) {setTrending(ranked)}
     })()
     return () => { cancelled = true }
   }, [store?.id, products])
@@ -232,7 +232,7 @@ export default function StorePage({
   // Store Posts — pulled from the seller's own Social Vybe posts, never
   // duplicated/re-uploaded. Loaded lazily when the Posts tab is opened.
   useEffect(() => {
-    if (tab !== 'posts' || !store || storePosts.length > 0 || storePostsLoading) return
+    if (tab !== 'posts' || !store || storePosts.length > 0 || storePostsLoading) {return}
     setStorePostsLoading(true)
     sb.from('feed_posts')
       .select('id, content, post_text, caption, media_url, media_type, likes, likes_count, created_at')
@@ -259,13 +259,13 @@ export default function StorePage({
   // Product" link (/store/[slug]?product=<id>).
   useEffect(() => {
     const productId = searchParams?.get('product')
-    if (!productId || products.length === 0 || cartItem) return
+    if (!productId || products.length === 0 || cartItem) {return}
     const match = products.find(p => p.id === productId)
-    if (match) openOrder(match)
+    if (match) {openOrder(match)}
   }, [searchParams, products])
 
   const placeOrder = async () => {
-    if (!cartItem || !orderName.trim() || !orderPhone.trim()) return
+    if (!cartItem || !orderName.trim() || !orderPhone.trim()) {return}
     setPlacing(true)
 
     const total = cartItem.price * qty
@@ -322,7 +322,7 @@ export default function StorePage({
   const wa = (store?.shop_whatsapp || store?.owner_phone || '').replace(/\D/g, '')
 
   // ── Loading ──
-  if (loading) return (
+  if (loading) {return (
     <main style={{ minHeight: '100vh', background: '#060C1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', color: '#6B7280' }}>
         <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#111827' }} />
@@ -330,10 +330,10 @@ export default function StorePage({
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
-  )
+  )}
 
   // ── Not found ──
-  if (notFound || !store) return (
+  if (notFound || !store) {return (
     <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: '2rem' }}>
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
@@ -344,7 +344,7 @@ export default function StorePage({
         </Link>
       </div>
     </main>
-  )
+  )}
 
   return (
     <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: 'var(--sn-font)' }}>
@@ -640,7 +640,7 @@ export default function StorePage({
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#9CA3AF' }}><Heart size={11} /> {fmtCount(likeN)}</span>
                         <div style={{ display: 'flex', gap: 8 }}>
-                          <button onClick={() => { if (navigator.share) navigator.share({ url: window.location.href }).catch(() => {}) }}
+                          <button onClick={() => { if (navigator.share) {navigator.share({ url: window.location.href }).catch(() => {})} }}
                             style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 11 }}>
                             <Share2 size={12} /> {t('store.share')}
                           </button>
@@ -667,7 +667,7 @@ export default function StorePage({
 
       {/* ── ORDER MODAL ── */}
       {cartItem && (
-        <div className="modal-bg" onClick={e => { if(e.target === e.currentTarget) setCartItem(null) }}>
+        <div className="modal-bg" onClick={e => { if(e.target === e.currentTarget) {setCartItem(null)} }}>
           <div className="modal">
             {success ? (
               // ── Success state ──
@@ -687,7 +687,7 @@ export default function StorePage({
                     <a href={`https://wa.me/${wa}`} target="_blank"
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#25D366',
                         color: '#111827', padding: '10px 20px', borderRadius: 999, fontWeight: 700, fontSize: 13,
-                        textDecoration: 'none' }}>
+                        textDecoration: 'none' }} rel="noreferrer">
                       <MessageCircle size={14} /> Chat Seller
                     </a>
                   )}
@@ -776,7 +776,7 @@ export default function StorePage({
                       style={{ flex: 1, padding: '12px', borderRadius: 999, background: '#25D366',
                         color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                        textDecoration: 'none', fontFamily: 'var(--sn-font)' }}>
+                        textDecoration: 'none', fontFamily: 'var(--sn-font)' }} rel="noreferrer">
                       <MessageCircle size={15} /> WhatsApp
                     </a>
                   )}
@@ -804,7 +804,7 @@ export default function StorePage({
       {/* ── WELCOME MODAL (AI Customer Care) ── */}
       {showWelcome && store && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(4px)' }}
-          onClick={e => { if(e.target === e.currentTarget) setShowWelcome(false) }}>
+          onClick={e => { if(e.target === e.currentTarget) {setShowWelcome(false)} }}>
           <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '1.75rem 1.5rem 2rem', width: '100%', maxWidth: 440, boxShadow: '0 -12px 48px rgba(0,0,0,0.18)', animation: 'slideUp 0.35s ease', }}>
             <style>{`@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
 
@@ -871,7 +871,7 @@ export default function StorePage({
                   // Trigger AI chat widget
                   setTimeout(() => {
                     const btn = document.querySelector('[data-ai-chat-toggle]') as HTMLElement
-                    if (btn) btn.click()
+                    if (btn) {btn.click()}
                   }, 300)
                 }}
                 style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'var(--sn-primary)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--sn-font)', boxShadow: '0 4px 14px rgba(29,78,216,0.2)' }}>
@@ -884,7 +884,7 @@ export default function StorePage({
 
       {/* ── MESSAGE SELLER MODAL ── */}
       {showMsg && store && (
-        <div className="modal-bg" onClick={e => { if(e.target === e.currentTarget) setShowMsg(false) }}>
+        <div className="modal-bg" onClick={e => { if(e.target === e.currentTarget) {setShowMsg(false)} }}>
           <div className="modal">
             {msgSent ? (
               <div style={{ textAlign: 'center', padding: '2rem 0' }}>
@@ -921,13 +921,13 @@ export default function StorePage({
                     <a
                       href={`https://wa.me/${wa}?text=${encodeURIComponent(`Hi! I am ${msgName || 'a customer'}. ${msgText}`)}`}
                       target="_blank"
-                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: 'var(--sn-font)' }}>
+                      style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#25D366', color: '#111827', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, textDecoration: 'none', fontFamily: 'var(--sn-font)' }} rel="noreferrer">
                       <MessageCircle size={14} /> WhatsApp
                     </a>
                   )}
                   <button
                     onClick={async () => {
-                      if (!msgName.trim() || !msgText.trim()) return
+                      if (!msgName.trim() || !msgText.trim()) {return}
                       await sb.from('store_messages').insert({ store_id: store.id, sender_name: msgName, message: msgText, created_at: new Date().toISOString() })
                       setMsgSent(true)
                     }}

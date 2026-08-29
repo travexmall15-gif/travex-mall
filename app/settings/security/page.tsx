@@ -21,7 +21,7 @@ export default function SecurityPage() {
     setLoading(true); setErr(''); setMsg('')
     const { error } = await sb.auth.updateUser({ password: newPw })
     setLoading(false)
-    if (error) setErr(error.message)
+    if (error) {setErr(error.message)}
     else { setMsg('Password updated successfully!'); setCurrentPw(''); setNewPw('') }
   }
 

@@ -78,7 +78,7 @@ export function SiteNav() {
 
   const handleSearch = useCallback((val: string) => {
     setQuery(val)
-    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (debounceRef.current) {clearTimeout(debounceRef.current)}
     if (!val.trim()) { setResults([]); setShowDrop(false); return }
 
     debounceRef.current = setTimeout(async () => {

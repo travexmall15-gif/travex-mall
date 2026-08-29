@@ -124,14 +124,14 @@ const LANG = {
   current: localStorage.getItem('travex_lang') || 'en',
 
   get: function(key) {
-    if (this.current === 'en') return key
+    if (this.current === 'en') {return key}
     const entry = DASHBOARD_I18N[key]
-    if (entry && entry[this.current]) return entry[this.current]
+    if (entry && entry[this.current]) {return entry[this.current]}
     return key
   },
 
   set: function(lang) {
-    if (!LANG_META[lang]) return
+    if (!LANG_META[lang]) {return}
     this.current = lang
     localStorage.setItem('travex_lang', lang)
     this.apply()
@@ -180,7 +180,7 @@ const LANG = {
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     const headerRight = document.querySelector('.header-right')
-    if (!headerRight || document.getElementById('langToggleBtn')) return
+    if (!headerRight || document.getElementById('langToggleBtn')) {return}
 
     const meta = LANG_META[LANG.current] || LANG_META.en
 
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.onclick = (e) => {
       e.stopPropagation()
       dd.style.display = dd.style.display === 'none' ? 'flex' : 'none'
-      if (dd.style.display === 'flex') dd.style.flexDirection = 'column'
+      if (dd.style.display === 'flex') {dd.style.flexDirection = 'column'}
     }
 
     document.addEventListener('click', () => { dd.style.display = 'none' })

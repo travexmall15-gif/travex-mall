@@ -32,8 +32,8 @@ export function OfflineNotification() {
     }
   }, [])
 
-  if (!mounted) return null
-  if (online && !showBack) return null
+  if (!mounted) {return null}
+  if (online && !showBack) {return null}
 
   return (
     <div

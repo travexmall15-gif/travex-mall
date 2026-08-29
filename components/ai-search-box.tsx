@@ -43,7 +43,7 @@ export default function AiSearchBox() {
     let budget = 0
     if (budgetMatch) {
       budget = parseInt(budgetMatch[1].replace(/,/g,''))
-      if (budgetMatch[2]) budget *= 1000
+      if (budgetMatch[2]) {budget *= 1000}
     }
 
     // Category keywords
@@ -79,7 +79,7 @@ export default function AiSearchBox() {
 
   // ── Search Supabase ────────────────────────────────────
   async function search() {
-    if (!query.trim()) return
+    if (!query.trim()) {return}
     setLoading(true)
     setSearched(true)
     setResults([])
@@ -95,8 +95,8 @@ export default function AiSearchBox() {
         .eq('is_verified', true)
         .limit(20)
 
-      if (category) shopQuery = shopQuery.ilike('shop_category', `%${category}%`)
-      if (city)     shopQuery = shopQuery.ilike('shop_city', `%${city}%`)
+      if (category) {shopQuery = shopQuery.ilike('shop_category', `%${category}%`)}
+      if (city)     {shopQuery = shopQuery.ilike('shop_city', `%${city}%`)}
 
       const { data: shops } = await shopQuery
 
@@ -111,24 +111,24 @@ export default function AiSearchBox() {
           .eq('is_available', true)
           .limit(5)
 
-        if (budget > 0)  prodQuery = prodQuery.lte('price', budget)
-        if (terms)       prodQuery = prodQuery.ilike('name', `%${terms}%`)
+        if (budget > 0)  {prodQuery = prodQuery.lte('price', budget)}
+        if (terms)       {prodQuery = prodQuery.ilike('name', `%${terms}%`)}
 
         const { data: products } = await prodQuery
 
         // Score relevance
         let score = 0
-        if (products?.length) score += products.length * 10
-        if (category && shop.shop_category?.toLowerCase().includes(category)) score += 20
-        if (city && shop.shop_city?.toLowerCase().includes(city)) score += 15
-        if (shop.rating) score += shop.rating * 3
+        if (products?.length) {score += products.length * 10}
+        if (category && shop.shop_category?.toLowerCase().includes(category)) {score += 20}
+        if (city && shop.shop_city?.toLowerCase().includes(city)) {score += 15}
+        if (shop.rating) {score += shop.rating * 3}
 
         if (products?.length || score > 20) {
           // Build match reason
           const reasons = []
-          if (products?.length)    reasons.push(`${products.length} product${products.length > 1 ? 's' : ''} found`)
-          if (budget > 0 && products?.length) reasons.push(`within TZS ${budget.toLocaleString()} budget`)
-          if (city)                reasons.push(`in ${city}`)
+          if (products?.length)    {reasons.push(`${products.length} product${products.length > 1 ? 's' : ''} found`)}
+          if (budget > 0 && products?.length) {reasons.push(`within TZS ${budget.toLocaleString()} budget`)}
+          if (city)                {reasons.push(`in ${city}`)}
 
           enriched.push({
             ...shop,
@@ -164,7 +164,7 @@ export default function AiSearchBox() {
   }
 
   const handleKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') search()
+    if (e.key === 'Enter') {search()}
   }
 
   return (

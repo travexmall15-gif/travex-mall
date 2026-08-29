@@ -29,11 +29,11 @@ export const getShops = cache(async (region?: string, category?: string) => {
     .order('rating',  { ascending: false })
     .limit(40)
 
-  if (region && region !== 'all')    q = q.eq('shop_region', region)
-  if (category && category !== 'all') q = q.ilike('shop_category', `%${category}%`)
+  if (region && region !== 'all')    {q = q.eq('shop_region', region)}
+  if (category && category !== 'all') {q = q.ilike('shop_category', `%${category}%`)}
 
   const { data, error } = await q
-  if (error) console.error('getShops:', error.message)
+  if (error) {console.error('getShops:', error.message)}
   return data || []
 })
 

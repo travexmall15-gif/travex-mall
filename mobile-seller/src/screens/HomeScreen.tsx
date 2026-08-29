@@ -11,10 +11,10 @@ export default function HomeScreen({ navigation }: any) {
 
   const load = async () => {
     const raw = await AsyncStorage.getItem('seller_session')
-    if (!raw) return
+    if (!raw) {return}
     const { id } = JSON.parse(raw)
     const { data: s } = await sb.from('pending_payments').select('*').eq('id',id).maybeSingle()
-    if (s) setShop(s)
+    if (s) {setShop(s)}
     const { data: o } = await sb.from('orders').select('*').eq('shop_id',id).order('created_at',{ascending:false})
     setOrders(o||[])
     const { count } = await sb.from('products').select('*',{count:'exact',head:true}).eq('shop_id',id)

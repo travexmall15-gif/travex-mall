@@ -38,7 +38,7 @@ export async function GET(req: Request) {
   const daily: Record<string, number> = {}
   for (const e of data||[]) {
     const day = e.created_at.split('T')[0]
-    if (e.event === 'view') daily[day] = (daily[day] || 0) + 1
+    if (e.event === 'view') {daily[day] = (daily[day] || 0) + 1}
   }
 
   return NextResponse.json({ views, orders, waClicks, conversion, daily })

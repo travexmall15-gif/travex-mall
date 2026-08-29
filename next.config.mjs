@@ -21,7 +21,6 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: false,
   typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
 
   // ── Router cache — CRITICAL: prevents stale UI ──────────
   // staleTimes: 0 = never serve cached page segments

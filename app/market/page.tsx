@@ -48,7 +48,7 @@ export default function MarketPage() {
           .select('shop_category, shop_market')
           .eq('status', 'approved')
 
-        if (!data) return
+        if (!data) {return}
 
         const result: Record<string, number> = { fashion: 0, vehicle: 0, electronics: 0 }
         for (const shop of data) {

@@ -10,7 +10,7 @@ export function useLocale() {
       .split('; ')
       .find(r => r.startsWith('NEXT_LOCALE='))
       ?.split('=')[1] as Locale | undefined
-    if (stored) setLocaleState(stored)
+    if (stored) {setLocaleState(stored)}
   }, [])
 
   const setLocale = useCallback((newLocale: Locale) => {

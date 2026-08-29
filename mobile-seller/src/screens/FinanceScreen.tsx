@@ -19,7 +19,7 @@ export default function FinanceScreen() {
 
   const load = async () => {
     const raw = await AsyncStorage.getItem('seller_session')
-    if (!raw) return
+    if (!raw) {return}
     const {id} = JSON.parse(raw); setShopId(id)
     const {data:o} = await sb.from('orders').select('*').eq('shop_id',id)
     const {data:s} = await sb.from('seller_sales').select('*').eq('store_id',id).order('date',{ascending:false})

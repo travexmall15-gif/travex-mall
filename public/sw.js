@@ -34,7 +34,7 @@ self.addEventListener('fetch', event => {
     url.pathname.startsWith('/_next/data/') ||
     url.hostname.includes('supabase.co') ||
     url.hostname !== self.location.hostname
-  ) return
+  ) {return}
 
   const isStatic = STATIC_EXTS.some(ext => url.pathname.endsWith(ext)) ||
                    url.pathname.startsWith('/_next/static/')
@@ -44,9 +44,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.open(CACHE_VERSION).then(cache =>
         cache.match(event.request).then(cached => {
-          if (cached) return cached
+          if (cached) {return cached}
           return fetch(event.request).then(res => {
-            if (res.ok) cache.put(event.request, res.clone())
+            if (res.ok) {cache.put(event.request, res.clone())}
             return res
           })
         })
@@ -67,5 +67,5 @@ self.addEventListener('fetch', event => {
 })
 
 self.addEventListener('message', event => {
-  if (event.data === 'skipWaiting') self.skipWaiting()
+  if (event.data === 'skipWaiting') {self.skipWaiting()}
 })

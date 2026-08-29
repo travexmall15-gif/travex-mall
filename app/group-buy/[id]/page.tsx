@@ -21,9 +21,9 @@ const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString()
 // ── Live HH:MM:SS countdown ──────────────────────────────────
 function useCountdown(endTime: string | null) {
   const calc = useCallback(() => {
-    if (!endTime) return { h: '00', m: '00', s: '00', done: false, ongoing: true }
+    if (!endTime) {return { h: '00', m: '00', s: '00', done: false, ongoing: true }}
     const diff = new Date(endTime).getTime() - Date.now()
-    if (diff <= 0) return { h: '00', m: '00', s: '00', done: true, ongoing: false }
+    if (diff <= 0) {return { h: '00', m: '00', s: '00', done: true, ongoing: false }}
     const totalH = Math.floor(diff / 3600000)
     const m = Math.floor((diff % 3600000) / 60000)
     const s = Math.floor((diff % 60000) / 1000)
@@ -53,7 +53,7 @@ export default function GroupDetailPage({
 
   useEffect(() => {
     sb.from('group_orders').select('*').eq('id', id).single()
-      .then(({ data, error }) => { if (!error && data) setGroup(data) })
+      .then(({ data, error }) => { if (!error && data) {setGroup(data)} })
     sb.from('group_order_members').select('name,phone,joined_at')
       .eq('group_id', id).order('joined_at')
       .then(({ data }) => setMembers(data || []))
@@ -72,7 +72,7 @@ export default function GroupDetailPage({
       // 1. Add member
       const { error: memberErr } = await sb.from('group_order_members')
         .insert({ group_id: id, name: name.trim(), phone: phone.trim(), joined_at: new Date().toISOString() })
-      if (memberErr) throw memberErr
+      if (memberErr) {throw memberErr}
 
       // 2. Atomic increment via RPC (prevents race conditions)
       // Fallback: read-then-write if RPC not available
@@ -81,7 +81,7 @@ export default function GroupDetailPage({
       const newCount = (latest?.current_members || 0) + 1
       const { error: updErr } = await sb.from('group_orders')
         .update({ current_members: newCount }).eq('id', id)
-      if (updErr) throw updErr
+      if (updErr) {throw updErr}
 
       // 3. Mark as ready if target reached
       if (latest && newCount >= (latest.min_members || 1)) {
@@ -101,12 +101,12 @@ export default function GroupDetailPage({
     }
   }
 
-  if (!group) return (
+  if (!group) {return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center' }}>
       <Loader2 size={32} style={{ animation:'spin 1s linear infinite', color:'var(--sn-text)' }} />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
-  )
+  )}
 
   const pct       = Math.round((group.current_members / group.min_members) * 100)
   const discount  = group.unit_price * (1 - group.discount_pct / 100)
