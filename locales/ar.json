@@ -415,7 +415,21 @@
     "step5": "أكمل الشراء",
     "readyToBuy": "جاهز للشراء",
     "fillingUp": "يمتلئ",
-    "allDeals": "جميع الصفقات الجماعية"
+    "allDeals": "جميع الصفقات الجماعية",
+    "backToGroups": "كل المجموعات",
+    "needMoreCount": "يلزم {count} أشخاص إضافيين",
+    "membersNeededDesc": "يلزم {min} أعضاء لتفعيل خصم {pct}%",
+    "youreIn": "لقد انضممت!",
+    "joinedShareDesc": "لقد انضممت إلى المجموعة. شارك الرابط لدعوة المزيد من الأصدقاء وتفعيل الخصم!",
+    "shareWhatsapp": "شارك على واتساب، وادعُ الأصدقاء",
+    "shareNow": "شارك الآن",
+    "nameRequired": "يرجى إدخال اسمك.",
+    "phoneRequired": "يرجى إدخال رقم هاتفك.",
+    "genericError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    "joining": "جارٍ الانضمام...",
+    "endsInSeconds": "ينتهي خلال {time}",
+    "groupUnlocked": "تم فتح المجموعة",
+    "groupExpired": "انتهت صلاحية المجموعة"
   },
   "flash": {
     "badge": "صفقات سريعة",

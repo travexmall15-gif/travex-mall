@@ -415,7 +415,21 @@
     "step5": "Complete Purchase",
     "readyToBuy": "Ready to Buy",
     "fillingUp": "Filling Up",
-    "allDeals": "All Group Deals"
+    "allDeals": "All Group Deals",
+    "backToGroups": "All Groups",
+    "needMoreCount": "{count} more people needed",
+    "membersNeededDesc": "{min} members needed for {pct}% discount to activate",
+    "youreIn": "You're In!",
+    "joinedShareDesc": "You joined the group. Share the link to invite more friends and activate the discount!",
+    "shareWhatsapp": "Share on WhatsApp, Invite Friends",
+    "shareNow": "Share Now",
+    "nameRequired": "Please enter your name.",
+    "phoneRequired": "Please enter your phone number.",
+    "genericError": "Something went wrong. Please try again.",
+    "joining": "Joining...",
+    "endsInSeconds": "Ends in {time}",
+    "groupUnlocked": "GROUP UNLOCKED",
+    "groupExpired": "GROUP EXPIRED"
   },
   "flash": {
     "badge": "Flash Deals",

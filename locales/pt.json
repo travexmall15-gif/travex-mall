@@ -415,7 +415,21 @@
     "step5": "Finalizar compra",
     "readyToBuy": "Pronto para comprar",
     "fillingUp": "Enchendo",
-    "allDeals": "Todas as ofertas em grupo"
+    "allDeals": "Todas as ofertas em grupo",
+    "backToGroups": "Todos os grupos",
+    "needMoreCount": "Mais {count} pessoas necessárias",
+    "membersNeededDesc": "{min} membros necessários para ativar {pct}% de desconto",
+    "youreIn": "Você entrou!",
+    "joinedShareDesc": "Você entrou no grupo. Compartilhe o link para convidar mais amigos e ativar o desconto!",
+    "shareWhatsapp": "Compartilhar no WhatsApp, convidar amigos",
+    "shareNow": "Compartilhar agora",
+    "nameRequired": "Digite seu nome.",
+    "phoneRequired": "Digite seu número de telefone.",
+    "genericError": "Algo deu errado. Tente novamente.",
+    "joining": "Entrando...",
+    "endsInSeconds": "Termina em {time}",
+    "groupUnlocked": "GRUPO DESBLOQUEADO",
+    "groupExpired": "GRUPO EXPIRADO"
   },
   "flash": {
     "badge": "Ofertas Relâmpago",

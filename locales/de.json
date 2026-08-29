@@ -415,7 +415,21 @@
     "step5": "Kauf abschließen",
     "readyToBuy": "Kaufbereit",
     "fillingUp": "Füllt sich",
-    "allDeals": "Alle Gruppendeals"
+    "allDeals": "Alle Gruppendeals",
+    "backToGroups": "Alle Gruppen",
+    "needMoreCount": "{count} weitere Personen benötigt",
+    "membersNeededDesc": "{min} Mitglieder nötig, um {pct}% Rabatt zu aktivieren",
+    "youreIn": "Du bist dabei!",
+    "joinedShareDesc": "Du bist der Gruppe beigetreten. Teile den Link, um mehr Freunde einzuladen und den Rabatt zu aktivieren!",
+    "shareWhatsapp": "Auf WhatsApp teilen, Freunde einladen",
+    "shareNow": "Jetzt teilen",
+    "nameRequired": "Bitte gib deinen Namen ein.",
+    "phoneRequired": "Bitte gib deine Telefonnummer ein.",
+    "genericError": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "joining": "Beitreten...",
+    "endsInSeconds": "Endet in {time}",
+    "groupUnlocked": "GRUPPE FREIGESCHALTET",
+    "groupExpired": "GRUPPE ABGELAUFEN"
   },
   "flash": {
     "badge": "Blitzangebote",

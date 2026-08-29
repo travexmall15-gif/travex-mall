@@ -415,7 +415,21 @@
     "step5": "Maliza Ununuzi",
     "readyToBuy": "Tayari Kununua",
     "fillingUp": "Inajaa",
-    "allDeals": "Ofa Zote za Kikundi"
+    "allDeals": "Ofa Zote za Kikundi",
+    "backToGroups": "Vikundi Vyote",
+    "needMoreCount": "Watu {count} zaidi wanahitajika",
+    "membersNeededDesc": "Wanachama {min} wanahitajika ili punguzo la {pct}% lianze",
+    "youreIn": "Umeshajiunga!",
+    "joinedShareDesc": "Umeshajiunga na kikundi. Shiriki kiungo kualika marafiki zaidi na kuamsha punguzo!",
+    "shareWhatsapp": "Shiriki kwa WhatsApp, Waalike Marafiki",
+    "shareNow": "Shiriki Sasa",
+    "nameRequired": "Tafadhali ingiza jina lako.",
+    "phoneRequired": "Tafadhali ingiza nambari yako ya simu.",
+    "genericError": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "joining": "Inajiunga...",
+    "endsInSeconds": "Inaisha baada ya {time}",
+    "groupUnlocked": "KIKUNDI KIMEFUNGULIWA",
+    "groupExpired": "KIKUNDI KIMEISHA"
   },
   "flash": {
     "badge": "Ofa za Haraka",

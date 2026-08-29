@@ -416,7 +416,21 @@
     "step5": "Finaliser l'achat",
     "readyToBuy": "Prêt à acheter",
     "fillingUp": "En remplissage",
-    "allDeals": "Toutes les offres groupées"
+    "allDeals": "Toutes les offres groupées",
+    "backToGroups": "Tous les groupes",
+    "needMoreCount": "{count} personnes de plus nécessaires",
+    "membersNeededDesc": "{min} membres nécessaires pour activer -{pct}%",
+    "youreIn": "Vous y êtes !",
+    "joinedShareDesc": "Vous avez rejoint le groupe. Partagez le lien pour inviter plus d'amis et activer la réduction !",
+    "shareWhatsapp": "Partager sur WhatsApp, inviter des amis",
+    "shareNow": "Partager maintenant",
+    "nameRequired": "Veuillez saisir votre nom.",
+    "phoneRequired": "Veuillez saisir votre numéro de téléphone.",
+    "genericError": "Une erreur s'est produite. Veuillez réessayer.",
+    "joining": "Adhésion...",
+    "endsInSeconds": "Se termine dans {time}",
+    "groupUnlocked": "GROUPE DÉBLOQUÉ",
+    "groupExpired": "GROUPE EXPIRÉ"
   },
   "flash": {
     "badge": "Ventes Flash",
