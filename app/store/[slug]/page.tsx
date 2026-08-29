@@ -1,6 +1,5 @@
 'use client'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteFooter } from '@/components/site-footer'
 
 import Image from 'next/image'
 
@@ -8,7 +7,6 @@ import { use, useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
-import { SiteNav } from '@/components/site-nav'
 import { ArrowLeft, MessageCircle, Package, ShoppingCart, ShoppingBag, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search, Sparkles, TrendingUp, LayoutGrid, MessageSquare, Play, Share2 } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 import { getCurrentBuyerId, getShopLikeCount, isShopLikedByUser, likeShop, unlikeShop } from '@/lib/shop-likes'
@@ -943,7 +941,6 @@ export default function StorePage({
       )}
 
       {store && <AIChatWidget storeId={store.id} shopName={store.shop_name} welcomeMessage={`Welcome to ${store.shop_name}! I am here to help you find products and place orders. What are you looking for today?`} />}
-      <SiteFooter />
     </main>
   )
 }

@@ -4,8 +4,6 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { useLang } from '@/lib/lang-context'
 import { useTheme } from '@/lib/theme-context'
 import {
@@ -37,7 +35,6 @@ export default function AppearancePage() {
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         <button onClick={() => router.back()}
@@ -167,7 +164,6 @@ export default function AppearancePage() {
           </div>
         )}
       </div>
-      <SiteFooter />
       <style>{`@keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}`}</style>
     </main>
   )

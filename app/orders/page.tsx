@@ -4,7 +4,6 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, Package, Filter as FilterIcon, Loader2, AlertCircle } from 'lucide-react'
 
@@ -81,7 +80,6 @@ export default function OrdersPage() {
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:540, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
         <button onClick={() => router.back()}

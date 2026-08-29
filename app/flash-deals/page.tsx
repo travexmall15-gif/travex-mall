@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { Zap, Clock, Store, ArrowLeft, ShoppingBag, TrendingUp, AlertCircle, CheckCircle2 } from 'lucide-react'
 
@@ -307,9 +305,6 @@ export default function FlashDealsPage() {
         @media (min-width:640px)  { .deal-grid { grid-template-columns:repeat(2,1fr); } }
         @media (min-width:1024px) { .deal-grid { grid-template-columns:repeat(3,1fr); } }
       `}</style>
-
-      <SiteNav />
-
       {/* ── CONTENT ───────────────────────────────────────────── */}
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
@@ -396,8 +391,6 @@ export default function FlashDealsPage() {
           </>
         )}
       </div>
-
-      <SiteFooter />
     </main>
   )
 }

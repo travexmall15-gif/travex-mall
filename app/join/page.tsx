@@ -1,6 +1,5 @@
 'use client'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteFooter } from '@/components/site-footer'
 
 import Link from 'next/link'
 
@@ -161,8 +160,6 @@ export default function JoinPage() {
           </Link>
         </div>
       </section>
-      <SiteFooter />
-
     </main>
   )
 }

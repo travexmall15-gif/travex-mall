@@ -3,8 +3,6 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { MessageSquare, Store, Search, Loader2, MessageCircle } from 'lucide-react'
 
@@ -112,7 +110,6 @@ export default function MessagesPage() {
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:560, margin:'0 auto', padding:'1.25rem 5% 4rem' }}>
 
         {/* Header */}
@@ -242,7 +239,6 @@ export default function MessagesPage() {
           </>
         )}
       </div>
-      <SiteFooter />
     </main>
   )
 }

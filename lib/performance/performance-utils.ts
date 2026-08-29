@@ -56,10 +56,10 @@ export function throttle<T extends (...args: any[]) => any>(
 
 // Check connection type and speed
 export function getConnectionInfo(): { effectiveType?: string; saveData?: boolean } {
-  if (typeof navigator === 'undefined' || !navigator.connection) {
+  if (typeof navigator === 'undefined' || !(navigator as any).connection) {
     return {}
   }
-  const conn = navigator.connection as any
+  const conn = (navigator as any).connection
   return {
     effectiveType: conn.effectiveType,
     saveData: conn.saveData,

@@ -1,14 +1,16 @@
 'use client'
 import Link from 'next/link'
+import { useTranslation } from '@/hooks/useTranslation'
 
 export function SiteFooter() {
+  const { t } = useTranslation()
   return (
     <footer style={{
       background: 'var(--sn-bg)',
       borderTop: '1px solid var(--sn-border)',
       padding: '1rem 5%',
     }}>
-      {/* Footer links */}
+      {/* Footer links — kept minimal per spec: legal/security link only */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -17,22 +19,10 @@ export function SiteFooter() {
         flexWrap: 'wrap',
       }}>
         <Link
-          href="/join"
+          href="/privacy"
           style={{ fontSize: '0.72rem', color: 'var(--sn-muted)', textDecoration: 'none', fontWeight: 600 }}
         >
-          Download App
-        </Link>
-        <Link
-          href="/auth"
-          style={{ fontSize: '0.72rem', color: 'var(--sn-muted)', textDecoration: 'none', fontWeight: 600 }}
-        >
-          Login
-        </Link>
-        <Link
-          href="/vybe"
-          style={{ fontSize: '0.72rem', color: 'var(--sn-muted)', textDecoration: 'none', fontWeight: 600 }}
-        >
-          Social Vybe
+          {t('footer.privacy')}
         </Link>
       </div>
       {/* Brand */}

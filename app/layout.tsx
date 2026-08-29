@@ -6,6 +6,7 @@ import { LangProvider } from '@/lib/lang-context'
 import { ThemeProvider } from '@/lib/theme-context'
 import { NavigationProgress } from '@/components/navigation-progress'
 import { OfflineNotification } from '@/components/offline-notification'
+import { AppShell } from '@/components/app-shell'
 import Script from 'next/script'
 import './globals.css'
 
@@ -179,7 +180,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NavigationProgress />
         <OfflineNotification />
           <LangProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider><AppShell>{children}</AppShell></ToastProvider>
           </LangProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}

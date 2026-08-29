@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { Search, MapPin, Heart, ArrowLeft, Loader2 } from 'lucide-react'
 import { getCurrentBuyerId, likeShop, unlikeShop } from '@/lib/shop-likes'
@@ -155,7 +153,6 @@ export default function MarketInnerPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 118 }}>
-      <SiteNav />
       <style>{`
         .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--sn-border);background:var(--sn-bg);color:var(--sn-muted);white-space:nowrap;transition:border-color 0.15s,background 0.15s,color 0.15s}
         .mk-chip.active{background:var(--sn-text);color:var(--sn-page);border-color:var(--sn-text)}
@@ -235,8 +232,6 @@ export default function MarketInnerPage() {
           </div>
         )}
       </section>
-
-      <SiteFooter />
     </main>
   )
 }

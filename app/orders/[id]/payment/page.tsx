@@ -3,7 +3,6 @@ import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, MapPin, Loader2, Check, Wallet, Truck, CreditCard, AlertCircle } from 'lucide-react'
 
@@ -118,7 +117,6 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
 
   if (loading) {return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
         <Loader2 size={30} color="#0D1B3E" style={{ animation:'spin 1s linear infinite', margin:'0 auto', display:'block' }} />
       </div>
@@ -128,7 +126,6 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
         <button onClick={() => step==='method' ? router.back() : setStep(step==='option'?'method':step==='location'?'option':'location')}

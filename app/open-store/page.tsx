@@ -1,8 +1,6 @@
 'use client'
 import { useState, useMemo, useRef } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteFooter } from '@/components/site-footer'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -152,8 +150,6 @@ export default function OpenStorePage() {
 
   return (
     <main style={{ fontFamily: 'var(--sn-font)', background: 'var(--sn-page)', minHeight: '100vh' }}>
-      <SiteNav />
-
       {success ? (
         <section style={{ maxWidth: 560, margin: '0 auto', padding: '7rem 6% 5rem', textAlign: 'center' }}>
           <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(5,150,105,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
@@ -411,8 +407,6 @@ export default function OpenStorePage() {
           </section>
         </>
       )}
-
-      <SiteFooter />
       <style>{`.spin{animation:snspin 1s linear infinite}@keyframes snspin{to{transform:rotate(360deg)}}`}</style>
     </main>
   )

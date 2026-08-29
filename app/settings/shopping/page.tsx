@@ -3,8 +3,6 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { getCurrentBuyerId, listPreferredShops, unlikeShop, type PreferredShop } from '@/lib/shop-likes'
 import {
@@ -80,7 +78,6 @@ export default function ShoppingPage() {
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
         {/* Header */}
@@ -259,7 +256,6 @@ export default function ShoppingPage() {
         </div>
 
       </div>
-      <SiteFooter />
     </main>
   )
 }

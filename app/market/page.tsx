@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { Shirt, Car, Smartphone } from 'lucide-react'
 
@@ -76,8 +74,6 @@ export default function MarketPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: 118 }}>
-      <SiteNav />
-
       <section style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem' }}>
 
         <h1 style={{ fontSize: 'clamp(1.3rem,3.5vw,1.7rem)', fontWeight: 900, color: 'var(--sn-text)', letterSpacing: '-0.02em', marginBottom: '1.5rem', textAlign: 'center' }}>
@@ -141,8 +137,6 @@ export default function MarketPage() {
       </section>
 
       <style>{`.market-card:hover{border-color:var(--sn-primary);transform:translateY(-2px)}`}</style>
-
-      <SiteFooter />
     </main>
   )
 }

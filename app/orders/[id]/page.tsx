@@ -4,7 +4,6 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, Package, Store, Loader2, AlertCircle } from 'lucide-react'
 
@@ -34,7 +33,6 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
 
   if (loading) {return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
         <Loader2 size={30} color="#0D1B3E" style={{ animation:'spin 1s linear infinite', margin:'0 auto', display:'block' }} />
       </div>
@@ -46,7 +44,6 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
         <button onClick={() => router.back()}
           style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>

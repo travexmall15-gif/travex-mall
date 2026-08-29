@@ -3,8 +3,6 @@ import { useTranslation } from "@/hooks/useTranslation"
 
 import { useState, useEffect, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, Send, Store, Loader2 } from 'lucide-react'
 
@@ -113,8 +111,6 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
 
   return (
     <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--sn-page)', fontFamily: 'var(--sn-font)' }}>
-      <SiteNav />
-
       {/* Chat header */}
       <div style={{ paddingTop: 108, background: 'var(--sn-bg)', borderBottom: '1px solid #F1F5F9', padding: '108px 5% 12px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => router.back()}

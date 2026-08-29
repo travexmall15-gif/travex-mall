@@ -2,8 +2,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import { useState, useEffect } from 'react'
 import { Bell, Lock, Info, LogOut, ChevronRight, Shield, FileText, HelpCircle, Trash2, User } from 'lucide-react'
@@ -84,7 +82,6 @@ export default function SettingsPage() {
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>{t('settings.title')}</h1>
@@ -193,8 +190,6 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
-
-      <SiteFooter />
     </main>
   )
 }

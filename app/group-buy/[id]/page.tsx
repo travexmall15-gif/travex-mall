@@ -4,8 +4,6 @@ import { use, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { sb } from '@/lib/supabase'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { Users, CheckCircle, Loader2, ArrowLeft, MessageCircle, Store, Clock, ShoppingBag } from 'lucide-react'
 
 type Group = {
@@ -119,7 +117,6 @@ export default function GroupDetailPage({
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', fontFamily:'var(--sn-font)' }}>
       <style>{`*{box-sizing:border-box}@keyframes spin{to{transform:rotate(360deg)}}input{font-family:var(--sn-font)}`}</style>
-      <SiteNav />
       <div style={{ maxWidth:560, margin:'0 auto', padding:'130px 5% 4rem' }}>
         <Link href="/group-buy" style={{ display:'inline-flex', alignItems:'center', gap:6,
           color:'var(--sn-muted)', textDecoration:'none', fontSize:13, marginBottom:20 }}>
@@ -271,7 +268,6 @@ export default function GroupDetailPage({
           </div>
         )}
       </div>
-      <SiteFooter />
     </main>
   )
 }

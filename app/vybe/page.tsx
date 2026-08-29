@@ -4,8 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import {
   Heart, Store, Loader2, Image as ImageIcon,
@@ -239,9 +237,6 @@ export default function VybePage() {
         .filter-pill.active { background:var(--sn-primary); color:var(--sn-primary-fg); border-color:var(--sn-primary); }
         .filter-pill:hover:not(.active) { border-color:var(--sn-border-strong); background:var(--sn-page); }
       `}</style>
-
-      <SiteNav />
-
       {/* ── SEARCH + FILTER ─────────────────────────────────── */}
       <div style={{ background:'var(--sn-bg)', borderBottom:'1px solid var(--sn-border)', position:'sticky', top:60, zIndex:90 }}>
         <div style={{ maxWidth:680, margin:'0 auto', padding:'0.75rem 4%' }}>
@@ -340,8 +335,6 @@ export default function VybePage() {
           </>
         )}
       </div>
-
-      <SiteFooter />
     </main>
   )
 }

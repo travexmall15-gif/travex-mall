@@ -1,9 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteFooter } from '@/components/site-footer'
 import Link from 'next/link'
-import { SiteNav } from '@/components/site-nav'
 import { ArrowRight, Store, Sparkles, BadgeCheck, ExternalLink } from 'lucide-react'
 import { sb } from '@/lib/supabase'
 
@@ -71,9 +69,6 @@ export default function HomePage() {
           .spons-card { min-width:195px; scroll-snap-align:start; flex-shrink:0; }
         }
       `}</style>
-
-      <SiteNav />
-
       {/* START SELLING CHIP */}
       <div className="sell-chip-wrap">
         <div className="sell-chip-inner">
@@ -229,8 +224,6 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
-      <SiteFooter />
     </main>
   )
 }

@@ -4,8 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { sb } from '@/lib/supabase'
 import {
   Users, Clock, Search, Loader2, TrendingUp,
@@ -350,9 +348,6 @@ export default function GroupBuyPage() {
         @media (min-width:640px)  { .gb-grid { grid-template-columns:repeat(2,1fr) !important; } }
         @media (min-width:1024px) { .gb-grid { grid-template-columns:repeat(3,1fr) !important; } }
       `}</style>
-
-      <SiteNav />
-
       {/* ── CONTENT ───────────────────────────────────────────── */}
       <div style={{ maxWidth:1200, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
@@ -507,8 +502,6 @@ export default function GroupBuyPage() {
           </div>
         )}
       </div>
-
-      <SiteFooter />
     </main>
   )
 }

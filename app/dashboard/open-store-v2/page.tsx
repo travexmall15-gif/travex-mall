@@ -1,8 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
-import { SiteFooter } from '@/components/site-footer'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import Link from 'next/link'
 import {
@@ -84,8 +82,6 @@ export default function OpenStoreStatusPage() {
 
   return (
     <main style={{ fontFamily: 'var(--sn-font)', background: 'var(--sn-page)', minHeight: '100vh' }}>
-      <SiteNav />
-
       <section style={{ maxWidth: 560, margin: '0 auto', padding: '128px 6% 5rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{ fontSize: 'clamp(1.4rem,4vw,1.9rem)', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 6 }}>{t('status.title')}</h1>
@@ -183,8 +179,6 @@ export default function OpenStoreStatusPage() {
           </div>
         )}
       </section>
-
-      <SiteFooter />
       <style>{`.spin{animation:snspin 1s linear infinite}@keyframes snspin{to{transform:rotate(360deg)}}`}</style>
     </main>
   )

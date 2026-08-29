@@ -2,7 +2,6 @@
 import { useTranslation } from "@/hooks/useTranslation"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { SiteNav } from '@/components/site-nav'
 import { sb } from '@/lib/supabase'
 import { ArrowLeft, Lock, Eye, EyeOff, Check, Loader2, Shield } from 'lucide-react'
 
@@ -29,7 +28,6 @@ export default function SecurityPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: '108px', fontFamily: 'var(--sn-font)' }}>
-      <SiteNav />
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--sn-muted)', fontSize: '0.82rem', fontWeight: 600, fontFamily: 'var(--sn-font)', marginBottom: '1.5rem', padding: 0 }}>
           <ArrowLeft size={15} /> Back

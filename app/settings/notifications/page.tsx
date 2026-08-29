@@ -2,8 +2,6 @@
 import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { SiteNav } from '@/components/site-nav'
-import { SiteFooter } from '@/components/site-footer'
 import { Bell, Package, Tag, MessageCircle, Zap, Users, ArrowLeft } from 'lucide-react'
 
 const KEYS = ['push','orders','deals','messages','flashDeals','groupBuy']
@@ -44,7 +42,6 @@ export default function NotificationsPage() {
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
-      <SiteNav />
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
         <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>
           <ArrowLeft size={15} /> Back
@@ -69,7 +66,6 @@ export default function NotificationsPage() {
           Preferences saved automatically
         </p>
       </div>
-      <SiteFooter />
     </main>
   )
 }
