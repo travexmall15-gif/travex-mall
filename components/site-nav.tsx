@@ -9,12 +9,7 @@ import {
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
 import { sb } from '@/lib/supabase'
-
-type ShopResult = {
-  id: string
-  shop_name: string
-  shop_city?: string
-}
+import { searchShops, searchProducts, type ShopSearchResult, type ProductSearchResult } from '@/lib/search'
 
 const NAV_ICON_DATA = [
   { href: '/home',        Icon: Home,          labelKey: 'nav.homeLabel'       },
@@ -32,7 +27,8 @@ export function SiteNav() {
   const { lang, setLang } = useLang()
 
   const [query,      setQuery]      = useState('')
-  const [results,    setResults]    = useState<ShopResult[]>([])
+  const [results,    setResults]    = useState<ShopSearchResult[]>([])
+  const [productResults, setProductResults] = useState<ProductSearchResult[]>([])
   const [searching,  setSearching]  = useState(false)
   const [showDrop,   setShowDrop]   = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -79,21 +75,14 @@ export function SiteNav() {
   const handleSearch = useCallback((val: string) => {
     setQuery(val)
     if (debounceRef.current) {clearTimeout(debounceRef.current)}
-    if (!val.trim()) { setResults([]); setShowDrop(false); return }
+    if (!val.trim()) { setResults([]); setProductResults([]); setShowDrop(false); return }
 
     debounceRef.current = setTimeout(async () => {
       setSearching(true)
       try {
-        const { data: biz } = await sb
-          .from('pending_payments')
-          .select('id,shop_name,shop_city')
-          .ilike('shop_name', `%${val}%`)
-          .eq('status', 'approved')
-          .limit(8)
-        const combined: ShopResult[] = (biz || []).map((s: any) => ({
-          id: s.id, shop_name: s.shop_name, shop_city: s.shop_city,
-        }))
-        setResults(combined)
+        const [shops, products] = await Promise.all([searchShops(val, 4), searchProducts(val, 4)])
+        setResults(shops)
+        setProductResults(products)
         setShowDrop(true)
       } catch {}
       setSearching(false)
@@ -144,12 +133,15 @@ export function SiteNav() {
                 autoFocus
                 value={query}
                 onChange={e => handleSearch(e.target.value)}
-                onKeyDown={e => { if (e.key==='Escape') { setSearchOpen(false); setQuery(''); setShowDrop(false) } }}
-                placeholder={t('common.search') + '...'}
+                onKeyDown={e => {
+                  if (e.key === 'Escape') { setSearchOpen(false); setQuery(''); setShowDrop(false) }
+                  if (e.key === 'Enter' && query.trim()) { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setSearchOpen(false); setShowDrop(false) }
+                }}
+                placeholder={t('search.placeholder')}
                 style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'var(--sn-text)', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
               />
               {query && (
-                <button onClick={() => { setQuery(''); setResults([]); setShowDrop(false) }}
+                <button onClick={() => { setQuery(''); setResults([]); setProductResults([]); setShowDrop(false) }}
                   style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'var(--sn-subtle)', flexShrink:0 }}>
                   <X size={14} />
                 </button>
@@ -169,34 +161,58 @@ export function SiteNav() {
             </button>
           )}
 
-          {/* Search dropdown */}
-          {showDrop && results.length > 0 && (
-            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden' }}>
+          {/* Search dropdown — shops + products (Home Search: no Vybe/Flash Deals/Group Buy/AI/Orders) */}
+          {showDrop && (results.length > 0 || productResults.length > 0) && (
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid var(--sn-border)', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden', maxHeight: 420, overflowY: 'auto' }}>
+              {results.length > 0 && (
+                <div style={{ padding: '8px 14px 2px', fontSize: '0.62rem', fontWeight: 800, color: 'var(--sn-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('search.tabShops')}</div>
+              )}
               {results.map(r => (
                 <button key={r.id} onClick={() => { goToShop(r.id); setSearchOpen(false) }}
-                  style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily:"'Inter',sans-serif" }}
-                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily: 'var(--sn-font)' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                  <div style={{ width:32, height:32, borderRadius:8, background:'#F0FDF4', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <Store size={14} color="#16A34A" />
+                  <div style={{ width:32, height:32, borderRadius:8, background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow: 'hidden' }}>
+                    {r.shop_logo ? <img src={r.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Store size={14} color="#16A34A" />}
                   </div>
-                  <div>
+                  <div style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)' }}>{r.shop_name}</div>
-                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{r.shop_city || ''}</div>
+                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{r.shop_region || ''}</div>
                   </div>
+                  {r.like_count > 0 && (
+                    <span style={{ fontSize: '0.65rem', color: 'var(--sn-subtle)', flexShrink: 0 }}>♥ {r.like_count}</span>
+                  )}
                 </button>
               ))}
-              <div style={{ padding:'8px 14px', borderTop:'1px solid #F1F5F9' }}>
-                <button onClick={() => { router.push(`/market`); setSearchOpen(false) }}
-                  style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'var(--sn-text)', fontWeight:600, textAlign:'left', fontFamily:"'Inter',sans-serif" }}>
-                  {t('nav.searchAll')} "{query}" →
+              {productResults.length > 0 && (
+                <div style={{ padding: '8px 14px 2px', fontSize: '0.62rem', fontWeight: 800, color: 'var(--sn-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em', borderTop: results.length > 0 ? '1px solid var(--sn-border)' : 'none' }}>{t('search.tabProducts')}</div>
+              )}
+              {productResults.map(p => (
+                <button key={p.id} onClick={() => { router.push(`/store/${p.store_id}?product=${p.id}`); setSearchOpen(false) }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily: 'var(--sn-font)' }}
+                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}
+                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
+                  <div style={{ width:32, height:32, borderRadius:8, background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow: 'hidden' }}>
+                    {p.image_url ? <img src={p.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Search size={13} color="var(--sn-subtle)" />}
+                  </div>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
+                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{p.shop_name}</div>
+                  </div>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--sn-primary)', flexShrink: 0 }}>TZS {p.price.toLocaleString()}</span>
+                </button>
+              ))}
+              <div style={{ padding:'8px 14px', borderTop:'1px solid var(--sn-border)' }}>
+                <button onClick={() => { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setSearchOpen(false) }}
+                  style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'var(--sn-text)', fontWeight:600, textAlign:'left', fontFamily: 'var(--sn-font)' }}>
+                  {t('search.seeAllResultsFor')} "{query}" →
                 </button>
               </div>
             </div>
           )}
-          {showDrop && results.length === 0 && query.trim() && !searching && (
-            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
-              <div style={{ fontSize:'0.82rem', color:'var(--sn-subtle)' }}>{t('common.noResults')}</div>
+          {showDrop && results.length === 0 && productResults.length === 0 && query.trim() && !searching && (
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid var(--sn-border)', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
+              <div style={{ fontSize:'0.82rem', color:'var(--sn-subtle)' }}>{t('search.noResults')}</div>
             </div>
           )}
         </div>

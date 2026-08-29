@@ -1373,5 +1373,19 @@
     "wrongPin": "Incorrect PIN.",
     "goToDashboard": "Go to Seller Dashboard",
     "checkAnother": "Check another email"
+  },
+  "search": {
+    "placeholder": "Search shops or products...",
+    "tabAll": "All",
+    "tabShops": "Shops",
+    "tabProducts": "Products",
+    "resultsFor": "Results for",
+    "noResults": "No results found",
+    "noResultsDesc": "Try a different search term.",
+    "emptyPrompt": "Search for shops or products",
+    "shopsSection": "Shops",
+    "productsSection": "Products",
+    "seeAllResultsFor": "See all results for",
+    "errorLoading": "Couldn't load results. Try again."
   }
 }

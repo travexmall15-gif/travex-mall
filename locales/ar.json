@@ -1449,5 +1449,19 @@
     "wrongPin": "رمز PIN غير صحيح.",
     "goToDashboard": "الذهاب إلى لوحة تحكم البائع",
     "checkAnother": "تحقق من بريد إلكتروني آخر"
+  },
+  "search": {
+    "placeholder": "ابحث عن متاجر أو منتجات...",
+    "tabAll": "الكل",
+    "tabShops": "المتاجر",
+    "tabProducts": "المنتجات",
+    "resultsFor": "نتائج",
+    "noResults": "لم يتم العثور على نتائج",
+    "noResultsDesc": "جرّب كلمة بحث مختلفة.",
+    "emptyPrompt": "ابحث عن متاجر أو منتجات",
+    "shopsSection": "المتاجر",
+    "productsSection": "المنتجات",
+    "seeAllResultsFor": "عرض كل النتائج لـ",
+    "errorLoading": "تعذر تحميل النتائج. حاول مرة أخرى."
   }
 }

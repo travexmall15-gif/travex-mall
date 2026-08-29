@@ -1373,5 +1373,19 @@
     "wrongPin": "PIN si sahihi.",
     "goToDashboard": "Nenda kwenye Dashibodi ya Muuzaji",
     "checkAnother": "Angalia barua pepe nyingine"
+  },
+  "search": {
+    "placeholder": "Tafuta maduka au bidhaa...",
+    "tabAll": "Zote",
+    "tabShops": "Maduka",
+    "tabProducts": "Bidhaa",
+    "resultsFor": "Matokeo ya",
+    "noResults": "Hakuna matokeo yaliyopatikana",
+    "noResultsDesc": "Jaribu neno lingine la utafutaji.",
+    "emptyPrompt": "Tafuta maduka au bidhaa",
+    "shopsSection": "Maduka",
+    "productsSection": "Bidhaa",
+    "seeAllResultsFor": "Angalia matokeo yote ya",
+    "errorLoading": "Imeshindikana kupakia matokeo. Jaribu tena."
   }
 }

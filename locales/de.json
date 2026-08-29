@@ -1449,5 +1449,19 @@
     "wrongPin": "Falsche PIN.",
     "goToDashboard": "Zum Verkäufer-Dashboard",
     "checkAnother": "Andere E-Mail prüfen"
+  },
+  "search": {
+    "placeholder": "Shops oder Produkte suchen...",
+    "tabAll": "Alle",
+    "tabShops": "Shops",
+    "tabProducts": "Produkte",
+    "resultsFor": "Ergebnisse für",
+    "noResults": "Keine Ergebnisse gefunden",
+    "noResultsDesc": "Versuche einen anderen Suchbegriff.",
+    "emptyPrompt": "Suche nach Shops oder Produkten",
+    "shopsSection": "Shops",
+    "productsSection": "Produkte",
+    "seeAllResultsFor": "Alle Ergebnisse anzeigen für",
+    "errorLoading": "Ergebnisse konnten nicht geladen werden. Erneut versuchen."
   }
 }

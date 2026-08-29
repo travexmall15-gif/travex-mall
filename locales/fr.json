@@ -1450,5 +1450,19 @@
     "wrongPin": "PIN incorrect.",
     "goToDashboard": "Aller au tableau de bord vendeur",
     "checkAnother": "Vérifier un autre e-mail"
+  },
+  "search": {
+    "placeholder": "Rechercher boutiques ou produits...",
+    "tabAll": "Tout",
+    "tabShops": "Boutiques",
+    "tabProducts": "Produits",
+    "resultsFor": "Résultats pour",
+    "noResults": "Aucun résultat trouvé",
+    "noResultsDesc": "Essayez un autre terme de recherche.",
+    "emptyPrompt": "Recherchez des boutiques ou produits",
+    "shopsSection": "Boutiques",
+    "productsSection": "Produits",
+    "seeAllResultsFor": "Voir tous les résultats pour",
+    "errorLoading": "Impossible de charger les résultats. Réessayez."
   }
 }
