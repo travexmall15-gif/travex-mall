@@ -7,6 +7,18 @@ const sb = createClient(
 )
 
 export async function GET(req: Request) {
+  // Protect this endpoint — it performs privileged writes (suspending
+  // sellers, expiring campaigns) and was previously callable by anyone
+  // on the internet with no authentication at all. Vercel Cron
+  // automatically sends `Authorization: Bearer $CRON_SECRET` on its own
+  // invocations once CRON_SECRET is set as an environment variable —
+  // see https://vercel.com/docs/cron-jobs/manage-cron-jobs#securing-cron-jobs
+  const authHeader = req.headers.get('authorization')
+  const expected = process.env.CRON_SECRET
+  if (!expected || authHeader !== `Bearer ${expected}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
   const now    = new Date()
   const results = { reminded: 0, suspended: 0, reactivated: 0 }
@@ -58,6 +70,6 @@ export async function GET(req: Request) {
 
   return NextResponse.json({ success: true, ...results })
   } catch (err) {
-    return NextResponse.json({ error: 'Cron job failed', detail: String(err) }, { status: 500 })
+    return NextResponse.json({ error: 'Cron job failed' }, { status: 500 })
   }
 }

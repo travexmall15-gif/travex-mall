@@ -1052,7 +1052,10 @@
     "messageSeller": "Message Seller",
     "startConversation": "Start a conversation",
     "noConversations": "No conversations yet",
-    "unread": "unread"
+    "unread": "unread",
+    "accessDeniedTitle": "You don't have access to this conversation",
+    "accessDeniedDesc": "This conversation belongs to someone else.",
+    "backToInbox": "Back to Inbox"
   },
   "ai": {
     "title": "360 AI",

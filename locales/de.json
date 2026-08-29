@@ -1126,7 +1126,10 @@
     "noConversations": "Noch keine Gespräche",
     "seen": "Gesehen",
     "startConversation": "Gespräch beginnen",
-    "unread": "ungelesen"
+    "unread": "ungelesen",
+    "accessDeniedTitle": "Du hast keinen Zugriff auf diese Unterhaltung",
+    "accessDeniedDesc": "Diese Unterhaltung gehört jemand anderem.",
+    "backToInbox": "Zurück zum Posteingang"
   },
   "ai": {
     "title": "360 AI",

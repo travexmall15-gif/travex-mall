@@ -1127,7 +1127,10 @@
     "noConversations": "Pas encore de conversations",
     "seen": "Lu",
     "startConversation": "Démarrer une conversation",
-    "unread": "non lus"
+    "unread": "non lus",
+    "accessDeniedTitle": "Vous n'avez pas accès à cette conversation",
+    "accessDeniedDesc": "Cette conversation appartient à quelqu'un d'autre.",
+    "backToInbox": "Retour à la boîte de réception"
   },
   "ai": {
     "title": "360 AI",

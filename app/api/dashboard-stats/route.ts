@@ -8,24 +8,32 @@ const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 export async function POST(req: NextRequest) {
   try {
-    const { shop_id, market, period_days = 30 } = await req.json()
+    const { shop_id, login_password, market, period_days = 30 } = await req.json()
 
     if (!shop_id) {
       return NextResponse.json({ error: 'shop_id required' }, { status: 400 })
     }
+    if (!login_password) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
     const sb = createClient(SB_URL, SB_KEY)
 
-    // Verify session is valid — NEVER trust browser-supplied shop_id alone
+    // Verify shop exists AND the caller supplied the correct seller PIN
+    // (login_password) for this shop — never trust a client-supplied
+    // shop_id alone, since shop ids are public (they're the storefront
+    // URL slug at /store/[id]). This is a stop-gap authorization check
+    // matching the app's existing PIN-based seller auth model; the
+    // durable fix is a real server-verifiable session (see security
+    // audit notes) rather than a per-request shared secret.
     const table  = market === 'campus' ? 'campus_stores' : 'pending_payments'
     const idCol  = 'id'
-    const statusFilter = market === 'campus' ? { is_active: true } : { status: 'approved' }
 
     const { data: shopRecord } = await sb
-      .from(table).select('id').eq(idCol, shop_id).maybeSingle()
+      .from(table).select('id, login_password').eq(idCol, shop_id).maybeSingle()
 
-    if (!shopRecord) {
-      return NextResponse.json({ error: 'Unauthorized — shop not found' }, { status: 403 })
+    if (!shopRecord || String(shopRecord.login_password || '') !== String(login_password)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
     const since = new Date()
@@ -58,13 +66,11 @@ export async function POST(req: NextRequest) {
       pending_orders: orders.filter(o => o.status === 'pending').length,
       revenue,
       total_products: products.length,
-      orders_errors:  ordersResult.error?.message,
-      products_errors: productsResult.error?.message,
     }
 
     return NextResponse.json({ stats, orders: orders.slice(0, 50), products })
 
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

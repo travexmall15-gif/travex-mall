@@ -49,6 +49,33 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options',       value: 'SAMEORIGIN' },
           { key: 'Referrer-Policy',       value: 'strict-origin-when-cross-origin' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=()' },
+          {
+            key: 'Content-Security-Policy',
+            // Built from the app's actual resources, not a generic template:
+            //  - fonts.googleapis.com/fonts.gstatic.com: Google Fonts (used in root layout)
+            //  - bscecjbgnjitlfmgwcic.supabase.co: the app's Supabase project (API + Storage)
+            //  - wa.me / api.whatsapp.com: WhatsApp deep links used throughout (Vybe, Group Buy, seller contact)
+            //  - img-src allows https: broadly because sellers can set arbitrary external
+            //    product-image URLs (no fixed set of image hosts to allowlist)
+            //  - 'unsafe-inline'/'unsafe-eval' on script-src are required by Next.js's own
+            //    inline hydration bootstrap scripts; removing them needs a nonce-based setup
+            //    (middleware-generated nonce threaded through app/layout.tsx) — flagged as a
+            //    follow-up rather than attempted here, to avoid shipping a CSP that silently
+            //    breaks hydration in production.
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https://bscecjbgnjitlfmgwcic.supabase.co wss://bscecjbgnjitlfmgwcic.supabase.co https://generativelanguage.googleapis.com https://api.anthropic.com https://vitals.vercel-insights.com",
+              "frame-ancestors 'self'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join('; '),
+          },
         ],
       },
       // Static JS/CSS (hashed) — cache 1 year

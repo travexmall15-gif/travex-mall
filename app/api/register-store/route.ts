@@ -77,14 +77,20 @@ export async function POST(req: NextRequest) {
     if (error) {
       let msg = error.message
       if (error.code === '23505') {msg = 'An application with this email already exists.'}
-      if (error.code === '42703') {msg = `Column error: ${error.message}`}
-      if (error.code === '42501') {msg = 'Permission denied. Check RLS policies.'}
+      if (error.code === '42703') {msg = 'A required field is not configured. Please contact support.'}
+      if (error.code === '42501') {msg = 'Unable to submit application. Please contact support.'}
       if (error.code === 'PGRST301') {msg = 'Database unreachable. Try again.'}
-      return NextResponse.json({ error: msg, code: error.code, details: error.details }, { status: 500 })
+      // Only ever surface a curated, safe message — never raw DB error
+      // text/details to the client (Part 44: no SQL errors/internal
+      // details in production responses).
+      const safe = ['23505', '42703', '42501', 'PGRST301'].includes(error.code)
+        ? msg
+        : 'Could not submit application. Please try again.'
+      return NextResponse.json({ error: safe }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, id: data?.id })
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

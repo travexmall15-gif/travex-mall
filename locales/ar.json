@@ -1126,7 +1126,10 @@
     "noConversations": "لا توجد محادثات بعد",
     "seen": "مرئي",
     "startConversation": "بدء محادثة",
-    "unread": "غير مقروء"
+    "unread": "غير مقروء",
+    "accessDeniedTitle": "ليس لديك صلاحية الوصول إلى هذه المحادثة",
+    "accessDeniedDesc": "تخص هذه المحادثة شخصًا آخر.",
+    "backToInbox": "العودة إلى الرسائل"
   },
   "ai": {
     "title": "360 AI",

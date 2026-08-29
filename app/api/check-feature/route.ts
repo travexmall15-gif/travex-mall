@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
-  || process.env.SUPABASE_ANON_KEY
-  || 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+// Only the anon key is needed here — this reads a shop's plan tier,
+// which is already public information (shown as a Basic/Premium badge
+// on the storefront and market listing cards), so no elevated
+// privileges are warranted for this read.
+const SB_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 
 // Feature → minimum plan required
 const PLAN_GATES: Record<string, string[]> = {
@@ -45,6 +47,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ allowed, plan, feature })
   } catch (e: any) {
-    return NextResponse.json({ allowed: false, reason: e.message }, { status: 500 })
+    return NextResponse.json({ allowed: false, reason: 'Server error' }, { status: 500 })
   }
 }

@@ -1052,7 +1052,10 @@
     "messageSeller": "Tuma Ujumbe kwa Muuzaji",
     "startConversation": "Anza mazungumzo",
     "noConversations": "Hakuna mazungumzo bado",
-    "unread": "ambayo hayajasomwa"
+    "unread": "ambayo hayajasomwa",
+    "accessDeniedTitle": "Huna ruhusa ya mazungumzo haya",
+    "accessDeniedDesc": "Mazungumzo haya ni ya mtu mwingine.",
+    "backToInbox": "Rudi kwenye Ujumbe"
   },
   "ai": {
     "title": "360 AI",

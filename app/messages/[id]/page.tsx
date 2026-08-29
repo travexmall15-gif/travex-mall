@@ -4,7 +4,8 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { sb } from '@/lib/supabase'
-import { ArrowLeft, Send, Store, Loader2 } from 'lucide-react'
+import { getCurrentBuyerId } from '@/lib/shop-likes'
+import { ArrowLeft, Send, Store, Loader2, ShieldAlert } from 'lucide-react'
 
 type Message = {
   id: string
@@ -24,6 +25,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   const [sending,   setSending]   = useState(false)
   const [userId,    setUserId]    = useState<string | null>(null)
   const [storeName, setStoreName] = useState('Shop')
+  const [denied,    setDenied]    = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -31,9 +33,12 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   }, [messages])
 
   useEffect(() => {
-    sb.auth.getSession().then(async ({ data: { session } }) => {
-      // Don't redirect — let custom auth users see the chat
-      const uid = session?.user?.id || null
+    ;(async () => {
+      // Resolve the current visitor's id the same way the rest of the app
+      // does (Supabase Auth session OR OTP-based customer session).
+      const buyerId = await getCurrentBuyerId()
+      const { data: { session } } = await sb.auth.getSession()
+      const uid = session?.user?.id || buyerId
       setUserId(uid)
 
       // Load conversation info
@@ -42,6 +47,16 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         .select('*')
         .eq('id', id)
         .single()
+
+      // Client-side authorization gate (defense in depth — the real
+      // enforcement must live in Supabase RLS; this closes the obvious
+      // exploitation path of just changing the URL's conversation id).
+      if (!convo || (convo.buyer_id !== uid && convo.seller_id !== uid)) {
+        setDenied(true)
+        setLoading(false)
+        return
+      }
+
       if (convo) {setStoreName(convo.store_name || 'Shop')}
 
       // Load messages
@@ -57,7 +72,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
       await sb.from('conversations')
         .update({ unread: 0 })
         .eq('id', id)
-    })
+    })()
 
     // Real-time subscription
     const channel = sb
@@ -107,6 +122,20 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
 
   function timeStr(d: string) {
     return new Date(d).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  }
+
+  if (denied) {
+    return (
+      <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--sn-page)', fontFamily: 'var(--sn-font)', padding: '2rem' }}>
+        <ShieldAlert size={40} color="var(--sn-subtle)" style={{ marginBottom: 12 }} />
+        <p style={{ color: 'var(--sn-text)', fontWeight: 700, fontSize: '0.95rem', marginBottom: 6 }}>{t('messages.accessDeniedTitle')}</p>
+        <p style={{ color: 'var(--sn-muted)', fontSize: '0.82rem', marginBottom: 20, textAlign: 'center' }}>{t('messages.accessDeniedDesc')}</p>
+        <button onClick={() => router.push('/messages')}
+          style={{ background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 999, padding: '10px 22px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>
+          {t('messages.backToInbox')}
+        </button>
+      </main>
+    )
   }
 
   return (
