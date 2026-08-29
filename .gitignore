@@ -1,4 +1,15 @@
 ```
+# Next.js build output
+.next/
+
+# ESLint configuration
+.eslintrc.json
+
+# Environment variables
+.env
+.env.local
+.env.*
+
 # Dependencies
 node_modules/
 
@@ -12,43 +23,40 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.py.class
-*.py.obj
 .Python
 env/
 venv/
 .venv/
-.env
-.env.local
-.env.*
 
 # Logs
 *.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
 
 # Coverage
 coverage/
 htmlcov/
 .coverage
 
-# IDE
-.vscode/
-.idea/
+# Temporary files
+*.tmp
+*.temp
+*.bak
 *.swp
 *.swo
-*.tmp
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Testing
-.mypy_cache/
-.pytest_cache/
-.nyc_output/
-istanbul/
-coverage/
-
-# Compressed
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -71,15 +79,4 @@ coverage/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# Gradle
-.gradle/
-
-# Performance/Loading specific build artifacts
-lib/loading/build/
-lib/loading/dist/
-lib/navigation/build/
-lib/navigation/dist/
-lib/performance/build/
-lib/performance/dist/
 ```
