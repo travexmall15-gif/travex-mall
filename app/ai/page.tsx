@@ -92,15 +92,15 @@ export default function AiPage() {
     let loc = city
     if (!loc) { for (const [c,kws] of Object.entries(CITY_KW)) { if(kws.some(k=>lq.includes(k))){loc=c;break} } }
     let q: any = sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan,shop_desc').eq('status','approved').limit(30)
-    if (cat) q = q.ilike('shop_category',`%${cat}%`)
-    if (loc) q = q.ilike('shop_region',`%${loc}%`)
+    if (cat) {q = q.ilike('shop_category',`%${cat}%`)}
+    if (loc) {q = q.ilike('shop_region',`%${loc}%`)}
     const { data: shops } = await q
     const enriched: Result[] = []
     for (const shop of (shops||[]).slice(0,15)) {
       let pq: any = sb.from('products').select('name,price').eq('shop_id',shop.id).eq('is_available',true).limit(4)
-      if (budgetNum>0) pq = pq.lte('price',budgetNum)
+      if (budgetNum>0) {pq = pq.lte('price',budgetNum)}
       const terms = query.split(' ').filter(w=>w.length>2&&!SKIP_W.includes(w.toLowerCase()))
-      if (terms.length) pq = pq.or(terms.map((t:string)=>`name.ilike.%${t}%`).join(','))
+      if (terms.length) {pq = pq.or(terms.map((t:string)=>`name.ilike.%${t}%`).join(','))}
       const { data: products } = await pq
       const textMatch = terms.some((term:string)=>
         shop.shop_name?.toLowerCase().includes(term.toLowerCase())||
@@ -108,23 +108,23 @@ export default function AiPage() {
       )
       if (products?.length||textMatch) {
         const why: string[] = []
-        if (products?.length) why.push(`${products.length} product${products.length>1?'s':''} found`)
-        if (budgetNum>0&&products?.length) why.push(`TZS ${budgetNum.toLocaleString()}`)
-        if (loc) why.push(`\uD83D\uDCCD ${loc}`)
+        if (products?.length) {why.push(`${products.length} product${products.length>1?'s':''} found`)}
+        if (budgetNum>0&&products?.length) {why.push(`TZS ${budgetNum.toLocaleString()}`)}
+        if (loc) {why.push(`\uD83D\uDCCD ${loc}`)}
         enriched.push({...shop, match_reason:why.join(' \u00B7 ')||'Verified store', products:products||[], rating:shop.rating||0})
       }
     }
     if (!enriched.length) {
       const { data: fb } = await sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan').eq('status','approved').or(`shop_name.ilike.%${query}%,shop_desc.ilike.%${query}%,shop_category.ilike.%${query}%`).limit(6)
-      for (const s of (fb||[])) enriched.push({...s,match_reason:'Matches search',products:[]})
+      for (const s of (fb||[])) {enriched.push({...s,match_reason:'Matches search',products:[]})}
     }
     return enriched.sort((a,b)=>(b.products?.length||0)-(a.products?.length||0)).slice(0,8)
   }
 
   async function send(override?: string) {
     const text = (override??input).trim()
-    if (!text||loading) return
-    if (!override) setInput('')
+    if (!text||loading) {return}
+    if (!override) {setInput('')}
     setLoading(true)
     const aiId = crypto.randomUUID()
     addMsg({id:crypto.randomUUID(),role:'user',content:text,ts:new Date()})
@@ -345,7 +345,7 @@ export default function AiPage() {
 }
 
 function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
-  if (!results.length) return null
+  if (!results.length) {return null}
   return (
     <div className="rl">
       {results.map(store=>(

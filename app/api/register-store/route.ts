@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
       }
     }
     if (!body.owner_email.includes('@'))
-      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+      {return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })}
     if (!/^\d{4}$/.test(String(body.login_password)))
-      return NextResponse.json({ error: 'PIN must be exactly 4 digits' }, { status: 400 })
+      {return NextResponse.json({ error: 'PIN must be exactly 4 digits' }, { status: 400 })}
         const sb = createClient(SB_URL, SB_KEY)
 
     // Duplicate check
@@ -53,11 +53,11 @@ export async function POST(req: NextRequest) {
       status:        'pending',
       created_at:    new Date().toISOString(),
     }
-    if (body.shop_logo && String(body.shop_logo).startsWith('http')) basePayload.shop_logo = body.shop_logo
-    if (body.shop_whatsapp) basePayload.shop_whatsapp = String(body.shop_whatsapp).trim()
-    if (body.shop_desc)     basePayload.shop_desc = String(body.shop_desc).trim()
-    if (body.shop_color)    basePayload.shop_color = String(body.shop_color)
-    if (body.shop_market)   basePayload.shop_market = String(body.shop_market)
+    if (body.shop_logo && String(body.shop_logo).startsWith('http')) {basePayload.shop_logo = body.shop_logo}
+    if (body.shop_whatsapp) {basePayload.shop_whatsapp = String(body.shop_whatsapp).trim()}
+    if (body.shop_desc)     {basePayload.shop_desc = String(body.shop_desc).trim()}
+    if (body.shop_color)    {basePayload.shop_color = String(body.shop_color)}
+    if (body.shop_market)   {basePayload.shop_market = String(body.shop_market)}
 
     let insertPayload = { ...basePayload }
     let data: any = null
@@ -65,21 +65,21 @@ export async function POST(req: NextRequest) {
     for (let attempt = 0; attempt < 6; attempt++) {
       const res = await sb.from('pending_payments').insert(insertPayload).select('id').single()
       data = res.data; error = res.error
-      if (!error || error.code !== '42703') break
+      if (!error || error.code !== '42703') {break}
       // Column doesn't exist — parse its name out of the error and drop it, then retry.
       const m = /column "?([a-zA-Z0-9_]+)"?/.exec(error.message || '')
       const badCol = m?.[1]
-      if (!badCol || !(badCol in insertPayload)) break
+      if (!badCol || !(badCol in insertPayload)) {break}
       const { [badCol]: _drop, ...rest } = insertPayload
       insertPayload = rest
     }
 
     if (error) {
       let msg = error.message
-      if (error.code === '23505') msg = 'An application with this email already exists.'
-      if (error.code === '42703') msg = `Column error: ${error.message}`
-      if (error.code === '42501') msg = 'Permission denied. Check RLS policies.'
-      if (error.code === 'PGRST301') msg = 'Database unreachable. Try again.'
+      if (error.code === '23505') {msg = 'An application with this email already exists.'}
+      if (error.code === '42703') {msg = `Column error: ${error.message}`}
+      if (error.code === '42501') {msg = 'Permission denied. Check RLS policies.'}
+      if (error.code === 'PGRST301') {msg = 'Database unreachable. Try again.'}
       return NextResponse.json({ error: msg, code: error.code, details: error.details }, { status: 500 })
     }
 

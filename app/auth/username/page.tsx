@@ -38,8 +38,8 @@ export default function UsernamePage() {
       data: { username, display_name: username },
     })
     setLoading(false)
-    if (error) setError(error.message)
-    else router.replace('/home')
+    if (error) {setError(error.message)}
+    else {router.replace('/home')}
   }
 
   return (

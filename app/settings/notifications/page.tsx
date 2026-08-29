@@ -23,7 +23,7 @@ export default function NotificationsPage() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('sn_notif')
-      if (saved) setS({ ...DEFAULTS, ...JSON.parse(saved) })
+      if (saved) {setS({ ...DEFAULTS, ...JSON.parse(saved) })}
     } catch {}
   }, [])
 

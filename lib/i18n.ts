@@ -36,18 +36,18 @@ export function getMsg(lang: Lang, key: string, vars?: Record<string, string | n
   const parts = key.split('.')
   let obj: any = MESSAGES[lang] ?? MESSAGES[DEFAULT_LANG]
   for (const p of parts) {
-    if (obj == null || typeof obj !== 'object') break
+    if (obj == null || typeof obj !== 'object') {break}
     obj = obj[p]
   }
   // Fallback chain: current lang → EN
   if (obj == null || typeof obj === 'object') {
     obj = MESSAGES['en']
     for (const p of parts) {
-      if (obj == null || typeof obj !== 'object') break
+      if (obj == null || typeof obj !== 'object') {break}
       obj = obj[p]
     }
   }
-  if (typeof obj !== 'string') return key
+  if (typeof obj !== 'string') {return key}
 
   // Variable interpolation: {count}, {name}
   if (vars) {

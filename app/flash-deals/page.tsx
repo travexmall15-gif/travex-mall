@@ -29,7 +29,7 @@ type Deal = {
 function useCountdown(endTime: string) {
   const calc = useCallback(() => {
     const diff = new Date(endTime).getTime() - Date.now()
-    if (diff <= 0) return { h: '00', m: '00', s: '00', done: true }
+    if (diff <= 0) {return { h: '00', m: '00', s: '00', done: true }}
     const h = Math.floor(diff / 3600000)
     const m = Math.floor((diff % 3600000) / 60000)
     const s = Math.floor((diff % 60000) / 1000)
@@ -56,8 +56,8 @@ const fmtTZS = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 function urgencyLevel(deal: Deal): 'high' | 'med' | 'new' | 'normal' {
   const soldPct = (deal.current_orders / deal.max_orders) * 100
   const minsLeft = (new Date(deal.ends_at).getTime() - Date.now()) / 60000
-  if (soldPct >= 80) return 'high'
-  if (minsLeft < 120) return 'med'
+  if (soldPct >= 80) {return 'high'}
+  if (minsLeft < 120) {return 'med'}
   const isNew = (Date.now() - (Date.now() - 86400000)) > 0 && deal.current_orders === 0
   return 'normal'
 }

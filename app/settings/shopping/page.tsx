@@ -41,8 +41,8 @@ export default function ShoppingPage() {
   useEffect(() => {
     try {
       const p = JSON.parse(localStorage.getItem('sn_shopping_prefs') || '{}')
-      if (p.categories) setCategories(p.categories)
-      if (p.alerts)     setAlerts(a => ({ ...a, ...p.alerts }))
+      if (p.categories) {setCategories(p.categories)}
+      if (p.alerts)     {setAlerts(a => ({ ...a, ...p.alerts }))}
     } catch {}
 
     ;(async () => {
@@ -52,7 +52,7 @@ export default function ShoppingPage() {
         setPreferredShops(await listPreferredShops(id))
         try {
           const { data } = await sb.from('orders').select('status').eq('buyer_id', id)
-          if (data) setOrderCount({ total: data.length, pending: data.filter(o => o.status==='pending').length })
+          if (data) {setOrderCount({ total: data.length, pending: data.filter(o => o.status==='pending').length })}
         } catch {}
       }
       setPreferredLoading(false)
@@ -68,7 +68,7 @@ export default function ShoppingPage() {
 
   const removeShop = async (storeId: string) => {
     setPreferredShops(prev => prev.filter(s => s.store_id !== storeId))
-    if (buyerId) await unlikeShop(storeId, buyerId)
+    if (buyerId) {await unlikeShop(storeId, buyerId)}
   }
 
   const ALERTS_CONFIG = [

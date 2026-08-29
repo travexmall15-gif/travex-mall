@@ -10,7 +10,7 @@ export function NavigationProgress() {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
 
   useEffect(() => {
-    if (pathname === prev.current) return
+    if (pathname === prev.current) {return}
     prev.current = pathname
 
     // Clear any pending timers
@@ -39,7 +39,7 @@ export function NavigationProgress() {
     return () => timers.current.forEach(clearTimeout)
   }, [pathname])
 
-  if (!visible && width === 0) return null
+  if (!visible && width === 0) {return null}
 
   return (
     <div

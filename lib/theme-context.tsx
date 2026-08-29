@@ -18,10 +18,10 @@ const Ctx = createContext<ThemeCtx>({
 })
 
 function resolveIsDark(t: Theme): boolean {
-  if (t === 'dark')   return true
-  if (t === 'light')  return false
+  if (t === 'dark')   {return true}
+  if (t === 'light')  {return false}
   if (typeof window !== 'undefined')
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
+    {return window.matchMedia('(prefers-color-scheme: dark)').matches}
   return false
 }
 

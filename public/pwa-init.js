@@ -10,7 +10,7 @@
   }
 
   // Capture install prompt
-  var _prompt = null;
+  let _prompt = null;
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     _prompt = e;

@@ -89,7 +89,7 @@ export default function OpenStorePage() {
   const goBack = () => { setErr(''); setStep(s => Math.max(1, s - 1)) }
 
   const onLogoPick = (file: File | null) => {
-    if (!file) return
+    if (!file) {return}
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { setErr(t('apply.errGeneric')); return }
     if (file.size > 2.5 * 1024 * 1024) { setErr(t('apply.errGeneric')); return }
     setLogoFile(file)
@@ -109,7 +109,7 @@ export default function OpenStorePage() {
           const ext = logoFile.name.split('.').pop()?.toLowerCase() || 'jpg'
           const path = `logos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
           const { error } = await sb.storage.from('shop-assets').upload(path, logoFile, { cacheControl: '3600', upsert: true })
-          if (!error) shop_logo = sb.storage.from('shop-assets').getPublicUrl(path).data.publicUrl
+          if (!error) {shop_logo = sb.storage.from('shop-assets').getPublicUrl(path).data.publicUrl}
         } catch {}
         setUploading(false)
       }
@@ -137,7 +137,7 @@ export default function OpenStorePage() {
         signal: AbortSignal.timeout(15000),
       })
       const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data.error || t('apply.errGeneric'))
+      if (!res.ok) {throw new Error(data.error || t('apply.errGeneric'))}
 
       try { localStorage.setItem('sn_applied_email', payload.owner_email) } catch {}
       setSuccess(true)

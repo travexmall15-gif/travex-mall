@@ -116,7 +116,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
     },
   ]
 
-  if (loading) return (
+  if (loading) {return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
       <SiteNav />
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
@@ -124,7 +124,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
       </div>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </main>
-  )
+  )}
 
   return (
     <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>

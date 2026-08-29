@@ -40,7 +40,7 @@ export default function MessagesPage() {
           .select('*')
           .or(`buyer_id.eq.${session.user.id},seller_id.eq.${session.user.id}`)
           .order('updated_at', { ascending: false })
-        if (!error) setConvos(data || [])
+        if (!error) {setConvos(data || [])}
         setLoading(false)
         return
       }
@@ -58,7 +58,7 @@ export default function MessagesPage() {
               .select('*')
               .or(`buyer_id.eq.${sess.id},seller_id.eq.${sess.id}`)
               .order('updated_at', { ascending: false })
-            if (!error) setConvos(data || [])
+            if (!error) {setConvos(data || [])}
             setLoading(false)
             return
           }
@@ -101,12 +101,12 @@ export default function MessagesPage() {
   const unreadCount = convos.filter(c => c.unread > 0).length
 
   function timeAgo(d: string) {
-    if (!d) return ''
+    if (!d) {return ''}
     const diff = Date.now() - new Date(d).getTime()
     const m = Math.floor(diff / 60000)
-    if (m < 1)    return t('vybe.justNow') || 'now'
-    if (m < 60)   return `${m}m`
-    if (m < 1440) return `${Math.floor(m/60)}h`
+    if (m < 1)    {return t('vybe.justNow') || 'now'}
+    if (m < 60)   {return `${m}m`}
+    if (m < 1440) {return `${Math.floor(m/60)}h`}
     return new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short' })
   }
 

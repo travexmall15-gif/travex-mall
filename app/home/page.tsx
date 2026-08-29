@@ -29,7 +29,7 @@ export default function HomePage() {
           .eq('status', 'approved')
           .eq('is_sponsored', true)
           .limit(12)
-        if (!error && data && data.length > 0) setSponsored(data)
+        if (!error && data && data.length > 0) {setSponsored(data)}
       } catch { /* column may not exist yet — section stays hidden */ }
     })()
   }, [])

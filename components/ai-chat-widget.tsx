@@ -22,7 +22,7 @@ export function AIChatWidget({
 
   const send = async (text?: string) => {
     const msg = (text || input).trim()
-    if (!msg || loading) return
+    if (!msg || loading) {return}
     setInput('')
     const newMsgs = [...msgs, { role: 'user' as const, content: msg }]
     setMsgs(newMsgs)

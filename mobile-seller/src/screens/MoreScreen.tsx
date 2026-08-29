@@ -13,7 +13,7 @@ export default function MoreScreen({ navigation }: any) {
 
   useEffect(() => {
     AsyncStorage.getItem('seller_session').then(raw => {
-      if (!raw) return
+      if (!raw) {return}
       const {id} = JSON.parse(raw)
       sb.from('pending_payments').select('*').eq('id',id).maybeSingle().then(({data}) => {
         if (data) { setShop(data); setPrem(data.plan==='premium') }
@@ -24,7 +24,7 @@ export default function MoreScreen({ navigation }: any) {
   const lockAlert = (f: string) => Alert.alert('Premium Feature', f+' is available on Premium plan (TZS 45,000/month).', [{text:'OK'}])
 
   const sendAI = async () => {
-    if (!msg.trim()||sending) return
+    if (!msg.trim()||sending) {return}
     const m = msg.trim(); setMsg('')
     setChat(c=>[...c,{role:'user',text:m}])
     setSend(true)

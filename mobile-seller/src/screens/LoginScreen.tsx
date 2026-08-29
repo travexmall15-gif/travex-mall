@@ -31,10 +31,10 @@ export default function LoginScreen({ navigation }: any) {
 
   const tapKey = (k: string) => {
     if (k === '⌫') { setPin(p => p.slice(0,-1)); return }
-    if (k === '' || pin.length >= 4) return
+    if (k === '' || pin.length >= 4) {return}
     const next = pin + k
     setPin(next)
-    if (next.length === 4) verifyPin(next)
+    if (next.length === 4) {verifyPin(next)}
   }
 
   const verifyPin = async (p: string) => {
@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }: any) {
     navigation.replace('Main')
   }
 
-  if (step === 'pin') return (
+  if (step === 'pin') {return (
     <View style={s.wrap}>
       <View style={s.card}>
         <View style={s.av}><Text style={s.avTx}>{shopName.slice(0,2).toUpperCase()}</Text></View>
@@ -67,7 +67,7 @@ export default function LoginScreen({ navigation }: any) {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  )}
 
   return (
     <KeyboardAvoidingView style={s.wrap} behavior={Platform.OS==='ios'?'padding':'height'}>

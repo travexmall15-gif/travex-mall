@@ -38,13 +38,13 @@ export default function OpenStoreStatusPage() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('sn_applied_email')
-      if (saved) setEmail(saved)
+      if (saved) {setEmail(saved)}
     } catch {}
   }, [])
 
   const check = async (e?: React.FormEvent) => {
     e?.preventDefault()
-    if (!email.trim()) return
+    if (!email.trim()) {return}
     setLoading(true); setChecked(false); setApp(null); setRevealed(false); setPin(''); setPinErr('')
     const normalized = email.trim().toLowerCase()
     try {
@@ -70,7 +70,7 @@ export default function OpenStoreStatusPage() {
   }
 
   const revealCode = () => {
-    if (!app) return
+    if (!app) {return}
     const stored = (app.login_password || '').toString()
     const match = stored === pin || stored.endsWith('-' + pin) || stored.startsWith(pin + '-') || stored.split('-').pop() === pin
     if (match) { setRevealed(true); setPinErr('') } else { setPinErr(t('status.wrongPin')) }
