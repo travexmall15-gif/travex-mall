@@ -322,7 +322,9 @@
     "liveNow": "HAI",
     "shopNow": "Nunua Sasa",
     "seeShop": "Ona Duka",
-    "noImage": "Hakuna picha"
+    "noImage": "Hakuna picha",
+    "viewProduct": "Angalia Bidhaa",
+    "linkCopied": "Kiungo kimenakiliwa!"
   },
   "groupBuy": {
     "badge": "Nunua Pamoja",

@@ -322,7 +322,9 @@
     "liveNow": "LIVE",
     "shopNow": "Shop Now",
     "seeShop": "See Shop",
-    "noImage": "No image"
+    "noImage": "No image",
+    "viewProduct": "View Product",
+    "linkCopied": "Link copied!"
   },
   "groupBuy": {
     "badge": "Group Buy",

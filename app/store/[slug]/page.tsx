@@ -5,6 +5,7 @@ import { SiteFooter } from '@/components/site-footer'
 import Image from 'next/image'
 
 import { use, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
 import { SiteNav } from '@/components/site-nav'
@@ -60,6 +61,7 @@ export default function StorePage({
   params }: { params: Promise<{ slug: string }> }) {
   const { t } = useTranslation()
   const { slug } = use(params)
+  const searchParams = useSearchParams()
   const [store, setStore]       = useState<Store | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading]   = useState(true)
@@ -252,6 +254,15 @@ export default function StorePage({
     setOrderLocation('')
     setSuccess(false)
   }
+
+  // Auto-open a product's order modal when arriving via a Vybe "View
+  // Product" link (/store/[slug]?product=<id>).
+  useEffect(() => {
+    const productId = searchParams?.get('product')
+    if (!productId || products.length === 0 || cartItem) return
+    const match = products.find(p => p.id === productId)
+    if (match) openOrder(match)
+  }, [searchParams, products])
 
   const placeOrder = async () => {
     if (!cartItem || !orderName.trim() || !orderPhone.trim()) return

@@ -322,7 +322,9 @@
     "totalPosts": "Publicações",
     "liveNow": "AO VIVO",
     "seeShop": "Ver loja",
-    "noImage": "Sem imagem"
+    "noImage": "Sem imagem",
+    "viewProduct": "Ver produto",
+    "linkCopied": "Link copiado!"
   },
   "groupBuy": {
     "badge": "Compra em Grupo",

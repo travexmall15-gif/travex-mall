@@ -10,7 +10,7 @@ import { sb } from '@/lib/supabase'
 import {
   Heart, Store, Loader2, Image as ImageIcon,
   Play, Search, Zap, TrendingUp, Star, RefreshCw,
-  ShieldCheck, Tag, Clock
+  ShieldCheck, Tag, Clock, Share2, ShoppingBag
 } from 'lucide-react'
 
 // ── Types ─────────────────────────────────────────────────────
@@ -31,6 +31,7 @@ type FeedPost = {
   media_type: string | null
   university_abbr: string | null
   is_verified?: boolean | null
+  product_id?: string | null
   created_at: string
 }
 
@@ -99,6 +100,20 @@ export default function VybePage() {
     setLiked(prev => { const s = new Set(prev); isLiked ? s.delete(post.id) : s.add(post.id); return s })
     setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: n, likes_count: n } : p))
     await sb.from('feed_posts').update({ likes: n, likes_count: n }).eq('id', post.id)
+  }
+
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+  const sharePost = async (post: FeedPost) => {
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/vybe#${post.id}` : ''
+    const text = getContent(post) || post.shop_name || 'ShopNekt'
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try { await navigator.share({ title: post.shop_name || 'ShopNekt', text, url }); return } catch { /* user cancelled */ }
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopiedId(post.id)
+      setTimeout(() => setCopiedId(null), 2000)
+    } catch {}
   }
 
   const filtered = useMemo(() => {
@@ -306,7 +321,8 @@ export default function VybePage() {
           <>
             <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
               {filtered.slice(0, visible).map(post => (
-                <PostCard key={post.id} post={post} liked={liked.has(post.id)} onLike={() => toggleLike(post)} ago={ago} t={t} />
+                <PostCard key={post.id} post={post} liked={liked.has(post.id)} onLike={() => toggleLike(post)}
+                  onShare={() => sharePost(post)} copied={copiedId === post.id} ago={ago} t={t} />
               ))}
             </div>
 
@@ -335,11 +351,13 @@ type PostCardProps = {
   post: FeedPost
   liked: boolean
   onLike: () => void
+  onShare: () => void
+  copied: boolean
   ago: (d: string) => string
   t: (k: string, vars?: Record<string, string | number>) => string
 }
 
-function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
+function PostCard({ post, liked, onLike, onShare, copied, ago, t }: PostCardProps) {
   const content  = getContent(post)
   const likes    = getLikes(post)
   const initials = (post.shop_name || 'TX').split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()
@@ -429,7 +447,7 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
         </div>
       )}
 
-      {/* ── Actions — Like + Visit Shop ONLY ── */}
+      {/* ── Actions — Like + Share + Visit Shop + View Product ── */}
       <div className="vybe-actions" style={{ display:'flex', alignItems:'center', gap:10, padding:'0.75rem 1rem 0.9rem', marginTop:'0.6rem', borderTop:'1px solid var(--sn-border)' }}>
 
         {/* Like button */}
@@ -438,8 +456,22 @@ function PostCard({ post, liked, onLike, ago, t }: PostCardProps) {
           <span>{likes > 0 ? likes : t('vybe.like')}</span>
         </button>
 
+        {/* Share button */}
+        <button className="like-btn" onClick={onShare} aria-label={t('vybe.sharePost')}>
+          <Share2 size={13} />
+          <span>{copied ? t('vybe.linkCopied') : t('vybe.sharePost')}</span>
+        </button>
+
         {/* Spacer */}
         <div style={{ flex:1 }} />
+
+        {/* View Product — only when this post is linked to a specific product */}
+        {post.product_id && post.store_id && (
+          <Link href={`/store/${post.store_id}?product=${post.product_id}`} className="visit-btn" aria-label={t('vybe.viewProduct')}>
+            <ShoppingBag size={12} />
+            {t('vybe.viewProduct')}
+          </Link>
+        )}
 
         {/* Visit Shop — only if store exists */}
         {post.store_id && (

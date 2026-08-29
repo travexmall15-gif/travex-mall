@@ -323,7 +323,9 @@
     "totalPosts": "Posts",
     "liveNow": "EN DIRECT",
     "seeShop": "Voir la boutique",
-    "noImage": "Aucune image"
+    "noImage": "Aucune image",
+    "viewProduct": "Voir le produit",
+    "linkCopied": "Lien copié !"
   },
   "groupBuy": {
     "badge": "Achat Groupé",

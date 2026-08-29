@@ -322,7 +322,9 @@
     "totalPosts": "Posts",
     "liveNow": "LIVE",
     "seeShop": "Shop ansehen",
-    "noImage": "Kein Bild"
+    "noImage": "Kein Bild",
+    "viewProduct": "Produkt ansehen",
+    "linkCopied": "Link kopiert!"
   },
   "groupBuy": {
     "badge": "Gruppenkauf",

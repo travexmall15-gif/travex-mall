@@ -322,7 +322,9 @@
     "totalPosts": "منشورات",
     "liveNow": "مباشر",
     "seeShop": "عرض المتجر",
-    "noImage": "لا توجد صورة"
+    "noImage": "لا توجد صورة",
+    "viewProduct": "عرض المنتج",
+    "linkCopied": "تم نسخ الرابط!"
   },
   "groupBuy": {
     "badge": "شراء جماعي",
