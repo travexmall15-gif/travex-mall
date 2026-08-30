@@ -116,7 +116,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
   ]
 
   if (loading) {return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:118, fontFamily:'var(--sn-font)' }}>
       <div style={{ textAlign:'center', padding:'5rem 0' }}>
         <Loader2 size={30} color="#0D1B3E" style={{ animation:'spin 1s linear infinite', margin:'0 auto', display:'block' }} />
       </div>
@@ -125,11 +125,11 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
   )}
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:118, fontFamily:'var(--sn-font)' }}>
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
         <button onClick={() => step==='method' ? router.back() : setStep(step==='option'?'method':step==='location'?'option':'location')}
-          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.25rem', padding:0 }}>
+          style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:'var(--sn-font)', marginBottom:'1.25rem', padding:0 }}>
           <ArrowLeft size={15}/> {t('common.back')}
         </button>
 
@@ -170,7 +170,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:'1.25rem' }}>
               {PAYMENT_METHODS.map(pm => (
                 <button key={pm.id} onClick={() => setSelMethod(pm.id)}
-                  style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'var(--sn-bg)', border:`2px solid ${selMethod===pm.id?'#1D4ED8':'var(--sn-border)'}`, borderRadius:14, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', textAlign:'left' }}>
+                  style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'var(--sn-bg)', border:`2px solid ${selMethod===pm.id?'#1D4ED8':'var(--sn-border)'}`, borderRadius:14, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
                   <span style={{ fontSize:'1.4rem', width:36, textAlign:'center' }}>{pm.icon}</span>
                   <span style={{ flex:1, fontSize:'0.9rem', fontWeight:600, color:'var(--sn-text)' }}>{pm.name}</span>
                   {selMethod===pm.id && <Check size={18} color="#0D1B3E" />}
@@ -178,7 +178,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               ))}
             </div>
             <button onClick={() => selMethod && setStep('option')} disabled={!selMethod}
-              style={{ width:'100%', padding:'0.9rem', background: selMethod?'#1D4ED8':'var(--sn-border)', color: selMethod?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selMethod?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif", transition:'all .2s' }}>
+              style={{ width:'100%', padding:'0.9rem', background: selMethod?'#1D4ED8':'var(--sn-border)', color: selMethod?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selMethod?'pointer':'not-allowed', fontFamily:'var(--sn-font)', transition:'all .2s' }}>
               Continue →
             </button>
           </>
@@ -195,7 +195,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:'1.25rem' }}>
               {PAY_OPTIONS.map(opt => (
                 <button key={opt.id} onClick={() => setSelOption(opt.id)}
-                  style={{ display:'flex', alignItems:'flex-start', gap:14, padding:'16px', background:'var(--sn-bg)', border:`2px solid ${selOption===opt.id?'#1D4ED8':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', textAlign:'left' }}>
+                  style={{ display:'flex', alignItems:'flex-start', gap:14, padding:'16px', background:'var(--sn-bg)', border:`2px solid ${selOption===opt.id?'#1D4ED8':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
                   <div style={{ width:42, height:42, borderRadius:12, background: selOption===opt.id?'#1D4ED8':'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
                     <opt.icon size={20} color={selOption===opt.id?'#1D4ED8':'#64748B'} />
                   </div>
@@ -212,7 +212,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               ))}
             </div>
             <button onClick={() => selOption && setStep('location')} disabled={!selOption}
-              style={{ width:'100%', padding:'0.9rem', background: selOption?'#1D4ED8':'var(--sn-border)', color: selOption?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selOption?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'0.9rem', background: selOption?'#1D4ED8':'var(--sn-border)', color: selOption?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selOption?'pointer':'not-allowed', fontFamily:'var(--sn-font)' }}>
               Continue →
             </button>
           </>
@@ -228,7 +228,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
 
             {/* Live location button */}
             <button onClick={getLiveLocation} disabled={locLoading}
-              style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'13px', background:'var(--sn-bg)', border:'none', borderRadius:14, color:'var(--sn-text)', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'Inter',sans-serif", marginBottom:'1rem', transition:'opacity .2s', opacity: locLoading?0.7:1 }}>
+              style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'13px', background:'var(--sn-bg)', border:'none', borderRadius:14, color:'var(--sn-text)', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:'var(--sn-font)', marginBottom:'1rem', transition:'opacity .2s', opacity: locLoading?0.7:1 }}>
               {locLoading
                 ? <><Loader2 size={16} style={{ animation:'spin 1s linear infinite' }}/> Getting location...</>
                 : <><MapPin size={16}/> {t('payment.useMyLocation')}</>}
@@ -243,19 +243,19 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             <textarea value={location} onChange={e => setLocation(e.target.value)}
               placeholder="e.g. Kariakoo, Dar es Salaam, near Mnazi Mmoja hospital..."
               rows={3}
-              style={{ width:'100%', boxSizing:'border-box', padding:'12px 14px', border:'1.5px solid #E2E8F0', borderRadius:12, fontSize:'0.875rem', fontFamily:"'Inter',sans-serif", outline:'none', resize:'vertical', background:'var(--sn-bg)', color:'var(--sn-text)', lineHeight:1.5, marginBottom:'0.75rem' }}
+              style={{ width:'100%', boxSizing:'border-box', padding:'12px 14px', border:'1.5px solid var(--sn-input-border)', borderRadius:12, fontSize:'0.875rem', fontFamily:'var(--sn-font)', outline:'none', resize:'vertical', background:'var(--sn-bg)', color:'var(--sn-text)', lineHeight:1.5, marginBottom:'0.75rem' }}
               onFocus={e => (e.target.style.borderColor='#0D1B3E')}
               onBlur={e  => (e.target.style.borderColor='var(--sn-border)')} />
 
             <textarea value={note} onChange={e => setNote(e.target.value)}
               placeholder="Delivery note (optional) — e.g. call on arrival, gate code..."
               rows={2}
-              style={{ width:'100%', boxSizing:'border-box', padding:'12px 14px', border:'1.5px solid #E2E8F0', borderRadius:12, fontSize:'0.875rem', fontFamily:"'Inter',sans-serif", outline:'none', resize:'none', background:'var(--sn-bg)', color:'var(--sn-text)', lineHeight:1.5, marginBottom:'1.25rem' }}
+              style={{ width:'100%', boxSizing:'border-box', padding:'12px 14px', border:'1.5px solid var(--sn-input-border)', borderRadius:12, fontSize:'0.875rem', fontFamily:'var(--sn-font)', outline:'none', resize:'none', background:'var(--sn-bg)', color:'var(--sn-text)', lineHeight:1.5, marginBottom:'1.25rem' }}
               onFocus={e => (e.target.style.borderColor='#0D1B3E')}
               onBlur={e  => (e.target.style.borderColor='var(--sn-border)')} />
 
             <button onClick={() => location.trim() && setStep('confirm')} disabled={!location.trim()}
-              style={{ width:'100%', padding:'0.9rem', background: location.trim()?'#1D4ED8':'var(--sn-border)', color: location.trim()?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: location.trim()?'pointer':'not-allowed', fontFamily:"'Inter',sans-serif" }}>
+              style={{ width:'100%', padding:'0.9rem', background: location.trim()?'#1D4ED8':'var(--sn-border)', color: location.trim()?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: location.trim()?'pointer':'not-allowed', fontFamily:'var(--sn-font)' }}>
               Continue →
             </button>
           </>
@@ -265,7 +265,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
         {step === 'confirm' && (
           <>
             <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.25rem', letterSpacing:'-0.02em' }}>{t('payment.confirmPayment')}</h2>
-            <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden', marginBottom:'1.25rem' }}>
+            <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid var(--sn-input-border)', overflow:'hidden', marginBottom:'1.25rem' }}>
               {[
                 { label:'Product',  value: order?.product_name },
                 { label:'Amount',   value: `TZS ${order?.total_amount?.toLocaleString()}` },
@@ -292,7 +292,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             </div>
 
             <button onClick={submitPayment} disabled={submitting}
-              style={{ width:'100%', padding:'0.9rem', background:'var(--sn-bg)', color:'var(--sn-text)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: submitting?'not-allowed':'pointer', fontFamily:"'Inter',sans-serif", display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+              style={{ width:'100%', padding:'0.9rem', background:'var(--sn-bg)', color:'var(--sn-text)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: submitting?'not-allowed':'pointer', fontFamily:'var(--sn-font)', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
               {submitting
                 ? <><Loader2 size={16} style={{ animation:'spin 1s linear infinite' }}/> Processing...</>
                 : 'Confirm & Submit Payment'}
@@ -315,7 +315,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
                 : 'Seller has been notified. Pay on delivery when rider arrives.'}
             </p>
             <button onClick={() => router.push('/orders')}
-              style={{ padding:'12px 32px', background:'var(--sn-bg)', color:'var(--sn-text)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+              style={{ padding:'12px 32px', background:'var(--sn-bg)', color:'var(--sn-text)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor:'pointer', fontFamily:'var(--sn-font)' }}>
               View My Orders
             </button>
           </div>

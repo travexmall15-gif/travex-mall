@@ -1060,7 +1060,22 @@
     "paymentMethod": "Método de pagamento",
     "paymentOption": "Opção de pagamento",
     "deliveryLocation": "Local de entrega",
-    "paymentPending": "Pagamento pendente"
+    "paymentPending": "Pagamento pendente",
+    "details": "Detalhes",
+    "paymentAndDelivery": "Pagamento e entrega",
+    "noFilteredOrders": "Nenhum pedido {status}",
+    "orderId": "ID do pedido",
+    "amount": "Valor",
+    "date": "Data",
+    "statusPendingDesc": "Aguardando confirmação do vendedor",
+    "statusConfirmedDesc": "Vendedor confirmou — preparando",
+    "statusRejectedDesc": "Vendedor recusou — prossiga com o pagamento para pedir novamente",
+    "statusPaymentPendingDesc": "Pagamento enviado, aguardando confirmação",
+    "statusDeliveredDesc": "Pedido entregue com sucesso",
+    "rejectedNotice": "Este pedido foi recusado. Você pode prosseguir com o pagamento e a entrega para concluir sua compra.",
+    "proceedToPayment": "Prosseguir para pagamento e entrega",
+    "paymentSubmittedNotice": "Pagamento enviado. Ao receber seu item, confirme a entrega para liberar o pagamento ao vendedor.",
+    "confirmReceived": "Confirmo que recebi meu item"
   },
   "payment": {
     "title": "Finalizar Pagamento",

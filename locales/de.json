@@ -1060,7 +1060,22 @@
     "paymentMethod": "Zahlungsmethode",
     "paymentOption": "Zahlungsoption",
     "deliveryLocation": "Lieferort",
-    "paymentPending": "Zahlung ausstehend"
+    "paymentPending": "Zahlung ausstehend",
+    "details": "Details",
+    "paymentAndDelivery": "Zahlung & Lieferung",
+    "noFilteredOrders": "Keine {status} Bestellungen",
+    "orderId": "Bestellnummer",
+    "amount": "Betrag",
+    "date": "Datum",
+    "statusPendingDesc": "Warten auf Bestätigung des Verkäufers",
+    "statusConfirmedDesc": "Verkäufer bestätigt — wird vorbereitet",
+    "statusRejectedDesc": "Verkäufer abgelehnt — mit Zahlung fortfahren, um erneut zu bestellen",
+    "statusPaymentPendingDesc": "Zahlung eingereicht, Bestätigung ausstehend",
+    "statusDeliveredDesc": "Bestellung erfolgreich geliefert",
+    "rejectedNotice": "Diese Bestellung wurde abgelehnt. Du kannst mit Zahlung und Lieferung fortfahren, um deinen Kauf abzuschließen.",
+    "proceedToPayment": "Weiter zu Zahlung & Lieferung",
+    "paymentSubmittedNotice": "Zahlung eingereicht. Wenn du deinen Artikel erhältst, bestätige die Lieferung, um die Zahlung an den Verkäufer freizugeben.",
+    "confirmReceived": "Bestätige, dass ich meinen Artikel erhalten habe"
   },
   "payment": {
     "title": "Zahlung Abschließen",

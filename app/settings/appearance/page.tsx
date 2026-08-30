@@ -34,7 +34,7 @@ export default function AppearancePage() {
   )
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop: 118, fontFamily:"'Inter',sans-serif" }}>
       <div style={{ maxWidth:480, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         <button onClick={() => router.back()}

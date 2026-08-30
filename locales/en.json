@@ -1010,7 +1010,22 @@
     "paymentOption": "Payment Option",
     "deliveryLocation": "Delivery Location",
     "paymentPending": "Payment Pending",
-    "makePayment": "Make Payment"
+    "makePayment": "Make Payment",
+    "details": "Details",
+    "paymentAndDelivery": "Payment & Delivery",
+    "noFilteredOrders": "No {status} orders",
+    "orderId": "Order ID",
+    "amount": "Amount",
+    "date": "Date",
+    "statusPendingDesc": "Waiting for seller to confirm",
+    "statusConfirmedDesc": "Seller confirmed — preparing",
+    "statusRejectedDesc": "Seller rejected — proceed with payment to reorder",
+    "statusPaymentPendingDesc": "Payment submitted, awaiting confirmation",
+    "statusDeliveredDesc": "Order delivered successfully",
+    "rejectedNotice": "This order was rejected. You can proceed with payment and delivery arrangements to complete your purchase.",
+    "proceedToPayment": "Proceed to Payment & Delivery",
+    "paymentSubmittedNotice": "Payment submitted. When you receive your item, confirm delivery to release payment to seller.",
+    "confirmReceived": "Confirm I Received My Item"
   },
   "payment": {
     "title": "Complete Payment",

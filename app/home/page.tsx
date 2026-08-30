@@ -33,7 +33,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main style={{ fontFamily: 'var(--sn-font)', background: '#FFFFFF', overflowX: 'hidden', paddingTop: '108px' }}>
+    <main style={{ fontFamily: 'var(--sn-font)', background: 'var(--sn-page)', overflowX: 'hidden', paddingTop: '118px' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
@@ -108,7 +108,7 @@ export default function HomePage() {
       </div>
 
       {/* TWO MARKETS */}
-      <section style={{ background:'#FFFFFF',padding:'5rem 5%',borderBottom:'1px solid #E2E8F0' }}>
+      <section style={{ background:'var(--sn-bg)',padding:'5rem 5%',borderBottom:'1px solid #E2E8F0' }}>
         <div style={{ maxWidth:'900px',margin:'0 auto' }}>
           <div style={{ textAlign:'center',marginBottom:'2.5rem' }}>
             <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#3B82F6',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
@@ -122,7 +122,7 @@ export default function HomePage() {
           <div className="market-cards">
 
             {/* Business Market */}
-            <div className="market-card business" style={{ flex:1,background:'#FFFFFF',border:'2px solid rgba(29,78,216,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(15,23,42,0.06)' }}>
+            <div className="market-card business" style={{ flex:1,background:'var(--sn-bg)',border:'2px solid rgba(29,78,216,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(15,23,42,0.06)' }}>
               <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,#1D4ED8,#F0C96B)' }} />
               <div style={{ width:56,height:56,borderRadius:16,background:'linear-gradient(135deg,#040C32,#071545)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1.4rem',boxShadow:'0 8px 20px rgba(5,11,46,0.20)' }}>
                 <Store style={{ width:26,height:26,color:'#111827' }} />

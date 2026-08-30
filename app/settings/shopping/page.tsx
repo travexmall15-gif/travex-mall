@@ -77,7 +77,7 @@ export default function ShoppingPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop: 118, fontFamily:"'Inter',sans-serif" }}>
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 5rem' }}>
 
         {/* Header */}

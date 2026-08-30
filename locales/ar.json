@@ -1060,7 +1060,22 @@
     "paymentMethod": "طريقة الدفع",
     "paymentOption": "خيار الدفع",
     "deliveryLocation": "موقع التسليم",
-    "paymentPending": "الدفع معلّق"
+    "paymentPending": "الدفع معلّق",
+    "details": "التفاصيل",
+    "paymentAndDelivery": "الدفع والتوصيل",
+    "noFilteredOrders": "لا توجد طلبات {status}",
+    "orderId": "رقم الطلب",
+    "amount": "المبلغ",
+    "date": "التاريخ",
+    "statusPendingDesc": "في انتظار تأكيد البائع",
+    "statusConfirmedDesc": "أكد البائع — جارٍ التحضير",
+    "statusRejectedDesc": "رفض البائع — تابع الدفع لإعادة الطلب",
+    "statusPaymentPendingDesc": "تم تقديم الدفع، في انتظار التأكيد",
+    "statusDeliveredDesc": "تم توصيل الطلب بنجاح",
+    "rejectedNotice": "تم رفض هذا الطلب. يمكنك المتابعة بالدفع وترتيبات التوصيل لإتمام عملية الشراء.",
+    "proceedToPayment": "المتابعة للدفع والتوصيل",
+    "paymentSubmittedNotice": "تم إرسال الدفع. عند استلام العنصر الخاص بك، أكد التسليم لإطلاق الدفع للبائع.",
+    "confirmReceived": "تأكيد استلام العنصر"
   },
   "payment": {
     "title": "إتمام الدفع",

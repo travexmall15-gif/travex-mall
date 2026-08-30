@@ -109,7 +109,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop: 118, fontFamily:"'Inter',sans-serif" }}>
       <div style={{ maxWidth:560, margin:'0 auto', padding:'1.25rem 5% 4rem' }}>
 
         {/* Header */}

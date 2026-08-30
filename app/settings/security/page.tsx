@@ -27,7 +27,7 @@ export default function SecurityPage() {
   const inp: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '0.75rem 1rem 0.75rem 2.75rem', border: '1.5px solid #E2E8F0', borderRadius: 12, fontSize: '0.875rem', fontFamily: 'var(--sn-font)', outline: 'none', background: 'var(--sn-page)', transition: 'border-color 0.2s' }
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: '108px', fontFamily: 'var(--sn-font)' }}>
+    <main style={{ minHeight: '100vh', background: 'var(--sn-page)', paddingTop: '118px', fontFamily: 'var(--sn-font)' }}>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '1.5rem 5% 4rem' }}>
         <button onClick={() => router.back()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--sn-muted)', fontSize: '0.82rem', fontWeight: 600, fontFamily: 'var(--sn-font)', marginBottom: '1.5rem', padding: 0 }}>
           <ArrowLeft size={15} /> Back

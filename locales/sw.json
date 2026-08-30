@@ -1010,7 +1010,22 @@
     "paymentOption": "Chaguo la Malipo",
     "deliveryLocation": "Mahali pa Uwasilishaji",
     "paymentPending": "Malipo Yanasubiri",
-    "makePayment": "Fanya Malipo"
+    "makePayment": "Fanya Malipo",
+    "details": "Maelezo",
+    "paymentAndDelivery": "Malipo na Uwasilishaji",
+    "noFilteredOrders": "Hakuna oda za {status}",
+    "orderId": "Namba ya Oda",
+    "amount": "Kiasi",
+    "date": "Tarehe",
+    "statusPendingDesc": "Inasubiri muuzaji athibitishe",
+    "statusConfirmedDesc": "Muuzaji amethibitisha — anaandaa",
+    "statusRejectedDesc": "Muuzaji amekataa — endelea na malipo kuagiza tena",
+    "statusPaymentPendingDesc": "Malipo yametumwa, yanasubiri uthibitisho",
+    "statusDeliveredDesc": "Oda imewasilishwa kwa mafanikio",
+    "rejectedNotice": "Oda hii imekataliwa. Unaweza kuendelea na malipo na mipango ya uwasilishaji kukamilisha ununuzi wako.",
+    "proceedToPayment": "Endelea na Malipo na Uwasilishaji",
+    "paymentSubmittedNotice": "Malipo yametumwa. Ukipokea bidhaa yako, thibitisha uwasilishaji ili kutoa malipo kwa muuzaji.",
+    "confirmReceived": "Thibitisha Nimepokea Bidhaa Yangu"
   },
   "payment": {
     "title": "Kamilisha Malipo",

@@ -141,7 +141,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
   return (
     <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--sn-page)', fontFamily: 'var(--sn-font)' }}>
       {/* Chat header */}
-      <div style={{ paddingTop: 108, background: 'var(--sn-bg)', borderBottom: '1px solid #F1F5F9', padding: '108px 5% 12px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ background: 'var(--sn-bg)', borderBottom: '1px solid var(--sn-border)', padding: '118px 5% 12px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => router.back()}
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4, color: 'var(--sn-muted)' }}>
           <ArrowLeft size={20} />

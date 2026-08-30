@@ -81,7 +81,7 @@ export default function SettingsPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:108, fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop: 118, fontFamily:"'Inter',sans-serif" }}>
       <div style={{ maxWidth:520, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         <h1 style={{ fontSize:'1.25rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1.5rem', letterSpacing:'-0.025em' }}>{t('settings.title')}</h1>

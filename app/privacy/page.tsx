@@ -17,7 +17,7 @@ export default function PrivacyPage() {
   ]
 
   return (
-    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <main style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'118px', fontFamily:"'Inter',sans-serif" }}>
       <div style={{ maxWidth:560, margin:'0 auto', padding:'1.5rem 5% 4rem' }}>
 
         <button onClick={() => router.back()} style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor:'pointer', color:'var(--sn-muted)', fontSize:'0.82rem', fontWeight:600, fontFamily:"'Inter',sans-serif", marginBottom:'1.5rem', padding:0 }}>

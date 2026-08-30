@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div style={{ minHeight:'100vh', background:'#FFFFFF', paddingTop:'108px', fontFamily:"'Inter',sans-serif" }}>
+    <div style={{ minHeight:'100vh', background:'var(--sn-page)', paddingTop:'118px', fontFamily:'var(--sn-font)' }}>
       <style>{`
         @keyframes shimmer {
           0%{background-position:-400px 0}
@@ -29,7 +29,7 @@ export default function Loading() {
       </div>
 
       {/* Three Markets skeleton */}
-      <section style={{padding:'3rem 5%',background:'#FFFFFF'}}>
+      <section style={{padding:'3rem 5%',background:'var(--sn-page)'}}>
         <div style={{maxWidth:'1100px',margin:'0 auto'}}>
           <div style={{textAlign:'center',marginBottom:'2rem'}}>
             <div className="sk" style={{height:14,width:120,margin:'0 auto 10px'}}/>
