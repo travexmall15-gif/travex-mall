@@ -96,7 +96,7 @@ export default function MenuPage() {
     {
       label: t('menuPage.communication'),
       items: [
-        { icon: Sparkles,       label: t('menuPage.aiAssistant'), href: '/ai',       color: 'var(--sn-text)' },
+        { icon: Sparkles,       label: t('menuPage.aiAssistant'), href: '/aiv',       color: 'var(--sn-text)' },
         { icon: MessageSquare,  label: t('menuPage.messages'),    href: '/messages', color: '#6366F1' },
       ],
     },

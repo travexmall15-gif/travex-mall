@@ -7,6 +7,7 @@ import { appendTurn, advanceContext } from './context/engine'
 import { classifyIntent } from './intent/classify'
 import { decideNextAction } from './reasoning/plan'
 import { executeTool } from './tools/executor'
+import { generateGroundedResponse } from '../runtime/respond'
 import { detectPromptInjectionAttempt, type AIRequestContext } from './security/authorize'
 import {
   buildRefusalResponse, buildUnknownResponse, buildClarificationResponse,
@@ -34,6 +35,8 @@ export type ProcessMessageInput = {
   turn: number
   /** Must be true if the previous turn asked for confirmation on a consequential action and this message is the user's affirmative reply. */
   confirmingPreviousAction?: boolean
+  /** When true, skips eager grounded-phrasing generation and instead returns response.pendingPhrase for the caller to stream separately (used by the /aiv streaming API route — see app/api/shopnekt-ai/route.ts). Default false: the returned response.text is always fully resolved. */
+  stream?: boolean
 }
 
 export type ProcessMessageResult = {
@@ -144,6 +147,33 @@ export async function processMessage(input: ProcessMessageInput): Promise<Proces
       }
 
       response = buildToolResultResponse(responseLanguage, decision.intentId, decision.toolName, result.data, entities)
+
+      // ── Batch 3: optional natural-language phrasing layer ──
+      // Only invoked when there IS real data to phrase (an empty
+      // result already has a clean, free, localized message from
+      // Batch 2 — no reason to spend a model call on that, per
+      // section 17's performance guidance). The underlying facts and
+      // hallucinationClass are UNCHANGED — this only ever replaces
+      // the wording, never the data driving it, and silently keeps
+      // Batch 2's template if the model call fails or returns nothing.
+      const hasData = Array.isArray(result.data) ? result.data.length > 0 : !!result.data
+      if (hasData && input.stream) {
+        // Streaming mode: defer phrasing to the caller (the /aiv API
+        // route), which will call runtime.stream() directly so real
+        // token deltas reach the client — awaiting the full text here
+        // would defeat the entire point of streaming.
+        response = { ...response, pendingPhrase: { toolName: decision.toolName, data: result.data } }
+      } else if (hasData) {
+        try {
+          const grounded = await generateGroundedResponse(decision.toolName, result.data, responseLanguage)
+          if (grounded.text.trim()) {
+            response = { ...response, text: grounded.text, modelPhrasing: { isFallback: grounded.isFallback, runtimeKind: grounded.runtimeKind } }
+          }
+        } catch {
+          // Batch 2's already-built `response` remains untouched — a
+          // model/runtime failure here must never break the reply.
+        }
+      }
       break
     }
   }

@@ -1210,7 +1210,16 @@
       "Kinderkleidung Budget 30k",
       "Telefonzubehör online",
       "Günstige Schönheitsprodukte"
-    ]
+    ],
+    "newChat": "Neuer Chat",
+    "thinking": "Denkt nach...",
+    "stop": "Stoppen",
+    "retry": "Wiederholen",
+    "confirmPrompt": "Soll ich fortfahren?",
+    "confirmYes": "Ja, mach weiter",
+    "confirmNo": "Abbrechen",
+    "devFallbackNote": "Basismodus — vollständige KI vorübergehend nicht verfügbar.",
+    "startPrompt": "Wonach suchst du?"
   },
   "menuPage": {
     "language": "Sprache",

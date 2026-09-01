@@ -1210,7 +1210,16 @@
       "Roupas infantis orçamento 30k",
       "Acessórios para celular online",
       "Produtos de beleza acessíveis"
-    ]
+    ],
+    "newChat": "Nova conversa",
+    "thinking": "Pensando...",
+    "stop": "Parar",
+    "retry": "Tentar novamente",
+    "confirmPrompt": "Devo continuar?",
+    "confirmYes": "Sim, continue",
+    "confirmNo": "Cancelar",
+    "devFallbackNote": "Modo básico — IA completa temporariamente indisponível.",
+    "startPrompt": "O que você está procurando?"
   },
   "menuPage": {
     "language": "Idioma",

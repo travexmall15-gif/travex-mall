@@ -1136,7 +1136,16 @@
     "qa4": "Trending",
     "qa5": "Nearby",
     "qa6": "Track Order",
-    "send": "Send"
+    "send": "Send",
+    "newChat": "New Chat",
+    "thinking": "Thinking...",
+    "stop": "Stop",
+    "retry": "Retry",
+    "confirmPrompt": "Should I go ahead?",
+    "confirmYes": "Yes, go ahead",
+    "confirmNo": "Cancel",
+    "devFallbackNote": "Basic mode — full AI is temporarily unavailable.",
+    "startPrompt": "What are you looking for?"
   },
   "menuPage": {
     "language": "Language",

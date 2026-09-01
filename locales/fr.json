@@ -1211,7 +1211,16 @@
       "Vêtements enfants budget 30k",
       "Accessoires téléphone en ligne",
       "Produits beauté abordables"
-    ]
+    ],
+    "newChat": "Nouvelle discussion",
+    "thinking": "Réflexion...",
+    "stop": "Arrêter",
+    "retry": "Réessayer",
+    "confirmPrompt": "Dois-je continuer ?",
+    "confirmYes": "Oui, continuez",
+    "confirmNo": "Annuler",
+    "devFallbackNote": "Mode de base — l'IA complète est temporairement indisponible.",
+    "startPrompt": "Que recherchez-vous ?"
   },
   "menuPage": {
     "language": "Langue",

@@ -32,6 +32,10 @@ export type AIResponse = {
   data?: unknown
   confirmationRequired: boolean
   toolCalled?: string
+  /** Batch 3: set when `text`'s WORDING (never its underlying facts) was phrased by a model runtime rather than Batch 2's static template. Absent when no model phrasing was attempted or it fell back silently. */
+  modelPhrasing?: { isFallback: boolean; runtimeKind: string }
+  /** Batch 3 streaming mode only (see ProcessMessageInput.stream): when set, `text` still holds Batch 2's template as a safe default, but the caller should stream real phrasing for this tool+data via runtime/respond.ts's streamGroundedResponse instead of using `text` directly. */
+  pendingPhrase?: { toolName: string; data: unknown }
 }
 
 export function buildRefusalResponse(reason: RefusalReason, language: SupportedLanguage, intentId: string | null): AIResponse {

@@ -1,8 +1,10 @@
 # SHOPNEKT 360 AI — Architecture
 
-**Status: Batch 1 of 3 (Data Core) — implemented, tested, type-safe.**
-**Batch 2 (Buyer 360 AI / Seller 360 AI orchestration) and Batch 3
-(model runtime + integration) are NOT started.**
+**Status: Batches 1-3 of 3 — implemented, tested, type-safe.**
+**Batch 3 introduced a REAL, working, config-selectable external model
+adapter (Anthropic) alongside the honest development fallback — see
+the Batch 3 section below for the precise REAL/PARTIAL/FALLBACK
+breakdown of every component.**
 
 ## The three layers, and why they're separate
 
@@ -112,3 +114,37 @@ Batch 3 runtime interface.
 npm test          # run once
 npm run test:watch  # watch mode
 ```
+
+---
+
+## BATCH 3 — Model Runtime + Buyer/Seller Integration
+
+### Component-by-component status (REAL / PARTIAL / FALLBACK / NOT IMPLEMENTED)
+
+| Component | Status | Detail |
+|---|---|---|
+| `ModelRuntime` interface | **REAL** | The abstraction itself — nothing above it can see which implementation is active. |
+| `DevFallbackRuntime` | **REAL** (as a fallback) | Genuinely deterministic, offline, honest — never claims to be a model. Always available. |
+| `AnthropicModelRuntime` | **REAL** | Genuinely calls the Anthropic API (same endpoint/pattern as the app's existing `api/ai-chat` route). Active only when `ANTHROPIC_API_KEY` is configured. Not a "foundation model built by ShopNekt" — an external adapter, exactly as spec section 2 permits ("External model adapter if temporarily required"). |
+| Runtime auto-selection (`runtime/config.ts`) | **REAL** | Reads `MODEL_RUNTIME`/`ANTHROPIC_API_KEY`, falls back honestly, reports `usedFallback` to callers. |
+| Grounded response generation (`runtime/respond.ts`) | **REAL** | The only place model output reaches the user; system prompt structurally forbids inventing facts beyond the supplied real tool data. |
+| Real streaming (Anthropic SSE) | **REAL** | Genuine `content_block_delta` parsing from Anthropic's actual streaming protocol, not a simulated chunker. |
+| Fallback "streaming" (DevFallbackRuntime) | **REAL, but not a model** | Synchronous word-chunking, zero artificial delay — honestly represents "no live generation happening" rather than faking it. |
+| Tool selection / intent / entity / context / memory / authorization | **REAL** (unchanged from Batch 2) | Batch 3 does not touch this — the model never selects tools or accesses Supabase; it only phrases already-fetched, already-authorized data. |
+| `/aiv` chat UI | **REAL**, buyer-scoped | Working streaming chat: composer, real SSE consumption, confirmation buttons for consequential actions, copy, retry, clear, dev-fallback disclosure badge, ShopNekt theme tokens (light/dark), i18n. |
+| Seller-side UI page | **NOT IMPLEMENTED** | Seller 360 AI's orchestrator/tools/API integration point is real and tested (`assistants/seller-360`), but no dedicated seller-facing chat page was built this batch — see Known Limitations. |
+| Server-side conversation persistence | **NOT IMPLEMENTED** | Context is round-tripped through the client between turns (same stateless pattern used elsewhere in this app), not stored server-side. Sidebar conversation history (spec section 14) is therefore not available across page reloads. |
+| "Website builder" AI assistance (spec section 16) | **NOT IMPLEMENTED** | Out of scope for this batch — no Open Store website builder integration exists yet to connect to. |
+
+### What genuinely changed vs. Batch 2
+
+Batch 2's orchestrator, tool executor, authorization, memory, and
+context logic are **completely unchanged and still fully covered by
+their original 108 tests**. Batch 3 adds one new, optional step at the
+very end of the `executeTool` path: when real tool data exists, the
+already-computed Batch 2 template text can be replaced with model-
+phrased wording of the *same* data — never different facts. If that
+step fails or no real runtime is configured, Batch 2's original text
+is what the user sees, unchanged. This is verified by
+`respond.test.ts` and by the full Batch 1+2 suite still passing
+unmodified.

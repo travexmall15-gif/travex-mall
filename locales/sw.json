@@ -1136,7 +1136,16 @@
       "Vifaa vya simu mtandaoni",
       "Bidhaa za urembo bei nafuu"
     ],
-    "send": "Tuma"
+    "send": "Tuma",
+    "newChat": "Mazungumzo Mapya",
+    "thinking": "Inafikiria...",
+    "stop": "Simamisha",
+    "retry": "Jaribu tena",
+    "confirmPrompt": "Niendelee?",
+    "confirmYes": "Ndiyo, endelea",
+    "confirmNo": "Ghairi",
+    "devFallbackNote": "Hali ya kawaida — AI kamili haipatikani kwa sasa.",
+    "startPrompt": "Unatafuta nini?"
   },
   "menuPage": {
     "language": "Lugha",
