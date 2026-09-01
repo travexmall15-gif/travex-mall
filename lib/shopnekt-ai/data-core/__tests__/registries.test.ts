@@ -44,7 +44,7 @@ describe('INTENTS registry', () => {
         // so it is intentionally consequential without requiring prior
         // auth — the order tool itself still validates real ownership at
         // execution time. All other consequential intents must require auth.
-        if (intent.id === 'ORDER_CREATE') continue
+        if (intent.id === 'ORDER_CREATE') {continue}
         expect(intent.requiresAuth, `${intent.id} is consequential but does not require auth`).toBe(true)
       }
     }
@@ -114,7 +114,7 @@ describe('REFUSAL_MESSAGES localization', () => {
         // Sanity check: if the brand name is mentioned at all, it must
         // appear verbatim, not transliterated.
         const value = text[lang]
-        if (/shopnekt/i.test(value)) expect(value).toMatch(/ShopNekt/)
+        if (/shopnekt/i.test(value)) {expect(value).toMatch(/ShopNekt/)}
       }
     }
   })

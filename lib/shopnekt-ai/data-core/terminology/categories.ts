@@ -53,9 +53,9 @@ export const CATEGORY_TERMS: CategoryTerm[] = [
 export function matchCategory(text: string): CategoryTerm | null {
   const lower = text.toLowerCase()
   for (const term of CATEGORY_TERMS) {
-    if (lower.includes(term.canonical.toLowerCase())) return term
+    if (lower.includes(term.canonical.toLowerCase())) {return term}
     for (const syn of [...term.synonyms.sw, ...term.synonyms.en]) {
-      if (lower.includes(syn.toLowerCase())) return term
+      if (lower.includes(syn.toLowerCase())) {return term}
     }
   }
   return null
@@ -76,9 +76,9 @@ export const MARKET_TERMS: { canonical: Market; synonyms: { sw: string[]; en: st
 export function matchMarket(text: string): Market | null {
   const lower = text.toLowerCase()
   for (const term of MARKET_TERMS) {
-    if (lower.includes(term.canonical)) return term.canonical
+    if (lower.includes(term.canonical)) {return term.canonical}
     for (const syn of [...term.synonyms.sw, ...term.synonyms.en]) {
-      if (lower.includes(syn.toLowerCase())) return term.canonical
+      if (lower.includes(syn.toLowerCase())) {return term.canonical}
     }
   }
   return null
@@ -96,7 +96,7 @@ const REGION_ALIASES: Record<string, string> = {
 export function matchRegion(text: string): string | null {
   const lower = text.toLowerCase()
   for (const [alias, canonical] of Object.entries(REGION_ALIASES)) {
-    if (lower.includes(alias)) return canonical
+    if (lower.includes(alias)) {return canonical}
   }
   return null
 }

@@ -58,16 +58,16 @@ export function extractDeterministicEntities(text: string): ExtractedEntities {
   const result: ExtractedEntities = {}
 
   const category = matchCategory(text)
-  if (category) result.category = category
+  if (category) {result.category = category}
 
   const market = matchMarket(text)
-  if (market) result.market = market
+  if (market) {result.market = market}
 
   const price = parsePriceExpression(text)
-  if (price) result.price = price
+  if (price) {result.price = price}
 
   const location = matchRegion(text)
-  if (location) result.location = location
+  if (location) {result.location = location}
 
   return result
 }

@@ -59,13 +59,13 @@ function parseAmount(segment: string): number | null {
   if (shorthand) {
     const n = parseFloat(shorthand[1])
     const unit = shorthand[2].toLowerCase()
-    if (unit === 'k' || unit === 'elfu') return Math.round(n * 1_000)
+    if (unit === 'k' || unit === 'elfu') {return Math.round(n * 1_000)}
     return Math.round(n * 1_000_000)
   }
 
   // Plain digit price, e.g. "500000" or "500,000"
   const digits = s.replace(/,/g, '')
-  if (/^\d{4,}$/.test(digits)) return parseInt(digits, 10)
+  if (/^\d{4,}$/.test(digits)) {return parseInt(digits, 10)}
 
   // Kiswahili "<unit> <number-word>" e.g. "laki tano", "elfu hamsini",
   // "milioni moja". Also tolerates the number word coming from the
@@ -82,7 +82,7 @@ function parseAmount(segment: string): number | null {
       }
       // "laki 5" (digit right after the unit word) is also valid
       const digitAfter = s.match(new RegExp(`\\b${unitWord}\\s+(\\d+)\\b`, 'i'))
-      if (digitAfter) return parseInt(digitAfter[1], 10) * unitValue
+      if (digitAfter) {return parseInt(digitAfter[1], 10) * unitValue}
     }
     // Bare unit word with no following number defaults to 1x
     // ("laki" alone rarely appears without a number in practice, so

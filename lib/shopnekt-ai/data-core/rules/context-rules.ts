@@ -82,9 +82,9 @@ export function mergeEntitiesIntoActiveTask(
   turn: number
 ): ActiveTask {
   const nextSlots = task.slots.map(slot => {
-    if (slot.filled) return slot
+    if (slot.filled) {return slot}
     const value = freshEntities[slot.entityType]
-    if (value === undefined || value === null) return slot
+    if (value === undefined || value === null) {return slot}
     return { ...slot, value, filled: true, filledAtTurn: turn }
   })
   return {

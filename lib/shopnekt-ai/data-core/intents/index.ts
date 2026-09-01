@@ -33,7 +33,7 @@ export const INTENTS: IntentDefinition[] = [
   {
     id: 'PRODUCT_SEARCH', role: 'buyer',
     description: 'Buyer wants to find products matching criteria (category, price, brand, feature).',
-    expectedEntities: ['category', 'brand', 'price', 'feature', 'location'],
+    expectedEntities: ['category', 'brand', 'price'],
     requiresAuth: false, isConsequential: false,
     examples: {
       sw: ['Natafuta simu ya laki tano', 'nionyeshe shoes chini ya 100k', 'nataka nguo za kiume'],
