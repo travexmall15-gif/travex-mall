@@ -1,6 +1,10 @@
 -- ═══════════════════════════════════════════════════════════
 -- SHOPNEKT — SAMPLE / DEMO DATA SEED (EXPANDED)
 -- ═══════════════════════════════════════════════════════════
+-- NOTE: shop_market is intentionally omitted — the live pending_payments
+-- table does not have that column (confirmed by a real error when the
+-- first seed attempt included it). The app already falls back to
+-- category-based market matching, so this is safe.
 -- Populates the marketplace with a much fuller set of sample content:
 --   • 12 approved shops (4 per market)
 --   • 30 products across those shops
@@ -30,25 +34,25 @@
 
 -- ── SHOPS (pending_payments, status = 'approved') — 4 per market ──
 
-INSERT INTO pending_payments (id, owner_name, owner_phone, owner_email, shop_name, shop_category, shop_region, shop_market, shop_whatsapp, shop_desc, shop_logo, plan, status, created_at)
+INSERT INTO pending_payments (id, owner_name, owner_phone, owner_email, shop_name, shop_category, shop_region, shop_whatsapp, shop_desc, shop_logo, plan, status, created_at)
 VALUES
   -- Fashion
-  ('b78f1bb1-18e7-4cf5-b532-88dd42c0c7c7', 'Amina Juma', '+255700000001', 'amina@example.com', 'Niffer Outfit', 'Clothing', 'Dar es Salaam', 'fashion', '+255700000001', 'Mitindo ya kisasa ya wanawake na wanaume — Ankara, kitenge, na vazi rasmi.', null, 'premium', 'approved', now()),
-  ('6130b516-50a7-4136-8adb-e1b0f58040e3', 'Zawadi Mrema', '+255700000002', 'zawadi@example.com', 'Zawadi Fashion House', 'Shoes', 'Arusha', 'fashion', '+255700000002', 'Viatu na vito vya asili, vilivyotengenezwa kwa mikono.', null, 'basic', 'approved', now()),
-  ('e422bd00-6a2e-470d-8f60-a61d6f8a1c02', 'Malaika Ngowi', '+255700000007', 'malaika@example.com', 'Malaika Boutique', 'Clothing', 'Mwanza', 'fashion', '+255700000007', 'Kanga, vitenge, na mavazi ya kisasa kwa bei nafuu.', null, 'basic', 'approved', now()),
-  ('078e6b93-3b3f-47b6-8315-cd053fbd0ae6', 'Frank Kalinga', '+255700000008', 'frank@example.com', 'Stellar Sneakers TZ', 'Shoes', 'Dodoma', 'fashion', '+255700000008', 'Sneakers halisi na viatu vya shule kwa bei ya jumla.', null, 'premium', 'approved', now()),
+  ('b78f1bb1-18e7-4cf5-b532-88dd42c0c7c7', 'Amina Juma', '+255700000001', 'amina@example.com', 'Niffer Outfit', 'Clothing', 'Dar es Salaam', '+255700000001', 'Mitindo ya kisasa ya wanawake na wanaume — Ankara, kitenge, na vazi rasmi.', null, 'premium', 'approved', now()),
+  ('6130b516-50a7-4136-8adb-e1b0f58040e3', 'Zawadi Mrema', '+255700000002', 'zawadi@example.com', 'Zawadi Fashion House', 'Shoes', 'Arusha', '+255700000002', 'Viatu na vito vya asili, vilivyotengenezwa kwa mikono.', null, 'basic', 'approved', now()),
+  ('e422bd00-6a2e-470d-8f60-a61d6f8a1c02', 'Malaika Ngowi', '+255700000007', 'malaika@example.com', 'Malaika Boutique', 'Clothing', 'Mwanza', '+255700000007', 'Kanga, vitenge, na mavazi ya kisasa kwa bei nafuu.', null, 'basic', 'approved', now()),
+  ('078e6b93-3b3f-47b6-8315-cd053fbd0ae6', 'Frank Kalinga', '+255700000008', 'frank@example.com', 'Stellar Sneakers TZ', 'Shoes', 'Dodoma', '+255700000008', 'Sneakers halisi na viatu vya shule kwa bei ya jumla.', null, 'premium', 'approved', now()),
 
   -- Vehicle
-  ('4cae53e2-b014-4b85-a3ef-f600a36a365d', 'Baraka Mwakalinga', '+255700000003', 'baraka@example.com', 'TZ Motors Spares', 'Spare Parts', 'Mwanza', 'vehicle', '+255700000003', 'Vipuri halisi vya magari — brake pads, betri, na zaidi.', null, 'premium', 'approved', now()),
-  ('a86d0d95-af36-4728-b054-a101545071b6', 'Godfrey Mushi', '+255700000004', 'godfrey@example.com', 'Dodoma Wheels & Tyres', 'Tyres', 'Dodoma', 'vehicle', '+255700000004', 'Matairi ya magari yote — bei nafuu, ubora wa hali ya juu.', null, 'basic', 'approved', now()),
-  ('68d0c07b-fcce-404a-8cb2-f592bf1e34cb', 'Hamisi Selemani', '+255700000009', 'hamisi@example.com', 'Kilimanjaro Auto Care', 'Auto Accessories', 'Arusha', 'vehicle', '+255700000009', 'Vifaa vya ndani na nje ya gari — viti, taa, na zaidi.', null, 'basic', 'approved', now()),
-  ('1a2b8828-db48-4372-a51f-1961d7731590', 'Salma Rashidi', '+255700000010', 'salma@example.com', 'Bahari Motors', 'Cars', 'Tanga', 'vehicle', '+255700000010', 'Magari na pikipiki za mikono ya kwanza na ya pili, zilizokaguliwa.', null, 'premium', 'approved', now()),
+  ('4cae53e2-b014-4b85-a3ef-f600a36a365d', 'Baraka Mwakalinga', '+255700000003', 'baraka@example.com', 'TZ Motors Spares', 'Spare Parts', 'Mwanza', '+255700000003', 'Vipuri halisi vya magari — brake pads, betri, na zaidi.', null, 'premium', 'approved', now()),
+  ('a86d0d95-af36-4728-b054-a101545071b6', 'Godfrey Mushi', '+255700000004', 'godfrey@example.com', 'Dodoma Wheels & Tyres', 'Tyres', 'Dodoma', '+255700000004', 'Matairi ya magari yote — bei nafuu, ubora wa hali ya juu.', null, 'basic', 'approved', now()),
+  ('68d0c07b-fcce-404a-8cb2-f592bf1e34cb', 'Hamisi Selemani', '+255700000009', 'hamisi@example.com', 'Kilimanjaro Auto Care', 'Auto Accessories', 'Arusha', '+255700000009', 'Vifaa vya ndani na nje ya gari — viti, taa, na zaidi.', null, 'basic', 'approved', now()),
+  ('1a2b8828-db48-4372-a51f-1961d7731590', 'Salma Rashidi', '+255700000010', 'salma@example.com', 'Bahari Motors', 'Cars', 'Tanga', '+255700000010', 'Magari na pikipiki za mikono ya kwanza na ya pili, zilizokaguliwa.', null, 'premium', 'approved', now()),
 
   -- Electronics
-  ('dcd11ef4-899e-460a-8df0-721d3b6da0a1', 'Neema Kessy', '+255700000005', 'neema@example.com', 'TechHub Tanzania', 'Phones', 'Dar es Salaam', 'electronics', '+255700000005', 'Simu mpya na laptop, uagizaji halisi, dhamana ya mwaka mmoja.', null, 'premium', 'approved', now()),
-  ('01537ae9-d146-48ff-a88b-9d90d2103345', 'Erick Malya', '+255700000006', 'erick@example.com', 'Smart Gadgets TZ', 'Audio', 'Tanga', 'electronics', '+255700000006', 'Vifaa vidogo vya elektroniki — earbuds, power banks, na chaja.', null, 'basic', 'approved', now()),
-  ('36058618-56d5-4494-824e-11a1204d14e4', 'Peter Machunda', '+255700000011', 'peter@example.com', 'Digital World Mwanza', 'Laptops', 'Mwanza', 'electronics', '+255700000011', 'Laptop na vifaa vya kompyuta kwa wanafunzi na wafanyakazi.', null, 'premium', 'approved', now()),
-  ('94d4b9b3-1853-49dd-9841-8c0aabb27f39', 'Rehema Chuma', '+255700000012', 'rehema@example.com', 'Dodoma Electronics Hub', 'Appliances', 'Dodoma', 'electronics', '+255700000012', 'Vifaa vya nyumbani — jiko la umeme, blender, na zaidi.', null, 'basic', 'approved', now())
+  ('dcd11ef4-899e-460a-8df0-721d3b6da0a1', 'Neema Kessy', '+255700000005', 'neema@example.com', 'TechHub Tanzania', 'Phones', 'Dar es Salaam', '+255700000005', 'Simu mpya na laptop, uagizaji halisi, dhamana ya mwaka mmoja.', null, 'premium', 'approved', now()),
+  ('01537ae9-d146-48ff-a88b-9d90d2103345', 'Erick Malya', '+255700000006', 'erick@example.com', 'Smart Gadgets TZ', 'Audio', 'Tanga', '+255700000006', 'Vifaa vidogo vya elektroniki — earbuds, power banks, na chaja.', null, 'basic', 'approved', now()),
+  ('36058618-56d5-4494-824e-11a1204d14e4', 'Peter Machunda', '+255700000011', 'peter@example.com', 'Digital World Mwanza', 'Laptops', 'Mwanza', '+255700000011', 'Laptop na vifaa vya kompyuta kwa wanafunzi na wafanyakazi.', null, 'premium', 'approved', now()),
+  ('94d4b9b3-1853-49dd-9841-8c0aabb27f39', 'Rehema Chuma', '+255700000012', 'rehema@example.com', 'Dodoma Electronics Hub', 'Appliances', 'Dodoma', '+255700000012', 'Vifaa vya nyumbani — jiko la umeme, blender, na zaidi.', null, 'basic', 'approved', now())
 ON CONFLICT (id) DO NOTHING;
 
 -- ── PRODUCTS (30 total, 2-3 per shop) ──
