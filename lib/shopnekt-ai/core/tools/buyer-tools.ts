@@ -14,16 +14,16 @@ import type { ShopConcept, ProductConcept, OrderConcept, FlashDealConcept, Group
 // instruction to integrate with real ShopNekt data contracts rather
 // than rebuild them.
 
-export async function toolSearchProducts(input: { query: string }): Promise<ProductConcept[]> {
-  const results = await realSearchProducts(input.query, 12)
+export async function toolSearchProducts(input: { query?: string; category?: string; maxPrice?: number; minPrice?: number }): Promise<ProductConcept[]> {
+  const results = await realSearchProducts(input.query || '', 12, { category: input.category, maxPrice: input.maxPrice, minPrice: input.minPrice })
   return results.map(p => ({
     id: p.id, name: p.name, price: p.price, stock: 0,
     description: null, category: null, image_url: p.image_url, store_id: p.store_id,
   }))
 }
 
-export async function toolSearchShops(input: { query: string }): Promise<ShopConcept[]> {
-  const results = await realSearchShops(input.query, 8)
+export async function toolSearchShops(input: { query?: string; category?: string; region?: string }): Promise<ShopConcept[]> {
+  const results = await realSearchShops(input.query || '', 8, { category: input.category, region: input.region })
   return results.map(s => ({
     id: s.id, shop_name: s.shop_name, shop_category: s.shop_category,
     shop_region: s.shop_region as any, shop_market: null, shop_desc: null,

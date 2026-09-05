@@ -33,7 +33,7 @@ export const INTENTS: IntentDefinition[] = [
   {
     id: 'PRODUCT_SEARCH', role: 'buyer',
     description: 'Buyer wants to find products matching criteria (category, price, brand, feature).',
-    expectedEntities: ['category', 'brand', 'price'],
+    expectedEntities: ['category', 'price'],
     requiresAuth: false, isConsequential: false,
     examples: {
       sw: ['Natafuta simu ya laki tano', 'nionyeshe shoes chini ya 100k', 'nataka nguo za kiume', 'Nataka kununua', 'nataka kununua kitu'],
@@ -43,7 +43,7 @@ export const INTENTS: IntentDefinition[] = [
   {
     id: 'SHOP_SEARCH', role: 'buyer',
     description: 'Buyer wants to find shops (by category, region, or name).',
-    expectedEntities: ['category', 'location', 'shopName'],
+    expectedEntities: ['category'],
     requiresAuth: false, isConsequential: false,
     examples: {
       sw: ['nionyeshe maduka ya electronics Arusha', 'nataka duka la nguo karibu'],
@@ -81,14 +81,14 @@ export const INTENTS: IntentDefinition[] = [
   {
     id: 'FLASH_DEAL_SEARCH', role: 'buyer',
     description: 'Buyer wants to see active Flash Deals.',
-    expectedEntities: ['category'],
+    expectedEntities: [],
     requiresAuth: false, isConsequential: false,
     examples: { sw: ['kuna flash deals leo?'], en: ['any flash deals right now?'] },
   },
   {
     id: 'GROUP_BUY_SEARCH', role: 'buyer',
     description: 'Buyer wants to see active Group Buy campaigns.',
-    expectedEntities: ['category'],
+    expectedEntities: [],
     requiresAuth: false, isConsequential: false,
     examples: { sw: ['kuna group buy ya simu?'], en: ['any group buys for phones?'] },
   },

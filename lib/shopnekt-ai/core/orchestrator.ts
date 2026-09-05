@@ -1,6 +1,6 @@
 import {
   extractDeterministicEntities, getIntentById, getWorkflowsForRole, getToolByName,
-  type ConversationContext, type SupportedLanguage,
+  type ConversationContext, type SupportedLanguage, type ExtractedEntities,
 } from '../data-core'
 import { detectInputLanguage } from './language/detect'
 import { appendTurn, advanceContext } from './context/engine'
@@ -187,17 +187,24 @@ export async function processMessage(input: ProcessMessageInput): Promise<Proces
   return { response, updatedContext: context }
 }
 
-/** Builds the real input object a tool call needs from the current extracted entities/context. */
+/** Builds the real input object a tool call needs — prefers values ACCUMULATED across the whole guided conversation (context.activeTask.slots) over the current message's entities alone, so a 3-turn "category → brand → budget" flow actually searches using everything the user said, not just their last reply. */
 function buildToolInput(toolName: string, rawText: string, entities: ReturnType<typeof extractDeterministicEntities>, context: ConversationContext): Record<string, unknown> {
+  const slotValue = (type: string) => context.activeTask?.slots.find(s => s.entityType === type)?.value
+
+  const categoryTerm = (slotValue('category') as ExtractedEntities['category']) ?? entities.category
+  const priceExpr = (slotValue('price') as ExtractedEntities['price']) ?? entities.price
+  const locationValue = (slotValue('location') as string | undefined) ?? entities.location
+
   switch (toolName) {
     case 'searchProducts':
+      return { category: categoryTerm?.canonical, maxPrice: priceExpr?.comparator !== 'gt' ? priceExpr?.amount : undefined, minPrice: priceExpr?.comparator === 'gt' ? priceExpr.amount : undefined }
     case 'searchShops':
-      return { query: rawText, category: entities.category?.canonical, maxPrice: entities.price?.amount }
+      return { category: categoryTerm?.canonical, region: locationValue }
     case 'getFlashDeals':
     case 'getGroupBuys':
-      return { category: entities.category?.canonical }
+      return { category: categoryTerm?.canonical }
     case 'getOrderStatus':
-      return { orderId: (context.activeTask?.slots.find(s => s.entityType === 'orderId')?.value) }
+      return { orderId: slotValue('orderId') }
     default:
       return {}
   }

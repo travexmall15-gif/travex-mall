@@ -24,17 +24,25 @@ export type ProductSearchResult = {
   shop_name: string
 }
 
-/** Real shop search — matches shop name or category, approved shops only. */
-export async function searchShops(query: string, limit = 8): Promise<ShopSearchResult[]> {
-  const q = query.trim()
-  if (!q) return []
+export type ProductSearchFilters = { category?: string; maxPrice?: number; minPrice?: number }
+export type ShopSearchFilters = { category?: string; region?: string }
 
-  const { data } = await sb
+/** Real shop search — matches shop name or category, approved shops only. Optional structured filters narrow further (used by ShopNekt AI once category/region are known, not just free text). */
+export async function searchShops(query: string, limit = 8, filters: ShopSearchFilters = {}): Promise<ShopSearchResult[]> {
+  const q = query.trim()
+  const category = filters.category?.trim()
+  if (!q && !category) return []
+
+  let builder = sb
     .from('pending_payments')
     .select('id, shop_name, shop_category, shop_region, shop_logo, plan')
     .eq('status', 'approved')
-    .or(`shop_name.ilike.%${q}%,shop_category.ilike.%${q}%`)
-    .limit(limit)
+
+  if (q) builder = builder.or(`shop_name.ilike.%${q}%,shop_category.ilike.%${q}%`)
+  if (category) builder = builder.ilike('shop_category', `%${category}%`)
+  if (filters.region) builder = builder.eq('shop_region', filters.region)
+
+  const { data } = await builder.limit(limit)
 
   if (!data || data.length === 0) return []
 
@@ -61,16 +69,20 @@ export async function searchShops(query: string, limit = 8): Promise<ShopSearchR
   }))
 }
 
-/** Real product search — matches product name or category. */
-export async function searchProducts(query: string, limit = 12): Promise<ProductSearchResult[]> {
+/** Real product search — matches product name or category. Optional structured filters (category/price range) narrow further. */
+export async function searchProducts(query: string, limit = 12, filters: ProductSearchFilters = {}): Promise<ProductSearchResult[]> {
   const q = query.trim()
-  if (!q) return []
+  const category = filters.category?.trim()
+  if (!q && !category) return []
 
-  const { data } = await sb
-    .from('products')
-    .select('id, name, price, image_url, store_id')
-    .or(`name.ilike.%${q}%,category.ilike.%${q}%`)
-    .limit(limit)
+  let builder = sb.from('products').select('id, name, price, image_url, store_id')
+
+  if (q) builder = builder.or(`name.ilike.%${q}%,category.ilike.%${q}%`)
+  if (category) builder = builder.ilike('category', `%${category}%`)
+  if (filters.maxPrice !== undefined) builder = builder.lte('price', filters.maxPrice)
+  if (filters.minPrice !== undefined) builder = builder.gte('price', filters.minPrice)
+
+  const { data } = await builder.limit(limit)
 
   if (!data || data.length === 0) return []
 

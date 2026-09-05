@@ -51,7 +51,20 @@ export function decideNextAction(
   // already in progress, rather than being treated as "unknown".
   // This is what lets a bare confirmation reply actually complete a
   // pending consequential action instead of derailing it.
-  const effectiveIntentId = intentId ?? activeTask?.intentId ?? null
+  // Which intent are we ACTUALLY pursuing this turn? If there's an
+  // active, unfinished task, context/engine.ts's advanceContext has
+  // already decided (via its own, deliberately different threshold
+  // logic) whether this message continues it or not — by the time we
+  // get here, activeTask.intentId IS that decision. Re-deriving "the"
+  // intent from the freshly classified intentId instead would let the
+  // two functions disagree: a short follow-up like "nguo" can score a
+  // different intent (e.g. SHOP_SEARCH) marginally higher than the
+  // in-progress one (e.g. PRODUCT_SEARCH) purely due to scoring noise,
+  // even though advanceContext correctly chose to continue the
+  // original task. Trusting activeTask.intentId here — whenever one
+  // exists and isn't ready yet — is what keeps a guided flow from
+  // being silently hijacked mid-conversation by a noisier classification.
+  const effectiveIntentId = (activeTask && !activeTask.readyToExecute ? activeTask.intentId : null) ?? intentId ?? activeTask?.intentId ?? null
 
   if (!effectiveIntentId) {
     return { action: 'unknown' }

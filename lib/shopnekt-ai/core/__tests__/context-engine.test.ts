@@ -40,19 +40,23 @@ describe('advanceContext — multi-turn continuity (the "Natafuta simu -> Samsun
   it('continues the active PRODUCT_SEARCH task when a follow-up message has weak/no new intent signal', () => {
     let ctx = createConversationContext('conv-1', buyerRequest)
 
-    // Turn 1: "Natafuta simu." -> classified as PRODUCT_SEARCH, category filled
+    // Turn 1: "Natafuta simu." -> classified as PRODUCT_SEARCH, category filled.
+    // PRODUCT_SEARCH's required slots are category + price — brand has no
+    // deterministic extractor (see data-core/entities/index.ts), so it is
+    // intentionally NOT a blocking slot; if mentioned it's informational
+    // only and doesn't gate readiness.
     ctx = advanceContext(ctx, 1, 'PRODUCT_SEARCH', 0.8, { category: { canonical: 'Phones', market: 'electronics', synonyms: { sw: [], en: [] } } })
     expect(ctx.activeTask?.intentId).toBe('PRODUCT_SEARCH')
     expect(ctx.activeTask?.readyToExecute).toBe(false)
 
     // Turn 2: "Samsung." -> no strong new intent classified (brand alone isn't a full sentence
-    // matching any intent example well), so it should CONTINUE the active task.
-    ctx = advanceContext(ctx, 2, null, 0, { brand: 'Samsung' })
+    // matching any intent example well) and no slot exists for it, so the
+    // active task simply continues unchanged, still waiting on price.
+    ctx = advanceContext(ctx, 2, null, 0, {})
     expect(ctx.activeTask?.intentId).toBe('PRODUCT_SEARCH')
-    const brandSlot = ctx.activeTask?.slots.find(s => s.entityType === 'brand')
-    expect(brandSlot?.value).toBe('Samsung')
+    expect(ctx.activeTask?.readyToExecute).toBe(false)
 
-    // Turn 3: "Chini ya laki tano." -> price entity fills the last slot.
+    // Turn 3: "Chini ya laki tano." -> price entity fills the last required slot.
     ctx = advanceContext(ctx, 3, null, 0, { price: { raw: 'laki tano', amount: 500000, comparator: 'lt' } })
     expect(ctx.activeTask?.readyToExecute).toBe(true)
     expect(ctx.activeTask?.slots.find(s => s.entityType === 'category')?.value).toEqual(

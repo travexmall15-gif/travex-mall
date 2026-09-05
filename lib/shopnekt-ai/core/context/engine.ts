@@ -89,7 +89,17 @@ export function advanceContext(
   const shouldContinueExisting =
     activeTask !== null &&
     !activeTask.readyToExecute &&
-    (classifiedIntentId === null || classifiedIntentId === activeTask.intentId || intentConfidence < 0.35)
+    // A short, low-information follow-up (e.g. just a category word
+    // like "nguo") can sometimes score a marginally higher confidence
+    // for a DIFFERENT intent than the one already in progress, purely
+    // because that intent has fewer expected entities (a smaller
+    // denominator inflates its entity-presence boost — see
+    // intent/classify.ts). A real, deliberate topic switch mid-flow
+    // should be unambiguous, not win by a hair — 0.6 requires a
+    // clearly confident new intent before abandoning unfinished work,
+    // found and raised from an earlier 0.35 after exactly this
+    // "nguo" tie-break case broke a live guided PRODUCT_SEARCH flow.
+    (classifiedIntentId === null || classifiedIntentId === activeTask.intentId || intentConfidence < 0.6)
 
   if (shouldContinueExisting && activeTask) {
     activeTask = mergeEntitiesIntoActiveTask(activeTask, freshEntities, turn)

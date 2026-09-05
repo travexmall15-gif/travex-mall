@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { processMessage } from '../orchestrator'
 import { createConversationContext } from '../context/engine'
 import type { AIRequestContext } from '../security/authorize'
+import * as executorModule from '../tools/executor'
 
 // HONEST TEST-SCOPE NOTE: these orchestrator-level tests exercise every
 // pipeline path that does NOT require a real network/Supabase call
@@ -140,10 +141,12 @@ describe('processMessage — guided buy flow asks specific, targeted questions',
     context = result.updatedContext
 
     result = await processMessage({ text: 'nguo', context, requestContext: buyerContext, turn: 2 })
+    // PRODUCT_SEARCH's only remaining required slot after category is
+    // price — this must ask the budget-specific question next, never
+    // silently execute a search with no price filter and never fall
+    // back to the generic "tell me more" prompt.
     expect(result.response.status).toBe('clarificationNeeded')
-    // Next missing slot after category is brand, then price — either
-    // way this must be a targeted question, never the generic fallback.
-    expect(result.response.text).not.toBe('Unaweza kunieleza zaidi?')
+    expect(result.response.text).toContain('Bei')
   })
 })
 
@@ -156,5 +159,30 @@ describe('processMessage — multi-turn context is preserved across calls', () =
 
     const second = await processMessage({ text: 'Samsung.', context, requestContext: buyerContext, turn: 2 })
     expect(second.updatedContext.activeTask?.intentId).toBe('PRODUCT_SEARCH')
+  })
+})
+
+describe('processMessage — the completed guided flow actually searches with ALL collected info, not just the last message', () => {
+  it('calls searchProducts with the category from turn 2 AND the price from turn 3, never just the raw last message', async () => {
+    const executeToolSpy = vi.spyOn(executorModule, 'executeTool').mockResolvedValue({ ok: true, toolName: 'searchProducts', data: [] })
+
+    let context = createConversationContext('c1', buyerContext)
+    let result = await processMessage({ text: 'Nataka kununua', context, requestContext: buyerContext, turn: 1 })
+    context = result.updatedContext
+
+    result = await processMessage({ text: 'nguo', context, requestContext: buyerContext, turn: 2 })
+    context = result.updatedContext
+    expect(result.response.status).toBe('clarificationNeeded') // still waiting on price
+
+    result = await processMessage({ text: 'chini ya laki tano', context, requestContext: buyerContext, turn: 3 })
+
+    expect(executeToolSpy).toHaveBeenCalledWith(
+      'searchProducts',
+      expect.objectContaining({ category: 'Clothing', maxPrice: 500000 }),
+      buyerContext,
+      expect.anything()
+    )
+
+    executeToolSpy.mockRestore()
   })
 })
