@@ -1220,7 +1220,10 @@
     "confirmYes": "Oui, continuez",
     "confirmNo": "Annuler",
     "devFallbackNote": "Mode de base — l'IA complète est temporairement indisponible.",
-    "startPrompt": "Que recherchez-vous ?"
+    "startPrompt": "Que recherchez-vous ?",
+    "optionBuy": "Je veux acheter quelque chose",
+    "optionOpenStore": "Ouvrir une boutique",
+    "optionFlashDeals": "Découvrir les nouvelles offres flash"
   },
   "menuPage": {
     "language": "Langue",

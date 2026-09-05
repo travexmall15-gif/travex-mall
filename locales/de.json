@@ -1219,7 +1219,10 @@
     "confirmYes": "Ja, mach weiter",
     "confirmNo": "Abbrechen",
     "devFallbackNote": "Basismodus — vollständige KI vorübergehend nicht verfügbar.",
-    "startPrompt": "Wonach suchst du?"
+    "startPrompt": "Wonach suchst du?",
+    "optionBuy": "Ich möchte etwas kaufen",
+    "optionOpenStore": "Shop eröffnen",
+    "optionFlashDeals": "Neue Flash Deals entdecken"
   },
   "menuPage": {
     "language": "Sprache",

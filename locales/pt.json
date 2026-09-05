@@ -1219,7 +1219,10 @@
     "confirmYes": "Sim, continue",
     "confirmNo": "Cancelar",
     "devFallbackNote": "Modo básico — IA completa temporariamente indisponível.",
-    "startPrompt": "O que você está procurando?"
+    "startPrompt": "O que você está procurando?",
+    "optionBuy": "Quero comprar algo",
+    "optionOpenStore": "Abrir uma loja",
+    "optionFlashDeals": "Explorar novas Ofertas Relâmpago"
   },
   "menuPage": {
     "language": "Idioma",

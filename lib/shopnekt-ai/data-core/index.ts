@@ -67,7 +67,7 @@ export {
 export type { EntitySlot, ActiveTask, ConversationTurn, ConversationContext } from './rules/context-rules'
 
 // Response / fallback rules
-export { REFUSAL_MESSAGES, RESPONSE_BEHAVIOR_RULES, STATUS_MESSAGES } from './rules/response-rules'
+export { REFUSAL_MESSAGES, RESPONSE_BEHAVIOR_RULES, STATUS_MESSAGES, CLARIFICATION_QUESTIONS } from './rules/response-rules'
 
 // Memory
 export { MemoryScopeSchema, MEMORY_SCOPE_POLICY, UserPreferenceSchema, MEMORY_RULES } from './memory'

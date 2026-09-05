@@ -92,7 +92,7 @@ export default function HomePage() {
       {/* AI CHIP */}
       <div className="ai-chip-wrap">
         <div className="ai-chip-inner">
-          <a href="/ai" className="ai-chip-link">
+          <a href="/aiv" className="ai-chip-link">
             <div style={{ display:'flex',alignItems:'center',gap:12 }}>
               <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#7C3AED,#A855F7)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
                 <Sparkles size={20} color="#fff" />

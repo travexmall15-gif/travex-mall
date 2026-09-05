@@ -73,6 +73,51 @@ export const REFUSAL_MESSAGES: Record<RefusalReason, LocalizedText> = {
  * Tone/behavior rules the response layer must follow. Encoded as data
  * so it can be checked/tested, not just described in a prompt.
  */
+/**
+ * Per-entity-type clarifying questions — used when the reasoning
+ * engine knows exactly WHICH piece of information is still missing
+ * (see core/reasoning/plan.ts's askClarification decision). Real,
+ * deterministic, localized text — not model-generated, since the
+ * question to ask is fully determined by which slot is empty.
+ * Only entity types that realistically appear as a missing slot in a
+ * guided flow need an entry here; anything else falls back to a
+ * generic "tell me more" in core/response/format.ts.
+ */
+export const CLARIFICATION_QUESTIONS: Partial<Record<string, LocalizedText>> = {
+  category: {
+    en: 'What would you like to buy? For example: clothes, shoes, or a phone.',
+    sw: 'Unataka kununua nini? Kwa mfano: nguo, viatu, au simu.',
+    fr: 'Que souhaitez-vous acheter ? Par exemple : vêtements, chaussures ou téléphone.',
+    de: 'Was möchtest du kaufen? Zum Beispiel: Kleidung, Schuhe oder ein Handy.',
+    pt: 'O que você gostaria de comprar? Por exemplo: roupas, sapatos ou um telefone.',
+    ar: 'ماذا تريد أن تشتري؟ على سبيل المثال: ملابس، أحذية، أو هاتف.',
+  },
+  brand: {
+    en: 'Do you have a brand in mind, or should I show you all options?',
+    sw: 'Unapendelea brand gani, au nikuonyeshe zote zilizopo?',
+    fr: 'Avez-vous une marque en tête, ou dois-je vous montrer toutes les options ?',
+    de: 'Hast du eine Marke im Sinn, oder soll ich dir alle Optionen zeigen?',
+    pt: 'Você tem uma marca em mente, ou devo mostrar todas as opções?',
+    ar: 'هل لديك علامة تجارية معينة في ذهنك، أم أعرض لك كل الخيارات؟',
+  },
+  price: {
+    en: 'What\'s your budget?',
+    sw: 'Bei iwe kiasi gani?',
+    fr: 'Quel est votre budget ?',
+    de: 'Wie hoch ist dein Budget?',
+    pt: 'Qual é o seu orçamento?',
+    ar: 'ما هي ميزانيتك؟',
+  },
+  location: {
+    en: 'Which area or region?',
+    sw: 'Eneo gani au mkoa upi?',
+    fr: 'Quelle zone ou région ?',
+    de: 'Welche Region?',
+    pt: 'Qual região?',
+    ar: 'أي منطقة؟',
+  },
+}
+
 export const RESPONSE_BEHAVIOR_RULES = {
   /** The AI must never claim to have performed an action it did not actually execute via a real tool. */
   neverClaimUnexecutedAction: true,

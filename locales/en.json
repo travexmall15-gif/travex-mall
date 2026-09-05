@@ -1145,7 +1145,10 @@
     "confirmYes": "Yes, go ahead",
     "confirmNo": "Cancel",
     "devFallbackNote": "Basic mode — full AI is temporarily unavailable.",
-    "startPrompt": "What are you looking for?"
+    "startPrompt": "What are you looking for?",
+    "optionBuy": "I want to buy something",
+    "optionOpenStore": "Open a store",
+    "optionFlashDeals": "Explore new Flash Deals"
   },
   "menuPage": {
     "language": "Language",

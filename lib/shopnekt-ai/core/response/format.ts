@@ -1,5 +1,5 @@
 import {
-  localize, REFUSAL_MESSAGES, STATUS_MESSAGES,
+  localize, REFUSAL_MESSAGES, STATUS_MESSAGES, CLARIFICATION_QUESTIONS,
   type SupportedLanguage, type HallucinationClass, type RefusalReason, type ExtractedEntities,
 } from '../../data-core'
 
@@ -61,10 +61,20 @@ export function buildUnknownResponse(language: SupportedLanguage, entities: Extr
 export function buildClarificationResponse(
   language: SupportedLanguage, intentId: string, missingEntityType: string, entities: ExtractedEntities
 ): AIResponse {
-  // A generic, honest "need more info" message — not a fabricated
-  // guess about what to ask. A future model runtime can phrase this
-  // more naturally (Batch 3); the underlying missingEntityType is
-  // exposed on the response so the UI can render a targeted prompt if desired.
+  // Ask the SPECIFIC question for whichever slot is missing when we
+  // have one (e.g. "What would you like to buy?" for a missing
+  // category) — falling back to a generic prompt only for entity
+  // types with no dedicated question defined.
+  const specific = CLARIFICATION_QUESTIONS[missingEntityType]
+  if (specific) {
+    return {
+      text: localize(specific, language), language, intentId, entities,
+      status: 'clarificationNeeded',
+      hallucinationClass: 'KNOWN', // a fixed, known question — not a guess
+      confirmationRequired: false,
+    }
+  }
+
   const generic: Record<SupportedLanguage, string> = {
     en: 'Could you tell me a bit more?', sw: 'Unaweza kunieleza zaidi?',
     fr: 'Pouvez-vous m\'en dire un peu plus ?', de: 'Kannst du mir mehr dazu sagen?',

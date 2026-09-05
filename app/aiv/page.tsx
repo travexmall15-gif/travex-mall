@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
 import type { ConversationContext } from '@/lib/shopnekt-ai/data-core'
@@ -116,8 +117,12 @@ export default function ShopNektAIPage() {
   const copy = (msg: ChatMessage) => { navigator.clipboard.writeText(msg.text); setCopiedId(msg.id); setTimeout(() => setCopiedId(null), 1500) }
   const retryLast = () => { const lastUser = [...messages].reverse().find(m => m.role === 'user'); if (lastUser) send(lastUser.text) }
 
-  // Kept deliberately short — two starters only, plain text, no icons.
-  const suggestions = ['suggest1', 'suggest4'] as const
+  // Guided starters: "buy" and "flash deals" send a real message
+  // through the same orchestrator/intent system as free typing (no
+  // separate fake flow) — "open a store" is a direct action link
+  // since that's an existing real page, not a conversation.
+  const buyStarter = lang === 'sw' ? 'Nataka kununua' : 'I want to buy something'
+  const dealsStarter = lang === 'sw' ? 'kuna flash deals leo?' : 'any flash deals right now?'
 
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: C.page, fontFamily: 'var(--sn-font)', color: C.text }}>
@@ -140,12 +145,18 @@ export default function ShopNektAIPage() {
           <div style={{ maxWidth: 480, margin: '3rem auto 0', textAlign: 'center' }}>
             <div style={{ fontSize: '1.15rem', fontWeight: 600, color: C.text, marginBottom: '1.75rem' }}>{t('ai.startPrompt')}</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {suggestions.map(key => (
-                <button key={key} onClick={() => send(t(`ai.${key}`))}
-                  style={{ padding: '11px 16px', borderRadius: 10, border: `1px solid ${C.border}`, background: C.panel, cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--sn-font)', fontSize: '0.85rem', color: C.text }}>
-                  {t(`ai.${key}`)}
-                </button>
-              ))}
+              <button onClick={() => send(buyStarter)}
+                style={{ padding: '11px 16px', borderRadius: 10, border: `1px solid ${C.border}`, background: C.panel, cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--sn-font)', fontSize: '0.85rem', color: C.text }}>
+                {t('ai.optionBuy')}
+              </button>
+              <Link href="/open-store"
+                style={{ display: 'block', padding: '11px 16px', borderRadius: 10, border: `1px solid ${C.border}`, background: C.panel, textAlign: 'left', fontFamily: 'var(--sn-font)', fontSize: '0.85rem', color: C.text, textDecoration: 'none' }}>
+                {t('ai.optionOpenStore')}
+              </Link>
+              <button onClick={() => send(dealsStarter)}
+                style={{ padding: '11px 16px', borderRadius: 10, border: `1px solid ${C.border}`, background: C.panel, cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--sn-font)', fontSize: '0.85rem', color: C.text }}>
+                {t('ai.optionFlashDeals')}
+              </button>
             </div>
           </div>
         ) : (

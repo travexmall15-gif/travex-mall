@@ -125,6 +125,28 @@ describe('processMessage — prompt injection does not bypass anything', () => {
   })
 })
 
+describe('processMessage — guided buy flow asks specific, targeted questions', () => {
+  it('"Nataka kununua" (the /aiv "I want to buy" starter) asks specifically what to buy, not a generic prompt', async () => {
+    const context = createConversationContext('c1', buyerContext)
+    const { response, updatedContext } = await processMessage({ text: 'Nataka kununua', context, requestContext: buyerContext, turn: 1 })
+    expect(response.status).toBe('clarificationNeeded')
+    expect(response.text).toContain('nini') // "Unataka kununua nini?" — the category-specific question, not the generic fallback
+    expect(updatedContext.activeTask?.intentId).toBe('PRODUCT_SEARCH')
+  })
+
+  it('answering with a category then leads to a budget question next', async () => {
+    let context = createConversationContext('c1', buyerContext)
+    let result = await processMessage({ text: 'Nataka kununua', context, requestContext: buyerContext, turn: 1 })
+    context = result.updatedContext
+
+    result = await processMessage({ text: 'nguo', context, requestContext: buyerContext, turn: 2 })
+    expect(result.response.status).toBe('clarificationNeeded')
+    // Next missing slot after category is brand, then price — either
+    // way this must be a targeted question, never the generic fallback.
+    expect(result.response.text).not.toBe('Unaweza kunieleza zaidi?')
+  })
+})
+
 describe('processMessage — multi-turn context is preserved across calls', () => {
   it('the updated context from turn 1 carries the active task into turn 2', async () => {
     let context = createConversationContext('c1', buyerContext)

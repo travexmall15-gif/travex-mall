@@ -1145,7 +1145,10 @@
     "confirmYes": "Ndiyo, endelea",
     "confirmNo": "Ghairi",
     "devFallbackNote": "Hali ya kawaida — AI kamili haipatikani kwa sasa.",
-    "startPrompt": "Unatafuta nini?"
+    "startPrompt": "Unatafuta nini?",
+    "optionBuy": "Nataka kununua kitu",
+    "optionOpenStore": "Fungua duka",
+    "optionFlashDeals": "Angalia Flash Deals mpya"
   },
   "menuPage": {
     "language": "Lugha",

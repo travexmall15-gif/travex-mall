@@ -36,8 +36,8 @@ export const INTENTS: IntentDefinition[] = [
     expectedEntities: ['category', 'brand', 'price'],
     requiresAuth: false, isConsequential: false,
     examples: {
-      sw: ['Natafuta simu ya laki tano', 'nionyeshe shoes chini ya 100k', 'nataka nguo za kiume'],
-      en: ['Show me phones under 500k', 'I need men\'s sneakers under TZS 150,000', 'looking for a laptop'],
+      sw: ['Natafuta simu ya laki tano', 'nionyeshe shoes chini ya 100k', 'nataka nguo za kiume', 'Nataka kununua', 'nataka kununua kitu'],
+      en: ['Show me phones under 500k', 'I need men\'s sneakers under TZS 150,000', 'looking for a laptop', 'I want to buy something', 'I want to buy'],
     },
   },
   {
