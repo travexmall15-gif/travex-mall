@@ -329,10 +329,10 @@ export default function FlashDealsPage() {
               {t('flash.noDealsDesc')}
             </p>
             <Link href="/market"
-              style={{ background:'linear-gradient(135deg,#F59E0B,#EF4444)', color:'var(--sn-text)',
+              style={{ background:'linear-gradient(135deg,#FF0080,#7800FF)', color:'#fff',
                 padding:'12px 28px', borderRadius:999, fontWeight:700, textDecoration:'none',
                 fontSize:14, display:'inline-flex', alignItems:'center', gap:6,
-                boxShadow:'0 8px 24px rgba(245,158,11,0.35)' }}>
+                boxShadow:'0 8px 24px rgba(120,0,255,0.35)' }}>
               <Store size={14} /> {t('flash.browseMarket')}
             </Link>
           </div>

@@ -225,7 +225,7 @@ export default function AiPage() {
     .ir{display:flex;gap:8px}
     .ci{flex:1;padding:13px 16px;border-radius:14px;border:1.5px solid #E2E8F0;font-size:0.875rem;font-family:inherit;color:#0F172A;outline:none;transition:border-color 0.15s;background:#fff}
     .ci:focus{border-color:#1D4ED8}.ci:disabled{background:#F8FAFC;cursor:not-allowed}
-    .sb{width:50px;height:50px;border-radius:14px;background:var(--sn-text);border:none;color:var(--sn-bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+    .sb{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#FF0080,#7800FF);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
     .sb:disabled{background:#E2E8F0;color:#94A3B8;cursor:not-allowed}
     .sb:not(:disabled):hover{background:#162444;box-shadow:0 4px 14px rgba(13,27,62,0.25)}
     @media(max-width:480px){.sg{grid-template-columns:1fr 1fr}.mb{max-width:88%}.ai-hero h1{font-size:1.3rem}.aih-in{padding:0 12px}.aim-in{padding:16px 12px 12px}.aib{padding:8px 12px 20px}}

@@ -98,7 +98,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
               </p>
             </div>
             <Link href={`/orders/${id}/payment`}
-              style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'12px', background:'var(--sn-text)', color:'var(--sn-page)', borderRadius:12, textDecoration:'none', fontWeight:700, fontSize:'0.875rem' }}>
+              style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'12px', background:'linear-gradient(135deg,#FF0080,#7800FF)', color:'#fff', borderRadius:12, textDecoration:'none', fontWeight:700, fontSize:'0.875rem' }}>
               {t('orders.proceedToPayment')} →
             </Link>
           </div>

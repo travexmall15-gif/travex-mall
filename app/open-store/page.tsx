@@ -332,7 +332,7 @@ export default function OpenStorePage() {
                       <button key={p} onClick={() => set('plan', p)}
                         style={{ position: 'relative', textAlign: 'left', padding: '1.4rem', borderRadius: 16, border: `2px solid ${sel ? 'var(--sn-primary)' : 'var(--sn-border)'}`, background: sel ? 'color-mix(in srgb, var(--sn-primary) 6%, var(--sn-bg))' : 'var(--sn-bg)', cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>
                         {premium && (
-                          <span style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', background: 'var(--sn-text)', color: 'var(--sn-page)', fontSize: '0.58rem', fontWeight: 800, padding: '2px 10px', borderRadius: 20, whiteSpace: 'nowrap' }}>
+                          <span style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', fontSize: '0.58rem', fontWeight: 800, padding: '2px 10px', borderRadius: 20, whiteSpace: 'nowrap' }}>
                             {t('apply.mostPopular')}
                           </span>
                         )}

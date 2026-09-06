@@ -129,7 +129,7 @@ export default function MenuPage() {
           <div style={{ width:36 }} />
         </div>
         <a href="/settings/profile" style={{ textDecoration:'none', display:'flex', alignItems:'center', gap:14, background:'var(--sn-bg)', borderRadius:18, padding:'14px 16px', border:'1px solid var(--sn-border)' }}>
-          <div style={{ width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,#FF0080,#7800FF)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid #D1D5DB', fontSize:'1.1rem', fontWeight:900, color:'var(--sn-text)' }}>
+          <div style={{ width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,#FF0080,#7800FF)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2.5px solid #D1D5DB', fontSize:'1.1rem', fontWeight:900, color:'#fff' }}>
             {user ? user.name.slice(0,2).toUpperCase() : '?'}
           </div>
           <div style={{ flex:1, minWidth:0 }}>

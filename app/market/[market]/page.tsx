@@ -264,7 +264,7 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
         {/* Header */}
         <div style={{ background: 'var(--sn-bg)', padding: '14px 14px 10px', position: 'relative', borderBottom: '1px solid var(--sn-border)' }}>
           {isPremium && (
-            <span style={{ position: 'absolute', top: 10, right: 10, background: 'linear-gradient(135deg,#1D4ED8,#2563EB)', color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 9px', borderRadius: 999, letterSpacing: '0.06em' }}>
+            <span style={{ position: 'absolute', top: 10, right: 10, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 9px', borderRadius: 999, letterSpacing: '0.06em' }}>
               ★ {t('market.premiumBadge')}
             </span>
           )}

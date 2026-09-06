@@ -135,13 +135,13 @@ function NavigationProgressInner() {
         left: 0,
         height: '4px',
         width: `${width}%`,
-        background: 'linear-gradient(90deg, var(--sn-primary, #1D4ED8) 0%, var(--sn-primary-light, #3B82F6) 100%)',
+        background: 'var(--sn-btn-bg, linear-gradient(135deg, #FF0080, #7800FF))',
         zIndex: 10000,
         transition: `width ${transitionDuration} ease-out`,
         opacity: visible ? 1 : 0,
         pointerEvents: 'none',
         borderRadius: '0 2px 2px 0',
-        boxShadow: '0 0 10px rgba(29, 78, 216, 0.5)',
+        boxShadow: '0 0 10px rgba(120, 0, 255, 0.5)',
       }}
     />
   )

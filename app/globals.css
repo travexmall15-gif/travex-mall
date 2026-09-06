@@ -14,6 +14,16 @@
   --sn-primary: #1D4ED8;
   --sn-primary-hover: #1E40AF;
   --sn-primary-fg: #ffffff;
+  /* Button — official ShopNekt CTA gradient (distinct from --sn-primary,
+     which remains the solid accent used for text/icons/borders/badges
+     that are NOT button backgrounds — e.g. prices, verified checks). */
+  --sn-btn-bg: linear-gradient(135deg, #FF0080, #7800FF);
+  --sn-btn-bg-hover: linear-gradient(135deg, #E6006F, #6600DB);
+  --sn-btn-bg-active: linear-gradient(135deg, #CC0060, #5500B8);
+  --sn-btn-fg: #ffffff;
+  --sn-btn-disabled-bg: #E5E7EB;
+  --sn-btn-disabled-fg: #9CA3AF;
+  --sn-btn-focus-ring: rgba(120, 0, 255, 0.45);
   /* Borders */
   --sn-border:  #E5E7EB;
   --sn-border-strong: #D1D5DB;
@@ -35,6 +45,13 @@
   --sn-primary: #3B82F6;
   --sn-primary-hover: #2563EB;
   --sn-primary-fg: #ffffff;
+  --sn-btn-bg: linear-gradient(135deg, #FF0080, #7800FF);
+  --sn-btn-bg-hover: linear-gradient(135deg, #FF3399, #9333EA);
+  --sn-btn-bg-active: linear-gradient(135deg, #E6006F, #6600DB);
+  --sn-btn-fg: #ffffff;
+  --sn-btn-disabled-bg: #334155;
+  --sn-btn-disabled-fg: #64748B;
+  --sn-btn-focus-ring: rgba(168, 85, 247, 0.5);
   --sn-border:  #334155;
   --sn-border-strong: #475569;
   --sn-input:   #1E293B;
@@ -1084,3 +1101,65 @@ img, video {
   display: block;
   vertical-align: middle;
 }
+
+/* ════════════════════════════════════════════════════
+   ShopNekt Button System — the single source of truth
+   for the official brand CTA color. Any new button/CTA
+   should use these classes instead of hardcoding colors.
+   ════════════════════════════════════════════════════ */
+.sn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: var(--sn-font);
+  font-weight: 700;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: filter .15s, transform .1s, box-shadow .15s;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+}
+.sn-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--sn-btn-focus-ring);
+}
+.sn-btn-primary {
+  background: var(--sn-btn-bg);
+  color: var(--sn-btn-fg);
+}
+.sn-btn-primary svg, .sn-btn-primary img { color: var(--sn-btn-fg); }
+.sn-btn-primary:hover { filter: brightness(1.06); }
+.sn-btn-primary:active { filter: brightness(0.94); transform: scale(0.98); }
+.sn-btn-primary:disabled, .sn-btn-primary[aria-disabled="true"] {
+  background: var(--sn-btn-disabled-bg);
+  color: var(--sn-btn-disabled-fg);
+  cursor: not-allowed;
+  filter: none;
+}
+.sn-btn-secondary {
+  background: transparent;
+  color: var(--sn-btn-fg);
+  border: 1.5px solid rgba(255,255,255,0.35);
+}
+.sn-btn-secondary:hover { background: rgba(255,255,255,0.1); }
+.sn-btn-outline {
+  background: var(--sn-bg);
+  color: #7800FF;
+  border: 1.5px solid #7800FF;
+}
+[data-theme="dark"] .sn-btn-outline { color: #C084FC; border-color: #C084FC; }
+.sn-btn-outline:hover { background: rgba(120,0,255,0.08); }
+.sn-btn-ghost {
+  background: transparent;
+  color: var(--sn-text);
+  border: none;
+}
+.sn-btn-ghost:hover { background: var(--sn-page); }
+.sn-btn-destructive {
+  background: #DC2626;
+  color: #ffffff;
+}
+.sn-btn-destructive:hover { filter: brightness(1.08); }

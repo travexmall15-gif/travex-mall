@@ -178,7 +178,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               ))}
             </div>
             <button onClick={() => selMethod && setStep('option')} disabled={!selMethod}
-              style={{ width:'100%', padding:'0.9rem', background: selMethod?'#1D4ED8':'var(--sn-border)', color: selMethod?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selMethod?'pointer':'not-allowed', fontFamily:'var(--sn-font)', transition:'all .2s' }}>
+              style={{ width:'100%', padding:'0.9rem', background: selMethod?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-btn-disabled-bg, #E5E7EB)', color: selMethod?'#fff':'var(--sn-btn-disabled-fg, #9CA3AF)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selMethod?'pointer':'not-allowed', fontFamily:'var(--sn-font)', transition:'all .2s' }}>
               Continue →
             </button>
           </>
@@ -212,7 +212,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               ))}
             </div>
             <button onClick={() => selOption && setStep('location')} disabled={!selOption}
-              style={{ width:'100%', padding:'0.9rem', background: selOption?'#1D4ED8':'var(--sn-border)', color: selOption?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selOption?'pointer':'not-allowed', fontFamily:'var(--sn-font)' }}>
+              style={{ width:'100%', padding:'0.9rem', background: selOption?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-btn-disabled-bg, #E5E7EB)', color: selOption?'#fff':'var(--sn-btn-disabled-fg, #9CA3AF)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: selOption?'pointer':'not-allowed', fontFamily:'var(--sn-font)' }}>
               Continue →
             </button>
           </>
@@ -255,7 +255,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               onBlur={e  => (e.target.style.borderColor='var(--sn-border)')} />
 
             <button onClick={() => location.trim() && setStep('confirm')} disabled={!location.trim()}
-              style={{ width:'100%', padding:'0.9rem', background: location.trim()?'#1D4ED8':'var(--sn-border)', color: location.trim()?'#fff':'#94A3B8', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: location.trim()?'pointer':'not-allowed', fontFamily:'var(--sn-font)' }}>
+              style={{ width:'100%', padding:'0.9rem', background: location.trim()?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-btn-disabled-bg, #E5E7EB)', color: location.trim()?'#fff':'var(--sn-btn-disabled-fg, #9CA3AF)', border:'none', borderRadius:14, fontWeight:700, fontSize:'0.9rem', cursor: location.trim()?'pointer':'not-allowed', fontFamily:'var(--sn-font)' }}>
               Continue →
             </button>
           </>

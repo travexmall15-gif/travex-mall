@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { sb } from '@/lib/supabase'
-import { Shirt, Car, Smartphone } from 'lucide-react'
+import { Shirt, Car, Smartphone, ArrowRight } from 'lucide-react'
 
 // ── Market definitions ─────────────────────────────────────
 const MARKETS = [
@@ -125,8 +125,8 @@ export default function MarketPage() {
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-primary)' }}>
                       {loading ? '—' : t(count === 1 ? 'market.storeCount' : 'market.storesCount', { count })}
                     </span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-text)' }}>
-                      {t('market.explore')} →
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg,#FF0080,#7800FF)', padding: '5px 12px', borderRadius: 999 }}>
+                      {t('market.explore')} <ArrowRight size={12} color="#fff" />
                     </span>
                   </div>
                 </div>

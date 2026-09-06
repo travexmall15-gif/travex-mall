@@ -206,8 +206,8 @@ export default function AuthPage() {
             disabled={loading}
             style={{
               width:'100%', padding:'0.875rem',
-              background: loading ? '#94A3B8' : '#1D4ED8',
-              color:'var(--sn-text)', border:'none', borderRadius:12,
+              background: loading ? 'var(--sn-btn-disabled-bg, #E5E7EB)' : 'linear-gradient(135deg,#FF0080,#7800FF)',
+              color: loading ? 'var(--sn-btn-disabled-fg, #9CA3AF)' : '#fff', border:'none', borderRadius:12,
               fontFamily:"'Inter',sans-serif", fontWeight:700,
               fontSize:'0.9rem', cursor: loading ? 'not-allowed' : 'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', gap:8,
@@ -309,8 +309,8 @@ export default function AuthPage() {
             disabled={loading || entered.length < 6}
             style={{
               width:'100%', padding:'0.875rem',
-              background: entered.length < 6 ? '#94A3B8' : '#1D4ED8',
-              color:'var(--sn-text)', border:'none', borderRadius:12,
+              background: entered.length < 6 ? 'var(--sn-btn-disabled-bg, #E5E7EB)' : 'linear-gradient(135deg,#FF0080,#7800FF)',
+              color: entered.length < 6 ? 'var(--sn-btn-disabled-fg, #9CA3AF)' : '#fff', border:'none', borderRadius:12,
               fontFamily:"'Inter',sans-serif", fontWeight:700,
               fontSize:'0.9rem',
               cursor: entered.length < 6 ? 'not-allowed' : 'pointer',

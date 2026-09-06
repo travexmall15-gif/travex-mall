@@ -315,7 +315,7 @@ export default function StorePage({
   })
 
   const isPremium = store?.plan === 'premium'
-  const accentColor = store?.shop_color || (isPremium ? '#1D4ED8' : '#3B82F6')
+  const accentColor = store?.shop_color || 'linear-gradient(135deg,#FF0080,#7800FF)'
   const initials = (store?.shop_name || '').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   const wa = (store?.shop_whatsapp || store?.owner_phone || '').replace(/\D/g, '')
 
@@ -577,7 +577,7 @@ export default function StorePage({
                       fontWeight: 900, color: accentColor }}>
                       {fmt(p.price)}
                     </div>
-                    <button style={{ background: accentColor, color: isPremium ? '#0F172A' : '#fff',
+                    <button style={{ background: accentColor, color: '#fff',
                       border: 'none', borderRadius: 999, padding: '6px 14px', fontSize: 12,
                       fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
                       fontFamily: 'var(--sn-font)' }}>
@@ -780,7 +780,7 @@ export default function StorePage({
                   )}
                   <button onClick={placeOrder} disabled={placing || !orderName.trim() || !orderPhone.trim()}
                     style={{ flex: 2, padding: '12px', borderRadius: 999, background: accentColor,
-                      color: isPremium ? '#0F172A' : '#fff', border: 'none', fontWeight: 700, fontSize: 13,
+                      color: '#fff', border: 'none', fontWeight: 700, fontSize: 13,
                       cursor: placing ? 'wait' : 'pointer', display: 'flex', alignItems: 'center',
                       justifyContent: 'center', gap: 6, fontFamily: 'var(--sn-font)',
                       opacity: (!orderName.trim() || !orderPhone.trim()) ? 0.55 : 1 }}>
@@ -930,7 +930,7 @@ export default function StorePage({
                       setMsgSent(true)
                     }}
                     disabled={!msgName.trim() || !msgText.trim()}
-                    style={{ flex: 2, padding: '11px', borderRadius: 10, background: accentColor, color: isPremium ? '#0F172A' : '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: 'var(--sn-font)', opacity: (!msgName.trim() || !msgText.trim()) ? 0.5 : 1 }}>
+                    style={{ flex: 2, padding: '11px', borderRadius: 10, background: accentColor, color: '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: 'var(--sn-font)', opacity: (!msgName.trim() || !msgText.trim()) ? 0.5 : 1 }}>
                     <MessageCircle size={14} /> Send Message
                   </button>
                 </div>

@@ -167,7 +167,7 @@ function SearchPageInner() {
                     <Heart size={11} fill={likedIds.has(shop.id) ? 'currentColor' : 'none'} /> {shop.like_count > 0 && fmtCount(shop.like_count)}
                   </button>
                   <Link href={`/store/${shop.id}`}
-                    style={{ background: 'var(--sn-text)', color: 'var(--sn-page)', borderRadius: 999, padding: '6px 14px', fontSize: '0.75rem', fontWeight: 700, textDecoration: 'none', flexShrink: 0 }}>
+                    style={{ background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', borderRadius: 999, padding: '6px 14px', fontSize: '0.75rem', fontWeight: 700, textDecoration: 'none', flexShrink: 0 }}>
                     {t('store.visitShop') || 'Visit'}
                   </Link>
                 </div>

@@ -166,7 +166,7 @@ export default function OpenStoreStatusPage() {
                   </div>
                 )}
 
-                <Link href="/login" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: '1.1rem', background: 'var(--sn-text)', color: 'var(--sn-page)', borderRadius: 12, padding: '0.75rem', fontWeight: 800, fontSize: '0.85rem', textDecoration: 'none' }}>
+                <Link href="/login" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: '1.1rem', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', borderRadius: 12, padding: '0.75rem', fontWeight: 800, fontSize: '0.85rem', textDecoration: 'none' }}>
                   <Store size={15} /> {t('status.goToDashboard')} <ArrowRight size={15} />
                 </Link>
               </div>
