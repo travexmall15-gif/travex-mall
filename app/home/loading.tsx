@@ -22,7 +22,7 @@ export default function Loading() {
       </div>
 
       {/* 360 AI chip skeleton */}
-      <div style={{background: 'var(--sn-bg),#0D1B3E)',padding:'1.2rem 5%'}}>
+      <div style={{background: 'var(--sn-bg)',padding:'1.2rem 5%'}}>
         <div style={{maxWidth:'1100px',margin:'0 auto'}}>
           <div className="sk" style={{height:50,borderRadius:14,opacity:.2}}/>
         </div>

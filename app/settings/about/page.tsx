@@ -55,7 +55,7 @@ export default function AboutPage() {
         </div>
 
         {/* Rate */}
-        <button style={{ width:'100%', padding:'0.875rem', background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#0D1B3E', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+        <button style={{ width:'100%', padding:'0.875rem', background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#7800FF', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
           ⭐ {t('about.rateApp')} ⭐⭐⭐⭐⭐
         </button>
 

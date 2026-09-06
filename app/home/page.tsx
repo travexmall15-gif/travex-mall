@@ -42,8 +42,8 @@ export default function HomePage() {
         .sell-chip-inner { max-width:1100px; margin:0 auto; }
         .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1.5px solid #E5E7EB; border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s,box-shadow 0.2s; }
         .sell-chip-card:hover { border-color:#D1D5DB; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
-        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#111827; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#374151; transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,0,255,0.30); }
+        .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:linear-gradient(135deg,#FF0080,#7800FF); color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+        .sell-cta:hover { filter:brightness(1.08); transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,0,255,0.30); }
 
         .ai-chip-wrap { background:#fff; padding:1.2rem 5%; border-bottom:1px solid #F3F4F6; }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
@@ -74,7 +74,7 @@ export default function HomePage() {
         <div className="sell-chip-inner">
           <div className="sell-chip-card">
             <div style={{ display:'flex',alignItems:'center',gap:12 }}>
-              <div style={{ width:38,height:38,borderRadius:10,background:'#1E3A8A',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+              <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#FF0080,#7800FF)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
                 <Store size={20} color="#fff" />
               </div>
               <div>
@@ -94,7 +94,7 @@ export default function HomePage() {
         <div className="ai-chip-inner">
           <a href="/aiv" className="ai-chip-link">
             <div style={{ display:'flex',alignItems:'center',gap:12 }}>
-              <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#7C3AED,#A855F7)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+              <div style={{ width:38,height:38,borderRadius:10,background:'linear-gradient(135deg,#FF0080,#7800FF)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
                 <Sparkles size={20} color="#fff" />
               </div>
               <div>
@@ -142,7 +142,7 @@ export default function HomePage() {
                 ))}
               </div>
               <div style={{ display:'flex',gap:'0.75rem',flexWrap:'wrap',marginTop:'auto' }}>
-                <Link href="/market" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#0F172A',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(15,23,42,0.22)' }}>
+                <Link href="/market" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(120,0,255,0.22)' }}>
                   <Store size={14} /> {t('home.browseMarket')}
                 </Link>
                 <Link href="/login" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(120,0,255,0.28)' }}>
@@ -215,7 +215,7 @@ export default function HomePage() {
                   {shop.shop_category && (
                     <div style={{ fontSize:'0.7rem',color:'#9CA3AF',marginBottom:'1rem' }}>{shop.shop_category}</div>
                   )}
-                  <div style={{ display:'inline-flex',alignItems:'center',gap:'0.3rem',background:'#0F172A',color:'#fff',padding:'0.5rem 1rem',borderRadius:999,fontWeight:600,fontSize:'0.76rem',marginTop:'auto' }}>
+                  <div style={{ display:'inline-flex',alignItems:'center',gap:'0.3rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.5rem 1rem',borderRadius:999,fontWeight:600,fontSize:'0.76rem',marginTop:'auto' }}>
                     {t('home.visitShop')} <ExternalLink size={11} />
                   </div>
                 </a>

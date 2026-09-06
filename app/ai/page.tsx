@@ -227,7 +227,7 @@ export default function AiPage() {
     .ci:focus{border-color:#7800FF}.ci:disabled{background:#F8FAFC;cursor:not-allowed}
     .sb{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#FF0080,#7800FF);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
     .sb:disabled{background:#E2E8F0;color:#94A3B8;cursor:not-allowed}
-    .sb:not(:disabled):hover{background:#162444;box-shadow:0 4px 14px rgba(13,27,62,0.25)}
+    .sb:not(:disabled):hover{filter:brightness(1.08);box-shadow:0 4px 14px rgba(120,0,255,0.30)}
     @media(max-width:480px){.sg{grid-template-columns:1fr 1fr}.mb{max-width:88%}.ai-hero h1{font-size:1.3rem}.aih-in{padding:0 12px}.aim-in{padding:16px 12px 12px}.aib{padding:8px 12px 20px}}
     @media(max-width:340px){.sg{grid-template-columns:1fr}}
   `

@@ -68,9 +68,9 @@ export default function WelcomePage() {
             onClick={() => choose(l.code)}
             style={{
               animationDelay:`${i * 0.06 + 0.15}s`,
-              background: lang === l.code ? '#0D1B3E' : '#fff',
+              background: lang === l.code ? 'linear-gradient(135deg,#FF0080,#7800FF)' : '#fff',
               border: lang === l.code
-                ? '2px solid #0D1B3E'
+                ? '2px solid transparent'
                 : '2px solid #E2E8F0',
               borderRadius:16,
               padding:'1.1rem 0.75rem',

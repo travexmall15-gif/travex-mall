@@ -149,7 +149,7 @@ export default function MenuPage() {
         <div style={{ display:'flex', background:'var(--sn-bg)', borderRadius:10, padding:3, gap:3, flexWrap:'wrap' }}>
           {(['en','sw','fr','de','pt','ar'] as const).map(code => (
             <button key={code} onClick={() => setLang(code)}
-              style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? 'linear-gradient(135deg,#FF0080,#7800FF)' : '#64748B' }}>
+              style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'transparent', color: lang===code ? '#fff' : '#64748B' }}>
               {code.toUpperCase()}
             </button>
           ))}

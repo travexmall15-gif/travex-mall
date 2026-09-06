@@ -151,7 +151,7 @@ export default function MessagesPage() {
               <Link href="/market" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'var(--sn-bg)', color:'var(--sn-text)', padding:'10px 22px', borderRadius:999, fontWeight:700, fontSize:'0.82rem', textDecoration:'none' }}>
                 <Store size={14} /> {t('messages.startShopping')}
               </Link>
-              <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'var(--sn-page)', color:'#0D1B3E', border:'1.5px solid #E2E8F0', padding:'10px 22px', borderRadius:999, fontWeight:600, fontSize:'0.82rem', textDecoration:'none' }}>
+              <Link href="/auth" style={{ display:'inline-flex', alignItems:'center', gap:6, background:'var(--sn-page)', color:'#7800FF', border:'1.5px solid #E2E8F0', padding:'10px 22px', borderRadius:999, fontWeight:600, fontSize:'0.82rem', textDecoration:'none' }}>
                 {t('authPage.signIn') || 'Sign In'}
               </Link>
             </div>

@@ -100,7 +100,7 @@ export default function ProfilePage() {
         </div>
 
         <button onClick={save} disabled={loading}
-          style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : '#0D1B3E', color: 'var(--sn-text)', border: 'none', borderRadius: 14, fontFamily: 'var(--sn-font)', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
+          style={{ width: '100%', marginTop: '1.25rem', padding: '0.875rem', background: saved ? '#059669' : 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', border: 'none', borderRadius: 14, fontFamily: 'var(--sn-font)', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
            : saved   ? <><Check size={15} /> {t('profile.saved')}</>
            : 'Save Changes'}

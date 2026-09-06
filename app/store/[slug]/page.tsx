@@ -321,7 +321,7 @@ export default function StorePage({
 
   // ── Loading ──
   if (loading) {return (
-    <main style={{ minHeight: '100vh', background: '#060C1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <main style={{ minHeight: '100vh', background: '#F8FAFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', color: '#6B7280' }}>
         <Loader2 style={{ width: 36, height: 36, margin: '0 auto 12px', animation: 'spin 1s linear infinite', color: '#111827' }} />
         <p style={{ color: '#9CA3AF', fontSize: 14 }}>Loading store...</p>
@@ -337,7 +337,7 @@ export default function StorePage({
         <Package size={48} style={{ color: '#CBD5E1', margin: '0 auto 1rem', display: 'block' }} />
         <h2 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>{t('store.storeNotFound')}</h2>
         <p style={{ color: '#9CA3AF', marginBottom: 24 }}>This store may have been removed or is not yet active.</p>
-        <Link href="/market" style={{ background: '#111827', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
+        <Link href="/market" style={{ background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', padding: '0.85rem 2rem', borderRadius: 999, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>
           ← Back to Market
         </Link>
       </div>
@@ -353,7 +353,7 @@ export default function StorePage({
         @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
         .cat-btn{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;transition:all 0.15s;font-family:'Inter',sans-serif}
-        .cat-btn.active{background:#0D1B3E;border-color:#0D1B3E;color:#fff}
+        .cat-btn.active{background:linear-gradient(135deg,#FF0080,#7800FF);border-color:transparent;color:#fff}
         .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:999;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
         @media(min-width:600px){.modal-bg{align-items:center}}
         .modal{background:#0D1B3E;border:1px solid rgba(255,255,255,0.10);border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:fadeUp 0.3s ease}

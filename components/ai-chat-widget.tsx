@@ -116,9 +116,9 @@ export function AIChatWidget({
             <div style={{ padding:'6px 10px', display:'flex', gap:5, flexWrap:'wrap', borderTop:'1px solid #F1F5F9', background:'var(--sn-bg)' }}>
               {QUICK.map((q,i) => (
                 <button key={i} onClick={() => send(q)}
-                  style={{ padding:'4px 10px', background:'#F8FAFF', border:'1.5px solid #E2E8F0', borderRadius:999, fontSize:'0.68rem', fontWeight:600, color:'#0D1B3E', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s' }}
-                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.background='#0D1B3E'; (e.currentTarget as HTMLElement).style.color='#fff' }}
-                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.background='#F8FAFF'; (e.currentTarget as HTMLElement).style.color='#0D1B3E' }}>
+                  style={{ padding:'4px 10px', background:'#F8FAFF', border:'1.5px solid #E2E8F0', borderRadius:999, fontSize:'0.68rem', fontWeight:600, color:'#7800FF', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s' }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.background='linear-gradient(135deg,#FF0080,#7800FF)'; (e.currentTarget as HTMLElement).style.color='#fff' }}
+                  onMouseOut={e  => { (e.currentTarget as HTMLElement).style.background='#F8FAFF'; (e.currentTarget as HTMLElement).style.color='#7800FF' }}>
                   {q}
                 </button>
               ))}
@@ -134,7 +134,7 @@ export function AIChatWidget({
               onFocus={e => (e.target.style.borderColor='#0D1B3E')}
               onBlur={e  => (e.target.style.borderColor='var(--sn-border)')} />
             <button onClick={() => send()} disabled={!input.trim() || loading}
-              style={{ width:34, height:34, borderRadius:'50%', background: input.trim() ? '#0D1B3E' : 'var(--sn-border)', border:'none', cursor: input.trim() ? 'pointer':'not-allowed', display:'flex', alignItems:'center', justifyContent:'center', transition:'all .2s', flexShrink:0 }}>
+              style={{ width:34, height:34, borderRadius:'50%', background: input.trim() ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'var(--sn-border)', border:'none', cursor: input.trim() ? 'pointer':'not-allowed', display:'flex', alignItems:'center', justifyContent:'center', transition:'all .2s', flexShrink:0 }}>
               <Send size={14} color={input.trim() ? '#7800FF' : '#94A3B8'} />
             </button>
           </div>

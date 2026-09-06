@@ -68,7 +68,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
 
   return (
     <article style={{
-      background: featured ? 'linear-gradient(160deg,#0D1B3E,#1B3A8A,#0D1B3E)' : 'var(--sn-bg)',
+      background: featured ? 'linear-gradient(160deg,#3B0764,#7800FF,#3B0764)' : 'var(--sn-bg)',
       border: featured
         ? '2px solid rgba(120,0,255,0.30)'
         : isReady
@@ -378,9 +378,9 @@ export default function GroupBuyPage() {
               style={{ padding:'0.6rem 1.1rem', borderRadius:999, fontSize:'0.78rem', fontWeight:600,
                 cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s',
                 border: filter===f.key ? 'none' : '1.5px solid var(--sn-border)',
-                background: filter===f.key ? '#0D1B3E' : 'var(--sn-bg)',
+                background: filter===f.key ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'var(--sn-bg)',
                 color: filter===f.key ? '#fff' : 'var(--sn-muted)',
-                boxShadow: filter===f.key ? '0 4px 12px rgba(13,27,62,0.18)' : 'none',
+                boxShadow: filter===f.key ? '0 4px 12px rgba(120,0,255,0.25)' : 'none',
               }}>
               {f.label}
             </button>

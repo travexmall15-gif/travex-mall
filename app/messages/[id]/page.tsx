@@ -215,7 +215,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
           onBlur={e  => (e.target.style.borderColor = 'var(--sn-border)')}
         />
         <button onClick={send} disabled={!text.trim() || sending}
-          style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? '#0D1B3E' : 'var(--sn-border)', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+          style={{ width: 42, height: 42, borderRadius: '50%', background: text.trim() ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'var(--sn-border)', border: 'none', cursor: text.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
           <Send size={16} color={text.trim() ? '#7800FF' : '#94A3B8'} />
         </button>
       </div>
