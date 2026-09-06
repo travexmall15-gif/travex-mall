@@ -19,8 +19,8 @@ const CATEGORIES = [
 
 const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
   <button onClick={onToggle}
-    style={{ width:46, height:26, borderRadius:999, background: on?'#1D4ED8':'var(--sn-border)', border:'none', cursor:'pointer', position:'relative', transition:'all .25s', flexShrink:0 }}>
-    <div style={{ width:20, height:20, borderRadius:'50%', background: on?'#1D4ED8':'#fff', position:'absolute', top:3, left: on?23:3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
+    style={{ width:46, height:26, borderRadius:999, background: on?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-border)', border:'none', cursor:'pointer', position:'relative', transition:'all .25s', flexShrink:0 }}>
+    <div style={{ width:20, height:20, borderRadius:'50%', background: on?'linear-gradient(135deg,#FF0080,#7800FF)':'#fff', position:'absolute', top:3, left: on?23:3, transition:'all .25s', boxShadow:'0 1px 4px rgba(0,0,0,0.15)' }} />
   </button>
 )
 
@@ -98,7 +98,7 @@ export default function ShoppingPage() {
         <button onClick={() => router.push('/orders')}
           style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'16px 18px', background:'var(--sn-bg)', borderRadius:16, border:'none', cursor:'pointer', marginBottom:'1.1rem', fontFamily:"'Inter',sans-serif", textAlign:'left' }}>
           <div style={{ width:44, height:44, borderRadius:12, background:'var(--sn-bg)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <Package size={22} color="#1D4ED8" />
+            <Package size={22} color="#7800FF" />
           </div>
           <div style={{ flex:1 }}>
             <div style={{ fontSize:'1rem', fontWeight:800, color:'var(--sn-text)' }}>{t('shopping.myOrders')}</div>
@@ -118,7 +118,7 @@ export default function ShoppingPage() {
               {t('shopping.savedShops')}
             </p>
             {preferredShops.length > 0 && (
-              <span style={{ fontSize:'0.65rem', fontWeight:700, color:'#0D1B3E', background:'#EEF2FF', padding:'2px 8px', borderRadius:999 }}>
+              <span style={{ fontSize:'0.65rem', fontWeight:700, color:'#0D1B3E', background:'#FAF0FF', padding:'2px 8px', borderRadius:999 }}>
                 {preferredShops.length}
               </span>
             )}
@@ -168,7 +168,7 @@ export default function ShoppingPage() {
                   
                   {/* Shop avatar */}
                   <div style={{ width:44, height:44, borderRadius:12, background:'var(--sn-bg)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <Store size={18} color="#1D4ED8" />
+                    <Store size={18} color="#7800FF" />
                   </div>
 
                   {/* Info */}
@@ -179,7 +179,7 @@ export default function ShoppingPage() {
                     <div style={{ fontSize:'0.7rem', color:'var(--sn-subtle)', marginTop:2 }}>
                       {[shop.shop_category, shop.shop_region].filter(Boolean).join(' · ')}
                       {shop.plan && (
-                        <span style={{ marginLeft:6, background: shop.plan==='premium'?'rgba(29,78,216,0.15)':'rgba(59,130,246,0.1)', color: shop.plan==='premium'?'#A07830':'#1D4ED8', padding:'1px 6px', borderRadius:999, fontWeight:700, fontSize:'0.6rem', textTransform:'uppercase' as const }}>
+                        <span style={{ marginLeft:6, background: shop.plan==='premium'?'rgba(120,0,255,0.15)':'rgba(120,0,255,0.1)', color: shop.plan==='premium'?'#A07830':'linear-gradient(135deg,#FF0080,#7800FF)', padding:'1px 6px', borderRadius:999, fontWeight:700, fontSize:'0.6rem', textTransform:'uppercase' as const }}>
                           {shop.plan}
                         </span>
                       )}
@@ -228,7 +228,7 @@ export default function ShoppingPage() {
               const sel = categories.includes(cat)
               return (
                 <button key={cat} onClick={() => toggleCat(cat)}
-                  style={{ padding:'7px 14px', borderRadius:999, border:`1.5px solid ${sel?'#1D4ED8':'var(--sn-border)'}`, background: sel?'#1D4ED8':'#fff', color: sel?'#1D4ED8':'#64748B', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
+                  style={{ padding:'7px 14px', borderRadius:999, border:`1.5px solid ${sel?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-border)'}`, background: sel?'linear-gradient(135deg,#FF0080,#7800FF)':'#fff', color: sel?'linear-gradient(135deg,#FF0080,#7800FF)':'#64748B', fontSize:'0.78rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'all .15s', display:'flex', alignItems:'center', gap:5 }}>
                   {sel && <Check size={11}/>} {cat}
                 </button>
               )

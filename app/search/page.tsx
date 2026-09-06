@@ -150,12 +150,12 @@ function SearchPageInner() {
               {shops.map(shop => (
                 <div key={shop.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--sn-bg)', border: '1.5px solid var(--sn-border)', borderRadius: 14, padding: '12px 14px' }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--sn-page)', border: '1.5px solid var(--sn-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                    {shop.shop_logo ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Store size={18} color="#1D4ED8" />}
+                    {shop.shop_logo ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Store size={18} color="#7800FF" />}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 800, fontSize: '0.88rem', color: 'var(--sn-text)', display: 'flex', alignItems: 'center', gap: 5 }}>
                       {shop.shop_name}
-                      {shop.plan === 'premium' && <span style={{ color: '#1D4ED8', fontSize: '0.7rem' }}>✓</span>}
+                      {shop.plan === 'premium' && <span style={{ color: '#7800FF', fontSize: '0.7rem' }}>✓</span>}
                     </div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--sn-subtle)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
                       {shop.shop_category}

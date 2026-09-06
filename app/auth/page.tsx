@@ -260,7 +260,7 @@ export default function AuthPage() {
             <div style={{
               fontSize: showCode ? '2.2rem' : '2rem',
               fontWeight:900, letterSpacing:'0.35em',
-              color: showCode ? '#1D4ED8' : 'var(--sn-border)',
+              color: showCode ? '#7800FF' : 'var(--sn-border)',
               fontFamily:"'Inter',sans-serif",
               filter: showCode ? 'none' : 'blur(8px)',
               transition:'all 0.3s', userSelect: showCode ? 'text' : 'none',

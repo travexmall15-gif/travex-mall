@@ -135,7 +135,7 @@ export default function MessagesPage() {
         {/* Guest state — not signed in via Supabase Auth */}
         {!loading && authState === 'guest' && (
           <div style={{ textAlign:'center', padding:'4rem 0' }}>
-            <div style={{ width:72, height:72, borderRadius:20, background:'#EEF2FF', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px' }}>
+            <div style={{ width:72, height:72, borderRadius:20, background:'#FAF0FF', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px' }}>
               <MessageCircle size={32} color="#6366F1" />
             </div>
             <h3 style={{ fontSize:'1.05rem', fontWeight:700, color:'#0D1B3E', marginBottom:8 }}>
@@ -174,7 +174,7 @@ export default function MessagesPage() {
             {/* Empty conversations */}
             {filtered.length === 0 && (
               <div style={{ textAlign:'center', padding:'5rem 0' }}>
-                <div style={{ width:68, height:68, borderRadius:20, background:'#EEF2FF', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
+                <div style={{ width:68, height:68, borderRadius:20, background:'#FAF0FF', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
                   <MessageSquare size={30} color="#6366F1" />
                 </div>
                 <h3 style={{ fontSize:'1.1rem', fontWeight:700, color:'#0D1B3E', marginBottom:8 }}>
@@ -196,7 +196,7 @@ export default function MessagesPage() {
               <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
                 {filtered.map(convo => (
                   <Link key={convo.id} href={`/messages/${convo.id}`} style={{ textDecoration:'none' }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 14px', background:'var(--sn-bg)', borderRadius:14, border:`1.5px solid ${convo.unread > 0 ? '#DBEAFE' : 'var(--sn-page)'}`, transition:'all 0.15s', cursor:'pointer' }}
+                    <div style={{ display:'flex', alignItems:'center', gap:12, padding:'13px 14px', background:'var(--sn-bg)', borderRadius:14, border:`1.5px solid ${convo.unread > 0 ? '#F3E0FF' : 'var(--sn-page)'}`, transition:'all 0.15s', cursor:'pointer' }}
                       onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                       onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='#fff'}>
 

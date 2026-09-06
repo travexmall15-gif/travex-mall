@@ -67,7 +67,7 @@ export default function SplashPage() {
         .sp-brand { animation: fadeUp 0.5s ease 0.75s both }
         .sp-sub   { animation: fadeUp2 0.5s ease 1.0s both }
         .sp-btn   { animation: btnIn 0.5s ease 1.3s both }
-        .dot { width:8px;height:8px;border-radius:50%;background:#1D4ED8;display:inline-block;margin:0 4px; }
+        .dot { width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#FF0080,#7800FF);display:inline-block;margin:0 4px; }
         .dot:nth-child(1){animation:dotPulse 1.2s ease-in-out 0s infinite}
         .dot:nth-child(2){animation:dotPulse 1.2s ease-in-out 0.2s infinite}
         .dot:nth-child(3){animation:dotPulse 1.2s ease-in-out 0.4s infinite}

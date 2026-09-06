@@ -81,7 +81,7 @@ export default function MenuPage() {
       items: [
         { icon: Home,           label: t('menuPage.home'),          href: '/home',               color: '#0D1B3E' },
         { icon: Sparkles,       label: t('menuPage.vybe'),          href: '/vybe',               color: 'var(--sn-text)' },
-        { icon: Store,          label: t('menuPage.market'),        href: '/market',             color: '#3B82F6' },
+        { icon: Store,          label: t('menuPage.market'),        href: '/market',             color: '#7800FF' },
         { icon: Zap,            label: t('menuPage.flashDeals'),    href: '/flash-deals',        color: '#EF4444' },
         { icon: Users,          label: t('menuPage.groupBuy'),      href: '/group-buy',          color: '#10B981' },
       ],
@@ -103,7 +103,7 @@ export default function MenuPage() {
     {
       label: t('menuPage.accountApp'),
       items: [
-        { icon: User,     label: t('menuPage.editProfile'),       href: '/settings/profile', color: '#3B82F6' },
+        { icon: User,     label: t('menuPage.editProfile'),       href: '/settings/profile', color: '#7800FF' },
         { icon: Settings, label: t('menuPage.settings'),          href: '/settings',         color: 'var(--sn-muted)' },
         { icon: Shield,   label: t('menuPage.privacyPolicyItem'), href: '/privacy',          color: 'var(--sn-muted)' },
         { icon: Info,     label: t('menuPage.aboutApp'),          href: '/settings/about',   color: 'var(--sn-muted)' },
@@ -149,7 +149,7 @@ export default function MenuPage() {
         <div style={{ display:'flex', background:'var(--sn-bg)', borderRadius:10, padding:3, gap:3, flexWrap:'wrap' }}>
           {(['en','sw','fr','de','pt','ar'] as const).map(code => (
             <button key={code} onClick={() => setLang(code)}
-              style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? '#1D4ED8' : '#64748B' }}>
+              style={{ padding:'5px 10px', borderRadius:8, border:'none', fontFamily:"'Inter',sans-serif", fontSize:'0.72rem', fontWeight:700, cursor:'pointer', transition:'all .2s', background: lang===code ? '#0D1B3E' : 'transparent', color: lang===code ? 'linear-gradient(135deg,#FF0080,#7800FF)' : '#64748B' }}>
               {code.toUpperCase()}
             </button>
           ))}

@@ -88,7 +88,7 @@ export default function WelcomePage() {
             }}>
               <span style={{
                 fontSize:'0.72rem', fontWeight:800,
-                color: lang === l.code ? '#1D4ED8' : '#64748B',
+                color: lang === l.code ? '#7800FF' : '#64748B',
                 letterSpacing:'0.08em',
               }}>{l.sub}</span>
             </div>

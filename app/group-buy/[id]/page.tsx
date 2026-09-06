@@ -124,15 +124,15 @@ export default function GroupDetailPage({
         </Link>
 
         <div style={{ background:'var(--sn-bg)', border:'1px solid var(--sn-border)', borderRadius:20, overflow:'hidden',
-          boxShadow:'0 8px 30px rgba(29,78,216,0.1)', marginBottom:20 }}>
+          boxShadow:'0 8px 30px rgba(120,0,255,0.1)', marginBottom:20 }}>
 
           {/* Product image */}
-          <div style={{ position:'relative', height:200, background: group.product_image ? 'var(--sn-page)' : 'linear-gradient(135deg,#DBEAFE,#EDE9FE)' }}>
+          <div style={{ position:'relative', height:200, background: group.product_image ? 'var(--sn-page)' : 'linear-gradient(135deg,#F3E0FF,#EDE9FE)' }}>
             {group.product_image ? (
               <Image src={group.product_image} alt={group.product_name} fill style={{ objectFit:'cover' }} />
             ) : (
               <div style={{ display:'flex', alignItems:'center', justifyContent:'center', width:'100%', height:'100%' }}>
-                <ShoppingBag size={44} color="rgba(29,78,216,0.35)" />
+                <ShoppingBag size={44} color="rgba(120,0,255,0.35)" />
               </div>
             )}
             {/* Status ribbon */}
@@ -176,7 +176,7 @@ export default function GroupDetailPage({
             </div>
             <div style={{ height:10, background:'var(--sn-page)', borderRadius:999 }}>
               <div style={{ height:'100%', width:`${Math.min(100,pct)}%`,
-                background: isReady ? 'linear-gradient(90deg,#059669,#10B981)' : 'linear-gradient(90deg,#60A5FA,#1D4ED8)',
+                background: isReady ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'linear-gradient(135deg,#FF0080,#7800FF)',
                 borderRadius:999, transition:'width .5s' }} />
             </div>
             <div style={{ fontSize:11, color:'var(--sn-subtle)', marginTop:4, textAlign:'center' }}>
@@ -189,7 +189,7 @@ export default function GroupDetailPage({
             <div style={{ display:'flex', gap:4, flexWrap:'wrap', marginBottom:16 }}>
               {members.map((m,i) => (
                 <div key={i} style={{ width:32, height:32, borderRadius:'50%',
-                  background:'linear-gradient(135deg,#1D4ED8,#60A5FA)',
+                  background:'linear-gradient(135deg,#FF0080,#7800FF)',
                   display:'flex', alignItems:'center', justifyContent:'center',
                   fontSize:11, fontWeight:800, color:'#fff' }}>
                   {m.name[0].toUpperCase()}
@@ -218,7 +218,7 @@ export default function GroupDetailPage({
 
         {success ? (
           <div style={{ background:'var(--sn-bg)', border:'1px solid var(--sn-border)', borderRadius:20, padding:'2rem', textAlign:'center',
-            boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
+            boxShadow:'0 8px 30px rgba(120,0,255,0.1)' }}>
             <CheckCircle size={48} style={{ color:'#22C55E', margin:'0 auto 12px' }} />
             <h2 style={{ fontFamily:'var(--sn-font)', color:'var(--sn-text)', marginBottom:8, fontWeight:800 }}>
               {t('groupBuy.youreIn')}
@@ -239,7 +239,7 @@ export default function GroupDetailPage({
           </div>
         ) : (
           <div style={{ background:'var(--sn-bg)', border:'1px solid var(--sn-border)', borderRadius:20, padding:'1.5rem',
-            boxShadow:'0 8px 30px rgba(29,78,216,0.1)' }}>
+            boxShadow:'0 8px 30px rgba(120,0,255,0.1)' }}>
             <h3 style={{ fontFamily:'var(--sn-font)', fontSize:'1.1rem',
               color:'var(--sn-text)', fontWeight:800, marginBottom:16 }}>{t('groupBuy.joinTitle')}</h3>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:16 }}>

@@ -43,7 +43,7 @@ export default function HomePage() {
         .sell-chip-card { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1.5px solid #E5E7EB; border-radius:16px; padding:14px 20px; flex-wrap:wrap; transition:border-color 0.2s,box-shadow 0.2s; }
         .sell-chip-card:hover { border-color:#D1D5DB; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
         .sell-cta { display:inline-flex; align-items:center; gap:0.45rem; background:#111827; color:#fff; padding:0.55rem 1.35rem; border-radius:999px; font-weight:800; font-size:0.82rem; text-decoration:none; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
-        .sell-cta:hover { background:#374151; transform:translateY(-1px); box-shadow:0 6px 18px rgba(29,78,216,0.30); }
+        .sell-cta:hover { background:#374151; transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,0,255,0.30); }
 
         .ai-chip-wrap { background:#fff; padding:1.2rem 5%; border-bottom:1px solid #F3F4F6; }
         .ai-chip-inner { max-width:1100px; margin:0 auto; }
@@ -53,12 +53,12 @@ export default function HomePage() {
         .market-cards { display:flex; gap:1.5rem; align-items:stretch; min-height:420px; }
         .market-card { transition:all 0.28s ease; display:flex; flex-direction:column; }
         .market-card:hover { transform:translateY(-6px); }
-        .market-card.business:hover { box-shadow:0 20px 50px rgba(29,78,216,0.18)!important; border-color:rgba(29,78,216,0.45)!important; }
+        .market-card.business:hover { box-shadow:0 20px 50px rgba(120,0,255,0.18)!important; border-color:rgba(120,0,255,0.45)!important; }
         .market-card.vybe:hover     { box-shadow:0 20px 50px rgba(120,0,255,0.20)!important; border-color:rgba(200,123,255,0.45)!important; }
 
         .spons-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:1.25rem; }
         .spons-card { background:#fff; border:1.5px solid #E2E8F0; border-radius:20px; padding:1.5rem 1.25rem; transition:all 0.25s; text-decoration:none; display:flex; flex-direction:column; }
-        .spons-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(15,23,42,0.10); border-color:rgba(29,78,216,0.30); }
+        .spons-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(15,23,42,0.10); border-color:rgba(120,0,255,0.30); }
 
         @media (max-width: 768px) {
           .sell-chip-card { gap:10px; }
@@ -111,7 +111,7 @@ export default function HomePage() {
       <section style={{ background:'var(--sn-bg)',padding:'5rem 5%',borderBottom:'1px solid #E2E8F0' }}>
         <div style={{ maxWidth:'900px',margin:'0 auto' }}>
           <div style={{ textAlign:'center',marginBottom:'2.5rem' }}>
-            <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#3B82F6',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
+            <div style={{ fontSize:'0.68rem',fontWeight:700,color:'#7800FF',textTransform:'uppercase',letterSpacing:'0.18em',marginBottom:'0.5rem' }}>
               // {t('home.marketsLabel')}
             </div>
             <h2 style={{ fontFamily:"'Inter',sans-serif",fontSize:'clamp(1.5rem,3vw,2.2rem)',fontWeight:800,color:'#111827',margin:0 }}>
@@ -122,13 +122,13 @@ export default function HomePage() {
           <div className="market-cards">
 
             {/* Business Market */}
-            <div className="market-card business" style={{ flex:1,background:'var(--sn-bg)',border:'2px solid rgba(29,78,216,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(15,23,42,0.06)' }}>
-              <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,#1D4ED8,#F0C96B)' }} />
+            <div className="market-card business" style={{ flex:1,background:'var(--sn-bg)',border:'2px solid rgba(120,0,255,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(15,23,42,0.06)' }}>
+              <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(135deg,#FF0080,#7800FF)' }} />
               <div style={{ width:56,height:56,borderRadius:16,background:'linear-gradient(135deg,#040C32,#071545)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1.4rem',boxShadow:'0 8px 20px rgba(5,11,46,0.20)' }}>
                 <Store style={{ width:26,height:26,color:'#111827' }} />
               </div>
               <div style={{ display:'flex',gap:'0.4rem',marginBottom:'1rem',flexWrap:'wrap' }}>
-                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(29,78,216,0.10)',color:'#A07830',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.premium')}</span>
+                <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(120,0,255,0.10)',color:'#A07830',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.premium')}</span>
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(15,23,42,0.06)',color:'#6B7280',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.basic')}</span>
               </div>
               <h3 style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.5rem',fontWeight:900,color:'#111827',marginBottom:'0.6rem',lineHeight:1.15 }}>Business Marketplaces</h3>
@@ -207,7 +207,7 @@ export default function HomePage() {
                       : <span style={{ fontSize:'1.2rem',fontWeight:900,color:'#111827' }}>{shop.shop_name.charAt(0)}</span>
                     }
                   </div>
-                  <div style={{ display:'inline-flex',alignItems:'center',gap:4,background:'rgba(29,78,216,0.10)',border:'1px solid rgba(29,78,216,0.22)',borderRadius:999,padding:'0.15rem 0.55rem',marginBottom:'0.65rem' }}>
+                  <div style={{ display:'inline-flex',alignItems:'center',gap:4,background:'rgba(120,0,255,0.10)',border:'1px solid rgba(120,0,255,0.22)',borderRadius:999,padding:'0.15rem 0.55rem',marginBottom:'0.65rem' }}>
                     <BadgeCheck size={11} style={{ color:'#111827' }} />
                     <span style={{ fontSize:'0.6rem',fontWeight:700,color:'#A07830' }}>{t('home.sponsoredBadge')}</span>
                   </div>

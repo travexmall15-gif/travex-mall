@@ -20,8 +20,8 @@ export default function JoinPage() {
       </header>
 
       {/*  HERO  */}
-      <section style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #1B3A8A 100%)', padding: 'clamp(3rem,8vw,5rem) 1.5rem', textAlign: 'center', color: 'var(--sn-text)' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(29,78,216,0.15)', border: '1px solid rgba(29,78,216,0.4)', borderRadius: 999, padding: '6px 16px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--sn-text)', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
+      <section style={{ background: 'linear-gradient(135deg, #FAF0FF 0%, #1B3A8A 100%)', padding: 'clamp(3rem,8vw,5rem) 1.5rem', textAlign: 'center', color: 'var(--sn-text)' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(120,0,255,0.15)', border: '1px solid rgba(120,0,255,0.4)', borderRadius: 999, padding: '6px 16px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--sn-text)', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
            {t('join.digitalBadge')} 
         </div>
         <h1 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem', maxWidth: 700, margin: '0 auto 1rem' }}>
@@ -88,7 +88,7 @@ export default function JoinPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
             {/* Business Market */}
-            <div style={{ background: 'var(--sn-page)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(29,78,216,0.3)' }}>
+            <div style={{ background: 'var(--sn-page)', borderRadius: 20, padding: '2rem', border: '1px solid rgba(120,0,255,0.3)' }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.1em', color: 'var(--sn-text)', marginBottom: 12 }}> BIASHARA MARKET</div>
               <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: '0.5rem' }}>{t('join.businessTitle2')}</h3>
               <p style={{ fontSize: '0.82rem', color: 'var(--sn-muted)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Kwa wafanyabiashara na wajasiriamali duniani kote. Uza bidhaa na huduma zako kwa wateja popote.</p>
@@ -105,7 +105,7 @@ export default function JoinPage() {
                     ))}
                   </ul>
                 </div>
-                <div style={{ background: 'linear-gradient(135deg, rgba(29,78,216,0.15), rgba(29,78,216,0.08))', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(29,78,216,0.4)', position: 'relative' }}>
+                <div style={{ background: 'linear-gradient(135deg, rgba(120,0,255,0.15), rgba(120,0,255,0.08))', borderRadius: 12, padding: '1rem 1.25rem', border: '1px solid rgba(120,0,255,0.4)', position: 'relative' }}>
                   <div style={{ position: 'absolute', top: -10, right: 16, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', fontSize: '0.6rem', fontWeight: 900, padding: '3px 10px', borderRadius: 999 }}>{t('join.mostPopular')}</div>
                   <div style={{ fontWeight: 800, color: 'var(--sn-text)', marginBottom: 4 }}>{t('join.premiumPlanLabel')}</div>
                   <div style={{ fontFamily: 'var(--sn-font)', fontSize: '1.6rem', fontWeight: 900, color: 'var(--sn-text)', marginBottom: 4 }}>TZS 45,000<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--sn-subtle)' }}>/mwezi</span></div>

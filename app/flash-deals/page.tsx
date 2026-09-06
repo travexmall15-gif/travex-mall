@@ -77,7 +77,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
       borderRadius: featured ? 24 : 20,
       overflow: 'hidden',
       boxShadow: featured
-        ? '0 20px 60px rgba(13,27,62,0.35), 0 0 0 1px rgba(29,78,216,0.15)'
+        ? '0 20px 60px rgba(13,27,62,0.35), 0 0 0 1px rgba(120,0,255,0.15)'
         : '0 4px 20px rgba(234,179,8,0.10)',
       transition: 'all .25s',
       position: 'relative',
@@ -114,7 +114,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
             style={{ objectFit:'cover', transition:'transform .4s' }} />
         ) : (
           <div style={{ height:'100%', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <ShoppingBag size={featured ? 56 : 44} color={featured ? 'rgba(29,78,216,0.3)' : 'rgba(245,158,11,0.3)'} />
+            <ShoppingBag size={featured ? 56 : 44} color={featured ? 'rgba(120,0,255,0.3)' : 'rgba(245,158,11,0.3)'} />
           </div>
         )}
 
@@ -250,14 +250,14 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
             style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7,
               flex: 1,
               background: featured
-                ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
+                ? 'linear-gradient(135deg,#FF0080,#7800FF)'
                 : 'linear-gradient(135deg,#F59E0B,#EF4444)',
               color: featured ? '#0F172A' : '#fff',
               borderRadius:999, padding:'11px 16px',
               fontWeight:800, fontSize:14,
               textDecoration:'none',
               boxShadow: featured
-                ? '0 8px 24px rgba(29,78,216,0.35)'
+                ? '0 8px 24px rgba(120,0,255,0.35)'
                 : '0 4px 16px rgba(245,158,11,0.40)',
               letterSpacing:'-0.01em',
               transition:'all .2s' }}

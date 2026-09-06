@@ -245,7 +245,7 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
   const [hovered, setHovered] = useState(false)
 
   const isPremium  = shop.plan === 'premium'
-  const color      = shop.shop_color || (isPremium ? '#1D4ED8' : accentColor)
+  const color      = shop.shop_color || (isPremium ? '#7800FF' : accentColor)
   const init       = (shop.shop_name || 'SH').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 
   return (
@@ -254,8 +254,8 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
         onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered(false)}
         style={{
           background: 'var(--sn-bg)', borderRadius: 20, overflow: 'hidden',
-          border: isPremium ? '2px solid rgba(29,78,216,0.30)' : '1.5px solid var(--sn-border)',
-          boxShadow: hovered ? '0 16px 40px rgba(13,27,62,0.14)' : isPremium ? '0 4px 20px rgba(29,78,216,0.10)' : '0 2px 10px rgba(15,23,42,0.06)',
+          border: isPremium ? '2px solid rgba(120,0,255,0.30)' : '1.5px solid var(--sn-border)',
+          boxShadow: hovered ? '0 16px 40px rgba(13,27,62,0.14)' : isPremium ? '0 4px 20px rgba(120,0,255,0.10)' : '0 2px 10px rgba(15,23,42,0.06)',
           transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
           transition: 'box-shadow 0.22s ease, transform 0.22s ease',
           cursor: 'pointer',
@@ -279,7 +279,7 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
                 {shop.shop_name}
               </div>
               <div style={{ fontSize: 10, color: 'var(--sn-subtle)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <MapPin size={8} color="#1D4ED8" /> {shop.shop_region}
+                <MapPin size={8} color="#7800FF" /> {shop.shop_region}
                 {shop.shop_category && <> · {shop.shop_category}</>}
               </div>
             </div>

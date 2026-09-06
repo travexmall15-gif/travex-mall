@@ -403,7 +403,7 @@ export default function StorePage({
                 <h1 style={{ fontFamily: 'var(--sn-font)', fontSize: 'clamp(1rem,3vw,1.35rem)', fontWeight: 900, color: '#111827', lineHeight: 1.1 }}>
                   {store.shop_name}
                 </h1>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(29,78,216,0.15)' : '#F3F4F6', color: isPremium ? '#1D4ED8' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(29,78,216,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: isPremium ? 'rgba(120,0,255,0.15)' : '#F3F4F6', color: isPremium ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 999, border: `1px solid ${isPremium ? 'rgba(120,0,255,0.25)' : 'rgba(255,255,255,0.1)'}` }}>
                   {isPremium ? 'PREMIUM' : 'BASIC'}
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: '#22C55E', fontSize: 10, fontWeight: 700 }}>
@@ -453,11 +453,11 @@ export default function StorePage({
             <div className="store-chips" style={{ display: 'flex', gap: 8, width: 'max-content', paddingLeft: '24px' }}>
               {[
                 { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-                { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+                { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#F3E0FF', border: '#D9A3FF', color: '#7800FF' },
                 { href: '/market', label: 'Business Market', sub: '500+ shops', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
                 { href: '/vybe', label: 'Social Vybe', sub: 'Community', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
                 { href: '/flash-deals', label: 'Flash Deals', sub: 'Limited offers', bg: '#FEF3C7', border: '#FCD34D', color: '#92400E' },
-                { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#DBEAFE', border: '#93C5FD', color: '#1E40AF' },
+                { href: '/group-buy', label: 'Group Buy', sub: 'Save together', bg: '#F3E0FF', border: '#D9A3FF', color: '#7800FF' },
                 { href: '/market', label: 'Business Market', sub: '500+ shops', bg: '#ECFDF5', border: '#6EE7B7', color: '#065F46' },
                 { href: '/vybe', label: 'Social Vybe', sub: 'Community', bg: '#EDE9FE', border: '#C4B5FD', color: '#5B21B6' },
               ].map((c, i) => (
@@ -839,7 +839,7 @@ export default function StorePage({
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>Aria</span>
-                  <span style={{ fontSize: 10, fontWeight: 600, color: '#6366F1', background: '#EEF2FF', padding: '1px 7px', borderRadius: 999, border: '1px solid #C7D2FE' }}>{t('store.aria')}</span>
+                  <span style={{ fontSize: 10, fontWeight: 600, color: '#6366F1', background: '#FAF0FF', padding: '1px 7px', borderRadius: 999, border: '1px solid #C7D2FE' }}>{t('store.aria')}</span>
                 </div>
                 <div style={{ background: '#F8FAFF', border: '1px solid #E0E7FF', borderRadius: '0 14px 14px 14px', padding: '0.8rem 1rem' }}>
                   <p style={{ fontSize: 13, color: '#111827', lineHeight: 1.7, margin: 0 }}>
@@ -852,7 +852,7 @@ export default function StorePage({
             {/* Quick action chips */}
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: '1.25rem' }}>
               {[t('store.findProduct'), t('store.placeOrder'), t('store.checkPrices')].map((chip, chipIdx) => (
-                <button key={chipIdx} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#EEF2FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>{ chip }</button>
+                <button key={chipIdx} onClick={() => setShowWelcome(false)} style={{ padding: '5px 12px', borderRadius: 999, background: '#FAF0FF', color: '#4338CA', border: '1px solid #C7D2FE', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>{ chip }</button>
               ))}
             </div>
 

@@ -18,7 +18,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
     pending:          { bg:'#FEF3C7', color:'#92400E', label:t('orders.pending'),         desc:t('orders.statusPendingDesc') },
     confirmed:        { bg:'#059669', color:'#fff',    label:t('orders.confirmed'),       desc:t('orders.statusConfirmedDesc') },
     rejected:         { bg:'#DC2626', color:'#fff',    label:t('orders.rejected'),        desc:t('orders.statusRejectedDesc') },
-    payment_pending:  { bg:'#1D4ED8', color:'#fff',    label:t('orders.paymentPending'),  desc:t('orders.statusPaymentPendingDesc') },
+    payment_pending:  { bg:'#7800FF', color:'#fff',    label:t('orders.paymentPending'),  desc:t('orders.statusPaymentPendingDesc') },
     delivered:        { bg:'#059669', color:'#fff',    label:t('orders.delivered'),       desc:t('orders.statusDeliveredDesc') },
   }
 
@@ -106,7 +106,7 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
 
         {/* Confirm delivery (for confirmed/delivered) */}
         {order?.status === 'payment_pending' && (
-          <div style={{ background:'var(--sn-bg)', border:'1.5px solid #BFDBFE', borderRadius:14, padding:'14px 16px' }}>
+          <div style={{ background:'var(--sn-bg)', border:'1.5px solid #E9CCFF', borderRadius:14, padding:'14px 16px' }}>
             <p style={{ fontSize:'0.78rem', color:'var(--sn-text)', marginBottom:12, lineHeight:1.5 }}>
               {t('orders.paymentSubmittedNotice')}
             </p>

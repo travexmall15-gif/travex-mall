@@ -70,14 +70,14 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
     <article style={{
       background: featured ? 'linear-gradient(160deg,#0D1B3E,#1B3A8A,#0D1B3E)' : 'var(--sn-bg)',
       border: featured
-        ? '2px solid rgba(29,78,216,0.30)'
+        ? '2px solid rgba(120,0,255,0.30)'
         : isReady
           ? '1.5px solid rgba(5,150,105,0.30)'
           : '1.5px solid var(--sn-border)',
       borderRadius: featured ? 24 : 18,
       overflow: 'hidden',
       boxShadow: featured
-        ? '0 24px 56px rgba(13,27,62,0.28), 0 0 0 1px rgba(29,78,216,0.12)'
+        ? '0 24px 56px rgba(13,27,62,0.28), 0 0 0 1px rgba(120,0,255,0.12)'
         : '0 2px 10px rgba(15,23,42,0.06)',
       transition: 'all .25s',
     }}
@@ -99,14 +99,14 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
       {/* Top banner */}
       <div style={{
         padding: featured ? '1rem 1.25rem' : '0.75rem 1rem',
-        background: featured ? 'var(--sn-page)' : 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
+        background: featured ? 'var(--sn-page)' : 'linear-gradient(135deg,#FAF0FF,#F3E0FF)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-          <ShoppingBag size={10} color="rgba(29,78,216,0.7)" />
+          <ShoppingBag size={10} color="rgba(120,0,255,0.7)" />
           <span style={{
             fontSize: 11, fontWeight: 700, letterSpacing: '0.06em',
-            color: featured ? '#1D4ED8' : 'var(--sn-muted)',
+            color: featured ? '#7800FF' : 'var(--sn-muted)',
             textTransform: 'uppercase' as const,
             whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
@@ -137,12 +137,12 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
       </div>
 
       {/* Product image */}
-      <div style={{ position:'relative', height: featured ? 160 : 120, background: group.product_image ? 'var(--sn-page)' : 'linear-gradient(135deg,#DBEAFE,#EDE9FE)' }}>
+      <div style={{ position:'relative', height: featured ? 160 : 120, background: group.product_image ? 'var(--sn-page)' : 'linear-gradient(135deg,#F3E0FF,#EDE9FE)' }}>
         {group.product_image ? (
           <Image src={group.product_image} alt={group.product_name || ''} fill style={{ objectFit:'cover' }} />
         ) : (
           <div style={{ display:'flex', alignItems:'center', justifyContent:'center', width:'100%', height:'100%' }}>
-            <ShoppingBag size={featured ? 40 : 30} color="rgba(29,78,216,0.3)" />
+            <ShoppingBag size={featured ? 40 : 30} color="rgba(120,0,255,0.3)" />
           </div>
         )}
       </div>
@@ -178,7 +178,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 <div style={{ fontSize: 9, fontWeight: 700, color: featured ? '#9CA3AF' : 'var(--sn-subtle)', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 1 }}>
                   {t('groupBuy.groupPrice')}
                 </div>
-                <span style={{ fontSize: featured ? 20 : 17, fontWeight: 900, color: isReady ? '#059669' : featured ? '#1D4ED8' : '#0D1B3E', letterSpacing: '-0.02em' }}>
+                <span style={{ fontSize: featured ? 20 : 17, fontWeight: 900, color: isReady ? '#059669' : featured ? '#7800FF' : '#0D1B3E', letterSpacing: '-0.02em' }}>
                   {fmtTZS(grpPrice)}
                 </span>
               </div>
@@ -228,7 +228,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 ? 'linear-gradient(90deg,#059669,#10B981)'
                 : pct >= 70
                   ? 'linear-gradient(90deg,#F59E0B,#059669)'
-                  : 'linear-gradient(90deg,#3B82F6,#0D1B3E)',
+                  : 'linear-gradient(135deg,#FF0080,#7800FF)',
               borderRadius: 999, transition: 'width .5s ease',
             }} />
           </div>
@@ -265,7 +265,7 @@ function GroupCard({ group, featured = false }: { group: Group; featured?: boole
                 : isReady
                   ? 'linear-gradient(135deg,#059669,#10B981)'
                   : featured
-                    ? 'linear-gradient(135deg,#1D4ED8,#F0C96B)'
+                    ? 'linear-gradient(135deg,#FF0080,#7800FF)'
                     : '#0D1B3E',
               color: isExpired
                 ? 'var(--sn-subtle)'
@@ -421,7 +421,7 @@ export default function GroupBuyPage() {
         {/* Empty */}
         {!loading && !error && filtered.length === 0 && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <div style={{ width:72, height:72, borderRadius:'20px', background: 'var(--sn-bg)', border: '1.5px solid var(--sn-border)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px', boxShadow:'0 8px 24px rgba(59,130,246,0.12)' }}>
+            <div style={{ width:72, height:72, borderRadius:'20px', background: 'var(--sn-bg)', border: '1.5px solid var(--sn-border)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 18px', boxShadow:'0 8px 24px rgba(120,0,255,0.12)' }}>
               <Users size={32} color="#6366F1" />
             </div>
             <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'var(--sn-text)', marginBottom:8, letterSpacing:'-0.025em' }}>
@@ -450,13 +450,13 @@ export default function GroupBuyPage() {
             {featured && filter === 'all' && !search && (
               <div style={{ marginBottom:'2rem' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
-                  <TrendingUp size={13} color="#1D4ED8" />
+                  <TrendingUp size={13} color="#7800FF" />
                   <span style={{ fontSize:12, fontWeight:800, color:'#0D1B3E', textTransform:'uppercase' as const, letterSpacing:'0.08em' }}>
                     {featured.current_members! >= featured.min_members!
                       ? t('groupBuy.readyToBuy')
                       : t('groupBuy.allDeals')}
                   </span>
-                  <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(29,78,216,0.4),transparent)' }} />
+                  <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(120,0,255,0.4),transparent)' }} />
                 </div>
                 <GroupCard group={featured} featured={true} />
               </div>
@@ -485,11 +485,11 @@ export default function GroupBuyPage() {
               <div>
                 {filter === 'all' && !search && fillingGroups.length > 0 && (
                   <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'1rem' }}>
-                    <Users size={13} color="#3B82F6" />
-                    <span style={{ fontSize:12, fontWeight:800, color:'#3B82F6', textTransform:'uppercase' as const, letterSpacing:'0.08em' }}>
+                    <Users size={13} color="#7800FF" />
+                    <span style={{ fontSize:12, fontWeight:800, color:'#7800FF', textTransform:'uppercase' as const, letterSpacing:'0.08em' }}>
                       {t('groupBuy.fillingUp')}
                     </span>
-                    <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(59,130,246,0.3),transparent)' }} />
+                    <div style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(120,0,255,0.3),transparent)' }} />
                   </div>
                 )}
                 <div className="gb-grid" style={{ display:'grid', gridTemplateColumns:'1fr', gap:'1rem' }}>

@@ -18,7 +18,7 @@ const MARKET_CATS: Record<string, string[]> = {
 
 const REGIONS = ['Dar es Salaam', 'Arusha', 'Mwanza', 'Dodoma', 'Tanga']
 
-const BRAND_COLORS = ['#1D4ED8', '#050B2E', '#059669', '#DC2626', '#D97706', '#7C3AED', '#0891B2', '#BE185D']
+const BRAND_COLORS = ['#7800FF', '#050B2E', '#059669', '#DC2626', '#D97706', '#7C3AED', '#0891B2', '#BE185D']
 
 const PRICE = { basic: 25000, premium: 45000 }
 

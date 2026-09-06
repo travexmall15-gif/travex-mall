@@ -196,7 +196,7 @@ export default function VybePage() {
           white-space: nowrap;
         }
         .filter-pill:hover  { border-color:#D1D5DB; color:#374151; }
-        .filter-pill.active { background:#1D4ED8; border-color:#1D4ED8; color:#0F172A; }
+        .filter-pill.active { background:linear-gradient(135deg,#FF0080,#7800FF); border-color:transparent; color:#fff; }
 
         .cat-chip {
           display:inline-flex; align-items:center; gap:4px;
@@ -209,7 +209,7 @@ export default function VybePage() {
           transition:all .15s;
           white-space:nowrap;
         }
-        .cat-chip:hover { border-color:rgba(29,78,216,.4); color:#1D4ED8; background:rgba(29,78,216,.08); }
+        .cat-chip:hover { border-color:rgba(120,0,255,.4); color:#7800FF; background:rgba(120,0,255,.08); }
 
         .search-input {
           width:100%; padding:11px 16px 11px 42px;
@@ -221,10 +221,10 @@ export default function VybePage() {
           transition:all .2s; box-sizing:border-box;
         }
         .search-input::placeholder { color:#9CA3AF; }
-        .search-input:focus { border-color:rgba(29,78,216,.45); background:#E5E7EB; }
+        .search-input:focus { border-color:rgba(120,0,255,.45); background:#E5E7EB; }
 
         .live-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; animation:pulse 1.8s ease-in-out infinite; }
-        .price-badge { background:rgba(29,78,216,.12); color:#1D4ED8; padding:3px 11px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid rgba(29,78,216,.2); }
+        .price-badge { background:rgba(120,0,255,.12); color:#7800FF; padding:3px 11px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid rgba(120,0,255,.2); }
 
         @media (max-width:480px) {
           .vybe-actions { flex-wrap:wrap; gap:8px !important; }
@@ -295,8 +295,8 @@ export default function VybePage() {
         {/* Empty */}
         {!loading && !error && filtered.length === 0 && (
           <div style={{ textAlign:'center', padding:'5rem 0' }}>
-            <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(29,78,216,0.08)', border:'1px solid rgba(29,78,216,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
-              <Star size={28} color="rgba(29,78,216,0.4)" />
+            <div style={{ width:64, height:64, borderRadius:'20px', background:'rgba(120,0,255,0.08)', border:'1px solid rgba(120,0,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
+              <Star size={28} color="rgba(120,0,255,0.4)" />
             </div>
             <p style={{ color:'var(--sn-subtle)', fontSize:14 }}>
               {search ? t('vybe.noResults') : t('vybe.noPosts')}
@@ -324,7 +324,7 @@ export default function VybePage() {
               <div style={{ textAlign:'center', marginTop:'1.5rem' }}>
                 <button onClick={() => setVisible(v => v + 12)}
                   style={{ padding:'11px 32px', background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', color:'var(--sn-muted)', borderRadius:999, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:600, transition:'all .2s' }}
-                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(29,78,216,.4)'; (e.currentTarget as HTMLElement).style.color='#1D4ED8' }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor='rgba(120,0,255,.4)'; (e.currentTarget as HTMLElement).style.color='#7800FF' }}
                   onMouseOut={e  => { (e.currentTarget as HTMLElement).style.borderColor='var(--sn-border)'; (e.currentTarget as HTMLElement).style.color='#6B7280' }}>
                   {t('vybe.loadMore')} · {filtered.length - visible} {t('vybe.totalPosts').toLowerCase()}
                 </button>
@@ -364,7 +364,7 @@ function PostCard({ post, liked, onLike, onShare, copied, ago, t }: PostCardProp
         {/* Logo */}
         <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
           background:'var(--sn-bg)',
-          border:'1.5px solid rgba(29,78,216,0.2)',
+          border:'1.5px solid rgba(120,0,255,0.2)',
           display:'flex', alignItems:'center', justifyContent:'center' }}>
           {post.shop_logo ? (
             <Image src={post.shop_logo} alt={initials} width={42} height={42} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
@@ -387,7 +387,7 @@ function PostCard({ post, liked, onLike, onShare, copied, ago, t }: PostCardProp
             )}
             {/* New badge */}
             {isNew && (
-              <span style={{ background:'rgba(29,78,216,0.15)', color:'var(--sn-text)', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(29,78,216,0.2)' }}>
+              <span style={{ background:'rgba(120,0,255,0.15)', color:'var(--sn-text)', fontSize:'0.55rem', fontWeight:800, padding:'1px 6px', borderRadius:999, letterSpacing:'0.06em', border:'1px solid rgba(120,0,255,0.2)' }}>
                 {t('vybe.newPost')}
               </span>
             )}
@@ -404,7 +404,7 @@ function PostCard({ post, liked, onLike, onShare, copied, ago, t }: PostCardProp
 
         {/* Tag */}
         {post.tag && (
-          <span style={{ fontSize:10, fontWeight:700, color:'var(--sn-text)', background:'rgba(29,78,216,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(29,78,216,0.15)', letterSpacing:'0.02em' }}>
+          <span style={{ fontSize:10, fontWeight:700, color:'var(--sn-text)', background:'rgba(120,0,255,0.10)', padding:'3px 9px', borderRadius:999, flexShrink:0, border:'1px solid rgba(120,0,255,0.15)', letterSpacing:'0.02em' }}>
             #{post.tag}
           </span>
         )}

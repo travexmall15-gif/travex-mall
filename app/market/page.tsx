@@ -10,7 +10,7 @@ const MARKETS = [
   {
     key: 'fashion',
     icon: Shirt,
-    iconColor: '#1D4ED8',
+    iconColor: '#7800FF',
     categories: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts','Fashion & Clothing','Beauty & Health'],
     labelKey: 'market.marketFashionLabel',
     descKey: 'market.marketFashionDesc',
@@ -18,7 +18,7 @@ const MARKETS = [
   {
     key: 'vehicle',
     icon: Car,
-    iconColor: '#1D4ED8',
+    iconColor: '#7800FF',
     categories: ['Cars','Motorcycles','Spare Parts','Tyres','Auto Accessories','Automotive'],
     labelKey: 'market.marketVehicleLabel',
     descKey: 'market.marketVehicleDesc',
@@ -26,7 +26,7 @@ const MARKETS = [
   {
     key: 'electronics',
     icon: Smartphone,
-    iconColor: '#1D4ED8',
+    iconColor: '#7800FF',
     categories: ['Phones','Laptops','TVs','Audio','Appliances','Gaming','Other Electronics','Electronics','Technology','Books & Stationery'],
     labelKey: 'market.marketElectronicsLabel',
     descKey: 'market.marketElectronicsDesc',

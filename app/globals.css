@@ -11,12 +11,13 @@
   --sn-muted:   #6B7280;
   --sn-subtle:  #9CA3AF;
   /* Brand */
-  --sn-primary: #1D4ED8;
-  --sn-primary-hover: #1E40AF;
+  --sn-primary: #7800FF;
+  --sn-primary-hover: #6600DB;
   --sn-primary-fg: #ffffff;
-  /* Button — official ShopNekt CTA gradient (distinct from --sn-primary,
-     which remains the solid accent used for text/icons/borders/badges
-     that are NOT button backgrounds — e.g. prices, verified checks). */
+  /* Button — official ShopNekt CTA gradient. --sn-primary above is the
+     solid brand purple used wherever a gradient can't apply (plain
+     text/icon/border color) — updated together with the buttons so
+     blue is fully retired everywhere, not just on button fills. */
   --sn-btn-bg: linear-gradient(135deg, #FF0080, #7800FF);
   --sn-btn-bg-hover: linear-gradient(135deg, #E6006F, #6600DB);
   --sn-btn-bg-active: linear-gradient(135deg, #CC0060, #5500B8);
@@ -42,8 +43,8 @@
   --sn-text:    #F1F5F9;
   --sn-muted:   #94A3B8;
   --sn-subtle:  #64748B;
-  --sn-primary: #3B82F6;
-  --sn-primary-hover: #2563EB;
+  --sn-primary: #A855F7;
+  --sn-primary-hover: #9333EA;
   --sn-primary-fg: #ffffff;
   --sn-btn-bg: linear-gradient(135deg, #FF0080, #7800FF);
   --sn-btn-bg-hover: linear-gradient(135deg, #FF3399, #9333EA);

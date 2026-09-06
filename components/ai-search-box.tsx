@@ -188,7 +188,7 @@ export default function AiSearchBox() {
               transition: 'border-color 0.2s',
               fontFamily: 'var(--sn-font)',
             }}
-            onFocus={e => e.target.style.borderColor = 'rgba(29,78,216,0.6)'}
+            onFocus={e => e.target.style.borderColor = 'rgba(120,0,255,0.6)'}
             onBlur={e => e.target.style.borderColor = 'var(--sn-border)'}
           />
         </div>
@@ -197,8 +197,8 @@ export default function AiSearchBox() {
           disabled={loading || !query.trim()}
           style={{
             padding: '14px 24px', borderRadius: '16px',
-            background: query.trim() ? '#1D4ED8' : 'rgba(29,78,216,0.3)',
-            border: 'none', color: query.trim() ? '#111827' : '#9CA3AF',
+            background: query.trim() ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'rgba(120,0,255,0.3)',
+            border: 'none', color: query.trim() ? '#fff' : '#9CA3AF',
             fontWeight: 700, fontSize: '0.85rem', cursor: query.trim() ? 'pointer' : 'default',
             transition: 'all 0.2s', whiteSpace: 'nowrap',
             fontFamily: 'var(--sn-font)',
@@ -282,7 +282,7 @@ export default function AiSearchBox() {
                 transition: 'all 0.2s',
                 animationDelay: `${i * 80}ms`,
               }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'var(--sn-border)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(29,78,216,0.3)' }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'var(--sn-border)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(120,0,255,0.3)' }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'var(--sn-page)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--sn-border)' }}
             >
               {/* Logo */}

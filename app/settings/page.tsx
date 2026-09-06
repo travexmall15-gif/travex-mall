@@ -60,7 +60,7 @@ export default function SettingsPage() {
     {
       title: t('settings.sectionAccount'),
       items: [
-        { icon: User,       label: t('menuPage.editProfile'),      sub: t('settings.labelProfileSub'),       href: '/settings/profile',       color: '#3B82F6' },
+        { icon: User,       label: t('menuPage.editProfile'),      sub: t('settings.labelProfileSub'),       href: '/settings/profile',       color: '#7800FF' },
         { icon: Lock,       label: t('settings.security'),          sub: t('settings.labelSecuritySub'),      href: '/settings/security',      color: 'var(--sn-primary)' },
       ],
     },

@@ -102,7 +102,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
       sub: `Pay TZS ${order?.total_amount?.toLocaleString() || '—'} now`,
       desc: 'Pay for item now via wallet. Pay delivery fee directly to rider on arrival.',
       badge: '📦 Flexible',
-      badgeColor: '#3B82F6',
+      badgeColor: '#7800FF',
     },
     {
       id: 'delivery-later' as PayOption,
@@ -142,8 +142,8 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             const active = i === cur
             return (
               <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:4 }}>
-                <div style={{ width:'100%', height:3, borderRadius:999, background: done||active ? '#1D4ED8' : 'var(--sn-border)', transition:'all .3s' }} />
-                <span style={{ fontSize:'0.55rem', fontWeight:600, color: done||active?'#1D4ED8':'#CBD5E1', textAlign:'center' }}>{s}</span>
+                <div style={{ width:'100%', height:3, borderRadius:999, background: done||active ? 'linear-gradient(135deg,#FF0080,#7800FF)' : 'var(--sn-border)', transition:'all .3s' }} />
+                <span style={{ fontSize:'0.55rem', fontWeight:600, color: done||active?'#7800FF':'#CBD5E1', textAlign:'center' }}>{s}</span>
               </div>
             )
           })}
@@ -170,7 +170,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:'1.25rem' }}>
               {PAYMENT_METHODS.map(pm => (
                 <button key={pm.id} onClick={() => setSelMethod(pm.id)}
-                  style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'var(--sn-bg)', border:`2px solid ${selMethod===pm.id?'#1D4ED8':'var(--sn-border)'}`, borderRadius:14, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
+                  style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'var(--sn-bg)', border:`2px solid ${selMethod===pm.id?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-border)'}`, borderRadius:14, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
                   <span style={{ fontSize:'1.4rem', width:36, textAlign:'center' }}>{pm.icon}</span>
                   <span style={{ flex:1, fontSize:'0.9rem', fontWeight:600, color:'var(--sn-text)' }}>{pm.name}</span>
                   {selMethod===pm.id && <Check size={18} color="#0D1B3E" />}
@@ -195,9 +195,9 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
             <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:'1.25rem' }}>
               {PAY_OPTIONS.map(opt => (
                 <button key={opt.id} onClick={() => setSelOption(opt.id)}
-                  style={{ display:'flex', alignItems:'flex-start', gap:14, padding:'16px', background:'var(--sn-bg)', border:`2px solid ${selOption===opt.id?'#1D4ED8':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
-                  <div style={{ width:42, height:42, borderRadius:12, background: selOption===opt.id?'#1D4ED8':'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
-                    <opt.icon size={20} color={selOption===opt.id?'#1D4ED8':'#64748B'} />
+                  style={{ display:'flex', alignItems:'flex-start', gap:14, padding:'16px', background:'var(--sn-bg)', border:`2px solid ${selOption===opt.id?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
+                  <div style={{ width:42, height:42, borderRadius:12, background: selOption===opt.id?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
+                    <opt.icon size={20} color={selOption===opt.id?'#7800FF':'#64748B'} />
                   </div>
                   <div style={{ flex:1 }}>
                     <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>

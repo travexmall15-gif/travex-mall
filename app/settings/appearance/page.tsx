@@ -87,13 +87,13 @@ export default function AppearancePage() {
             ].map(t => (
               <button key={t.v}
                 onClick={() => { setTheme(t.v as any); save() }}
-                style={{ padding:'16px 8px', background: theme===t.v?'#1D4ED8':'#fff', border:`2px solid ${theme===t.v?'#1D4ED8':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
+                style={{ padding:'16px 8px', background: theme===t.v?'linear-gradient(135deg,#FF0080,#7800FF)':'#fff', border:`2px solid ${theme===t.v?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
                 {theme===t.v && (
                   <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'linear-gradient(135deg,#FF0080,#7800FF)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={10} color="#fff" strokeWidth={3} />
                   </div>
                 )}
-                <t.icon size={22} color={theme===t.v?'#1D4ED8':'#64748B'} />
+                <t.icon size={22} color={theme===t.v?'#7800FF':'#64748B'} />
                 <span style={{ fontSize:'0.82rem', fontWeight:700, color: theme===t.v?'#fff':'#0F172A' }}>{t.label}</span>
                 <span style={{ fontSize:'0.65rem', color: theme===t.v?'#6B7280':'#94A3B8' }}>{t.sub}</span>
               </button>
@@ -115,8 +115,8 @@ export default function AppearancePage() {
                 style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i<2?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s', textAlign:'left' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'#1D4ED8':'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
-                  <Type size={16} color={fontSize===f.v?'#1D4ED8':'#64748B'} />
+                <div style={{ width:38, height:38, borderRadius:10, background: fontSize===f.v?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s' }}>
+                  <Type size={16} color={fontSize===f.v?'#7800FF':'#64748B'} />
                 </div>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize: f.size, fontWeight:700, color:'var(--sn-text)' }}>{f.label}</div>
