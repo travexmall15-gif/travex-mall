@@ -96,7 +96,7 @@ export default function OpenStoreStatusPage() {
               <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
                 style={{ flex: 1, padding: '0.65rem 0.9rem', border: '1.5px solid var(--sn-input-border)', borderRadius: 10, fontSize: '0.85rem', fontFamily: 'var(--sn-font)', color: 'var(--sn-text)', background: 'var(--sn-input)', outline: 'none' }} />
               <button type="submit" disabled={loading}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 10, padding: '0 1.1rem', fontWeight: 700, fontSize: '0.82rem', cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.75 : 1, fontFamily: 'var(--sn-font)' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 10, padding: '0 1.1rem', fontWeight: 700, fontSize: '0.82rem', cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.75 : 1, fontFamily: 'var(--sn-font)' }}>
                 {loading ? <Loader2 size={15} className="spin" /> : <Search size={15} />} {loading ? t('status.checking') : t('status.checkBtn')}
               </button>
             </div>
@@ -152,7 +152,7 @@ export default function OpenStoreStatusPage() {
                       <input inputMode="numeric" maxLength={4} value={pin} onChange={e => { setPin(e.target.value.replace(/\D/g, '').slice(0, 4)); setPinErr('') }}
                         placeholder="••••" style={{ width: 100, textAlign: 'center', letterSpacing: '0.3em', fontWeight: 800, padding: '0.6rem', border: '1.5px solid var(--sn-input-border)', borderRadius: 10, fontSize: '0.9rem', fontFamily: 'var(--sn-font)', color: 'var(--sn-text)', background: 'var(--sn-input)', outline: 'none' }} />
                       <button onClick={revealCode} disabled={pin.length !== 4}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 10, padding: '0 1.1rem', fontWeight: 700, fontSize: '0.82rem', cursor: pin.length === 4 ? 'pointer' : 'default', opacity: pin.length === 4 ? 1 : 0.5, fontFamily: 'var(--sn-font)' }}>
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 10, padding: '0 1.1rem', fontWeight: 700, fontSize: '0.82rem', cursor: pin.length === 4 ? 'pointer' : 'default', opacity: pin.length === 4 ? 1 : 0.5, fontFamily: 'var(--sn-font)' }}>
                         <Eye size={14} /> {t('status.reveal')}
                       </button>
                     </div>

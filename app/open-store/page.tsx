@@ -160,13 +160,13 @@ export default function OpenStorePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', textAlign: 'left', background: 'var(--sn-bg)', border: `1px solid var(--sn-border)`, borderRadius: 16, padding: '1.25rem', marginBottom: '2rem' }}>
             {[t('apply.next1'), t('apply.next2'), t('apply.next3'), t('apply.next4')].map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
                 <span style={{ fontSize: '0.82rem', color: 'var(--sn-text)' }}>{s}</span>
               </div>
             ))}
           </div>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', padding: '0.75rem 1.5rem', borderRadius: 999, fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+            <Link href="/market" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', padding: '0.75rem 1.5rem', borderRadius: 999, fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
               <Store size={15} /> {t('apply.viewMarket')}
             </Link>
             <a href="https://wa.me/255651919915" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#25D366', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 999, fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
@@ -373,7 +373,7 @@ export default function OpenStorePage() {
               <Card>
                 <StepHeading title={t('apply.submitTitle')} sub={t('apply.submitSub')} />
                 <button onClick={submit} disabled={submitting}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 14, padding: '1rem', fontWeight: 800, fontSize: '0.92rem', cursor: submitting ? 'default' : 'pointer', opacity: submitting ? 0.75 : 1, fontFamily: 'var(--sn-font)' }}>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 14, padding: '1rem', fontWeight: 800, fontSize: '0.92rem', cursor: submitting ? 'default' : 'pointer', opacity: submitting ? 0.75 : 1, fontFamily: 'var(--sn-font)' }}>
                   {submitting ? (<><Loader2 size={16} className="spin" /> {uploading ? t('apply.logo') + '…' : t('apply.submitting')}</>) : (<>{t('apply.submitBtn')} <ArrowRight size={15} /></>)}
                 </button>
               </Card>
@@ -387,7 +387,7 @@ export default function OpenStorePage() {
                   <ArrowLeft size={15} /> {t('apply.back')}
                 </button>
                 <button onClick={goNext}
-                  style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 999, padding: '0.7rem 1.6rem', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 999, padding: '0.7rem 1.6rem', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'var(--sn-font)' }}>
                   {t('apply.continue')} <ArrowRight size={15} />
                 </button>
               </div>

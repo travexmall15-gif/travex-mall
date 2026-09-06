@@ -170,9 +170,9 @@ export default function VybePage() {
 
         .visit-btn {
           display:inline-flex; align-items:center; gap:6px;
-          background: linear-gradient(135deg, #EFF6FF, #1B3A8A);
-          border: 1px solid rgba(29,78,216,.30);
-          color: #1D4ED8;
+          background: linear-gradient(135deg,#FF0080,#7800FF);
+          border: 1px solid transparent;
+          color: #fff;
           border-radius: 999px;
           padding: 7px 18px;
           font-size:13px; font-weight:700;
@@ -180,10 +180,8 @@ export default function VybePage() {
           transition: all .18s;
         }
         .visit-btn:hover {
-          background: #1D4ED8;
-          color: #0F172A;
-          border-color: #1D4ED8;
-          box-shadow: 0 4px 16px rgba(29,78,216,.35);
+          filter: brightness(1.08);
+          box-shadow: 0 4px 16px rgba(120,0,255,.35);
         }
 
         .filter-pill {
@@ -288,7 +286,7 @@ export default function VybePage() {
               <RefreshCw size={22} color="#EF4444" />
             </div>
             <p style={{ color:'var(--sn-subtle)', fontSize:14, marginBottom:16 }}>{error}</p>
-            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'var(--sn-primary)', color:'var(--sn-primary-fg)', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
+            <button onClick={loadPosts} style={{ padding:'10px 24px', background:'linear-gradient(135deg,#FF0080,#7800FF)', color:'var(--sn-primary-fg)', border:'none', borderRadius:999, fontWeight:700, cursor:'pointer', fontFamily:'Inter,sans-serif', fontSize:14 }}>
               {t('vybe.retry')}
             </button>
           </div>

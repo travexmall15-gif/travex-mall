@@ -59,7 +59,7 @@ export function AIChatWidget({
           onMouseOver={e => (e.currentTarget as HTMLElement).style.transform='scale(1.1)'}
           onMouseOut={e  => (e.currentTarget as HTMLElement).style.transform='scale(1)'}>
           <Sparkles size={22} color="#1D4ED8" />
-          <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'var(--sn-primary)', borderRadius:'50%', border:'2.5px solid #fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'linear-gradient(135deg,#FF0080,#7800FF)', borderRadius:'50%', border:'2.5px solid #fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
             <span style={{ fontSize:'7px', fontWeight:900, color:'#fff' }}>AI</span>
           </div>
         </button>

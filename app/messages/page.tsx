@@ -118,7 +118,7 @@ export default function MessagesPage() {
             {t('messages.title')}
           </h1>
           {unreadCount > 0 && (
-            <span style={{ background:'var(--sn-primary)', color:'var(--sn-primary-fg)', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
+            <span style={{ background:'linear-gradient(135deg,#FF0080,#7800FF)', color:'var(--sn-primary-fg)', fontSize:'0.65rem', fontWeight:800, padding:'2px 8px', borderRadius:999 }}>
               {unreadCount} {t('messages.unread') || 'unread'}
             </span>
           )}

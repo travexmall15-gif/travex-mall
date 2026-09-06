@@ -97,7 +97,7 @@ export default function UsernamePage() {
         {error && <p style={{ fontSize: '0.75rem', color: '#FCA5A5', marginBottom: '0.85rem', textAlign: 'center' }}>{error}</p>}
 
         <button onClick={save} disabled={loading || username.length < 3}
-          style={{ width: '100%', padding: '0.875rem', background: 'var(--sn-primary)', color: '#fff', border: 'none', borderRadius: 14, fontFamily: 'var(--sn-font)', fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
+          style={{ width: '100%', padding: '0.875rem', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', border: 'none', borderRadius: 14, fontFamily: 'var(--sn-font)', fontWeight: 700, fontSize: '0.9rem', cursor: username.length < 3 ? 'not-allowed' : 'pointer', opacity: username.length < 3 ? 0.45 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
           {loading
             ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</>
             : <>{t('authPage.continueUsername')} <ArrowRight size={14} /></>}

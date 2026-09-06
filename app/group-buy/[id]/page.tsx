@@ -257,7 +257,7 @@ export default function GroupDetailPage({
               ⚠️ {error}
             </div>}
             <button onClick={joinGroup} disabled={joining}
-              style={{ width:'100%', padding:'13px', background:'var(--sn-primary)',
+              style={{ width:'100%', padding:'13px', background:'linear-gradient(135deg,#FF0080,#7800FF)',
                 color:'var(--sn-primary-fg)', border:'none', borderRadius:999,
                 fontWeight:800, fontSize:14, cursor: joining ? 'default' : 'pointer', opacity: joining ? 0.75 : 1,
                 display:'flex', alignItems:'center', justifyContent:'center', gap:6,

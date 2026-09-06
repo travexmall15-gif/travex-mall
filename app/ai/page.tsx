@@ -217,7 +217,7 @@ export default function AiPage() {
     .qa-row{display:flex;gap:6px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
     .qa-row::-webkit-scrollbar{display:none}
     .qa-btn{display:inline-flex;align-items:center;gap:4px;background:rgba(13,27,62,0.05);border:1px solid rgba(13,27,62,0.09);border-radius:999px;padding:5px 12px;font-size:0.7rem;font-weight:600;color:#334155;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s;flex-shrink:0}
-    .qa-btn:hover{background:#1D4ED8;color:#fff;border-color:#1D4ED8}
+    .qa-btn:hover{background:linear-gradient(135deg,#FF0080,#7800FF);color:#fff;border-color:transparent}
     .fr{display:flex;gap:7px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
     .fr::-webkit-scrollbar{display:none}
     .fi,.fs{flex:0 0 auto;padding:7px 12px;border-radius:999px;border:1.5px solid #E2E8F0;font-size:0.74rem;font-family:inherit;color:#334155;outline:none;background:#fff;cursor:pointer;transition:border-color 0.15s;min-width:128px}

@@ -98,7 +98,7 @@ export default function WelcomePage() {
               lineHeight:1.2,
             }}>{l.label}</div>
             {lang === l.code && (
-              <div style={{ width:5, height:5, borderRadius:'50%', background:'#1D4ED8' }} />
+              <div style={{ width:5, height:5, borderRadius:'50%', background:'linear-gradient(135deg,#FF0080,#7800FF)' }} />
             )}
           </button>
         ))}

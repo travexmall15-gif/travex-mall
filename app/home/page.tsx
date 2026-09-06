@@ -145,7 +145,7 @@ export default function HomePage() {
                 <Link href="/market" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#0F172A',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(15,23,42,0.22)' }}>
                   <Store size={14} /> {t('home.browseMarket')}
                 </Link>
-                <Link href="/login" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'#1D4ED8',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(29,78,216,0.28)' }}>
+                <Link href="/login" style={{ display:'inline-flex',alignItems:'center',gap:'0.4rem',background:'linear-gradient(135deg,#FF0080,#7800FF)',color:'#fff',padding:'0.75rem 1.5rem',borderRadius:999,fontWeight:700,fontSize:'0.82rem',textDecoration:'none',boxShadow:'0 6px 16px rgba(120,0,255,0.28)' }}>
                   {t('nav.login')} <ArrowRight size={13} />
                 </Link>
               </div>

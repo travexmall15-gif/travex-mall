@@ -91,7 +91,7 @@ export default function SettingsPage() {
           <div style={{ background:'var(--sn-bg)', borderRadius:18, padding:'1.1rem 1.25rem', display:'flex', alignItems:'center', gap:14, cursor:'pointer', transition:'opacity .2s' }}
             onMouseOver={e => (e.currentTarget as HTMLElement).style.opacity='0.9'}
             onMouseOut={e  => (e.currentTarget as HTMLElement).style.opacity='1'}>
-            <div style={{ width:50, height:50, borderRadius:'50%', background:'var(--sn-primary)', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid #E5E7EB', fontSize:'1.05rem', fontWeight:900 }}>
+            <div style={{ width:50, height:50, borderRadius:'50%', background:'linear-gradient(135deg,#FF0080,#7800FF)', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:'2px solid #E5E7EB', fontSize:'1.05rem', fontWeight:900 }}>
               {user ? user.name.slice(0,2).toUpperCase() : '?'}
             </div>
             <div style={{ flex:1, minWidth:0 }}>

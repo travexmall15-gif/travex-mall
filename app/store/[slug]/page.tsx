@@ -813,7 +813,7 @@ export default function StorePage({
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.9rem', marginBottom: '1.5rem' }}>
               {/* AI Female avatar */}
               <div style={{ flexShrink: 0, position: 'relative' }}>
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'var(--sn-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2.5px solid #fff', boxShadow: '0 4px 14px rgba(29,78,216,0.2)', overflow: 'hidden' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#FF0080,#7800FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2.5px solid #fff', boxShadow: '0 4px 14px rgba(120,0,255,0.2)', overflow: 'hidden' }}>
                   <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
                     {/* Body */}
                     <circle cx="26" cy="56" r="20" fill="#A5B4FC"/>
@@ -872,7 +872,7 @@ export default function StorePage({
                     if (btn) {btn.click()}
                   }, 300)
                 }}
-                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'var(--sn-primary)', color: '#111827', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--sn-font)', boxShadow: '0 4px 14px rgba(29,78,216,0.2)' }}>
+                style={{ flex: 1, padding: '11px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--sn-font)', boxShadow: '0 4px 14px rgba(120,0,255,0.25)' }}>
                 Chat with Aria
               </button>
             </div>

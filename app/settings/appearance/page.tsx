@@ -89,7 +89,7 @@ export default function AppearancePage() {
                 onClick={() => { setTheme(t.v as any); save() }}
                 style={{ padding:'16px 8px', background: theme===t.v?'#1D4ED8':'#fff', border:`2px solid ${theme===t.v?'#1D4ED8':'var(--sn-border)'}`, borderRadius:16, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'flex', flexDirection:'column', alignItems:'center', gap:6, transition:'all .2s', position:'relative' }}>
                 {theme===t.v && (
-                  <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'#1D4ED8', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <div style={{ position:'absolute', top:8, right:8, width:16, height:16, borderRadius:'50%', background:'linear-gradient(135deg,#FF0080,#7800FF)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <Check size={10} color="#0D1B3E" strokeWidth={3} />
                   </div>
                 )}

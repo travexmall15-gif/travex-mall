@@ -131,7 +131,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
         <p style={{ color: 'var(--sn-text)', fontWeight: 700, fontSize: '0.95rem', marginBottom: 6 }}>{t('messages.accessDeniedTitle')}</p>
         <p style={{ color: 'var(--sn-muted)', fontSize: '0.82rem', marginBottom: 20, textAlign: 'center' }}>{t('messages.accessDeniedDesc')}</p>
         <button onClick={() => router.push('/messages')}
-          style={{ background: 'var(--sn-primary)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 999, padding: '10px 22px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>
+          style={{ background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: 'var(--sn-primary-fg)', border: 'none', borderRadius: 999, padding: '10px 22px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>
           {t('messages.backToInbox')}
         </button>
       </main>
