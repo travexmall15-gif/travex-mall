@@ -124,8 +124,8 @@ export default function HomePage() {
             {/* Business Market */}
             <div className="market-card business" style={{ flex:1,background:'var(--sn-bg)',border:'2px solid rgba(120,0,255,0.20)',borderRadius:24,padding:'2.5rem 2rem',position:'relative',overflow:'hidden',boxShadow:'0 4px 20px rgba(15,23,42,0.06)' }}>
               <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(135deg,#FF0080,#7800FF)' }} />
-              <div style={{ width:56,height:56,borderRadius:16,background:'linear-gradient(135deg,#040C32,#071545)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1.4rem',boxShadow:'0 8px 20px rgba(5,11,46,0.20)' }}>
-                <Store style={{ width:26,height:26,color:'#111827' }} />
+              <div style={{ width:56,height:56,borderRadius:16,background:'linear-gradient(135deg,#FF0080,#7800FF)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1.4rem',boxShadow:'0 8px 20px rgba(120,0,255,0.25)' }}>
+                <Store style={{ width:26,height:26,color:'#fff' }} />
               </div>
               <div style={{ display:'flex',gap:'0.4rem',marginBottom:'1rem',flexWrap:'wrap' }}>
                 <span style={{ fontSize:'0.62rem',fontWeight:800,background:'rgba(120,0,255,0.10)',color:'#A07830',padding:'0.2rem 0.65rem',borderRadius:999 }}>{t('home.premium')}</span>
@@ -137,7 +137,7 @@ export default function HomePage() {
                 {([['5',t('home.regions')],['TZS 25K',t('home.basicMo')]] as [string,string][]).map(([v,l]) => (
                   <div key={l}>
                     <div style={{ fontFamily:"'Inter',sans-serif",fontSize:'1.2rem',fontWeight:900,color:'#111827',lineHeight:1 }}>{v}</div>
-                    <div style={{ fontSize:'0.65rem',color:'rgba(255,255,255,0.55)',marginTop:2 }}>{l}</div>
+                    <div style={{ fontSize:'0.65rem',color:'var(--sn-muted)',marginTop:2 }}>{l}</div>
                   </div>
                 ))}
               </div>
@@ -201,10 +201,10 @@ export default function HomePage() {
             <div className="spons-grid">
               {sponsored.map(shop => (
                 <a key={shop.id} href={shop.shop_slug ? `/store/${shop.shop_slug}` : '#'} className="spons-card">
-                  <div style={{ width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,#040C32,#071545)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1rem',overflow:'hidden',flexShrink:0 }}>
+                  <div style={{ width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,#FF0080,#7800FF)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1rem',overflow:'hidden',flexShrink:0 }}>
                     {shop.logo_url
                       ? <img src={shop.logo_url} alt={shop.shop_name} style={{ width:'100%',height:'100%',objectFit:'cover' }} loading="lazy" />
-                      : <span style={{ fontSize:'1.2rem',fontWeight:900,color:'#111827' }}>{shop.shop_name.charAt(0)}</span>
+                      : <span style={{ fontSize:'1.2rem',fontWeight:900,color:'#fff' }}>{shop.shop_name.charAt(0)}</span>
                     }
                   </div>
                   <div style={{ display:'inline-flex',alignItems:'center',gap:4,background:'rgba(120,0,255,0.10)',border:'1px solid rgba(120,0,255,0.22)',borderRadius:999,padding:'0.15rem 0.55rem',marginBottom:'0.65rem' }}>
