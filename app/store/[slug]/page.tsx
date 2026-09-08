@@ -10,6 +10,7 @@ import { sb } from '@/lib/supabase'
 import { ArrowLeft, MessageCircle, Package, ShoppingCart, ShoppingBag, X, Plus, Minus, MapPin, Tag, Star, CheckCircle, Loader2, Heart, Search, Sparkles, TrendingUp, LayoutGrid, MessageSquare, Play, Share2 } from 'lucide-react'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 import { getCurrentBuyerId, getShopLikeCount, isShopLikedByUser, likeShop, unlikeShop } from '@/lib/shop-likes'
+import { getWebstoreTemplateComponent } from '@/lib/webstore/render-template'
 
 type Store = {
   id: string
@@ -343,6 +344,37 @@ export default function StorePage({
       </div>
     </main>
   )}
+
+  // ── WebStore Builder Phase 1: dynamic template rendering ──
+  // Only shops that completed the new WebStore flow AND were
+  // published render through a template — every existing/legacy shop
+  // (no selected_template, or not yet published) falls through
+  // unchanged to the original storefront UI below. This is the entire
+  // integration point; nothing above this was touched.
+  const webstoreTemplate = (store as any).webstore_status === 'published'
+    ? getWebstoreTemplateComponent((store as any).selected_template)
+    : null
+
+  if (webstoreTemplate) {
+    const TemplateComponent = webstoreTemplate
+    return (
+      <TemplateComponent
+        store={{
+          id: store.id, shop_name: store.shop_name, shop_desc: store.shop_desc,
+          shop_category: store.shop_category,
+          shop_logo_url: (store as any).shop_logo_url, shop_cover_url: (store as any).shop_cover_url,
+          shop_region: store.shop_region, shop_city: (store as any).shop_city, shop_address: (store as any).shop_address,
+          shop_whatsapp: store.shop_whatsapp, owner_phone: store.owner_phone,
+          shop_instagram: (store as any).shop_instagram, shop_facebook: (store as any).shop_facebook, shop_tiktok: (store as any).shop_tiktok,
+        }}
+        products={products}
+        likeCount={likeCount}
+        isLiked={liked}
+        onLike={() => { if (!likeBusy) toggleLikeShop() }}
+        onMessage={() => setShowMsg(true)}
+      />
+    )
+  }
 
   return (
     <main style={{ minHeight: '100vh', background: '#F8FAFF', fontFamily: 'var(--sn-font)' }}>

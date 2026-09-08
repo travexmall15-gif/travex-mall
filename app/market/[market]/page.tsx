@@ -41,7 +41,7 @@ type Shop = {
   id: string; owner_name: string; owner_phone: string | null
   shop_name: string; shop_category: string | null; shop_region: string | null
   shop_whatsapp: string | null; shop_desc: string | null
-  shop_color: string | null; shop_logo: string | null; shop_market: string | null
+  shop_color: string | null; shop_logo_url: string | null
   plan: 'premium' | 'basic'
   status: string; created_at: string
 }
@@ -67,18 +67,27 @@ export default function MarketInnerPage() {
     try {
       const { data } = await sb
         .from('pending_payments')
-        .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,shop_market,plan,status,shop_logo,created_at')
+        .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,plan,status,shop_logo_url,webstore_status,selected_template,created_at')
         .eq('status', 'approved')
         .order('plan', { ascending: false })
         .order('created_at', { ascending: false })
 
       if (!data) { setShops([]); return }
 
-      // Prefer explicit shop_market; fall back to category-inference for
-      // shops that applied before that column existed (see Batch 1).
-      const filtered = data.filter((s: any) =>
-        s.shop_market ? s.shop_market === market : cfg.categories.includes(s.shop_category || '')
-      )
+      // WebStore Builder visibility rule: a shop that never started the
+      // new template flow (selected_template is null) keeps showing
+      // exactly as it always has — zero regression for existing live
+      // shops. A shop that DID pick a template only appears once its
+      // webstore_status is genuinely 'published' — draft/submitted/
+      // under_review/rejected/approved-but-not-yet-published stay
+      // hidden from the public marketplace, per spec.
+      const visibleData = data.filter((s: any) => !s.selected_template || s.webstore_status === 'published')
+
+      // Category-based market matching (shop_market column does not
+      // exist on this table — confirmed via a real runtime error —
+      // so every shop is matched by its category against this
+      // market's known category list).
+      const filtered = visibleData.filter((s: any) => cfg.categories.includes(s.shop_category || ''))
 
       setShops(filtered as unknown as Shop[])
     } finally {
@@ -270,8 +279,8 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--sn-page)', border: '1.5px solid var(--sn-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: color, flexShrink: 0, overflow: 'hidden' }}>
-              {shop.shop_logo
-                ? <img src={shop.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+              {shop.shop_logo_url
+                ? <img src={shop.shop_logo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                 : init}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
