@@ -61,7 +61,7 @@ export default function VehicleTemplate01({ store, products, likeCount, isLiked,
 
       {/* New Arrivals — large showroom cards */}
       {newArrivals.length > 0 && (
-        <div style={{ padding: '1.5rem 6%' }}>
+        <div style={{ padding: '1.5rem 6%', maxWidth: 1100, margin: '0 auto', boxSizing: 'border-box' }}>
           <h2 style={{ fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7800FF', marginBottom: 14, fontWeight: 800 }}>New Arrivals</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {newArrivals.map(p => (
@@ -84,7 +84,7 @@ export default function VehicleTemplate01({ store, products, likeCount, isLiked,
       {products.length > newArrivals.length && (
         <div style={{ padding: '0.5rem 6% 2rem' }}>
           <h2 style={{ fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: 14, fontWeight: 800 }}>Full Inventory</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 12 }}>
             {products.map(p => (
               <div key={p.id} style={{ background: '#141821', borderRadius: 12, overflow: 'hidden', border: '1px solid #1F2430' }}>
                 <div style={{ height: 90, background: p.image_url ? `url(${p.image_url}) center/cover` : '#1A1F2B' }} />
@@ -98,7 +98,7 @@ export default function VehicleTemplate01({ store, products, likeCount, isLiked,
         </div>
       )}
 
-      <footer style={{ padding: '1.5rem 6%', borderTop: '1px solid #1F2430' }}>
+      <footer style={{ padding: '1.5rem 6%', borderTop: '1px solid #1F2430', maxWidth: 1100, margin: '0 auto', boxSizing: 'border-box' }}>
         {(store.shop_region || store.shop_city) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.78rem', color: '#9CA3AF', marginBottom: 10 }}>
             <MapPin size={13} /> {[store.shop_address, store.shop_city, store.shop_region].filter(Boolean).join(', ')}

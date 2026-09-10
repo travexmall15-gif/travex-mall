@@ -63,7 +63,7 @@ export default function ElectronicsTemplate01({ store, products, likeCount, isLi
       {newArrivals.length > 0 && (
         <div style={{ padding: '0.5rem 6% 1rem' }}>
           <h2 style={{ fontSize: '0.72rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7800FF', marginBottom: 10, fontWeight: 800 }}>New Arrivals</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(150px,1fr))', gap: 8 }}>
             {newArrivals.map(p => (
               <div key={p.id} style={{ background: '#fff', borderRadius: 10, overflow: 'hidden', border: '1px solid #E5E7EB' }}>
                 <div style={{ aspectRatio: '1/1', background: p.image_url ? `url(${p.image_url}) center/cover` : '#F3F4F6' }} />
@@ -81,7 +81,7 @@ export default function ElectronicsTemplate01({ store, products, likeCount, isLi
       {products.length > newArrivals.length && (
         <div style={{ padding: '0.5rem 6% 2rem' }}>
           <h2 style={{ fontSize: '0.72rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6B7280', marginBottom: 10, fontWeight: 800 }}>All Products</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(150px,1fr))', gap: 8 }}>
             {products.map(p => (
               <div key={p.id} style={{ background: '#fff', borderRadius: 10, overflow: 'hidden', border: '1px solid #E5E7EB' }}>
                 <div style={{ aspectRatio: '1/1', background: p.image_url ? `url(${p.image_url}) center/cover` : '#F3F4F6' }} />
@@ -95,7 +95,7 @@ export default function ElectronicsTemplate01({ store, products, likeCount, isLi
         </div>
       )}
 
-      <footer style={{ padding: '1.25rem 6%', background: '#fff', borderTop: '1px solid #E5E7EB' }}>
+      <footer style={{ padding: '1.25rem 6%', background: '#fff', borderTop: '1px solid #E5E7EB', maxWidth: 1100, margin: '0 auto', boxSizing: 'border-box' }}>
         {(store.shop_region || store.shop_city) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.75rem', color: '#6B7280', marginBottom: 8 }}>
             <MapPin size={12} /> {[store.shop_address, store.shop_city, store.shop_region].filter(Boolean).join(', ')}

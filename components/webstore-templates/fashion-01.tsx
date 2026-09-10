@@ -60,9 +60,9 @@ export default function FashionTemplate01({ store, products, likeCount, isLiked,
 
       {/* New Arrivals */}
       {newArrivals.length > 0 && (
-        <div style={{ padding: '1rem 6% 2rem' }}>
+        <div style={{ padding: '1rem 6% 2rem' , maxWidth: 1100, margin: '0 auto', boxSizing: 'border-box' }}>
           <h2 style={{ fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8A8A8A', marginBottom: 16 }}>New Arrivals</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: 20 }}>
             {newArrivals.map(p => (
               <div key={p.id}>
                 <div style={{ aspectRatio: '3/4', background: p.image_url ? `url(${p.image_url}) center/cover` : '#F0EBE1', borderRadius: 2, marginBottom: 8 }} />
@@ -76,9 +76,9 @@ export default function FashionTemplate01({ store, products, likeCount, isLiked,
 
       {/* All products */}
       {products.length > newArrivals.length && (
-        <div style={{ padding: '1rem 6% 2rem' }}>
+        <div style={{ padding: '1rem 6% 2rem' , maxWidth: 1100, margin: '0 auto', boxSizing: 'border-box' }}>
           <h2 style={{ fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8A8A8A', marginBottom: 16 }}>Collection</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: 20 }}>
             {products.map(p => (
               <div key={p.id}>
                 <div style={{ aspectRatio: '3/4', background: p.image_url ? `url(${p.image_url}) center/cover` : '#F0EBE1', borderRadius: 2, marginBottom: 8 }} />
@@ -91,7 +91,7 @@ export default function FashionTemplate01({ store, products, likeCount, isLiked,
       )}
 
       {/* Footer */}
-      <footer style={{ padding: '2rem 6%', borderTop: '1px solid #EDE6DA', marginTop: 20 }}>
+      <footer style={{ padding: '2rem 6%', borderTop: '1px solid #EDE6DA', marginTop: 20, maxWidth: 1100, margin: '20px auto 0', boxSizing: 'border-box' }}>
         {(store.shop_region || store.shop_city) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.82rem', color: '#8A8A8A', marginBottom: 10 }}>
             <MapPin size={13} /> {[store.shop_address, store.shop_city, store.shop_region].filter(Boolean).join(', ')}
