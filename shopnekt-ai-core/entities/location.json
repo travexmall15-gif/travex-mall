@@ -1,0 +1,12 @@
+{
+  "type": "location",
+  "name": "Location",
+  "description": "Geographic location (Tanzania regions)",
+  "extractionPatterns": ["dar", "arusha", "mwanza", "dodoma", "moshi", "zanzibar", "tanga", "morogoro"],
+  "valueType": "string",
+  "examples": [
+    "Dar es Salaam",
+    "Arusha",
+    "Mwanza"
+  ]
+}

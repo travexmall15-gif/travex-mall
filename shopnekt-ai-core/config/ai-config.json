@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "defaultLanguage": "sw",
+  "supportedLanguages": ["en", "sw", "fr", "de", "pt", "ar"],
+  "sessionTimeout": 1800000,
+  "enableMemory": true,
+  "enableContext": true,
+  "enableEvaluation": false,
+  "logLevel": "info",
+  "maxContextTurns": 50,
+  "maxMemoryItems": 100
+}

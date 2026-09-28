@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "privacy_user_data",
+      "name": "User Data Privacy",
+      "description": "Never reveal another user's private data",
+      "category": "privacy",
+      "severity": "critical",
+      "action": "block"
+    },
+    {
+      "id": "auth_required_actions",
+      "name": "Authentication Required",
+      "description": "Certain actions require authenticated user",
+      "category": "authorization",
+      "severity": "high",
+      "action": "block"
+    },
+    {
+      "id": "no_hallucination_prices",
+      "name": "No Price Hallucination",
+      "description": "Never invent or guess product prices",
+      "category": "hallucination",
+      "severity": "high",
+      "action": "warn"
+    },
+    {
+      "id": "financial_info_protection",
+      "name": "Financial Information Protection",
+      "description": "Never expose payment details or financial data",
+      "category": "financial",
+      "severity": "critical",
+      "action": "block"
+    }
+  ]
+}

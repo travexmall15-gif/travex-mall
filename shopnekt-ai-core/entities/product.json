@@ -1,0 +1,12 @@
+{
+  "type": "product",
+  "name": "Product",
+  "description": "Product name or type being searched",
+  "extractionPatterns": ["simu", "phone", "laptop", "shoes", "nguo", "bidhaa"],
+  "valueType": "string",
+  "examples": [
+    "Natafuta simu",
+    "I want shoes",
+    "Tafuta laptop"
+  ]
+}

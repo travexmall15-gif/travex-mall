@@ -1,0 +1,24 @@
+{
+  "name": "@shopnekt/ai-core",
+  "version": "1.0.0",
+  "description": "ShopNekt AI Core - Internal AI Foundation for language understanding, intent detection, entity extraction, context management, and controlled tool execution",
+  "private": true,
+  "type": "module",
+  "main": "./core/engine.ts",
+  "types": "./core/ai-types.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "echo \"Tests coming soon\""
+  },
+  "keywords": [
+    "shopnekt",
+    "ai",
+    "nlp",
+    "intent-detection",
+    "entity-extraction",
+    "language-understanding"
+  ],
+  "author": "ShopNekt",
+  "license": "PROPRIETARY"
+}

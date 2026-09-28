@@ -1,0 +1,13 @@
+{
+  "domain": "flashDeals",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "key": "what_are_flash_deals",
+      "title": "Flash Deals (Ofa za Haraka)",
+      "description": "Time-limited special offers from sellers with significant discounts. Limited duration deals.",
+      "relationships": ["products", "sellers", "discounts"],
+      "workflows": ["browse_flash_deals", "claim_deal", "time_tracking"]
+    }
+  ]
+}
