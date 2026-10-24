@@ -5,7 +5,7 @@ import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { sb } from '@/lib/supabase'
-import { ArrowLeft, Package, Store, Loader2, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Package, Store, Loader2, AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function OrderDetailPage({params }: { params: Promise<{ id: string }> }) {
   const { t } = useTranslation()
@@ -25,8 +25,12 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
   useEffect(() => {
     sb.auth.getSession().then(async ({ data: { session } }) => {
       if (!session?.user) { router.replace('/auth'); return }
-      const { data } = await sb.from('orders').select('*').eq('id', id).single()
-      setOrder(data)
+      if (!session.access_token) {router.replace('/auth'); return}
+      const response = await fetch(`/api/customer/orders/${encodeURIComponent(id)}`, {
+        headers: { Authorization: `Bearer ${session.access_token}` }, cache: 'no-store',
+      }).catch(() => null)
+      const result = response?.ok ? await response.json().catch(() => null) : null
+      setOrder(result?.order || null)
       setLoading(false)
     })
   }, [id, router])
@@ -112,11 +116,16 @@ export default function OrderDetailPage({params }: { params: Promise<{ id: strin
             </p>
             <button
               onClick={async () => {
-                await sb.from('orders').update({ status:'delivered' }).eq('id', id)
+                const { data: { session } } = await sb.auth.getSession()
+                if (!session?.access_token) {router.replace('/auth'); return}
+                const response = await fetch(`/api/customer/orders/${encodeURIComponent(id)}/confirm-delivery`, {
+                  method: 'POST', headers: { Authorization: `Bearer ${session.access_token}` },
+                })
+                if (!response.ok) {return}
                 setOrder((o: any) => ({ ...o, status:'delivered' }))
               }}
               style={{ width:'100%', padding:'11px', background:'#059669', border:'none', borderRadius:12, color: '#fff', fontWeight:700, fontSize:'0.875rem', cursor:'pointer', fontFamily:'var(--sn-font)' }}>
-              ✅ {t('orders.confirmReceived')}
+              <span style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', gap:6 }}><CheckCircle size={15} /> {t('orders.confirmReceived')}</span>
             </button>
           </div>
         )}

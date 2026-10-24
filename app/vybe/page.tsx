@@ -77,11 +77,17 @@ export default function VybePage() {
     try {
       const { data, error: err } = await sb
         .from('feed_posts')
-        .select('*')
+        .select('id,store_id,shop_name,caption,post_text,media_url,likes,likes_count,comments,tag,category,price,created_at')
         .order('created_at', { ascending: false })
         .limit(100)
       if (err) {throw err}
-      setPosts(data || [])
+      setPosts((data || []).map(post => ({
+        ...post,
+        shop_logo: null,
+        content: null,
+        media_type: null,
+        university_abbr: null,
+      })))
     } catch {
       setError(t('vybe.couldNotLoad'))
     } finally {
@@ -92,12 +98,33 @@ export default function VybePage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { loadPosts() }, [])
 
+  useEffect(() => {
+    const targetId = typeof window === 'undefined' ? '' : window.location.hash.slice(1)
+    if (!targetId || loading) {return}
+    const index = posts.findIndex(post => post.id === targetId)
+    if (index < 0) {return}
+    if (index >= visible) {setVisible(index + 1); return}
+    requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ block: 'center' }))
+  }, [loading, posts, visible])
+
   const toggleLike = async (post: FeedPost) => {
     const isLiked = liked.has(post.id)
     const n = getLikes(post) + (isLiked ? -1 : 1)
     setLiked(prev => { const s = new Set(prev); isLiked ? s.delete(post.id) : s.add(post.id); return s })
     setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: n, likes_count: n } : p))
-    await sb.from('feed_posts').update({ likes: n, likes_count: n }).eq('id', post.id)
+    try {
+      const response = await fetch('/api/vybe/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ post_id: post.id, liked: !isLiked }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok || typeof result.likes !== 'number') {throw new Error('Like update failed')}
+      setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: result.likes, likes_count: result.likes } : p))
+    } catch {
+      setLiked(prev => { const s = new Set(prev); isLiked ? s.add(post.id) : s.delete(post.id); return s })
+      setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: getLikes(post), likes_count: getLikes(post) } : p))
+    }
   }
 
   const [copiedId, setCopiedId] = useState<string | null>(null)
@@ -356,7 +383,7 @@ function PostCard({ post, liked, onLike, onShare, copied, ago, t }: PostCardProp
   const isNew    = (Date.now() - new Date(post.created_at).getTime()) < 3600000 * 6
 
   return (
-    <article className="vybe-card">
+    <article id={post.id} className="vybe-card">
 
       {/* ── Shop header ── */}
       <div style={{ display:'flex', alignItems:'center', gap:'0.7rem', padding:'0.9rem 1rem 0' }}>

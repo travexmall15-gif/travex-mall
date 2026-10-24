@@ -12,7 +12,7 @@ export function AIChatWidget({
   const [open, setOpen]   = useState(false)
   const [msgs, setMsgs]   = useState<Msg[]>([{
     role: 'bot',
-    content: welcomeMessage || `👋 Habari! Mimi ni **360 AI** — msaidizi wa duka la **${shopName}**.\n\nNinaweza kukusaidia:\n• 🛍️ Kupata bidhaa\n• 💰 Kuangalia bei\n• 📦 Kuuliza kuhusu delivery\n• 💬 Kuwasiliana na seller\n\nUnaweza kuniuliza nini?`
+    content: welcomeMessage || `Habari! Mimi ni **360 AI** — msaidizi wa duka la **${shopName}**.\n\nNinaweza kukusaidia:\n• Kupata bidhaa\n• Kuangalia bei\n• Kuuliza kuhusu delivery\n• Kuwasiliana na seller\n\nUnaweza kuniuliza nini?`
   }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -43,7 +43,7 @@ export function AIChatWidget({
       const data = await res.json()
       setMsgs([...newMsgs, { role: 'bot', content: data.reply || 'Samahani, jaribu tena.' }])
     } catch {
-      setMsgs([...newMsgs, { role: 'bot', content: '❌ Tatizo limetokea. Jaribu tena.' }])
+      setMsgs([...newMsgs, { role: 'bot', content: 'Tatizo limetokea. Jaribu tena.' }])
     }
     setLoading(false)
   }

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/hooks/useTranslation'
 import { sb } from '@/lib/supabase'
 import { useState, useEffect } from 'react'
-import { Bell, Lock, Info, LogOut, ChevronRight, Shield, FileText, HelpCircle, Trash2, User } from 'lucide-react'
+import { Bell, Lock, Info, LogOut, ChevronRight, Shield, FileText, HelpCircle, Trash2, User, TriangleAlert } from 'lucide-react'
 
 export default function SettingsPage() {
   const { t } = useTranslation()
@@ -164,7 +164,7 @@ export default function SettingsPage() {
         </div>
 
         <p style={{ textAlign:'center', fontSize:'0.65rem', color:'#CBD5E1', letterSpacing:'0.05em' }}>
-          ShopNekt v1.0.0 &middot; from QNEX360
+          shopnekt v1.0.0 &middot; from QNEX360
         </p>
       </div>
 
@@ -172,7 +172,7 @@ export default function SettingsPage() {
       {showDelete && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:999, display:'flex', alignItems:'center', justifyContent:'center', padding:'1rem' }}>
           <div style={{ background:'var(--sn-bg)', borderRadius:20, padding:'1.5rem', maxWidth:340, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
-            <div style={{ fontSize:'1.5rem', textAlign:'center', marginBottom:12 }}>⚠️</div>
+            <div style={{ display:'flex', justifyContent:'center', marginBottom:12, color:'#D97706' }}><TriangleAlert size={26} /></div>
             <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', textAlign:'center', marginBottom:8 }}>{t('settings.deleteConfirmTitle')}</h3>
             <p style={{ fontSize:'0.82rem', color:'var(--sn-muted)', textAlign:'center', lineHeight:1.6, marginBottom:'1.25rem' }}>
               {t('settings.deleteConfirmDesc')}

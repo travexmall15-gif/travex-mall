@@ -166,7 +166,7 @@ export default function ChatPage({params }: { params: Promise<{ id: string }> })
 
         {!loading && messages.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--sn-subtle)', fontSize: '0.85rem' }}>
-            {t('messages.noConversations') || 'Start the conversation! 👋'}
+            {t('messages.noConversations') || 'Start the conversation!'}
           </div>
         )}
 

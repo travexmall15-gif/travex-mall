@@ -11,7 +11,7 @@ type Order = {
   id: string
   product_name: string
   store_name: string
-  status: 'pending' | 'confirmed' | 'rejected'
+  status: string
   total_amount: number
   created_at: string
   image_url?: string
@@ -23,6 +23,8 @@ const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
   pending:   { bg:'#FEF3C7', color:'#92400E' },
   confirmed: { bg:'#059669', color:'#fff' },
   rejected:  { bg:'#DC2626', color:'#fff' },
+  payment_pending: { bg:'#7800FF', color:'#fff' },
+  delivered: { bg:'#059669', color:'#fff' },
 }
 
 export default function OrdersPage() {
@@ -35,37 +37,15 @@ export default function OrdersPage() {
 
   useEffect(() => {
     async function loadOrders() {
-      // Try Supabase Auth session first
       const { data: { session } } = await sb.auth.getSession()
-      if (session?.user) {
-        const { data } = await sb
-          .from('orders')
-          .select('id,product_name,store_name,status,total_amount,created_at,image_url')
-          .eq('buyer_id', session.user.id)
-          .order('created_at', { ascending: false })
-        setOrders(data || [])
-        setLoading(false)
-        return
-      }
-      // Fallback: OTP customer session (localStorage)
-      try {
-        const raw = localStorage.getItem('sn_customer_session')
-        if (raw) {
-          const sess = JSON.parse(raw)
-          if (sess?.id) {
-            const { data } = await sb
-              .from('orders')
-              .select('id,product_name,store_name,status,total_amount,created_at,image_url')
-              .eq('buyer_id', sess.id)
-              .order('created_at', { ascending: false })
-            setOrders(data || [])
-            setLoading(false)
-            return
-          }
-        }
-      } catch {}
-      // No session — redirect to auth
-      router.replace('/auth')
+      if (!session?.user || !session.access_token) {router.replace('/auth'); return}
+      const response = await fetch('/api/customer/orders', {
+        headers: { Authorization: `Bearer ${session.access_token}` }, cache: 'no-store',
+      }).catch(() => null)
+      if (response?.status === 401) {router.replace('/auth'); return}
+      const result = response?.ok ? await response.json().catch(() => null) : null
+      setOrders(Array.isArray(result?.orders) ? result.orders : [])
+      setLoading(false)
     }
     loadOrders()
   }, [router])
@@ -124,7 +104,7 @@ export default function OrdersPage() {
         {!loading && filtered.length > 0 && (
           <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
             {filtered.map(order => {
-              const st = STATUS_STYLE[order.status]
+              const st = STATUS_STYLE[order.status] || STATUS_STYLE.pending
               return (
                 <div key={order.id} style={{ background:'var(--sn-bg)', borderRadius:16, border:`1.5px solid ${order.status==='rejected'?'#FEE2E2':'var(--sn-border)'}`, padding:'14px 16px', boxShadow:'0 1px 4px rgba(15,23,42,0.05)' }}>
                   <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12 }}>

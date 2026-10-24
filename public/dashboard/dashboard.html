@@ -734,12 +734,7 @@ function applyPlan() {
 // ── LOAD DATA ─────────────────────────────────────────
 async function loadOrders() {
   try {
-    const sess = JSON.parse(localStorage.getItem('travex_session') || '{}')
-    const isCampus = sess.market === 'campus'
-    const idCol = isCampus ? 'store_id' : 'shop_id'
-    const { data, error } = await sb.from('orders')
-      .select('*').eq(idCol, SHOP_ID).order('created_at', {ascending:false})
-    if (error) throw new Error(error.message)
+    const data = await DB.orders.getAll(SHOP_ID)
     ALL_ORDERS = data || []
   } catch(e) {
     console.error('[orders]', e.message)
@@ -753,9 +748,7 @@ async function loadOrders() {
 
 async function loadSales() {
   try {
-    const { data, error } = await sb.from('seller_sales')
-      .select('*').eq('store_id', SHOP_ID).order('date', {ascending:false})
-    if (error) throw new Error(error.message)
+    const data = await DB.sales.getAll(SHOP_ID)
     ALL_SALES = data || []
   } catch(e) {
     console.error('[sales]', e.message)
@@ -765,13 +758,7 @@ async function loadSales() {
 
 async function loadProducts() {
   try {
-    const sess = JSON.parse(localStorage.getItem('travex_session') || '{}')
-    const isCampus = sess.market === 'campus'
-    const tbl = isCampus ? 'campus_products' : 'products'
-    const idCol = isCampus ? 'store_id' : 'shop_id'
-    const { data, error } = await sb.from(tbl)
-      .select('*').eq(idCol, SHOP_ID).order('created_at', {ascending:false})
-    if (error) throw new Error(error.message)
+    const data = await DB.products.getAll(SHOP_ID)
     ALL_PRODUCTS = data || []
   } catch(e) {
     console.error('[products]', e.message)
@@ -1006,7 +993,7 @@ function openOrderModal(id) {
 
 async function confirmOrder() {
   if (!EDITING_ORDER) return
-  const { error } = await sb.from('orders').update({status:'confirmed'}).eq('id', EDITING_ORDER.id)
+  const { error } = await DB.orders.updateStatus(EDITING_ORDER.id, 'confirmed')
   if (!error) {
     toast('Order confirmed!')
     EDITING_ORDER.status = 'confirmed'
@@ -1040,10 +1027,12 @@ async function saveProduct() {
   if (!name) { toast('Please enter a product name'); return }
 
   if (EDITING_PROD) {
-    await sb.from('products').update({name, price, description:desc}).eq('id', EDITING_PROD.id)
+    const { error } = await DB.products.save({ id: EDITING_PROD.id, name, price, description:desc })
+    if (error) { toast('Could not update product'); return }
     toast('Product updated')
   } else {
-    await sb.from('products').insert({name, price, description:desc, shop_id:SHOP_ID, created_at: new Date().toISOString()})
+    const { error } = await DB.products.save({ name, price, description:desc })
+    if (error) { toast('Could not add product'); return }
     toast('Product added')
   }
   EDITING_PROD = null
@@ -1053,7 +1042,8 @@ async function saveProduct() {
 
 async function deleteProduct() {
   if (!EDITING_PROD || !confirm('Delete this product?')) return
-  await sb.from('products').delete().eq('id', EDITING_PROD.id)
+  const { error } = await DB.products.delete(EDITING_PROD.id)
+  if (error) { toast('Could not delete product'); return }
   toast('Product deleted')
   EDITING_PROD = null
   await loadProducts()
@@ -1068,7 +1058,8 @@ async function saveSale() {
   const date   = document.getElementById('salDate').value || new Date().toISOString().split('T')[0]
   if (!desc || !amount) { toast('Fill in all fields'); return }
 
-  await sb.from('seller_sales').insert({type, description:desc, amount, date, store_id:SHOP_ID, created_at: new Date().toISOString()})
+  const { error } = await DB.sales.save({type, description:desc, amount, date})
+  if (error) { toast('Could not save transaction'); return }
   toast('Transaction saved')
   await loadSales()
   renderFinance()

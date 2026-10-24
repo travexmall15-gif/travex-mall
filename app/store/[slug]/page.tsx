@@ -175,10 +175,13 @@ export default function StorePage({
     if (tab !== 'posts' || !store || storePosts.length > 0 || storePostsLoading) {return}
     setStorePostsLoading(true)
     sb.from('feed_posts')
-      .select('id, content, post_text, caption, media_url, media_type, likes, likes_count, created_at')
+      .select('id, content, post_text, caption, media_url, likes, likes_count, created_at')
       .eq('store_id', store.id)
       .order('created_at', { ascending: false })
-      .then(({ data }) => { setStorePosts(data || []); setStorePostsLoading(false) })
+      .then(({ data }) => {
+        setStorePosts((data || []).map(post => ({ ...post, media_type: null })))
+        setStorePostsLoading(false)
+      })
   }, [tab, store?.id])
 
   const newArrivals = [...products]
@@ -209,11 +212,14 @@ export default function StorePage({
     setPlacing(true)
 
     const total = cartItem.price * qty
+    const { data: { session } } = await sb.auth.getSession()
+    const orderHeaders: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (session?.access_token) {orderHeaders.Authorization = `Bearer ${session.access_token}`}
 
     // Route to correct orders table based on store type
     const orderResponse = await fetch(`/api/store/${encodeURIComponent(store!.id)}/orders`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: orderHeaders,
       body: JSON.stringify({
         product_id: cartItem.id,
         customer_name: orderName.trim(),
@@ -233,14 +239,14 @@ export default function StorePage({
     const wa = (store!.shop_whatsapp || store!.owner_phone || '').replace(/\D/g, '')
     if (wa) {
       const msg = encodeURIComponent(
-        `🛍️ *Order Mpya!*\n\n` +
-        `📦 Products: *${cartItem.name}*\n` +
-        `🔢 Quantity: *${qty}*\n` +
-        `💰 Total: *${fmt(total)}*\n\n` +
-        `👤 Mteja: *${orderName}*\n` +
-        `📱 Simu: *${orderPhone}*\n` +
+        `*Order Mpya!*\n\n` +
+        `Products: *${cartItem.name}*\n` +
+        `Quantity: *${qty}*\n` +
+        `Total: *${fmt(total)}*\n\n` +
+        `Mteja: *${orderName}*\n` +
+        `Simu: *${orderPhone}*\n` +
         (orderLocation ? `Location: *${orderLocation}*\n` : '') +
-        (orderNotes ? `📝 Notes: ${orderNotes}\n` : '') +
+        (orderNotes ? `Notes: ${orderNotes}\n` : '') +
         `\n_From ShopNekt_`
       )
       window.open(`https://wa.me/${wa}?text=${msg}`, '_blank')
@@ -313,7 +319,7 @@ export default function StorePage({
         products={products}
         likeCount={likeCount}
         isLiked={liked}
-        onLike={() => { if (!likeBusy) toggleLikeShop() }}
+        onLike={() => { if (!likeBusy) { toggleLikeShop() } }}
         onMessage={() => setShowMsg(true)}
       />
     )
@@ -650,7 +656,7 @@ export default function StorePage({
                   <CheckCircle style={{ width: 30, height: 30, color: '#22C55E' }} />
                 </div>
                 <h3 style={{ fontFamily: 'var(--sn-font)', fontSize: '1.3rem', color: '#111827',
-                  marginBottom: 8 }}>Order Placed! 🎉</h3>
+                  marginBottom: 8 }}>Order Placed!</h3>
                 <p style={{ color: '#6B7280', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
                   Your order for <strong style={{ color: '#111827' }}>{cartItem.name}</strong> has been sent to the seller.
                   They will contact you on WhatsApp shortly.
@@ -901,8 +907,11 @@ export default function StorePage({
                   <button
                     onClick={async () => {
                       if (!msgName.trim() || !msgText.trim()) {return}
-                      await sb.from('store_messages').insert({ store_id: store.id, sender_name: msgName, message: msgText, created_at: new Date().toISOString() })
-                      setMsgSent(true)
+                      const response = await fetch('/api/store-messages', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ store_id: store.id, sender_name: msgName, message: msgText }),
+                      }).catch(() => null)
+                      if (response?.ok) {setMsgSent(true)}
                     }}
                     disabled={!msgName.trim() || !msgText.trim()}
                     style={{ flex: 2, padding: '11px', borderRadius: 10, background: accentColor, color: '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: 'var(--sn-font)', opacity: (!msgName.trim() || !msgText.trim()) ? 0.5 : 1 }}>

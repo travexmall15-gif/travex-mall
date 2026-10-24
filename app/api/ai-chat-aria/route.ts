@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-)
+import { createServiceSupabase, isActiveSeller } from '@/lib/security/server-supabase'
+import { readSellerSession } from '@/lib/security/signed-session'
+import { getClientIp, rateLimit } from '@/lib/security/rate-limit'
+import { hasSameOrigin } from '@/lib/security/http'
 
 const P = (n: number) => `TZS ${Number(n||0).toLocaleString()}`
 const D = (d: string) => new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})
@@ -66,10 +64,17 @@ function extractTerm(msg: string) {
 
 const fmt = P, dt = D
 
+async function visibleStoreIds(sb: ReturnType<typeof createServiceSupabase>, storeId?: string) {
+  if (storeId) {return [storeId]}
+  const { data } = await sb.from('pending_payments').select('id').eq('status', 'approved').limit(1000)
+  return (data || []).map(row => row.id as string)
+}
+
 //  Response generators 
-async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, storeId?: string, shopName?: string, shopCategory?: string, userId?: string) {
+async function respond(sb: ReturnType<typeof createServiceSupabase>, intent: string, msg: string, l: 'sw'|'en', mode: string, storeId?: string, shopName?: string, shopCategory?: string, userId?: string) {
 
   const sw = l === 'sw'
+  const visibleStores = await visibleStoreIds(sb, storeId)
 
   //  GREET 
   if (intent === 'greet') {
@@ -87,14 +92,14 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   //  PRODUCTS 
   if (intent === 'products') {
     if (storeId) {
-      const { data } = await sb.from('products').select('name,price,category').eq('shop_id',storeId).eq('is_available',true).limit(12)
+      const { data } = await sb.from('products').select('name,price,category').eq('store_id',storeId).eq('is_available',true).limit(12)
       if (data?.length) {
         const list = data.map((p,i) => `${i+1}. **${p.name}** — ${fmt(p.price)}`).join('\n')
         return sw ? ` **Bidhaa za ${shopName}** (${data.length}):\n\n${list}\n\nUnataka kujua zaidi? Niulize!`
                   : ` **Products at ${shopName}** (${data.length}):\n\n${list}\n\nWant details on any item? Just ask!`
       }
     }
-    const { data: shops } = await sb.from('shops').select('shop_name,shop_category').eq('is_verified',true).limit(6)
+    const { data: shops } = await sb.from('pending_payments').select('shop_name,shop_category').eq('status','approved').limit(6)
     const list = shops?.map(s => `• ${s.shop_name} — ${s.shop_category}`).join('\n') || ''
     return sw ? ` **Maduka ya Verified:**\n\n${list}\n\n Nenda /market kuona bidhaa zote!`
               : ` **Verified Stores:**\n\n${list}\n\n Go to /market to browse all products!`
@@ -103,7 +108,7 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   //  PRICE 
   if (intent === 'price') {
     if (storeId) {
-      const { data } = await sb.from('products').select('name,price,original_price').eq('shop_id',storeId).order('price',{ascending:true}).limit(8)
+      const { data } = await sb.from('products').select('name,price,original_price').eq('store_id',storeId).order('price',{ascending:true}).limit(8)
       if (data?.length) {
         const list = data.map(p => {
           let r = `• ${p.name}: **${fmt(p.price)}**`
@@ -114,9 +119,9 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
                   : ` **Prices at ${shopName}:**\n\n${list}\n\n Message the seller for special prices!`
       }
     }
-    const { data: deals } = await sb.from('flash_deals').select('product_name,discounted_price,discount_pct').eq('is_active',true).limit(4)
+    const { data: deals } = visibleStores.length ? await sb.from('flash_deals').select('product_name,deal_price,discount_pct').in('store_id',visibleStores).eq('status','active').gt('ends_at',new Date().toISOString()).limit(4) : { data: [] }
     if (deals?.length) {
-      const list = deals.map(d => `• ${d.product_name}: **${fmt(d.discounted_price)}** (-${d.discount_pct}%)`).join('\n')
+      const list = deals.map(d => `• ${d.product_name}: **${fmt(d.deal_price)}** (-${d.discount_pct}%)`).join('\n')
       return sw ? ` **Bei Poa za Flash Deals:**\n\n${list}\n\n Nenda /flash-deals kununua!`
                 : ` **Best Prices on Flash Deals:**\n\n${list}\n\n Go to /flash-deals to buy now!`
     }
@@ -126,11 +131,11 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  DEALS 
   if (intent === 'deals') {
-    const { data } = await sb.from('flash_deals').select('product_name,original_price,discounted_price,discount_pct,ends_at').eq('is_active',true).order('discount_pct',{ascending:false}).limit(5)
+    const { data } = visibleStores.length ? await sb.from('flash_deals').select('product_name,original_price,deal_price,discount_pct,ends_at').in('store_id',visibleStores).eq('status','active').gt('ends_at',new Date().toISOString()).order('discount_pct',{ascending:false}).limit(5) : { data: [] }
     if (data?.length) {
       const list = data.map((d,i) => {
         const hrs = Math.max(0, Math.floor((new Date(d.ends_at).getTime()-Date.now())/3600000))
-        return `${i+1}. **${d.product_name}**\n   ${fmt(d.original_price)} → **${fmt(d.discounted_price)}** (-${d.discount_pct}%) ⏰ ${hrs}h`
+        return `${i+1}. **${d.product_name}**\n   ${fmt(d.original_price)} → **${fmt(d.deal_price)}** (-${d.discount_pct}%) ${hrs}h remaining`
       }).join('\n\n')
       return sw ? ` **Flash Deals za Sasa:**\n\n${list}\n\n /flash-deals kununua sasa!`
                 : ` **Current Flash Deals:**\n\n${list}\n\n Go to /flash-deals to buy now!`
@@ -141,11 +146,11 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  GROUP BUY 
   if (intent === 'group') {
-    const { data } = await sb.from('group_buys').select('product_name,target_members,current_members,discount_pct').eq('status','active').limit(4)
+    const { data } = visibleStores.length ? await sb.from('group_orders').select('product_name,min_members,current_members,discount_pct').in('store_id',visibleStores).eq('status','open').gt('expires_at',new Date().toISOString()).limit(4) : { data: [] }
     if (data?.length) {
       const list = data.map((g,i) => {
-        const pct = Math.round((g.current_members/g.target_members)*100)
-        return `${i+1}. **${g.product_name}**\n    ${g.current_members}/${g.target_members} (${pct}%) — ${g.discount_pct}% discount`
+        const pct = Math.round((g.current_members/g.min_members)*100)
+        return `${i+1}. **${g.product_name}**\n    ${g.current_members}/${g.min_members} (${pct}%) — ${g.discount_pct}% discount`
       }).join('\n\n')
       return sw ? ` **Group Buy Zinazoendela:**\n\n${list}\n\n /group-buy kujiunga!`
                 : ` **Active Group Buys:**\n\n${list}\n\n Go to /group-buy to join!`
@@ -160,8 +165,7 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
                            : ` Please sign in first to view your orders.\n /auth`}
     const { data } = await sb.from('orders').select('product_name,status,total_amount,store_name,created_at').eq('buyer_id',userId).order('created_at',{ascending:false}).limit(6)
     if (data?.length) {
-      const e = (s:string) => s==='confirmed'?'':s==='rejected'?'':s==='delivered'?'':'⏳'
-      const list = data.map(o => `${e(o.status)} **${o.product_name}**\n   ${fmt(o.total_amount)} · ${o.store_name} · ${dt(o.created_at)}`).join('\n\n')
+      const list = data.map(o => `**${o.product_name}**\n   ${fmt(o.total_amount)} · ${o.store_name} · ${dt(o.created_at)}`).join('\n\n')
       const rej = data.filter(o=>o.status==='rejected').length
       let r = sw ? ` **Orders Zako:**\n\n${list}` : ` **Your Orders:**\n\n${list}`
       if (rej) {r += sw ? `\n\n ${rej} order imekataliwa — nenda /orders kufanya malipo.` : `\n\n ${rej} order(s) rejected — go to /orders to complete payment.`}
@@ -214,24 +218,22 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
 
   //  CAMPUS 
   if (intent === 'campus') {
-    const { data } = await sb.from('campus_universities').select('name,abbr').limit(6)
-    const unis = data?.map(u => `• ${u.name} (${u.abbr})`).join('\n') || '• UDSM, Ardhi, MUHAS, TIA na zaidi'
     return sw
-      ? ` **Campus Market — Soko la Wanafunzi:**\n\nWanafunzi wanauza kwa wanafunzi wenzao!\n\n**Vyuo vilivyopo:**\n${unis}\n\n Angalia: /campus\n Unataka kuuza? /campus-apply`
-      : ` **Campus Market — Student Marketplace:**\n\nStudents sell to fellow students!\n\n**Available campuses:**\n${unis}\n\n Browse: /campus\n Want to sell? /campus-apply`
+      ? `Campus Market haipatikani kwa sasa. Tumia Business Market kutafuta maduka na bidhaa.`
+      : `Campus Market is not available. Use Business Market to browse stores and products.`
   }
 
   //  SELLER ANALYTICS 
   if (intent === 'seller_analytics') {
-    if (userId) {
-      const { data } = await sb.from('orders').select('status,total_amount').eq('buyer_id',userId)
+    if (mode === 'seller' && storeId) {
+      const { data } = await sb.from('orders').select('status,total_amount').eq('store_id',storeId).limit(500)
       if (data?.length) {
         const total = data.reduce((s,o)=>s+(o.total_amount||0),0)
-        const confirmed = data.filter(o=>o.status==='confirmed').length
+        const confirmed = data.filter(o=>o.status==='completed').length
         const pending = data.filter(o=>o.status==='pending').length
         return sw
-          ? ` **Takwimu za Duka Lako:**\n\n Mapato yote: **${fmt(total)}**\n Orders zilizokamilika: ${confirmed}\n⏳ Orders zinazongoja: ${pending}\n Orders zote: ${data.length}\n\n Jibu orders haraka ili kuongeza mauzo!`
-          : ` **Your Store Analytics:**\n\n Total revenue: **${fmt(total)}**\n Completed orders: ${confirmed}\n⏳ Pending orders: ${pending}\n Total orders: ${data.length}\n\n Respond to orders quickly to boost sales!`
+          ? ` **Takwimu za Duka Lako:**\n\n Mapato yote: **${fmt(total)}**\n Orders zilizokamilika: ${confirmed}\nOrders zinazongoja: ${pending}\n Orders zote: ${data.length}\n\n Jibu orders haraka ili kuongeza mauzo!`
+          : ` **Your Store Analytics:**\n\n Total revenue: **${fmt(total)}**\n Completed orders: ${confirmed}\nPending orders: ${pending}\n Total orders: ${data.length}\n\n Respond to orders quickly to boost sales!`
       }
     }
     return sw
@@ -263,14 +265,14 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   //  HELP 
   if (intent === 'help') {
     return sw
-      ? `ℹ **Mwongozo wa ShopNekt:**\n\n /home — Ukurasa mkuu\n /market — Business Market\n /campus — Campus Market\n /vybe — Social Vybe\n /flash-deals — Flash Deals\n /group-buy — Group Buy\n /orders — Orders zangu\n /messages — Inbox\n /open-store — Fungua duka\n /settings — Mipangilio\n /ai — 360 AI\n\nNiulize chochote! `
-      : `ℹ **ShopNekt Guide:**\n\n /home — Home page\n /market — Business Market\n /campus — Campus Market\n /vybe — Social Vybe\n /flash-deals — Flash Deals\n /group-buy — Group Buy\n /orders — My Orders\n /messages — Inbox\n /open-store — Open a shop\n /settings — Settings\n /ai — 360 AI\n\nAsk me anything! `
+      ? `**Mwongozo wa shopnekt:**\n\n /home — Ukurasa mkuu\n /market — Business Market\n /vybe — Social Vybe\n /flash-deals — Flash Deals\n /group-buy — Group Buy\n /orders — Orders zangu\n /messages — Inbox\n /open-store — Fungua duka\n /settings — Mipangilio\n /ai — 360 AI\n\nNiulize chochote! `
+      : `**shopnekt Guide:**\n\n /home — Home page\n /market — Business Market\n /vybe — Social Vybe\n /flash-deals — Flash Deals\n /group-buy — Group Buy\n /orders — My Orders\n /messages — Inbox\n /open-store — Open a shop\n /settings — Settings\n /ai — 360 AI\n\nAsk me anything! `
   }
 
   //  VYBE 
   if (intent === 'vybe') {
-    const { data } = await sb.from('feed_posts').select('caption,store_name,likes,likes_count').order('likes_count',{ascending:false}).limit(3)
-    const list = data?.map(p => `• "${(p.caption||'').slice(0,40)}" — ${p.store_name} (${p.likes_count||0})`).join('\n') || ''
+    const { data } = visibleStores.length ? await sb.from('feed_posts').select('caption,shop_name,likes,likes_count').in('store_id',visibleStores).order('likes_count',{ascending:false}).limit(3) : { data: [] }
+    const list = data?.map(p => `• "${(p.caption||'').slice(0,40)}" — ${p.shop_name} (${p.likes_count||0})`).join('\n') || ''
     return sw
       ? ` **Social Vybe:**\n\nGundua bidhaa kupitia picha na videos!\n\n${list ? ` **Trending sasa:**\n${list}\n\n` : ''} Nenda /vybe!`
       : ` **Social Vybe:**\n\nDiscover products through photos and videos!\n\n${list ? ` **Trending now:**\n${list}\n\n` : ''} Go to /vybe!`
@@ -293,18 +295,19 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   //  SEARCH / FALLBACK 
   const term = extractTerm(msg)
   if (term.length > 1) {
-    const { data: shops } = await sb.from('shops').select('shop_name,shop_category,shop_city').or(`shop_name.ilike.%${term}%,shop_category.ilike.%${term}%,shop_description.ilike.%${term}%`).limit(4)
-    const { data: products } = await sb.from('products').select('name,price,store_name').ilike('name',`%${term}%`).limit(4)
+    const safeTerm = term.replace(/[%_,()]/g, ' ').slice(0, 80).trim()
+    const { data: shops } = await sb.from('pending_payments').select('id,shop_name,shop_category,shop_region').eq('status','approved').ilike('shop_name',`%${safeTerm}%`).limit(4)
+    const { data: products } = visibleStores.length ? await sb.from('products').select('name,price').in('store_id',visibleStores).eq('is_active',true).eq('is_available',true).ilike('name',`%${safeTerm}%`).limit(4) : { data: [] }
     if (shops?.length || products?.length) {
       let r = sw ? ` **Nimepata "${term}":**\n\n` : ` **Found for "${term}":**\n\n`
       if (products?.length) {
         r += sw ? ` **Bidhaa:**\n` : ` **Products:**\n`
-        products.forEach(p => { r += `• ${p.name} — ${fmt(p.price)} (${p.store_name})\n` })
+        products.forEach(p => { r += `• ${p.name} — ${fmt(p.price)}\n` })
         r += '\n'
       }
       if (shops?.length) {
         r += sw ? ` **Maduka:**\n` : ` **Stores:**\n`
-        shops.forEach(s => { r += `• ${s.shop_name} — ${s.shop_category} (${s.shop_city||'Online'})\n` })
+        shops.forEach(s => { r += `• ${s.shop_name} — ${s.shop_category} (${s.shop_region||'Online'})\n` })
       }
       return r + (sw ? '\n /market kwa zaidi!' : '\n /market for more!')
     }
@@ -343,4 +346,52 @@ async function respond(intent: string, msg: string, l: 'sw'|'en', mode: string, 
   return sw
     ? 'Samahani, sijaelewa vizuri. Ninaweza kukusaidia na bidhaa, bei, orders, na maswali yoyote kuhusu ShopNekt. Uliza tena!'
     : "I didn't quite understand. I can help with products, prices, orders, and anything else on ShopNekt. Please ask again!"
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+export async function POST(request: NextRequest) {
+  if (!hasSameOrigin(request)) {return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 })}
+  const limit = rateLimit(`ai-chat-aria:${getClientIp(request)}`, 20, 60)
+  if (!limit.allowed) {return NextResponse.json({ error: 'Too many requests.' }, { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } })}
+
+  let body: unknown
+  try { body = await request.json() } catch { body = null }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })}
+  const input = body as Record<string, unknown>
+  const message = typeof input.message === 'string' ? input.message.trim() : ''
+  if (!message || message.length > 2000) {return NextResponse.json({ error: 'Invalid message.' }, { status: 400 })}
+
+  const mode = input.mode === 'seller' ? 'seller' : input.mode === 'store' ? 'store' : 'buyer'
+  const sellerSession = mode === 'seller' ? readSellerSession(request) : null
+  if (mode === 'seller' && (!sellerSession || sellerSession.market !== 'business')) {
+    return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })
+  }
+  const sb = createServiceSupabase()
+  let storeId: string | undefined
+  let shopName = ''
+  let shopCategory = 'General'
+  if (mode === 'seller') {
+    if (!sellerSession || !await isActiveSeller(sb, sellerSession.sellerId, 'business')) {return NextResponse.json({ error: 'Seller account is not active.' }, { status: 403 })}
+    storeId = sellerSession.sellerId
+    const { data } = await sb.from('pending_payments').select('shop_name,shop_category').eq('id', storeId).maybeSingle()
+    shopName = data?.shop_name || ''
+    shopCategory = data?.shop_category || 'General'
+  } else if (mode === 'store') {
+    const requestedStoreId = typeof input.store_id === 'string' ? input.store_id : ''
+    if (!UUID.test(requestedStoreId)) {return NextResponse.json({ error: 'Invalid store.' }, { status: 400 })}
+    const { data } = await sb.from('pending_payments').select('id,shop_name,shop_category,selected_template,webstore_status')
+      .eq('id', requestedStoreId).eq('status', 'approved').maybeSingle()
+    if (!data || (data.selected_template && data.webstore_status !== 'published')) {return NextResponse.json({ error: 'Store not found.' }, { status: 404 })}
+    storeId = data.id
+    shopName = data.shop_name || ''
+    shopCategory = data.shop_category || 'General'
+  }
+
+  try {
+    const reply = await respond(sb, getIntent(message), message, lang(message), mode, storeId, shopName, shopCategory)
+    return NextResponse.json({ reply }, { headers: { 'Cache-Control': 'no-store' } })
+  } catch {
+    return NextResponse.json({ error: 'Unable to answer right now.' }, { status: 503 })
+  }
 }

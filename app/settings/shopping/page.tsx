@@ -49,8 +49,16 @@ export default function ShoppingPage() {
       if (id) {
         setPreferredShops(await listPreferredShops(id))
         try {
-          const { data } = await sb.from('orders').select('status').eq('buyer_id', id)
-          if (data) {setOrderCount({ total: data.length, pending: data.filter(o => o.status==='pending').length })}
+          const { data: { session } } = await sb.auth.getSession()
+          if (session?.access_token) {
+            const response = await fetch('/api/customer/orders', {
+              headers: { Authorization: `Bearer ${session.access_token}` }, cache: 'no-store',
+            })
+            const result = response.ok ? await response.json().catch(() => null) : null
+            if (Array.isArray(result?.orders)) {
+              setOrderCount({ total: result.orders.length, pending: result.orders.filter((o: any) => o.status === 'pending').length })
+            }
+          }
         } catch {}
       }
       setPreferredLoading(false)

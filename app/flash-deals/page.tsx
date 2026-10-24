@@ -71,7 +71,7 @@ function DealCard({ deal, featured = false }: { deal: Deal; featured?: boolean }
   const isEndingSoon = (new Date(deal.ends_at).getTime() - Date.now()) < 7200000
 
   return (
-    <article style={{
+    <article id={`deal-${deal.id}`} style={{
       background: 'var(--sn-bg)',
       border: featured ? '2px solid var(--sn-primary)' : '1.5px solid var(--sn-border)',
       borderRadius: featured ? 24 : 20,
@@ -279,13 +279,19 @@ export default function FlashDealsPage() {
 
   useEffect(() => {
     sb.from('flash_deals')
-      .select('*')
+      .select('id,store_id,shop_name,product_id,product_name,product_image,original_price,deal_price,discount_pct,ends_at,max_orders,current_orders,status,created_at')
       .eq('status', 'active')
       .gt('ends_at', new Date().toISOString())
       .order('ends_at', { ascending: true })
       .then(({ data }) => { setDeals(data || []); setLoading(false) })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const targetId = typeof window === 'undefined' ? '' : window.location.hash.slice(1)
+    if (!targetId || deals.length === 0) {return}
+    requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ block: 'center' }))
+  }, [deals])
 
   const featured     = deals[0] || null
   const rest         = deals.slice(1)
@@ -311,7 +317,7 @@ export default function FlashDealsPage() {
         {/* Loading */}
         {loading && (
           <div style={{ textAlign:'center', padding:'6rem 0' }}>
-            <div style={{ fontSize:40, marginBottom:14 }}>⚡</div>
+            <Zap size={38} color="var(--sn-primary)" style={{ marginBottom:14 }} />
             <p style={{ color:'var(--sn-muted)', fontSize:15, fontWeight:500 }}>{t('flash.loading')}</p>
           </div>
         )}

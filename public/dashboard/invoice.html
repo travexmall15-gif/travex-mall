@@ -64,10 +64,7 @@ let shopData = null, invoices = [];
 })();
 
 async function loadInvoices() {
-  const { data } = await sb.from('seller_sales')
-    .select('*').eq('store_id', shopData?.id)
-    .eq('category','invoice').order('created_at',{ascending:false});
-  invoices = data || [];
+  invoices = (await DB.sales.getAll(shopData?.id)).filter(row => row.category === 'invoice');
   renderInvoices();
 }
 
@@ -101,12 +98,13 @@ async function createInvoice() {
   const due      = document.getElementById('invDue').value;
   if (!customer || !items || !amount) { showToast('Fill all required fields','error'); return; }
   const invNum = 'INV-' + Date.now();
-  await sb.from('seller_sales').insert({
-    store_id: shopData?.id, category: 'invoice',
+  const { error } = await DB.sales.save({
+    category: 'invoice',
     description: customer + '|' + phone,
     amount, notes: items,
     sale_date: new Date().toISOString().split('T')[0]
   });
+  if (error) { showToast('Unable to create invoice','error'); return; }
   const msg = encodeURIComponent(
     ' *Invoice from ' + (shopData?.shop_name||'ShopNekt') + '*\n\n' +
     'Invoice #: ' + invNum + '\n' +

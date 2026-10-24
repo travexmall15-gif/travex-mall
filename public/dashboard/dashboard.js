@@ -67,85 +67,87 @@ const Shop = {
 };
 
 //  DATABASE 
+async function sellerDataRequest(resource, action, item, id, status) {
+  const read = action === 'read'
+  try {
+    const response = await fetch(read ? `/api/seller/data?resource=${encodeURIComponent(resource)}` : '/api/seller/data', {
+      method: read ? 'GET' : 'POST',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: read ? undefined : { 'Content-Type': 'application/json' },
+      body: read ? undefined : JSON.stringify({ resource, action, item, id, status }),
+    })
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok) {return { data: null, error: { message: result.error || 'Request failed.' } }}
+    return { ...result, error: null }
+  } catch {
+    return { data: null, error: { message: 'Unable to reach ShopNekt.' } }
+  }
+}
+
 const DB = {
   products: {
-    _tbl() { const s=JSON.parse(localStorage.getItem('travex_session')||'{}'); return s.market==='campus' ? {t:'campus_products',c:'store_id'} : {t:'products',c:'shop_id'}; },
-    async getAll(shopId) {
-      const {t,c}=this._tbl();
-      const { data } = await sb.from(t).select('*').eq(c, shopId).order('created_at',{ascending:false});
+    async getAll() {
+      const { data } = await sellerDataRequest('products', 'read');
       return data || [];
     },
     async save(item) {
-      const {t}=this._tbl();
-      if (item.id) { const {id,...rest}=item; return sb.from(t).update(rest).eq('id',id); }
-      return sb.from(t).insert(item);
+      const { id, ...rest } = item;
+      return sellerDataRequest('products', id ? 'update' : 'create', rest, id);
     },
     async delete(id) {
-      const {t}=this._tbl();
-      return sb.from(t).delete().eq('id',id);
+      return sellerDataRequest('products', 'delete', undefined, id);
     },
   },
   orders: {
-    _tbl() { const s=JSON.parse(localStorage.getItem('travex_session')||'{}'); return s.market==='campus' ? {t:'campus_orders',c:'store_id'} : {t:'orders',c:'shop_id'}; },
-    async getAll(shopId) {
-      const {t,c}=this._tbl();
-      const { data } = await sb.from(t).select('*').eq(c, shopId).order('created_at',{ascending:false});
-      return data || [];
+    async getAll() {
+      const { data } = await sellerDataRequest('orders', 'read');
+      return (data || []).map(order => ({ ...order, status: order.status === 'completed' ? 'delivered' : order.status }));
     },
     async updateStatus(id, status) {
-      const {t}=this._tbl();
-      return sb.from(t).update({status}).eq('id',id);
+      return sellerDataRequest('orders', 'status', undefined, id, status);
     },
   },
   sales: {
-    async getAll(shopId) {
-      const { data } = await sb.from('seller_sales')
-        .select('*').eq('store_id',shopId).order('date',{ascending:false});
-      return data || [];
+    async getAll() {
+      const { data } = await sellerDataRequest('sales', 'read');
+      return (data || []).map(s => ({ ...s, date: s.sale_date || s.date, type: s.category || s.type }));
     },
     async save(item) {
-      if (item.id) {
-        const {id,...rest}=item;
-        return sb.from('seller_sales').update(rest).eq('id',id);
-      }
-      return sb.from('seller_sales').insert(item);
+      const { id, ...rest } = item;
+      return sellerDataRequest('sales', id ? 'update' : 'create', rest, id);
     },
     async delete(id) {
-      return sb.from('seller_sales').delete().eq('id',id);
+      return sellerDataRequest('sales', 'delete', undefined, id);
     },
   },
   debts: {
-    async getAll(shopId) {
-      const { data } = await sb.from('seller_debts')
-        .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
-      return data || [];
+    async getAll() {
+      const { data } = await sellerDataRequest('debts', 'read');
+      return (data || []).map(d => ({ ...d, person_name: d.debtor_name || d.person_name, paid: d.is_paid === true || d.paid === true }));
     },
     async save(item) {
-      if (item.id) {
-        const {id,...rest}=item;
-        return sb.from('seller_debts').update(rest).eq('id',id);
-      }
-      return sb.from('seller_debts').insert(item);
+      const { id, ...rest } = item;
+      return sellerDataRequest('debts', id ? 'update' : 'create', rest, id);
     },
     async delete(id) {
-      return sb.from('seller_debts').delete().eq('id',id);
+      return sellerDataRequest('debts', 'delete', undefined, id);
     },
     async markPaid(id) {
-      return sb.from('seller_debts').update({paid:true}).eq('id',id);
+      return sellerDataRequest('debts', 'mark-paid', undefined, id);
     },
   },
   vybe: {
     async getPosts(shopId) {
-      const { data } = await sb.from('feed_posts')
-        .select('*').eq('store_id',shopId).order('created_at',{ascending:false});
+      const { data } = await sellerDataRequest('posts', 'read');
       return data || [];
     },
     async getAll(shopId) { return this.getPosts(shopId); },
     async post(item) {
-      return sb.from('feed_posts').insert(item);
+      return sellerDataRequest('posts', 'create', item);
     },
     async delete(id) {
-      return sb.from('feed_posts').delete().eq('id',id);
+      return sellerDataRequest('posts', 'delete', undefined, id);
     },
   },
 };
@@ -348,16 +350,14 @@ async function askAI(system, userMsg) {
 // 
 const FlashDeals = {
   async getAll(shopId) {
-    const { data } = await sb.from('flash_deals')
-      .select('*').eq('store_id', shopId)
-      .order('created_at', { ascending: false });
+    const { data } = await sellerDataRequest('flash-deals', 'read');
     return data || [];
   },
   async create(item) {
-    return sb.from('flash_deals').insert(item);
+    return sellerDataRequest('flash-deals', 'create', item);
   },
   async delete(id) {
-    return sb.from('flash_deals').delete().eq('id', id);
+    return sellerDataRequest('flash-deals', 'delete', undefined, id);
   },
 };
 
@@ -366,17 +366,14 @@ const FlashDeals = {
 // 
 const GroupBuys = {
   async getAll(shopId) {
-    const { data } = await sb.from('group_orders')
-      .select('*, group_order_members(count)')
-      .eq('store_id', shopId)
-      .order('created_at', { ascending: false });
+    const { data } = await sellerDataRequest('group-orders', 'read');
     return data || [];
   },
   async create(item) {
-    return sb.from('group_orders').insert(item);
+    return sellerDataRequest('group-orders', 'create', item);
   },
   async delete(id) {
-    return sb.from('group_orders').delete().eq('id', id);
+    return sellerDataRequest('group-orders', 'delete', undefined, id);
   },
 };
 

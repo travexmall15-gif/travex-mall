@@ -1,4 +1,7 @@
 import { NextRequest } from 'next/server'
+import { createServiceSupabase } from '@/lib/security/server-supabase'
+import { getClientIp, rateLimit } from '@/lib/security/rate-limit'
+import { hasSameOrigin } from '@/lib/security/http'
 import { createBuyerRequestContext, startBuyerConversation, sendBuyerMessage } from '@/lib/shopnekt-ai/assistants/buyer-360'
 import { streamGroundedResponse } from '@/lib/shopnekt-ai/runtime/respond'
 import type { ConversationContext, SupportedLanguage } from '@/lib/shopnekt-ai/data-core'
@@ -30,6 +33,9 @@ type RequestBody = {
 }
 
 export async function POST(req: NextRequest) {
+  if (!hasSameOrigin(req)) {return new Response('Invalid request origin.', { status: 403 })}
+  const limit = rateLimit(`shopnekt-ai:${getClientIp(req)}`, 20, 60)
+  if (!limit.allowed) {return new Response('Too many requests.', { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } })}
   let body: RequestBody
   try {
     body = await req.json()
@@ -41,7 +47,20 @@ export async function POST(req: NextRequest) {
     return new Response('Invalid message.', { status: 400 })
   }
 
-  const requestContext = await createBuyerRequestContext(crypto.randomUUID(), body.applicationLanguage || 'en')
+  let verifiedUserId: string | null = null
+  const authorization = req.headers.get('authorization') || ''
+  if (authorization) {
+    const match = /^Bearer\s+(.+)$/i.exec(authorization)
+    if (!match) {return new Response('Unauthorized.', { status: 401 })}
+    try {
+      const { data, error } = await createServiceSupabase().auth.getUser(match[1])
+      if (error || !data.user) {return new Response('Unauthorized.', { status: 401 })}
+      verifiedUserId = data.user.id
+    } catch {
+      return new Response('Authentication is unavailable.', { status: 503 })
+    }
+  }
+  const requestContext = await createBuyerRequestContext(crypto.randomUUID(), body.applicationLanguage || 'en', verifiedUserId)
   const context = body.context ?? startBuyerConversation(crypto.randomUUID(), requestContext)
 
   const encoder = new TextEncoder()

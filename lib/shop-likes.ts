@@ -6,22 +6,19 @@
 import { sb } from '@/lib/supabase'
 
 /**
- * Resolves the current buyer's id the same way `orders`, `messages` and
- * `settings` pages already do: prefer a live Supabase Auth session, fall
- * back to the OTP-based customer session stored in localStorage.
- * Returns null if the visitor isn't signed in either way.
+ * Only a verified Supabase Auth session is treated as a buyer identity.
+ * Browser localStorage values are user-controlled and cannot authorize data.
  */
 export async function getCurrentBuyerId(): Promise<string | null> {
   const { data: { session } } = await sb.auth.getSession()
-  if (session?.user) {return session.user.id}
-  try {
-    const raw = localStorage.getItem('sn_customer_session')
-    if (raw) {
-      const sess = JSON.parse(raw)
-      if (sess?.id) {return sess.id as string}
-    }
-  } catch {}
-  return null
+  return session?.user?.id || null
+}
+
+async function shopLikesRequest(url: string, init?: RequestInit) {
+  const { data: { session } } = await sb.auth.getSession()
+  const headers = new Headers(init?.headers)
+  if (session?.access_token) {headers.set('Authorization', `Bearer ${session.access_token}`)}
+  return fetch(url, { ...init, headers, cache: 'no-store' })
 }
 
 export type PreferredShop = {
@@ -35,69 +32,58 @@ export type PreferredShop = {
 
 /** Public, no-auth-required like count for a store (renders on the storefront). */
 export async function getShopLikeCount(storeId: string): Promise<number> {
-  const { count, error } = await sb
-    .from('shop_likes')
-    .select('id', { count: 'exact', head: true })
-    .eq('store_id', storeId)
-  if (error) {return 0}
-  return count ?? 0
+  const response = await shopLikesRequest(`/api/shop-likes?store_id=${encodeURIComponent(storeId)}`).catch(() => null)
+  if (!response?.ok) {return 0}
+  const result = await response.json().catch(() => null)
+  return typeof result?.count === 'number' ? result.count : 0
 }
 
 /** Whether the given user has liked this store. Returns false if not signed in. */
 export async function isShopLikedByUser(storeId: string, userId: string | null | undefined): Promise<boolean> {
   if (!userId) {return false}
-  const { data } = await sb
-    .from('shop_likes')
-    .select('id')
-    .eq('store_id', storeId)
-    .eq('user_id', userId)
-    .maybeSingle()
-  return !!data
+  const response = await shopLikesRequest(`/api/shop-likes?store_id=${encodeURIComponent(storeId)}`).catch(() => null)
+  if (!response?.ok) {return false}
+  const result = await response.json().catch(() => null)
+  return result?.liked === true
 }
 
 /** Like a shop (adds it to the user's Preferred Shops). Requires an authenticated user. */
 export async function likeShop(storeId: string, userId: string): Promise<{ error: string | null }> {
-  const { error } = await sb.from('shop_likes').insert({ store_id: storeId, user_id: userId })
-  // Unique constraint violation = already liked — treat as success, not an error.
-  if (error && error.code !== '23505') {return { error: error.message }}
-  return { error: null }
+  return setShopLike(storeId, userId, true)
 }
 
 /** Unlike a shop (removes it from the user's Preferred Shops). */
 export async function unlikeShop(storeId: string, userId: string): Promise<{ error: string | null }> {
-  const { error } = await sb.from('shop_likes').delete().eq('store_id', storeId).eq('user_id', userId)
-  return { error: error?.message ?? null }
+  return setShopLike(storeId, userId, false)
+}
+
+async function setShopLike(storeId: string, userId: string, liked: boolean): Promise<{ error: string | null }> {
+  const currentBuyerId = await getCurrentBuyerId()
+  if (!currentBuyerId || currentBuyerId !== userId) {return { error: 'Sign in again to update preferred shops.' }}
+  const response = await shopLikesRequest('/api/shop-likes', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ store_id: storeId, liked }),
+  }).catch(() => null)
+  if (!response?.ok) {return { error: 'Unable to update preferred shops.' }}
+  return { error: null }
 }
 
 /** Full Preferred Shops list for a signed-in user, joined with live store info. */
 export async function listPreferredShops(userId: string): Promise<PreferredShop[]> {
-  const { data: likes, error } = await sb
-    .from('shop_likes')
-    .select('store_id, created_at')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-  if (error || !likes || likes.length === 0) {return []}
+  if (await getCurrentBuyerId() !== userId) {return []}
+  const response = await shopLikesRequest('/api/shop-likes?list=1').catch(() => null)
+  if (!response?.ok) {return []}
+  const result = await response.json().catch(() => null)
+  return Array.isArray(result?.shops) ? result.shops as PreferredShop[] : []
+}
 
-  const storeIds = likes.map(l => l.store_id)
-  const { data: stores } = await sb
-    .from('pending_payments')
-    .select('id, shop_name, shop_category, shop_region, plan')
-    .in('id', storeIds)
-    .eq('status', 'approved')
-
-  const byId = new Map((stores || []).map(s => [s.id, s]))
-  return likes
-    .map(l => {
-      const s = byId.get(l.store_id)
-      if (!s) {return null}
-      return {
-        store_id: l.store_id,
-        shop_name: s.shop_name,
-        shop_category: s.shop_category,
-        shop_region: s.shop_region,
-        plan: s.plan,
-        liked_at: l.created_at,
-      } as PreferredShop
-    })
-    .filter((x): x is PreferredShop => x !== null)
+/** Returns only the current authenticated buyer's liked IDs from the server. */
+export async function getLikedStoreIds(storeIds: string[]): Promise<Set<string>> {
+  const buyerId = await getCurrentBuyerId()
+  if (!buyerId || storeIds.length === 0) {return new Set()}
+  const ids = storeIds.slice(0, 100).join(',')
+  const response = await shopLikesRequest(`/api/shop-likes?store_ids=${encodeURIComponent(ids)}`).catch(() => null)
+  if (!response?.ok) {return new Set()}
+  const result = await response.json().catch(() => null)
+  return new Set(Array.isArray(result?.liked_ids) ? result.liked_ids : [])
 }

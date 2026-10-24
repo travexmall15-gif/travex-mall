@@ -118,13 +118,10 @@ let posts = [], shopData = null;
   if (!session) return;
   shopData = await Shop.get(session.user.email);
   await loadSidebar('vybe', shopData);
-  // If shopData is null (RLS blocks pending_payments), load all recent posts
   if (shopData?.id) {
     posts = await DB.vybe.getPosts(shopData.id);
   } else {
-    // Fallback: load all posts
-    const { data } = await sb.from('feed_posts').select('*').order('created_at',{ascending:false}).limit(50);
-    posts = data || [];
+    posts = [];
   }
   renderPosts();
   showLoading(false);

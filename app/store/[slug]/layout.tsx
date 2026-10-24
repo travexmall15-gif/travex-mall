@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   let name = '', description = '', image = '', city = '', category = ''
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(slug)) {
-    return { title: 'Store Not Found', description: 'This store could not be found on ShopNekt.', robots: { index: false, follow: false } }
+    return { title: 'Store Not Found', description: 'This store could not be found on shopnekt.', robots: { index: false, follow: false } }
   }
   const sb = createServiceSupabase()
   const { data: store } = await sb.from('pending_payments')
@@ -27,13 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!name) {
     return {
       title: 'Store Not Found',
-      description: 'This store could not be found on ShopNekt.',
+      description: 'This store could not be found on shopnekt.',
       robots: { index: false, follow: false },
     }
   }
 
   const title = `${name} — Official Store`
-  const desc  = description || `Shop at ${name} on ShopNekt. ${category} ${city ? `based in ${city}` : ''}. Verified seller on ShopNekt marketplace.`
+  const desc  = description || `Shop at ${name} on shopnekt. ${category} ${city ? `based in ${city}` : ''}. Verified seller on shopnekt marketplace.`
   const img   = image || `${BASE}/og-image.png`
   const url   = `${BASE}/store/${slug}`
 
@@ -44,15 +44,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: 'profile',
       url,
-      siteName: 'ShopNekt',
-      title: `${title} | ShopNekt`,
+      siteName: 'shopnekt',
+      title: `${title} | shopnekt`,
       description: desc,
       images: [{ url: img, width: 1200, height: 630, alt: name }],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@shopnekt',
-      title: `${title} | ShopNekt`,
+      title: `${title} | shopnekt`,
       description: desc,
       images: [img],
     },

@@ -32,10 +32,17 @@ const MARKETS = [
   },
 ]
 
+const HOME_LIVING_CATEGORIES = [
+  'Furniture', 'Sofas & Chairs', 'Beds & Mattresses', 'Tables & Desks', 'Wardrobes & Storage',
+  'Décor', 'Curtains & Carpets', 'Kitchen & Dining', 'Lighting', 'Bathroom', 'Garden & Outdoor',
+  'Appliances', 'Art & Mirrors', 'Home Improvement', 'Building & Interior Materials',
+]
+
 export default function MarketPage() {
   const { t } = useTranslation()
   const [counts, setCounts] = useState<Record<string, number>>({ fashion: 0, vehicle: 0, electronics: 0 })
   const [loading, setLoading] = useState(true)
+  const [countsError, setCountsError] = useState(false)
 
   useEffect(() => {
     async function loadCounts() {
@@ -43,6 +50,9 @@ export default function MarketPage() {
         const response = await fetch('/api/public/market?type=counts', { cache: 'no-store' })
         const result = await response.json().catch(() => null)
         if (response.ok && result?.counts) {setCounts(result.counts)}
+        else {setCountsError(true)}
+      } catch {
+        setCountsError(true)
       } finally {
         setLoading(false)
       }
@@ -101,7 +111,7 @@ export default function MarketPage() {
                   {/* Footer */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--sn-border)', paddingTop: '0.9rem' }}>
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--sn-primary)' }}>
-                      {loading ? '—' : t(count === 1 ? 'market.storeCount' : 'market.storesCount', { count })}
+                      {loading || countsError ? '—' : t(count === 1 ? 'market.storeCount' : 'market.storesCount', { count })}
                     </span>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg,#FF0080,#7800FF)', padding: '5px 12px', borderRadius: 999 }}>
                       {t('market.explore')} <ArrowRight size={12} color="#fff" />
@@ -112,9 +122,21 @@ export default function MarketPage() {
             )
           })}
         </div>
+
+        <section aria-labelledby="home-living-title" style={{ marginTop: '2.5rem' }}>
+          <h2 id="home-living-title" style={{ fontSize: '1.15rem', fontWeight: 850, color: 'var(--sn-text)', marginBottom: '0.35rem' }}>Home &amp; Living</h2>
+          <p style={{ fontSize: '0.82rem', color: 'var(--sn-muted)', margin: '0 0 1rem' }}>Browse products in the categories currently supported by marketplace product records.</p>
+          <div className="home-living-grid">
+            {HOME_LIVING_CATEGORIES.map(category => (
+              <Link key={category} href={`/search?category=${encodeURIComponent(category)}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '12px 14px', border: '1px solid var(--sn-border)', borderRadius: 12, background: 'var(--sn-bg)', color: 'var(--sn-text)', textDecoration: 'none', fontSize: '0.82rem', fontWeight: 650 }}>
+                {category}<ArrowRight size={14} color="var(--sn-primary)" />
+              </Link>
+            ))}
+          </div>
+        </section>
       </section>
 
-      <style>{`.market-card:hover{border-color:var(--sn-primary);transform:translateY(-2px)}`}</style>
+      <style>{`.market-card:hover{border-color:var(--sn-primary);transform:translateY(-2px)}.home-living-grid{display:grid;grid-template-columns:1fr;gap:8px}@media(min-width:768px){.home-living-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}`}</style>
     </main>
   )
 }

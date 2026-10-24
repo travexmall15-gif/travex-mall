@@ -4,27 +4,27 @@ const BASE = 'https://shopnekt.vercel.app'
 
 export const metadata: Metadata = {
   title: 'Limited Time Deals',
-  description: 'Grab flash deals before they expire! Limited-time discounts up to 70% off from verified sellers on ShopNekt. New deals every hour.',
-  keywords: ['flash deals', 'limited time offers', 'best deals Tanzania', 'discount products online', 'ShopNekt deals'],
+  description: 'Grab flash deals before they expire! Limited-time discounts up to 70% off from verified sellers on shopnekt. New deals every hour.',
+  keywords: ['flash deals', 'limited time offers', 'best deals Tanzania', 'discount products online', 'shopnekt deals'],
   alternates: { canonical: `${BASE}/flash-deals` },
   openGraph: {
     type: 'website',
     url: `${BASE}/flash-deals`,
-    siteName: 'ShopNekt',
-    title: 'Limited Time Deals | ShopNekt',
-    description: 'Grab flash deals before they expire! Limited-time discounts up to 70% off from verified sellers on ShopNekt. New deals every hour.',
+    siteName: 'shopnekt',
+    title: 'Limited Time Deals | shopnekt',
+    description: 'Grab flash deals before they expire! Limited-time discounts up to 70% off from verified sellers on shopnekt. New deals every hour.',
     images: [{
       url: `${BASE}/og-image.png`,
       width: 1200,
       height: 630,
-      alt: 'Limited Time Deals — ShopNekt',
+      alt: 'Limited Time Deals — shopnekt',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@shopnekt',
-    title: 'Limited Time Deals | ShopNekt',
-    description: 'Grab flash deals before they expire! Limited-time discounts up to 70% off from verified sellers on ShopNekt. New deals every hour.',
+    title: 'Limited Time Deals | shopnekt',
+    description: 'Grab flash deals before they expire! Limited-time discounts up to 70% off from verified sellers on shopnekt. New deals every hour.',
     images: [`${BASE}/og-image.png`],
   },
 }

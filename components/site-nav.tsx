@@ -4,12 +4,12 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Home, Store, MessageCircle, Zap,
-  Users, Truck, Search, Menu, Loader2, MessageSquare, X
+  Users, Truck, Search, Menu, Loader2, MessageSquare, X, ShoppingBag, Image as ImageIcon, BriefcaseBusiness
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
 import { sb } from '@/lib/supabase'
-import { searchShops, searchProducts, type ShopSearchResult, type ProductSearchResult } from '@/lib/search'
+import { searchMarketplace, type MarketplaceSearchResult } from '@/lib/search'
 
 const NAV_ICON_DATA = [
   { href: '/home',        Icon: Home,          labelKey: 'nav.homeLabel'       },
@@ -27,8 +27,7 @@ export function SiteNav() {
   const { lang, setLang } = useLang()
 
   const [query,      setQuery]      = useState('')
-  const [results,    setResults]    = useState<ShopSearchResult[]>([])
-  const [productResults, setProductResults] = useState<ProductSearchResult[]>([])
+  const [suggestions, setSuggestions] = useState<MarketplaceSearchResult[]>([])
   const [searching,  setSearching]  = useState(false)
   const [showDrop,   setShowDrop]   = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -61,6 +60,7 @@ export function SiteNav() {
 
   const searchRef   = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const searchRequestRef = useRef(0)
 
   useEffect(() => {
     const fn = (e: MouseEvent) => {
@@ -75,24 +75,25 @@ export function SiteNav() {
   const handleSearch = useCallback((val: string) => {
     setQuery(val)
     if (debounceRef.current) {clearTimeout(debounceRef.current)}
-    if (!val.trim()) { setResults([]); setProductResults([]); setShowDrop(false); return }
+    const requestId = ++searchRequestRef.current
+    if (!val.trim()) { setSuggestions([]); setShowDrop(false); setSearching(false); return }
+    setSuggestions([])
+    setShowDrop(false)
 
     debounceRef.current = setTimeout(async () => {
       setSearching(true)
       try {
-        const [shops, products] = await Promise.all([searchShops(val, 4), searchProducts(val, 4)])
-        setResults(shops)
-        setProductResults(products)
+        const results = await searchMarketplace({ query: val, limit: 3 })
+        if (requestId !== searchRequestRef.current) {return}
+        setSuggestions(results.slice(0, 12))
         setShowDrop(true)
-      } catch {}
-      setSearching(false)
+      } catch {
+        if (requestId === searchRequestRef.current) {setShowDrop(false)}
+      } finally {
+        if (requestId === searchRequestRef.current) {setSearching(false)}
+      }
     }, 300)
   }, [])
-
-  const goToShop = (id: string) => {
-    setShowDrop(false); setQuery('')
-    router.push(`/store/${id}`)
-  }
 
   const isActive = (href: string) =>
     href === '/home'
@@ -112,10 +113,9 @@ export function SiteNav() {
       <div style={{ display: 'flex', alignItems: 'center', padding: '10px 5%', gap: '14px' }}>
 
         {/* Brand */}
-        <Link href="/home" prefetch={true} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
-          <img src="/icon-192.png" alt="ShopNekt" style={{ height: '52px', width: '52px', objectFit: 'contain', borderRadius: '12px' }} />
+        <Link href="/home" prefetch={true} aria-label="shopnekt home" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
           <span style={{ fontFamily: 'var(--sn-font)', fontSize: '1.35rem', fontWeight: 900, color: '#0D1B3E', letterSpacing: '-0.04em', lineHeight: 1 }}>
-            Shop<span style={{ color: 'var(--sn-primary)' }}>Nekt</span>
+            shopnekt
           </span>
         </Link>
 
@@ -141,7 +141,7 @@ export function SiteNav() {
                 style={{ flex:1, border:'none', background:'transparent', fontSize:'0.875rem', color:'var(--sn-text)', outline:'none', padding:'8px 0', fontFamily:"'Inter',sans-serif" }}
               />
               {query && (
-                <button onClick={() => { setQuery(''); setResults([]); setProductResults([]); setShowDrop(false) }}
+                <button onClick={() => { setQuery(''); setSuggestions([]); setShowDrop(false) }}
                   style={{ background:'none', border:'none', cursor:'pointer', padding:'2px', color:'var(--sn-subtle)', flexShrink:0 }}>
                   <X size={14} />
                 </button>
@@ -162,55 +162,42 @@ export function SiteNav() {
           )}
 
           {/* Search dropdown — shops + products (Home Search: no Vybe/Flash Deals/Group Buy/AI/Orders) */}
-          {showDrop && (results.length > 0 || productResults.length > 0) && (
+          {showDrop && suggestions.length > 0 && (
             <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid var(--sn-border)', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, overflow:'hidden', maxHeight: 420, overflowY: 'auto' }}>
-              {results.length > 0 && (
-                <div style={{ padding: '8px 14px 2px', fontSize: '0.62rem', fontWeight: 800, color: 'var(--sn-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('search.tabShops')}</div>
-              )}
-              {results.map(r => (
-                <button key={r.id} onClick={() => { goToShop(r.id); setSearchOpen(false) }}
+              {suggestions.map(result => {
+                const Icon = result.kind === 'store' ? Store
+                  : result.kind === 'product' ? ShoppingBag
+                    : result.kind === 'vybe' ? ImageIcon
+                      : result.kind === 'flash_deal' ? Zap
+                        : result.kind === 'service' ? BriefcaseBusiness : Users
+                const typeLabel = result.kind === 'store' ? t('search.tabShops')
+                  : result.kind === 'product' ? t('search.tabProducts')
+                    : result.kind === 'flash_deal' ? 'Flash Deal'
+                      : result.kind === 'group_buy' ? 'Group Buy'
+                        : result.kind === 'service' ? 'Service' : 'Vybe'
+                return <button key={`${result.kind}:${result.id}`} onClick={() => { setShowDrop(false); setSearchOpen(false); setQuery(''); router.push(result.href) }}
                   style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily: 'var(--sn-font)' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
                   <div style={{ width:32, height:32, borderRadius:8, background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow: 'hidden' }}>
-                    {r.shop_logo ? <img src={r.shop_logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Store size={14} color="#16A34A" />}
+                    {result.imageUrl ? <img src={result.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Icon size={14} color="var(--sn-primary)" />}
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)' }}>{r.shop_name}</div>
-                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{r.shop_region || ''}</div>
+                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)' }}>{result.title}</div>
+                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{typeLabel} · {result.subtitle}</div>
                   </div>
-                  {r.like_count > 0 && (
-                    <span style={{ fontSize: '0.65rem', color: 'var(--sn-subtle)', flexShrink: 0 }}>♥ {r.like_count}</span>
-                  )}
+                  {result.price !== undefined && <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--sn-primary)', flexShrink: 0 }}>TZS {result.price.toLocaleString()}</span>}
                 </button>
-              ))}
-              {productResults.length > 0 && (
-                <div style={{ padding: '8px 14px 2px', fontSize: '0.62rem', fontWeight: 800, color: 'var(--sn-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em', borderTop: results.length > 0 ? '1px solid var(--sn-border)' : 'none' }}>{t('search.tabProducts')}</div>
-              )}
-              {productResults.map(p => (
-                <button key={p.id} onClick={() => { router.push(`/store/${p.store_id}?product=${p.id}`); setSearchOpen(false) }}
-                  style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'11px 14px', border:'none', background:'none', cursor:'pointer', textAlign:'left', transition:'background .15s', fontFamily: 'var(--sn-font)' }}
-                  onMouseOver={e => (e.currentTarget as HTMLElement).style.background='var(--sn-page)'}
-                  onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                  <div style={{ width:32, height:32, borderRadius:8, background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, overflow: 'hidden' }}>
-                    {p.image_url ? <img src={p.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Search size={13} color="var(--sn-subtle)" />}
-                  </div>
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--sn-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
-                    <div style={{ fontSize:'0.68rem', color:'var(--sn-subtle)', marginTop:1 }}>{p.shop_name}</div>
-                  </div>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--sn-primary)', flexShrink: 0 }}>TZS {p.price.toLocaleString()}</span>
-                </button>
-              ))}
+              })}
               <div style={{ padding:'8px 14px', borderTop:'1px solid var(--sn-border)' }}>
-                <button onClick={() => { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setSearchOpen(false) }}
+                <button onClick={() => { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setSearchOpen(false); setShowDrop(false) }}
                   style={{ width:'100%', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'var(--sn-text)', fontWeight:600, textAlign:'left', fontFamily: 'var(--sn-font)' }}>
                   {t('search.seeAllResultsFor')} "{query}" →
                 </button>
               </div>
             </div>
           )}
-          {showDrop && results.length === 0 && productResults.length === 0 && query.trim() && !searching && (
+          {showDrop && suggestions.length === 0 && query.trim() && !searching && (
             <div style={{ position:'absolute', top:'calc(100% + 8px)', left:0, right:0, background:'var(--sn-bg)', border:'1.5px solid var(--sn-border)', borderRadius:16, boxShadow:'0 8px 28px rgba(0,0,0,0.10)', zIndex:9999, padding:'1rem', textAlign:'center' }}>
               <div style={{ fontSize:'0.82rem', color:'var(--sn-subtle)' }}>{t('search.noResults')}</div>
             </div>

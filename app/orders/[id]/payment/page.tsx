@@ -4,23 +4,23 @@ import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { sb } from '@/lib/supabase'
-import { ArrowLeft, MapPin, Loader2, Check, Wallet, Truck, CreditCard, AlertCircle } from 'lucide-react'
+import { ArrowLeft, MapPin, Loader2, Check, Wallet, Truck, CreditCard, AlertCircle, Smartphone, Landmark, type LucideIcon } from 'lucide-react'
 
 type PaymentMethod = {
   id: string
   name: string
-  icon: string
+  icon: LucideIcon
   type: 'mobile' | 'bank'
   number?: string
 }
 
 const PAYMENT_METHODS: PaymentMethod[] = [
-  { id:'tigopesa',  name:'Lipa Namba (Tigo Pesa)', icon:'📱', type:'mobile', number:'' },
-  { id:'mpesa',     name:'M-Pesa',                 icon:'💚', type:'mobile', number:'' },
-  { id:'yas',       name:'YAS (Airtel)',            icon:'🔴', type:'mobile', number:'' },
-  { id:'airtel',    name:'Airtel Money',            icon:'🟠', type:'mobile', number:'' },
-  { id:'halotel',   name:'Halotel Halopesa',        icon:'🟣', type:'mobile', number:'' },
-  { id:'bank',      name:'Bank Transfer',           icon:'🏦', type:'bank',   number:'' },
+  { id:'tigopesa',  name:'Lipa Namba (Tigo Pesa)', icon:Smartphone, type:'mobile', number:'' },
+  { id:'mpesa',     name:'M-Pesa',                 icon:Smartphone, type:'mobile', number:'' },
+  { id:'yas',       name:'YAS (Airtel)',            icon:Smartphone, type:'mobile', number:'' },
+  { id:'airtel',    name:'Airtel Money',            icon:Smartphone, type:'mobile', number:'' },
+  { id:'halotel',   name:'Halotel Halopesa',        icon:Smartphone, type:'mobile', number:'' },
+  { id:'bank',      name:'Bank Transfer',           icon:Landmark, type:'bank',   number:'' },
 ]
 
 type PayOption = 'full' | 'item-only' | 'delivery-later'
@@ -43,8 +43,12 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
   useEffect(() => {
     sb.auth.getSession().then(async ({ data: { session } }) => {
       if (!session?.user) { router.replace('/auth'); return }
-      const { data } = await sb.from('orders').select('*').eq('id', id).single()
-      setOrder(data)
+      if (!session.access_token) {router.replace('/auth'); return}
+      const response = await fetch(`/api/customer/orders/${encodeURIComponent(id)}`, {
+        headers: { Authorization: `Bearer ${session.access_token}` }, cache: 'no-store',
+      }).catch(() => null)
+      const result = response?.ok ? await response.json().catch(() => null) : null
+      setOrder(result?.order || null)
       setLoading(false)
     })
   }, [id, router])
@@ -66,16 +70,14 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
   const submitPayment = async () => {
     setSubmitting(true)
     try {
-      await sb.from('payments').insert({
-        order_id:        id,
-        payment_method:  selMethod,
-        payment_option:  selOption,
-        delivery_location: location,
-        note,
-        status:         'pending_confirmation',
-        created_at:     new Date().toISOString(),
+      const { data: { session } } = await sb.auth.getSession()
+      if (!session?.access_token) {router.replace('/auth'); return}
+      const response = await fetch(`/api/customer/orders/${encodeURIComponent(id)}/payment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ payment_method: selMethod, payment_option: selOption, delivery_location: location, note }),
       })
-      await sb.from('orders').update({ status: 'payment_pending' }).eq('id', id)
+      if (!response.ok) {throw new Error('Unable to submit payment details.')}
       setStep('done')
     } catch (e) {
       alert('Something went wrong. Please try again.')
@@ -91,8 +93,8 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
       icon: Wallet,
       title: 'Full Payment (Escrow)',
       sub: `Pay TZS ${order?.total_amount?.toLocaleString() || '—'} + delivery now`,
-      desc: 'Money held safely in ShopNekt wallet. Released to seller ONLY after you confirm delivery.',
-      badge: '🔒 Most Secure',
+      desc: 'Money held safely in shopnekt wallet. Released to seller ONLY after you confirm delivery.',
+      badge: 'Most Secure',
       badgeColor: '#059669',
     },
     {
@@ -101,7 +103,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
       title: 'Item Payment Only',
       sub: `Pay TZS ${order?.total_amount?.toLocaleString() || '—'} now`,
       desc: 'Pay for item now via wallet. Pay delivery fee directly to rider on arrival.',
-      badge: '📦 Flexible',
+      badge: 'Flexible',
       badgeColor: '#7800FF',
     },
     {
@@ -110,7 +112,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
       title: 'Pay on Delivery',
       sub: 'Pay everything when you receive item',
       desc: 'Pay both item and delivery when rider arrives. Seller approves this method.',
-      badge: '🚚 On Arrival',
+      badge: 'On Arrival',
       badgeColor: 'var(--sn-primary)',
     },
   ]
@@ -171,7 +173,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
               {PAYMENT_METHODS.map(pm => (
                 <button key={pm.id} onClick={() => setSelMethod(pm.id)}
                   style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'var(--sn-bg)', border:`2px solid ${selMethod===pm.id?'linear-gradient(135deg,#FF0080,#7800FF)':'var(--sn-border)'}`, borderRadius:14, cursor:'pointer', fontFamily:'var(--sn-font)', transition:'all .15s', textAlign:'left' }}>
-                  <span style={{ fontSize:'1.4rem', width:36, textAlign:'center' }}>{pm.icon}</span>
+                  <span style={{ width:36, display:'flex', justifyContent:'center', color:'var(--sn-primary)' }}><pm.icon size={20} /></span>
                   <span style={{ flex:1, fontSize:'0.9rem', fontWeight:600, color:'var(--sn-text)' }}>{pm.name}</span>
                   {selMethod===pm.id && <Check size={18} color="#0D1B3E" />}
                 </button>
@@ -188,7 +190,7 @@ export default function PaymentPage({params }: { params: Promise<{ id: string }>
         {step === 'option' && (
           <>
             <div style={{ background:'var(--sn-page)', borderRadius:12, padding:'10px 14px', marginBottom:'1rem', display:'flex', alignItems:'center', gap:10 }}>
-              <span style={{ fontSize:'1.2rem' }}>{method?.icon}</span>
+              <span style={{ display:'flex', color:'var(--sn-primary)' }}>{method && <method.icon size={19} />}</span>
               <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#0D1B3E' }}>{method?.name}</span>
             </div>
             <h2 style={{ fontSize:'1rem', fontWeight:800, color:'#0D1B3E', marginBottom:'1rem', letterSpacing:'-0.02em' }}>{t('payment.howToPay')}</h2>

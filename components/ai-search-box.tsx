@@ -2,6 +2,7 @@
 import { useTranslation } from "@/hooks/useTranslation"
 import { useState, useRef } from 'react'
 import { sb } from '@/lib/supabase'
+import { MapPin, Sparkles, Star, Store } from 'lucide-react'
 
 type StoreResult = {
   id: string
@@ -172,7 +173,7 @@ export default function AiSearchBox() {
       {/* Input row */}
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <div style={{ flex: 1, position: 'relative' }}>
-          <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem' }}>✨</span>
+          <Sparkles size={17} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--sn-primary)' }} />
           <input
             ref={inputRef}
             value={query}
@@ -293,7 +294,7 @@ export default function AiSearchBox() {
                 fontSize: '1.2rem', color: 'var(--sn-text)', fontWeight: 800,
                 border: '1px solid rgba(255,255,255,0.1)',
               }}>
-                {!store.logo_url && (store.shop_name?.[0] || '🏪')}
+                {!store.logo_url && (store.shop_name?.[0] || <Store size={19} />)}
               </div>
 
               {/* Info */}
@@ -303,12 +304,12 @@ export default function AiSearchBox() {
                     {store.shop_name}
                   </span>
                   {store.rating > 0 && (
-                    <span style={{ fontSize: '0.68rem', color: 'var(--sn-text)', flexShrink: 0 }}>⭐ {store.rating.toFixed(1)}</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--sn-text)', flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 3 }}><Star size={11} fill="currentColor" /> {store.rating.toFixed(1)}</span>
                   )}
                 </div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--sn-subtle)', marginBottom: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {store.shop_category && <span>{store.shop_category}</span>}
-                  {store.shop_city && <span>📍 {store.shop_city}</span>}
+                  {store.shop_city && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><MapPin size={11} /> {store.shop_city}</span>}
                 </div>
                 {store.match_reason && (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.68rem', color: '#6ee7b7', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.15)', borderRadius: '999px', padding: '2px 8px' }}>

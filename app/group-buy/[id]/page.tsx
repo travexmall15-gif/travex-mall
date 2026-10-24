@@ -3,15 +3,13 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { use, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { sb } from '@/lib/supabase'
-import { Users, CheckCircle, Loader2, ArrowLeft, MessageCircle, Store, Clock, ShoppingBag } from 'lucide-react'
+import { Users, CheckCircle, Loader2, ArrowLeft, MessageCircle, Store, Clock, ShoppingBag, AlertCircle } from 'lucide-react'
 
 type Group = {
   id: string; store_id: string; shop_name: string
   product_name: string; product_image?: string | null
   unit_price: number; discount_pct: number
   min_members: number; current_members: number; expires_at: string; status: string
-  creator_name: string; creator_phone: string
 }
 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString()
@@ -40,7 +38,6 @@ export default function GroupDetailPage({
   const { t } = useTranslation()
   const { id }       = use(params)
   const [group, setGroup]   = useState<Group | null>(null)
-  const [members, setMembers] = useState<any[]>([])
   const [name, setName]     = useState('')
   const [phone, setPhone]   = useState('')
   const [joining, setJoining] = useState(false)
@@ -50,11 +47,12 @@ export default function GroupDetailPage({
   const countdown = useCountdown(group?.expires_at || null)
 
   useEffect(() => {
-    sb.from('group_orders').select('*').eq('id', id).single()
-      .then(({ data, error }) => { if (!error && data) {setGroup(data)} })
-    sb.from('group_order_members').select('name,phone,joined_at')
-      .eq('group_id', id).order('joined_at')
-      .then(({ data }) => setMembers(data || []))
+    let cancelled = false
+    fetch(`/api/group-buy/${encodeURIComponent(id)}`, { cache: 'no-store' })
+      .then(async response => response.ok ? response.json() : null)
+      .then(result => { if (!cancelled && result?.group) {setGroup(result.group)} })
+      .catch(() => {})
+    return () => {cancelled = true}
   }, [id])
 
   async function joinGroup() {
@@ -62,35 +60,15 @@ export default function GroupDetailPage({
     if (!phone.trim()) { setError(t('groupBuy.phoneRequired')); return }
     setJoining(true); setError('')
 
-    // Check for duplicate by phone
-    const already = members.find(m => m.phone?.trim() === phone.trim())
-    if (already) { setError(t('groupBuy.alreadyJoined')); setJoining(false); return }
-
     try {
-      // 1. Add member
-      const { error: memberErr } = await sb.from('group_order_members')
-        .insert({ group_id: id, name: name.trim(), phone: phone.trim(), joined_at: new Date().toISOString() })
-      if (memberErr) {throw memberErr}
-
-      // 2. Atomic increment via RPC (prevents race conditions)
-      // Fallback: read-then-write if RPC not available
-      const { data: latest } = await sb.from('group_orders')
-        .select('current_members,min_members').eq('id', id).single()
-      const newCount = (latest?.current_members || 0) + 1
-      const { error: updErr } = await sb.from('group_orders')
-        .update({ current_members: newCount }).eq('id', id)
-      if (updErr) {throw updErr}
-
-      // 3. Mark as ready if target reached
-      if (latest && newCount >= (latest.min_members || 1)) {
-        await sb.from('group_orders').update({ status: 'completed' }).eq('id', id)
-      }
-
-      // 4. Refresh members list and group state
-      const { data: updatedMembers } = await sb.from('group_order_members')
-        .select('name,phone,joined_at').eq('group_id', id).order('joined_at')
-      setMembers(updatedMembers || [])
-      setGroup(g => g ? { ...g, current_members: newCount } : g)
+      const response = await fetch(`/api/group-buy/${encodeURIComponent(id)}/join`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), phone: phone.trim() }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {throw new Error(result.error || t('groupBuy.genericError'))}
+      const latest = await fetch(`/api/group-buy/${encodeURIComponent(id)}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null)
+      if (latest?.group) {setGroup(latest.group)}
       setSuccess(true)
     } catch (e: any) {
       setError(e?.message || t('groupBuy.genericError'))
@@ -185,15 +163,13 @@ export default function GroupDetailPage({
           </div>
 
           {/* Members */}
-          {members.length > 0 && (
+          {group.current_members > 0 && (
             <div style={{ display:'flex', gap:4, flexWrap:'wrap', marginBottom:16 }}>
-              {members.map((m,i) => (
-                <div key={i} style={{ width:32, height:32, borderRadius:'50%',
+              {Array.from({ length: Math.min(group.current_members, 20) }, (_, i) => (
+                <div key={i} aria-hidden="true" style={{ width:32, height:32, borderRadius:'50%',
                   background:'linear-gradient(135deg,#FF0080,#7800FF)',
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:11, fontWeight:800, color:'#fff' }}>
-                  {m.name[0].toUpperCase()}
-                </div>
+                  fontSize:11, fontWeight:800, color:'#fff' }} />
               ))}
             </div>
           )}
@@ -254,7 +230,7 @@ export default function GroupDetailPage({
             </div>
             {error && <div style={{ background:'rgba(220,38,38,0.08)', color:'#DC2626',
               padding:'10px', borderRadius:8, fontSize:13, marginBottom:12 }}>
-              ⚠️ {error}
+              <span style={{ display:'inline-flex', alignItems:'center', gap:6 }}><AlertCircle size={14} /> {error}</span>
             </div>}
             <button onClick={joinGroup} disabled={joining}
               style={{ width:'100%', padding:'13px', background:'linear-gradient(135deg,#FF0080,#7800FF)',

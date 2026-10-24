@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/hooks/useTranslation'
-import { ArrowLeft, Mail, Phone, Globe } from 'lucide-react'
+import { ArrowLeft, Mail, Phone, Globe, Star } from 'lucide-react'
 
 export default function AboutPage() {
   const router = useRouter()
@@ -23,7 +23,7 @@ export default function AboutPage() {
 
         {/* Identity */}
         <div style={{ textAlign:'center', marginBottom:'2rem' }}>
-          <img src="/icon-192.png" alt="ShopNekt" style={{ width:72, height:72, borderRadius:18, objectFit:'cover', marginBottom:12 }} loading="lazy" />
+          <img src="/icon-192.png" alt="shopnekt" style={{ width:72, height:72, borderRadius:18, objectFit:'cover', marginBottom:12 }} loading="lazy" />
           <div>
             <span style={{ fontSize:'1.25rem', fontWeight:900, color:'#0D1B3E' }}>shop</span>
             <span style={{ fontSize:'1.25rem', fontWeight:900, color:'var(--sn-primary)' }}>nekt</span>
@@ -56,7 +56,7 @@ export default function AboutPage() {
 
         {/* Rate */}
         <button style={{ width:'100%', padding:'0.875rem', background:'var(--sn-bg)', border:'1.5px solid #E2E8F0', borderRadius:14, fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#7800FF', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
-          ⭐ {t('about.rateApp')} ⭐⭐⭐⭐⭐
+          <span style={{ display:'inline-flex', alignItems:'center', gap:3 }}><Star size={15} fill="currentColor" /> {t('about.rateApp')} {Array.from({ length: 5 }, (_, index) => <Star key={index} size={13} fill="currentColor" />)}</span>
         </button>
 
         <p style={{ textAlign:'center', fontSize:'0.65rem', color:'#CBD5E1', marginTop:'2rem' }}>

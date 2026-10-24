@@ -4,27 +4,27 @@ const BASE = 'https://shopnekt.vercel.app'
 
 export const metadata: Metadata = {
   title: 'Business Market — Buy & Sell from Verified Shops',
-  description: 'Explore thousands of products from verified businesses on ShopNekt Business Market. Fashion, electronics, food, and more — shop safely from anywhere.',
-  keywords: ['business market', 'buy online Tanzania', 'verified shops', 'online shopping', 'ShopNekt market'],
+  description: 'Explore thousands of products from verified businesses on shopnekt Business Market. Fashion, electronics, food, and more — shop safely from anywhere.',
+  keywords: ['business market', 'buy online Tanzania', 'verified shops', 'online shopping', 'shopnekt market'],
   alternates: { canonical: `${BASE}/market` },
   openGraph: {
     type: 'website',
     url: `${BASE}/market`,
-    siteName: 'ShopNekt',
-    title: 'Business Market — Buy & Sell from Verified Shops | ShopNekt',
-    description: 'Explore thousands of products from verified businesses on ShopNekt Business Market. Fashion, electronics, food, and more — shop safely from anywhere.',
+    siteName: 'shopnekt',
+    title: 'Business Market — Buy & Sell from Verified Shops | shopnekt',
+    description: 'Explore thousands of products from verified businesses on shopnekt Business Market. Fashion, electronics, food, and more — shop safely from anywhere.',
     images: [{
       url: `${BASE}/og-image.png`,
       width: 1200,
       height: 630,
-      alt: 'Business Market — Buy & Sell from Verified Shops — ShopNekt',
+      alt: 'Business Market — Buy & Sell from Verified Shops — shopnekt',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@shopnekt',
-    title: 'Business Market — Buy & Sell from Verified Shops | ShopNekt',
-    description: 'Explore thousands of products from verified businesses on ShopNekt Business Market. Fashion, electronics, food, and more — shop safely from anywhere.',
+    title: 'Business Market — Buy & Sell from Verified Shops | shopnekt',
+    description: 'Explore thousands of products from verified businesses on shopnekt Business Market. Fashion, electronics, food, and more — shop safely from anywhere.',
     images: [`${BASE}/og-image.png`],
   },
 }

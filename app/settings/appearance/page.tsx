@@ -8,7 +8,7 @@ import { useLang } from '@/lib/lang-context'
 import { useTheme } from '@/lib/theme-context'
 import {
   ArrowLeft, Sun, Moon, Monitor, Check, Globe,
-  Type, ChevronRight
+  Type, ChevronRight, Bell, LockKeyhole, Info
 } from 'lucide-react'
 
 export default function AppearancePage() {
@@ -51,16 +51,16 @@ export default function AppearancePage() {
           <p style={{ fontSize:'0.62rem', fontWeight:700, color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.language')}</p>
           <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
-              { code:'en', flag:'🇬🇧', label:'English',   sub:'App displayed in English'  },
-              { code:'sw', flag:'🇹🇿', label:'Kiswahili', sub:'Programu kwa Kiswahili'    },
+              { code:'en', label:'English',   sub:'App displayed in English'  },
+              { code:'sw', label:'Kiswahili', sub:'Programu kwa Kiswahili'    },
             ].map((l, i) => (
               <button key={l.code}
                 onClick={() => { setLang(l.code as 'en'|'sw'); save() }}
                 style={{ width:'100%', display:'flex', alignItems:'center', gap:14, padding:'14px 16px', background:'none', border:'none', borderBottom: i===0?'1px solid #F1F5F9':'none', cursor:'pointer', fontFamily:"'Inter',sans-serif", transition:'background .15s' }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                 onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                <div style={{ width:38, height:38, borderRadius:10, background:'var(--sn-bg)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.3rem' }}>
-                  {l.flag}
+                <div style={{ width:38, height:38, borderRadius:10, background:'var(--sn-page)', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--sn-primary)' }}>
+                  <Globe size={18} aria-hidden="true" />
                 </div>
                 <div style={{ flex:1, textAlign:'left' }}>
                   <div style={{ fontSize:'0.9rem', fontWeight:600, color:'var(--sn-text)' }}>{l.label}</div>
@@ -137,15 +137,17 @@ export default function AppearancePage() {
           <p style={{ fontSize:'0.62rem', fontWeight:700, color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.09em', marginBottom:8, paddingLeft:4 }}>{t('appearance.moreSettings')}</p>
           <div style={{ background:'var(--sn-bg)', borderRadius:16, border:'1.5px solid #E2E8F0', overflow:'hidden' }}>
             {[
-              { label:'Notifications',     sub:'Manage alerts',      href:'/settings/notifications', icon:'🔔' },
-              { label:'Privacy Policy',    sub:'How we use data',    href:'/privacy',                icon:'🔒' },
-              { label:'About ShopNekt',    sub:'Version & contact',  href:'/settings/about',         icon:'ℹ️' },
-            ].map((item, i) => (
+              { label:'Notifications',     sub:'Manage alerts',      href:'/settings/notifications', icon:Bell },
+              { label:'Privacy Policy',    sub:'How we use data',    href:'/privacy',                icon:LockKeyhole },
+              { label:'About shopnekt',    sub:'Version & contact',  href:'/settings/about',         icon:Info },
+            ].map((item, i) => {
+              const Icon = item.icon
+              return (
               <Link key={i} href={item.href} style={{ textDecoration:'none' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:14, padding:'13px 16px', borderBottom: i<2?'1px solid #F1F5F9':'none', transition:'background .15s', cursor:'pointer' }}
                   onMouseOver={e => (e.currentTarget as HTMLElement).style.background='#F8FAFF'}
                   onMouseOut={e  => (e.currentTarget as HTMLElement).style.background='transparent'}>
-                  <span style={{ fontSize:'1.1rem', width:38, textAlign:'center' }}>{item.icon}</span>
+                  <span style={{ width:38, display:'flex', alignItems:'center', justifyContent:'center', color:'var(--sn-primary)' }}><Icon size={18} aria-hidden="true" /></span>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:'0.875rem', fontWeight:600, color:'var(--sn-text)' }}>{item.label}</div>
                     <div style={{ fontSize:'0.7rem', color:'var(--sn-subtle)', marginTop:2 }}>{item.sub}</div>
@@ -153,7 +155,8 @@ export default function AppearancePage() {
                   <ChevronRight size={14} color="#CBD5E1" />
                 </div>
               </Link>
-            ))}
+              )
+            })}
           </div>
         </div>
 

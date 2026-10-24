@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/lib/lang-context'
 import type { ConversationContext } from '@/lib/shopnekt-ai/data-core'
+import { sb } from '@/lib/supabase'
 import { ArrowLeft, Send, Square, Copy, Check, RotateCcw, Plus } from 'lucide-react'
 
 type ChatMessage = {
@@ -61,9 +62,12 @@ export default function ShopNektAIPage() {
     abortRef.current = controller
 
     try {
+      const { data: { session } } = await sb.auth.getSession()
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      if (session?.access_token) {headers.Authorization = `Bearer ${session.access_token}`}
       const res = await fetch('/api/shopnekt-ai', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           text, context: contextRef.current, applicationLanguage: lang,
           turn: turnRef.current, confirmingPreviousAction: confirming,

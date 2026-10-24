@@ -84,17 +84,13 @@ async function loadReports(){
   const since = new Date(); since.setDate(since.getDate()-days);
   const fmt   = n=>'TZS '+Number(n).toLocaleString();
 
-  const[{data:sales,error:salesErr},{data:orders,error:ordersErr}]=await Promise.all([
-    sb.from('seller_sales').select('*').eq('store_id',shopData?.id).gte('created_at',since.toISOString()),
-    sb.from(shopData?._market==='campus'?'campus_orders':'orders').select('*').eq(shopData?._market==='campus'?'store_id':'shop_id',shopData?.id).gte('created_at',since.toISOString()),
-  ]);
-
-  if(salesErr) console.warn('[reports/sales]', salesErr.message)
-  if(ordersErr) console.warn('[reports/orders]', ordersErr.message)
-  const revenue  =(sales||[]).filter(s=>s.category!=='expense'&&s.category!=='invoice').reduce((a,s)=>a+Number(s.amount),0);
-  const expense  =(sales||[]).filter(s=>s.category==='expense').reduce((a,s)=>a+Number(s.amount),0);
+  const [allSales, allOrders] = await Promise.all([DB.sales.getAll(shopData?.id), DB.orders.getAll(shopData?.id)]);
+  const sales = (allSales || []).filter(s => new Date(s.created_at || s.sale_date || s.date) >= since);
+  const orders = (allOrders || []).filter(o => new Date(o.created_at) >= since);
+  const revenue  =sales.filter(s=>s.category!=='expense'&&s.category!=='invoice').reduce((a,s)=>a+Number(s.amount),0);
+  const expense  =sales.filter(s=>s.category==='expense').reduce((a,s)=>a+Number(s.amount),0);
   const profit   =revenue-expense;
-  const orderCnt =(orders||[]).length;
+  const orderCnt =orders.length;
 
   document.getElementById('rRevenue').textContent=fmt(revenue);
   document.getElementById('rExpense').textContent=fmt(expense);
@@ -104,7 +100,7 @@ async function loadReports(){
 
   // Top products
   const prodMap={};
-  (orders||[]).forEach(o=>{
+  orders.forEach(o=>{
     prodMap[o.product_name]=(prodMap[o.product_name]||{name:o.product_name,orders:0,revenue:0});
     prodMap[o.product_name].orders++;
     prodMap[o.product_name].revenue+=Number(o.total_amount||0);
@@ -115,7 +111,7 @@ async function loadReports(){
     :'<tr><td colspan="3" class="empty-state"><h4>No orders yet</h4></td></tr>';
 
   // Recent sales
-  const recent=(sales||[]).slice(0,8);
+  const recent=sales.slice(0,8);
   document.getElementById('recentSalesTbl').innerHTML=recent.length
     ?recent.map(s=>`<tr><td><small>${new Date(s.created_at).toLocaleDateString('en-GB')}</small></td><td>${s.description||'-'}</td><td class="${s.category==='expense'?'expense':'income'}">${s.category==='expense'?'-':'+'} ${fmt(s.amount)}</td></tr>`).join('')
     :'<tr><td colspan="3" class="empty-state"><h4>No sales yet</h4></td></tr>';

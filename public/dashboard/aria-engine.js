@@ -4,24 +4,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 const ARIA = (() => {
-  const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-  const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
   const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
-
-  // ── Supabase helper ─────────────────────────────────────────
-  async function sb(table, method='GET', body=null, query='') {
-    const res = await fetch(`${SB_URL}/rest/v1/${table}${query}`, {
-      method,
-      headers: {
-        'apikey': SB_KEY,
-        'Authorization': `Bearer ${SB_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': method === 'POST' ? 'return=representation' : '',
-      },
-      body: body ? JSON.stringify(body) : null
-    })
-    return res.json()
-  }
 
   // ── Session ─────────────────────────────────────────────────
   function getSession() {
@@ -70,96 +53,77 @@ const ARIA = (() => {
 
   // ── Data fetchers ────────────────────────────────────────────
   async function fetchStore() {
-    const id = getStoreId()
-    if (!id) {return null}
-    const [store] = await sb('pending_payments', 'GET', null, `?id=eq.${id}`)
-    return store
+    const response = await fetch('/api/seller/profile', { credentials: 'same-origin', cache: 'no-store' }).catch(() => null)
+    if (!response?.ok) {return null}
+    const result = await response.json().catch(() => ({}))
+    return result.seller || null
   }
 
   async function fetchProducts() {
-    const id = getStoreId()
-    const session = getSession()
-    // Business sellers use campus_products table (ShopNekt schema)
-    const table = 'campus_products'
-    return await sb(table, 'GET', null, `?store_id=eq.${id}&order=created_at.desc`)
+    const result = await sellerDataRequest('products', 'read')
+    return result.data || []
   }
 
   async function fetchOrders(days=30) {
-    const id = getStoreId()
     const since = new Date()
     since.setDate(since.getDate() - days)
-    try {
-      const data = await sb('orders', 'GET', null,
-        `?store_id=eq.${id}&created_at=gte.${since.toISOString()}&order=created_at.desc&limit=100`)
-      return Array.isArray(data) ? data : []
-    } catch { return [] }
+    const result = await sellerDataRequest('orders', 'read')
+    return (result.data || []).filter(order => new Date(order.created_at) >= since)
   }
 
   async function fetchSales(days=30) {
-    const id = getStoreId()
     const since = new Date()
     since.setDate(since.getDate() - days)
-    return await sb('seller_sales', 'GET', null,
-      `?store_id=eq.${id}&created_at=gte.${since.toISOString()}&order=created_at.desc`)
+    const result = await sellerDataRequest('sales', 'read')
+    return (result.data || []).filter(sale => new Date(sale.created_at || sale.sale_date) >= since)
   }
 
   async function fetchPosts() {
-    const id = getStoreId()
-    return await sb('feed_posts', 'GET', null, `?store_id=eq.${id}&order=created_at.desc&limit=10`)
+    const result = await sellerDataRequest('posts', 'read')
+    return result.data || []
   }
 
   // ── Command executors ─────────────────────────────────────────
   async function addProduct(name, price, stock, category, desc) {
-    const id = getStoreId()
-    const res = await sb('campus_products', 'POST', {
-      store_id: id, name, price: Number(price)||0,
-      stock: Number(stock)||1, category, description: desc,
-      created_at: new Date().toISOString()
-    })
-    return res[0] ? ` Bidhaa "${name}" imeongezwa kwa mafanikio!\nBei: ${fmt(price)} | Stock: ${stock}` : ' Hitilafu imetokea. Jaribu tena.'
+    const result = await sellerDataRequest('products', 'create', { name, price: Number(price)||0, stock: Number(stock)||1, category, description: desc })
+    return result.error ? ' Hitilafu imetokea. Jaribu tena.' : ` Bidhaa "${name}" imeongezwa kwa mafanikio!\nBei: ${fmt(price)} | Stock: ${stock}`
   }
 
   async function createFlashDeal(productName, discount, hours) {
-    const id = getStoreId()
     const expiry = new Date()
     expiry.setHours(expiry.getHours() + (Number(hours)||24))
     const products = await fetchProducts()
     const product = products.find(p => p.name?.toLowerCase().includes(productName?.toLowerCase()))
     if (!product) {return ` Sikupata bidhaa "${productName}". Tafadhali angalia jina na ujaribu tena.`}
     const dealPrice = product.price * (1 - Number(discount)/100)
-    await sb('flash_deals', 'POST', {
-      store_id: id, product_id: product.id,
+    const result = await sellerDataRequest('flash-deals', 'create', {
       product_name: product.name, original_price: product.price,
       deal_price: dealPrice, discount_pct: Number(discount),
-      expires_at: expiry.toISOString(), status: 'active',
-      created_at: new Date().toISOString()
+      ends_at: expiry.toISOString(), status: 'active',
     })
+    if (result.error) {return ' Sikuweza kuunda Flash Deal. Jaribu tena.'}
     return ` Flash Deal imeundwa!\n ${product.name}\n ${fmt(product.price)} → ${fmt(dealPrice)} (-${discount}%)\n⏰ Inakwisha: ${expiry.toLocaleString('en-GB')}`
   }
 
   async function createGroupBuy(productName, discount, minMembers) {
-    const id = getStoreId()
     const products = await fetchProducts()
     const product = products.find(p => p.name?.toLowerCase().includes(productName?.toLowerCase()))
     if (!product) {return ` Sikupata bidhaa "${productName}".`}
     const dealPrice = product.price * (1 - Number(discount)/100)
-    await sb('group_orders', 'POST', {
-      store_id: id, product_name: product.name,
+    const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000)
+    const result = await sellerDataRequest('group-orders', 'create', {
+      product_name: product.name,
       unit_price: product.price, discount_pct: Number(discount),
-      min_members: Number(minMembers)||3, current_members: 0,
-      status: 'open', created_at: new Date().toISOString()
+      min_members: Number(minMembers)||3, expires_at: expiresAt.toISOString(),
     })
+    if (result.error) {return ' Sikuweza kuunda Group Buy. Jaribu tena.'}
     return ` Group Buy imeundwa!\n ${product.name}\n ${fmt(dealPrice)} ukiwa na watu ${minMembers}\n Inahitaji watu ${minMembers} kujoin`
   }
 
   async function createVybePost(content, price, tag) {
-    const id = getStoreId()
     const store = await fetchStore()
-    await sb('feed_posts', 'POST', {
-      store_id: id, shop_name: store?.shop_name,
-      content, caption: content, price: Number(price)||null,
-      tag, created_at: new Date().toISOString()
-    })
+    const result = await sellerDataRequest('posts', 'create', { content, price: Number(price)||null, tag })
+    if (result.error) {return ' Sikuweza kuchapisha ujumbe. Jaribu tena.'}
     return ` Post imechapishwa kwenye Social Vybe!\n\n"${content}"\n\nWateja wataona post yako hivi karibuni.`
   }
 

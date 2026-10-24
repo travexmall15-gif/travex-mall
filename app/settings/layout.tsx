@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Settings',
-  description: 'Manage your ShopNekt account settings — profile, security, notifications, and appearance.',
+  description: 'Manage your shopnekt account settings — profile, security, notifications, and appearance.',
   robots: { index: false, follow: false },
 }
 

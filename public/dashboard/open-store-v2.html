@@ -824,17 +824,10 @@ async function submitApplication(){
       lastError = 'API unavailable — trying direct connection...'
     }
 
-    // ── STRATEGY 2: Cannot bypass RLS with anon key ───────────
+    // ── Fail closed if the authenticated server API is unavailable ──
     if (!submitted) {
-      // The anon/publishable key cannot bypass Supabase RLS.
-      // Fix required (choose one):
-      // A) Add SUPABASE_SERVICE_ROLE_KEY to Vercel environment variables
-      // B) Add this RLS policy in Supabase SQL editor:
-      //    CREATE POLICY "allow_anon_insert" ON pending_payments
-      //    FOR INSERT TO anon WITH CHECK (status = 'pending');
-      throw new Error('Permission denied by database security policy.\n\nTo fix this, your administrator must either:\n\nOption A: Add SUPABASE_SERVICE_ROLE_KEY to Vercel Environment Variables\n\nOption B: Run this SQL in Supabase Dashboard > SQL Editor:\nCREATE POLICY \"allow_anon_insert\" ON pending_payments FOR INSERT TO anon WITH CHECK (status = \'pending\');')
+      throw new Error('Store registration is temporarily unavailable. Please try again shortly.')
     }
-
     // ── SUCCESS ──────────────────────────────────────────────
     if (submitted) {
       document.getElementById('step5').classList.remove('active')

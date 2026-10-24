@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceSupabase } from '@/lib/security/server-supabase'
 import { getClientIp, rateLimit } from '@/lib/security/rate-limit'
+import { hasSameOrigin } from '@/lib/security/http'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const PHONE = /^[0-9+()\s.-]{6,32}$/
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ storeId: string }> }) {
+  if (!hasSameOrigin(request)) {return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 })}
   const limit = rateLimit(`public-order:${getClientIp(request)}`, 5, 3600)
   if (!limit.allowed) {
     return NextResponse.json({ error: 'Too many order attempts. Try again later.' }, { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } })
@@ -28,6 +30,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     const sb = createServiceSupabase()
+    let buyerId: string | null = null
+    const authorization = request.headers.get('authorization') || ''
+    if (authorization) {
+      const match = /^Bearer\s+(.+)$/i.exec(authorization)
+      if (!match) {return NextResponse.json({ error: 'Invalid customer session.' }, { status: 401 })}
+      const { data: authData, error: authError } = await sb.auth.getUser(match[1])
+      if (authError || !authData.user) {return NextResponse.json({ error: 'Invalid customer session.' }, { status: 401 })}
+      buyerId = authData.user.id
+    }
     const [{ data: store, error: storeError }, { data: product, error: productError }] = await Promise.all([
       sb.from('pending_payments').select('id,shop_name,status,selected_template,webstore_status')
         .eq('id', storeId).eq('status', 'approved').maybeSingle(),
@@ -52,6 +63,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       customer_name: customerName,
       customer_phone: customerPhone,
       phone: customerPhone,
+      ...(buyerId ? { buyer_id: buyerId } : {}),
       quantity,
       total_amount: total,
       total_price: total,

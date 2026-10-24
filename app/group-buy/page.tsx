@@ -22,8 +22,8 @@ type Group = {
   current_members: number | null
   expires_at: string | null
   status: string | null
-  category: string | null
-  description: string | null
+  category?: string | null
+  description?: string | null
   product_image?: string | null
 }
 
@@ -301,7 +301,7 @@ export default function GroupBuyPage() {
     setLoading(true); setError(null)
     try {
       const { data, error: err } = await sb
-        .from('group_orders').select('*')
+        .from('group_orders').select('id,store_id,shop_name,product_name,product_image,unit_price,discount_pct,min_members,current_members,expires_at,status,created_at')
         .eq('status', 'open')
         .order('created_at', { ascending: false })
       if (err) {throw err}

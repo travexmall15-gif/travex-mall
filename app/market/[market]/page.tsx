@@ -3,9 +3,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
-import { Search, MapPin, Heart, ArrowLeft, Loader2 } from 'lucide-react'
-import { getCurrentBuyerId, likeShop, unlikeShop } from '@/lib/shop-likes'
-import { sb } from '@/lib/supabase'
+import { Search, MapPin, Heart, ArrowLeft, Loader2, Store, AlertCircle } from 'lucide-react'
+import { getCurrentBuyerId, getLikedStoreIds, likeShop, unlikeShop } from '@/lib/shop-likes'
 
 // ── Config ────────────────────────────────────────────────────
 const REGIONS = ['Dar es Salaam', 'Arusha', 'Mwanza', 'Dodoma', 'Tanga']
@@ -42,6 +41,8 @@ type Shop = {
   shop_name: string; shop_category: string | null; shop_region: string | null
   shop_whatsapp: string | null; shop_desc: string | null
   shop_color: string | null; shop_logo_url: string | null
+  selected_template: string | null; webstore_status: string | null
+  product_previews?: Array<{ id: string; name: string; image_url: string }>
   plan: 'premium' | 'basic'
   status: string; created_at: string
 }
@@ -55,7 +56,7 @@ export default function MarketInnerPage() {
   const { t } = useTranslation()
   const [shops,    setShops]    = useState<Shop[]>([])
   const [loading,  setLoading]  = useState(true)
-  const [search,   setSearch]   = useState('')
+  const [loadError, setLoadError] = useState(false)
   const [region,   setRegion]   = useState('')
   const [category, setCategory] = useState('')
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set())
@@ -64,11 +65,16 @@ export default function MarketInnerPage() {
   const load = useCallback(async () => {
     if (!cfg) {return}
     setLoading(true)
+    setLoadError(false)
     try {
-      const response = await fetch(`/api/public/market?type=market&market=${encodeURIComponent(market)}`, { cache: 'no-store' })
+      const response = await fetch(`/api/public/market?type=market&market=${encodeURIComponent(market)}&include_product_previews=1`, { cache: 'no-store' })
       const result = await response.json().catch(() => null)
+      if (!response.ok) {setShops([]); setLoadError(true); return}
       const data = response.ok && Array.isArray(result?.shops) ? result.shops : []
       setShops(data.map((shop: any) => ({ ...shop, owner_name: '', owner_phone: null, shop_color: null })) as Shop[])
+    } catch {
+      setShops([])
+      setLoadError(true)
     } finally {
       setLoading(false)
     }
@@ -86,8 +92,8 @@ export default function MarketInnerPage() {
       if (cancelled) {return}
       setBuyerId(id)
       if (!id) {return}
-      const { data } = await sb.from('shop_likes').select('store_id').eq('user_id', id).in('store_id', shops.map(s => s.id))
-      if (!cancelled && data) {setLikedIds(new Set(data.map((r: any) => r.store_id)))}
+      const liked = await getLikedStoreIds(shops.map(s => s.id))
+      if (!cancelled) {setLikedIds(liked)}
     })()
     return () => { cancelled = true }
   }, [shops])
@@ -114,14 +120,10 @@ export default function MarketInnerPage() {
 
   // Client-side filters
   const visible = shops.filter(s => {
-    const q = search.toLowerCase()
-    const matchSearch = !q ||
-      s.shop_name.toLowerCase().includes(q) ||
-      (s.shop_desc || '').toLowerCase().includes(q)
     const matchRegion   = !region   || s.shop_region   === region
     const matchCategory = !category || s.shop_category === category ||
       (cfg?.allCats.includes(category))
-    return matchSearch && matchRegion && matchCategory
+    return matchRegion && matchCategory
   })
 
   // 404 guard
@@ -129,7 +131,7 @@ export default function MarketInnerPage() {
     return (
       <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
+          <Search size={32} color="var(--sn-subtle)" style={{ marginBottom: '1rem' }} />
           <p style={{ color: 'var(--sn-muted)' }}>{t('market.marketNotFound')}</p>
           <Link href="/market" style={{ color: 'var(--sn-text)', fontWeight: 700, fontSize: '0.85rem' }}>← {t('market.backToMarketplaces')}</Link>
         </div>
@@ -145,7 +147,7 @@ export default function MarketInnerPage() {
         .mk-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--sn-border);background:var(--sn-bg);color:var(--sn-muted);white-space:nowrap;transition:border-color 0.15s,background 0.15s,color 0.15s}
         .mk-chip.active{background:var(--sn-text);color:var(--sn-page);border-color:var(--sn-text)}
         .mk-chip:hover:not(.active){border-color:var(--sn-border-strong)}
-        .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
+        .shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem}
         @media(max-width:600px){.shop-grid{grid-template-columns:1fr}}
       `}</style>
 
@@ -162,16 +164,6 @@ export default function MarketInnerPage() {
           <p style={{ color: 'var(--sn-muted)', fontSize: '0.83rem', marginTop: '0.25rem' }}>
             {loading ? '...' : t(shops.length === 1 ? 'market.verifiedStoreCount' : 'market.verifiedStoresCount', { count: shops.length })}
           </p>
-        </div>
-
-        {/* Search */}
-        <div style={{ position: 'relative', marginBottom: '1rem' }}>
-          <Search size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--sn-subtle)' }} />
-          <input
-            value={search} onChange={e => setSearch(e.target.value)}
-            placeholder={t('market.searchInMarket', { market: marketLabel.toLowerCase() })}
-            style={{ width: '100%', boxSizing: 'border-box', paddingLeft: 38, paddingRight: 16, paddingTop: 11, paddingBottom: 11, border: '1.5px solid var(--sn-input-border)', borderRadius: 12, fontSize: '0.85rem', outline: 'none', background: 'var(--sn-input)', color: 'var(--sn-text)' }}
-          />
         </div>
 
         {/* Region filter */}
@@ -201,12 +193,18 @@ export default function MarketInnerPage() {
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
             <p style={{ fontSize: '0.85rem' }}>{t('market.loadingStores')}</p>
           </div>
+        ) : loadError ? (
+          <div role="alert" style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--sn-muted)' }}>
+            <AlertCircle size={30} color="#DC2626" style={{ marginBottom: 10 }} />
+            <p style={{ fontWeight: 700, color: 'var(--sn-text)', margin: '0 0 0.4rem' }}>Stores could not be loaded.</p>
+            <button onClick={() => load()} style={{ marginTop: '0.5rem', padding: '8px 20px', borderRadius: 999, border: '1.5px solid var(--sn-border)', background: 'var(--sn-bg)', color: 'var(--sn-text)', fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer' }}>Try again</button>
+          </div>
         ) : visible.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--sn-muted)' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🏪</div>
+            <Store size={36} color="var(--sn-subtle)" style={{ marginBottom: '0.75rem' }} />
             <p style={{ fontWeight: 700, color: 'var(--sn-text)', marginBottom: '0.4rem' }}>{t('market.noStoresFound')}</p>
             <p style={{ fontSize: '0.83rem' }}>{t('market.adjustFilters')}</p>
-            <button onClick={() => { setSearch(''); setRegion(''); setCategory('') }}
+            <button onClick={() => { setRegion(''); setCategory('') }}
               style={{ marginTop: '1rem', padding: '8px 20px', borderRadius: 999, border: '1.5px solid var(--sn-border)', background: 'var(--sn-bg)', color: 'var(--sn-text)', fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer' }}>
               {t('market.clearFilters')}
             </button>
@@ -231,10 +229,15 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
   t: (k: string, vars?: Record<string, string | number>) => string
 }) {
   const [hovered, setHovered] = useState(false)
+  const [failedPreviewIds, setFailedPreviewIds] = useState<Set<string>>(new Set())
 
   const isPremium  = shop.plan === 'premium'
   const color      = shop.shop_color || (isPremium ? '#7800FF' : accentColor)
   const init       = (shop.shop_name || 'SH').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  const eligibleForPreviews = shop.status === 'approved' && !!shop.selected_template && shop.webstore_status === 'published'
+  const previews = eligibleForPreviews
+    ? (shop.product_previews || []).filter(product => !failedPreviewIds.has(product.id)).slice(0, 3)
+    : []
 
   return (
     <Link href={`/store/${shop.id}`} style={{ textDecoration: 'none' }}>
@@ -251,11 +254,6 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
 
         {/* Header */}
         <div style={{ background: 'var(--sn-bg)', padding: '14px 14px 10px', position: 'relative', borderBottom: '1px solid var(--sn-border)' }}>
-          {isPremium && (
-            <span style={{ position: 'absolute', top: 10, right: 10, background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 9px', borderRadius: 999, letterSpacing: '0.06em' }}>
-              ★ {t('market.premiumBadge')}
-            </span>
-          )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--sn-page)', border: '1.5px solid var(--sn-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: color, flexShrink: 0, overflow: 'hidden' }}>
               {shop.shop_logo_url
@@ -267,7 +265,7 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
                 {shop.shop_name}
               </div>
               <div style={{ fontSize: 10, color: 'var(--sn-subtle)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <MapPin size={8} color="#7800FF" /> {shop.shop_region}
+                {shop.shop_region && <><MapPin size={10} color="#7800FF" /> {shop.shop_region}</>}
                 {shop.shop_category && <> · {shop.shop_category}</>}
               </div>
             </div>
@@ -287,15 +285,22 @@ function ShopCard({ shop, accentColor, liked, onToggleLike, t }: {
               {shop.shop_desc}
             </p>
           )}
-          <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.7rem', color: 'var(--sn-subtle)', fontWeight: 600 }}>
-              {isPremium ? `★ ${t('market.premiumBadge')}` : t('market.basicBadge')}
-            </span>
+          <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--sn-text)' }}>
               {t('market.visitStore')} →
             </span>
           </div>
         </div>
+
+        {previews.length > 0 && (
+          <div aria-label={`Products from ${shop.shop_name}`} style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 6, padding: '0 13px 13px' }}>
+            {previews.map(product => (
+              <div key={product.id} style={{ height: 64, borderRadius: 9, overflow: 'hidden', background: 'var(--sn-page)' }}>
+                <img src={product.image_url} alt={product.name} loading="lazy" onError={() => setFailedPreviewIds(previous => new Set(previous).add(product.id))} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   )

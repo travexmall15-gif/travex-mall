@@ -123,7 +123,7 @@ async function dispatch(tool: ToolDefinition, input: Record<string, unknown>, co
       const { order } = await buyerTools.toolGetOrderRaw(String(input.orderId))
       return order
     }
-    case 'createOrder': return buyerTools.toolCreateOrder(input as any)
+    case 'createOrder': return buyerTools.toolCreateOrder({ ...(input as any), buyerId: context.userId! })
 
     // Seller
     case 'getInventory': return sellerTools.toolGetInventory(context.shopId!)

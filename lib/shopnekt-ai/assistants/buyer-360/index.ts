@@ -1,4 +1,3 @@
-import { getCurrentBuyerId } from '@/lib/shop-likes'
 import { getIntentsForRole, getToolsForRole, type SupportedLanguage, type ConversationContext } from '../../data-core'
 import type { AIRequestContext } from '../../core/security/authorize'
 import { processMessage, type ProcessMessageResult } from '../../core/orchestrator'
@@ -15,20 +14,18 @@ import { createConversationContext } from '../../core/context/engine'
 
 /**
  * Builds the buyer's identity context from a REAL resolved session —
- * getCurrentBuyerId() checks a live Supabase Auth session first, then
- * falls back to the OTP-based customer session, exactly the same way
- * the rest of the buyer app resolves identity (see lib/shop-likes.ts,
- * already used throughout the storefront/market/search features).
+ * The caller supplies only a user id already verified from a Supabase
+ * Auth access token.
  * Returns userId: null for a fully anonymous visitor — Buyer 360 AI
  * still works for public tools (search) in that case, per
  * ToolPermission.public.
  */
 export async function createBuyerRequestContext(
   sessionId: string,
-  applicationLanguage: SupportedLanguage
+  applicationLanguage: SupportedLanguage,
+  verifiedUserId: string | null = null
 ): Promise<AIRequestContext> {
-  const userId = await getCurrentBuyerId()
-  return { sessionId, userId, role: 'buyer', shopId: null, applicationLanguage }
+  return { sessionId, userId: verifiedUserId, role: 'buyer', shopId: null, applicationLanguage }
 }
 
 export function startBuyerConversation(conversationId: string, requestContext: AIRequestContext): ConversationContext {

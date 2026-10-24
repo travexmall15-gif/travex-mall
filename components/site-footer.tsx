@@ -34,7 +34,7 @@ export function SiteFooter() {
         fontWeight: 500,
         letterSpacing: '0.02em',
       }}>
-        from QNEX360
+        shopnekt — from QNEX360
       </p>
     </footer>
   )

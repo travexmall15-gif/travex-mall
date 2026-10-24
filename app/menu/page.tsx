@@ -193,7 +193,7 @@ export default function MenuPage() {
         </div>
 
         <p style={{ textAlign:'center', fontSize:'0.62rem', color:'#CBD5E1', marginTop:'1.5rem', letterSpacing:'0.05em' }}>
-          ShopNekt v1.0.0 &middot; from QNEX360
+          shopnekt v1.0.0 &middot; from QNEX360
         </p>
       </div>
 

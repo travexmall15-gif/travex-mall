@@ -4,27 +4,27 @@ const BASE = 'https://shopnekt.vercel.app'
 
 export const metadata: Metadata = {
   title: 'Group Buy — Unlock Bulk Discounts Together',
-  description: 'Join group purchases on ShopNekt and unlock huge bulk discounts. The more people join, the lower the price for everyone.',
-  keywords: ['group buy', 'bulk discount', 'collective buying', 'group purchase Tanzania', 'ShopNekt group buy'],
+  description: 'Join group purchases on shopnekt and unlock huge bulk discounts. The more people join, the lower the price for everyone.',
+  keywords: ['group buy', 'bulk discount', 'collective buying', 'group purchase Tanzania', 'shopnekt group buy'],
   alternates: { canonical: `${BASE}/group-buy` },
   openGraph: {
     type: 'website',
     url: `${BASE}/group-buy`,
-    siteName: 'ShopNekt',
-    title: 'Group Buy — Unlock Bulk Discounts Together | ShopNekt',
-    description: 'Join group purchases on ShopNekt and unlock huge bulk discounts. The more people join, the lower the price for everyone.',
+    siteName: 'shopnekt',
+    title: 'Group Buy — Unlock Bulk Discounts Together | shopnekt',
+    description: 'Join group purchases on shopnekt and unlock huge bulk discounts. The more people join, the lower the price for everyone.',
     images: [{
       url: `${BASE}/og-image.png`,
       width: 1200,
       height: 630,
-      alt: 'Group Buy — Unlock Bulk Discounts Together — ShopNekt',
+      alt: 'Group Buy — Unlock Bulk Discounts Together — shopnekt',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@shopnekt',
-    title: 'Group Buy — Unlock Bulk Discounts Together | ShopNekt',
-    description: 'Join group purchases on ShopNekt and unlock huge bulk discounts. The more people join, the lower the price for everyone.',
+    title: 'Group Buy — Unlock Bulk Discounts Together | shopnekt',
+    description: 'Join group purchases on shopnekt and unlock huge bulk discounts. The more people join, the lower the price for everyone.',
     images: [`${BASE}/og-image.png`],
   },
 }

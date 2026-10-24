@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { NextRequest, NextResponse } from 'next/server'
+vi.mock('server-only', () => ({}))
 import { setSellerSession, setAdminSession, setWebstoreOwnerSession } from '@/lib/security/signed-session'
 
 const serviceMock = vi.hoisted(() => ({ create: vi.fn(), rpc: vi.fn(), lockedUntil: null as string | null }))
@@ -13,10 +14,19 @@ import { GET as analyticsGet } from '../analytics/route'
 import { POST as notifyPost, PUT as notifyPut } from '../notify/route'
 import { PATCH as adminWebstorePatch } from '../admin/webstores/route'
 import { POST as sellerLogin } from '../seller/auth/login/route'
+import { GET as sellerDataGet, POST as sellerDataPost } from '../seller/data/route'
+import { POST as ariaChatPost } from '../ai-chat-aria/route'
 import { GET as webstoreStatusGet, PATCH as webstoreStatusPatch } from '../webstore/application/route'
 import { GET as adminOperationsGet, POST as adminOperationsPost } from '../admin/operations/route'
 import { PATCH as sellerSettingsPatch } from '../seller/settings/route'
 import { GET as sellerProfileGet } from '../seller/profile/route'
+import { POST as shopLikePost } from '../shop-likes/route'
+import { POST as vybeLikePost } from '../vybe/like/route'
+import { GET as customerOrdersGet } from '../customer/orders/route'
+import { GET as customerOrderGet } from '../customer/orders/[id]/route'
+import { POST as customerPaymentPost } from '../customer/orders/[id]/payment/route'
+import { POST as confirmDeliveryPost } from '../customer/orders/[id]/confirm-delivery/route'
+import { POST as storeMessagePost } from '../store-messages/route'
 
 const originalSellerSecret = process.env.SELLER_SESSION_SECRET
 const originalAdminSecret = process.env.SHOPNEKT_SESSION_SECRET
@@ -72,6 +82,160 @@ afterEach(() => {
 })
 
 describe('protected API boundaries', () => {
+  it('requires a server-issued seller session for seller AI mode', async () => {
+    const request = new NextRequest('https://shopnekt.test/api/ai-chat-aria', {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ mode: 'seller', userId: sellerA, message: 'show revenue' }),
+    })
+    expect((await ariaChatPost(request)).status).toBe(401)
+    expect(serviceMock.create).not.toHaveBeenCalled()
+  })
+
+  it('does not let a client supplied user id expose another customer order history through AI', async () => {
+    const query = mockQuery({ data: [], error: null })
+    const from = vi.fn((_table: string) => query)
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/ai-chat-aria', {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ mode: 'buyer', userId: sellerB, message: 'tracking my order history' }),
+    })
+    const response = await ariaChatPost(request)
+    expect(response.status).toBe(200)
+    expect(from.mock.calls.map(([table]) => table)).not.toContain('orders')
+  })
+
+  it('rejects seller data requests without a seller session', async () => {
+    const request = new NextRequest('https://shopnekt.test/api/seller/data?resource=orders')
+    expect((await sellerDataGet(request)).status).toBe(401)
+    expect(serviceMock.create).not.toHaveBeenCalled()
+  })
+
+  it('does not treat a normal customer cookie as seller authentication for seller data', async () => {
+    const request = new NextRequest('https://shopnekt.test/api/seller/data?resource=orders', {
+      headers: { cookie: 'sn_customer_session=%7B%22id%22%3A%22customer-1%22%7D' },
+    })
+    expect((await sellerDataGet(request)).status).toBe(401)
+    expect(serviceMock.create).not.toHaveBeenCalled()
+  })
+
+  it('binds seller data reads to the signed seller even if another store id is requested', async () => {
+    const query = mockQuery({ data: [{ id: applicationId }], error: null })
+    const from = vi.fn().mockReturnValue(query)
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest(`https://shopnekt.test/api/seller/data?resource=orders&store_id=${sellerB}`, {
+      headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}` },
+    })
+    const response = await sellerDataGet(request)
+    expect(response.status).toBe(200)
+    expect(query.eq).toHaveBeenCalledWith('store_id', sellerA)
+    expect(query.eq).not.toHaveBeenCalledWith('store_id', sellerB)
+  })
+
+  it('overwrites a forged store id with the signed seller id when creating products', async () => {
+    let inserted: Record<string, unknown> | undefined
+    const query = mockQuery({ data: { id: applicationId }, error: null }) as any
+    query.insert = vi.fn((values: Record<string, unknown>) => { inserted = values; return query })
+    query.single = vi.fn(async () => ({ data: { id: applicationId }, error: null }))
+    const from = vi.fn().mockReturnValue(query)
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/seller/data', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ resource: 'products', action: 'create', item: { store_id: sellerB, name: 'Secure product', price: 1200 } }),
+    })
+    expect((await sellerDataPost(request)).status).toBe(201)
+    expect(inserted?.store_id).toBe(sellerA)
+  })
+
+  it('rejects malformed seller data values before writing', async () => {
+    const query = mockQuery({ data: null, error: null }) as any
+    const from = vi.fn().mockReturnValue(query)
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/seller/data', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ resource: 'products', action: 'create', item: { name: 'Invalid price', price: -4 } }),
+    })
+    expect((await sellerDataPost(request)).status).toBe(400)
+    expect(from).not.toHaveBeenCalled()
+  })
+
+  it('requires a verified buyer token before changing preferred shops and ignores client user ids', async () => {
+    const anonymous = new NextRequest('https://shopnekt.test/api/shop-likes', {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ store_id: sellerA, user_id: sellerB, liked: true }),
+    })
+    serviceMock.create.mockReturnValue({ auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: new Error('invalid token') }) } })
+    expect((await shopLikePost(anonymous)).status).toBe(401)
+
+    const query = mockQuery({ data: { id: sellerA }, error: null }) as any
+    let inserted: Record<string, unknown> | undefined
+    query.insert = vi.fn((row: Record<string, unknown>) => { inserted = row; return Promise.resolve({ error: null }) })
+    const from = vi.fn((table: string) => table === 'pending_payments' ? query : query)
+    serviceMock.create.mockReturnValue({
+      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: sellerA } }, error: null }) },
+      from, rpc: serviceMock.rpc,
+    })
+    const authorized = new NextRequest('https://shopnekt.test/api/shop-likes', {
+      method: 'POST', headers: { origin: 'https://shopnekt.test', authorization: 'Bearer verified-customer-token' },
+      body: JSON.stringify({ store_id: sellerA, user_id: sellerB, liked: true }),
+    })
+    expect((await shopLikePost(authorized)).status).toBe(200)
+    expect(inserted).toEqual({ store_id: sellerA, user_id: sellerA })
+    expect(query.eq).toHaveBeenCalledWith('status', 'approved')
+  })
+
+  it('blocks direct unauthenticated feed-like writes and rejects malformed requests', async () => {
+    const wrongOrigin = new NextRequest('https://shopnekt.test/api/vybe/like', {
+      method: 'POST', headers: { origin: 'https://attacker.test' },
+      body: JSON.stringify({ post_id: applicationId, liked: true }),
+    })
+    expect((await vybeLikePost(wrongOrigin)).status).toBe(403)
+    const malformed = new NextRequest('https://shopnekt.test/api/vybe/like', {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ post_id: 'not-a-uuid', liked: 100 }),
+    })
+    expect((await vybeLikePost(malformed)).status).toBe(400)
+  })
+
+  it('requires verified customer authentication for orders, payment and delivery confirmation', async () => {
+    const orders = new NextRequest('https://shopnekt.test/api/customer/orders')
+    expect((await customerOrdersGet(orders)).status).toBe(401)
+    const order = new NextRequest(`https://shopnekt.test/api/customer/orders/${applicationId}`)
+    expect((await customerOrderGet(order, { params: Promise.resolve({ id: applicationId }) })).status).toBe(401)
+    const payment = new NextRequest(`https://shopnekt.test/api/customer/orders/${applicationId}/payment`, {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' }, body: JSON.stringify({ payment_method: 'mpesa', payment_option: 'full' }),
+    })
+    expect((await customerPaymentPost(payment, { params: Promise.resolve({ id: applicationId }) })).status).toBe(401)
+    const delivery = new NextRequest(`https://shopnekt.test/api/customer/orders/${applicationId}/confirm-delivery`, {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' },
+    })
+    expect((await confirmDeliveryPost(delivery, { params: Promise.resolve({ id: applicationId }) })).status).toBe(401)
+    expect(serviceMock.create).not.toHaveBeenCalled()
+  })
+
+  it('does not return an order when the verified customer does not own it', async () => {
+    const query = mockQuery({ data: null, error: null })
+    serviceMock.create.mockReturnValue({
+      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: sellerA } }, error: null }) },
+      from: vi.fn(() => query),
+    })
+    const request = new NextRequest(`https://shopnekt.test/api/customer/orders/${applicationId}`, {
+      headers: { authorization: 'Bearer verified-token' },
+    })
+    expect((await customerOrderGet(request, { params: Promise.resolve({ id: applicationId }) })).status).toBe(404)
+    expect(query.eq).toHaveBeenCalledWith('buyer_id', sellerA)
+  })
+
+  it('rejects cross-origin public store messages and validates message input', async () => {
+    const forbidden = new NextRequest('https://shopnekt.test/api/store-messages', {
+      method: 'POST', headers: { origin: 'https://attacker.test' }, body: JSON.stringify({ store_id: sellerA, sender_name: 'Buyer', message: 'Hello' }),
+    })
+    expect((await storeMessagePost(forbidden)).status).toBe(403)
+    const invalid = new NextRequest('https://shopnekt.test/api/store-messages', {
+      method: 'POST', headers: { origin: 'https://shopnekt.test' }, body: JSON.stringify({ store_id: sellerA, sender_name: 'A', message: '' }),
+    })
+    expect((await storeMessagePost(invalid)).status).toBe(400)
+  })
+
   it('rejects unauthenticated dashboard statistics requests', async () => {
     const request = new NextRequest('https://shopnekt.test/api/dashboard-stats', { method: 'POST', body: JSON.stringify({ shop_id: sellerA, market: 'business' }) })
     expect((await dashboardStats(request)).status).toBe(401)

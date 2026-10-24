@@ -4,27 +4,27 @@ const BASE = 'https://shopnekt.vercel.app'
 
 export const metadata: Metadata = {
   title: 'Social Vybe — Discover Products Through Photos & Videos',
-  description: 'Discover trending products through photos and videos on ShopNekt Social Vybe. Like, share, and shop directly from your feed.',
-  keywords: ['social commerce', 'product discovery', 'ShopNekt vybe', 'shop social feed', 'buy from videos'],
+  description: 'Discover trending products through photos and videos on shopnekt Social Vybe. Like, share, and shop directly from your feed.',
+  keywords: ['social commerce', 'product discovery', 'shopnekt vybe', 'shop social feed', 'buy from videos'],
   alternates: { canonical: `${BASE}/vybe` },
   openGraph: {
     type: 'website',
     url: `${BASE}/vybe`,
-    siteName: 'ShopNekt',
-    title: 'Social Vybe — Discover Products Through Photos & Videos | ShopNekt',
-    description: 'Discover trending products through photos and videos on ShopNekt Social Vybe. Like, share, and shop directly from your feed.',
+    siteName: 'shopnekt',
+    title: 'Social Vybe — Discover Products Through Photos & Videos | shopnekt',
+    description: 'Discover trending products through photos and videos on shopnekt Social Vybe. Like, share, and shop directly from your feed.',
     images: [{
       url: `${BASE}/og-image.png`,
       width: 1200,
       height: 630,
-      alt: 'Social Vybe — Discover Products Through Photos & Videos — ShopNekt',
+      alt: 'Social Vybe — Discover Products Through Photos & Videos — shopnekt',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@shopnekt',
-    title: 'Social Vybe — Discover Products Through Photos & Videos | ShopNekt',
-    description: 'Discover trending products through photos and videos on ShopNekt Social Vybe. Like, share, and shop directly from your feed.',
+    title: 'Social Vybe — Discover Products Through Photos & Videos | shopnekt',
+    description: 'Discover trending products through photos and videos on shopnekt Social Vybe. Like, share, and shop directly from your feed.',
     images: [`${BASE}/og-image.png`],
   },
 }
