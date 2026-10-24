@@ -1,85 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
-
-const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
-  || process.env.SUPABASE_ANON_KEY
-  || 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
+import { createServiceSupabase } from '@/lib/security/server-supabase'
+import { readSellerSession } from '@/lib/security/signed-session'
 
 export async function POST(req: NextRequest) {
   try {
-    const { shop_id, login_password, market, period_days = 30 } = await req.json()
-
-    if (!shop_id) {
-      return NextResponse.json({ error: 'shop_id required' }, { status: 400 })
-    }
-    if (!login_password) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    // The PIN is only 4 digits (10,000 possibilities) — rate limit PIN
-    // attempts per shop_id to blunt brute-forcing (Part 37), on top of
-    // the ownership check itself.
-    const { allowed, retryAfterSeconds } = rateLimit(`dashboard-stats:${shop_id}:${getClientIp(req)}`, 10, 300)
-    if (!allowed) {
-      return NextResponse.json({ error: 'Too many attempts. Please wait before retrying.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
+    const body = await req.json()
+    const shopId = typeof body.shop_id === 'string' ? body.shop_id : ''
+    const market = body.market === undefined || body.market === 'business' ? 'business' : ''
+    const periodDays = body.period_days === undefined ? 30 : Number(body.period_days)
+    if (!shopId || !market || !Number.isInteger(periodDays) || periodDays < 1 || periodDays > 365) {
+      return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
     }
 
-    const sb = createClient(SB_URL, SB_KEY)
+    const session = readSellerSession(req)
+    if (!session) {return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })}
+    if (session.sellerId !== shopId || session.market !== market) {return NextResponse.json({ error: 'Forbidden.' }, { status: 403 })}
 
-    // Verify shop exists AND the caller supplied the correct seller PIN
-    // (login_password) for this shop — never trust a client-supplied
-    // shop_id alone, since shop ids are public (they're the storefront
-    // URL slug at /store/[id]). This is a stop-gap authorization check
-    // matching the app's existing PIN-based seller auth model; the
-    // durable fix is a real server-verifiable session (see security
-    // audit notes) rather than a per-request shared secret.
-    const table  = market === 'campus' ? 'campus_stores' : 'pending_payments'
-    const idCol  = 'id'
+    const limit = rateLimit(`dashboard-stats:${session.sellerId}:${getClientIp(req)}`, 60, 300)
+    if (!limit.allowed) {return NextResponse.json({ error: 'Too many requests.' }, { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } })}
 
-    const { data: shopRecord } = await sb
-      .from(table).select('id, login_password').eq(idCol, shop_id).maybeSingle()
+    const sb = createServiceSupabase()
+    const { data: store, error: storeError } = await sb.from('pending_payments').select('id,status').eq('id', shopId).maybeSingle()
+    if (storeError) {return NextResponse.json({ error: 'Unable to load statistics.' }, { status: 503 })}
+    const storeIsActive = (store as { status?: string } | null)?.status === 'approved'
+    if (!store || !storeIsActive) {return NextResponse.json({ error: 'Forbidden.' }, { status: 403 })}
 
-    if (!shopRecord || String(shopRecord.login_password || '') !== String(login_password)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
-    }
-
-    const since = new Date()
-    since.setDate(since.getDate() - period_days)
-
-    const ordersTable = 'orders'
-    const ordersIdCol = market === 'campus' ? 'store_id' : 'shop_id'
-
+    const since = new Date(Date.now() - periodDays * 24 * 60 * 60 * 1000).toISOString()
     const [ordersResult, productsResult] = await Promise.all([
-      sb.from(ordersTable)
-        .select('id,status,total_amount,total_price,product_name,customer_name,customer_phone,created_at')
-        .eq(ordersIdCol, shop_id)
-        .gte('created_at', since.toISOString())
-        .order('created_at', { ascending: false }),
-      sb.from(market === 'campus' ? 'campus_products' : 'products')
-        .select('id,name,price,stock')
-        .eq(market === 'campus' ? 'store_id' : 'shop_id', shop_id),
+      sb.from('orders').select('id,status,total_amount,total_price,product_name,created_at')
+        .eq('store_id', shopId).gte('created_at', since).order('created_at', { ascending: false }).limit(500),
+      sb.from('products').select('id,name,price,stock').eq('store_id', shopId).limit(500),
     ])
-
+    if (ordersResult.error || productsResult.error) {return NextResponse.json({ error: 'Unable to load statistics.' }, { status: 503 })}
     const orders = ordersResult.data || []
     const products = productsResult.data || []
-
-    // Compute stats server-side
-    const revenue = orders
-      .filter(o => o.status !== 'cancelled')
-      .reduce((s, o) => s + Number(o.total_amount || o.total_price || 0), 0)
-
     const stats = {
-      total_orders:   orders.length,
-      pending_orders: orders.filter(o => o.status === 'pending').length,
-      revenue,
+      total_orders: orders.length,
+      pending_orders: orders.filter(order => order.status === 'pending').length,
+      revenue: orders.filter(order => order.status !== 'cancelled')
+        .reduce((sum, order) => sum + Number(order.total_amount || order.total_price || 0), 0),
       total_products: products.length,
     }
-
     return NextResponse.json({ stats, orders: orders.slice(0, 50), products })
-
-  } catch (err: any) {
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  } catch {
+    return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
   }
 }

@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { sb } from '@/lib/supabase'
 import { buildWebstoreNotificationLink } from '@/lib/webstore/whatsapp-notify'
 import { CheckCircle2, XCircle, ExternalLink, Loader2 } from 'lucide-react'
 import type { WebstoreRecord } from '@/lib/webstore/types'
@@ -8,14 +7,6 @@ import type { WebstoreRecord } from '@/lib/webstore/types'
 // ═══════════════════════════════════════════════════════════
 // ADMIN — WebStore Applications
 // ═══════════════════════════════════════════════════════════
-// SECURITY NOTE (documented honestly, not hidden): like the rest of
-// this app's admin tooling (public/dashboard/admin-panel.html), there
-// is no server-verified admin role/session system in ShopNekt today —
-// this page uses the same anon-key client access pattern already in
-// use. This is a pre-existing architectural gap, not something this
-// feature introduces; flagged in the final report rather than quietly
-// left undocumented.
-
 export default function AdminWebstoresPage() {
   const [apps, setApps] = useState<WebstoreRecord[]>([])
   const [loading, setLoading] = useState(true)
@@ -26,10 +17,13 @@ export default function AdminWebstoresPage() {
 
   const load = async () => {
     setLoading(true)
-    const { data } = await sb.from('pending_payments').select('*')
-      .in('webstore_status', ['submitted', 'under_review', 'approved', 'rejected', 'published'])
-      .order('webstore_submitted_at', { ascending: false })
-    setApps((data || []) as WebstoreRecord[])
+    const response = await fetch('/api/admin/webstores', { cache: 'no-store' })
+    if (response.status === 401) {
+      window.location.replace('/dashboard/admin-panel.html?next=%2Fadmin%2Fwebstores')
+      return
+    }
+    const result = await response.json()
+    setApps(response.ok ? (result.applications || []) as WebstoreRecord[] : [])
     setLoading(false)
   }
 
@@ -37,10 +31,8 @@ export default function AdminWebstoresPage() {
 
   const approve = async (app: WebstoreRecord) => {
     setBusyId(app.id)
-    const { error } = await sb.from('pending_payments')
-      .update({ webstore_status: 'approved', webstore_reviewed_at: new Date().toISOString() })
-      .eq('id', app.id)
-    if (!error) {
+    const response = await fetch('/api/admin/webstores', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: app.id, status: 'approved' }) })
+    if (response.ok) {
       setApps(prev => prev.map(a => a.id === app.id ? { ...a, webstore_status: 'approved' } : a))
       const link = buildWebstoreNotificationLink({
         event: 'WEBSTORE_APPROVED', ownerName: app.owner_name, businessName: app.shop_name,
@@ -55,10 +47,8 @@ export default function AdminWebstoresPage() {
     if (!rejectingId) {return}
     setBusyId(rejectingId)
     const app = apps.find(a => a.id === rejectingId)!
-    const { error } = await sb.from('pending_payments')
-      .update({ webstore_status: 'rejected', webstore_rejection_reason: reason, webstore_reviewed_at: new Date().toISOString() })
-      .eq('id', rejectingId)
-    if (!error) {
+    const response = await fetch('/api/admin/webstores', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: rejectingId, status: 'rejected', reason }) })
+    if (response.ok) {
       setApps(prev => prev.map(a => a.id === rejectingId ? { ...a, webstore_status: 'rejected', webstore_rejection_reason: reason } : a))
       const link = buildWebstoreNotificationLink({
         event: 'WEBSTORE_REJECTED', ownerName: app.owner_name, businessName: app.shop_name,

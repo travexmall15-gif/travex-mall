@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { randomUUID } from 'node:crypto'
 import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
+import { createServiceSupabase } from '@/lib/security/server-supabase'
 
-const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 )
 
 //  Types 
@@ -66,53 +64,42 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Too many requests. Please slow down.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
   }
   try {
-  const { store_id, message, session_id, history, conv_state } = await req.json()
-  const state: ConvState = conv_state || {}
+  const body = await req.json()
+  const store_id = typeof body.store_id === 'string' ? body.store_id : ''
+  const message = typeof body.message === 'string' ? body.message : ''
+  const session_id = typeof body.session_id === 'string' && /^[0-9a-f-]{36}$/i.test(body.session_id) ? body.session_id : randomUUID()
+  const state: ConvState = body.conv_state && typeof body.conv_state === 'object' ? body.conv_state : {}
   const msg = message.trim()
+  if (!UUID.test(store_id) || !msg || msg.length > 2000) {
+    return NextResponse.json({ error: 'Invalid chat request.' }, { status: 400 })
+  }
+  const sb = createServiceSupabase()
 
   //  Fetch ALL store data 
   const [
     { data: storeRow },
-    { data: campusRow },
     { data: bizProducts },
-    { data: campusProducts },
-    { data: pastOrders },
-    { data: feedPosts },
   ] = await Promise.all([
     sb.from('pending_payments')
-      .select('id,shop_name,shop_desc,shop_category,shop_region,owner_name,owner_phone,shop_whatsapp,plan,created_at')
-      .eq('id', store_id).maybeSingle(),
-    sb.from('campus_stores')
-      .select('id,store_name,description,category,university_abbr,whatsapp,phone,created_at')
-      .eq('id', store_id).maybeSingle(),
-    sb.from('products').select('id,name,price,stock,description,category,image_url').eq('shop_id', store_id).gt('stock', 0).order('name'),
-    sb.from('campus_products').select('id,name,price,stock,description,category,image_url').eq('store_id', store_id).gt('stock', 0).order('name'),
-    sb.from('orders').select('id,product_name,total_amount,status,created_at').eq('store_id', store_id).order('created_at', { ascending: false }).limit(10),
-    sb.from('feed_posts').select('content,post_text,caption,price,tag,created_at').eq('store_id', store_id).order('created_at', { ascending: false }).limit(5),
+      .select('id,shop_name,shop_desc,shop_category,shop_region,shop_whatsapp,plan,created_at,selected_template,webstore_status')
+      .eq('id', store_id).eq('status', 'approved').maybeSingle(),
+    sb.from('products').select('id,name,price,stock,description,category,image_url,is_active,is_available')
+      .eq('store_id', store_id).gt('stock', 0).order('name').limit(200),
   ])
 
-  // Merge data
-  const shop: Shop = storeRow ? {
+  if (!storeRow || (storeRow.selected_template && storeRow.webstore_status !== 'published')) {
+    return NextResponse.json({ error: 'Store not found.' }, { status: 404 })
+  }
+  const shop: Shop = {
     id: storeRow.id, name: storeRow.shop_name, desc: storeRow.shop_desc || '',
     category: storeRow.shop_category || 'General', region: storeRow.shop_region || 'Tanzania',
-    owner: storeRow.owner_name, phone: storeRow.owner_phone || '',
-    whatsapp: storeRow.shop_whatsapp || storeRow.owner_phone || '',
+    owner: '', phone: '',
+    whatsapp: storeRow.shop_whatsapp || '',
     plan: storeRow.plan, since: storeRow.created_at?.split('T')[0] || '',
     type: 'business',
-  } : {
-    id: campusRow?.id || store_id, name: campusRow?.store_name || 'This Shop',
-    desc: campusRow?.description || '', category: campusRow?.category || 'Campus',
-    region: campusRow?.university_abbr || 'Campus', owner: '',
-    phone: campusRow?.phone || '', whatsapp: campusRow?.whatsapp || campusRow?.phone || '',
-    plan: 'campus', since: campusRow?.created_at?.split('T')[0] || '', type: 'campus',
   }
 
-  const allProducts: Product[] = [
-    ...(bizProducts || []), ...(campusProducts || [])
-  ].filter((p, i, arr) => arr.findIndex(x => x.id === p.id) === i)
-
-  const allPosts = feedPosts || []
-  const allOrders = pastOrders || []
+  const allProducts: Product[] = (bizProducts || []).filter(p => p.is_active !== false && p.is_available !== false)
   const wa = shop.whatsapp.replace(/\D/g, '')
 
   //  Detect intent 
@@ -240,45 +227,40 @@ export async function POST(req: Request) {
 
   } else if (intent === 'confirm_order' && state.step === 'await_confirm') {
     if (/(ndiyo|yes|confirm|sawa|ok|ndio|yeah|yep)/i.test(msg)) {
-      const p = state.selectedProduct!
-      const qty = state.qty || 1
-      const total = p.price * qty
-
-      // Save order to database
-      const { error: orderErr } = await sb.from('orders').insert({
-        store_id,
-        store_name: shop.name,
-        product_name: p.name,
-        product_id: p.id || null,
-        customer_name: state.customerName,
-        customer_phone: state.customerPhone,
-        quantity: qty,
-        total_amount: total,
-        total_price: total,
-        status: 'pending',
-        notes: `Order placed via Aria AI Assistant`,
-        created_at: new Date().toISOString(),
-      })
+      const selectedId = typeof state.selectedProduct?.id === 'string' ? state.selectedProduct.id : ''
+      const qty = Number.isInteger(state.qty) ? Number(state.qty) : 0
+      const customerName = typeof state.customerName === 'string' ? state.customerName.trim() : ''
+      const customerPhone = typeof state.customerPhone === 'string' ? state.customerPhone.trim() : ''
+      const validContact = customerName.length >= 2 && customerName.length <= 120
+        && /^[0-9+()\s.-]{6,32}$/.test(customerPhone)
+      const { data: product } = UUID.test(selectedId) && qty >= 1 && qty <= 99 && validContact
+        ? await sb.from('products').select('id,store_id,name,price,stock,is_active,is_available')
+          .eq('id', selectedId).eq('store_id', store_id).maybeSingle()
+        : { data: null }
+      const p = product
+      const total = p ? Number(p.price) * qty : 0
+      const orderErr = !p || p.stock < qty || p.is_active === false || p.is_available === false
+        ? new Error('Product is not available')
+        : (await sb.from('orders').insert({
+          store_id,
+          store_name: shop.name,
+          product_name: p.name,
+          product_id: p.id,
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          phone: customerPhone,
+          quantity: qty,
+          total_amount: total,
+          total_price: total,
+          status: 'pending',
+          notes: 'Order placed via Aria AI Assistant',
+        })).error
 
       if (orderErr) {
-        reply = `Kuna tatizo kidogo la kiufundi. Tafadhali jaribu tena au wasiliana na seller moja kwa moja${wa ? ` kwa WhatsApp: +${wa}` : ''}.`
+        reply = `Bidhaa haipatikani tena au kuna tatizo la kiufundi. Tafadhali jaribu tena au wasiliana na seller moja kwa moja${wa ? ` kwa WhatsApp: +${wa}` : ''}.`
       } else {
         newState = { orderPlaced: true }
-        reply = `Order yako imepelekwa kwa ${shop.name}!\n\n **Umefanikiwa!**\n\n ${p.name} x${qty}\n ${fmt(total)}\n ${state.customerName}\n ${state.customerPhone}\n\nSeller atakupigia simu au kukutumia WhatsApp hivi karibuni kukuthibitishia. Asante kwa kununua kutoka ${shop.name}!`
-
-        // Also send WhatsApp notification to seller (non-blocking)
-        if (wa) {
-          const waMsg = encodeURIComponent(
-            ` ORDER MPYA kutoka Aria AI!\n\n` +
-            ` Bidhaa: ${p.name} x${qty}\n` +
-            ` Jumla: ${fmt(total)}\n` +
-            ` Mteja: ${state.customerName}\n` +
-            ` Simu: ${state.customerPhone}\n\n` +
-            `_Order imepelekwa kupitia Aria AI Assistant - ShopNekt_`
-          )
-          // Note: In production, send via server-side WhatsApp Business API
-          // For now we log for seller dashboard to pick up
-        }
+        reply = `Order yako imepelekwa kwa ${shop.name}!\n\n **Umefanikiwa!**\n\n ${p!.name} x${qty}\n ${fmt(total)}\n ${customerName}\n ${customerPhone}\n\nSeller atakupigia simu au kukutumia WhatsApp hivi karibuni kukuthibitishia. Asante kwa kununua kutoka ${shop.name}!`
       }
 
     } else {
@@ -330,15 +312,6 @@ export async function POST(req: Request) {
       reply = `Karibu ${shop.name}! Duka lina bidhaa ${allProducts.length}. Ninaweza kukusaidia na swali lolote.`
     }
   }
-
-  // Save session
-  const updatedHistory = [...(history || []).slice(-20), { role: 'user', content: msg }, { role: 'bot', content: reply }]
-  sb.from('ai_chat_sessions').upsert({
-    session_id, store_id,
-    messages: updatedHistory,
-    conv_state: newState,
-    updated_at: new Date().toISOString(),
-  }, { onConflict: 'session_id' })
 
   return NextResponse.json({ reply, session_id, conv_state: newState })
   } catch (err) {

@@ -79,9 +79,6 @@ h1{font-family:'Inter',sans-serif;font-weight:700;font-size:1.3rem;font-weight:8
 </div>
 
 <script>
-const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-
 function show(id) {
   ['loadingState','successState','errorState'].forEach(s => {
     document.getElementById(s).style.display = s === id ? 'block' : 'none'
@@ -104,34 +101,13 @@ async function checkToken() {
   }
 
   try {
-    // Check token in DB
-    const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?login_token=eq.${token}&select=id,shop_name,owner_name,owner_phone,plan,shop_number,token_expires_at,status`,
-      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-    )
-    const data = await res.json()
-
-    if (!data || !data.length) {
-      showError('Link Si Sahihi', 'Token hii haipo kwenye mfumo wetu. Omba admin akutumie link mpya.')
+    const res = await fetch(`/api/seller/auth/token?token=${encodeURIComponent(token)}`, { cache: 'no-store' })
+    const result = await res.json().catch(() => ({}))
+    if (!res.ok || !result.seller) {
+      showError('Link Si Sahihi', result.error || 'Token hii haipo kwenye mfumo wetu. Omba admin akutumie link mpya.')
       return
     }
-
-    const shop = data[0]
-
-    // Check expiry
-    if (shop.token_expires_at) {
-      const expires = new Date(shop.token_expires_at)
-      const now = new Date()
-      if (now > expires) {
-        showError('Link Imekwisha ⏰', `Link yako iliisha tarehe ${expires.toLocaleString()}. Saa 24 zimepita. Tumia PIN yako kuingia.`)
-        return
-      }
-    }
-
-    if (shop.status !== 'approved') {
-      showError('Duka Halijaidhinishwa', 'Duka lako bado halijaidhinishwa. Wasiliana na ShopNekt.')
-      return
-    }
+    const shop = result.seller
 
     //  Valid token — save session and redirect
     const session = {
@@ -144,13 +120,6 @@ async function checkToken() {
       logged_in_at: new Date().toISOString()
     }
     localStorage.setItem('travex_session', JSON.stringify(session))
-
-    // Invalidate token after use (one-time use)
-    await fetch(`${SB_URL}/rest/v1/pending_payments?id=eq.${shop.id}`, {
-      method: 'PATCH',
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ login_token: null })
-    })
 
     // Show success
     document.getElementById('shopName').textContent = shop.shop_name

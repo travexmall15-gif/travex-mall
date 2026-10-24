@@ -3,15 +3,15 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
 import Link from 'next/link'
 import { ArrowRight, Store, Sparkles, BadgeCheck, ExternalLink } from 'lucide-react'
-import { sb } from '@/lib/supabase'
 
 type SponsoredShop = {
   id: string
   shop_name: string
-  shop_slug: string | null
   shop_category: string | null
   shop_city: string | null
-  logo_url: string | null
+  shop_logo_url: string | null
+  selected_template: string | null
+  webstore_status: string | null
 }
 
 export default function HomePage() {
@@ -21,13 +21,9 @@ export default function HomePage() {
   useEffect(() => {
     ;(async () => {
       try {
-        const { data, error } = await sb
-          .from('pending_payments')
-          .select('id,shop_name,shop_slug,shop_category,shop_city,logo_url')
-          .eq('status', 'approved')
-          .eq('is_sponsored', true)
-          .limit(12)
-        if (!error && data && data.length > 0) {setSponsored(data)}
+        const response = await fetch('/api/public/market?type=sponsored', { cache: 'no-store' })
+        const result = await response.json().catch(() => null)
+        if (response.ok && Array.isArray(result?.shops)) {setSponsored(result.shops)}
       } catch { /* column may not exist yet — section stays hidden */ }
     })()
   }, [])
@@ -200,10 +196,10 @@ export default function HomePage() {
             </div>
             <div className="spons-grid">
               {sponsored.map(shop => (
-                <a key={shop.id} href={shop.shop_slug ? `/store/${shop.shop_slug}` : '#'} className="spons-card">
+                <a key={shop.id} href={`/store/${shop.id}`} className="spons-card">
                   <div style={{ width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,#FF0080,#7800FF)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1rem',overflow:'hidden',flexShrink:0 }}>
-                    {shop.logo_url
-                      ? <img src={shop.logo_url} alt={shop.shop_name} style={{ width:'100%',height:'100%',objectFit:'cover' }} loading="lazy" />
+                    {shop.shop_logo_url
+                      ? <img src={shop.shop_logo_url} alt={shop.shop_name} style={{ width:'100%',height:'100%',objectFit:'cover' }} loading="lazy" />
                       : <span style={{ fontSize:'1.2rem',fontWeight:900,color:'#fff' }}>{shop.shop_name.charAt(0)}</span>
                     }
                   </div>

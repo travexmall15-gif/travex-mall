@@ -29,6 +29,7 @@ const Auth = {
     return { user: { id: session.id, email: session.id } };
   },
   async signOut() {
+    await fetch('/api/seller/auth/session', { method: 'DELETE' }).catch(() => {});
     ['travex_session','travex_plan','travex_shop_name','travex_owner_name',
      'travex_category','travex_region','travex_user_id','travex_email'].forEach(k => localStorage.removeItem(k));
     window.location.href = 'login.html';
@@ -49,36 +50,16 @@ const Shop = {
     let session;
     try { session = JSON.parse(raw); } catch { return null; }
 
-    if (session.market === 'campus') {
-      const { data: campus } = await sb.from('campus_stores')
-        .select('*').eq('id', session.id).eq('is_active', true).maybeSingle();
-      if (campus) {
-        this._cache = {
-          ...campus,
-          shop_name:      campus.store_name,
-          owner_name:     campus.owner_name,
-          shop_whatsapp:  campus.whatsapp,
-          shop_category:  campus.category,
-          shop_region:    campus.university_abbr,
-          shop_desc:      campus.description,
-          plan:           'campus',
-          _market:        'campus',
-        };
-        this._type = 'campus';
-        return this._cache;
-      }
-      return null;
-    }
-
-    // business market
-    const { data: biz } = await sb.from('pending_payments')
-      .select('*').eq('id', session.id).eq('status','approved').maybeSingle();
-    if (biz) {
-      this._cache = { ...biz, _market: 'business' };
+    if (session.market === 'campus') {return null;}
+    try {
+      const response = await fetch('/api/seller/profile', { cache: 'no-store' });
+      if (!response.ok) {return null;}
+      const result = await response.json();
+      if (!result.seller || result.seller.id !== session.id) {return null;}
+      this._cache = { ...result.seller, _market: 'business' };
       this._type = 'business';
       return this._cache;
-    }
-    return null;
+    } catch { return null; }
   },
 
   isCampus() { return this._type === 'campus'; },

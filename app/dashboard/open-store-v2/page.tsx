@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { sb } from '@/lib/supabase'
 import { Search, Loader2, Clock, CheckCircle2, XCircle, Rocket, ExternalLink } from 'lucide-react'
 import type { WebstoreStatus } from '@/lib/webstore/types'
 
@@ -30,31 +29,39 @@ export default function WebstoreDashboardPage() {
   const [checked, setChecked] = useState(false)
   const [app, setApp] = useState<App | null>(null)
   const [publishing, setPublishing] = useState(false)
+  const [statusMessage, setStatusMessage] = useState('')
 
   const checkStatus = async () => {
     if (!email.trim()) {return}
     setLoading(true)
-    const { data } = await sb
-      .from('pending_payments')
-      .select('id, shop_name, shop_category, webstore_status, webstore_rejection_reason, owner_name, shop_whatsapp')
-      .eq('owner_email', email.trim())
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-    setApp(data as App | null)
-    setChecked(true)
-    setLoading(false)
+    setStatusMessage('')
+    try {
+      const response = await fetch(`/api/webstore/application?email=${encodeURIComponent(email.trim())}`, { cache: 'no-store' })
+      const result = await response.json()
+      setApp(response.ok ? result.application as App : null)
+      if (!response.ok) {setStatusMessage(result.error || 'Unable to check application status.')}
+    } catch {
+      setApp(null)
+      setStatusMessage('Unable to check application status. Please try again.')
+    } finally {
+      setChecked(true)
+      setLoading(false)
+    }
   }
 
   const publish = async () => {
     if (!app) {return}
     setPublishing(true)
-    const { error } = await sb.from('pending_payments')
-      .update({ webstore_status: 'published', webstore_published_at: new Date().toISOString(), status: 'approved' })
-      .eq('id', app.id)
-      .eq('webstore_status', 'approved') // server-side guard: can only publish from approved, never bypassed by the client
-    if (!error) {setApp({ ...app, webstore_status: 'published' })}
-    setPublishing(false)
+    try {
+      const response = await fetch('/api/webstore/application', { method: 'PATCH' })
+      const result = await response.json()
+      if (response.ok) {setApp({ ...app, webstore_status: 'published' })}
+      else {setStatusMessage(result.error || 'Unable to publish this WebStore.')}
+    } catch {
+      setStatusMessage('Unable to publish this WebStore. Please try again.')
+    } finally {
+      setPublishing(false)
+    }
   }
 
   const meta = app ? STATUS_META[app.webstore_status] : null
@@ -79,7 +86,7 @@ export default function WebstoreDashboardPage() {
           </div>
         ) : !app ? (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-            <p style={{ fontSize: '0.85rem', color: 'var(--sn-muted)' }}>No WebStore application found for that email.</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--sn-muted)' }}>{statusMessage || 'No WebStore application found for that email.'}</p>
             <Link href="/open-store" style={{ display: 'inline-block', marginTop: 14, color: '#7800FF', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none' }}>Start a new WebStore →</Link>
             <button onClick={() => { setChecked(false); setEmail('') }} style={{ display: 'block', margin: '10px auto 0', background: 'none', border: 'none', color: 'var(--sn-subtle)', fontSize: '0.78rem', cursor: 'pointer' }}>Try another email</button>
           </div>

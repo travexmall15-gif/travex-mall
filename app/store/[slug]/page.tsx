@@ -104,65 +104,19 @@ export default function StorePage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ store_id: slug, event: 'view', source: document.referrer ? 'referral' : 'direct' })
       }).catch(() => {})
-      // Try pending_payments (business market)
-      const { data: shopData } = await sb
-        .from('pending_payments')
-        .select('*')
-        .eq('id', slug)
-        .eq('status', 'approved')
-        .single()
-
-      if (shopData) {
+      const response = await fetch(`/api/store/${encodeURIComponent(slug)}`, { cache: 'no-store' })
+      const result = await response.json().catch(() => null)
+      if (response.ok && result?.store) {
+        const shopData = result.store as Store
+        const publicProducts = Array.isArray(result.products) ? result.products as Product[] : []
         setStore(shopData)
         setTimeout(() => setShowWelcome(true), 800)
-        // Business market stores use the 'products' table with shop_id
-        const { data: prods } = await sb
-          .from('products')
-          .select('*')
-          .eq('shop_id', shopData.id)
-          .gt('stock', 0)
-          .order('created_at', { ascending: false })
-        setProducts(prods || [])
+        setProducts(publicProducts)
+        const popularIds = Array.isArray(result.trendingProductIds) ? result.trendingProductIds : []
+        setTrending(popularIds.map((id: string) => publicProducts.find(product => product.id === id)).filter(Boolean) as Product[])
         setLoading(false)
         return
       }
-
-      // Try campus_stores
-      const { data: campusShop } = await sb
-        .from('campus_stores')
-        .select('*')
-        .eq('id', slug)
-        .eq('is_active', true)
-        .single()
-
-      if (campusShop) {
-        setStore({
-          id: campusShop.id,
-          shop_name: campusShop.store_name,
-          owner_name: campusShop.owner_name,
-          owner_phone: campusShop.phone,
-          shop_whatsapp: campusShop.whatsapp,
-          shop_category: campusShop.category,
-          shop_region: campusShop.university_abbr,
-          shop_desc: campusShop.description,
-          shop_color: null,
-          shop_banner: campusShop.banner || null,
-          shop_logo: campusShop.logo || null,
-          plan: 'campus',
-          status: 'approved',
-          auth_email: null,
-        })
-        const { data: prods } = await sb
-          .from('campus_products')
-          .select('*')
-          .eq('store_id', campusShop.id)
-          .gt('stock', 0)
-          .order('created_at', { ascending: false })
-        setProducts(prods || [])
-        setLoading(false)
-        return
-      }
-
       setNotFound(true)
       setLoading(false)
     }
@@ -171,7 +125,7 @@ export default function StorePage({
 
   // Load Like Shop count + whether the current visitor has liked this shop
   useEffect(() => {
-    if (!store || store.plan === 'campus') {return}
+    if (!store) {return}
     let cancelled = false
     ;(async () => {
       const count = await getShopLikeCount(store.id)
@@ -212,20 +166,7 @@ export default function StorePage({
   // No fake/simulated signals — an empty result just means no genuine
   // engagement data exists yet, and the section is hidden.
   useEffect(() => {
-    if (!store || store.plan === 'campus' || products.length === 0) { setTrending([]); return }
-    let cancelled = false
-    ;(async () => {
-      const { data: ords } = await sb.from('orders').select('product_id').eq('shop_id', store.id)
-      if (cancelled || !ords || ords.length === 0) { setTrending([]); return }
-      const counts = new Map<string, number>()
-      for (const o of ords) {if (o.product_id) {counts.set(o.product_id, (counts.get(o.product_id) || 0) + 1)}}
-      const ranked = products
-        .filter(p => counts.has(p.id))
-        .sort((a, b) => (counts.get(b.id) || 0) - (counts.get(a.id) || 0))
-        .slice(0, 8)
-      if (!cancelled) {setTrending(ranked)}
-    })()
-    return () => { cancelled = true }
+    if (!store || products.length === 0) { setTrending([]) }
   }, [store?.id, products])
 
   // Store Posts — pulled from the seller's own Social Vybe posts, never
@@ -270,21 +211,23 @@ export default function StorePage({
     const total = cartItem.price * qty
 
     // Route to correct orders table based on store type
-    const ordersTable = store!.plan === 'campus' ? 'campus_orders' : 'orders'
-    await sb.from(ordersTable).insert({
-      store_id: store!.id,
-      ...(store!.plan === 'campus' ? {} : { shop_id: store!.id }),
-      product_id: cartItem.id,
-      product_name: cartItem.name,
-      customer_name: orderName.trim(),
-      customer_phone: orderPhone.trim(),
-      delivery_location: orderLocation.trim(),
-      notes: orderNotes.trim(),
-      quantity: qty,
-      total_amount: total,
-      total_price: total,
-      status: 'pending',
+    const orderResponse = await fetch(`/api/store/${encodeURIComponent(store!.id)}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        product_id: cartItem.id,
+        customer_name: orderName.trim(),
+        customer_phone: orderPhone.trim(),
+        delivery_location: orderLocation.trim(),
+        notes: orderNotes.trim(),
+        quantity: qty,
+      }),
     })
+    if (!orderResponse.ok) {
+      setPlacing(false)
+      setSuccess(false)
+      return
+    }
 
     // Also send WhatsApp to seller
     const wa = (store!.shop_whatsapp || store!.owner_phone || '').replace(/\D/g, '')

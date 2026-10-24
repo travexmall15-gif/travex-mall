@@ -7,6 +7,10 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['lib/shopnekt-ai/**/__tests__/**/*.test.ts'],
+    include: [
+      'lib/shopnekt-ai/**/__tests__/**/*.test.ts',
+      'lib/security/**/__tests__/**/*.test.ts',
+      'app/api/**/__tests__/**/*.test.ts',
+    ],
   },
 })

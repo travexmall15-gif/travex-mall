@@ -1,49 +1,27 @@
 import type { Metadata } from 'next'
-import { createClient } from '@supabase/supabase-js'
+import { createServiceSupabase } from '@/lib/security/server-supabase'
 
 const BASE = 'https://shopnekt.vercel.app'
-const sb   = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-)
 
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
 
-  // Try business market first (pending_payments table, id = slug)
   let name = '', description = '', image = '', city = '', category = ''
-
-  const { data: biz } = await sb
-    .from('pending_payments')
-    .select('shop_name,shop_desc,shop_category,shop_city,shop_logo,shop_banner')
-    .eq('id', slug)
-    .eq('status', 'approved')
-    .single()
-
-  if (biz) {
-    name        = biz.shop_name || ''
-    description = biz.shop_desc || ''
-    category    = biz.shop_category || ''
-    city        = biz.shop_city || ''
-    image       = biz.shop_banner || biz.shop_logo || ''
-  } else {
-    // Try campus stores
-    const { data: campus } = await sb
-      .from('campus_stores')
-      .select('store_name,description,category,university_abbr,logo,banner')
-      .eq('id', slug)
-      .eq('is_active', true)
-      .single()
-
-    if (campus) {
-      name        = campus.store_name || ''
-      description = campus.description || ''
-      category    = campus.category || ''
-      city        = campus.university_abbr || ''
-      image       = campus.banner || campus.logo || ''
-    }
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(slug)) {
+    return { title: 'Store Not Found', description: 'This store could not be found on ShopNekt.', robots: { index: false, follow: false } }
+  }
+  const sb = createServiceSupabase()
+  const { data: store } = await sb.from('pending_payments')
+    .select('shop_name,shop_desc,shop_category,shop_city,shop_logo_url,shop_cover_url,selected_template,webstore_status')
+    .eq('id', slug).eq('status', 'approved').maybeSingle()
+  if (store && (!store.selected_template || store.webstore_status === 'published')) {
+    name = store.shop_name || ''
+    description = store.shop_desc || ''
+    category = store.shop_category || ''
+    city = store.shop_city || ''
+    image = store.shop_cover_url || store.shop_logo_url || ''
   }
 
   if (!name) {

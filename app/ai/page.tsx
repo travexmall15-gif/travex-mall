@@ -1,7 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { sb } from '@/lib/supabase'
 import { useTranslation } from '@/hooks/useTranslation'
 import {
   ArrowLeft, Send, Copy, RotateCcw, Trash2,
@@ -9,8 +8,8 @@ import {
 } from 'lucide-react'
 
 type Result = {
-  id: string; shop_name: string; shop_slug: string | null
-  shop_category: string | null; shop_region: string | null; shop_logo: string | null
+  id: string; shop_name: string
+  shop_category: string | null; shop_region: string | null; shop_logo_url: string | null
   plan: string; match_reason: string
   products?: { name: string; price: number }[]
 }
@@ -91,32 +90,54 @@ export default function AiPage() {
     if (!cat) { for (const [c,kws] of Object.entries(CAT_MAP)) { if(kws.some(k=>lq.includes(k))){cat=c;break} } }
     let loc = city
     if (!loc) { for (const [c,kws] of Object.entries(CITY_KW)) { if(kws.some(k=>lq.includes(k))){loc=c;break} } }
-    let q: any = sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan,shop_desc').eq('status','approved').limit(30)
-    if (cat) {q = q.ilike('shop_category',`%${cat}%`)}
-    if (loc) {q = q.ilike('shop_region',`%${loc}%`)}
-    const { data: shops } = await q
-    const enriched: Result[] = []
-    for (const shop of (shops||[]).slice(0,15)) {
-      let pq: any = sb.from('products').select('name,price').eq('shop_id',shop.id).eq('is_available',true).limit(4)
-      if (budgetNum>0) {pq = pq.lte('price',budgetNum)}
-      const terms = query.split(' ').filter(w=>w.length>2&&!SKIP_W.includes(w.toLowerCase()))
-      if (terms.length) {pq = pq.or(terms.map((t:string)=>`name.ilike.%${t}%`).join(','))}
-      const { data: products } = await pq
-      const textMatch = terms.some((term:string)=>
-        shop.shop_name?.toLowerCase().includes(term.toLowerCase())||
-        shop.shop_description?.toLowerCase().includes(term.toLowerCase())
-      )
-      if (products?.length||textMatch) {
-        const why: string[] = []
-        if (products?.length) {why.push(`${products.length} product${products.length>1?'s':''} found`)}
-        if (budgetNum>0&&products?.length) {why.push(`TZS ${budgetNum.toLocaleString()}`)}
-        if (loc) {why.push(`\uD83D\uDCCD ${loc}`)}
-        enriched.push({...shop, match_reason:why.join(' \u00B7 ')||'Verified store', products:products||[], rating:shop.rating||0})
-      }
+    const terms = query.split(' ').filter(w=>w.length>2&&!SKIP_W.includes(w.toLowerCase()))
+    const params = new URLSearchParams({ type: 'shops', limit: '30' })
+    if (terms.length) {params.set('q', terms.join(' '))}
+    if (cat) {params.set('category', cat)}
+    if (loc) {params.set('region', loc)}
+    const productParams = new URLSearchParams({ type: 'products', limit: '100' })
+    if (terms.length) {productParams.set('q', terms.join(' '))}
+    if (budgetNum > 0) {productParams.set('max_price', String(budgetNum))}
+    if (cat) {productParams.set('category', cat)}
+
+    const [shopsResponse, productsResponse] = await Promise.all([
+      fetch(`/api/public/market?${params.toString()}`, { cache: 'no-store' }),
+      fetch(`/api/public/market?${productParams.toString()}`, { cache: 'no-store' }),
+    ])
+    if (!shopsResponse.ok || !productsResponse.ok) {throw new Error('Unable to search public marketplace')}
+    const [{ shops = [] }, { products = [] }] = await Promise.all([
+      shopsResponse.json(), productsResponse.json(),
+    ]) as [{ shops?: Array<Record<string, any>> }, { products?: Array<Record<string, any>> }]
+    const productsByStore = new Map<string, { name: string; price: number }[]>()
+    for (const product of products) {
+      if (product.is_available === false) {continue}
+      const list = productsByStore.get(product.store_id) || []
+      if (list.length < 4) {list.push({ name: product.name, price: Number(product.price) || 0 })}
+      productsByStore.set(product.store_id, list)
     }
-    if (!enriched.length) {
-      const { data: fb } = await sb.from('pending_payments').select('id,shop_name,shop_slug,shop_category,shop_region,shop_logo,plan').eq('status','approved').or(`shop_name.ilike.%${query}%,shop_desc.ilike.%${query}%,shop_category.ilike.%${query}%`).limit(6)
-      for (const s of (fb||[])) {enriched.push({...s,match_reason:'Matches search',products:[]})}
+    const enriched: Result[] = []
+    for (const shop of shops.slice(0, 30)) {
+      const matchedProducts = productsByStore.get(shop.id) || []
+      const textMatch = terms.some(term =>
+        shop.shop_name?.toLowerCase().includes(term.toLowerCase()) ||
+        shop.shop_desc?.toLowerCase().includes(term.toLowerCase())
+      )
+      if (matchedProducts.length || textMatch || !terms.length) {
+        const why: string[] = []
+        if (matchedProducts.length) {why.push(`${matchedProducts.length} product${matchedProducts.length > 1 ? 's' : ''} found`)}
+        if (budgetNum > 0 && matchedProducts.length) {why.push(`TZS ${budgetNum.toLocaleString()}`)}
+        if (loc) {why.push(`\uD83D\uDCCD ${loc}`)}
+        enriched.push({
+          id: shop.id,
+          shop_name: shop.shop_name || 'Shop',
+          shop_category: shop.shop_category || null,
+          shop_region: shop.shop_region || null,
+          shop_logo_url: shop.shop_logo_url || null,
+          plan: shop.plan || 'basic',
+          match_reason: why.join(' \u00B7 ') || 'Verified store',
+          products: matchedProducts,
+        })
+      }
     }
     return enriched.sort((a,b)=>(b.products?.length||0)-(a.products?.length||0)).slice(0,8)
   }
@@ -349,10 +370,10 @@ function ResultList({results,t,q}:{results:Result[];t:TFn;q:string}) {
   return (
     <div className="rl">
       {results.map(store=>(
-        <a key={store.id} href={`/store/${store.shop_slug}`} className="rc">
+        <a key={store.id} href={`/store/${store.id}`} className="rc">
           <div className="rl-logo">
-            {store.shop_logo
-              ? <img src={store.shop_logo} alt={store.shop_name} style={{width:'100%',height:'100%',objectFit:'cover'}} loading="lazy"/>
+            {store.shop_logo_url
+              ? <img src={store.shop_logo_url} alt={store.shop_name} style={{width:'100%',height:'100%',objectFit:'cover'}} loading="lazy"/>
               : <span>{store.shop_name?.[0]?.toUpperCase()||'\uD83C\uDFEA'}</span>
             }
           </div>

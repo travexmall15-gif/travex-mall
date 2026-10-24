@@ -273,33 +273,14 @@ async function go(){
   email = v
   localStorage.setItem(MAIL_K, v)
 
-  // Tafuta jina la duka mapema (kuonyesha kwenye PIN screen)
+  // Load only safe seller display data through the server.
   var shopName = 'ShopNekt Seller'
   try {
-    var h = { 'apikey': KEY, 'Authorization': 'Bearer '+KEY }
-    var enc = encodeURIComponent(v)
-    var r = await fetch(SB+'/rest/v1/pending_payments?auth_email=eq.'+enc+'&select=shop_name,status', {headers:h})
+    var r = await fetch('/api/seller/auth/lookup', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v})})
     var d = await r.json()
-    if(!d||!d.length){
-      r = await fetch(SB+'/rest/v1/pending_payments?owner_email=eq.'+enc+'&select=shop_name,status', {headers:h})
-      d = await r.json()
-    }
-    if(d&&d.length){
-      shopName = d[0].shop_name || shopName
-      // Onyesha onyo kama bado inapitiwa
-      if(d[0].status==='pending'){
-        showErr(t('errPending'))
-        return
-      }
-      if(d[0].status==='rejected'){
-        showErr(t('errRejected'))
-        return
-      }
-    } else {
-      showErr(t('errShop'))
-      return
-    }
-  } catch(e){ /* network error — endelea tu */ }
+    if(!r.ok || !d.id){ showErr(d.error || t('errShop')); return }
+    shopName = d.shop_name || shopName
+  } catch(e){ showErr(t('errNet')); return }
 
   // Onyesha PIN screen
   document.getElementById('s1').classList.add('hide')
@@ -339,50 +320,10 @@ async function submit(){
   keys.forEach(function(k){ k.disabled=true })
 
   try {
-    var h = { 'apikey': KEY, 'Authorization': 'Bearer '+KEY }
-    var enc = encodeURIComponent(email)
-    // Select status too — tuchunguze baada ya kupata shop
-    var sel = 'select=id,shop_name,login_password,status'
-
-    // Tafuta kwa auth_email kwanza (v2 form), kisha owner_email (forms za zamani)
-    var data = null
-    var r = await fetch(SB+'/rest/v1/pending_payments?auth_email=eq.'+enc+'&'+sel, {headers:h})
-    data = await r.json()
-    if(!data || !data.length){
-      r = await fetch(SB+'/rest/v1/pending_payments?owner_email=eq.'+enc+'&'+sel, {headers:h})
-      data = await r.json()
-    }
-
-    var shop = data && data[0]
-
-    // Hakuna duka kabisa
-    if(!shop){
-      showErr(t('errShop'))
-      pin=''; dots()
-      keys.forEach(function(k){ k.disabled=false })
-      return
-    }
-
-    // Duka lipo — angalia hali yake kwanza
-    if(shop.status === 'pending'){
-      showErr(t('errPending'))
-      pin=''; dots()
-      keys.forEach(function(k){ k.disabled=false })
-      return
-    }
-
-    if(shop.status === 'rejected'){
-      showErr(t('errRejected'))
-      pin=''; dots()
-      keys.forEach(function(k){ k.disabled=false })
-      return
-    }
-
-    // Status ni approved — angalia PIN
-    var stored = (shop.login_password||'').toString()
-    var match  = stored===pin || stored.endsWith('-'+pin) || stored.startsWith(pin+'-') || stored.split('-').pop()===pin
-    if(!match){
-      showErr(t('errPin'))
+    var r = await fetch('/api/seller/auth/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,pin:pin})})
+    var result = await r.json()
+    if(!r.ok || !result.success || !result.seller){
+      showErr(result.error || t('errPin'))
       pin=''; dots()
       keys.forEach(function(k){ k.disabled=false })
       return
@@ -390,9 +331,9 @@ async function submit(){
 
     // Login imefanikiwa
     showOk(t('loading'))
-    document.getElementById('wn').textContent = shop.shop_name || 'Seller'
+    document.getElementById('wn').textContent = result.seller.shop_name || 'Seller'
     localStorage.removeItem(MAIL_K)
-    localStorage.setItem(SESS_K, JSON.stringify({id:shop.id, market:'business', shop_name:shop.shop_name}))
+    localStorage.setItem(SESS_K, JSON.stringify({id:result.seller.id, market:result.seller.market, shop_name:result.seller.shop_name}))
     setTimeout(function(){ location.href='dashboard.html' }, 700)
 
   } catch(e){
@@ -412,13 +353,12 @@ window.onload = function(){
     var sess = JSON.parse(localStorage.getItem(SESS_K)||'{}')
     if(sess && sess.id){
       // Quick verify
-      fetch(SB+'/rest/v1/pending_payments?id=eq.'+sess.id+'&select=id,status',
-        {headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
-        .then(function(r){ return r.json() })
-        .then(function(d){
-          if(d&&d.length&&d[0].status==='approved'){ location.href='dashboard.html' }
+      fetch('/api/seller/auth/session')
+        .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,data:d} }) })
+        .then(function(result){
+          if(result.ok && result.data.authenticated){ location.href='dashboard.html' }
           else { localStorage.removeItem(SESS_K); checkEmail() }
-        }).catch(checkEmail)
+        }).catch(function(){ localStorage.removeItem(SESS_K); checkEmail() })
     } else { checkEmail() }
   } catch(e){ checkEmail() }
 }

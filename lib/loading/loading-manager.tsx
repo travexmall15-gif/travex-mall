@@ -24,6 +24,7 @@ interface LoadingState {
   progress: number
   error: string | null
   loadedAt: number | null
+  _interval?: ReturnType<typeof setInterval>
 }
 
 interface LoadingManagerType {
@@ -76,12 +77,13 @@ class LoadingManagerImpl implements LoadingManagerType {
     }, 100)
 
     // Store interval ID for cleanup
-    ;(this.states.get(key) as any)._interval = interval
+    const state = this.states.get(key)
+    if (state) {state._interval = interval}
   }
 
   stopLoading(key: LoadingKey): void {
     const state = this.states.get(key)
-    if (state && state._interval) {
+    if (state?._interval) {
       clearInterval(state._interval)
     }
     

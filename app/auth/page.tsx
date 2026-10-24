@@ -1,33 +1,32 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Mail, User, ArrowRight, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react'
+import { Mail, User, ArrowRight, ArrowLeft, ShieldCheck } from 'lucide-react'
+import { sb } from '@/lib/supabase'
 
 type Screen = 'form' | 'code'
-
-function generateCode() {
-  return Math.floor(100000 + Math.random() * 900000).toString()
-}
 
 export default function AuthPage() {
   const router = useRouter()
   const [screen,    setScreen]    = useState<Screen>('form')
   const [name,      setName]      = useState('')
   const [email,     setEmail]     = useState('')
-  const [code,      setCode]      = useState('')
   const [entered,   setEntered]   = useState('')
   const [error,     setError]     = useState('')
   const [loading,   setLoading]   = useState(false)
-  const [showCode,  setShowCode]  = useState(false)
   const [timer,     setTimer]     = useState(60)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // Redirect if already logged in
   useEffect(() => {
-    const c = localStorage.getItem('sn_customer_session')
-    const s = localStorage.getItem('travex_session')
-    if (c) { try { if (JSON.parse(c)?.id) { router.replace('/home'); return } } catch {} }
-    if (s) { try { if (JSON.parse(s)?.id) { router.replace('/home'); return } } catch {} }
+    let cancelled = false
+    void (async () => {
+      const { data: { user } } = await sb.auth.getUser()
+      if (!cancelled && user) {router.replace('/home'); return}
+      const seller = await fetch('/api/seller/auth/session', { cache: 'no-store' }).catch(() => null)
+      if (!cancelled && seller?.ok) {window.location.replace('/dashboard/dashboard.html')}
+    })()
+    return () => {cancelled = true}
   }, [router])
 
   // Countdown timer on code screen
@@ -41,73 +40,55 @@ export default function AuthPage() {
     return () => { if (timerRef.current) {clearInterval(timerRef.current)} }
   }, [screen])
 
-  const handleGetCode = () => {
+  const handleGetCode = async () => {
     setError('')
     if (!name.trim()) { setError('Please enter your full name.'); return }
     if (!email.trim() || !email.includes('@')) { setError('Please enter a valid email address.'); return }
     setLoading(true)
-    setTimeout(() => {
-      const newCode = generateCode()
-      setCode(newCode)
+    const { error: sendError } = await sb.auth.signInWithOtp({
+      email: email.trim().toLowerCase(),
+      options: { shouldCreateUser: true, data: { display_name: name.trim() } },
+    })
+    if (sendError) {
+      setError('Unable to send a sign-in code. Please check your email and try again.')
+      setLoading(false)
+      return
+    }
       setEntered('')
-      setShowCode(false)
       setScreen('code')
       setLoading(false)
-    }, 600)
   }
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     setError('')
     if (entered.length < 6) { setError('Please enter the full 6-digit code.'); return }
-    if (entered !== code) { setError('Incorrect code. Please check and try again.'); return }
     setLoading(true)
-    setTimeout(async () => {
-      const id = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()
-      const session = {
-        id,
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        created_at: new Date().toISOString(),
-      }
-      // Save to localStorage first (instant)
-      localStorage.setItem('sn_customer_session', JSON.stringify(session))
-
-      // Save to Supabase customers table (background — non-blocking)
-      try {
-        await fetch('https://bscecjbgnjitlfmgwcic.supabase.co/rest/v1/customers', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
-            'Authorization': 'Bearer sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos',
-            'Prefer': 'resolution=merge-duplicates',
-            'on-conflict': 'email',
-          },
-          body: JSON.stringify({
-            id,
-            name: name.trim(),
-            email: email.trim().toLowerCase(),
-            created_at: new Date().toISOString(),
-            last_seen: new Date().toISOString(),
-          })
-        })
-      } catch { /* non-critical — session already saved locally */ }
-
-      router.replace('/home')
-    }, 500)
+    const { error: verifyError } = await sb.auth.verifyOtp({
+      email: email.trim().toLowerCase(), token: entered, type: 'email',
+    })
+    if (verifyError) {
+      setError('Incorrect or expired code. Please check your email and try again.')
+      setLoading(false)
+      return
+    }
+    router.replace('/home')
   }
 
-  const handleResend = () => {
-    const newCode = generateCode()
-    setCode(newCode)
-    setEntered('')
-    setShowCode(false)
+  const handleResend = async () => {
+    setLoading(true)
     setError('')
+    const { error: sendError } = await sb.auth.signInWithOtp({
+      email: email.trim().toLowerCase(),
+      options: { shouldCreateUser: true, data: { display_name: name.trim() } },
+    })
+    if (sendError) {setError('Unable to send a new code. Please try again.')}
+    setEntered('')
     setTimer(60)
     if (timerRef.current) {clearInterval(timerRef.current)}
     timerRef.current = setInterval(() => {
       setTimer(t => { if (t <= 1) { clearInterval(timerRef.current!); return 0 } return t - 1 })
     }, 1000)
+    setLoading(false)
   }
 
   const inp: React.CSSProperties = {
@@ -167,7 +148,7 @@ export default function AuthPage() {
             Welcome to ShopNekt
           </h2>
           <p style={{ fontSize:'0.78rem', color:'var(--sn-subtle)', marginBottom:'1.5rem', lineHeight:1.6 }}>
-            Enter your details to get started. We'll generate a code for you instantly.
+            Enter your details to receive a one-time code by email.
           </p>
 
           <div style={{ display:'flex', flexDirection:'column', gap:'0.75rem', marginBottom:'1rem' }}>
@@ -240,46 +221,30 @@ export default function AuthPage() {
               <ShieldCheck size={26} color="#0D1B3E"/>
             </div>
             <h2 style={{ fontSize:'1.05rem', fontWeight:800, color:'#0D1B3E', letterSpacing:'-0.02em', marginBottom:6 }}>
-              Your code is ready
+              Check your email
             </h2>
             <p style={{ fontSize:'0.76rem', color:'var(--sn-subtle)', lineHeight:1.6 }}>
-              Hi <strong style={{ color:'#0D1B3E' }}>{name.split(' ')[0]}</strong> — here is your one-time login code.
+              Hi <strong style={{ color:'#0D1B3E' }}>{name.split(' ')[0]}</strong> — enter the one-time code sent to {email}.
             </p>
           </div>
 
-          {/* Code display box */}
+          {/* Verification notice */}
           <div style={{
             background:'var(--sn-bg)',
             borderRadius:14, padding:'1.25rem',
             textAlign:'center', marginBottom:'1.25rem',
             position:'relative',
           }}>
-            <div style={{ fontSize:'0.62rem', color:'var(--sn-subtle)', textTransform:'uppercase', letterSpacing:'0.12em', marginBottom:10 }}>
-              Your login code
+            <div style={{ fontSize:'0.85rem', color:'var(--sn-muted)', lineHeight:1.6 }}>
+              <strong style={{ color:'var(--sn-text)' }}>{email}</strong>
+              <br/>Check your inbox for the sign-in code. It is issued and verified securely by ShopNekt authentication.
             </div>
-            <div style={{
-              fontSize: showCode ? '2.2rem' : '2rem',
-              fontWeight:900, letterSpacing:'0.35em',
-              color: showCode ? '#7800FF' : 'var(--sn-border)',
-              fontFamily:"'Inter',sans-serif",
-              filter: showCode ? 'none' : 'blur(8px)',
-              transition:'all 0.3s', userSelect: showCode ? 'text' : 'none',
-              marginBottom:10, lineHeight:1.2,
-            }}>
-              {showCode ? code : '● ● ● ● ● ●'}
-            </div>
-            <button
-              onClick={() => setShowCode(v => !v)}
-              style={{ background:'var(--sn-bg)', border:'1px solid var(--sn-border)', borderRadius:999, padding:'4px 14px', color:'var(--sn-muted)', fontSize:'0.72rem', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif", display:'inline-flex', alignItems:'center', gap:5 }}
-            >
-              {showCode ? <><EyeOff size={12}/> Hide</> : <><Eye size={12}/> Reveal Code</>}
-            </button>
           </div>
 
           {/* Code input */}
           <div style={{ marginBottom:'0.85rem' }}>
             <label style={{ display:'block', fontSize:'0.72rem', fontWeight:600, color:'var(--sn-muted)', marginBottom:6, textTransform:'uppercase', letterSpacing:'0.06em' }}>
-              Enter the code above
+              Enter the code from your email
             </label>
             <input
               value={entered}

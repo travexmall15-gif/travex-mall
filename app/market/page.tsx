@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
-import { sb } from '@/lib/supabase'
 import { Shirt, Car, Smartphone, ArrowRight } from 'lucide-react'
 
 // ── Market definitions ─────────────────────────────────────
@@ -41,30 +40,9 @@ export default function MarketPage() {
   useEffect(() => {
     async function loadCounts() {
       try {
-        const { data } = await sb
-          .from('pending_payments')
-          .select('shop_category, shop_market')
-          .eq('status', 'approved')
-
-        if (!data) {return}
-
-        const result: Record<string, number> = { fashion: 0, vehicle: 0, electronics: 0 }
-        for (const shop of data) {
-          // Prefer the explicit shop_market column (set by every application
-          // since Batch 1). Fall back to category-inference for older shops
-          // that applied before that column existed.
-          if (shop.shop_market && result[shop.shop_market] !== undefined) {
-            result[shop.shop_market]++
-            continue
-          }
-          for (const market of MARKETS) {
-            if (market.categories.includes(shop.shop_category || '')) {
-              result[market.key]++
-              break
-            }
-          }
-        }
-        setCounts(result)
+        const response = await fetch('/api/public/market?type=counts', { cache: 'no-store' })
+        const result = await response.json().catch(() => null)
+        if (response.ok && result?.counts) {setCounts(result.counts)}
       } finally {
         setLoading(false)
       }

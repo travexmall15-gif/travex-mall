@@ -1,11 +1,8 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
-
-const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-)
+import { readSellerSession } from '@/lib/security/signed-session'
+import { createServiceSupabase, isActiveSeller } from '@/lib/security/server-supabase'
+import { hasSameOrigin } from '@/lib/security/http'
 
 const fmt = (n: number) => 'TZS ' + Number(n).toLocaleString('en-US')
 
@@ -147,40 +144,40 @@ function coachTool(q:string,ctx:any){
   return `My advice for ${name}: Focus on three things this week — (1) add products if below 10, (2) post on Social Vybe daily, (3) create a Flash Deal. You have ${prods} products and ${ords} orders. ${ords===0?'Getting your first order is the most important step right now.':'Keep growing — every 10 orders builds your reputation.'} Ask me anything specific!`
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  if (!hasSameOrigin(req)) {return NextResponse.json({ result: 'Invalid request origin.' }, { status: 403 })}
   const { allowed, retryAfterSeconds } = rateLimit(`ai-tools:${getClientIp(req)}`, 30, 60)
   if (!allowed) {
     return NextResponse.json({ result: 'Too many requests. Please slow down.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
   }
   try {
-  const { tool, store_id, login_password, ...params } = await req.json()
+  const body = await req.json()
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return NextResponse.json({ result: 'Invalid request.' }, { status: 400 })
+  }
+  const { tool, store_id, ...params } = body
+  if (typeof tool !== 'string' || !['description','price','report','expenses','social','whatsapp','coach','tips'].includes(tool)) {
+    return NextResponse.json({ result: 'Invalid tool.' }, { status: 400 })
+  }
+  const storeId = typeof store_id === 'string' ? store_id : ''
+  const seller = readSellerSession(req)
+  if (!seller) {return NextResponse.json({ result: 'Unauthorized.' }, { status: 401 })}
+  if (!storeId || seller.sellerId !== storeId) {return NextResponse.json({ result: 'Forbidden.' }, { status: 403 })}
 
-  // Financial/business-data tools require proof of ownership (the shop's
-  // PIN) before reading that store's private sales/orders. Content-
-  // generation-only tools (description/price/social/whatsapp/expenses,
-  // the last of which only processes text the caller supplies inline,
-  // not stored data) don't read another shop's private records, so they
-  // don't need this gate.
-  const SENSITIVE_TOOLS = new Set(['report', 'tips', 'coach'])
-  if (SENSITIVE_TOOLS.has(tool) && store_id) {
-    const { data: authRow } = await sb.from('pending_payments').select('login_password').eq('id', store_id).maybeSingle()
-    if (!authRow || String(authRow.login_password || '') !== String(login_password || '')) {
-      return NextResponse.json({ result: 'Unauthorized.' }, { status: 403 })
-    }
+  const sb = createServiceSupabase()
+  if (!await isActiveSeller(sb, seller.sellerId, seller.market)) {
+    return NextResponse.json({ result: 'Forbidden.' }, { status: 403 })
   }
 
   const [
-    {data:storeRow},{data:bizProds},{data:campusProds},{data:sales},{data:orders},{data:vybes},
+    {data:storeRow},{data:products},{data:sales},{data:orders},{data:vybes},
   ] = await Promise.all([
-    sb.from('pending_payments').select('shop_name,shop_category,plan').eq('id',store_id).maybeSingle(),
-    sb.from('products').select('name,price,category').eq('shop_id',store_id),
-    sb.from('campus_products').select('name,price,category').eq('store_id',store_id),
-    sb.from('seller_sales').select('amount,category,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(200),
-    sb.from('orders').select('id,total_amount,created_at').eq('store_id',store_id).order('created_at',{ascending:false}).limit(100),
-    sb.from('feed_posts').select('id').eq('store_id',store_id),
+    sb.from('pending_payments').select('shop_name,shop_category,plan').eq('id',storeId).maybeSingle(),
+    sb.from('products').select('name,price,category').eq('store_id',storeId),
+    sb.from('seller_sales').select('amount,category,created_at').eq('store_id',storeId).order('created_at',{ascending:false}).limit(200),
+    sb.from('orders').select('id,total_amount,created_at').eq('store_id',storeId).order('created_at',{ascending:false}).limit(100),
+    sb.from('feed_posts').select('id').eq('store_id',storeId),
   ])
-  const products = [...(bizProds||[]), ...(campusProds||[])]
-
   const shopName=storeRow?.shop_name||'My Shop'
   const shopCat=storeRow?.shop_category||'General'
   const shopPlan=storeRow?.plan||'basic'
@@ -207,7 +204,7 @@ export async function POST(req: Request) {
       result=`EXPENSE BREAKDOWN:\n${rows.join('\n')}\n\n---\n\nBY CATEGORY:\n${sum}\n\nTOTAL: ${fmt(total)}`
       break
     }
-    case 'social': result=socialTool(params.product||'',params.platform||'instagram',params.tone||'casual and fun',params.offer||'',shopName,store_id); break
+    case 'social': result=socialTool(params.product||'',params.platform||'instagram',params.tone||'casual and fun',params.offer||'',shopName,storeId); break
     case 'whatsapp': result=waTool(params.type||'new product announcement',params.detail||'',shopName,store_id); break
     case 'tips': {
       const rev=(orders||[]).reduce((a:number,o:any)=>a+Number(o.total_amount||0),0)

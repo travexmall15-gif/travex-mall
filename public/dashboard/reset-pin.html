@@ -107,8 +107,6 @@ input[type=number]{text-align:center;font-size:1.4rem;font-weight:800;letter-spa
 </div>
 
 <script>
-const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
 let foundShop = null
 
 function showStep(n) {
@@ -132,17 +130,22 @@ async function verifyIdentity() {
   btn.textContent = 'Inathibitisha...'; btn.disabled = true
 
   try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?shop_name=ilike.${encodeURIComponent(shopName)}&owner_phone=eq.${encodeURIComponent(phone)}&select=id,shop_name,shop_number,status`,
-      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
-    )
-    const data = await res.json()
-    if (!data?.length) {
+    const res = await fetch('/api/seller/profile', {cache:'no-store'})
+    const result = await res.json().catch(()=>({}))
+    const seller = result.seller
+    if (!res.ok || !seller) {
+      showError('Ingia kwenye dashibodi kwanza ili kubadilisha PIN kwa usalama.')
+      btn.textContent = 'Thibitisha →'; btn.disabled = false
+      return
+    }
+    const normalizedPhone = String(seller.owner_phone||'').replace(/\D/g,'')
+    if (String(seller.shop_name||'').trim().toLowerCase() !== shopName.toLowerCase()
+      || normalizedPhone !== phone.replace(/\D/g,'')) {
       showError('Jina la duka au nambari ya simu si sahihi. Jaribu tena.')
       btn.textContent = 'Thibitisha →'; btn.disabled = false
       return
     }
-    foundShop = data[0]
+    foundShop = seller
     document.getElementById('confirmedShop').textContent = foundShop.shop_name
     document.getElementById('confirmedNum').textContent = `Duka #${String(foundShop.shop_number||'000').padStart(3,'0')}`
     showStep(2)
@@ -173,16 +176,16 @@ async function doReset() {
   btn.textContent = 'Inabadilisha...'; btn.disabled = true
 
   try {
-    const { error } = await fetch(
-      `${SB_URL}/rest/v1/pending_payments?id=eq.${foundShop.id}`,
-      {
-        method: 'PATCH',
-        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ login_password: newPin })
-      }
-    )
-    const num = String(foundShop.shop_number||'000').padStart(3,'0')
-    document.getElementById('finalPin').textContent = `${newPin}-${num}`
+    const response = await fetch('/api/seller/auth/update-pin', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: newPin })
+    })
+    const result = await response.json()
+    if (!response.ok) {
+      showError(result.error || 'Ingia kwanza ili kubadilisha PIN yako kwa usalama.')
+      btn.textContent = ' Badilisha PIN'; btn.disabled = false
+      return
+    }
+    document.getElementById('finalPin').textContent = newPin
     showStep(3)
   } catch {
     showError('Hitilafu imetokea. Jaribu tena.')

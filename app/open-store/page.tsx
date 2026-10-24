@@ -79,31 +79,31 @@ export default function WebstoreBuilderPage() {
       if (coverFile) {cover_url = await uploadAsset(coverFile, 'cover')}
 
       const { data: { session } } = await sb.auth.getSession()
-
-      const { error: insertError } = await sb.from('pending_payments').insert({
-        owner_name: session?.user?.user_metadata?.full_name || draft.shop_name,
-        owner_phone: draft.owner_phone,
-        owner_email: draft.owner_email || null,
-        shop_name: draft.shop_name,
-        shop_desc: draft.shop_desc,
-        shop_category: draft.shop_category,
-        shop_region: draft.shop_region,
-        shop_city: draft.shop_city || null,
-        shop_address: draft.shop_address || null,
-        shop_whatsapp: draft.shop_whatsapp,
-        shop_instagram: draft.shop_instagram || null,
-        shop_facebook: draft.shop_facebook || null,
-        shop_tiktok: draft.shop_tiktok || null,
-        shop_logo_url: logo_url,
-        shop_cover_url: cover_url,
-        selected_template: draft.selected_template,
-        webstore_status: 'submitted',
-        webstore_submitted_at: new Date().toISOString(),
-        status: 'pending',
-        plan: 'basic',
+      const response = await fetch('/api/webstore/application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          owner_name: session?.user?.user_metadata?.full_name || draft.shop_name,
+          owner_phone: draft.owner_phone,
+          owner_email: draft.owner_email || null,
+          shop_name: draft.shop_name,
+          shop_desc: draft.shop_desc,
+          shop_category: draft.shop_category,
+          shop_region: draft.shop_region,
+          shop_city: draft.shop_city || null,
+          shop_address: draft.shop_address || null,
+          shop_whatsapp: draft.shop_whatsapp,
+          shop_instagram: draft.shop_instagram || null,
+          shop_facebook: draft.shop_facebook || null,
+          shop_tiktok: draft.shop_tiktok || null,
+          shop_logo_url: logo_url,
+          shop_cover_url: cover_url,
+          selected_template: draft.selected_template,
+          market: draft.market,
+        }),
       })
-
-      if (insertError) {throw insertError}
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {throw new Error(result.error || 'Could not submit application.')}
       setStep(TOTAL_STEPS + 1) // "submitted" confirmation screen
     } catch {
       setError('Imeshindikana kutuma. Tafadhali jaribu tena.')

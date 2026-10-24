@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Keep build tracing inside this repository even when the machine has
+  // unrelated lockfiles in parent directories.
+  outputFileTracingRoot: process.cwd(),
+  turbopack: { root: process.cwd() },
+
   // ── Image optimization ──────────────────────────────────
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
@@ -20,7 +25,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: false,
-  typescript: { ignoreBuildErrors: true },
 
   // ── Router cache — CRITICAL: prevents stale UI ──────────
   // staleTimes: 0 = never serve cached page segments

@@ -1,11 +1,10 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { NextRequest, NextResponse } from 'next/server'
+import { createServiceSupabase } from '@/lib/security/server-supabase'
+import { hasAdminSession } from '@/lib/security/signed-session'
 import { rateLimit, getClientIp } from '@/lib/security/rate-limit'
+import { hasSameOrigin } from '@/lib/security/http'
 
-const sb = createClient(
-  'https://bscecjbgnjitlfmgwcic.supabase.co',
-  'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-)
+const appIdPattern = /^[a-zA-Z0-9_-]{1,100}$/
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || ''
 
@@ -54,30 +53,32 @@ Reply ONLY with JSON: {"score": NUMBER, "reasons": ["reason1","reason2"]}`
   }
 }
 
-export async function POST(req: Request) {
-  // This endpoint has no authentication (see security audit — flagged as
-  // a remaining risk pending a real admin session system) and calls a
-  // paid Gemini API per request, so rate limiting here specifically
-  // guards against quota-exhaustion abuse, not just generic spam.
+export async function POST(req: NextRequest) {
+  if (!hasSameOrigin(req)) {return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 })}
+  if (!hasAdminSession(req)) {return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })}
   const { allowed, retryAfterSeconds } = rateLimit(`auto-approve:${getClientIp(req)}`, 10, 60)
   if (!allowed) {
     return NextResponse.json({ error: 'Too many requests.' }, { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } })
   }
-  const { app_id, app_type } = await req.json()
+  let body: any
+  try { body = await req.json() } catch { return NextResponse.json({ error: 'Invalid request.' }, { status: 400 }) }
+  const app_id = typeof body.app_id === 'string' ? body.app_id : ''
+  if (!appIdPattern.test(app_id)) {return NextResponse.json({ error: 'Invalid application.' }, { status: 400 })}
+  if (body.app_type === 'campus') {return NextResponse.json({ error: 'Campus is no longer an active ShopNekt feature.' }, { status: 410 })}
+  if (body.app_type !== 'business') {return NextResponse.json({ error: 'Invalid application.' }, { status: 400 })}
+  const sb = createServiceSupabase()
 
-  const table = app_type === 'campus' ? 'campus_applications' : 'pending_payments'
-  const { data: app } = await sb.from(table).select('*').eq('id', app_id).single()
+  const { data: app } = await sb.from('pending_payments').select('id,shop_name,owner_name,owner_phone,shop_category,shop_desc,status').eq('id', app_id).maybeSingle()
   if (!app) {return NextResponse.json({ error: 'Not found' }, { status: 404 })}
+  if (app.status !== 'pending') {return NextResponse.json({ error: 'Application is no longer pending.' }, { status: 409 })}
 
   const { score, decision, reasons } = await scoreApplication(app)
 
-  await sb.from('auto_approvals').insert({ app_id, app_type, score, decision, reasons })
+  const { error: logError } = await sb.from('auto_approvals').insert({ app_id, app_type: 'business', score, decision, reasons })
+  if (logError) {return NextResponse.json({ error: 'Unable to save review result.' }, { status: 503 })}
 
-  if (decision === 'approved') {
-    await sb.from(table).update({ ai_score: score, ai_decision: 'approved' }).eq('id', app_id)
-  } else {
-    await sb.from(table).update({ ai_score: score, ai_decision: decision }).eq('id', app_id)
-  }
+  const { error: updateError } = await sb.from('pending_payments').update({ ai_score: score, ai_decision: decision }).eq('id', app_id).eq('status', 'pending')
+  if (updateError) {return NextResponse.json({ error: 'Unable to save review result.' }, { status: 503 })}
 
   return NextResponse.json({ success: true, score, decision, reasons })
 }

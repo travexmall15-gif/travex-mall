@@ -33,21 +33,18 @@ export async function searchShops(query: string, limit = 8, filters: ShopSearchF
   const category = filters.category?.trim()
   if (!q && !category) return []
 
-  let builder = sb
-    .from('pending_payments')
-    .select('id, shop_name, shop_category, shop_region, shop_logo, plan')
-    .eq('status', 'approved')
-
-  if (q) builder = builder.or(`shop_name.ilike.%${q}%,shop_category.ilike.%${q}%`)
-  if (category) builder = builder.ilike('shop_category', `%${category}%`)
-  if (filters.region) builder = builder.eq('shop_region', filters.region)
-
-  const { data } = await builder.limit(limit)
+  const params = new URLSearchParams({ type: 'shops', q: q || category || '', limit: String(limit) })
+  if (category) {params.set('category', category)}
+  if (filters.region) {params.set('region', filters.region)}
+  const response = await fetch(`/api/public/market?${params.toString()}`, { cache: 'no-store' })
+  if (!response.ok) {return []}
+  const result = await response.json().catch(() => null)
+  const data = Array.isArray(result?.shops) ? result.shops : []
 
   if (!data || data.length === 0) return []
 
   // Batch-fetch real like counts for these shops (one query, not N).
-  const ids = data.map(s => s.id)
+  const ids = data.map((s: { id: string }) => s.id)
   const { data: likeRows } = await sb
     .from('shop_likes')
     .select('store_id')
@@ -58,12 +55,12 @@ export async function searchShops(query: string, limit = 8, filters: ShopSearchF
     counts.set(row.store_id, (counts.get(row.store_id) || 0) + 1)
   }
 
-  return data.map(s => ({
+  return data.map((s: any) => ({
     id: s.id,
     shop_name: s.shop_name,
     shop_category: s.shop_category,
     shop_region: s.shop_region,
-    shop_logo: s.shop_logo,
+    shop_logo: s.shop_logo_url,
     plan: s.plan,
     like_count: counts.get(s.id) || 0,
   }))
@@ -75,35 +72,20 @@ export async function searchProducts(query: string, limit = 12, filters: Product
   const category = filters.category?.trim()
   if (!q && !category) return []
 
-  let builder = sb.from('products').select('id, name, price, image_url, store_id')
-
-  if (q) builder = builder.or(`name.ilike.%${q}%,category.ilike.%${q}%`)
-  if (category) builder = builder.ilike('category', `%${category}%`)
-  if (filters.maxPrice !== undefined) builder = builder.lte('price', filters.maxPrice)
-  if (filters.minPrice !== undefined) builder = builder.gte('price', filters.minPrice)
-
-  const { data } = await builder.limit(limit)
-
-  if (!data || data.length === 0) return []
-
-  // Batch-fetch shop names for these products' stores (one query, not N).
-  const storeIds = [...new Set(data.map(p => p.store_id))]
-  const { data: shops } = await sb
-    .from('pending_payments')
-    .select('id, shop_name')
-    .in('id', storeIds)
-    .eq('status', 'approved')
-
-  const shopNames = new Map((shops || []).map(s => [s.id, s.shop_name]))
-
-  return data
-    .filter(p => shopNames.has(p.store_id)) // only show products from live, approved shops
-    .map(p => ({
+  const params = new URLSearchParams({ type: 'products', q: q || '', limit: String(limit) })
+  if (category) {params.set('category', category)}
+  if (filters.maxPrice !== undefined) {params.set('max_price', String(filters.maxPrice))}
+  if (filters.minPrice !== undefined) {params.set('min_price', String(filters.minPrice))}
+  const response = await fetch(`/api/public/market?${params.toString()}`, { cache: 'no-store' })
+  if (!response.ok) {return []}
+  const result = await response.json().catch(() => null)
+  const data = Array.isArray(result?.products) ? result.products : []
+  return data.map((p: any) => ({
       id: p.id,
       name: p.name,
       price: p.price,
       image_url: p.image_url,
       store_id: p.store_id,
-      shop_name: shopNames.get(p.store_id) || '',
+      shop_name: p.shop_name || '',
     }))
 }

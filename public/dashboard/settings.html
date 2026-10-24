@@ -239,36 +239,36 @@ async function handleSettingsLogoUpload(input) {
 async function saveShop() {
   const session = JSON.parse(localStorage.getItem('travex_session')||'{}');
   const isCampus = session.market === 'campus';
-  let error;
-  if (isCampus) {
-    // Campus store: different table + column names
-    const updates = {
-      store_name:  document.getElementById('sShopName').value,
-      category:    document.getElementById('sCategory').value,
-      description: document.getElementById('sDesc').value,
-      whatsapp:    document.getElementById('sWhatsapp').value,
-    };
-    ({ error } = await sb.from('campus_stores').update(updates).eq('id', shopData?.id));
-  } else {
-    var newLogoUrl = window._newLogoUrl || null
-    const updates = {
-      shop_name:     document.getElementById('sShopName').value,
-      shop_category: document.getElementById('sCategory').value,
-      shop_region:   document.getElementById('sRegion').value,
-      shop_whatsapp: document.getElementById('sWhatsapp').value,
-      shop_desc:     document.getElementById('sDesc').value,
-      ...(newLogoUrl ? {shop_logo: newLogoUrl} : {}),
-    };
-    ({ error } = await sb.from('pending_payments').update(updates).eq('id', shopData?.id));
-  }
-  if (error) { showToast('Error: '+error.message,'error'); return; }
+  const fields = isCampus ? {
+    store_name: document.getElementById('sShopName').value,
+    category: document.getElementById('sCategory').value,
+    description: document.getElementById('sDesc').value,
+    whatsapp: document.getElementById('sWhatsapp').value,
+  } : {
+    shop_name: document.getElementById('sShopName').value,
+    shop_category: document.getElementById('sCategory').value,
+    shop_region: document.getElementById('sRegion').value,
+    shop_whatsapp: document.getElementById('sWhatsapp').value,
+    shop_desc: document.getElementById('sDesc').value,
+    ...(window._newLogoUrl ? {shop_logo: window._newLogoUrl} : {}),
+  };
+  const response = await fetch('/api/seller/settings', {
+    method: 'PATCH', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({section:'shop', ...fields}),
+  });
+  const result = await response.json().catch(()=>({}));
+  if (!response.ok) { showToast('Error: '+(result.error||'Unable to save shop settings.'),'error'); return; }
   showToast(' Shop info saved!','success');
 }
 
 async function saveAccount() {
   const name = document.getElementById('sOwnerName').value;
-  const { error } = await sb.from('pending_payments').update({ owner_name: name }).eq('id', shopData?.id);
-  if (error) { showToast('Error: '+error.message,'error'); return; }
+  const response = await fetch('/api/seller/settings', {
+    method: 'PATCH', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({section:'account', owner_name:name}),
+  });
+  const result = await response.json().catch(()=>({}));
+  if (!response.ok) { showToast('Error: '+(result.error||'Unable to update account.'),'error'); return; }
   localStorage.setItem('travex_owner_name', name);
   showToast(' Account updated!','success');
 }

@@ -3,9 +3,9 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from '@/hooks/useTranslation'
-import { sb } from '@/lib/supabase'
 import { Search, MapPin, Heart, ArrowLeft, Loader2 } from 'lucide-react'
 import { getCurrentBuyerId, likeShop, unlikeShop } from '@/lib/shop-likes'
+import { sb } from '@/lib/supabase'
 
 // ── Config ────────────────────────────────────────────────────
 const REGIONS = ['Dar es Salaam', 'Arusha', 'Mwanza', 'Dodoma', 'Tanga']
@@ -65,31 +65,10 @@ export default function MarketInnerPage() {
     if (!cfg) {return}
     setLoading(true)
     try {
-      const { data } = await sb
-        .from('pending_payments')
-        .select('id,owner_name,owner_phone,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_color,plan,status,shop_logo_url,webstore_status,selected_template,created_at')
-        .eq('status', 'approved')
-        .order('plan', { ascending: false })
-        .order('created_at', { ascending: false })
-
-      if (!data) { setShops([]); return }
-
-      // WebStore Builder visibility rule: a shop that never started the
-      // new template flow (selected_template is null) keeps showing
-      // exactly as it always has — zero regression for existing live
-      // shops. A shop that DID pick a template only appears once its
-      // webstore_status is genuinely 'published' — draft/submitted/
-      // under_review/rejected/approved-but-not-yet-published stay
-      // hidden from the public marketplace, per spec.
-      const visibleData = data.filter((s: any) => !s.selected_template || s.webstore_status === 'published')
-
-      // Category-based market matching (shop_market column does not
-      // exist on this table — confirmed via a real runtime error —
-      // so every shop is matched by its category against this
-      // market's known category list).
-      const filtered = visibleData.filter((s: any) => cfg.categories.includes(s.shop_category || ''))
-
-      setShops(filtered as unknown as Shop[])
+      const response = await fetch(`/api/public/market?type=market&market=${encodeURIComponent(market)}`, { cache: 'no-store' })
+      const result = await response.json().catch(() => null)
+      const data = response.ok && Array.isArray(result?.shops) ? result.shops : []
+      setShops(data.map((shop: any) => ({ ...shop, owner_name: '', owner_phone: null, shop_color: null })) as Shop[])
     } finally {
       setLoading(false)
     }
