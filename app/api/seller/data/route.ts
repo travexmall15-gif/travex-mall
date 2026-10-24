@@ -31,6 +31,14 @@ function safeMediaUrl(value: unknown): string | null | undefined {
   } catch { return undefined }
 }
 
+function productImage(value: unknown): string | null | undefined {
+  if (value === undefined) {return undefined}
+  if (value === null || value === '') {return null}
+  if (typeof value !== 'string' || value.length > 3_500_000) {return undefined}
+  if (/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(value)) {return value}
+  return safeMediaUrl(value)
+}
+
 async function sellerContext(request: NextRequest) {
   const session = readSellerSession(request)
   if (!session) {return { response: NextResponse.json({ error: 'Unauthorized.' }, { status: 401 }) }}
@@ -82,14 +90,14 @@ export async function POST(request: NextRequest) {
   const input = record(body.item) || body
   try {
     if (resource === 'orders') {
-      const status = body.status === 'confirmed' || body.status === 'delivered' ? 'completed' : body.status
-      if (action !== 'status' || !UUID.test(id) || !['pending', 'completed', 'cancelled'].includes(String(status))) {
+      const status = body.status
+      if (action !== 'status' || !UUID.test(id) || !['confirmed', 'cancelled'].includes(String(status))) {
         return NextResponse.json({ error: 'Invalid order update.' }, { status: 400 })
       }
       const { data, error } = await sb.from('orders').update({ status, updated_at: new Date().toISOString() })
-        .eq('id', id).eq('store_id', session.sellerId).select('id,status').maybeSingle()
+        .eq('id', id).eq('store_id', session.sellerId).eq('status', 'pending').select('id,status').maybeSingle()
       if (error) {return NextResponse.json({ error: 'Unable to update order.' }, { status: 503 })}
-      if (!data) {return NextResponse.json({ error: 'Order not found.' }, { status: 404 })}
+      if (!data) {return NextResponse.json({ error: 'This order can no longer be changed.' }, { status: 409 })}
       return NextResponse.json({ data })
     }
 
@@ -167,19 +175,34 @@ export async function POST(request: NextRequest) {
     }
     let values: Record<string, unknown> = { store_id: session.sellerId }
     if (resource === 'products') {
-      const name = boundedText(input.name, 120, true)
-      const price = numberValue(input.price, 0.01)
-      const description = boundedText(input.description, 4000)
-      const category = boundedText(input.category, 80)
-      const image = boundedText(input.image_url ?? input.image, 3_500_000)
-      const stock = numberValue(input.stock ?? 0, 0, 1_000_000)
-      if (!name || price === null || description === null || category === null || image === null || stock === null) {
+      const updating = action === 'update'
+      const name = input.name === undefined && updating ? undefined : boundedText(input.name, 120, true)
+      const price = input.price === undefined && updating ? undefined : numberValue(input.price, 0.01)
+      const description = input.description === undefined && updating ? undefined : boundedText(input.description, 4000)
+      const category = input.category === undefined && updating ? undefined : boundedText(input.category, 80)
+      const rawImage = Object.prototype.hasOwnProperty.call(input, 'image_url') ? input.image_url : input.image
+      const image = rawImage === undefined && updating ? undefined : productImage(rawImage)
+      const stock = input.stock === undefined && updating ? undefined : numberValue(input.stock ?? 0, 0, 1_000_000)
+      const active = input.is_active === undefined && updating ? undefined : input.is_active === undefined ? true : input.is_active
+      const available = input.is_available === undefined && updating ? undefined : input.is_available === undefined ? true : input.is_available
+      if (!name && !updating || name === null || price === null || !updating && price === undefined
+        || description === null || category === null || image === undefined && rawImage !== undefined
+        || stock === null || active !== undefined && typeof active !== 'boolean'
+        || available !== undefined && typeof available !== 'boolean') {
         return NextResponse.json({ error: 'Invalid product details.' }, { status: 400 })
       }
-      values = { ...values, name, price, description, category: category || null, image_url: image || null, image: image || null, stock: Math.floor(stock), is_active: input.is_active !== false, is_available: input.is_available !== false }
-      const originalPrice = input.original_price === undefined ? null : numberValue(input.original_price, 0.01)
-      if (input.original_price !== undefined && originalPrice === null) {return NextResponse.json({ error: 'Invalid original price.' }, { status: 400 })}
-      if (originalPrice !== null) {values.original_price = originalPrice}
+      values = { ...values }
+      if (name !== undefined) {values.name = name}
+      if (price !== undefined) {values.price = price}
+      if (description !== undefined) {values.description = description}
+      if (category !== undefined) {values.category = category || null}
+      if (image !== undefined) {values.image_url = image; values.image = image}
+      if (stock !== undefined) {values.stock = Math.floor(stock)}
+      if (active !== undefined) {values.is_active = active}
+      if (available !== undefined) {values.is_available = available}
+      const originalPrice = input.original_price === undefined ? undefined : numberValue(input.original_price, 0.01)
+      if (originalPrice === null) {return NextResponse.json({ error: 'Invalid original price.' }, { status: 400 })}
+      if (originalPrice !== undefined) {values.original_price = originalPrice}
     } else if (resource === 'sales') {
       const description = boundedText(input.description, 500, true)
       const amount = numberValue(input.amount, 0.01)

@@ -56,6 +56,7 @@ beforeEach(() => {
         pending_payments: [approved, service, hidden],
         products: [
           { id: 'product-chair', name: 'Oak chair', price: 240000, category: 'Furniture', image_url: '/chair.jpg', store_id: 'store-public', stock: 3, is_available: true },
+          { id: 'product-inactive', name: 'Inactive chair', price: 90000, category: 'Furniture', image_url: null, store_id: 'store-public', stock: 5, is_active: false, is_available: true },
           { id: 'product-hidden', name: 'Hidden chair', price: 90000, category: 'Furniture', image_url: null, store_id: 'store-pending', stock: 5, is_available: true },
         ],
         feed_posts: [{ id: 'post-one', store_id: 'store-public', shop_name: 'Public Living', caption: 'New chairs', post_text: null, media_url: '/post.jpg', category: 'Furniture', tag: null, created_at: '2026-01-04' }],
@@ -82,6 +83,7 @@ describe('public marketplace search', () => {
     expect(body.results.find((result: { id: string }) => result.id === 'deal-one').href).toBe('/flash-deals#deal-deal-one')
     expect(body.results.find((result: { id: string }) => result.id === 'group-one').href).toBe('/group-buy/group-one')
     expect(body.results.some((result: { id: string }) => result.id === 'product-hidden')).toBe(false)
+    expect(body.results.some((result: { id: string }) => result.id === 'product-inactive')).toBe(false)
     expect(body.results.some((result: { id: string }) => result.id === 'store-pending')).toBe(false)
   })
 

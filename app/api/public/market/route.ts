@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceSupabase } from '@/lib/security/server-supabase'
 import { getClientIp, rateLimit } from '@/lib/security/rate-limit'
+import { isProductPubliclyAvailable } from '@/lib/products/public-visibility'
 
 const MARKET_CATEGORIES: Record<string, string[]> = {
   fashion: ['Clothing','Shoes','Accessories','Beauty','Jewelry','Sports & Fitness','Arts & Crafts','Fashion & Clothing','Beauty & Health'],
@@ -17,7 +18,7 @@ type PublicShopRecord = {
   [field: string]: unknown
 }
 type SearchStoreRow = { id: string; shop_name: string | null; shop_category: string | null; shop_desc: string | null; shop_logo_url: string | null; shop_region: string | null; plan: string | null }
-type SearchProductRow = { id: string; name: string | null; price: number | null; category: string | null; image_url: string | null; store_id: string }
+type SearchProductRow = { id: string; name: string | null; price: number | null; category: string | null; image_url: string | null; store_id: string; stock: number; is_active?: boolean | null; is_available?: boolean | null }
 type SearchPostRow = { id: string; store_id: string | null; shop_name: string | null; caption: string | null; post_text: string | null; media_url: string | null; category: string | null; tag: string | null }
 type SearchDealRow = { id: string; store_id: string | null; shop_name: string | null; product_name: string | null; product_image: string | null; deal_price: number | null }
 type SearchGroupRow = { id: string; store_id: string | null; shop_name: string | null; product_name: string | null; product_image: string | null; unit_price: number | null }
@@ -69,8 +70,9 @@ export async function GET(request: NextRequest) {
           ].join(',')).order('plan', { ascending: false }).order('created_at', { ascending: false }).limit(searchLimit)
         : Promise.resolve({ data: [], error: null })
       const productsQuery = sb.from('products')
-        .select('id,name,price,category,image_url,store_id,stock,is_available')
+        .select('id,name,price,category,image_url,store_id,stock,is_active,is_available')
         .eq('is_available', true).gt('stock', 0).limit(searchLimit)
+      productsQuery.or('is_active.eq.true,is_active.is.null')
       if (query) {productsQuery.or(`name.ilike.${pattern(query)},category.ilike.${pattern(query)}`)}
       if (category) {productsQuery.ilike('category', pattern(category))}
       const vybeQuery = includeNonProducts
@@ -104,7 +106,7 @@ export async function GET(request: NextRequest) {
       }
 
       const shopRows = (shopsResult.data || []) as unknown as SearchStoreRow[]
-      const products = (productsResult.data || []) as unknown as SearchProductRow[]
+      const products = ((productsResult.data || []) as unknown as SearchProductRow[]).filter(isProductPubliclyAvailable)
       const posts = (vybeResult.data || []) as unknown as SearchPostRow[]
       const deals = (dealsResult.data || []) as unknown as SearchDealRow[]
       const groups = (groupsResult.data || []) as unknown as SearchGroupRow[]
@@ -175,8 +177,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (type === 'products') {
-      let productsQuery = sb.from('products').select('id,name,price,category,image_url,store_id,stock,is_available')
+      let productsQuery = sb.from('products').select('id,name,price,category,image_url,store_id,stock,is_active,is_available')
         .eq('is_available', true).gt('stock', 0).limit(requestedLimit)
+      productsQuery = productsQuery.or('is_active.eq.true,is_active.is.null')
       if (query) {productsQuery = productsQuery.ilike('name', `%${query}%`)}
       if (category) {productsQuery = productsQuery.ilike('category', `%${category}%`)}
       if (params.has('max_price')) {
@@ -196,7 +199,7 @@ export async function GET(request: NextRequest) {
       const { data: shops, error: shopsError } = await visibleStores().in('id', ids)
       if (shopsError) {return NextResponse.json({ error: 'Unable to search products.' }, { status: 503 })}
       const shopNames = new Map(((shops || []) as unknown as Array<{ id: string; shop_name: string | null }>).map(shop => [shop.id, shop.shop_name || '']))
-      return NextResponse.json({ products: (products || []).filter(product => shopNames.has(product.store_id))
+      return NextResponse.json({ products: (products || []).filter(product => isProductPubliclyAvailable(product) && shopNames.has(product.store_id))
         .map(product => ({ ...product, shop_name: shopNames.get(product.store_id) })) })
     }
 
@@ -221,11 +224,12 @@ export async function GET(request: NextRequest) {
       const previewsByStore = new Map<string, Array<{ id: string; name: string; image_url: string }>>()
       if (eligibleStoreIds.length > 0) {
         const { data: products, error: productsError } = await sb.from('products')
-          .select('id,store_id,name,image_url,stock,is_available')
+          .select('id,store_id,name,image_url,stock,is_active,is_available')
           .in('store_id', eligibleStoreIds).eq('is_available', true).gt('stock', 0)
+          .or('is_active.eq.true,is_active.is.null')
           .not('image_url', 'is', null).limit(Math.min(eligibleStoreIds.length * 9, 900))
         if (productsError) {return NextResponse.json({ error: 'Unable to load shops.' }, { status: 503 })}
-        for (const product of products || []) {
+        for (const product of (products || []).filter(isProductPubliclyAvailable)) {
           const previews = previewsByStore.get(product.store_id) || []
           if (previews.length < 9 && product.image_url) {
             previews.push({ id: product.id, name: product.name || '', image_url: product.image_url })

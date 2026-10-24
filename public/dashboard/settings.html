@@ -19,25 +19,49 @@
   <div class="main-content">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
       <!-- Shop Info -->
-      <div class="table-card">
+      <div class="table-card" id="service-profile">
         <div class="table-card-header"><div class="table-card-title"><i class="ti ti-store"></i> Shop Information</div></div>
         <div class="table-card-body">
+          <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;margin:0 0 14px">This is your business profile and the information shown in your WebStore. If your category is Services, buyers discover this provider profile and can contact you through the store or WhatsApp.</p>
           <div class="form-group" style="text-align:center;margin-bottom:16px">
             <label class="form-label" style="text-align:left;display:block">Shop Logo</label>
             <img id="sLogoPreview" src="" style="display:none;width:80px;height:80px;object-fit:cover;border-radius:14px;border:2px solid #E2E8F0;margin-bottom:8px"/>
             <br/>
             <label style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1D4ED8;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer">
                Change Logo
-              <input type="file" accept="image/*" style="display:none" onchange="handleSettingsLogoUpload(this)"/>
+              <input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleSettingsAssetUpload(this,'logo')"/>
             </label>
             <div style="font-size:0.7rem;color:#94A3B8;margin-top:4px">Square image, min 200×200px</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cover Image (optional)</label>
+            <img id="sCoverPreview" src="" style="display:none;width:100%;max-height:120px;object-fit:cover;border-radius:10px;border:1.5px solid #E2E8F0;margin-bottom:8px"/>
+            <label style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1D4ED8;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer">
+              Change Cover
+              <input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleSettingsAssetUpload(this,'cover')"/>
+            </label>
           </div>
           <div class="form-group"><label class="form-label">Shop Name</label><input class="form-input" id="sShopName"></div>
           <div class="form-group"><label class="form-label">Category</label><input class="form-input" id="sCategory"></div>
           <div class="form-group"><label class="form-label">Region</label><input class="form-input" id="sRegion"></div>
+          <div class="form-group"><label class="form-label">City / District</label><input class="form-input" id="sCity"></div>
+          <div class="form-group"><label class="form-label">Street / Address</label><input class="form-input" id="sAddress"></div>
           <div class="form-group"><label class="form-label">WhatsApp Number</label><input class="form-input" id="sWhatsapp" placeholder="+255..."></div>
           <div class="form-group"><label class="form-label">Shop Description</label><textarea class="form-textarea" id="sDesc" style="min-height:80px"></textarea></div>
+          <div class="form-group"><label class="form-label">Instagram (username or link)</label><input class="form-input" id="sInstagram"></div>
+          <div class="form-group"><label class="form-label">Facebook (username or link)</label><input class="form-input" id="sFacebook"></div>
+          <div class="form-group"><label class="form-label">TikTok (username or link)</label><input class="form-input" id="sTiktok"></div>
           <button class="btn btn-gold" onclick="saveShop()" style="width:100%"><i class="ti ti-check"></i> Save Shop Info</button>
+          <div style="border-top:1px solid var(--border);margin-top:18px;padding-top:14px">
+            <div class="table-card-title" style="margin-bottom:8px">WebStore status</div>
+            <div id="webstoreState" style="font-size:0.8rem;color:var(--text-muted);line-height:1.5">Loading current status…</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+              <a id="webstorePreviewLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="display:none;text-decoration:none">Preview customer WebStore</a>
+              <a href="/dashboard/open-store-v2" class="btn btn-outline" style="text-decoration:none">Review / publish status</a>
+              <a href="/search?q=Services" class="btn btn-outline" style="text-decoration:none">View service providers</a>
+            </div>
+            <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.5;margin:10px 0 0">This repository supports one public service-provider profile per store. Separate service packages, bookings and booking confirmations need a dedicated persistent service model.</p>
+          </div>
         </div>
       </div>
 
@@ -190,14 +214,22 @@ let shopData = null;
     document.getElementById('loadingOverlay').style.display = 'none';
   if (!session) return;
   shopData = await Shop.get(session.user.email);
-  await loadSidebar('settings', shopData);
+  await loadSidebar(location.hash === '#service-profile' ? 'services' : 'settings', shopData);
 
   const plan = shopData?.plan || localStorage.getItem('travex_plan') || 'basic';
   document.getElementById('sShopName').value  = shopData?.shop_name||'';
   document.getElementById('sCategory').value  = shopData?.shop_category||'';
   document.getElementById('sRegion').value    = shopData?.shop_region||'';
+  document.getElementById('sCity').value      = shopData?.shop_city||'';
+  document.getElementById('sAddress').value   = shopData?.shop_address||'';
   document.getElementById('sWhatsapp').value  = shopData?.shop_whatsapp||shopData?.owner_phone||'';
   document.getElementById('sDesc').value      = shopData?.shop_desc||'';
+  document.getElementById('sInstagram').value = shopData?.shop_instagram||'';
+  document.getElementById('sFacebook').value  = shopData?.shop_facebook||'';
+  document.getElementById('sTiktok').value    = shopData?.shop_tiktok||'';
+  if(shopData?.shop_logo_url) { document.getElementById('sLogoPreview').src=shopData.shop_logo_url; document.getElementById('sLogoPreview').style.display='inline-block'; }
+  if(shopData?.shop_cover_url) { document.getElementById('sCoverPreview').src=shopData.shop_cover_url; document.getElementById('sCoverPreview').style.display='block'; }
+  renderWebstoreStatus();
   document.getElementById('sOwnerName').value = shopData?.owner_name||'';
   document.getElementById('sEmail').value     = shopData?.auth_email||session.user.email;
   document.getElementById('currentPlan').textContent =
@@ -206,33 +238,23 @@ let shopData = null;
 })();
 
 
-const BUCKET = 'shop-assets'
-async function handleSettingsLogoUpload(input) {
+async function handleSettingsAssetUpload(input, kind) {
   const file = input.files[0]; if(!file) return
-  if(file.size > 2*1024*1024) { showToast('Logo must be under 2 MB','error'); return }
-  showToast('Uploading logo...','info')
+  if(file.size > 2*1024*1024) { showToast('Image must be under 2 MB','error'); input.value=''; return }
+  if(!['image/png','image/jpeg','image/webp'].includes(file.type)) { showToast('Choose a PNG, JPEG, or WebP image','error'); input.value=''; return }
+  showToast('Preparing image...','info')
   try {
-    const ext  = file.name.split('.').pop().toLowerCase()||'jpg'
-    const path = `logos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    let url = ''
-    try {
-      const {error} = await sb.storage.from(BUCKET).upload(path, file, {cacheControl:'3600',upsert:true})
-      if(!error) url = sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
-    } catch(e) {}
-    if(!url) {
-      url = await new Promise((res,rej) => {
-        const r = new FileReader()
-        r.onload = e => res(e.target.result)
-        r.onerror = () => rej(new Error('Read failed'))
-        r.readAsDataURL(file)
-      })
-    }
-    window._newLogoUrl = url
-    const prev = document.getElementById('sLogoPreview')
-    if(prev) { prev.src = url; prev.style.display = 'block' }
-    showToast('Logo ready — click Save to apply','success')
+    const { url, error } = await uploadToStorage(file, `webstore-${kind}`)
+    if(error || typeof url !== 'string' || !url) { throw error || new Error('Image could not be prepared') }
+    window[kind === 'logo' ? '_newLogoUrl' : '_newCoverUrl'] = url
+    const preview = document.getElementById(kind === 'logo' ? 'sLogoPreview' : 'sCoverPreview')
+    preview.src = url
+    preview.style.display = kind === 'logo' ? 'inline-block' : 'block'
+    showToast(url.startsWith('data:image/') ? 'Image ready; save shop information to store it' : 'Image uploaded; save shop information to apply it','success')
   } catch(e) {
     showToast('Upload failed: '+e.message,'error')
+  } finally {
+    input.value=''
   }
 }
 
@@ -248,17 +270,37 @@ async function saveShop() {
     shop_name: document.getElementById('sShopName').value,
     shop_category: document.getElementById('sCategory').value,
     shop_region: document.getElementById('sRegion').value,
+    shop_city: document.getElementById('sCity').value,
+    shop_address: document.getElementById('sAddress').value,
     shop_whatsapp: document.getElementById('sWhatsapp').value,
     shop_desc: document.getElementById('sDesc').value,
+    shop_instagram: document.getElementById('sInstagram').value,
+    shop_facebook: document.getElementById('sFacebook').value,
+    shop_tiktok: document.getElementById('sTiktok').value,
     ...(window._newLogoUrl ? {shop_logo: window._newLogoUrl} : {}),
+    ...(window._newCoverUrl ? {shop_cover: window._newCoverUrl} : {}),
   };
   const response = await fetch('/api/seller/settings', {
-    method: 'PATCH', headers: {'Content-Type':'application/json'},
+    method: 'PATCH', credentials:'same-origin', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({section:'shop', ...fields}),
   });
   const result = await response.json().catch(()=>({}));
   if (!response.ok) { showToast('Error: '+(result.error||'Unable to save shop settings.'),'error'); return; }
-  showToast(' Shop info saved!','success');
+  Object.assign(shopData || {}, fields);
+  if(fields.shop_logo) { shopData.shop_logo_url=fields.shop_logo; delete window._newLogoUrl; }
+  if(fields.shop_cover) { shopData.shop_cover_url=fields.shop_cover; delete window._newCoverUrl; }
+  renderWebstoreStatus();
+  showToast('Shop information saved.','success');
+}
+
+function renderWebstoreStatus() {
+  const state = document.getElementById('webstoreState')
+  const preview = document.getElementById('webstorePreviewLink')
+  if(!state || !preview || !shopData) return
+  state.textContent = `Business approval: ${shopData.status || 'unknown'} · WebStore: ${shopData.webstore_status || 'not submitted'}`
+  const canPreview = shopData.status === 'approved' && (!shopData.selected_template || shopData.webstore_status === 'published')
+  preview.style.display = canPreview ? 'inline-flex' : 'none'
+  preview.href = canPreview ? `/store/${encodeURIComponent(shopData.id)}` : '#'
 }
 
 async function saveAccount() {

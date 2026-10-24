@@ -27,7 +27,7 @@
   </div>
   <div class="main-content">
     <div class="stats-grid" style="margin-bottom:20px">
-      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="rRevenue">TZS 0</div><div class="stat-sub" id="rRevSub">-</div></div>
+      <div class="stat-card"><div class="stat-label">Recorded Income</div><div class="stat-value" id="rRevenue">TZS 0</div><div class="stat-sub" id="rRevSub">Seller-recorded sales</div></div>
       <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="rOrders">0</div></div>
       <div class="stat-card"><div class="stat-label">Total Expenses</div><div class="stat-value" id="rExpense">TZS 0</div></div>
       <div class="stat-card"><div class="stat-label">Net Profit</div><div class="stat-value" id="rProfit">TZS 0</div></div>
@@ -36,7 +36,7 @@
       <div class="table-card">
         <div class="table-card-header"><div class="table-card-title">Top Products by Orders</div></div>
         <div style="overflow-x:auto"><table>
-          <thead><tr><th>Product</th><th>Orders</th><th>Revenue</th></tr></thead>
+          <thead><tr><th>Product</th><th>Orders</th><th>Order Value</th></tr></thead>
           <tbody id="topProductsTbl"></tbody>
         </table></div>
       </div>
@@ -101,20 +101,28 @@ async function loadReports(){
   // Top products
   const prodMap={};
   orders.forEach(o=>{
-    prodMap[o.product_name]=(prodMap[o.product_name]||{name:o.product_name,orders:0,revenue:0});
+    prodMap[o.product_name]=(prodMap[o.product_name]||{name:o.product_name,orders:0,orderValue:0});
     prodMap[o.product_name].orders++;
-    prodMap[o.product_name].revenue+=Number(o.total_amount||0);
+    if(o.status!=='cancelled') prodMap[o.product_name].orderValue+=Number(o.total_amount||o.total_price||0);
   });
   const top=Object.values(prodMap).sort((a,b)=>b.orders-a.orders).slice(0,5);
   document.getElementById('topProductsTbl').innerHTML=top.length
-    ?top.map(p=>`<tr><td>${p.name}</td><td>${p.orders}</td><td>${fmt(p.revenue)}</td></tr>`).join('')
+    ?top.map(p=>`<tr><td>${escapeHTML(p.name)}</td><td>${p.orders}</td><td>${fmt(p.orderValue)}</td></tr>`).join('')
     :'<tr><td colspan="3" class="empty-state"><h4>No orders yet</h4></td></tr>';
 
   // Recent sales
   const recent=sales.slice(0,8);
   document.getElementById('recentSalesTbl').innerHTML=recent.length
-    ?recent.map(s=>`<tr><td><small>${new Date(s.created_at).toLocaleDateString('en-GB')}</small></td><td>${s.description||'-'}</td><td class="${s.category==='expense'?'expense':'income'}">${s.category==='expense'?'-':'+'} ${fmt(s.amount)}</td></tr>`).join('')
+    ?recent.map(s=>`<tr><td><small>${new Date(s.created_at || s.sale_date || s.date).toLocaleDateString('en-GB')}</small></td><td>${escapeHTML(s.description||'-')}</td><td class="${s.category==='expense'?'expense':'income'}">${s.category==='expense'?'-':'+'} ${fmt(s.amount)}</td></tr>`).join('')
     :'<tr><td colspan="3" class="empty-state"><h4>No sales yet</h4></td></tr>';
+  } catch {
+    document.getElementById('rRevenue').textContent='Unavailable';
+    document.getElementById('rExpense').textContent='Unavailable';
+    document.getElementById('rProfit').textContent='Unavailable';
+    document.getElementById('rOrders').textContent='—';
+    document.getElementById('topProductsTbl').innerHTML='<tr><td colspan="3" class="empty-state"><h4>Reports could not be loaded. Retry to check your connection.</h4></td></tr>';
+    document.getElementById('recentSalesTbl').innerHTML='<tr><td colspan="3" class="empty-state"><h4>Sales could not be loaded. Retry to check your connection.</h4></td></tr>';
+  }
 }
 </script>
   <script src="aria-engine.js"></script>

@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Seller account is not active.' }, { status: 403 })
     }
     const { data, error } = await sb.from('pending_payments')
-      .select('id,owner_name,owner_email,owner_phone,auth_email,shop_name,shop_category,shop_region,shop_whatsapp,shop_desc,shop_logo_url,plan,shop_number,subscription_end,shop_address,shop_instagram,shop_facebook,shop_tiktok,selected_template,webstore_status,status,created_at')
+      .select('id,owner_name,owner_email,owner_phone,auth_email,shop_name,shop_category,shop_region,shop_city,shop_address,shop_whatsapp,shop_desc,shop_logo_url,shop_cover_url,shop_instagram,shop_facebook,shop_tiktok,plan,shop_number,subscription_end,selected_template,webstore_status,webstore_rejection_reason,status,created_at')
       .eq('id', session.sellerId).maybeSingle()
     if (error) {return NextResponse.json({ error: 'Unable to load seller profile.' }, { status: 503 })}
     if (!data) {return NextResponse.json({ error: 'Seller account not found.' }, { status: 404 })}

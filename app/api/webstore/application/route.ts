@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Please choose an available WebStore template.' }, { status: 400 })
     }
 
-    const { data, error } = await sb.from('pending_payments').insert({
+    const submission = {
       owner_name: ownerName || shopName,
       owner_phone: ownerPhone,
       owner_email: ownerEmail,
@@ -94,6 +94,32 @@ export async function POST(request: NextRequest) {
       selected_template: template,
       webstore_status: 'submitted',
       webstore_submitted_at: new Date().toISOString(),
+    }
+
+    const seller = readSellerSession(request)
+    if (seller) {
+      if (seller.market !== 'business' || !await isActiveSeller(sb, seller.sellerId, seller.market)) {
+        return NextResponse.json({ error: 'This seller account cannot submit a WebStore.' }, { status: 403 })
+      }
+      const { data: existing, error: existingError } = await sb.from('pending_payments')
+        .select('id,status,webstore_status').eq('id', seller.sellerId).maybeSingle()
+      if (existingError) {return NextResponse.json({ error: 'Unable to submit the WebStore.' }, { status: 503 })}
+      if (!existing || existing.status !== 'approved') {return NextResponse.json({ error: 'Seller account is not active.' }, { status: 403 })}
+      if (![null, 'draft', 'rejected'].includes(existing.webstore_status)) {
+        return NextResponse.json({ error: 'This WebStore already has an active review or approval.' }, { status: 409 })
+      }
+      let updateQuery = sb.from('pending_payments').update(submission).eq('id', seller.sellerId).eq('status', 'approved')
+      updateQuery = existing.webstore_status === null
+        ? updateQuery.is('webstore_status', null)
+        : updateQuery.eq('webstore_status', existing.webstore_status)
+      const { data, error } = await updateQuery.select('id').maybeSingle()
+      if (error) {return NextResponse.json({ error: 'Could not submit the WebStore. Please try again.' }, { status: 503 })}
+      if (!data) {return NextResponse.json({ error: 'This WebStore changed while the application was being submitted. Reload and try again.' }, { status: 409 })}
+      return NextResponse.json({ success: true, application_id: seller.sellerId, reused_store: true })
+    }
+
+    const { data, error } = await sb.from('pending_payments').insert({
+      ...submission,
       status: 'pending',
       plan: 'basic',
     }).select('id').single()

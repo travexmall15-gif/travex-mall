@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Search, Loader2, Clock, CheckCircle2, XCircle, Rocket, ExternalLink } from 'lucide-react'
 import type { WebstoreStatus } from '@/lib/webstore/types'
@@ -30,6 +30,30 @@ export default function WebstoreDashboardPage() {
   const [app, setApp] = useState<App | null>(null)
   const [publishing, setPublishing] = useState(false)
   const [statusMessage, setStatusMessage] = useState('')
+
+  useEffect(() => {
+    let active = true
+    fetch('/api/seller/profile', { cache: 'no-store' })
+      .then(async response => response.ok ? response.json() : null)
+      .then(result => {
+        const seller = result?.seller
+        if (!active || !seller?.id) {return}
+        const status = STATUS_META[seller.webstore_status as WebstoreStatus] ? seller.webstore_status as WebstoreStatus : 'draft'
+        setEmail(seller.owner_email || seller.auth_email || '')
+        setApp({
+          id: seller.id,
+          shop_name: seller.shop_name || '',
+          shop_category: seller.shop_category || null,
+          webstore_status: status,
+          webstore_rejection_reason: seller.webstore_rejection_reason || null,
+          owner_name: seller.owner_name || '',
+          shop_whatsapp: seller.shop_whatsapp || null,
+        })
+        setChecked(true)
+      })
+      .catch(() => {})
+    return () => { active = false }
+  }, [])
 
   const checkStatus = async () => {
     if (!email.trim()) {return}
@@ -101,7 +125,12 @@ export default function WebstoreDashboardPage() {
               </div>
             )}
 
-            {app.webstore_status === 'under_review' || app.webstore_status === 'submitted' ? (
+            {app.webstore_status === 'draft' ? (
+              <div>
+                <p style={{ fontSize: '0.82rem', color: 'var(--sn-muted)', lineHeight: 1.6, marginBottom: 14 }}>This seller account does not have a submitted WebStore yet. Continue setup to choose a template and send the existing store for review.</p>
+                <Link href="/open-store" style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,#FF0080,#7800FF)', color: '#fff', padding: '11px', borderRadius: 999, textDecoration: 'none', fontWeight: 700, fontSize: '0.85rem' }}>Continue WebStore setup</Link>
+              </div>
+            ) : app.webstore_status === 'under_review' || app.webstore_status === 'submitted' ? (
               <p style={{ fontSize: '0.82rem', color: 'var(--sn-muted)', lineHeight: 1.6 }}>
                 Your WebStore has been submitted and is awaiting admin review. You&apos;ll be notified once it&apos;s reviewed.
               </p>

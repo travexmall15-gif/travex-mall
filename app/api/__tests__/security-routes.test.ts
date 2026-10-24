@@ -16,7 +16,7 @@ import { PATCH as adminWebstorePatch } from '../admin/webstores/route'
 import { POST as sellerLogin } from '../seller/auth/login/route'
 import { GET as sellerDataGet, POST as sellerDataPost } from '../seller/data/route'
 import { POST as ariaChatPost } from '../ai-chat-aria/route'
-import { GET as webstoreStatusGet, PATCH as webstoreStatusPatch } from '../webstore/application/route'
+import { GET as webstoreStatusGet, PATCH as webstoreStatusPatch, POST as webstoreApplicationPost } from '../webstore/application/route'
 import { GET as adminOperationsGet, POST as adminOperationsPost } from '../admin/operations/route'
 import { PATCH as sellerSettingsPatch } from '../seller/settings/route'
 import { GET as sellerProfileGet } from '../seller/profile/route'
@@ -54,7 +54,7 @@ function webstoreOwnerCookie(id: string) {
 
 function mockQuery(result: unknown) {
   const builder: any = {}
-  for (const method of ['select', 'eq', 'order', 'limit', 'update', 'in']) {builder[method] = vi.fn(() => builder)}
+  for (const method of ['select', 'eq', 'order', 'limit', 'update', 'in', 'is']) {builder[method] = vi.fn(() => builder)}
   builder.maybeSingle = vi.fn(async () => result)
   builder.then = (resolve: (value: unknown) => unknown, reject: (reason: unknown) => unknown) => Promise.resolve(result).then(resolve, reject)
   return builder
@@ -144,6 +144,46 @@ describe('protected API boundaries', () => {
     })
     expect((await sellerDataPost(request)).status).toBe(201)
     expect(inserted?.store_id).toBe(sellerA)
+  })
+
+  it('updates only submitted product fields and scopes the update to the signed seller', async () => {
+    const query = mockQuery({ data: { id: applicationId }, error: null }) as any
+    let updated: Record<string, unknown> | undefined
+    query.update = vi.fn((values: Record<string, unknown>) => { updated = values; return query })
+    serviceMock.create.mockReturnValue({ from: vi.fn(() => query), rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/seller/data', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ resource: 'products', action: 'update', id: applicationId, item: { name: 'Updated name' } }),
+    })
+
+    expect((await sellerDataPost(request)).status).toBe(200)
+    expect(updated).toEqual({ store_id: sellerA, name: 'Updated name' })
+    expect(query.eq).toHaveBeenCalledWith('id', applicationId)
+    expect(query.eq).toHaveBeenCalledWith('store_id', sellerA)
+  })
+
+  it('allows only pending orders to be confirmed or cancelled by their seller', async () => {
+    const query = mockQuery({ data: { id: applicationId, status: 'confirmed' }, error: null }) as any
+    let updated: Record<string, unknown> | undefined
+    query.update = vi.fn((values: Record<string, unknown>) => { updated = values; return query })
+    const from = vi.fn(() => query)
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/seller/data', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ resource: 'orders', action: 'status', id: applicationId, status: 'confirmed' }),
+    })
+
+    expect((await sellerDataPost(request)).status).toBe(200)
+    expect(updated?.status).toBe('confirmed')
+    expect(query.eq).toHaveBeenCalledWith('store_id', sellerA)
+    expect(query.eq).toHaveBeenCalledWith('status', 'pending')
+
+    const invalid = new NextRequest('https://shopnekt.test/api/seller/data', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ resource: 'orders', action: 'status', id: applicationId, status: 'delivered' }),
+    })
+    expect((await sellerDataPost(invalid)).status).toBe(400)
+    expect(from).toHaveBeenCalledTimes(1)
   })
 
   it('rejects malformed seller data values before writing', async () => {
@@ -282,6 +322,18 @@ describe('protected API boundaries', () => {
     expect(serviceMock.create).not.toHaveBeenCalled()
   })
 
+  it('rejects social links containing misleading URL credentials before saving seller settings', async () => {
+    const from = vi.fn()
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/seller/settings', {
+      method: 'PATCH', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test' },
+      body: JSON.stringify({ section: 'shop', shop_name: 'Shop', shop_category: 'Services', shop_region: 'Dar', shop_whatsapp: '255712345678', shop_desc: 'Business profile', shop_instagram: 'https://attacker.example@instagram.com/profile' }),
+    })
+
+    expect((await sellerSettingsPatch(request)).status).toBe(400)
+    expect(from).not.toHaveBeenCalled()
+  })
+
   it('rejects profile reads without a seller session and binds authorized reads to the signed seller id', async () => {
     const anonymous = new NextRequest('https://shopnekt.test/api/seller/profile')
     expect((await sellerProfileGet(anonymous)).status).toBe(401)
@@ -389,5 +441,52 @@ describe('protected API boundaries', () => {
     expect((await webstoreStatusPatch(ownerPublish)).status).toBe(200)
     expect(updateQuery.eq).toHaveBeenCalledWith('id', applicationId)
     expect(updateQuery.eq).toHaveBeenCalledWith('webstore_status', 'approved')
+  })
+
+  it('submits an approved seller WebStore against the existing store record', async () => {
+    const templateQuery = mockQuery({ data: { id: 'fashion-template' }, error: null })
+    const sellerQuery = mockQuery({ data: { id: sellerA, status: 'approved', webstore_status: null }, error: null })
+    const updateQuery = mockQuery({ data: { id: sellerA }, error: null })
+    let updated: Record<string, unknown> | undefined
+    updateQuery.update = vi.fn((values: Record<string, unknown>) => { updated = values; return updateQuery })
+    const pendingQueries = [sellerQuery, updateQuery]
+    const from = vi.fn((table: string) => table === 'webstore_templates' ? templateQuery : pendingQueries.shift())
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/webstore/application', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop_name: 'Shop A', shop_desc: 'A real store description', owner_name: 'Owner A', owner_phone: '255712345678',
+        owner_email: 'owner@example.com', shop_whatsapp: '255712345678', shop_region: 'Dar es Salaam',
+        selected_template: 'fashion-template', shop_category: 'Fashion', market: 'fashion',
+      }),
+    })
+
+    const response = await webstoreApplicationPost(request)
+    expect(response.status).toBe(200)
+    expect(await response.json()).toMatchObject({ success: true, application_id: sellerA, reused_store: true })
+    expect(updated?.webstore_status).toBe('submitted')
+    expect(updateQuery.eq).toHaveBeenCalledWith('id', sellerA)
+    expect(updateQuery.eq).toHaveBeenCalledWith('status', 'approved')
+    expect(updateQuery.is).toHaveBeenCalledWith('webstore_status', null)
+    expect(from).toHaveBeenCalledTimes(3)
+  })
+
+  it('does not create another WebStore application while review or approval is active', async () => {
+    const templateQuery = mockQuery({ data: { id: 'fashion-template' }, error: null })
+    const sellerQuery = mockQuery({ data: { id: sellerA, status: 'approved', webstore_status: 'submitted' }, error: null })
+    const from = vi.fn((table: string) => table === 'webstore_templates' ? templateQuery : sellerQuery)
+    serviceMock.create.mockReturnValue({ from, rpc: serviceMock.rpc })
+    const request = new NextRequest('https://shopnekt.test/api/webstore/application', {
+      method: 'POST', headers: { cookie: `sn_seller_session=${sellerCookie(sellerA)}`, origin: 'https://shopnekt.test', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop_name: 'Shop A', shop_desc: 'A real store description', owner_name: 'Owner A', owner_phone: '255712345678',
+        owner_email: 'owner@example.com', shop_whatsapp: '255712345678', shop_region: 'Dar es Salaam',
+        selected_template: 'fashion-template', shop_category: 'Fashion', market: 'fashion',
+      }),
+    })
+
+    expect((await webstoreApplicationPost(request)).status).toBe(409)
+    expect(from).toHaveBeenCalledTimes(2)
+    expect(sellerQuery.update).not.toHaveBeenCalled()
   })
 })

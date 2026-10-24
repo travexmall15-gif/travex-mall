@@ -35,11 +35,13 @@ export async function POST(req: NextRequest) {
     if (ordersResult.error || productsResult.error) {return NextResponse.json({ error: 'Unable to load statistics.' }, { status: 503 })}
     const orders = ordersResult.data || []
     const products = productsResult.data || []
+    const orderValue = orders.filter(order => order.status !== 'cancelled')
+      .reduce((sum, order) => sum + Number(order.total_amount || order.total_price || 0), 0)
     const stats = {
       total_orders: orders.length,
       pending_orders: orders.filter(order => order.status === 'pending').length,
-      revenue: orders.filter(order => order.status !== 'cancelled')
-        .reduce((sum, order) => sum + Number(order.total_amount || order.total_price || 0), 0),
+      order_value: orderValue,
+      revenue: orderValue, // Retained as a legacy response field for existing consumers.
       total_products: products.length,
     }
     return NextResponse.json({ stats, orders: orders.slice(0, 50), products })

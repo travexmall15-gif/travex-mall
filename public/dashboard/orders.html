@@ -32,7 +32,7 @@
       <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="statTotal">0</div></div>
       <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" id="statPending" style="color:#F97316">0</div></div>
       <div class="stat-card"><div class="stat-label">Delivered</div><div class="stat-value" id="statDelivered" style="color:#22C55E">0</div></div>
-      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="statRevenue">TZS 0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Order Value</div><div class="stat-value" id="statRevenue">TZS 0</div></div>
     </div>
 
     <!-- Orders Table -->
@@ -80,6 +80,9 @@ setTimeout(function() {
 window.addEventListener("unhandledrejection",()=>{var o=document.getElementById("loadingOverlay");if(o)o.style.display="none"});
 let allOrders = []
 const fmt = n => 'TZS ' + Number(n||0).toLocaleString('en-US')
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))
+}
 const STATUS_COLORS = { pending:'#F97316', confirmed:'#3B82F6', delivered:'#22C55E', cancelled:'#EF4444' }
 const STATUS_BG = { pending:'rgba(249,115,22,.1)', confirmed:'rgba(59,130,246,.1)', delivered:'rgba(34,197,94,.1)', cancelled:'rgba(239,68,68,.1)' }
 
@@ -138,31 +141,30 @@ function renderOrders(orders) {
     <tr style="border-top:1px solid var(--border);transition:background .15s" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
       <td style="padding:12px 14px;font-size:12px;color:var(--text-muted)">#${String(i+1).padStart(3,'0')}</td>
       <td style="padding:12px 14px">
-        <div style="font-size:13px;font-weight:600;color:var(--text-primary)">${o.customer_name||'Unknown'}</div>
-        <div style="font-size:11px;color:var(--text-muted)">${o.customer_phone||''}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary)">${escapeHTML(o.customer_name||'Unknown')}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${escapeHTML(o.customer_phone||'')}</div>
       </td>
       <td style="padding:12px 14px">
-        <div style="font-size:13px;color:var(--text-primary)">${o.product_name||'Order'}</div>
+        <div style="font-size:13px;color:var(--text-primary)">${escapeHTML(o.product_name||'Order')}</div>
         <div style="font-size:11px;color:var(--text-muted)">Qty: ${o.quantity||1}</div>
       </td>
       <td style="padding:12px 14px;font-weight:700;font-size:13px;color:var(--navy)">${fmt(o.total_amount||o.total_price)}</td>
       <td style="padding:12px 14px">
-        <select onchange="updateStatus('${o.id}',this.value)" style="background:${STATUS_BG[o.status]||'var(--bg)'};color:${STATUS_COLORS[o.status]||'var(--text-primary)'};border:none;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">
-          <option value="pending" ${o.status==='pending'?'selected':''}>Pending</option>
-          <option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmed</option>
-          <option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
-          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
-        </select>
+        ${o.status === 'pending' ? `<select onchange="updateStatus('${escapeHTML(o.id)}',this.value)" aria-label="Update order status" style="background:${STATUS_BG[o.status]||'var(--bg)'};color:${STATUS_COLORS[o.status]||'var(--text-primary)'};border:none;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">
+          <option value="pending" selected>Pending</option>
+          <option value="confirmed">Confirm order</option>
+          <option value="cancelled">Cancel order</option>
+        </select>` : `<span style="background:${STATUS_BG[o.status]||'var(--bg)'};color:${STATUS_COLORS[o.status]||'var(--text-primary)'};border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700">${escapeHTML(o.status)}</span>`}
       </td>
       <td style="padding:12px 14px">
-        <div style="font-size:12px;color:var(--text-primary);font-weight:500">${o.delivery_location||'—'}</div>
-        ${o.notes?`<div style="font-size:11px;color:var(--text-muted);margin-top:2px">${o.notes}</div>`:''}
+        <div style="font-size:12px;color:var(--text-primary);font-weight:500">${escapeHTML(o.delivery_location||'—')}</div>
+        ${o.notes?`<div style="font-size:11px;color:var(--text-muted);margin-top:2px">${escapeHTML(o.notes)}</div>`:''}
       </td>
       <td style="padding:12px 14px;font-size:11px;color:var(--text-muted)">${new Date(o.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</td>
       <td style="padding:12px 14px">
         <div style="display:flex;gap:5px">
           ${wa(o.customer_phone) ? `<a href="https://wa.me/${wa(o.customer_phone)}?text=Hello ${encodeURIComponent(o.customer_name||'')}, regarding your order for ${encodeURIComponent(o.product_name||'')}..." target="_blank" style="padding:4px 9px;background:#25D366;color:#fff;border-radius:7px;font-size:11px;font-weight:700;text-decoration:none"><i class="ti ti-brand-whatsapp"></i></a>` : ''}
-          <button onclick="viewOrder('${o.id}')" style="padding:4px 9px;background:var(--bg);border:1px solid var(--border);border-radius:7px;font-size:11px;cursor:pointer;color:var(--text-secondary)"><i class="ti ti-eye"></i></button>
+          <button onclick="viewOrder('${escapeHTML(o.id)}')" style="padding:4px 9px;background:var(--bg);border:1px solid var(--border);border-radius:7px;font-size:11px;cursor:pointer;color:var(--text-secondary)"><i class="ti ti-eye"></i></button>
         </div>
       </td>
     </tr>
@@ -170,11 +172,13 @@ function renderOrders(orders) {
 }
 
 async function updateStatus(id, status) {
-  const { error } = await DB.orders.updateStatus(id, status)
-  if (error) { showToast('Error updating status'); return }
-  showToast(`Order marked as ${status}`)
   const order = allOrders.find(o=>o.id===id)
+  if (!order || order.status !== 'pending' || !['confirmed','cancelled'].includes(status)) return
+  const { error } = await DB.orders.updateStatus(id, status)
+  if (error) { showToast(error.message || 'Error updating status'); await loadData(); return }
+  showToast(`Order marked as ${status}`)
   if (order) order.status = status
+  renderOrders(allOrders)
   updateStats(allOrders)
 }
 

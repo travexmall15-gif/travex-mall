@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceSupabase } from '@/lib/security/server-supabase'
 import { getClientIp, rateLimit } from '@/lib/security/rate-limit'
+import { isProductPubliclyAvailable } from '@/lib/products/public-visibility'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const [{ data: products, error: productsError }, { data: orders, error: ordersError }] = await Promise.all([
-      sb.from('products').select('id,name,price,stock,description,category,image_url,store_id,created_at,is_available')
+      sb.from('products').select('id,name,price,stock,description,category,image_url,store_id,created_at,is_active,is_available')
         .eq('store_id', storeId).gt('stock', 0).order('created_at', { ascending: false }).limit(200),
       sb.from('orders').select('product_id').eq('store_id', storeId).neq('status', 'cancelled').limit(5000),
     ])
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         plan: store.plan, status: store.status, webstore_status: store.webstore_status,
         selected_template: store.selected_template,
       },
-      products: products || [],
+      products: (products || []).filter(isProductPubliclyAvailable),
       trendingProductIds,
     }, { headers: { 'Cache-Control': 'no-store' } })
   } catch {

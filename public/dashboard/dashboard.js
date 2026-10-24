@@ -5,8 +5,16 @@
 
 const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co';
 const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos';
-const { createClient } = supabase;
-const sb = createClient(SB_URL, SB_KEY);
+let storageClient = null;
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+}
+function getStorageClient() {
+  if (!storageClient && window.supabase?.createClient) {
+    storageClient = window.supabase.createClient(SB_URL, SB_KEY);
+  }
+  return storageClient;
+}
 
 //  AUTH 
 const Auth = {
@@ -88,7 +96,8 @@ async function sellerDataRequest(resource, action, item, id, status) {
 const DB = {
   products: {
     async getAll() {
-      const { data } = await sellerDataRequest('products', 'read');
+      const { data, error } = await sellerDataRequest('products', 'read');
+      if (error) {throw new Error(error.message)}
       return data || [];
     },
     async save(item) {
@@ -101,7 +110,8 @@ const DB = {
   },
   orders: {
     async getAll() {
-      const { data } = await sellerDataRequest('orders', 'read');
+      const { data, error } = await sellerDataRequest('orders', 'read');
+      if (error) {throw new Error(error.message)}
       return (data || []).map(order => ({ ...order, status: order.status === 'completed' ? 'delivered' : order.status }));
     },
     async updateStatus(id, status) {
@@ -110,7 +120,8 @@ const DB = {
   },
   sales: {
     async getAll() {
-      const { data } = await sellerDataRequest('sales', 'read');
+      const { data, error } = await sellerDataRequest('sales', 'read');
+      if (error) {throw new Error(error.message)}
       return (data || []).map(s => ({ ...s, date: s.sale_date || s.date, type: s.category || s.type }));
     },
     async save(item) {
@@ -158,11 +169,13 @@ async function uploadToStorage(file, folder) {
   const ext  = file.name.split('.').pop().toLowerCase();
   const name = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
   try {
-    const { data, error } = await sb.storage.from('shop-assets').upload(name, file, {
+    const client = getStorageClient();
+    if (!client) {throw new Error('Image storage is unavailable')}
+    const { data, error } = await client.storage.from('shop-assets').upload(name, file, {
       cacheControl: '3600', upsert: true, contentType: file.type
     });
     if (error) {throw error;}
-    const { data: pub } = sb.storage.from('shop-assets').getPublicUrl(name);
+    const { data: pub } = client.storage.from('shop-assets').getPublicUrl(name);
     return { url: pub.publicUrl, error: null };
   } catch (e) {
     console.warn('[storage] upload failed, using base64 fallback:', e.message);
@@ -255,7 +268,7 @@ async function loadSidebar(activePage, shopData) {
 
   el.innerHTML = `
     <div class="sidebar-logo">
-      <div class="sidebar-logo-brand">SHOPNEKT</div>
+      <div class="sidebar-logo-brand">shopnekt</div>
       <div class="sidebar-logo-tag">Seller Dashboard</div>
     </div>
 
@@ -272,6 +285,10 @@ async function loadSidebar(activePage, shopData) {
       ${navItem('dashboard', 'dashboard.html', 'ti-home',          'Overview')}
       ${navItem('products',  'products.html',  'ti-package',       'Products')}
       ${navItem('orders',    'orders.html',    'ti-shopping-cart', 'Orders')}
+      ${navItem('messages',  'dashboard.html?screen=messages', 'ti-message', 'Messages')}
+      ${navItem('notifications', 'dashboard.html?screen=notifications', 'ti-bell', 'Notifications')}
+      ${navItem('webstore',  '/dashboard/open-store-v2', 'ti-world', 'WebStore')}
+      ${navItem('services', 'settings.html#service-profile', 'ti-tool', 'Services')}
 
       <div class="nav-label">Finance</div>
       ${navItem('accounting','accounting.html','ti-cash',          'Accounting')}
@@ -298,8 +315,29 @@ async function loadSidebar(activePage, shopData) {
       </button>
     </div>
   `;
+  ensureSellerMoreLinks();
   // Apply i18n after sidebar renders
   setTimeout(() => { if (window.LANG) {window.LANG.apply();} }, 100);
+}
+
+function ensureSellerMoreLinks() {
+  const grid = document.querySelector('.mobile-more-menu .mmm-grid');
+  if (!grid) {return;}
+  const links = [
+    ['webstore', '/dashboard/open-store-v2', 'ti-world', 'WebStore'],
+    ['services', 'settings.html#service-profile', 'ti-tool', 'Services'],
+    ['messages', 'dashboard.html?screen=messages', 'ti-message', 'Messages'],
+    ['notifications', 'dashboard.html?screen=notifications', 'ti-bell', 'Notifications'],
+  ];
+  for (const [id, href, icon, label] of links) {
+    if (grid.querySelector(`[data-seller-more="${id}"]`)) {continue;}
+    const item = document.createElement('a');
+    item.className = 'mmm-item';
+    item.href = href;
+    item.dataset.sellerMore = id;
+    item.innerHTML = `<i class="ti ${icon}" aria-hidden="true"></i><span>${label}</span>`;
+    grid.appendChild(item);
+  }
 }
 
 //  MOBILE MENU 

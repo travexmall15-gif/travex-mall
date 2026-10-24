@@ -6,7 +6,6 @@
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
 <title>Dashboard — ShopNekt</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--navy:#0D1B3E;--gold:#1D4ED8;--green:#059669;--red:#DC2626;--off:#F8FAFF;--lgray:#E2E8F0;--gray:#64748B;--radius:14px;--nav-h:64px}
@@ -242,12 +241,12 @@ button,input,select,textarea{font-family:inherit}
   <!-- Stats -->
   <div class="stats-grid">
     <div class="stat-card green">
-      <div class="stat-label">Revenue Today</div>
+      <div class="stat-label">Order Value Today</div>
       <div class="stat-val" id="statToday">TZS 0</div>
       <div class="stat-sub" id="statTodayOrders">0 orders</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">This Month</div>
+      <div class="stat-label">Order Value This Month</div>
       <div class="stat-val gold" id="statMonth">TZS 0</div>
       <div class="stat-sub" id="statMonthOrders">0 orders</div>
     </div>
@@ -266,7 +265,7 @@ button,input,select,textarea{font-family:inherit}
   <!-- Weekly chart -->
   <div class="chart-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:0.78rem;font-weight:700;color:#0D1B3E">Revenue This Week</div>
+      <div style="font-size:0.78rem;font-weight:700;color:#0D1B3E">Order Value This Week</div>
       <div style="font-size:0.65rem;color:#94A3B8" id="chartWeekTotal">TZS 0</div>
     </div>
     <div class="chart-bars" id="weekChart"></div>
@@ -362,7 +361,7 @@ button,input,select,textarea{font-family:inherit}
   </div>
   <div class="finance-summary">
     <div class="fin-card">
-      <div class="fin-label">Income</div>
+      <div class="fin-label">Recorded Income</div>
       <div class="fin-val income" id="finIncome">0</div>
     </div>
     <div class="fin-card">
@@ -502,6 +501,24 @@ button,input,select,textarea{font-family:inherit}
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D1B3E" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
       </div>
       <span class="drawer-label">Products</span>
+    </div>
+    <div class="drawer-item" onclick="window.location.href='/dashboard/open-store-v2'">
+      <div class="drawer-icon" style="background:rgba(120,0,255,0.10)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7800FF" stroke-width="2"><path d="M3 10h18M5 10V5h14v5M5 10v9h14v-9M9 14h6"/></svg>
+      </div>
+      <span class="drawer-label">WebStore</span>
+    </div>
+    <div class="drawer-item" onclick="window.location.href='settings.html#service-profile'">
+      <div class="drawer-icon" style="background:rgba(16,185,129,0.10)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3zM19 15l1 2.2 2 1-2 1-1 2.2-1-2.2-2-1 2-1 1-2.2z"/></svg>
+      </div>
+      <span class="drawer-label">Services</span>
+    </div>
+    <div class="drawer-item" onclick="toggleNotifPanel();closeDrawer()">
+      <div class="drawer-icon" style="background:rgba(59,130,246,0.10)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+      </div>
+      <span class="drawer-label">Notifications</span>
     </div>
     <div class="drawer-item" onclick="goToVybe();closeDrawer()">
       <div class="drawer-icon" style="background:rgba(124,58,237,0.10)">
@@ -657,12 +674,8 @@ button,input,select,textarea{font-family:inherit}
 <!-- ══════════════════════════════════════════════════════
      JAVASCRIPT
 ══════════════════════════════════════════════════════ -->
+<script src="dashboard.js"></script>
 <script>
-const SB_URL = 'https://bscecjbgnjitlfmgwcic.supabase.co'
-const SB_KEY = 'sb_publishable_giz1AS9CcdTiksOrW5U0rQ_yY5kkzos'
-const { createClient } = supabase
-const sb = createClient(SB_URL, SB_KEY)
-
 // ── STATE ──────────────────────────────────────────────
 let SHOP = null
 let PLAN = 'basic'
@@ -675,6 +688,7 @@ let NOTIFICATIONS = []
 let EDITING_PROD = null
 let EDITING_ORDER = null
 let FIN_PERIOD = 'today'
+let DATA_ERRORS = { orders: '', sales: '', products: '' }
 
 // ── AUTH CHECK ────────────────────────────────────────
 function getSession() {
@@ -703,11 +717,13 @@ async function init() {
   renderFinance()
   renderMessages()
   renderProducts()
-  subscribeRealtime()
   requestPushPermission()
 
   document.getElementById('loader').style.display = 'none'
   setInterval(loadOrders, 30000)
+  const requestedScreen = new URLSearchParams(window.location.search).get('screen')
+  if (requestedScreen === 'notifications') {toggleNotifPanel()}
+  else if (['home', 'orders', 'finance', 'messages', 'products'].includes(requestedScreen)) {goScreen(requestedScreen)}
 }
 
 // ── PLAN UI ───────────────────────────────────────────
@@ -736,10 +752,11 @@ async function loadOrders() {
   try {
     const data = await DB.orders.getAll(SHOP_ID)
     ALL_ORDERS = data || []
+    DATA_ERRORS.orders = ''
   } catch(e) {
     console.error('[orders]', e.message)
+    DATA_ERRORS.orders = 'Orders could not be loaded. Check your connection and retry.'
     setStatError('statToday', 'statMonth', 'statPending')
-    ALL_ORDERS = []
   }
   updateOrderBadge()
   renderHomeOrders()
@@ -750,9 +767,10 @@ async function loadSales() {
   try {
     const data = await DB.sales.getAll(SHOP_ID)
     ALL_SALES = data || []
+    DATA_ERRORS.sales = ''
   } catch(e) {
     console.error('[sales]', e.message)
-    ALL_SALES = []
+    DATA_ERRORS.sales = 'Sales records could not be loaded. Check your connection and retry.'
   }
 }
 
@@ -760,32 +778,28 @@ async function loadProducts() {
   try {
     const data = await DB.products.getAll(SHOP_ID)
     ALL_PRODUCTS = data || []
+    DATA_ERRORS.products = ''
   } catch(e) {
     console.error('[products]', e.message)
-    ALL_PRODUCTS = []
+    DATA_ERRORS.products = 'Products could not be loaded. Check your connection and retry.'
   }
-  document.getElementById('statProds').textContent = ALL_PRODUCTS.length
+  document.getElementById('statProds').textContent = DATA_ERRORS.products ? '—' : ALL_PRODUCTS.length
   renderProducts()
-}
-
-// ── REALTIME ──────────────────────────────────────────
-function subscribeRealtime() {
-  sb.channel('orders-' + SHOP_ID)
-    .on('postgres_changes', { event:'INSERT', schema:'public', table:'orders', filter:'shop_id=eq.'+SHOP_ID },
-      async (payload) => {
-        ALL_ORDERS.unshift(payload.new)
-        updateOrderBadge()
-        renderHomeOrders()
-        renderOrdersList('all')
-        addNotif('New Order', 'Order from ' + (payload.new.customer_name || 'Customer'), 'order')
-        showPush('New Order!', 'You have a new order from ' + (payload.new.customer_name || 'a customer'))
-        toast('New order received!')
-      })
-    .subscribe()
 }
 
 // ── RENDER HOME ───────────────────────────────────────
 function renderHome() {
+  if (DATA_ERRORS.orders) {
+    document.getElementById('statToday').textContent = 'Unavailable'
+    document.getElementById('statTodayOrders').textContent = 'Orders could not be loaded'
+    document.getElementById('statMonth').textContent = 'Unavailable'
+    document.getElementById('statMonthOrders').textContent = 'Orders could not be loaded'
+    document.getElementById('statPending').textContent = '—'
+    document.getElementById('chartWeekTotal').textContent = 'Unavailable'
+    document.getElementById('weekChart').innerHTML = `<div class="empty">${escapeHTML(DATA_ERRORS.orders)}</div>`
+    renderHomeOrders()
+    return
+  }
   const today = new Date().toISOString().split('T')[0]
   const month = today.slice(0,7)
 
@@ -818,8 +832,7 @@ function renderWeekChart() {
 
   const vals = weekDays.map(d => {
     const dayOrders = ALL_ORDERS.filter(o => (o.created_at||'').startsWith(d.date))
-    const daySales = ALL_SALES.filter(s => (s.date||'').startsWith(d.date) && s.type === 'income')
-    return sumOrders(dayOrders) + daySales.reduce((a,s) => a + (Number(s.amount)||0), 0)
+    return sumOrders(dayOrders)
   })
 
   const max = Math.max(...vals, 1)
@@ -834,11 +847,19 @@ function renderWeekChart() {
 }
 
 function renderHomeOrders() {
+  if (DATA_ERRORS.orders) {
+    document.getElementById('homeOrders').innerHTML = `<div class="empty"><div class="empty-title">${escapeHTML(DATA_ERRORS.orders)}</div><button class="btn btn-outline" onclick="loadOrders()">Retry</button></div>`
+    return
+  }
   const recent = ALL_ORDERS.slice(0,4)
   document.getElementById('homeOrders').innerHTML = recent.length ? recent.map(o => orderItemHTML(o)).join('') : '<div class="empty"><div class="empty-title">No orders yet</div></div>'
 }
 
 function renderOrdersList(filter) {
+  if (DATA_ERRORS.orders) {
+    document.getElementById('ordersList').innerHTML = `<div class="empty"><div class="empty-title">${escapeHTML(DATA_ERRORS.orders)}</div><button class="btn btn-outline" onclick="loadOrders()">Retry</button></div>`
+    return
+  }
   let orders = ALL_ORDERS
   if (filter !== 'all') orders = orders.filter(o => o.status === filter)
   document.getElementById('ordersList').innerHTML = orders.length
@@ -847,18 +868,18 @@ function renderOrdersList(filter) {
 }
 
 function orderItemHTML(o, hasAction) {
-  const initials = (o.customer_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
-  const statusClass = o.status || 'pending'
+  const initials = escapeHTML((o.customer_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase())
+  const statusClass = ['pending','confirmed','delivered','cancelled'].includes(o.status) ? o.status : 'unknown'
   return `
-    <div class="order-item" onclick="openOrderModal('${o.id}')">
+    <div class="order-item" onclick="openOrderModal('${escapeHTML(o.id)}')">
       <div class="order-av">${initials}</div>
       <div class="order-info">
-        <div class="order-name">${o.customer_name || 'Customer'}</div>
-        <div class="order-meta">${o.product_name || ''} · ${timeAgo(o.created_at)}</div>
+        <div class="order-name">${escapeHTML(o.customer_name || 'Customer')}</div>
+        <div class="order-meta">${escapeHTML(o.product_name || '')} · ${timeAgo(o.created_at)}</div>
       </div>
       <div style="text-align:right;flex-shrink:0">
-        <div class="order-amount">${fmtTZS(o.amount||0)}</div>
-        <span class="status-chip ${statusClass}">${statusClass}</span>
+        <div class="order-amount">${fmtTZS(o.total_amount||o.amount||o.total_price||0)}</div>
+        <span class="status-chip ${statusClass}">${escapeHTML(o.status || 'pending')}</span>
       </div>
     </div>`
 }
@@ -883,27 +904,26 @@ function renderFinance() {
     sales  = sales.filter(s  => (s.date||'').startsWith(monthStr))
   }
 
-  const autoIncome = sumOrders(orders)
   const manIncome  = sales.filter(s => s.type === 'income').reduce((a,s) => a+(Number(s.amount)||0), 0)
   const expense    = sales.filter(s => s.type === 'expense').reduce((a,s) => a+(Number(s.amount)||0), 0)
-  const income     = autoIncome + manIncome
+  const income     = manIncome
   const profit     = income - expense
 
-  document.getElementById('finIncome').textContent  = fmtTZS(income)
-  document.getElementById('finExpense').textContent = fmtTZS(expense)
-  document.getElementById('finProfit').textContent  = (profit >= 0 ? '+' : '') + fmtTZS(profit)
+  document.getElementById('finIncome').textContent  = DATA_ERRORS.sales ? 'Unavailable' : fmtTZS(income)
+  document.getElementById('finExpense').textContent = DATA_ERRORS.sales ? 'Unavailable' : fmtTZS(expense)
+  document.getElementById('finProfit').textContent  = DATA_ERRORS.sales ? 'Unavailable' : (profit >= 0 ? '+' : '') + fmtTZS(profit)
   document.getElementById('finProfit').style.color  = profit >= 0 ? 'var(--green)' : 'var(--red)'
 
-  const txItems = [
-    ...orders.map(o => ({desc: 'Order: ' + (o.customer_name||'Customer'), amount: o.amount||0, type:'income', date:o.created_at})),
-    ...sales.map(s => ({desc: s.description||'Transaction', amount: s.amount||0, type:s.type||'income', date:s.date}))
-  ].sort((a,b) => b.date > a.date ? 1 : -1).slice(0,20)
+  const txItems = sales.map(s => ({desc: s.description||'Transaction', amount: s.amount||0, type:s.type||'income', date:s.date}))
+    .sort((a,b) => b.date > a.date ? 1 : -1).slice(0,20)
 
-  document.getElementById('txList').innerHTML = txItems.length ? txItems.map(t => `
+  document.getElementById('txList').innerHTML = DATA_ERRORS.sales
+    ? `<div class="empty"><div class="empty-title">${escapeHTML(DATA_ERRORS.sales)}</div><button class="btn btn-outline" onclick="loadSales().then(renderFinance)">Retry</button></div>`
+    : txItems.length ? txItems.map(t => `
     <div class="tx-item">
       <div class="tx-dot" style="background:${t.type==='income' ? 'var(--green)' : 'var(--red)'}"></div>
       <div class="tx-info">
-        <div class="tx-desc">${t.desc}</div>
+        <div class="tx-desc">${escapeHTML(t.desc)}</div>
         <div class="tx-date">${formatDate(t.date)}</div>
       </div>
       <div class="tx-amount" style="color:${t.type==='income' ? 'var(--green)' : 'var(--red)'}">
@@ -919,8 +939,19 @@ function setFinPeriod(p, btn) {
   renderFinance()
 }
 
+function setStatError(...ids) {
+  ids.forEach(id => {
+    const element = document.getElementById(id)
+    if (element) {element.textContent = 'Unavailable'}
+  })
+}
+
 // ── RENDER MESSAGES ───────────────────────────────────
 function renderMessages() {
+  if (DATA_ERRORS.orders) {
+    document.getElementById('msgList').innerHTML = `<div class="empty"><div class="empty-title">${escapeHTML(DATA_ERRORS.orders)}</div><button class="btn btn-outline" onclick="loadOrders().then(renderMessages)">Retry</button></div>`
+    return
+  }
   const seen = {}
   const contacts = ALL_ORDERS.filter(o => {
     if (seen[o.customer_phone||o.customer_name]) return false
@@ -934,8 +965,8 @@ function renderMessages() {
     <a class="msg-item" href="${wa}" target="_blank">
       <div class="msg-av">${initials}</div>
       <div class="msg-info">
-        <div class="msg-name">${o.customer_name||'Customer'}</div>
-        <div class="msg-preview">Order: ${o.product_name||''} · ${fmtTZS(o.amount||0)}</div>
+        <div class="msg-name">${escapeHTML(o.customer_name||'Customer')}</div>
+        <div class="msg-preview">Order: ${escapeHTML(o.product_name||'')} · ${fmtTZS(o.total_amount||o.amount||o.total_price||0)}</div>
       </div>
       <div class="msg-wa">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
@@ -949,17 +980,21 @@ function renderMessages() {
 // ── RENDER PRODUCTS ───────────────────────────────────
 function renderProducts() {
   const el = document.getElementById('productsList')
+  if (DATA_ERRORS.products) {
+    el.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-title">${escapeHTML(DATA_ERRORS.products)}</div><button class="btn btn-outline" onclick="loadProducts()">Retry</button></div>`
+    return
+  }
   if (!ALL_PRODUCTS.length) {
     el.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-title">No products yet</div><div class="empty-sub">Add your first product</div></div>'
     return
   }
   el.innerHTML = ALL_PRODUCTS.map(p => `
-    <div class="prod-card" onclick="editProduct('${p.id}')">
+    <div class="prod-card" onclick="editProduct('${escapeHTML(p.id)}')">
       <div class="prod-img">
-        ${p.image_url ? `<img src="${p.image_url}" loading="lazy" alt="${p.name}"/>` : `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`}
+        ${p.image_url && (/^https?:\/\//i.test(p.image_url) || /^data:image\/(?:png|jpeg|webp);base64,/i.test(p.image_url)) ? `<img src="${escapeHTML(p.image_url)}" loading="lazy" alt="${escapeHTML(p.name||'Product')}"/>` : `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`}
       </div>
       <div class="prod-body">
-        <div class="prod-name">${p.name||'Product'}</div>
+        <div class="prod-name">${escapeHTML(p.name||'Product')}</div>
         <div class="prod-price">${fmtTZS(p.price||0)}</div>
       </div>
     </div>`).join('')
@@ -972,20 +1007,20 @@ function openOrderModal(id) {
   document.getElementById('orderModalBody').innerHTML = `
     <div style="background:var(--off);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:0.78rem;color:var(--gray);margin-bottom:3px">Customer</div>
-      <div style="font-size:0.92rem;font-weight:700;color:var(--navy)">${o.customer_name||'Customer'}</div>
+      <div style="font-size:0.92rem;font-weight:700;color:var(--navy)">${escapeHTML(o.customer_name||'Customer')}</div>
       ${o.customer_phone ? `<a href="https://wa.me/${o.customer_phone.replace(/[^0-9]/g,'')}" target="_blank" style="font-size:0.72rem;color:#25D366;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:4px">Chat on WhatsApp</a>` : ''}
     </div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <div style="flex:1;background:var(--off);border-radius:10px;padding:10px">
         <div style="font-size:0.66rem;color:var(--gray)">Product</div>
-        <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-top:2px">${o.product_name||'-'}</div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-top:2px">${escapeHTML(o.product_name||'-')}</div>
       </div>
       <div style="flex:1;background:var(--off);border-radius:10px;padding:10px">
         <div style="font-size:0.66rem;color:var(--gray)">Amount</div>
-        <div style="font-size:0.82rem;font-weight:700;color:var(--green);margin-top:2px">${fmtTZS(o.amount||0)}</div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--green);margin-top:2px">${fmtTZS(o.total_amount||o.amount||o.total_price||0)}</div>
       </div>
     </div>
-    <div style="font-size:0.72rem;color:var(--gray)">Status: <span class="status-chip ${o.status}">${o.status||'pending'}</span></div>`
+    <div style="font-size:0.72rem;color:var(--gray)">Status: <span class="status-chip ${['pending','confirmed','delivered','cancelled'].includes(o.status)?o.status:'unknown'}">${escapeHTML(o.status||'pending')}</span></div>`
 
   document.getElementById('confirmOrderBtn').style.display = o.status === 'pending' ? 'block' : 'none'
   openModal('order')
@@ -1022,9 +1057,12 @@ function editProduct(id) {
 
 async function saveProduct() {
   const name  = document.getElementById('prodName').value.trim()
-  const price = Number(document.getElementById('prodPrice').value)
+  const priceText = document.getElementById('prodPrice').value.trim()
+  const price = Number(priceText)
   const desc  = document.getElementById('prodDesc').value.trim()
-  if (!name) { toast('Please enter a product name'); return }
+  if (!name || name.length > 120) { toast('Enter a product name under 120 characters'); return }
+  if (!priceText || !Number.isFinite(price) || price < 0.01 || price > 100000000) { toast('Enter a valid price greater than zero'); return }
+  if (desc.length > 4000) { toast('Description is too long'); return }
 
   if (EDITING_PROD) {
     const { error } = await DB.products.save({ id: EDITING_PROD.id, name, price, description:desc })
@@ -1081,7 +1119,7 @@ async function sendAiMsg() {
   try {
     const context = `You are an AI business assistant for a ShopNekt seller.
 Shop: ${SHOP?.shop_name}, Category: ${SHOP?.shop_category}, Region: ${SHOP?.shop_region}.
-Today revenue: ${sumOrders(ALL_ORDERS.filter(o=>o.created_at?.startsWith(new Date().toISOString().split('T')[0])))}.
+ Today's order value: ${sumOrders(ALL_ORDERS.filter(o=>o.created_at?.startsWith(new Date().toISOString().split('T')[0])))}.
 Total orders: ${ALL_ORDERS.length}. Products: ${ALL_PRODUCTS.length}.
 Be concise, helpful, and focused on growing their business.`
 
@@ -1248,7 +1286,7 @@ function doLogout() {
 
 // ── HELPERS ───────────────────────────────────────────
 function sumOrders(orders) {
-  return orders.reduce((a,o) => {
+  return orders.filter(o => o.status !== 'cancelled').reduce((a,o) => {
     // Handle all possible amount column names from orders table
     const amt = Number(o.total_amount || o.amount || o.total_price || o.price || 0)
     return a + amt
